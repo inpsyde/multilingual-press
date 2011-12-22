@@ -28,7 +28,7 @@ if ( ! class_exists( 'inpsyde_multilingualpress_helpers' ) ) {
 	 * load the available language titles  
 	 *
 	 * @access  public
-	 * @since   1.5.3b
+	 * @since   0.5.3b
 	 * @return  array Available languages
 	 */
 	function mlp_get_available_languages_titles() {

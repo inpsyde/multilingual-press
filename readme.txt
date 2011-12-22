@@ -52,6 +52,7 @@ Help tab for further explanation can be found on the right top of the page.
 1. List of Sites in Network with new column for interlinked sites
 2. Settings for each site in Network
 3. Preview and linked posts in a post
+4. Widget for switch language in Twenty Eleven Theme
 
 
 == Other Notes ==
