@@ -144,7 +144,7 @@ if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
 										<?php echo $module; ?>
 									</th>
 									<td>
-										<input type="checkbox" <?php echo ( array_key_exists( $module, $states ) AND 'on' == $states[ $module ] ) ? 'checked="checked"' : ''; ?> id="mlp_state_<?php echo $module; ?>" value="true" name="mlp_state_<?php echo $module; ?>" />
+										<input type="checkbox" <?php echo ( array_key_exists( $module, $states ) && 'on' == $states[ $module ] ) ? 'checked="checked"' : ''; ?> id="mlp_state_<?php echo $module; ?>" value="true" name="mlp_state_<?php echo $module; ?>" />
 									</td>
 								</tr>
 								<?php

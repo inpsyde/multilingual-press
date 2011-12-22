@@ -15,14 +15,14 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 		 * 
 		 */
 		function mlp_widget() {
-
+			
 			$this->textdomain = inpsyde_multilingualpress :: get_textdomain();
-
+			
 			$widget_ops = array(
 				'classname' => 'mlp_widget',
 				'description' => __( 'Multilingual Press Widget', $this->textdomain )
 			);
-
+			
 			$this->WP_Widget( 'mlp_widget', __( 'Multilingual Press Widget', $this->textdomain ), $widget_ops );
 		}
 
@@ -77,14 +77,15 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 		 * @return void
 		 */
 		function widget( $args, $instance ) {
-
-			extract( $args );
-			$languages = mlp_get_available_languages();
-			$language_titles = mlp_get_available_language_titles();
 			
-			if ( !( 0 < count( $languages ) ) )
+			extract( $args );
+			
+			$languages = mlp_get_available_languages();
+			$language_titles = mlp_get_available_languages_titles();
+			
+			if ( ! ( 0 < count( $languages ) ) )
 				return;
-		   
+			
 			echo $before_widget;
 
 			// Display Title (optional)
@@ -100,7 +101,7 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 
 				// Get params
 				$flag = mlp_get_language_flag( $language_blog );
-				$title = mlp_get_available_language_titles();
+				$title = mlp_get_available_languages_titles();
 				
 				// Display type
 				if( 'flag' == $instance[ 'widget_link_type' ] && '' != $flag ) {

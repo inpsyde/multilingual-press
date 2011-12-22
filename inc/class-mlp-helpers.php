@@ -9,8 +9,6 @@ if ( ! class_exists( 'inpsyde_multilingualpress_helpers' ) ) {
 	class inpsyde_multilingualpress_helpers extends Inpsyde_Multilingualpress{}
 }
 
-
-
 	/**
 	 * wrapper of internal inpsyde_multilingualpress:get_available_languages
 	 * load the available languages  

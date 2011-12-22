@@ -144,15 +144,14 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 
 			global $pagenow;
 
+			// Include helper functions
+			require_once( 'inc/class-mlp-helpers.php' );
 			// Include widget
 			require_once( 'inc/class-mlp-widget.php' );
 			
-			// Include helper functions
-			require_once( 'inc/class-mlp-helpers.php' );
-
 			// Page specific admin files
 			$hook = array( 'sites.php' );
-			if ( is_admin() AND in_array( $pagenow, $hook ) ) {
+			if ( is_admin() && in_array( $pagenow, $hook ) ) {
 
 				require_once( 'inc/class-mlp-custom-columns.php' );
 				add_action( 'init', array( 'mlp_custom_columns', 'init' ) );
@@ -262,7 +261,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 				$blog_id = get_current_blog_id();
 			}
 			// Wieso %s und nicht %d?
-			$results = $wpdb->get_results( $wpdb->prepare( 'SELECT t.ml_blogid, t.ml_elementid FROM ' . $this->link_table . ' s INNER JOIN ' . $this->link_table . ' t ON s.ml_source_blogid = t.ml_source_blogid AND s.ml_source_elementid = t.ml_source_elementid WHERE s.ml_blogid = %s AND s.ml_elementid = %s', $blog_id, $element_id ) );
+			$results = $wpdb->get_results( $wpdb->prepare( 'SELECT t.ml_blogid, t.ml_elementid FROM ' . $this->link_table . ' s INNER JOIN ' . $this->link_table . ' t ON s.ml_source_blogid = t.ml_source_blogid && s.ml_source_elementid = t.ml_source_elementid WHERE s.ml_blogid = %s && s.ml_elementid = %s', $blog_id, $element_id ) );
 			$elements = array( );
 			if ( 0 < count( $results ) ) {
 				foreach ( $results as $resultelement ) {
@@ -805,7 +804,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 				} else {
 					// These blogs should not be connected. Delete
 					// possibly existing connection
-					if ( FALSE !== $key AND ISSET( $current_rel[ $key ] ) )
+					if ( FALSE !== $key && ISSET( $current_rel[ $key ] ) )
 						unset( $current_rel[ $key ] );
 				}
 
@@ -850,9 +849,9 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 
 				// Filter out blogs that are not related
 				if ( ISSET( $related_blogs ) 
-					 AND is_array( $related_blogs ) 
-					 AND !in_array( $language_blogid, $related_blogs ) 
-					 AND TRUE === $filter
+					 && is_array( $related_blogs ) 
+					 && !in_array( $language_blogid, $related_blogs ) 
+					 && TRUE === $filter
 					)
 					continue;
 
@@ -887,14 +886,14 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 			if ( TRUE === $filter )
 				$related_blogs = get_blog_option( get_current_blog_id(), 'inpsyde_multilingual_blog_relationship' );
 
-			if ( !is_array( $related_blogs ) AND TRUE === $filter )
+			if ( !is_array( $related_blogs ) && TRUE === $filter )
 				return;
 
 			$options = array( );
 			foreach ( $languages as $language_blogid => $language_data ) {
 
 				// Filter out blogs that are not related
-				if ( is_array( $related_blogs ) AND !in_array( $language_blogid, $related_blogs ) AND TRUE === $filter )
+				if ( is_array( $related_blogs ) && !in_array( $language_blogid, $related_blogs ) && TRUE === $filter )
 					continue;
 
 				$lang = $language_data[ 'text' ];
