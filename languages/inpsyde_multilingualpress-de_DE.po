@@ -1,0 +1,283 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: inpsyde-multilingualpress.php:468
+#@ inpsyde_multilingualpress
+msgid "choose preview language"
+msgstr "Preview Sprache w&auml;hlen"
+
+#: inpsyde-multilingualpress.php:647
+#@ inpsyde_multilingualpress
+msgid "choose language"
+msgstr "Sprache w&auml;hlen"
+
+#: inpsyde-multilingualpress.php:648
+#@ inpsyde_multilingualpress
+msgid "English"
+msgstr "Englisch"
+
+#: inpsyde-multilingualpress.php:441
+#@ inpsyde_multilingualpress
+msgid "Linked posts"
+msgstr "Verkn&uuml;pfte Artikel"
+
+#: inpsyde-multilingualpress.php:447
+#@ inpsyde_multilingualpress
+msgid "Linked pages"
+msgstr "Verkn&uuml;pfte Seiten"
+
+#: inc/class-mlp-custom-columns.php:54
+#@ inpsyde_multilingualpress
+msgid "Interlinked with"
+msgstr "Veknüpft mit"
+
+#: inc/class-mlp-settings-page.php:59
+#@ inpsyde_multilingualpress
+msgid "mlp Options"
+msgstr "mlp Optionen"
+
+#: inc/class-mlp-settings-page.php:59
+#@ inpsyde_multilingualpress
+msgid "MlP Options"
+msgstr "MlP Optionen"
+
+#: inc/class-mlp-settings-page.php:62
+#@ inpsyde_multilingualpress
+msgid "mlp Modules"
+msgstr "MlP Module"
+
+#: inc/class-mlp-settings-page.php:62
+#@ inpsyde_multilingualpress
+msgid "MlP Modules"
+msgstr "MlP Module"
+
+#: inc/class-mlp-settings-page.php:136
+#@ inpsyde_multilingualpress
+msgid "List of installed modules"
+msgstr "Liste der installierten Module"
+
+#: inc/class-mlp-widget.php:40
+#@ inpsyde_multilingualpress
+msgid "Title:"
+msgstr "Titel:"
+
+#: inc/class-mlp-widget.php:44
+#@ inpsyde_multilingualpress
+msgid "Link-Type:"
+msgstr "Link-Typ"
+
+#: inc/class-mlp-widget.php:47
+#@ inpsyde_multilingualpress
+msgid "Text"
+msgstr "Text"
+
+#: inc/class-mlp-widget.php:49
+#@ inpsyde_multilingualpress
+msgid "Flag"
+msgstr "Flagge"
+
+#: inc/class-mlp-widget.php:51
+#@ inpsyde_multilingualpress
+msgid "Language code"
+msgstr "Sprachcode"
+
+#: inpsyde-multilingualpress.php:527
+#@ inpsyde_multilingualpress
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: inpsyde-multilingualpress.php:514
+#: inpsyde-multilingualpress.php:534
+#@ inpsyde_multilingualpress
+msgid "No post available"
+msgstr "Kein Artikel verfügbar"
+
+#: inpsyde-multilingualpress.php:557
+#@ default
+msgid "Invalid site ID."
+msgstr ""
+
+#: inpsyde-multilingualpress.php:560
+#, php-format
+#@ default
+msgid "Edit Site: <a href=\"%1$s\">%2$s</a>"
+msgstr ""
+
+#: inpsyde-multilingualpress.php:567
+#@ default
+msgid "Info"
+msgstr ""
+
+#: inpsyde-multilingualpress.php:567
+#@ default
+msgid "Users"
+msgstr ""
+
+#: inpsyde-multilingualpress.php:567
+#@ default
+msgid "Themes"
+msgstr ""
+
+#: inpsyde-multilingualpress.php:567
+#@ default
+msgid "Settings"
+msgstr ""
+
+#: inpsyde-multilingualpress.php:608
+#@ inpsyde_multilingualpress
+msgid "Blog settings saved"
+msgstr "Blog Einstellungen gespeichert"
+
+#: inpsyde-multilingualpress.php:636
+#@ inpsyde_multilingualpress
+msgid "Language"
+msgstr "Sprache"
+
+#: inpsyde-multilingualpress.php:641
+#: inpsyde-multilingualpress.php:1108
+#@ inpsyde_multilingualpress
+msgid "Choose blog language"
+msgstr "Wähle Blog-Sprache"
+
+#: inpsyde-multilingualpress.php:662
+#@ inpsyde_multilingualpress
+msgid "Determine blog language and flag. This will be used in the frontend widget."
+msgstr "Wähle Blog-Sprache und -Flagge. Diese werden im Widget eingesetzt."
+
+#: inpsyde-multilingualpress.php:669
+#: inpsyde-multilingualpress.php:1110
+#@ inpsyde_multilingualpress
+msgid "Title"
+msgstr "Titel"
+
+#: inpsyde-multilingualpress.php:677
+#: inpsyde-multilingualpress.php:1112
+#@ inpsyde_multilingualpress
+msgid "Blog flag image URL"
+msgstr "Blog-Flagge Bild-URL"
+
+#: inpsyde-multilingualpress.php:682
+#@ inpsyde_multilingualpress
+msgid "(optional, must begin with http://)"
+msgstr "(optional, muss mit http:// beginnen)"
+
+#: inpsyde-multilingualpress.php:703
+#@ inpsyde_multilingualpress
+msgid "Blog Relationships"
+msgstr "Blog Verknüpfungen"
+
+#: inpsyde-multilingualpress.php:707
+#: inpsyde-multilingualpress.php:1114
+#@ inpsyde_multilingualpress
+msgid "Multilingual Blog Relationship"
+msgstr "Multilingual Blog Verknüpfungen"
+
+#: inpsyde-multilingualpress.php:732
+#@ inpsyde_multilingualpress
+msgid "Posts and pages will be automaticaly duplicated into these blogs"
+msgstr "Artikel und Seiten werden automatisch in diese Blogs dupliziert"
+
+#: inpsyde-multilingualpress.php:1115
+#@ inpsyde_multilingualpress
+msgid " - Determine which blogs will be interlinked. If you create a post or page, they will be automaticaly duplicated into each interlinked blog."
+msgstr "- Entscheide, welches Blogs verknüpft werden sollen. Wenn Du einen Artikel oder eine Seite erstellst, werden diese automatisch in die verknüpften Blogs dupliziert."
+
+#: inpsyde-multilingualpress.php:524
+#@ inpsyde_multilingualpress
+msgid "Status:"
+msgstr "Status:"
+
+#: inpsyde-multilingualpress.php:524
+#@ inpsyde_multilingualpress
+msgid "Published on:"
+msgstr "Publiziert am:"
+
+#. translators: plugin header field 'Name'
+#: inpsyde-multilingualpress.php:0
+#: inpsyde-multilingualpress.php:207
+#: inpsyde-multilingualpress.php:567
+#: inpsyde-multilingualpress.php:1119
+#@ inpsyde_multilingualpress
+#@ default
+msgid "Multilingual Press"
+msgstr "Multilingual Press"
+
+#. translators: plugin header field 'PluginURI'
+#: inpsyde-multilingualpress.php:0
+#@ inpsyde_multilingualpress
+msgid "https://github.com/inpsyde/multilingual-press"
+msgstr ""
+
+#. translators: plugin header field 'Description'
+#: inpsyde-multilingualpress.php:0
+#@ inpsyde_multilingualpress
+msgid "By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature."
+msgstr "Durch die Verwendung des WordPress Plugin Multilingual-Press ist es viel einfacher, mehrsprachige Websites mit WordPress Multisite-Funktion zu bauen."
+
+#. translators: plugin header field 'Author'
+#: inpsyde-multilingualpress.php:0
+#@ inpsyde_multilingualpress
+msgid "Inpsyde GmbH"
+msgstr ""
+
+#. translators: plugin header field 'AuthorURI'
+#: inpsyde-multilingualpress.php:0
+#@ inpsyde_multilingualpress
+msgid "http://inpsyde.com"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: inpsyde-multilingualpress.php:0
+#@ inpsyde_multilingualpress
+msgid "0.7a (Alpha)"
+msgstr ""
+
+#: inpsyde-multilingualpress.php:1109
+#@ inpsyde_multilingualpress
+msgid " - Set the language and flag. You can use this to distinguish blogs and display them in the frontend using the Multilingual Press widget."
+msgstr "- Wähle Sprache und Flagge. Damit kannst Du die Blogs auseinanderhalten und auf den öffentlichen Seiten mithilfe des Widgets darstellen."
+
+#: inpsyde-multilingualpress.php:1113
+#@ inpsyde_multilingualpress
+msgid " - Multilingual Press uses a default flag image, you can define a custom one here."
+msgstr "- MultilingualPress benutzt ein Standard-Flaggenbild, hier kannst Du ein eigenes bestimmen."
+
+#: inpsyde-multilingualpress.php:1111
+#@ inpsyde_multilingualpress
+msgid " - Alternative language file, which will be used if text field is filled."
+msgstr " - Alternativer Sprachtitle, der genutzt wird, wenn er gesetzt ist."
+
+#: inc/class-mlp-settings-page.php:82
+#@ inpsyde_multilingualpress
+msgid "Multilingual Press Options"
+msgstr "Multilingual Press Optionen"
+
+#: inc/class-mlp-settings-page.php:133
+#@ inpsyde_multilingualpress
+msgid "Multilingual Press Module Manager"
+msgstr "Multilingual Press Modul-Manager"
+
+#: inc/class-mlp-widget.php:23
+#: inc/class-mlp-widget.php:26
+#@ inpsyde_multilingualpress
+msgid "Multilingual Press Widget"
+msgstr "Multilingual Press Widget"
+
