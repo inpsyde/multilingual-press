@@ -14,6 +14,7 @@ By using the powerful WordPress Plugin Multilingual-Press it´s much easier to b
 **Currently the Plugin is under development; pure alpha**
 
 Please give us feedback, contribute and file technical bugs on [GitHub Repo](https://github.com/inpsyde/multilingual-press).
+See also the [Wiki](https://github.com/inpsyde/multilingual-press/wiki) on the repo for more informations about public functions and more.
 
 = Pro Version =
 We will also have a pro version of this Plugin, which includes these additional features and many more:
