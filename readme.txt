@@ -1,6 +1,6 @@
 === Multilingual Press ===
 Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle
-Tags: language, multilinguage, multisite
+Tags: language, multilanguage, multi-language, multisite, wpmu
 Requires at least: 3.3
 Tested up to: 3.3
 Stable tag: alpha
