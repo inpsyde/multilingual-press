@@ -1,8 +1,15 @@
 <?php
 /**
  * Multilingual Press widget class
- * Version: 1.1b
+ * Version: 0.7a
  * 
+ */
+
+/**
+ * Changelog
+ * 
+ * 0.7a
+ * - Use URL-parameter to avoid redirection 
  */
 if ( ! class_exists( 'mlp_widget' ) ) {
 
@@ -110,8 +117,7 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 				}
 				elseif ( 'text' == $instance[ 'widget_link_type' ] && '' != $language_titles[ $language_blog ] ) {
 					
-					$display = $language_titles[ $language_blog ];
-					
+					$display = $language_titles[ $language_blog ];	
 				} else $display = $languages[ $language_blog ];
 				
 				$class = ( get_current_blog_id() == $language_blog ) ? 'id="mlp_current_locale"' : '';
@@ -120,7 +126,7 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 				$post = ( ISSET( $linked_elements[ $language_blog ] ) ) ? get_blog_post( $language_blog, $linked_elements[ $language_blog ] ) : '';
 				
 				// Output link elements
-				echo '<li><a ' . $class . ' href="' . ( ( is_single() || is_page() ) && ISSET( $linked_elements[ $language_blog ] ) && 'publish' === $post->post_status ? get_blog_permalink( $language_blog, $linked_elements[ $language_blog ] ) : get_site_url( $language_blog ) ) . '">' . $display . '</a></li>';
+				echo '<li><a ' . $class . ' href="' . ( ( is_single() || is_page() ) && ISSET( $linked_elements[ $language_blog ] ) && 'publish' === $post->post_status ? get_blog_permalink( $language_blog, $linked_elements[ $language_blog ] ) : get_site_url( $language_blog ) ) . '?redirect=no">' . $display . '</a></li>';
 			}
 
 			echo '</ul>';

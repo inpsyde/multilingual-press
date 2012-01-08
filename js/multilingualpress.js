@@ -13,25 +13,21 @@ jQuery.noConflict();
         bind_submit_setting_form : function() {
             
             $( '#multilingualpress_settings' ).live( 'submit', function() {
-                multilingualpress.submit_form();
+                
+                // Serialize form field/data
+                var serialized_data = $( this ).serialize();
+                multilingualpress.submit_form( serialized_data );
                 return false;
             } );
         },
     	
-        submit_form : function() {
-   
-            var related_blogs = $.map( $( 'input[id=related_blog]' ), function(e) {
-                if( $( e ).is(':checked') ) { return $( e ).val(); }
-            } );
-    		
+        submit_form : function( serialized_data ) {
+               		
             var multilang_post_data = {
                 action: 'save_multilang_settings',
-                inpsyde_multilingual_text: $( '#inpsyde_multilingual_text' ).val(),
-                inpsyde_multilingual_lang: $( '#inpsyde_multilingual_lang' ).val(),
-                inpsyde_multilingual_flag_url: $( '#inpsyde_multilingual_flag_url' ).val(),
-                related_blogs: related_blogs,
-                id: mlp_loc.blog_id,
-                form_nonce: mlp_loc.ajax_form_nonce
+                serialized_data: serialized_data + '&id=' + mlp_loc.blog_id,
+                form_nonce: mlp_loc.ajax_form_nonce,
+                id: mlp_loc.blog_id
             };
     		
             var multilang_saved_settings = $.ajax( {
