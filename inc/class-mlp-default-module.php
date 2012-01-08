@@ -113,7 +113,7 @@ if ( !class_exists( 'inpsyde_multilingualpress_default_module' ) ) {
                                     ?>
                                     <select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang">
                                         <option value="-1"><?php _e( 'choose language', $this->get_textdomain() ); ?></option>
-                                        <option  style="background-position:0px 50%;background-image:url(<?php echo plugins_url( 'flags/us.gif', __FILE__ ); ?>);background-repeat:no-repeat;padding-left:30px;" value="en_US" <?php echo selected( 'en_US', $selected ); ?>><?php _e( 'English (US)', $this->get_textdomain() ) ?></option>
+                                        <option  style="background-position:0px 50%;background-image:url(<?php echo plugins_url( 'flags/us.gif', dirname( __FILE__ ) ); ?>);background-repeat:no-repeat;padding-left:30px;" value="en_US" <?php echo selected( 'en_US', $selected ); ?>><?php _e( 'English (US)', $this->get_textdomain() ) ?></option>
 
                                         <?php
                                         
