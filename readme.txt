@@ -9,9 +9,18 @@ Multilingual websites with WordPress Multisite
 
 
 == Description ==
-By using the powerful WordPress Multilingual-Press plugin it´s much easier to build multilingual sites and run them with WordPress' multisite feature. To get going with this plugin, you need to setup a WordPress multisite installation first (check the Codex for more infos on this topic: http://codex.wordpress.org/Create_A_Network). Each site/blog can then be attributed to a different language. Simply write a post or page in one language and Multilingual-Press will automatically create a duplication of it in the other sites/blogs. These new posts and pages are interlinked and are easily accessible via the post/page editor screen - you can switch back and forth to translate them! Multilingual-Press is WordPress conform, easy to install and doesn't make any changes to the WordPress core. It doesn't harm your website's performance.  
+By using the powerful WordPress Multilingual-Press plugin itÂ´s much easier to build multilingual sites and
+run them with WordPress' multisite feature. To get going with this plugin, you need to setup a WordPress 
+multisite installation first 
+(check the Codex for more infos on this topic: http://codex.wordpress.org/Create_A_Network). 
+Each site/blog can then be attributed to a different language. Simply write a post or page in one language 
+and Multilingual-Press will automatically create a duplication of it in the other sites/blogs. These new 
+posts and pages are interlinked and are easily accessible via the post/page editor screen - you can switch 
+back and forth to translate them! Multilingual-Press is WordPress conform, easy to install and doesn't make 
+any changes to the WordPress core. It doesn't harm your website's performance.  
 
-**Currently the plugin is under development; pure alpha. Before using this version of the plugin in your live site, we recommend you to install it in a testing environment and to backup your database and site/blog content**
+**Currently the plugin is under development; pure alpha. Before using this version of the plugin in your live 
+site, we recommend you to install it in a testing environment and to backup your database and site/blog content**
 
 Please give us feedback, contribute and file technical bugs on [GitHub Repo](https://github.com/inpsyde/multilingual-press).
 
@@ -19,7 +28,8 @@ Please give us feedback, contribute and file technical bugs on [GitHub Repo](htt
 We will also have a pro version of this plugin, which includes these additional features and many more:
 
 - browser language detection and automatically forwarding to the correct language (can be deactivated via settings)
-- creating a draft is activated by default (can be deactivated globaly via settings or in metabox for specific posts)
+- creating a draft is activated by default (can be deactivated globaly via settings or in 
+  metabox for specific posts)
 - possibility to publish posts just on selected sites/blogs
 - create new language -> copy of a complete site/blog:
         posts, links, attachments, categories, tags
