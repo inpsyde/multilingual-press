@@ -5,7 +5,14 @@
  * The helperfunctions call the static functions
  * of the below class.
  * 
- * Version: 0.5.2a
+ * Version: 0.5.3a
+ * 
+ */
+
+/**
+ * @TODO:
+ * 
+ * - get_available_languages() works with/returns shortcode, which is no-good, we need ISO language codes (fr_FR, fr_BE, etc)
  * 
  */
 
@@ -19,6 +26,9 @@
  * 0.5.2a
  * - new functin get_current_blog_language
  * - new function is_redirect
+ * 
+ * 0.5.3a 
+ * - Fixed issue with function parameters for get_available_languages()
  * 
  * 
  */
@@ -72,24 +82,26 @@ if ( !class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
          * @param   $rel | filter out non-related blogs? By default
          * @return  array $options
          */
-        static function get_available_languages( $filter = TRUE ) {
+        static function get_available_languages( $nonrelated = FALSE ) {
+            
+            $related_blogs = '';
 
             // Get all registered blogs
             $languages = get_site_option( 'inpsyde_multilingual' );
             
             if ( ! is_array( $languages ) )
                 return FALSE;
-
+            
             // Do we need related blogs only?
-            if ( TRUE === $filter )
+            if ( FALSE === $nonrelated )
                 $related_blogs = get_blog_option( get_current_blog_id(), 'inpsyde_multilingual_blog_relationship' );
             
             // No related blogs? Leave here.
-            if ( ! is_array( $related_blogs ) && TRUE === $filter )
+            if ( ! is_array( $related_blogs ) && FALSE === $nonrelated )
                 return;
 
             $options = array( );
-            
+                       
             // Loop through blogs
             foreach ( $languages as $language_blogid => $language_data ) {
 
@@ -125,14 +137,16 @@ if ( !class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
          * @uses    get_site_option
          * @return  array $options
          */
-        static function get_available_languages_titles( $filter = TRUE ) {
+        static function get_available_languages_titles( $nonrelated = FALSE ) {
+            
+            $related_blogs = '';
 
             $languages = get_site_option( 'inpsyde_multilingual' );
 
-            if ( TRUE === $filter )
+            if ( FALSE === $nonrelated )
                 $related_blogs = get_blog_option( get_current_blog_id(), 'inpsyde_multilingual_blog_relationship' );
 
-            if ( ! is_array( $related_blogs ) && TRUE === $filter )
+            if ( ! is_array( $related_blogs ) && FALSE === $nonrelated )
                 return;
 
             $options = array( );
@@ -140,7 +154,7 @@ if ( !class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
             foreach ( $languages as $language_blogid => $language_data ) {
 
                 // Filter out blogs that are not related
-                if ( is_array( $related_blogs ) && ! in_array( $language_blogid, $related_blogs ) && TRUE === $filter )
+                if ( is_array( $related_blogs ) && ! in_array( $language_blogid, $related_blogs ) && FALSE === $nonrelated )
                     continue;
 
                 $lang = $language_data[ 'text' ];
@@ -187,7 +201,7 @@ if ( !class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
                 return array();
             
             // Walk results
-            $elements = array( );
+            $elements = array();
             
             foreach ( $results as $resultelement ) {
                 
@@ -304,9 +318,9 @@ function mlp_get_current_blog_language( $count ) {
  * @since   0.1
  * @return  array Available languages
  */
-function mlp_get_available_languages() {
+function mlp_get_available_languages( $nonrelated = FALSE ) {
 
-    return Inpsyde_Multilingualpress_Helpers::get_available_languages();
+    return Inpsyde_Multilingualpress_Helpers::get_available_languages( $nonrelated );
 }
 
 /**
@@ -317,9 +331,9 @@ function mlp_get_available_languages() {
  * @since   0.5.3b
  * @return  array Available languages
  */
-function mlp_get_available_languages_titles() {
+function mlp_get_available_languages_titles( $nonrelated = FALSE ) {
 
-    return Inpsyde_Multilingualpress_Helpers::get_available_languages_titles();
+    return Inpsyde_Multilingualpress_Helpers::get_available_languages_titles( $nonrelated );
 }
 
 /**

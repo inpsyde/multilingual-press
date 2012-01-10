@@ -18,15 +18,39 @@
  * - Updated language codes 
  * 
  * 0.7.3a
- * - Exported helper functions into own class
- * - Code documentation
+ * - Exported helper functions into own class.
+ * - Code documentation.
  * 
  * 0.7.4a
- * - Exported the basic UI and userinput handling functionality into "default-module" class
- * - By default post types other than post and page are excluded
+ * - Exported the basic UI and userinput handling functionality into "default-module" class.
+ * - By default post types other than post and page are excluded.
+ * - Added hooks&filters documentation.
  * 
  *
  */
+
+/**
+ * Available hooks
+ * 
+ * inpsyde_mlp_init - This hook is called upon instantiation of the main class
+ * mlp_blogs_add_fields - Allows modules to add form fields to the Multilingual Press blog settings screen
+ * mlp_blogs_add_fields_secondary - Same as above, with lower priority. 
+ * mlp_blogs_save_fields - Modules can hook in here to handle user data returned by their form fields
+ * mlp_options_page_add_metabox - This hook registers a metabox on the Multilingual Press options page. Use inpsyde_multilingualpress_settingspage::$class_object->options_page for 'screen' parameter.
+ * mlp_settings_save_fields - Handles the data of the options page form. Function parameter contains the form data
+ * mlp_modules_add_fields - Add data to the module manager. Probably obsolete in the future.
+ * mlp_modules_save_fields - Hooks into the module manager's saving routine.
+ */
+
+/**
+ * Available filters
+ * 
+ * mlp_pre_save_postdata - This filter is passed the postdata prior to creating blog interlinks.
+ * mlp-context-help - Is passed the content of the contextual help screen.
+ * mlp_language_codes - Is passed all the language codes used by Multilingual Press.
+ * 
+ */
+
 if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
 
     class Inpsyde_Multilingualpress {
@@ -134,7 +158,6 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
 
             // Hooks and filters
             add_action( 'init', array( $this, 'localize_plugin' ) );
-            add_action( 'admin_init', array( $this, 'get_lang_codes' ), 1 );
 
             // Load modules
             add_action( 'plugins_loaded', array( $this, 'load_modules' ), 9 );
@@ -159,6 +182,7 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
             // Context help of the plugin
             add_filter( 'contextual_help', array( $this, 'context_help' ), 10, 3 );
 
+            // Cleanup upon blog delete
             add_action( 'delete_blog', array( $this, 'delete_blog' ), 10, 2 );
         }
 
@@ -355,7 +379,7 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
             // If there is no filter hooked into this saving method, then we
             // will exclude all post types other that "post" and "page".
             // @TODO: improve this logic :/
-           
+            // @TODO: create a whitelist for allowed post types, incl. apply_filters() ?           
             if ( ! has_filter( 'mlp_pre_save_postdata' ) ) 
                 if ( 'post' != $postdata[ 'post_type'] && 'page' != $postdata[ 'post_type'] ) 
                     return;
@@ -654,114 +678,6 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
             die;
         }
 
-        /**
-         * save all language codes from wordpress  
-         * and update them with the language codes
-         * used in the language file repository
-         *
-         * @access  public
-         * @param   array $lang_codes | languages from wordpress
-         * @since   0.1
-         * @return  array $lang_codes | List of updated lang codes
-         */
-        function load_lang_codes( $lang_codes ) {
-
-            $obsolete_shortcodes = array( 'fr', 'es', 'bg', 'it', 'da', 'de', 'gl', 'hu', 'is', 'id', 'kr', 'ky', 'mg', 'mk', 'ml', 'en',
-                'bs', 'ne', 'no', 'pa', 'pl', 'pt', 'ro', 'ru', 'sa', 'sd', 'si', 'sk', 'sl', 'so', 'sr', 'sv',
-                'tr', 'ug', 'uz', 'bn', 'cs', 'ms', 'my' );
-            foreach ( $obsolete_shortcodes AS $os ) {
-                unset( $lang_codes[ $os ] );
-            }
-
-            $lang_codes[ 'fa_IR' ] = __( 'Persian', $this->get_textdomain() );
-            $lang_codes[ 'zh_TW' ] = __( 'Simplified Chinese (Taiwan)', $this->get_textdomain() );
-            $lang_codes[ 'zh_HK' ] = __( 'Simplified Chinese (Hong Kong)', $this->get_textdomain() );
-            $lang_codes[ 'zh_CN' ] = __( 'Simplified Chinese (China)', $this->get_textdomain() );
-            $lang_codes[ 'ta_LK' ] = __( 'Tamil (Sri Lanka)', $this->get_textdomain() );
-            $lang_codes[ 'ta_IN' ] = __( 'Tamil (India)', $this->get_textdomain() );
-            $lang_codes[ 'ru_UA' ] = __( 'Russian (Ukraine)', $this->get_textdomain() );
-            $lang_codes[ 'my_MM' ] = __( 'Burmese', $this->get_textdomain() );
-            $lang_codes[ 'ms_MY' ] = __( 'Malay', $this->get_textdomain() );
-            $lang_codes[ 'hi_IN' ] = __( 'Hindi', $this->get_textdomain() );
-            $lang_codes[ 'he_IL' ] = __( 'Hebrew', $this->get_textdomain() );
-            $lang_codes[ 'haw_US' ] = __( 'Hawaiian', $this->get_textdomain() );
-            $lang_codes[ 'cs_CZ' ] = __( 'Czech', $this->get_textdomain() );
-            $lang_codes[ 'bn_BD' ] = __( 'Bengali', $this->get_textdomain() );
-            $lang_codes[ 'uz_UZ' ] = __( 'Uzbek', $this->get_textdomain() );
-            $lang_codes[ 'ug_CN' ] = __( 'Uighur; Uyghur', $this->get_textdomain() );
-            $lang_codes[ 'tr_TR' ] = __( 'Turkish', $this->get_textdomain() );
-            $lang_codes[ 'sv_SE' ] = __( 'Swedish', $this->get_textdomain() );
-            $lang_codes[ 'sr_RS' ] = __( 'Serbian', $this->get_textdomain() );
-            $lang_codes[ 'so_SO' ] = __( 'Somali', $this->get_textdomain() );
-            $lang_codes[ 'sl_SI' ] = __( 'Slovenian', $this->get_textdomain() );
-            $lang_codes[ 'sk_SK' ] = __( 'Slowak', $this->get_textdomain() );
-            $lang_codes[ 'si_LK' ] = __( 'Sinhala; Sinhalese', $this->get_textdomain() );
-            $lang_codes[ 'fr_FR' ] = __( 'French (France)', $this->get_textdomain() );
-            $lang_codes[ 'fr_BE' ] = __( 'French (Belgium)', $this->get_textdomain() );
-            $lang_codes[ 'es_CL' ] = __( 'Spanish (Chile)', $this->get_textdomain() );
-            $lang_codes[ 'es_ES' ] = __( 'Spanish (Castilian)', $this->get_textdomain() );
-            $lang_codes[ 'es_PE' ] = __( 'Spanish (Peru)', $this->get_textdomain() );
-            $lang_codes[ 'es_VE' ] = __( 'Spanish (Venezuela)', $this->get_textdomain() );
-            $lang_codes[ 'az_TR' ] = __( 'Azerbaijani (Turkey)', $this->get_textdomain() );
-            $lang_codes[ 'bg_BG' ] = __( 'Bulgarian', $this->get_textdomain() );
-            $lang_codes[ 'it_IT' ] = __( 'Italian', $this->get_textdomain() );
-            $lang_codes[ 'da_DK' ] = __( 'Danish', $this->get_textdomain() );
-            $lang_codes[ 'de_DE' ] = __( 'German', $this->get_textdomain() );
-            $lang_codes[ 'en_CA' ] = __( 'English (Canada)', $this->get_textdomain() );
-            $lang_codes[ 'gl_ES' ] = __( 'Galician', $this->get_textdomain() );
-            $lang_codes[ 'hu_HU' ] = __( 'Hungarian', $this->get_textdomain() );
-            $lang_codes[ 'is_IS' ] = __( 'Icelandic', $this->get_textdomain() );
-            $lang_codes[ 'id_ID' ] = __( 'Indonesian', $this->get_textdomain() );
-            $lang_codes[ 'jv_ID' ] = __( 'Indonesian (Java)', $this->get_textdomain() );
-            $lang_codes[ 'ko_KR' ] = __( 'Kanuri', $this->get_textdomain() );
-            $lang_codes[ 'ky_KY' ] = __( 'Kirghiz; Kyrgyz', $this->get_textdomain() );
-            $lang_codes[ 'mg_MG' ] = __( 'Malagasy', $this->get_textdomain() );
-            $lang_codes[ 'mk_MK' ] = __( 'Macedonian', $this->get_textdomain() );
-            $lang_codes[ 'ml_IN' ] = __( 'Malayalam', $this->get_textdomain() );
-            $lang_codes[ 'en' ] = __( 'English (Great Britain)', $this->get_textdomain() );
-            $lang_codes[ 'bs_BA' ] = __( 'Bosnian', $this->get_textdomain() );
-            $lang_codes[ 'ne_NP' ] = __( 'Nepali', $this->get_textdomain() );
-            $lang_codes[ 'nl_BE' ] = __( 'Dutch (Belgium)', $this->get_textdomain() );
-            $lang_codes[ 'nb_NO' ] = __( 'Bokmål', $this->get_textdomain() );
-            $lang_codes[ 'nn_NO' ] = __( 'Nynorsk', $this->get_textdomain() );
-            $lang_codes[ 'pa_IN' ] = __( 'Panjabi; Punjabi', $this->get_textdomain() );
-            $lang_codes[ 'pl_PL' ] = __( 'Polish', $this->get_textdomain() );
-            $lang_codes[ 'pt_PT' ] = __( 'Portuguese (Portugal)', $this->get_textdomain() );
-            $lang_codes[ 'pt_BR' ] = __( 'Portuguese (Brasil)', $this->get_textdomain() );
-            $lang_codes[ 'ro_RO' ] = __( 'Romanian', $this->get_textdomain() );
-            $lang_codes[ 'ru_RU' ] = __( 'Russian', $this->get_textdomain() );
-            $lang_codes[ 'sa_IN' ] = __( 'Sanskrit', $this->get_textdomain() );
-            $lang_codes[ 'sd_PK' ] = __( 'Sindhi', $this->get_textdomain() );
-
-            // Sort them according to
-            // language name
-            asort( $lang_codes );
-
-            // Modules can hook in here
-            // to add or modify codes
-            $lang_codes = apply_filters( 'mlp_language_codes', $lang_codes );
-
-            // Make the codes available in the whole class
-            $this->lang_codes = $lang_codes;
-
-            return $lang_codes;
-        }
-
-        /**
-         * add filter to get the language 
-         * shortcodes from wordpress  
-         *
-         * @access  public
-         * @since   0.1
-         * @return  array $lang_codes
-         */
-        function get_lang_codes() {
-
-            // Get Current Language Codes
-            add_filter( 'lang_codes', array( $this, 'load_lang_codes' ) );
-            format_code_lang( '' ); // hack to get all available languages
-            remove_filter( 'lang_codes', array( $this, 'load_lang_codes' ) );
-        }
 
         /**
          * create the element links database table  
@@ -860,7 +776,7 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
          * @param   string $module | module handler
          * @return  array $state | module state  
          */
-        protected function get_state_module( $module ) {
+        protected function get_module_state( $module ) {
 
             // Get the current states
             $state = get_site_option( 'state_modules', FALSE );
