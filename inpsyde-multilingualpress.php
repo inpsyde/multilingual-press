@@ -428,6 +428,11 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
             if ( !( 0 < count( $blogs ) ) )
                 return;
 
+            // Load Page Parents			
+            $parent_elements = array( );
+            if ( 'page' == $postdata[ 'post_type' ] && 0 < $postdata[ 'post_parent' ] )
+            	$parent_elements = mlp_get_linked_elements( $postdata[ 'post_parent' ] );
+
             // Create a copy of the item for every related blog
             foreach ( $blogs as $blogid => $blogname ) {
 
@@ -435,6 +440,10 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
                     
                     switch_to_blog( $blogid );
 
+                    // Set the linked parent page 
+                    if ( 0  < count( $parent_elements ) && 0 < $parent_elements[ $blogid ] )
+                    	$newpost[ 'post_parent'] = $parent_elements[ $blogid ];
+                    
                     // Insert remote blog post
                     $remote_post_id = wp_insert_post( $newpost );
                     
