@@ -104,5 +104,9 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
  * - Exported the basic UI and userinput handling functionality into "default-module" class
  * - By default post types other than post and page are excluded
  * 
+ * 0.7.5a
+ * - Display an admin notice if the plugin was not activated on multisite
+ * - Set the parent page if this page was also handled by the plugin    
+ * - Fix a problem that a new multisite cannot set related blogs
  *
  */
