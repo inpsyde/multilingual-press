@@ -5,7 +5,7 @@
  * Description: By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature. 
  * Author:	  Inpsyde GmbH
  * Author URI:  http://inpsyde.com
- * Version:	 0.7.4a (Alpha)
+ * Version:	 0.7.5a (Alpha)
  * Text Domain: inpsyde_multilingualpress
  * Domain Path: /languages
  * License: GPLv3
@@ -142,6 +142,11 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
          */
         function __construct() {
             
+            if ( function_exists('is_multisite') && !is_multisite() && is_super_admin() ) {
+            	add_action( 'admin_notices',  array( $this, 'error_msg_no_multisite' ) );
+            	return;
+            }
+			
             global $wpdb;
 
             // Show database errors
@@ -689,17 +694,6 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
          */
         function install_plugin() {
 
-            global $wp_version;
-
-            if ( FALSE == is_multisite() || !version_compare( $wp_version, '3.3', '>=' ) ) {
-                add_action( 'admin_notices', array( 'Inpsyde_Multilingualpress', 'notice_no_multisite' ) );
-
-                $current = get_option( 'active_plugins' );
-                array_splice( $current, array_search( plugin_basename( __FILE__ ), $current ), 1 );
-                update_option( 'active_plugins', $current );
-                exit();
-            }
-
             global $wpdb;
 
             // The sql executed to create the elements table
@@ -725,15 +719,6 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
          */
         function remove_plugin() {
             return;
-        }
-
-        public function notice_no_multisite() {
-            ?>
-            <div class="error">
-                <p><?php _e( 'Multilingual Press only works in a multisite installation. See how to install a multisite network:', $this->get_textdomain() ); ?>
-                    <a href="http://codex.wordpress.org/Create_A_Network" title="<?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?>"><?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?></a></p>
-            </div>
-            <?php
         }
 
         /**
@@ -848,6 +833,18 @@ if ( !class_exists( 'Inpsyde_Multilingualpress' ) ) {
             }
         }
 
+        /**
+         * Display an Admin Notice if multisite is not active 
+         * 
+         * @since   0.7.5a
+        */
+        function error_msg_no_multisite() {
+        	?>
+			<div class="error">
+                <p><?php _e( 'Multilingual Press only works in a multisite installation. See how to install a multisite network:', $this->get_textdomain() ); ?>
+                    <a href="http://codex.wordpress.org/Create_A_Network" title="<?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?>"><?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?></a></p>
+            </div><?php
+        }
     }
 
     // Enqueue plugin
