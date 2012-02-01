@@ -40,7 +40,7 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 		 */
 		function form( $instance ) {
 
-			$title = ( ISSET( $instance[ 'widget_title' ] ) ) ? esc_attr( $instance[ 'widget_title' ] ) : '';
+			$title = ( ISSET( $instance[ 'widget_title' ] ) ) ? strip_tags( $instance[ 'widget_title' ] ) : '';
 			$link_type = ( ISSET( $instance[ 'widget_title' ] ) ) ? esc_attr( $instance[ 'widget_link_type' ] ) : '';
 			?>
 			<p>
@@ -50,12 +50,9 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 			<p>
 				<label for='<?php echo $this->get_field_id( "mlp_widget_link_type" ); ?>'><?php _e( 'Link-Type:', $this->textdomain ); ?></label><br />	
 				<select class="widefat" id='<?php echo $this->get_field_id( "mlp_widget_link_type" ); ?>' name='<?php echo $this->get_field_name( "mlp_widget_link_type" ); ?>' >
-					<option <?php if ( 'text' === $link_type )
-				echo 'selected="selected"'; ?> value='text'><?php _e( 'Text', $this->textdomain ); ?></option>
-					<option <?php if ( 'flag' === $link_type )
-				echo 'selected="selected"'; ?> value='flag'><?php _e( 'Flag', $this->textdomain ); ?></option>
-					<option <?php if ( 'lang_code' === $link_type )
-				echo 'selected="selected"'; ?> value='lang_code'><?php _e( 'Language code', $this->textdomain ); ?></option>
+					<option <?php selected( $link_type, 'text' ); ?> value="text"><?php _e( 'Text', $this->textdomain ); ?></option>
+					<option <?php selected( $link_type, 'flag' ); ?> value="flag"><?php _e( 'Flag', $this->textdomain ); ?></option>
+					<option <?php selected( $link_type, 'lang_code' ); ?> value="lang_code"><?php _e( 'Language code', $this->textdomain ); ?></option>
 				</select>
 			</p>
 			<?php
@@ -70,7 +67,7 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 		function update( $new_instance, $old_instance ) {
 
 			$instance = $old_instance;
-			$instance[ 'widget_title' ] = esc_attr( $new_instance[ 'mlp_widget_title' ] );
+			$instance[ 'widget_title' ] = strip_tags( $new_instance[ 'mlp_widget_title' ] );
 			$instance[ 'widget_link_type' ] = esc_attr( $new_instance[ 'mlp_widget_link_type' ] );
 
 			return $instance;
@@ -133,12 +130,14 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 
 			echo $after_widget;
 		}
-
+		
+		function widget_register() {
+			register_widget( 'mlp_widget' );	
+		}
 	}
-
 	// Class END;
-	
+
 	// Initialize widget
-	add_action( 'widgets_init', create_function( '', 'return register_widget("mlp_widget");' ) );
+	add_action( 'widgets_init', array( 'mlp_widget', 'widget_register' ) );
 }
 ?>
