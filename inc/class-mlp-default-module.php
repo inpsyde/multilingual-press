@@ -181,7 +181,7 @@ if ( !class_exists( 'inpsyde_multilingualpress_default_module' ) ) {
 
             <?php
             // Only display this part if there are blogs to interlink
-            if ( 1 >= count( mlp_get_available_languages( FALSE ) ) )
+            if ( 1 >= count( mlp_get_available_languages( TRUE ) ) )
                 return;
             ?>
 
