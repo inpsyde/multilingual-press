@@ -166,7 +166,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Default_Module' ) ) {
 							<td>
 								<input class="regular-text" type="text" id="inpsyde_multilingual_text" name="inpsyde_multilingual_text" value="<?php echo $lang_title; ?>" />
 								<br />
-								<span class="description"><?php _e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")' ); ?></span>
+								<span class="description"><?php _e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")', $this->get_textdomain() ); ?></span>
 							</td>
 						</tr>
 						<tr>
