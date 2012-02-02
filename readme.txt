@@ -3,7 +3,7 @@ Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle
 Tags: language, multilinguage, multisite
 Requires at least: 3.3
 Tested up to: 3.3
-Stable tag: alpha
+Stable tag: 0.7.5a
 
 Multilingual websites with WordPress Multisite
 
@@ -49,7 +49,7 @@ We will also have a pro version of this plugin, which includes these additional 
 
 == Installation ==
 = Requirements =
-* WordPress Multisite 3.3
+* WordPress Multisite 3.3*
 * PHP 5.2*
 
 = Installation =
@@ -90,23 +90,24 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
 [Localization](http://wordpress.org/extend/plugins/codestyling-localization/).
 
 == Changelog ==
-= Alpha =
-/**
- * 
- * 0.7.2a
- * - Updated language codes 
- * 
- * 0.7.3a
- * - Exported helper functions into own class
- * - Code documentation
- * 
- * 0.7.4a
- * - Exported the basic UI and userinput handling functionality into "default-module" class
- * - By default post types other than post and page are excluded
- * 
- * 0.7.5a
- * - Display an admin notice if the plugin was not activated on multisite
- * - Set the parent page if this page was also handled by the plugin    
- * - Fix a problem that a new multisite cannot set related blogs
- *
- */
+= 0.7.5a =
+* Display an admin notice if the plugin was not activated on multisite
+* Set the parent page if this page was also handled by the plugin [Issue 2](https://github.com/inpsyde/multilingual-press/issues/2)
+* Fix a problem that a new multisite cannot set related blogs
+* Change filter [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
+* Widget bugfix [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
+* Smaller source via use function selected() [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
+* Static value for register widget [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
+* Update Wiki for wrapper functions [Wiki on Repo](https://github.com/inpsyde/multilingual-press/wiki)
+
+= 0.7.4a =
+* Exported the basic UI and userinput handling functionality into "default-module" class
+* By default post types other than post and page are excluded
+* Incorrect flags for some languages [Issue 7](https://github.com/inpsyde/multilingual-press/issues/7)
+
+= 0.7.3a =
+* Exported helper functions into own class
+* Code documentation
+
+= 0.7.2a =
+* Updated language codes

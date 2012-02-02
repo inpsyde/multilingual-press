@@ -102,7 +102,7 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 			echo '<ul>';
 
 			foreach ( $languages as $language_blog => $language_string ) {
-                            
+				
 				// Get params
 				$flag = mlp_get_language_flag( $language_blog );
 				$title = mlp_get_available_languages_titles( TRUE );
@@ -113,9 +113,9 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 					$display = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
 				}
 				elseif ( 'text' == $instance[ 'widget_link_type' ] && '' != $language_titles[ $language_blog ] )
-                                    $display = $language_titles[ $language_blog ];	
+					$display = $language_titles[ $language_blog ];	
 				else 
-                                    $display = $languages[ $language_blog ];
+					$display = $languages[ $language_blog ];
 				
 				$class = ( get_current_blog_id() == $language_blog ) ? 'id="mlp_current_locale"' : '';
 
