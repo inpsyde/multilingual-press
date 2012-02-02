@@ -12,7 +12,7 @@ if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
 
 	class inpsyde_multilingualpress_settingspage extends Inpsyde_Multilingualpress {
 
-            	/**
+		/**
 		 * The static class object variable
 		 *
 		 * @static
@@ -20,43 +20,43 @@ if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
 		 * @var    string
 		 */
 		static public $class_object = NULL;
-                
-            	/**
+		
+		/**
 		 * The var containing the plugins' textdomain
 		 *
 		 * @static
 		 * @since  0.1
 		 * @var    string
-		 */                
+		 */				
 		static private $mlp = FALSE; 
-                
-            	/**
+		
+		/**
 		 * Registered modules
 		 *
 		 * @static
 		 * @since  0.1
 		 * @var    string
-		 */               
+		 */
 		protected $loaded_modules = FALSE; 
 
-            	/**
+		/**
 		 * Handler for the custom network options page
 		 *
 		 * @static
 		 * @since  0.2
 		 * @var    string
-		 */               
+		 */
 		public $options_page = FALSE; 
-                
-            	/**
+				
+		/**
 		 * Handler for the network module manager
 		 *
 		 * @static
 		 * @since  0.2
 		 * @var    string
-		 */               
-		public $modules_page = FALSE;                 
-                
+		 */
+		public $modules_page = FALSE;				 
+				
 		/**
 		 * to load the object and get the current state 
 		 *
@@ -81,30 +81,29 @@ if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
 		 * @return void
 		 */
 		function __construct() {
-                    				 
+									 
 			// Set some class vars
 			$this->mlp = parent::get_textdomain();
 			
 			add_action( 'network_admin_menu', array( $this, 'settings_page' ) );
 			add_action( 'admin_post_mlp_update_settings', array( $this, 'update_settings' ) );
 			add_action( 'admin_post_mlp_update_modules', array( $this, 'update_modules' ) );
-                        
-                        add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+						
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 		}
-                
-                /**
-                 * Load the scripts for the options page
-                 * 
-                 * @param string $hook | current page identifier 
-                 */
-                public function admin_scripts( $hook ) {
-                                                           
-                    if ( 'settings_page_mlp-pro-options' == $hook ) {
-                        
-                        wp_enqueue_script( 'dashboard' );
-                        wp_enqueue_style( 'dashboard' );
-                    }
-                }
+		
+		/**
+		 * Load the scripts for the options page
+		 * 
+		 * @param string $hook | current page identifier 
+		 */
+		public function admin_scripts( $hook ) {
+			
+			if ( 'settings_page_mlp-pro-options' == $hook ) {
+				wp_enqueue_script( 'dashboard' );
+				wp_enqueue_style( 'dashboard' );
+			}
+		}
 
 		/**
 		 * Add Multilingual Press networks settings
@@ -121,21 +120,36 @@ if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
 			if ( ! $this->loaded_modules ) return;
 			
 			$this->options_page = add_submenu_page(
-				'settings.php', __( 'mlp Options', $this->mlp ), __( 'MlP Options', $this->mlp ), 'manage_network_options', 'mlp-pro-options', array( $this, 'settings_form' )
+				'settings.php', 
+				__( 'mlp Options', $this->mlp ), 
+				__( 'MlP Options', $this->mlp ), 
+				'manage_network_options', 
+				'mlp-pro-options', 
+				array( $this, 'settings_form' )
 			);
 			$this->modules_page = add_submenu_page(
-				'settings.php', __( 'mlp Modules', $this->mlp ), __( 'MlP Modules', $this->mlp ), 'manage_network_options', 'mlp-pro-modules', array( $this, 'modules_form' )
+				'settings.php', 
+				__( 'mlp Modules', $this->mlp ), 
+				__( 'MlP Modules', $this->mlp ), 
+				'manage_network_options', 
+				'mlp-pro-modules', 
+				array( $this, 'modules_form' )
 			);
-                        
-                        add_action( 'load-'.$this->options_page, array( $this, 'metaboxes_options_page') );
+			
+			add_action( 'load-'.$this->options_page, array( $this, 'metaboxes_options_page') );
 		}
-                
-                public function metaboxes_options_page() {
-                    
-                    do_action( 'mlp_options_page_add_metabox' );
-
-                }
-                
+		
+		/**
+		 * Set an Action Hook for add meta boxes
+		 * 
+		 * @since   0.1
+		 * @return  void
+		 */
+		public function metaboxes_options_page() {
+		
+			do_action( 'mlp_options_page_add_metabox' );
+		}
+		
 		/**
 		 * The network settings page for
 		 * Multilingual Press. Modules use hook
@@ -148,30 +162,30 @@ if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
 		 * otherwise display "no options available"
 		 * 
 		 */
-		function settings_form() {
-                    
+		public function settings_form() {
+			
 			?>
 			<div class="wrap">
 				<div class="icon32" id="icon-options-general"><br></div>
 				<h2><?php _e( 'Multilingual Press Options', $this->mlp ); ?></h2>
-                                <br />
+								<br />
 				<form action="<?php echo admin_url( 'admin-post.php?action=mlp_update_settings' ); ?>" method="post">
-                                    <?php
-                                    wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
-                                    wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
-                                    ?>
-                                    
+									<?php
+									wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
+									wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
+									?>
+									
 					
-                                    <div id="poststuff" class="metabox-holder">
+									<div id="poststuff" class="metabox-holder">
 					<?php wp_nonce_field( 'mlp_settings' ); ?>
 
 					<?php do_meta_boxes( $this->options_page, 'normal', FALSE );
-                                        //do_action( 'mlp_settings_add_fields' );
+										//do_action( 'mlp_settings_add_fields' );
 					
 					//$has_options = did_action( 'mlp_settings_add_fields' );
 							
 					submit_button(); ?>
-                                    </div>
+									</div>
 					
 				</form>
 			</div>
@@ -185,7 +199,7 @@ if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
 		 * @since 1.2
 		 * 
 		 */
-		function update_settings() {
+		public function update_settings() {
 
 			check_admin_referer( 'mlp_settings' );
 
@@ -261,29 +275,29 @@ if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
 
 			$current_states = get_site_option( 'state_modules' );
 			$loaded_modules = parent::$class_object->loaded_modules;
-                        
+						
 			// Walk user input
 			foreach ( $_POST AS $module => $state ) {
 				if ( 0 === strpos( $module, 'mlp_state_' ) )
 					$modules[ str_replace( 'mlp_state_', '', $module ) ] = $state;
 			}
-                        			
+									
 			// Deactivate previously activated modules
 			$new_states = array_diff_key( $current_states, $modules );
-                        
+						
 			if ( is_array( $new_states ) ) {
 				foreach ( $new_states AS $module => $state ) {
 					$current_states[ $module ][ 'state' ] = 'off';
 				}
 			}
-                                         
-                        
+										 
+						
 
 			// Activate modules
 			foreach ( $modules AS $module => $state ) {
 				$current_states[ $module ][ 'state' ] = 'on';
 			}
-                        
+						
 			// Update module states
 			update_site_option( 'state_modules', $current_states );
 
@@ -294,6 +308,7 @@ if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
 			exit;
 		}
 
-	}
-}
+	} // end class
+	
+} // end if class exists
 ?>
