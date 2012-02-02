@@ -99,6 +99,7 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
 * Smaller source via use function selected() [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
 * Static value for register widget [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
 * Update Wiki for wrapper functions [Wiki on Repo](https://github.com/inpsyde/multilingual-press/wiki)
+* Add new pages on [Wiki on Repo](https://github.com/inpsyde/multilingual-press/wiki) for Filter- and Action Hooks inside the plugin
 
 = 0.7.4a =
 * Exported the basic UI and userinput handling functionality into "default-module" class
