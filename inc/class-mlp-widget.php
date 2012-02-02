@@ -108,12 +108,12 @@ if ( ! class_exists( 'Mlp_Widget' ) ) {
 				$title = mlp_get_available_languages_titles( TRUE );
 				
 				// Display type
-				if( 'flag' == $instance[ 'widget_link_type' ] && '' != $flag ) {
+				if ( 'flag' == $instance[ 'widget_link_type' ] && '' != $flag ) {
 					
 					$display = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
 				}
-				elseif ( 'text' == $instance[ 'widget_link_type' ] && '' != $language_titles[ $language_blog ] )
-					$display = $language_titles[ $language_blog ];	
+				else if ( 'text' == $instance[ 'widget_link_type' ] && ! empty( $language_titles[ $language_blog ] ) )
+					$display = $language_titles[ $language_blog ];
 				else 
 					$display = $languages[ $language_blog ];
 				

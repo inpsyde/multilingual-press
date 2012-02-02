@@ -101,15 +101,18 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 				return;
 
 			$options = array( );
-					   
+			var_dump($languages);
 			// Loop through blogs
 			foreach ( $languages as $language_blogid => $language_data ) {
-
+				
+				if ( '-1' === $language_data[ 'lang' ] )
+					break;
+				
 				// Filter out blogs that are not related
-				if ( ISSET( $related_blogs )
+				if ( isset( $related_blogs )
 						&& is_array( $related_blogs )
 						&& ! in_array( $language_blogid, $related_blogs )
-				)
+					)
 					continue;
 
 				$lang = $language_data[ 'lang' ];
@@ -125,6 +128,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 				}
 				$options[ $language_blogid ] = $lang;
 			}
+			
 			return $options;
 		}
 
