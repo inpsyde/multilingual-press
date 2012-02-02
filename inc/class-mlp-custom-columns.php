@@ -62,7 +62,8 @@ class Mlp_Custom_Columns extends Inpsyde_Multilingualpress {
 			
 			$interlinked = mlp_get_available_languages_titles();
 			
-			if ( ! is_array( $interlinked ) ) {
+			if ( ! is_array( $interlinked ) || 
+				 ( isset( $interlinked[4] ) && '-1' === $interlinked[4] ) ) {
 				_e( 'nothing', $this->get_textdomain() );
 				return;
 			}
