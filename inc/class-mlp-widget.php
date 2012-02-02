@@ -11,9 +11,9 @@
  * 0.7a
  * - Use URL-parameter to avoid redirection 
  */
-if ( ! class_exists( 'mlp_widget' ) ) {
+if ( ! class_exists( 'Mlp_Widget' ) ) {
 
-	class mlp_widget extends WP_Widget {
+	class Mlp_Widget extends WP_Widget {
 
 		private $textdomain = '';
 
@@ -21,16 +21,16 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 		 * Widget init
 		 * 
 		 */
-		function mlp_widget() {
+		public function mlp_widget() {
 			
 			$this->textdomain = inpsyde_multilingualpress :: get_textdomain();
 			
 			$widget_ops = array(
-				'classname' => 'mlp_widget',
+				'classname' => 'Mlp_Widget',
 				'description' => __( 'Multilingual Press Widget', $this->textdomain )
 			);
 			
-			$this->WP_Widget( 'mlp_widget', __( 'Multilingual Press Widget', $this->textdomain ), $widget_ops );
+			$this->WP_Widget( 'Mlp_Widget', __( 'Multilingual Press Widget', $this->textdomain ), $widget_ops );
 		}
 
 		/**
@@ -38,7 +38,7 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 		 * 
 		 * @param array $instance | widget settings 
 		 */
-		function form( $instance ) {
+		public function form( $instance ) {
 
 			$title = ( ISSET( $instance[ 'widget_title' ] ) ) ? strip_tags( $instance[ 'widget_title' ] ) : '';
 			$link_type = ( ISSET( $instance[ 'widget_title' ] ) ) ? esc_attr( $instance[ 'widget_link_type' ] ) : '';
@@ -64,7 +64,7 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 		 * @param array $instance | widget settings 
 		 * @param array $new_instance | new widget settings 
 		 */
-		function update( $new_instance, $old_instance ) {
+		public function update( $new_instance, $old_instance ) {
 
 			$instance = $old_instance;
 			$instance[ 'widget_title' ] = strip_tags( $new_instance[ 'mlp_widget_title' ] );
@@ -80,7 +80,7 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 		 * @param array $instance | widget settings
 		 * @return void
 		 */
-		function widget( $args, $instance ) {
+		public function widget( $args, $instance ) {
 			
 			extract( $args );
 			
@@ -131,13 +131,13 @@ if ( ! class_exists( 'mlp_widget' ) ) {
 			echo $after_widget;
 		}
 		
-		function widget_register() {
+		public function widget_register() {
 			register_widget( 'mlp_widget' );	
 		}
-	}
-	// Class END;
+		
+	} // Class END;
 
 	// Initialize widget
-	add_action( 'widgets_init', array( 'mlp_widget', 'widget_register' ) );
+	add_action( 'widgets_init', array( 'Mlp_Widget', 'widget_register' ) );
 }
 ?>
