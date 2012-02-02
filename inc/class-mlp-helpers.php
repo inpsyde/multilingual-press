@@ -258,7 +258,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 			if ( 0 == $blog_id ) {
 				$blog_id = get_current_blog_id();
 			}
-		   
+			
 			// Custom flag image set?
 			$custom_flag = get_blog_option( $blog_id, 'inpsyde_multilingual_flag_url' );
 			if ( $custom_flag )
@@ -271,7 +271,6 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 			// Is this a shortcode (i.e. "fr"), or an ISO 
 			// formatted language code (i.e. fr_BE) ?
 			$language_code = ( 5 == strlen( $languages[ $blog_id ][ 'lang' ] ) ) ? strtolower( substr( $languages[ $blog_id ][ 'lang' ], 3, 2 ) ) : substr( $languages[ $blog_id ][ 'lang' ], 0, 2 );
-			
 			// Check for existing file
 			if ( '' != $language_code && file_exists( plugin_dir_path( dirname( __FILE__ ) ) . '/flags/' . $language_code . '.gif' ) ) {
 				$url = plugins_url( 'flags/' . $language_code . '.gif', dirname( __FILE__ ) );

@@ -81,7 +81,10 @@ class Mlp_Custom_Columns extends Inpsyde_Multilingualpress {
 				echo '<img src="' 
 					. mlp_get_language_flag( $interlinked_blog_id ) 
 					. '" alt="' . $interlinked_blog_title 
-					. '" title="' . $interlinked_blog_title . '" />&nbsp;';
+					. '" title="' . $interlinked_blog_title 
+					. '" class="mlp_interlinked_blog_' . $interlinked_blog_id
+					. '" width="16" height="11"'
+					. '/>&nbsp;';
 			}
 			echo '</div>';
 			
