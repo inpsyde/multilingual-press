@@ -1,16 +1,16 @@
 <?php
 /**
  * MultilingualPress
- * Class name: inpsyde_multilingualpress_settingspage
+ * Class name: Inpsyde_Multilingualpress_Settingspage
  * The plugins' settings page and module manager. Modules 
  * can hook into this (not fully implemented yet)
  * 
  * @version 0.2
  * 
  */
-if ( ! class_exists( 'inpsyde_multilingualpress_settingspage' ) ) {
+if ( ! class_exists( 'Inpsyde_Multilingualpress_Settingspage' ) ) {
 
-	class inpsyde_multilingualpress_settingspage extends Inpsyde_Multilingualpress {
+	class Inpsyde_Multilingualpress_Settingspage extends Inpsyde_Multilingualpress {
 
 		/**
 		 * The static class object variable

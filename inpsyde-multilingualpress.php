@@ -18,7 +18,7 @@
  * mlp_blogs_add_fields - Allows modules to add form fields to the Multilingual Press blog settings screen
  * mlp_blogs_add_fields_secondary - Same as above, with lower priority. 
  * mlp_blogs_save_fields - Modules can hook in here to handle user data returned by their form fields
- * mlp_options_page_add_metabox - This hook registers a metabox on the Multilingual Press options page. Use inpsyde_multilingualpress_settingspage::$class_object->options_page for 'screen' parameter.
+ * mlp_options_page_add_metabox - This hook registers a metabox on the Multilingual Press options page. Use Inpsyde_Multilingualpress_Settingspage::$class_object->options_page for 'screen' parameter.
  * mlp_settings_save_fields - Handles the data of the options page form. Function parameter contains the form data
  * mlp_modules_add_fields - Add data to the module manager. Probably obsolete in the future.
  * mlp_modules_save_fields - Hooks into the module manager's saving routine.
@@ -204,7 +204,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 
 				// Include settings page _after_ modules are loaded
 				require_once( 'inc/class-mlp-settings-page.php' );
-				add_action( 'plugins_loaded', array( 'inpsyde_multilingualpress_settingspage', 'get_object' ), 8 );
+				add_action( 'plugins_loaded', array( 'Inpsyde_Multilingualpress_Settingspage', 'get_object' ), 8 );
 			}
 		}
 

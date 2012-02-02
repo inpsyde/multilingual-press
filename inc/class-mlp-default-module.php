@@ -322,7 +322,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Default_Module' ) ) {
 		 */
 		public function add_metabox() {
 
-			add_meta_box( 'demo_metabox', __( 'Demo Module Metabox', $this->mlp ), array( $this, 'draw_options_page_form_fields' ), inpsyde_multilingualpress_settingspage::$class_object->options_page, 'normal', 'low', TRUE );
+			add_meta_box( 'demo_metabox', __( 'Demo Module Metabox', $this->mlp ), array( $this, 'draw_options_page_form_fields' ), Inpsyde_Multilingualpress_Settingspage::$class_object->options_page, 'normal', 'low', TRUE );
 		}
 
 		/**
