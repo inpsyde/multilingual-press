@@ -104,7 +104,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 			
 			// Loop through blogs
 			foreach ( $languages as $language_blogid => $language_data ) {
-				
+				// no blogs with a link to other blogs
 				if ( '-1' === $language_data[ 'lang' ] )
 					break;
 				
