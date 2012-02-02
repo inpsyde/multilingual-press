@@ -196,7 +196,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 			if ( is_admin() && in_array( $pagenow, $hook ) ) {
 
 				require_once( 'inc/class-mlp-custom-columns.php' );
-				add_action( 'init', array( 'mlp_custom_columns', 'init' ) );
+				add_action( 'init', array( 'Mlp_Custom_Columns', 'init' ) );
 			}
 
 			// Global admin files
