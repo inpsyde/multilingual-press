@@ -1,0 +1,13 @@
+/**
+ * Multilingual Press Admin CSS File
+ */
+
+#multilingualpress_settings h3{ 
+	padding: 7px 10px;
+	margin: 0;
+}
+
+#inpsyde_multilingualpress_link textarea {
+	width: 98%;
+}
+
