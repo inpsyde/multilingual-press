@@ -52,6 +52,7 @@ if ( ! class_exists( 'Mlp_Widget' ) ) {
 				<select class="widefat" id='<?php echo $this->get_field_id( "mlp_widget_link_type" ); ?>' name='<?php echo $this->get_field_name( "mlp_widget_link_type" ); ?>' >
 					<option <?php selected( $link_type, 'text' ); ?> value="text"><?php _e( 'Text', $this->textdomain ); ?></option>
 					<option <?php selected( $link_type, 'flag' ); ?> value="flag"><?php _e( 'Flag', $this->textdomain ); ?></option>
+					<option <?php selected( $link_type, 'text_flag' ); ?> value="text_flag"><?php _e( 'Text &amp; Flag', $this->textdomain ); ?></option>
 					<option <?php selected( $link_type, 'lang_code' ); ?> value="lang_code"><?php _e( 'Language code', $this->textdomain ); ?></option>
 				</select>
 			</p>
@@ -109,13 +110,16 @@ if ( ! class_exists( 'Mlp_Widget' ) ) {
 				
 				// Display type
 				if ( 'flag' == $instance[ 'widget_link_type' ] && '' != $flag ) {
-					
 					$display = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
-				}
-				else if ( 'text' == $instance[ 'widget_link_type' ] && ! empty( $language_titles[ $language_blog ] ) )
+				} else if ( 'text' == $instance[ 'widget_link_type' ] && ! empty( $language_titles[ $language_blog ] ) ) {
 					$display = $language_titles[ $language_blog ];
-				else 
+				} else if ( 'text_flag' == $instance[ 'widget_link_type' ] ) {
+					$display  = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
+					if ( ! empty( $language_titles[ $language_blog ] ) )
+						$display .= ' ' . $language_titles[ $language_blog ];
+				} else {
 					$display = $languages[ $language_blog ];
+				}
 				
 				$class = ( get_current_blog_id() == $language_blog ) ? 'id="mlp_current_locale"' : '';
 
