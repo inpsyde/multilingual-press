@@ -235,19 +235,32 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 		 * @return  array linked elements
 		 */
 		static function run_custom_plugin( $element_id, $type, $blog_id, $hook, $param ) {
-
+			
+			// if no element id is provides, use WP default
+			if ( ! $element_id )
+				$element_id = get_the_ID();
+				
+			// If no ID is provided, get current blogs' ID
+			if ( 0 == $blog_id )
+				$blog_id = get_current_blog_id();
+			
 			$this->set_source_id( $element_id, $blog_id, $type );
 			$languages = $this->get_available_languages();
 			$current_blog = get_current_blog_id();
+			
 			if ( 0 < count( $languages ) ) {
+			
 				foreach ( $languages as $languageid => $languagename ) {
 					if ( $current_blog != $languageid ) {
 						switch_to_blog( $languageid );
+						// custom hook
 						$return = do_action( $hook, $param );
 						restore_current_blog();
 					}
 				}
+			
 			}
+			
 		}
 		
 		/**
@@ -370,7 +383,7 @@ function mlp_get_linked_elements( $element_id = FALSE, $type = '', $blog_id = 0 
  * @param   array $param parameters for the function
  * @return  array linked elements
  */
-function mlp_run_custom_plugin( $element_id, $type = '', $blog_id = 0, $hook, $param ) {
+function mlp_run_custom_plugin( $element_id = FALSE, $type = '', $blog_id = 0, $hook = NULL, $param = NULL ) {
 
 	return Inpsyde_Multilingualpress_Helpers::run_custom_plugin( $element_id, $type, $blog_id, $hook, $param );
 }
