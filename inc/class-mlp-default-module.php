@@ -387,7 +387,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Default_Module' ) ) {
 		 * @since   0.1
 		 * @return  array $lang_codes | List of updated lang codes
 		 */
-		function load_lang_codes( $lang_codes ) {
+		public function load_lang_codes( $lang_codes ) {
 
 			$obsolete_shortcodes = array( 'fr', 'es', 'bg', 'it', 'da', 'de', 'gl', 'hu', 'is', 'id', 'kr', 'ky', 'mg', 'mk', 'ml', 'en',
 				'bs', 'ne', 'no', 'pa', 'pl', 'pt', 'ro', 'ru', 'sa', 'sd', 'si', 'sk', 'sl', 'so', 'sr', 'sv',
@@ -432,6 +432,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Default_Module' ) ) {
 			$lang_codes[ 'de_DE' ] = __( 'German', $this->get_textdomain() );
 			$lang_codes[ 'en_CA' ] = __( 'English (Canada)', $this->get_textdomain() );
 			$lang_codes[ 'gl_ES' ] = __( 'Galician', $this->get_textdomain() );
+			$lang_codes[ 'gu' ]    = __( 'Gujarati', $this->get_textdomain() );
 			$lang_codes[ 'hu_HU' ] = __( 'Hungarian', $this->get_textdomain() );
 			$lang_codes[ 'is_IS' ] = __( 'Icelandic', $this->get_textdomain() );
 			$lang_codes[ 'id_ID' ] = __( 'Indonesian', $this->get_textdomain() );
