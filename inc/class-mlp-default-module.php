@@ -389,9 +389,11 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Default_Module' ) ) {
 		 */
 		public function load_lang_codes( $lang_codes ) {
 
-			$obsolete_shortcodes = array( 'fr', 'es', 'bg', 'it', 'da', 'de', 'gl', 'hu', 'is', 'id', 'kr', 'ky', 'mg', 'mk', 'ml', 'en',
+			$obsolete_shortcodes = array( 
+				'fr', 'es', 'bg', 'it', 'da', 'de', 'gl', 'hu', 'is', 'id', 'kr', 'ky', 'mg', 'mk', 'ml', 'en',
 				'bs', 'ne', 'no', 'pa', 'pl', 'pt', 'ro', 'ru', 'sa', 'sd', 'si', 'sk', 'sl', 'so', 'sr', 'sv',
-				'tr', 'ug', 'uz', 'bn', 'cs', 'ms', 'my' );
+				'tr', 'ug', 'uz', 'bn', 'cs', 'ms', 'my'
+			);
 			foreach ( $obsolete_shortcodes AS $os ) {
 				unset( $lang_codes[ $os ] );
 			}
