@@ -188,10 +188,14 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 		 * @param   int $blog_id ID of the selected blog
 		 * @return  array $elements
 		 */
-		static function load_linked_elements( $element_id, $type = '', $blog_id = 0 ) {
+		static function load_linked_elements( $element_id = FALSE, $type = '', $blog_id = 0 ) {
 
 			global $wpdb;
-
+			
+			// if no element id is provides, use WP default
+			if ( ! $element_id )
+				$element_id = get_the_ID();
+			
 			// If no ID is provided, get current blogs' ID
 			if ( 0 == $blog_id ) {
 				$blog_id = get_current_blog_id();
@@ -349,7 +353,7 @@ function mlp_get_available_languages_titles( $nonrelated = FALSE ) {
  * @param   int $blog_id ID of the selected blog
  * @return  array linked elements
  */
-function mlp_get_linked_elements( $element_id, $type = '', $blog_id = 0 ) {
+function mlp_get_linked_elements( $element_id = FALSE, $type = '', $blog_id = 0 ) {
 
 	return Inpsyde_Multilingualpress_Helpers::load_linked_elements( $element_id, $type, $blog_id );
 }
