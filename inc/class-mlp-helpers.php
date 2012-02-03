@@ -211,7 +211,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 				
 				if ( $blog_id != $resultelement->ml_blogid ) {
 					
-					$elements[ $resultelement->ml_blogid ] = $resultelement->ml_elementid;
+					$elements[ $resultelement->ml_blogid ] = (int) $resultelement->ml_elementid;
 				}
 			}
 
