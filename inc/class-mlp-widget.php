@@ -79,16 +79,16 @@ if ( ! class_exists( 'Mlp_Widget' ) ) {
 		 * 
 		 * @param array $args
 		 * @param array $instance | widget settings
+		 * @uses mlp_show_linked_elements
 		 * @return void
 		 */
 		public function widget( $args, $instance ) {
 			
 			extract( $args );
 			
-			$languages = mlp_get_available_languages( TRUE );
-			$language_titles = mlp_get_available_languages_titles();
+			$output = mlp_show_linked_elements( $instance[ 'widget_link_type' ], FALSE );
 			
-			if ( ! ( 0 < count( $languages ) ) )
+			if ( '' == $output )
 				return;
 			
 			echo $before_widget;
@@ -97,42 +97,7 @@ if ( ! class_exists( 'Mlp_Widget' ) ) {
 			if ( $instance[ 'widget_title' ] )
 				echo $before_title . apply_filters( 'widget_title', $instance[ 'widget_title' ] ) . $after_title;
 
-			if ( is_single() || is_page() )
-				$linked_elements = mlp_get_linked_elements( get_the_id() );
-
-			echo '<ul>';
-
-			foreach ( $languages as $language_blog => $language_string ) {
-				
-				// Get params
-				$flag = mlp_get_language_flag( $language_blog );
-				$title = mlp_get_available_languages_titles( TRUE );
-				
-				// Display type
-				if ( 'flag' == $instance[ 'widget_link_type' ] && '' != $flag ) {
-					$display = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
-				} else if ( 'text' == $instance[ 'widget_link_type' ] && ! empty( $language_titles[ $language_blog ] ) ) {
-					$display = $language_titles[ $language_blog ];
-				} else if ( 'text_flag' == $instance[ 'widget_link_type' ] ) {
-					$display  = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
-					if ( ! empty( $language_titles[ $language_blog ] ) )
-						$display .= ' ' . $language_titles[ $language_blog ];
-				} else {
-					$display = $languages[ $language_blog ];
-				}
-				
-				$class = ( get_current_blog_id() == $language_blog ) ? 'id="mlp_current_locale"' : '';
-
-				// Check post status
-				$post = ( ISSET( $linked_elements[ $language_blog ] ) ) ? get_blog_post( $language_blog, $linked_elements[ $language_blog ] ) : '';
-				
-				// Output link elements
-				echo '<li><a ' . $class . ' href="' . ( ( is_single() || is_page() ) && ISSET( $linked_elements[ $language_blog ] ) && 'publish' === $post->post_status ? get_blog_permalink( $language_blog, $linked_elements[ $language_blog ] ) : get_site_url( $language_blog ) ) . '?noredirect=' . $language_string . '">' . $display . '</a></li>';
-			}
-
-			echo '</ul>';
-
-			echo $after_widget;
+			echo $output . $after_widget;
 		}
 		
 		public function widget_register() {

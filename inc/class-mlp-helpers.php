@@ -310,6 +310,60 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 			}
 			return $url;
 		}
+		
+		/**
+		 * Get the linked elements and display them as a list 
+		 * flag from a blogid
+		 *
+		 * @access public
+		 * @since 0.1
+		 * @param int $blog_id ID of a blog
+		 * @return string output of the bloglist
+		 */
+		static function show_linked_elements( $link_type ) {
+
+			$output				= '';
+			$languages			= mlp_get_available_languages( TRUE );
+			$language_titles	= mlp_get_available_languages_titles();
+				
+			if ( ! ( 0 < count( $languages ) ) )
+				return $output;
+
+			if ( is_single() || is_page() )
+				$linked_elements = mlp_get_linked_elements( get_the_id() );
+
+			$output .= '<div class="mlp_language_box"><ul>';
+
+			foreach ( $languages as $language_blog => $language_string ) {
+
+				// Get params
+				$flag = mlp_get_language_flag( $language_blog );
+				$title = mlp_get_available_languages_titles( TRUE );
+
+				// Display type
+				if ( 'flag' == $link_type && '' != $flag ) {
+					$display = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
+				} else if ( 'text' == $link_type && ! empty( $language_titles[ $language_blog ] ) ) {
+					$display = $language_titles[ $language_blog ];
+				} else if ( 'text_flag' == $link_type ) {
+					$display  = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
+					if ( ! empty( $language_titles[ $language_blog ] ) )
+					$display .= ' ' . $language_titles[ $language_blog ];
+				} else {
+					$display = $languages[ $language_blog ];
+				}
+
+				$class = ( get_current_blog_id() == $language_blog ) ? 'id="mlp_current_locale"' : '';
+
+				// Check post status
+				$post = ( ISSET( $linked_elements[ $language_blog ] ) ) ? get_blog_post( $language_blog, $linked_elements[ $language_blog ] ) : '';
+
+				// Output link elements
+				$output .= '<li><a ' . $class . ' href="' . ( ( is_single() || is_page() ) && ISSET( $linked_elements[ $language_blog ] ) && 'publish' === $post->post_status ? get_blog_permalink( $language_blog, $linked_elements[ $language_blog ] ) : get_site_url( $language_blog ) ) . '?noredirect=' . $language_string . '">' . $display . '</a></li>';
+			}
+			$output .= '</ul></div>';
+			return $output;
+		}
 
 	} // end class
 
@@ -411,4 +465,22 @@ function mlp_run_custom_plugin( $element_id = FALSE, $type = '', $blog_id = 0, $
 function mlp_get_language_flag( $blog_id = 0 ) {
 
 	return Inpsyde_Multilingualpress_Helpers::get_language_flag( $blog_id );
+}
+
+/**
+ * wrapper of Inpsyde_Multilingualpress_Helpers function for function to get the linked elements and display them as a list
+ *
+ * @access  public
+ * @since   0.8
+ * @param   string $link_type available types: flag, text, text_flag
+ * @param	bool $echo to display the output or to return. default is display   
+ * @return  string output of the bloglist
+ */
+function mlp_show_linked_elements( $link_type = 'text', $echo = TRUE ) {
+
+	$output = Inpsyde_Multilingualpress_Helpers::show_linked_elements( $link_type );
+	if ( TRUE === $echo )
+		echo $output;
+	else
+		return $output;
 }

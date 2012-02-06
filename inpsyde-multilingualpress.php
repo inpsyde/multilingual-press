@@ -5,7 +5,7 @@
  * Description: By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature. 
  * Author:	  Inpsyde GmbH
  * Author URI:  http://inpsyde.com
- * Version:	 0.7.5a (Alpha)
+ * Version:	 0.8
  * Text Domain: inpsyde_multilingualpress
  * Domain Path: /languages
  * License:	 GPLv3
