@@ -236,17 +236,29 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress_Helpers' ) ) {
 		 */
 		static function run_custom_plugin( $element_id, $type, $blog_id, $hook, $param ) {
 			
-			// if no element id is provides, use WP default
-			if ( ! $element_id )
-				$element_id = get_the_ID();
-				
+			if ( empty( $element_id ) ) {
+				$error = new WP_Error( 'mlp_empty_custom_element', __( 'Empty Element', self::get_textdomain() ) );
+				return $error;
+			}
+
+			if ( empty( $type ) ) {
+				$error = new WP_Error( 'mlp_empty_custom_type', __( 'Empty Type', self::get_textdomain() ) );
+				return $error;
+			}
+			
+			if ( empty( $hook ) || !is_callable( $hook ) ) {
+				$error = new WP_Error( 'mlp_empty_custom_hook', __( 'Invalid Hook', self::get_textdomain() ) );
+				return $error;
+			}
+			
 			// If no ID is provided, get current blogs' ID
 			if ( 0 == $blog_id )
 				$blog_id = get_current_blog_id();
 			
-			$this->set_source_id( $element_id, $blog_id, $type );
-			$languages = $this->get_available_languages();
-			$current_blog = get_current_blog_id();
+			// set the current element in the mlp class
+			self::$class_object -> set_source_id( $element_id, $blog_id, $type );
+			$languages		= mlp_get_available_languages();
+			$current_blog	= get_current_blog_id();
 			
 			if ( 0 < count( $languages ) ) {
 			
