@@ -41,6 +41,7 @@
  * - Codexified
  * - Renamed the files
  * - changed textdomain
+ * - fixed fi_FI language pack
  * 
  * 0.7.5a
  * - Display an admin notice if the plugin was not activated on multisite
