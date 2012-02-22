@@ -624,7 +624,6 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			if ( 0 < count( $linked ) ) { // post is a linked post
 				$languages = mlp_get_available_languages();
 				if ( 0 < count( $languages ) ) {
-					
 					?>
 					<select name="multilingual_press" id="multilingual_press">
 						<option><?php _e( 'choose preview language', $this->get_textdomain() ); ?></option>
@@ -632,7 +631,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 					foreach ( $languages as $language_blogid => $language_name ) {
 						if ( $language_blogid != get_current_blog_id() ) {
 							?>
-							<option value="<?php echo $language_blogid; ?>"><?php $language_name;?></option>
+							<option value="<?php echo $language_blogid; ?>"><?php echo $language_name;?></option>
 							<?php 
 						}
 					}
