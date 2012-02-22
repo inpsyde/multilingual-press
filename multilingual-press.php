@@ -42,6 +42,10 @@
  * - Renamed the files
  * - changed textdomain
  * - fixed fi_FI language pack
+ * - fixed several widget bugs ( #10, #13, #18, #22 )
+ * - Documentation
+ * - Only load the Widget CSS when widget is used
+ * - added a check box to the editing view asking whether you want to create the drafts to other languages
  * 
  * 0.7.5a
  * - Display an admin notice if the plugin was not activated on multisite
@@ -237,6 +241,9 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 
 			// Cleanup upon blog delete
 			add_filter( 'delete_blog', array( $this, 'delete_blog' ), 10, 2 );
+			
+			// Register Translated Post Meta to the submit box
+			add_filter( 'post_submitbox_misc_actions', array( $this, 'post_submitbox_misc_actions' ) );
 		}
 		
 		/**
@@ -473,6 +480,10 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			// We're only interested in published posts at this time
 			$post_status = get_post_status( $post_id );
 			if ( 'publish' !== $post_status )
+				return;
+			
+			// If checkbox is not checked, return
+			if ( 'on' != $_POST[ 'translate_this_post' ] )
 				return;
 			
 			// Get the post
@@ -993,6 +1004,27 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 					<a href="http://codex.wordpress.org/Create_A_Network" title="<?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?>"><?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?></a>
 				</p>
 			</div><?php
+		}
+		
+		/**
+		 * Displays the checkbox for the post to translate meta
+		 *
+		 * @since 0.8
+		 * @uses get_post_meta
+		 * @return void
+		 */
+		public function post_submitbox_misc_actions() {
+			
+			$linked_elements = mlp_get_linked_elements( $post->ID );
+			if ( 0 < count( $linked_elements ) )
+				$checked = 'checked="checked"';
+			
+			?>
+			<div class="misc-pub-section curtime misc-pub-section-last">
+				<input type="checkbox" id="translate_this_post" name="translate_this_post" <?php echo $checked; ?> />
+				<label for="translate_this_post"><?php _e( 'Translate this post', $this->get_textdomain() ); ?></label>
+			</div>
+			<?php
 		}
 	}
 }
