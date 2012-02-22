@@ -1,41 +1,79 @@
 <?php
 /**
- * Plugin Name: Multilingual Press
- * Plugin URI:  https://github.com/inpsyde/multilingual-press
- * Description: By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature. 
- * Author:	  Inpsyde GmbH
- * Author URI:  http://inpsyde.com
- * Version:	 0.8
- * Text Domain: inpsyde_multilingualpress
- * Domain Path: /languages
- * License:	 GPLv3
- */
-
-/**
+ * Plugin Name:	Multilingual Press
+ * Plugin URI:	https://github.com/inpsyde/multilingual-press
+ * Description:	By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature. 
+ * Author:		Inpsyde GmbH
+ * Author URI:	http://inpsyde.com
+ * Version:		0.8
+ * Text Domain:	inpsyde_multilingualpress
+ * Domain Path:	/languages
+ * License:		GPLv3
+ * 
  * Available hooks
  * 
- * inpsyde_mlp_init - This hook is called upon instantiation of the main class
- * mlp_blogs_add_fields - Allows modules to add form fields to the Multilingual Press blog settings screen
- * mlp_blogs_add_fields_secondary - Same as above, with lower priority. 
- * mlp_blogs_save_fields - Modules can hook in here to handle user data returned by their form fields
- * mlp_options_page_add_metabox - This hook registers a metabox on the Multilingual Press options page. Use Inpsyde_Multilingualpress_Settingspage::$class_object->options_page for 'screen' parameter.
- * mlp_settings_save_fields - Handles the data of the options page form. Function parameter contains the form data
- * mlp_modules_add_fields - Add data to the module manager. Probably obsolete in the future.
- * mlp_modules_save_fields - Hooks into the module manager's saving routine.
- */
-
-/**
+ * - inpsyde_mlp_init - This hook is called upon instantiation of the main class
+ * - mlp_blogs_add_fields - Allows modules to add form fields to the Multilingual Press blog settings screen
+ * - mlp_blogs_add_fields_secondary - Same as above, with lower priority. 
+ * - mlp_blogs_save_fields - Modules can hook in here to handle user data returned by their form fields
+ * - mlp_options_page_add_metabox - This hook registers a metabox on the Multilingual Press options page. Use Multilingual_Press_Settingspage::$class_object->options_page for 'screen' parameter.
+ * - mlp_settings_save_fields - Handles the data of the options page form. Function parameter contains the form data
+ * - mlp_modules_add_fields - Add data to the module manager. Probably obsolete in the future.
+ * - mlp_modules_save_fields - Hooks into the module manager's saving routine.
+ * 
  * Available filters
  * 
- * mlp_pre_save_postdata - This filter is passed the postdata prior to creating blog interlinks.
- * mlp-context-help - Is passed the content of the contextual help screen.
- * mlp_language_codes - Is passed all the language codes used by Multilingual Press.
+ * - mlp_pre_save_postdata - This filter is passed the postdata prior to creating blog interlinks.
+ * - mlp-context-help - Is passed the content of the contextual help screen.
+ * - mlp_language_codes - Is passed all the language codes used by Multilingual Press.
  * 
+ * Changelog
+ * 
+ * 0.8
+ * - Codexified
+ * - Renamed some Files
+ * 
+ * 0.7.5a
+ * - Display an admin notice if the plugin was not activated on multisite
+ * - Set the parent page if this page was also handled by the plugin [Issue 2](https://github.com/inpsyde/multilingual-press/issues/2)
+ * - Fix a problem that a new multisite cannot set related blogs
+ * - Change filter [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
+ * - Widget bugfix [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
+ * - Smaller source via use function selected() [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
+ * - Static value for register widget [Issue 12](https://github.com/inpsyde/multilingual-press/issues/12)
+ * - Update Wiki for wrapper functions [Wiki on Repo](https://github.com/inpsyde/multilingual-press/wiki)
+ * - Add new pages on [Wiki on Repo](https://github.com/inpsyde/multilingual-press/wiki) for Filter- and Action Hooks inside the plugin
+ * - Fix bug, if you kill data on an blog for dont interlinked with other blogs
+ * 
+ * 0.7.4a
+ * - Exported the basic UI and userinput handling functionality into "default-module" class
+ * - By default post types other than post and page are excluded
+ * - Incorrect flags for some languages [Issue 7](https://github.com/inpsyde/multilingual-press/issues/7)
+ *
+ * 0.7.3a
+ * - Exported helper functions into own class
+ * - Code documentation
+ *
+ * 0.7.2a
+ * - Updated language codes
  */
 
-if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
+if ( ! class_exists( 'Multilingual_Press' ) ) {
+	
+	// Enqueue plugin
+	if ( function_exists( 'add_filter' ) ) {
+	
+		// Kick-Off
+		add_filter( 'plugins_loaded', array( 'Multilingual_Press', 'get_object' ) );
+	
+		// Upon activation
+		register_activation_hook( __FILE__, array( 'Multilingual_Press', 'install_plugin' ) );
+	
+		// Upon deactivation
+		register_deactivation_hook( __FILE__, array( 'Multilingual_Press', 'remove_plugin' ) );
+	}
 
-	class Inpsyde_Multilingualpress {
+	class Multilingual_Press {
 	
 		/**
 		 * The class object
@@ -103,12 +141,9 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 * @since   0.1
 		 * @return  $class_object
 		 */
-
 		public function get_object() {
-
-			if ( NULL == self::$class_object ) {
+			if ( NULL == self::$class_object )
 				self::$class_object = new self;
-			}
 			return self::$class_object;
 		}
 
@@ -119,13 +154,15 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 *
 		 * @access  public
 		 * @since   0.1
-		 * @uses	add_action, get_site_option
+		 * @uses	add_filter, get_site_option, is_multisite, is_super_admin,
+		 * 			do_action, apply_filters
+		 * @global	$wpdb | WordPress Database Wrapper
 		 * @return  void
 		 */
 		public function __construct() {
 			
-			if ( function_exists('is_multisite') && !is_multisite() && is_super_admin() ) {
-				add_action( 'admin_notices',  array( $this, 'error_msg_no_multisite' ) );
+			if ( function_exists( 'is_multisite' ) && ! is_multisite() && is_super_admin() ) {
+				add_filter( 'admin_notices',  array( $this, 'error_msg_no_multisite' ) );
 				return;
 			}
 			
@@ -141,42 +178,47 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 			// Load classes
 			$this->include_files();
 
+			// Kick-Off Init
 			do_action( 'inpsyde_mlp_init' );
 
 			// Hooks and filters
-			add_action( 'init', array( $this, 'localize_plugin' ) );
+			add_filter( 'init', array( $this, 'localize_plugin' ) );
 
 			// Load modules
-			add_action( 'plugins_loaded', array( $this, 'load_modules' ), 9 );
+			add_filter( 'plugins_loaded', array( $this, 'load_modules' ), 9 );
 
-			add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+			// Add the meta box
+			add_filter( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 
 			// Does another plugin offer its own save method?
 			$external_save_method = apply_filters( 'inpsyde_multilingualpress_external_save_method', FALSE );
-			if ( !$external_save_method )
-				add_action( 'save_post', array( $this, 'save_post' ) );
+			if ( ! $external_save_method )
+				add_filter( 'save_post', array( $this, 'save_post' ) );
 
 			// Enqueue scripts
-			add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'wp_styles' ) );
+			add_filter( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+			add_filter( 'wp_enqueue_scripts', array( $this, 'wp_styles' ) );
 
-
-			// AJAX hooks
-			add_action( 'wp_ajax_tab_form', array( $this, 'draw_blog_settings_form' ) );
-			add_action( 'wp_ajax_save_multilang_settings', array( $this, 'update_blog_settings' ) );
-			add_action( 'wp_ajax_get_metabox_content', array( $this, 'ajax_get_metabox_content' ) );
+			// AJAX hooks for the tab form and the meta boxes
+			add_filter( 'wp_ajax_tab_form', array( $this, 'draw_blog_settings_form' ) );
+			add_filter( 'wp_ajax_save_multilang_settings', array( $this, 'update_blog_settings' ) );
+			add_filter( 'wp_ajax_get_metabox_content', array( $this, 'ajax_get_metabox_content' ) );
 
 			// Context help of the plugin
 			add_filter( 'contextual_help', array( $this, 'context_help' ), 10, 3 );
 
 			// Cleanup upon blog delete
-			add_action( 'delete_blog', array( $this, 'delete_blog' ), 10, 2 );
+			add_filter( 'delete_blog', array( $this, 'delete_blog' ), 10, 2 );
 		}
 
 		/**
 		 * Include class files when needed
 		 * 
-		 * @global string $pagenow | current page identifier
+		 * @access  public
+		 * @since   0.1
+		 * @uses	is_admin, add_filter
+		 * @global	$pagenow | current page identifier
+		 * @return  void
 		 */
 		private function include_files() {
 
@@ -196,7 +238,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 			if ( is_admin() && in_array( $pagenow, $hook ) ) {
 
 				require_once( 'inc/class-mlp-custom-columns.php' );
-				add_action( 'init', array( 'Mlp_Custom_Columns', 'init' ) );
+				add_filter( 'init', array( 'Mlp_Custom_Columns', 'init' ) );
 			}
 
 			// Global admin files
@@ -204,34 +246,45 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 
 				// Include settings page _after_ modules are loaded
 				require_once( 'inc/class-mlp-settings-page.php' );
-				add_action( 'plugins_loaded', array( 'Inpsyde_Multilingualpress_Settingspage', 'get_object' ), 8 );
+				add_filter( 'plugins_loaded', array( 'Multilingual_Press_Settingspage', 'get_object' ), 8 );
 			}
 		}
 
 		/**
 		 * Load frontend CSS
 		 * 
-		 * @since  0.5.3b
+		 * @access  public
+		 * @since	0.5.3b
+		 * @uses	wp_enqueue_style, plugins_url
+		 * @return  void
 		 */
 		public function wp_styles() {
-
 			wp_enqueue_style( 'mlp-frontend-css', plugins_url( 'css/frontend.css', __FILE__ ) );
 		}
 
 		/**
 		 * Load admin javascript and CSS
 		 *
-		 * @since 1.0
+		 * @access  public
+		 * @since	0.5.3b
+		 * @uses	wp_enqueue_script, plugins_url, wp_localize_script, wp_enqueue_style
+		 * @global	$pagenow | current page identifier
+		 * @return  void
 		 */
 		public function admin_scripts() {
 
 			global $pagenow;
 
-			$pages = array( 'site-info.php', 'site-users.php', 'site-themes.php', 'site-settings.php' );
+			// We only need our Scripts on our pages
+			$pages = array(
+				'site-info.php',
+				'site-users.php',
+				'site-themes.php',
+				'site-settings.php'
+			);
 
 			if ( in_array( $pagenow, $pages ) ) {
-
-				wp_enqueue_script( 'mlp-js', plugins_url( 'js/', __FILE__ ) . 'multilingualpress.js' );
+				wp_enqueue_script( 'mlp-js', plugins_url( 'js/', __FILE__ ) . 'multilingual_press.js' );
 				wp_localize_script( 'mlp-js', 'mlp_loc', $this->localize_script() );
 				wp_enqueue_style( 'mlp-admin-css', plugins_url( 'css/admin.css', __FILE__ ) );
 			}
@@ -240,18 +293,22 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		/**
 		 * Make localized strings available in javascript
 		 *
-		 * @return type $loc | Array containing localized strings
+		 * @access  public
+		 * @since	0.1
+		 * @uses	wp_create_nonce
+		 * @global	$pagenow | current page identifier
+		 * @return	type $loc | Array containing localized strings
 		 */
 		public function localize_script() {
 
 			$loc = array(
-				'tab_label' => __( 'Multilingual Press', $this->get_textdomain() ),
-				'blog_id' => intval( $_GET[ 'id' ] ),
-				'ajax_tab_nonce' => wp_create_nonce( 'mlp_tab_nonce' ),
-				'ajax_form_nonce' => wp_create_nonce( 'mlp_form_nonce' ),
-				'ajax_select_nonce' => wp_create_nonce( 'mlp_select_nonce' ),
-				'ajax_switch_language_nonce' => wp_create_nonce( 'mlp_switch_language_nonce' ),
-				'ajax_check_single_nonce' => wp_create_nonce( 'mlp_check_single_nonce' )
+				'tab_label'						=> __( 'Multilingual Press', $this->get_textdomain() ),
+				'blog_id'						=> intval( $_GET[ 'id' ] ),
+				'ajax_tab_nonce'				=> wp_create_nonce( 'mlp_tab_nonce' ),
+				'ajax_form_nonce'				=> wp_create_nonce( 'mlp_form_nonce' ),
+				'ajax_select_nonce'				=> wp_create_nonce( 'mlp_select_nonce' ),
+				'ajax_switch_language_nonce'	=> wp_create_nonce( 'mlp_switch_language_nonce' ),
+				'ajax_check_single_nonce'		=> wp_create_nonce( 'mlp_check_single_nonce' )
 			);
 
 			return $loc;
@@ -260,9 +317,9 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		/**
 		 * Return Textdomain string
 		 *
-		 * @access public
-		 * @since 0.1
-		 * @return string | Plugins' textdomain
+		 * @access	public
+		 * @since	0.1
+		 * @return	string | Plugins' textdomain
 		 */
 		public function get_textdomain() {
 
@@ -298,9 +355,9 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		public function set_source_id( $sourceid, $source_blog = 0, $source_type = '' ) {
 
 			$this->source_id = $sourceid;
-			if ( 0 == $source_blog ) {
+			if ( 0 == $source_blog )
 				$source_blog = get_current_blog_id();
-			}
+			
 			$this->source_blog_id = $source_blog;
 			$this->source_type = $source_type;
 
@@ -319,21 +376,22 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 * @param   int $source_blog ID of the selected blog
 		 * @param   string $type type of the selected element
 		 * @param   int $blog_id ID of the selected blog
+		 * @global	$wpdb | WordPress Database Wrapper
 		 * @return  void
 		 */
 		public function set_linked_element( $element_id, $source_id = 0, $source_blog_id = 0, $type = '', $blog_id = 0 ) {
 
 			global $wpdb;
 
-			if ( 0 == $blog_id ) {
+			if ( 0 == $blog_id )
 				$blog_id = get_current_blog_id();
-			}
-			if ( 0 == $source_id ) {
+			
+			if ( 0 == $source_id )
 				$source_id = $this->source_id;
-			}
-			if ( 0 == $source_blog_id ) {
+			
+			if ( 0 == $source_blog_id )
 				$source_blog_id = $this->source_blog_id;
-			}
+			
 			$wpdb->insert( $this->link_table, array( 'ml_source_blogid' => $source_blog_id, 'ml_source_elementid' => $source_id, 'ml_blogid' => $blog_id, 'ml_elementid' => $element_id, 'ml_type' => $type ) );
 		}
 
@@ -343,9 +401,9 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 * @access  public
 		 * @since   0.1
 		 * @uses	get_post_status, get_post, get_post_thumbnail_id, wp_upload_dir, get_post_meta, 
-		 *		  pathinfo, get_blog_list, get_current_blog_id, switch_to_blog, wp_insert_post, 
-		 *		  wp_unique_filename, wp_check_filetype, is_wp_error, wp_update_attachment_metadata, 
-		 *		  wp_generate_attachment_metadata, update_post_meta, restore_current_blog
+		 *			pathinfo, get_blog_list, get_current_blog_id, switch_to_blog, wp_insert_post, 
+		 *			wp_unique_filename, wp_check_filetype, is_wp_error, wp_update_attachment_metadata, 
+		 *			wp_generate_attachment_metadata, update_post_meta, restore_current_blog
 		 * @param   $post_id ID of the post
 		 * @return  void
 		 */
@@ -372,7 +430,8 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 					return;
 			
 			// When the filter returns FALSE, we'll stop here
-			if ( FALSE == $postdata || ! is_array( $postdata ) ) return;
+			if ( FALSE == $postdata || ! is_array( $postdata ) )
+				return;
 								
 			$linked = mlp_get_linked_elements( $post_id );
 
@@ -395,19 +454,19 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 			
 			// Create the post array
 			$newpost = array(
-				'post_title' => $postdata[ 'post_title' ],
-				'post_content' => $postdata[ 'post_content' ],
-				'post_status' => 'draft',
-				'post_author' => $postdata[ 'post_author' ],
-				'post_excerpt' => $postdata[ 'post_excerpt' ],
-				'post_date' => $postdata[ 'post_date' ],
-				'post_type' => $postdata[ 'post_type' ]
+				'post_title'	=> $postdata[ 'post_title' ],
+				'post_content'	=> $postdata[ 'post_content' ],
+				'post_status'	=> 'draft',
+				'post_author'	=> $postdata[ 'post_author' ],
+				'post_excerpt'	=> $postdata[ 'post_excerpt' ],
+				'post_date'		=> $postdata[ 'post_date' ],
+				'post_type'		=> $postdata[ 'post_type' ]
 			);
 			
 			$blogs = mlp_get_available_languages();
 			$current_blog = get_current_blog_id();
 
-			if ( !( 0 < count( $blogs ) ) )
+			if ( ! ( 0 < count( $blogs ) ) )
 				return;
 
 			// Load Page Parents			
@@ -432,26 +491,29 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 					if ( '' != $file ) { // thumbfile exists
 						include_once ( ABSPATH . 'wp-admin/includes/image.php' ); //including the attachment function
 						if ( 0 < count( $fileinfo ) ) {
+							
 							$filedir = wp_upload_dir();
 							$filename = wp_unique_filename( $filedir[ 'path' ], $fileinfo[ 'basename' ] );
 							$copy = copy( $path[ 'basedir' ] . '/' . $file, $filedir[ 'path' ] . '/' . $filename );
+							
 							if ( $copy ) {
 								unset( $postdata[ 'ID' ] );
 								$wp_filetype = wp_check_filetype( $filedir[ 'url' ] . '/' . $filename ); //get the file type
 								$attachment = array(
-									'post_mime_type' => $wp_filetype[ 'type' ],
-									'guid' => $filedir[ 'url' ] . '/' . $filename,
-									'post_parent' => $remote_post_id,
-									'post_title' => '',
-									'post_excerpt' => '',
-									'post_author' => $postdata[ 'post_author' ],
-									'post_content' => '',
+									'post_mime_type'	=> $wp_filetype[ 'type' ],
+									'guid'				=> $filedir[ 'url' ] . '/' . $filename,
+									'post_parent'		=> $remote_post_id,
+									'post_title'		=> '',
+									'post_excerpt'		=> '',
+									'post_author'		=> $postdata[ 'post_author' ],
+									'post_content'		=> '',
 								);
+								
 								//insert the image
 								$attach_id = wp_insert_attachment( $attachment, $filedir[ 'path' ] . '/' . $filename );
-								if ( !is_wp_error( $attach_id ) ) {
+								if ( ! is_wp_error( $attach_id ) ) {
 									wp_update_attachment_metadata(
-											$attach_id, wp_generate_attachment_metadata( $attach_id, $filedir[ 'path' ] . '/' . $filename )
+										$attach_id, wp_generate_attachment_metadata( $attach_id, $filedir[ 'path' ] . '/' . $filename )
 									);
 									set_post_thumbnail( $remote_post_id, $attach_id );
 								} // update the image data
@@ -470,24 +532,20 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 * @access  public
 		 * @since   0.1
 		 * @uses	add_meta_box
+		 * @global	$post | the current post
 		 * @return  void
 		 */
 		public function add_meta_boxes() {
-			
 			global $post;
 			
 			// Do we have linked elements?
 			$linked = mlp_get_linked_elements( $post->ID );
-			if ( !$linked )
+			if ( ! $linked )
 				return;
 
 			// Register metaboxes
-			add_meta_box(
-					'inpsyde_multilingualpress_link', __( 'Linked posts', $this->get_textdomain() ), array( $this, 'display_meta_box' ), 'post', 'normal', 'high'
-			);
-			add_meta_box(
-					'inpsyde_multilingualpress_link', __( 'Linked pages', $this->get_textdomain() ), array( $this, 'display_meta_box' ), 'page', 'normal', 'high'
-			);
+			add_meta_box( 'multilingual_press_link', __( 'Linked posts', $this->get_textdomain() ), array( $this, 'display_meta_box' ), 'post', 'normal', 'high' );
+			add_meta_box( 'multilingual_press_link', __( 'Linked pages', $this->get_textdomain() ), array( $this, 'display_meta_box' ), 'page', 'normal', 'high' );
 		}
 
 		/**
@@ -505,32 +563,49 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 			if ( 0 < count( $linked ) ) { // post is a linked post
 				$languages = mlp_get_available_languages();
 				if ( 0 < count( $languages ) ) {
-					echo '<select name="inpsyde_multilingual" id="inpsyde_multilingual"><option>' . __( 'choose preview language', $this->get_textdomain() ) . '</option>';
+					
+					?>
+					<select name="multilingual_press" id="multilingual_press">
+						<option><?php _e( 'choose preview language', $this->get_textdomain() ); ?></option>
+					<?php
 					foreach ( $languages as $language_blogid => $language_name ) {
 						if ( $language_blogid != get_current_blog_id() ) {
-							echo '<option value="' . $language_blogid . '">' . $language_name . '</option>';
+							?>
+							<option value="<?php echo $language_blogid; ?>"><?php $language_name;?></option>
+							<?php 
 						}
 					}
-					echo '</select><div id="inpsyde_multilingual_content"></div>';
-					echo '<script type="text/javascript">
-					//<![CDATA[
-					jQuery(document).ready(function($) {
-						$("#inpsyde_multilingual").change(function() {
-							blogid = "";
-							$("#inpsyde_multilingual option:selected").each(function () {
-								blogid += $(this).attr( "value" );
-							});
-							$.post( ajaxurl, { action: "get_metabox_content", blogid:blogid, post: ' . $post->ID . ' },
-								function( returned_data ) {
-									if ( "" != returned_data ) {
-										$( "#inpsyde_multilingual_content").html( returned_data );
+					?>
+					</select>
+					<div id="multilingual_press_content"></div>
+					
+					<script type="text/javascript">
+						//<![CDATA[
+						jQuery( document ).ready( function( $ ) {
+							$( '#multilingual_press' ).change( function() {
+
+								blogid = '';
+								$( '#multilingual_press option:selected' ).each( function () {
+									blogid += $( this ).attr( 'value' );
+								} );
+								
+								$.post( ajaxurl,
+									{
+										action: 'get_metabox_content',
+										blogid: blogid,
+										post: <?php echo $post->ID; ?>
+									},
+									function( returned_data ) {
+										if ( '' != returned_data ) {
+											$( '#multilingual_press_content' ).html( returned_data );
+										}
 									}
-								}
-							);
-						});
-					});
-					//]]>
-					</script>';
+								);
+							} );
+						} );
+						//]]>
+					</script>
+					<?php
 				}
 			}
 		}
@@ -551,7 +626,7 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 			$linked = mlp_get_linked_elements( esc_attr( $_POST[ 'post' ] ) );
 
 			// No elements available? Au revoir.
-			if ( !$linked )
+			if ( ! $linked )
 				die( __( 'No post available', $this->get_textdomain() ) );
 
 			// Walk through elements
@@ -592,7 +667,8 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 *
 		 * @access  public
 		 * @since   0.1
-		 * @uses	get_site_option, scandir, dirname, plugins_url, get_site_option
+		 * @uses	check_ajax_referer, wp_die, get_blogaddress_by_id, _e, screen_icon
+		 * 			do_action, submit_button
 		 * @param   $id ID of the blog
 		 * @return  void
 		 */
@@ -604,41 +680,41 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 			// Get blog id
 			$current_blog_id = isset( $_REQUEST[ 'id' ] ) ? intval( $_REQUEST[ 'id' ] ) : 0;
 
-			if ( !$current_blog_id )
+			if ( ! $current_blog_id )
 				wp_die( __( 'Invalid site ID.' ) );
 
 			// Use a linked page title
 			$site_url_no_http = preg_replace( '#^http(s)?://#', '', get_blogaddress_by_id( $current_blog_id ) );
 			$title_site_url_linked = sprintf( __( 'Edit Site: <a href="%1$s">%2$s</a>' ), get_blogaddress_by_id( $current_blog_id ), $site_url_no_http );
+			
+			screen_icon( 'ms-admin' );
 			?>
-
-			<?php screen_icon( 'ms-admin' ); ?>
-
-			<h2 id="edit-site"><?php echo $title_site_url_linked ?></h2>
+			<h2 id="edit-site"><?php echo $title_site_url_linked; ?></h2>
+			
 			<h3 class="nav-tab-wrapper">
-				<a class="nav-tab" href="site-info.php?id=<?php echo $current_blog_id; ?>"><?php _e( 'Info' ); ?></a><a class="nav-tab" href="site-users.php?id=<?php echo $current_blog_id; ?>"><?php _e( 'Users' ); ?></a><a class="nav-tab" href="site-themes.php?id=<?php echo $current_blog_id; ?>"><?php _e( 'Themes' ); ?></a><a class="nav-tab" href="site-settings.php?id=<?php echo $current_blog_id; ?>"><?php _e( 'Settings' ); ?></a><a href="#" class="nav-tab nav-tab-active" id="mlp_settings_tab"><?php _e( 'Multilingual Press', $this->get_textdomain() ); ?></a>
+				<a class="nav-tab" href="site-info.php?id=<?php echo $current_blog_id; ?>"><?php _e( 'Info' ); ?></a>
+				<a class="nav-tab" href="site-users.php?id=<?php echo $current_blog_id; ?>"><?php _e( 'Users' ); ?></a>
+				<a class="nav-tab" href="site-themes.php?id=<?php echo $current_blog_id; ?>"><?php _e( 'Themes' ); ?></a>
+				<a class="nav-tab" href="site-settings.php?id=<?php echo $current_blog_id; ?>"><?php _e( 'Settings' ); ?></a>
+				<a href="#" class="nav-tab nav-tab-active" id="mlp_settings_tab"><?php _e( 'Multilingual Press', $this->get_textdomain() ); ?></a>
 			</h3>
 
 			<form action="" method="post" id="multilingualpress_settings">
-
 				<!-- Modules can hook their form fields here -->
-
-			<?php do_action( 'mlp_blogs_add_fields', $current_blog_id ); ?>
-
+				<?php do_action( 'mlp_blogs_add_fields', $current_blog_id ); ?>
 
 				<!-- Secondary fields hook -->
+				<?php do_action( 'mlp_blogs_add_fields_secondary', $current_blog_id ); ?>
 
-			<?php do_action( 'mlp_blogs_add_fields_secondary', $current_blog_id ); ?>
-
-			<?php submit_button(); ?>
-
+				<?php submit_button(); ?>
 			</form>
-
-
 			<?php
 			die;
 		}
 
+		/**
+		 * @todo	PHP Doc
+		 */
 		private function parse_serialized_postdata( $data ) {
 
 			parse_str( $data, $parsed_data );
@@ -650,10 +726,10 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 * Make available a hook 
 		 * to save blog settings
 		 *
-		 * @access  public
-		 * @since   0.1
-		 * @uses	get_site_option, update_site_option, delete_site_option
-		 * @return  void
+		 * @access	public
+		 * @since	0.1
+		 * @uses	check_ajax_referer, do_action, _e
+		 * @return	void
 		 */
 		public function update_blog_settings() {
 
@@ -678,10 +754,11 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		/**
 		 * create the element links database table  
 		 *
-		 * @access  public
-		 * @since   0.1
+		 * @access	public
+		 * @since	0.1
 		 * @uses	dbDelta
-		 * @return  void
+		 * @global	$wpdb | WordPress Database Wrapper
+		 * @return	void
 		 */
 		public function install_plugin() {
 
@@ -706,7 +783,8 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 * Execute this function
 		 * upon plugin deactivation
 		 * 
-		 * @return type 
+		 * @since	0.1
+		 * @return	type 
 		 */
 		public function remove_plugin() {
 			
@@ -718,21 +796,22 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 * saves them in the class var "loaded_modules".
 		 * Scans the plugins' subfolder "/features"
 		 *
-		 * @access  public
-		 * @since   0.1
-		 * @return  array Files to include
+		 * @access	public
+		 * @since	0.1
+		 * @return	array Files to include
 		 */
 		public function load_modules() {
 
 			// Get dir
-			if ( ! $dh = @opendir( dirname( __FILE__ ) . '/features' ) ) {
+			$handle = opendir( dirname( __FILE__ ) . '/features' );
+			if ( ! $handle )
 				return;
-			}
 
 			// Loop through directory files
-			while ( ( $plugin = readdir( $dh ) ) !== false ) {
+			while ( FALSE !== ( $plugin = readdir( $handle ) ) ) {
+				
 				// Is this file for us?
-				if ( substr( $plugin, -4 ) == '.php' ) {
+				if ( '.php' == substr( $plugin, -4 ) ) {
 
 					// Save in class var
 					$this->loaded_modules[ substr( $plugin, 0, -4 ) ] = TRUE;
@@ -741,17 +820,18 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 					require_once dirname( __FILE__ ) . '/features/' . $plugin;
 				}
 			}
-			closedir( $dh );
+			closedir( $handle );
 		}
 
 		/**
 		 * Check state of module to determine
 		 * aktivation/deactivation
 		 * 
-		 * @access  protected
-		 * @since   0.3b
-		 * @param   string $module | module handler
-		 * @return  array $state | module state  
+		 * @access	protected
+		 * @since	0.3b
+		 * @param	string $module | module handler
+		 * @uses	get_site_option, update_site_option, 
+		 * @return	array $state | module state  
 		 */
 		protected function get_module_state( $module ) {
 
@@ -759,15 +839,15 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 			$state = get_site_option( 'state_modules', FALSE );
 
 			// New module?
-			if ( !( ISSET( $state[ $module[ 'slug' ] ] ) ) ) {
+			if ( ! ( isset( $state[ $module[ 'slug' ] ] ) ) ) {
 				$module[ 'state' ] = 'on';
 				$state[ $module[ 'slug' ] ] = $module;
 
 				update_site_option( 'state_modules', $state );
 				return $state[ $module[ 'slug' ] ][ 'state' ];
 			}
-			// Deaktivated module?
-			elseif ( 'off' == $state[ $module[ 'slug' ] ][ 'state' ] ) {
+			else if ( 'off' == $state[ $module[ 'slug' ] ][ 'state' ] ) {
+				// Deaktivated module?
 				return $state[ $module[ 'slug' ] ][ 'state' ];
 			}
 		}
@@ -776,8 +856,11 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		 * Delete removed blogs from site_option 'inpsyde_multilingual'
 		 * and cleanup linked elements table
 		 * 
-		 * @param   int $blog_id 
-		 * @since   0.3
+		 * @param	int $blog_id 
+		 * @since	0.3
+		 * @uses	get_site_option, update_site_option
+		 * @global	$wpdb | WordPress Database Wrapper
+		 * @return	void
 		 */
 		public function delete_blog( $blog_id ) {
 
@@ -796,60 +879,61 @@ if ( ! class_exists( 'Inpsyde_Multilingualpress' ) ) {
 		/**
 		 * Contextual help
 		 *
-		 * @global  type $my_plugin_hook
-		 * @param   string $contextual_help
-		 * @param   type $screen_id
-		 * @param   type $screen
-		 * @return  string $contextual_help
+		 * @since	0.5.6b
+		 * @param	string $contextual_help
+		 * @param	type $screen_id
+		 * @param	type $screen
+		 * @uses	get_current_screen, apply_filters
+		 * @return	void
 		 */
 		public function context_help( $contextual_help, $screen_id, $screen ) {
 
 			$screen = get_current_screen();
 
-			$sites = array( 'site-info-network', 'site-users-network', 'site-themes-network', 'site-settings-network' );
+			$sites = array(
+				'site-info-network',
+				'site-users-network',
+				'site-themes-network',
+				'site-settings-network'
+			);
 
 			if ( in_array( $screen_id, $sites ) ) {
 
-				$content = '<p><strong>' . __( 'Choose blog language', $this->get_textdomain() ) . '</strong>';
-				$content.= __( ' - Set the language and flag. You can use this to distinguish blogs and display them in the frontend using the Multilingual Press widget.', $this->get_textdomain() ) . '</p>';
-				$content.= '<p><strong>' . __( 'Alternative language title', $this->get_textdomain() ) . '</strong>';
-				$content.= __( ' - Alternative language title will be used mainly in the Multilingual Press frontend widget. You can use it to determine a site title other than the default one (i.e. "My Swedish Site")', $this->get_textdomain() ) . '</p>';
-				$content.= '<p><strong>' . __( 'Blog flag image URL', $this->get_textdomain() ) . '</strong>';
-				$content.= __( ' - Multilingual Press uses a default flag image, you can define a custom one here.', $this->get_textdomain() ) . '</p>';
-				$content.= '<p><strong>' . __( 'Multilingual Blog Relationship', $this->get_textdomain() ) . '</strong>';
-				$content.= __( ' - Determine which blogs will be interlinked. If you create a post or page, they will be automaticaly duplicated into each interlinked blog.', $this->get_textdomain() ) . '</p>';
+				$content  = '<p><strong>' . __( 'Choose blog language', $this->get_textdomain() ) . '</strong>';
+				$content .= __( ' - Set the language and flag. You can use this to distinguish blogs and display them in the frontend using the Multilingual Press widget.', $this->get_textdomain() ) . '</p>';
+				$content .= '<p><strong>' . __( 'Alternative language title', $this->get_textdomain() ) . '</strong>';
+				$content .= __( ' - Alternative language title will be used mainly in the Multilingual Press frontend widget. You can use it to determine a site title other than the default one (i.e. "My Swedish Site")', $this->get_textdomain() ) . '</p>';
+				$content .= '<p><strong>' . __( 'Blog flag image URL', $this->get_textdomain() ) . '</strong>';
+				$content .= __( ' - Multilingual Press uses a default flag image, you can define a custom one here.', $this->get_textdomain() ) . '</p>';
+				$content .= '<p><strong>' . __( 'Multilingual Blog Relationship', $this->get_textdomain() ) . '</strong>';
+				$content .= __( ' - Determine which blogs will be interlinked. If you create a post or page, they will be automaticaly duplicated into each interlinked blog.', $this->get_textdomain() ) . '</p>';
 
 				$content = apply_filters( 'mlp-context-help', $content );
 
-				$screen->add_help_tab( array( 'id' => 'multilingualpress-help', 'title' => __( 'Multilingual Press' ), 'content' => $content ) );
+				$screen->add_help_tab( array(
+					'id'		=> 'multilingualpress-help',
+					'title'		=> __( 'Multilingual Press', $this->get_textdomain() ),
+					'content'	=> $content
+				) );
 			}
 		}
 
 		/**
 		 * Display an Admin Notice if multisite is not active 
 		 * 
-		 * @since   0.7.5a
-		 * @return  void
+		 * @since	0.7.5a
+		 * @uses	_e
+		 * @return	void
 		*/
 		public function error_msg_no_multisite() {
 			?>
 			<div class="error">
-				<p><?php _e( 'Multilingual Press only works in a multisite installation. See how to install a multisite network:', $this->get_textdomain() ); ?>
-					<a href="http://codex.wordpress.org/Create_A_Network" title="<?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?>"><?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?></a></p>
+				<p>
+					<?php _e( 'Multilingual Press only works in a multisite installation. See how to install a multisite network:', $this->get_textdomain() ); ?>
+					<a href="http://codex.wordpress.org/Create_A_Network" title="<?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?>"><?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?></a>
+				</p>
 			</div><?php
 		}
-	}
-
-	// Enqueue plugin
-	if ( function_exists( 'add_filter' ) ) {
-
-		add_action( 'plugins_loaded', array( 'Inpsyde_Multilingualpress', 'get_object' ) );
-
-		// Upon activation
-		register_activation_hook( __FILE__, array( 'Inpsyde_Multilingualpress', 'install_plugin' ) );
-
-		// Upon deactivation
-		register_deactivation_hook( __FILE__, array( 'Inpsyde_Multilingualpress', 'remove_plugin' ) );
 	}
 }
 ?>
