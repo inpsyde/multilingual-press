@@ -310,6 +310,10 @@ class Mlp_Helpers extends Multilingual_Press {
 		$output .= '<div class="mlp_language_box"><ul>';
 
 		foreach ( $languages as $language_blog => $language_string ) {
+			
+			$current_language = mlp_get_current_blog_language( 2 );
+			if ( $current_language == $language_string )
+				continue;
 
 			// Get params
 			$flag = mlp_get_language_flag( $language_blog );
