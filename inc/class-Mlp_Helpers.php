@@ -444,8 +444,7 @@ function mlp_get_language_flag( $blog_id = 0 ) {
 function mlp_show_linked_elements( $link_type = 'text', $echo = TRUE ) {
 	$output = Mlp_Helpers::show_linked_elements( $link_type );
 	if ( TRUE === $echo )
-	echo $output;
+		echo $output;
 	else
-	return $output;
-
+		return $output;
 }
