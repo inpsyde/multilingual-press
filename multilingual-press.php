@@ -142,7 +142,25 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		 * @since  0.5
 		 * @var    array
 		 */
-		protected $lang_codes; // 
+		protected $lang_codes;
+		
+		/**
+		 * The plugins textdomain
+		 *
+		 * @static
+		 * @since 0.8
+		 * @var string
+		 */
+		public static $textdomain = '';
+		
+		/**
+		 * The plugins textdomain path
+		 *
+		 * @static
+		 * @since 0.8
+		 * @var string
+		 */
+		public static $textdomainpath = '';
 
 		/**
 		 * to load the object and get the current state 
@@ -192,7 +210,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			do_action( 'inpsyde_mlp_init' );
 
 			// Hooks and filters
-			add_filter( 'init', array( $this, 'localize_plugin' ) );
+			add_filter( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 			// Load modules
 			add_filter( 'plugins_loaded', array( $this, 'load_modules' ), 9 );
@@ -219,6 +237,55 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 
 			// Cleanup upon blog delete
 			add_filter( 'delete_blog', array( $this, 'delete_blog' ), 10, 2 );
+		}
+		
+		/**
+		 * Get a value of the plugin header
+		 *
+		 * @since	0.8
+		 * @uses	get_plugin_data, ABSPATH
+		 * @param	string $value
+		 * @return	string The plugin header value
+		 */
+		protected function get_plugin_header( $value = 'TextDomain' ) {
+			if ( ! function_exists( 'get_plugin_data' ) )
+				require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		
+			$plugin_data = get_plugin_data( __FILE__ );
+			$plugin_value = $plugin_data[ $value ];
+		
+			return $plugin_value;
+		}
+		
+		/**
+		 * Get the Textdomain
+		 *
+		 * @since	0.8
+		 * @return	The plugins textdomain
+		 */
+		public function get_textdomain() {
+			return $this->get_plugin_header( 'TextDomain' );
+		}
+		
+		/**
+		 * Get the Textdomain Path where the language files are located
+		 *
+		 * @since	0.8
+		 * @return	The plugins textdomain path
+		 */
+		public function get_domain_path() {
+			return $this->get_plugin_header( 'DomainPath' );
+		}
+		
+		/**
+		 * Load the localization
+		 *
+		 * @since 0.1
+		 * @uses load_plugin_textdomain, plugin_basename
+		 * @return void
+		 */
+		public function load_plugin_textdomain() {
+			load_plugin_textdomain( $this->get_textdomain(), FALSE, dirname( plugin_basename( __FILE__ ) ) . $this->get_domain_path() );
 		}
 
 		/**
@@ -322,33 +389,6 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			);
 
 			return $loc;
-		}
-
-		/**
-		 * Return Textdomain string
-		 *
-		 * @access	public
-		 * @since	0.1
-		 * @return	string | Plugins' textdomain
-		 */
-		public function get_textdomain() {
-
-			return 'multilingualpress';
-		}
-
-		/**
-		 * register the textdomain
-		 *
-		 * @access  public
-		 * @since   0.1
-		 * @uses	load_plugin_textdomain, plugin_basename
-		 * @return  void
-		 */
-		public function localize_plugin() {
-
-			load_plugin_textdomain(
-				$this->get_textdomain(), FALSE, dirname( plugin_basename( __FILE__ ) ) . '/languages'
-			);
 		}
 
 		/**

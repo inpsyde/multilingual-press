@@ -22,7 +22,8 @@ class Mlp_Widget extends WP_Widget {
 	 */
 	public function mlp_widget() {
 		
-		$this->textdomain = Multilingual_Press::get_textdomain();
+		$mlp = Multilingual_Press::get_object();
+		$this->textdomain = $mlp->get_textdomain();
 		
 		$widget_ops = array(
 			'classname' => 'Mlp_Widget',
