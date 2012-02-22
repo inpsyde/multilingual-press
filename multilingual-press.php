@@ -6,17 +6,25 @@
  * Author:		Inpsyde GmbH
  * Author URI:	http://inpsyde.com
  * Version:		0.8
- * Text Domain:	inpsyde_multilingualpress
+ * Text Domain:	multilingualpress
  * Domain Path:	/languages
  * License:		GPLv3
  * 
+ * By using the WordPress plugin Multilingual-Press it's much
+ * easier to build multilingual sites and run them with
+ * WordPress Multisite feature.
+ * 
+ * @author		fb, rw, ms, th
+ * @version		0.8
+ * @package		mlp
+ * @subpackage	main
+ * 
  * Available hooks
  * 
- * - inpsyde_mlp_init - This hook is called upon instantiation of the main class
  * - mlp_blogs_add_fields - Allows modules to add form fields to the Multilingual Press blog settings screen
  * - mlp_blogs_add_fields_secondary - Same as above, with lower priority. 
  * - mlp_blogs_save_fields - Modules can hook in here to handle user data returned by their form fields
- * - mlp_options_page_add_metabox - This hook registers a metabox on the Multilingual Press options page. Use Multilingual_Press_Settingspage::$class_object->options_page for 'screen' parameter.
+ * - mlp_options_page_add_metabox - This hook registers a metabox on the Multilingual Press options page. Use Mlp_Settingspage::$class_object->options_page for 'screen' parameter.
  * - mlp_settings_save_fields - Handles the data of the options page form. Function parameter contains the form data
  * - mlp_modules_add_fields - Add data to the module manager. Probably obsolete in the future.
  * - mlp_modules_save_fields - Hooks into the module manager's saving routine.
@@ -31,7 +39,8 @@
  * 
  * 0.8
  * - Codexified
- * - Renamed some Files
+ * - Renamed the files
+ * - changed textdomain
  * 
  * 0.7.5a
  * - Display an admin notice if the plugin was not activated on multisite
@@ -225,19 +234,19 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			global $pagenow;
 
 			// Include helper functions
-			require_once( 'inc/class-mlp-helpers.php' );
+			require_once( 'inc/class-Mlp_Helpers.php' );
 
 			// Include widget
-			require_once( 'inc/class-mlp-widget.php' );
+			require_once( 'inc/class-Mlp_Widget.php' );
 			
 			// Include default module
-			require_once( 'inc/class-mlp-default-module.php' );
+			require_once( 'inc/class-Mlp_Default_Module.php' );
 
 			// Page specific admin files
 			$hook = array( 'sites.php' );
 			if ( is_admin() && in_array( $pagenow, $hook ) ) {
 
-				require_once( 'inc/class-mlp-custom-columns.php' );
+				require_once( 'inc/class-Mlp_Custom_Columns.php' );
 				add_filter( 'init', array( 'Mlp_Custom_Columns', 'init' ) );
 			}
 
@@ -245,8 +254,8 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			if ( is_admin() ) {
 
 				// Include settings page _after_ modules are loaded
-				require_once( 'inc/class-mlp-settings-page.php' );
-				add_filter( 'plugins_loaded', array( 'Multilingual_Press_Settingspage', 'get_object' ), 8 );
+				require_once( 'inc/class-Mlp_Settingspage.php' );
+				add_filter( 'plugins_loaded', array( 'Mlp_Settingspage', 'get_object' ), 8 );
 			}
 		}
 
@@ -323,7 +332,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		 */
 		public function get_textdomain() {
 
-			return 'inpsyde_multilingualpress';
+			return 'multilingualpress';
 		}
 
 		/**
@@ -803,7 +812,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		public function load_modules() {
 
 			// Get dir
-			$handle = opendir( dirname( __FILE__ ) . '/features' );
+			$handle = @opendir( dirname( __FILE__ ) . '/features' );
 			if ( ! $handle )
 				return;
 

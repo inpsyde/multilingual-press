@@ -1,20 +1,22 @@
 <?php
 /**
- * MultilingualPress custom columns class
+ * Custom Columns
  * 
- * @version 0.5.1a
- * @since   0.5.0
- */
-
-/**
- * Changelog
- * 
- * 0.5a
- * - added filters for module support
+ * @author		fb, rw, ms, th
+ * @package		mlp
+ * @subpackage	columns
  * 
  */
-class Mlp_Custom_Columns extends Inpsyde_Multilingualpress {
 
+class Mlp_Custom_Columns extends Multilingual_Press {
+
+	/**
+	 * The class object
+	 *
+	 * @static
+	 * @since  0.1
+	 * @var	string
+	 */
 	static protected $class_object = NULL;
 	
 	/**
@@ -24,10 +26,8 @@ class Mlp_Custom_Columns extends Inpsyde_Multilingualpress {
 	 * @return object
 	 */
 	public static function init() {
-
-		if ( NULL == self::$class_object ) {
+		if ( NULL == self::$class_object )
 			self::$class_object = new self;
-		}
 		return self::$class_object;
 	}
 	
@@ -35,23 +35,25 @@ class Mlp_Custom_Columns extends Inpsyde_Multilingualpress {
 	 * Constructor
 	 * Init methods in WP
 	 * 
-	 * @since  0.1
-	 * @return void
+	 * @since	0.1
+	 * @uses	add_filter
+	 * @return	void
 	 */
 	public function __construct() {
 
 		add_filter( 'wpmu_blogs_columns', array( $this, 'get_id' ) );
-		add_action( 'manage_sites_custom_column', array( $this, 'add_columns' ), 10, 2 );
-		//add_action( 'manage_blogs_custom_column', array( $this, 'add_columns' ), 10, 2 );
+		add_filter( 'manage_sites_custom_column', array( $this, 'add_columns' ), 10, 2 );
 	}
 	
 	/**
 	 * Add colums to blog view
 	 * 
-	 * @since  0.1
-	 * @param  $column_name  string
-	 * @param  $blog_id      integer
-	 * @return $column_name  string
+	 * @since	0.1
+	 * @param	$column_name  string
+	 * @param	$blog_id	  integer
+	 * @uses	switch_to_blog, mlp_get_available_languages_titles, _e, network_admin_url
+	 * 			mlp_get_language_flag, restore_current_blog, apply_filters
+	 * @return	$column_name  string
 	 */
 	public function add_columns( $column_name, $blog_id ) {
 
@@ -62,8 +64,8 @@ class Mlp_Custom_Columns extends Inpsyde_Multilingualpress {
 			
 			$interlinked = mlp_get_available_languages_titles();
 			
-			if ( ! is_array( $interlinked ) || 
-				 ( isset( $interlinked[4] ) && '-1' === $interlinked[4] ) ) {
+			// TODO WTF is $interlinked[ 4 ]??
+			if ( ! is_array( $interlinked ) || ( isset( $interlinked[ 4 ] ) && '-1' === $interlinked[ 4 ] ) ) {
 				_e( 'nothing', $this->get_textdomain() );
 				return;
 			}
@@ -71,14 +73,11 @@ class Mlp_Custom_Columns extends Inpsyde_Multilingualpress {
 			$url = network_admin_url();
 			
 			echo '<div class="mlp_interlinked_blogs">';
-			foreach( $interlinked AS $interlinked_blog_id => $interlinked_blog_title ) {
+			foreach ( $interlinked as $interlinked_blog_id => $interlinked_blog_title ) {
 				
 				if ( $interlinked_blog_id == $blog_id )
 					continue;
 				
-				//echo "<img src=\"" . mlp_get_language_flag( $interlinked_blog_id ) 
-				//	. "\" alt=\"{$interlinked_blog_title}\" />&nbsp;" 
-				//	. $interlinked_blog_title . "<br />";
 				echo '<img src="' 
 					. mlp_get_language_flag( $interlinked_blog_id ) 
 					. '" alt="' . $interlinked_blog_title 
@@ -103,6 +102,7 @@ class Mlp_Custom_Columns extends Inpsyde_Multilingualpress {
 	 * 
 	 * @since   0.7.1a
 	 * @param   $columns  Array
+	 * @uses	apply_filters
 	 * @return  $columns  Array
 	 */
 	public function get_id( $columns ) {
@@ -114,6 +114,5 @@ class Mlp_Custom_Columns extends Inpsyde_Multilingualpress {
 		
 		return $columns;
 	}
-	
 } // end class
 ?>
