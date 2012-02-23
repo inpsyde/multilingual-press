@@ -46,6 +46,8 @@
  * - Documentation
  * - Only load the Widget CSS when widget is used
  * - added a check box to the editing view asking whether you want to create the drafts to other languages
+ * - Translation is availeable for drafts
+ * - Fixed up JS
  * 
  * 0.7.5a
  * - Display an admin notice if the plugin was not activated on multisite
@@ -165,6 +167,15 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		 * @var string
 		 */
 		public static $textdomainpath = '';
+		
+		/**
+		 * Used in save_post() to prevent recursion
+		 *
+		 * @static
+		 * @since	0.8
+		 * @var		NULL | integer
+		 */
+		private static $source_blog = NULL;
 
 		/**
 		 * to load the object and get the current state 
@@ -478,10 +489,21 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			$post_status = get_post_status( $post_id );
 			if ( 'publish' !== $post_status )
 				return;
+
+			// Avoid recursion:
+			// wp_insert_post() invokes the save_post hook, so we have to make sure
+			// the loop below is only entered once per save action. Therefore we save
+			// the source_blog in a static class variable. If it is already set we
+			// know the loop has already been entered and we can exit the save action.
+			if ( NULL === self::$source_blog )
+				self::$source_blog = get_current_blog_id();
+			else
+				return;
 			
 			// If checkbox is not checked, return
 			if ( 'on' != $_POST[ 'translate_this_post' ] )
 				return;
+			
 			
 			// Get the post
 			$postdata = get_post( $post_id, ARRAY_A );
@@ -533,7 +555,6 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			);
 			
 			$blogs = mlp_get_available_languages();
-			$current_blog = get_current_blog_id();
 
 			if ( ! ( 0 < count( $blogs ) ) )
 				return;
@@ -546,7 +567,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			// Create a copy of the item for every related blog
 			foreach ( $blogs as $blogid => $blogname ) {
 
-				if ( $blogid != $current_blog ) {
+				if ( $blogid != self::$source_blog ) {
 					
 					switch_to_blog( $blogid );
 
