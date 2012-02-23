@@ -487,7 +487,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 
 			// We're only interested in published posts at this time
 			$post_status = get_post_status( $post_id );
-			if ( 'publish' !== $post_status )
+			if ( 'publish' !== $post_status && 'draft' !== $post_status )
 				return;
 
 			// Avoid recursion:
