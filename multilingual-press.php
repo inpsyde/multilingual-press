@@ -504,7 +504,6 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			if ( 'on' != $_POST[ 'translate_this_post' ] )
 				return;
 			
-			
 			// Get the post
 			$postdata = get_post( $post_id, ARRAY_A );
 			
@@ -974,13 +973,53 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		public function delete_blog( $blog_id ) {
 
 			global $wpdb;
-
+			
+			$current_blog_id = $blog_id;
+			
+			// Update Blog Relationships
+			// Get blogs related to the current blog
+			$all_blogs = get_site_option( 'inpsyde_multilingual' );
+			
+			if ( ! $all_blogs )
+				$all_blogs = array( );
+				
+			// The user defined new relationships for this blog. We add it's own ID
+			// for internal purposes
+			$data[ 'related_blogs' ][] = $current_blog_id;
+			$new_rel = $data[ 'related_blogs' ];
+				
+			// Loop through related blogs
+			foreach ( $all_blogs as $blog_id => $blog_data ) {
+				
+				if ( $current_blog_id == $blog_id )
+					continue;
+					
+				// 1. Get related blogs' current relationships
+				$current_rel = get_blog_option( $blog_id, 'inpsyde_multilingual_blog_relationship' );
+				
+				if ( ! is_array( $current_rel ) )
+					$current_rel = array();
+					
+				// 2. Compare old to new relationships
+				// Get the key of the current blog in the relationships array of the looped blog
+				$key = array_search( $current_blog_id, $current_rel );
+				
+				// These blogs should not be connected. Delete
+				// possibly existing connection
+				if ( FALSE !== $key && isset( $current_rel[ $key ] ) )
+					unset( $current_rel[ $key ] );
+				
+				// $current_rel should be our relationships array for the currently looped blog
+				update_blog_option( $blog_id, 'inpsyde_multilingual_blog_relationship', $current_rel );
+			}
+			
 			// Update site_option
 			$blogs = get_site_option( 'inpsyde_multilingual' );
-			if ( array_key_exists( $blog_id, $blogs ) )
-				unset( $blogs[ $blog_id ] );
+			if ( array_key_exists( $current_blog_id, $blogs ) )
+				unset( $blogs[ $current_blog_id ] );
+			
 			update_site_option( 'inpsyde_multilingual', $blogs );
-
+			
 			// Cleanup linked elements table
 			$error = $wpdb->query( $wpdb->prepare( "DELETE FROM {$this->link_table} WHERE ml_source_blogid = %d OR ml_blogid = %d", $blog_id, $blog_id ) );
 		}
