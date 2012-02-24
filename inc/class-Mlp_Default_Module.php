@@ -229,7 +229,7 @@ class Mlp_Default_Module extends Multilingual_Press {
 		update_site_option( 'inpsyde_multilingual', $siteoption );
 
 		// Custom flag URL
-		if ( ISSET( $data[ 'inpsyde_multilingual_flag_url' ] ) )
+		if ( isset( $data[ 'inpsyde_multilingual_flag_url' ] ) )
 			update_blog_option( $current_blog_id, 'inpsyde_multilingual_flag_url', esc_url( $data[ 'inpsyde_multilingual_flag_url' ], array( 'http' ) ) );
 
 		// Update blog relationships
@@ -241,10 +241,9 @@ class Mlp_Default_Module extends Multilingual_Press {
 
 		// The user defined new relationships for this blog. We add it's own ID 
 		// for internal purposes
-		$data[ 'related_blogs' ][ ] = $current_blog_id;
+		$data[ 'related_blogs' ][] = $current_blog_id;
 		$new_rel = $data[ 'related_blogs' ];
 
-		//@TODO: unchanged settings?
 		// Loop through related blogs
 		foreach ( $all_blogs as $blog_id => $blog_data ) {
 
@@ -262,12 +261,11 @@ class Mlp_Default_Module extends Multilingual_Press {
 			$key = array_search( $current_blog_id, $current_rel );
 
 			if ( in_array( $blog_id, $new_rel ) ) {
-
 				// Connect these blogs, if not already.
-				if ( FALSE === $key ) {
-					$current_rel[ ] = $current_blog_id;
-				}
-			} else {
+				if ( FALSE === $key )
+					$current_rel[] = $current_blog_id;
+			}
+			else {
 				// These blogs should not be connected. Delete
 				// possibly existing connection
 				if ( FALSE !== $key && ISSET( $current_rel[ $key ] ) )

@@ -35,7 +35,7 @@ jQuery.noConflict();
 			$( '#multilingualpress_settings' ).live( 'submit', function() {
 				// Serialize form field/data
 				var serialized_data = $( this ).serialize();
-				multilingualpress.submit_form( serialized_data );
+				multilingual_press.submit_form( serialized_data );
 				return false;
 			} );
 		},
