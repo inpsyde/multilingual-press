@@ -591,7 +591,7 @@ msgstr ""
 #: multilingual-press.php:940
 #@ multilingualpress
 msgid "Multilingual Press only works in a multisite installation. See how to install a multisite network:"
-msgstr "Multilingual Press funktioniert nun in einer Multisite Installation. Die Installationsanleitung eines Multisite finden Sie unter:"
+msgstr "Multilingual Press funktioniert nur in einer Multisite Installation. Die Installationsanleitung eines Multisite finden Sie unter:"
 
 #: multilingual-press.php:941
 #@ multilingualpress
