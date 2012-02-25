@@ -352,17 +352,8 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		 */
 		public function wp_styles() {
 			
-			$widgets = array();
-			$sidebars = wp_get_sidebars_widgets();
-			unset( $sidebars[ 'wp_inactive_widgets' ] );
-			
-			foreach( $sidebars as $sidebar ) {
-				foreach ( $sidebar as $widget ) {
-					if ( 'mlp_widget' == substr( $widget, 0, 10 ) ) {
-						wp_enqueue_style( 'mlp-frontend-css', plugins_url( 'css/frontend.css', __FILE__ ) );
-					}
-				}
-			}
+			if ( is_active_widget( false, false, 'mlp_widget' ) )
+				wp_enqueue_style( 'mlp-frontend-css', plugins_url( 'css/frontend.css', __FILE__ ) );
 		}
 
 		/**
