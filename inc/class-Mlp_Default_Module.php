@@ -261,11 +261,11 @@ class Mlp_Default_Module extends Multilingual_Press {
 			$key = array_search( $current_blog_id, $current_rel );
 
 			if ( in_array( $blog_id, $new_rel ) ) {
+
 				// Connect these blogs, if not already.
 				if ( FALSE === $key )
-					$current_rel[] = $current_blog_id;
-			}
-			else {
+					$current_rel[ ] = $current_blog_id;
+			} else {
 				// These blogs should not be connected. Delete
 				// possibly existing connection
 				if ( FALSE !== $key && ISSET( $current_rel[ $key ] ) )
