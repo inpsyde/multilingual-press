@@ -17,7 +17,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 * @var    string
 	 */
 	static public $class_object = NULL;
-	
+
 	/**
 	 * Registered modules
 	 *
@@ -43,8 +43,21 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 * @since  0.2
 	 * @var    string
 	 */
-	public $modules_page = FALSE;				 
-			
+	public $modules_page = FALSE;
+
+	/**
+	 * Tab holder
+	 * 
+	 * the key defines the tabname and the prefix for a private function of this class 
+	 * to show the metabox. To do so, define a private function like {tablame}_jobs_tab()
+	 * The order of items in the array definies the order of the tabs
+	 * 
+	 * @static
+	 * @since 0.5
+	 * @var array
+	 */
+	static private $tabs = NULL;
+
 	/**
 	 * to load the object and get the current state 
 	 *
@@ -67,14 +80,17 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 * @return	void
 	 */
 	function __construct() {
-								 
+
+		self::$tabs = array(
+			'mlp-options'	=> __( 'Settings', $this->get_textdomain() )
+		);
+
 		add_filter( 'network_admin_menu', array( $this, 'settings_page' ) );
 		add_filter( 'admin_post_mlp_update_settings', array( $this, 'update_settings' ) );
 		add_filter( 'admin_post_mlp_update_modules', array( $this, 'update_modules' ) );
-					
 		add_filter( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 	}
-	
+
 	/**
 	 * Load the scripts for the options page
 	 * 
@@ -84,7 +100,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 * @return	void
 	 */
 	public function admin_scripts( $hook ) {
-		
+
 		if ( 'settings_page_mlp-pro-options' == $hook ) {
 			wp_enqueue_script( 'dashboard' );
 			wp_enqueue_style( 'dashboard' );
@@ -100,55 +116,123 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 * @return	void
 	 */
 	function settings_page() {
-		
-		// Get the loaded modules from parent class
-		$this->loaded_modules = parent::$class_object->loaded_modules;
-		
-		// No modules available? Then forget about the settings page and module manager.
-		if ( ! $this->loaded_modules )
-			return;
-		
-		$this->options_page = add_submenu_page(
-			'settings.php', 
-			__( 'mlp Options', $this->get_textdomain() ), 
-			__( 'MlP Options', $this->get_textdomain() ), 
-			'manage_network_options', 
-			'mlp-pro-options', 
-			array( $this, 'settings_form' )
-		);
-		$this->modules_page = add_submenu_page(
-			'settings.php', 
-			__( 'mlp Modules', $this->get_textdomain() ), 
-			__( 'MlP Modules', $this->get_textdomain() ), 
-			'manage_network_options', 
-			'mlp-pro-modules', 
-			array( $this, 'modules_form' )
-		);
-		
+
+		// Adding "Module Tab" if modules avilable
+		if ( 0 < count( parent::$class_object->loaded_modules ) )
+			self::$tabs[ 'mlp-modules' ] = __( 'Modules', $this->get_textdomain() );
+
+		// Register options page
+		$this->options_page = add_submenu_page( 'settings.php', __( 'mlp Options', $this->get_textdomain() ), __( 'Multilingual Press', $this->get_textdomain() ), 'manage_network_options', 'mlp', array( $this, 'mlp_options' ) );
+
+		// Callback for adding more metaboxes
 		add_filter( 'load-'.$this->options_page, array( $this, 'metaboxes_options_page') );
 	}
-	
+
 	/**
-	 * Set an Action Hook for add meta boxes
+	 * This callback allows modules
+	 * to hook in their own metaboxes;
 	 * 
 	 * @since	0.1
 	 * @uses	do_action
 	 * @return	void
 	 */
 	public function metaboxes_options_page() {
+
 		do_action( 'mlp_options_page_add_metabox' );
+	}
+
+	/**
+	 * MLP Settings Tab Handler for better UI
+	 * 
+	 * @since 0.5
+	 * @return void
+	 */
+	function mlp_options() {
+		
+		// set the current tab to the first element, if no tab is in request
+		if ( ISSET( $_REQUEST[ 'tab' ] ) && array_key_exists( $_REQUEST[ 'tab' ], self::$tabs ) ) {
+			$current_tab = $_REQUEST[ 'tab' ];
+			$current_tabname = self::$tabs[ $current_tab ];
+		}
+		else {
+			$current_tab = current( array_keys( self::$tabs ) );
+			$current_tabname = self::$tabs[ $current_tab ];
+		}
+
+		?>
+		<div class="wrap">
+			<div class="icon32" id="icon-options-general"><br /></div>
+			<h2 class="nav-tab-wrapper">
+				
+				<?php _e( 'Multilingual Press', $this->get_textdomain() ); ?>
+				
+				<?php 
+					foreach( self::$tabs as $tab_handle => $tabname ) {
+						// set the url to the tab
+						$url = network_admin_url( 'settings.php?page=mlp&tab=' . $tab_handle );
+						// check, if this is the current tab
+						$active = ( $current_tab == $tab_handle ) ? ' nav-tab-active' : '';
+						printf( '<a href="%s" class="nav-tab%s">%s</a>', $url, $active, $tabname );
+					}
+					?>
+				</h2>
+				<br />
+			
+			<?php if ( ISSET( $_GET[ 'message' ] ) && 'updated' == $_GET[ 'message' ] ) { ?>
+				<div class="updated">
+					<p><?php _e( 'Settings saved', parent::get_textdomain() ); ?></p>
+				</div>
+			<?php } ?>
+			
+			<div id="poststuff" class="metabox-holder has-right-sidebar">
+			
+				<div id="side-info-column" class="inner-sidebar">
+					<div id="side-sortables" class="meta-box-sortables ui-sortable">
+						<div id="wp-liveticker-inpsyde" class="postbox">
+							<h3 class="hndle"><span><?php _e( 'Powered by', $this->get_textdomain() ); ?></span></h3>
+							<div class="inside">
+								<p style="text-align: center;"><a href="http://inpsyde.com"><img src="http://inpsyde.com/wp-content/themes/inpsyde/images/logo.jpg" style="border: 7px solid #fff;" /></a></p>
+								<p><?php _e( 'This plugin is powered by <a href="http://inpsyde.com">Inpsyde.com</a> - Your expert for WordPress, BuddyPress and bbPress.', $this->get_textdomain() ); ?></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div id="post-body">
+					<div id="post-body-content">
+						<div id="normal-sortables" class="meta-box-sortables ui-sortable">
+						
+							<?php
+								switch ( $current_tab ) {
+									case 'mlp-modules':
+										$this->modules_form();
+										break;
+									case 'mlp-options':
+									default:
+										$this->settings_form();
+										break;
+								}
+							?>
+						
+						</div>
+					</div>
+				</div>
+			
+			</div>
+		</div>
+		<?php
 	}
 	
 	/**
 	 * The network settings page for
 	 * Multilingual Press. Modules use hook
 	 * 'mlp_settings_add_fields' to
-	 * add fields to the form.
-	 * 
-	 * @since	0.1
+ 	 * add fields to the form.
+	 *
+	 * @since	1.2
 	 * @uses	_e, admin_url, wp_nonce_field, do_meta_boxes, submit_button
 	 * @return	void
-	 * 
+	 *
 	 * @TODO: check whether something was hooked here,
 	 * otherwise display "no options available"
 	 */
@@ -162,6 +246,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 				wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
 				wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
 				?>
+
 				<div id="poststuff" class="metabox-holder">
 					<?php
 					wp_nonce_field( 'mlp_settings' );
@@ -180,7 +265,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 * 
 	 * @since	0.1
 	 * @uses	check_admin_referer, current_user_can, wp_die, do_action,
-	 * 			wp_redirect, admin_url
+	 * 			wp_safe_redirect, admin_url
 	 * @return	void
 	 */
 	public function update_settings() {
@@ -193,7 +278,8 @@ class Mlp_Settingspage extends Multilingual_Press {
 		// process your fields from $_POST here and update_site_option
 		do_action( 'mlp_settings_save_fields', $_POST );
 
-		wp_redirect( admin_url( 'network/settings.php?page=mlp-pro-options' ) );
+		ob_end_clean();
+		wp_safe_redirect( admin_url( 'network/settings.php?page=mlp&tab?mlp-pro-options&message=updated' ) );
 		exit;
 	}
 
@@ -207,8 +293,11 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 */
 	public function modules_form() {
 
+		// Get modules data
 		$states = get_site_option( 'state_modules' );
 		$loaded_modules = parent::$class_object->loaded_modules;
+		
+		// Draw the form
 		?>
 		<div class="wrap">
 			<div class="icon32" id="icon-options-general"><br></div>
@@ -235,6 +324,22 @@ class Mlp_Settingspage extends Multilingual_Press {
 					</tbody>
 				</table>
 
+				<div id="mlp_help" class="postbox">
+					<h3 class="hndle"><span><?php _e( 'Multilingual Press - Modules', $this->get_textdomain() ); ?></h3>
+					<div class="inside">
+						<p><?php _e( 'In the below boxes, there are all modules which come with MultilingualPress Pro. If you don\'t need a module just deactivate the checkbox and save the settings. If you need help for a module there is a detailed description in every module.', $this->get_textdomain() ); ?></p>
+					</div>
+				</div>
+				
+					<?php foreach ( $loaded_modules AS $module => $reg ) : ?>
+					<div id="mlp_help" class="postbox">
+						<h3 class="hndle"><span><?php echo $states[ $module ][ 'display_name' ]; ?></h3>
+						<div class="inside">
+							<p><?php echo $states[ $module ][ 'description' ]; ?></p>
+							<p><input type="checkbox" <?php echo ( array_key_exists( $module, $states ) && 'on' == $states[ $module ][ 'state' ] ) ? 'checked="checked"' : ''; ?> id="mlp_state_<?php echo $module; ?>" value="true" name="mlp_state_<?php echo $module; ?>" /> <?php _e( 'Activate this module', $this->get_textdomain() ); ?></p>
+						</div>
+					</div>
+					<?php endforeach; ?>
 				<?php
 					do_action( 'mlp_modules_add_fields' );
 					submit_button();
@@ -275,8 +380,21 @@ class Mlp_Settingspage extends Multilingual_Press {
 		$new_states = array_diff_key( $current_states, $modules );
 					
 		if ( is_array( $new_states ) ) {
-			foreach ( $new_states AS $module => $state ) {
+			foreach ( $new_states AS $module => $meta ) {
+																   
+				// Don't bother if already turned off
+				if ( 'off' == $meta[ 'state' ] )
+					continue;
+					
+				// Register as off
 				$current_states[ $module ][ 'state' ] = 'off';
+									
+				// Fire deactivation callback of module, if given
+				if ( ISSET( $meta[ 'deactivation' ] ) && is_array( $meta[ 'deactivation' ] ) ) {
+					@list( $class, $method ) = $meta[ 'deactivation' ];
+					if ( method_exists( $class, $method ) )
+						$class::$method();		 
+				}
 			}
 		}
 									 
@@ -284,6 +402,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 
 		// Activate modules
 		foreach ( $modules AS $module => $state ) {
+			// Save state
 			$current_states[ $module ][ 'state' ] = 'on';
 		}
 					
@@ -293,9 +412,10 @@ class Mlp_Settingspage extends Multilingual_Press {
 		// process your fields from $_POST here and update_site_option
 		do_action( 'mlp_modules_save_fields', $_POST );
 
-		wp_redirect( admin_url( 'network/settings.php?page=mlp-pro-modules' ) );
+		ob_end_clean();
+		wp_safe_redirect( admin_url( 'network/settings.php?page=mlp&tab=mlp-modules&message=updated' ) );
 		exit;
 	}
 
-} // end class
+}
 ?>
