@@ -48,6 +48,7 @@
  * - added a check box to the editing view asking whether you want to create the drafts to other languages
  * - Translation is availeable for drafts
  * - Fixed up JS
+ * - Blog Checkup for invalid data
  * 
  * 0.7.5a
  * - Display an admin notice if the plugin was not activated on multisite
@@ -169,6 +170,33 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		public static $textdomainpath = '';
 		
 		/**
+		 * The plugins Name
+		 *
+		 * @static
+		 * @since 0.4
+		 * @var string
+		 */
+		public static $plugin_name = '';
+		
+		/**
+		 * The plugins plugin_base
+		 *
+		 * @static
+		 * @since 0.3
+		 * @var string
+		 */
+		public static $plugin_base_name = '';
+		
+		/**
+		 * The plugins URL
+		 *
+		 * @static
+		 * @since 0.4
+		 * @var string
+		 */
+		public static $plugin_url = '';
+		
+		/**
 		 * Used in save_post() to prevent recursion
 		 *
 		 * @static
@@ -209,6 +237,20 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 				return;
 			}
 			
+			// The Plugins Basename
+			self::$plugin_base_name = plugin_basename( __FILE__ );
+				
+			// The Plugins URL
+			self::$plugin_url = $this->get_plugin_header( 'PluginURI' );
+				
+			// The Plugins Name
+			self::$plugin_name = $this->get_plugin_header( 'Name' );
+				
+			// Textdomain
+			self::$textdomain = $this->get_textdomain();
+			// Textdomain Path
+			self::$textdomainpath = $this->get_domain_path();
+			
 			global $wpdb;
 
 			// Show database errors
@@ -227,17 +269,6 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			// Hooks and filters
 			add_filter( 'init', array( $this, 'load_plugin_textdomain' ) );
 
-			// Load modules
-			add_filter( 'plugins_loaded', array( $this, 'load_modules' ), 9 );
-
-			// Add the meta box
-			add_filter( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
-
-			// Does another plugin offer its own save method?
-			$external_save_method = apply_filters( 'inpsyde_multilingualpress_external_save_method', FALSE );
-			if ( ! $external_save_method )
-				add_filter( 'save_post', array( $this, 'save_post' ) );
-
 			// Enqueue scripts
 			add_filter( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 			add_filter( 'wp_enqueue_scripts', array( $this, 'wp_styles' ) );
@@ -252,6 +283,25 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 
 			// Cleanup upon blog delete
 			add_filter( 'delete_blog', array( $this, 'delete_blog' ), 10, 2 );
+			
+			// Checkup blog cleanup
+			add_filter( 'admin_head', array( $this, 'checkup_blog_message' ) );
+			add_filter( 'wp_ajax_checkup_blogs', array( $this, 'checkup_blog' ) );
+			
+			// Check for errors
+			if ( ! $this->check_for_user_errors() )
+				return;
+			
+			// Load modules
+			add_filter( 'plugins_loaded', array( $this, 'load_modules' ), 9 );
+			
+			// Does another plugin offer its own save method?
+			$external_save_method = apply_filters( 'inpsyde_multilingualpress_external_save_method', FALSE );
+			if ( ! $external_save_method )
+				add_filter( 'save_post', array( $this, 'save_post' ) );
+			
+			// Add the meta box
+			add_filter( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		}
 		
 		/**
@@ -746,8 +796,8 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 				if ( NULL != $remote_post ) {
 					$has_linked = TRUE;
 					echo '<p>' . __( 'Status:', $this->get_textdomain() ) . '&nbsp;<b>' . ucfirst( get_post_status( $linked_post ) ) . '</b>&nbsp;|&nbsp;' . __( 'Published on:', $this->get_textdomain() ) . '<b>&nbsp;' . get_post_time( get_option( 'date_format' ), FALSE, $linked_post ) . '</b></p>';
-					echo '<h2>' . get_the_title( $linked_post ) . '</h2>';
-					echo '<textarea class="large-text cols="80" rows="10" disabled="disabled">' . apply_filters( 'the_content', $remote_post->post_content ) . '</textarea><br />';
+					echo '<h2 id="headline">' . get_the_title( $linked_post ) . '</h2>';
+					echo '<textarea id="content" class="large-text cols="80" rows="10" disabled="disabled">' . apply_filters( 'the_content', $remote_post->post_content ) . '</textarea>';
 					echo '<p><a href="' . admin_url( 'post.php?post=' . $linked_post . '&action=edit' ) . '">' . __( 'Edit', $this->get_textdomain() ) . '</a></p>';
 				}
 				restore_current_blog();
@@ -1072,6 +1122,141 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 					<a href="http://codex.wordpress.org/Create_A_Network" title="<?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?>"><?php _e( 'WordPress Codex: Create a network', $this->get_textdomain() ); ?></a>
 				</p>
 			</div><?php
+		}
+		
+	/**
+		 * returns an error-nag with an ajax-link for the blog cleanup
+		 * if there is a problem
+		 * 
+		 * @access	public
+		 * @since	0.8
+		 * @uses	get_site_option, is_super_admin, _e
+		 * @return	void
+		 */
+		public function checkup_blog_message() {
+			
+			$is_checkup_message = get_site_option( 'multilingual_press_check_db', FALSE );
+			if ( $is_checkup_message && is_super_admin() ) {
+				?>
+				<div class="error" id="multilingual_press_checkup"><p><?php _e( 'We found invalid Multilingual Press Data in your Blogsystem. <a href="#" id="multilingual_press_checkup_link">Please do a checkup by clicking here</a>', $this->get_textdomain() ); ?></p></div>
+				<?php
+			}
+		}
+		
+		/**
+		 * Checks the blog for invalid data
+		 *
+		 * @access	public
+		 * @since	0.8
+		 * @uses	get_site_option, is_super_admin, _e, delete_site_option
+		 * @return	void
+		 */
+		public function checkup_blog() {
+			
+			// Message
+			?>
+			<p><?php _e( 'Cleanup runs. Please stand by.', $this->get_textdomain() ); ?></p>
+			<?php
+			
+			// Update Blog Relationships
+			// Get blogs related to the current blog
+			$all_blogs = get_site_option( 'inpsyde_multilingual' );
+			
+			if ( ! $all_blogs )
+				$all_blogs = array();
+			
+			$current_blog_id = get_current_blog_id();
+			$cleanup_blogs = array();
+			
+			// The user defined new relationships for this blog. We add it's own ID
+			// for internal purposes
+			$data[ 'related_blogs' ][] = $current_blog_id;
+			$new_rel = $data[ 'related_blogs' ];
+			
+			// Loop through related blogs
+			foreach ( $all_blogs as $blog_id => $blog_data ) {
+				// Does this blog exists?
+				$blog_details = get_blog_details( $blog_id );
+				if ( empty( $blog_details ) )
+					$cleanup_blogs[] = $blog_id;
+			}
+			
+			// We found blogs so we have to check em up
+			if ( 0 < count( $cleanup_blogs ) ) {
+				?><p><?php _e( sprintf( '%d Corrupt Blogs found. Fixing ...', count( $cleanup_blogs ) ), $this->get_textdomain() ); ?></p><?php
+				
+				// Loop throug the blogs array
+				foreach ( $all_blogs as $blog_id => $blog_data ) {
+					
+					// Loop throug corrupt blogs
+					foreach ( $cleanup_blogs as $blog_to_clean ) {
+						
+						// 1. Get related blogs' current relationships
+						$current_rel = get_blog_option( $blog_id, 'inpsyde_multilingual_blog_relationship' );
+						
+						// We have relationshops
+						if ( 1 < count( $current_rel ) ) {
+							
+							// 2. Compare old to new relationships
+							// Get the key of the current blog in the relationships array of the looped blog
+							$key = array_search( $blog_to_clean, $current_rel );
+							
+							// These blogs should not be connected. Delete
+							// possibly existing connection
+							if ( FALSE !== $key && isset( $current_rel[ $key ] ) )
+								unset( $current_rel[ $key ] );
+							
+							update_blog_option( $blog_id, 'inpsyde_multilingual_blog_relationship', $current_rel );
+						}
+					}
+				}
+				
+				?><p><?php _e( 'Relationships has been deleted.' , $this->get_textdomain() ); ?></p><?php
+				
+				// Update site_option
+				$blogs = get_site_option( 'inpsyde_multilingual' );
+				foreach ( $cleanup_blogs as $blog_to_clean ) {
+					
+					if ( array_key_exists( $blog_to_clean, $blogs ) )
+						unset( $blogs[ $blog_to_clean ] );
+					
+				}
+				update_site_option( 'inpsyde_multilingual', $blogs );
+				
+				?><p><?php _e( 'Blogmap has been updated.' , $this->get_textdomain() ); ?></p><?php
+				?><p><?php _e( 'All done!' , $this->get_textdomain() ); ?></p><?php
+			}
+			
+			delete_site_option( 'multilingual_press_check_db' );
+			die;
+		}
+		
+		/**
+		 * Checks for errors
+		 * 
+		 * @access	public
+		 * @since	0.8
+		 * @uses	
+		 * @return	void
+		 */
+		public function check_for_user_errors() {
+			
+			if ( is_admin() && ! is_network_admin() ) {
+			
+				// Get blogs related to the current blog
+				$all_blogs = get_site_option( 'inpsyde_multilingual', array() );
+				$relationships = get_option( 'inpsyde_multilingual_blog_relationship' );
+				
+				if ( array_key_exists( get_current_blog_id(), $all_blogs ) ) {
+					if ( 2 > count( $relationships ) ) {
+						if ( is_super_admin() ) {
+							?><div class="error"><p><?php _e( 'You didn\'t setup any blog relationships! You have to setup them first to use Multilingual Press.' , $this->get_textdomain() ); ?></p></div><?php
+						}
+						return FALSE;
+					}	
+				}
+			}
+			return TRUE;
 		}
 	}
 }
