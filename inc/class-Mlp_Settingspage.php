@@ -299,53 +299,34 @@ class Mlp_Settingspage extends Multilingual_Press {
 		
 		// Draw the form
 		?>
-		<div class="wrap">
-			<div class="icon32" id="icon-options-general"><br></div>
-			<h2><?php _e( 'Multilingual Press Module Manager', $this->get_textdomain() ); ?></h2>
-			<form action="<?php echo admin_url( 'admin-post.php?action=mlp_update_modules' ); ?>" method="post">
-				<?php wp_nonce_field( 'mlp_modules' ); ?>
-				<h3><?php _e( 'List of installed modules', $this->get_textdomain() ); ?></h3>
-				<table class="form-table">
-					<tbody>
-						<?php
-						foreach ( $loaded_modules AS $module => $reg ) {
-							?>
-							<tr>
-								<th scope="row">
-									<?php echo $states[ $module ][ 'display_name' ]; ?>
-								</th>
-								<td>
-									<input type="checkbox" <?php echo ( array_key_exists( $module, $states ) && 'on' == $states[ $module ][ 'state' ] ) ? 'checked="checked"' : ''; ?> id="mlp_state_<?php echo $module; ?>" value="true" name="mlp_state_<?php echo $module; ?>" />
-								</td>
-							</tr>
-							<?php
-						}
-						?>
-					</tbody>
-				</table>
+		<form action="<?php echo admin_url( 'admin-post.php?action=mlp_update_modules' ); ?>" method="post">
+			<?php wp_nonce_field( 'mlp_modules' ); ?>
 
+			<div id="mlp_help" class="postbox">
+				<h3 class="hndle"><span><?php _e( 'Multilingual Press - Modules', $this->get_textdomain() ); ?></h3>
+				<div class="inside">
+					<p><?php _e( 'In the below boxes, there are all modules which come with MultilingualPress Pro. If you don\'t need a module just deactivate the checkbox and save the settings. If you need help for a module there is a detailed description in every module.', $this->get_textdomain() ); ?></p>
+				</div>
+			</div>
+			
+				<?php foreach ( $loaded_modules AS $module => $reg ) :
+					if ( TRUE == apply_filters( 'mlp_dont_show_module', $module ) )
+						continue;
+				?>
+				
 				<div id="mlp_help" class="postbox">
-					<h3 class="hndle"><span><?php _e( 'Multilingual Press - Modules', $this->get_textdomain() ); ?></h3>
+					<h3 class="hndle"><span><?php echo $states[ $module ][ 'display_name' ]; ?></h3>
 					<div class="inside">
-						<p><?php _e( 'In the below boxes, there are all modules which come with MultilingualPress Pro. If you don\'t need a module just deactivate the checkbox and save the settings. If you need help for a module there is a detailed description in every module.', $this->get_textdomain() ); ?></p>
+						<p><?php echo $states[ $module ][ 'description' ]; ?></p>
+						<p><input type="checkbox" <?php echo ( array_key_exists( $module, $states ) && 'on' == $states[ $module ][ 'state' ] ) ? 'checked="checked"' : ''; ?> id="mlp_state_<?php echo $module; ?>" value="true" name="mlp_state_<?php echo $module; ?>" /> <?php _e( 'Activate this module', $this->get_textdomain() ); ?></p>
 					</div>
 				</div>
-				
-					<?php foreach ( $loaded_modules AS $module => $reg ) : ?>
-					<div id="mlp_help" class="postbox">
-						<h3 class="hndle"><span><?php echo $states[ $module ][ 'display_name' ]; ?></h3>
-						<div class="inside">
-							<p><?php echo $states[ $module ][ 'description' ]; ?></p>
-							<p><input type="checkbox" <?php echo ( array_key_exists( $module, $states ) && 'on' == $states[ $module ][ 'state' ] ) ? 'checked="checked"' : ''; ?> id="mlp_state_<?php echo $module; ?>" value="true" name="mlp_state_<?php echo $module; ?>" /> <?php _e( 'Activate this module', $this->get_textdomain() ); ?></p>
-						</div>
-					</div>
-					<?php endforeach; ?>
-				<?php
-					do_action( 'mlp_modules_add_fields' );
-					submit_button();
-				?>
-			</form>
-		</div>
+				<?php endforeach; ?>
+			<?php
+				do_action( 'mlp_modules_add_fields' );
+				submit_button();
+			?>
+		</form>
 		<?php
 	}
 
