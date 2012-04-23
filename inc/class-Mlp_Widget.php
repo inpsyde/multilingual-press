@@ -1,24 +1,38 @@
 <?php
 /**
- * Widget
+ * Module Name:	Multilingual Press Widget
+ * Description:	This Widget shows the flags
+ * Author:		Inpsyde GmbH
+ * Version:		0.2
+ * Author URI:	http://inpsyde.com
  *
- * @author		fb, rw, ms, th
- * @package		mlp
- * @subpackage	widget
+ * Changelog
  *
+ * 0.2
+ * - Codexified
+ *
+ * 0.1
+ * - Initial Commit
+ * 
  */
 class Mlp_Widget extends WP_Widget {
 
 	/**
 	 * The textdomain
 	 * 
-	 * @var		string | The textdomain
 	 * @since	0.1
+	 * @access	private
+	 * @var		string | The textdomain
 	 */
 	private $textdomain = '';
 
 	/**
-	 * Widget init
+	 * Inits the textdomain, registers the widget and set up the description
+	 * 
+	 * @since	0.1
+	 * @access	public
+	 * @uses	Multilingual_Press, __
+	 * @return	void
 	 */
 	public function mlp_widget() {
 		
@@ -26,8 +40,8 @@ class Mlp_Widget extends WP_Widget {
 		$this->textdomain = $mlp->get_textdomain();
 		
 		$widget_ops = array(
-			'classname' => 'Mlp_Widget',
-			'description' => __( 'Multilingual Press Widget', $this->textdomain )
+			'classname'		=> 'Mlp_Widget',
+			'description'	=> __( 'Multilingual Press Widget', $this->textdomain )
 		);
 		
 		$this->WP_Widget( 'Mlp_Widget', __( 'Multilingual Press Widget', $this->textdomain ), $widget_ops );
@@ -36,20 +50,24 @@ class Mlp_Widget extends WP_Widget {
 	/**
 	 * Display widget admin form
 	 * 
-	 * @param array $instance | widget settings 
+	 * @since	0.1
+	 * @access	public
+	 * @param	array $instance | widget settings 
+	 * @uses	strip_tags, esc_attr, _e
+	 * @return	void
 	 */
 	public function form( $instance ) {
 
-		$title = ( ISSET( $instance[ 'widget_title' ] ) ) ? strip_tags( $instance[ 'widget_title' ] ) : '';
-		$link_type = ( ISSET( $instance[ 'widget_title' ] ) ) ? esc_attr( $instance[ 'widget_link_type' ] ) : '';
+		$title = ( isset( $instance[ 'widget_title' ] ) ) ? strip_tags( $instance[ 'widget_title' ] ) : '';
+		$link_type = ( isset( $instance[ 'widget_title' ] ) ) ? esc_attr( $instance[ 'widget_link_type' ] ) : '';
 		?>
 		<p>
-			<label for='<?php echo $this->get_field_id( "mlp_widget_title" ); ?>'><?php _e( 'Title:', $this->textdomain ); ?></label><br /> 
-			<input class="widefat" type ='text' id='<?php echo $this->get_field_id( "mlp_widget_title" ); ?>' name='<?php echo $this->get_field_name( "mlp_widget_title" ); ?>' value='<?php echo $title; ?>'>
+			<label for='<?php echo $this->get_field_id( 'mlp_widget_title' ); ?>'><?php _e( 'Title:', $this->textdomain ); ?></label><br /> 
+			<input class="widefat" type ='text' id='<?php echo $this->get_field_id( "mlp_widget_title" ); ?>' name='<?php echo $this->get_field_name( 'mlp_widget_title' ); ?>' value='<?php echo $title; ?>'>
 		</p>
 		<p>
-			<label for='<?php echo $this->get_field_id( "mlp_widget_link_type" ); ?>'><?php _e( 'Link-Type:', $this->textdomain ); ?></label><br />	
-			<select class="widefat" id='<?php echo $this->get_field_id( "mlp_widget_link_type" ); ?>' name='<?php echo $this->get_field_name( "mlp_widget_link_type" ); ?>' >
+			<label for='<?php echo $this->get_field_id( 'mlp_widget_link_type' ); ?>'><?php _e( 'Link-Type:', $this->textdomain ); ?></label><br />	
+			<select class="widefat" id='<?php echo $this->get_field_id( 'mlp_widget_link_type' ); ?>' name='<?php echo $this->get_field_name( 'mlp_widget_link_type' ); ?>' >
 				<option <?php selected( $link_type, 'text' ); ?> value="text"><?php _e( 'Text', $this->textdomain ); ?></option>
 				<option <?php selected( $link_type, 'flag' ); ?> value="flag"><?php _e( 'Flag', $this->textdomain ); ?></option>
 				<option <?php selected( $link_type, 'text_flag' ); ?> value="text_flag"><?php _e( 'Text &amp; Flag', $this->textdomain ); ?></option>
@@ -62,8 +80,12 @@ class Mlp_Widget extends WP_Widget {
 	/**
 	 * Callback for widget update
 	 * 
-	 * @param array $instance | widget settings 
-	 * @param array $new_instance | new widget settings 
+	 * @since	0.1
+	 * @access	public
+	 * @param	array $new_instance | new widget settings 
+	 * @param	array $instance | widget settings 
+	 * @uses	strip_tags, esc_attr
+	 * @return	array $new_instance | new widget settings
 	 */
 	public function update( $new_instance, $old_instance ) {
 
@@ -77,10 +99,12 @@ class Mlp_Widget extends WP_Widget {
 	/**
 	 * Frontend display
 	 * 
-	 * @param array $args
-	 * @param array $instance | widget settings
-	 * @uses mlp_show_linked_elements
-	 * @return void
+	 * @since	0.1
+	 * @access	public
+	 * @param	array $args
+	 * @param	array $instance | widget settings
+	 * @uses	mlp_show_linked_elements
+	 * @return	void
 	 */
 	public function widget( $args, $instance ) {
 		
@@ -100,12 +124,20 @@ class Mlp_Widget extends WP_Widget {
 		echo $output . $after_widget;
 	}
 	
+	/**
+	 * Registers the widget
+	 *
+	 * @since	0.1
+	 * @access	public
+	 * @uses	register_widget
+	 * @return	void
+	 */
 	public function widget_register() {
 		register_widget( 'mlp_widget' );	
 	}
 	
-} // Class END;
+}
 
 // Initialize widget
-add_action( 'widgets_init', array( 'Mlp_Widget', 'widget_register' ) );
+add_filter( 'widgets_init', array( 'Mlp_Widget', 'widget_register' ) );
 ?>
