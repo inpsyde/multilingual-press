@@ -509,6 +509,9 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			if ( 0 == $source_blog_id )
 				$source_blog_id = $this->source_blog_id;
 			
+			if ( ! $this->link_table )
+				$this->link_table = $wpdb->base_prefix . 'multilingual_linked';
+			
 			$wpdb->insert( $this->link_table, array( 'ml_source_blogid' => $source_blog_id, 'ml_source_elementid' => $source_id, 'ml_blogid' => $blog_id, 'ml_elementid' => $element_id, 'ml_type' => $type ) );
 		}
 
