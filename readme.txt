@@ -3,7 +3,7 @@ Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle
 Tags: language, multilinguage, multisite
 Requires at least: 3.3
 Tested up to: 3.3.2
-Stable tag: 0.8.
+Stable tag: 0.8.0
 
 Multilingual websites with WordPress Multisite
 
@@ -72,6 +72,7 @@ Help tab for further explanation can be found on the right top of the page.
 this plugin.
 
 * German language files by [ourselves](http://inpsyde.com) ;)
+* Lithuanian translation files by [Vincent G](http://www.host1plus.com)
 
 = Licence =
 Good news, this plugin is free for everyone! Since it's released under the GPLv3, you can use it free 
