@@ -40,10 +40,11 @@
  * 0.8.1 (not ready yet)
  * - Adding Plugin Settingspage, Code Cleanup
  * - added check that prevents the use of this plugin in a not-setted blog
- * - Codexified
+ * - Codexified several stuff
  * - Fixed Missing Table from external Module
  * - Added filter for the list, fixed Style
  * - Fixed several notices
+ * - fixed language key output
  * 
  * 0.8
  * - Codexified
