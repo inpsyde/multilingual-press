@@ -10,7 +10,7 @@
  *
  * 0.6
  * - Codexified
- * - Added link to post on single page
+ * - Fixed Notices
  *
  * 0.5.2a
  * - Initial Commit
@@ -53,6 +53,10 @@ class Mlp_Helpers extends Multilingual_Press {
 		
 		// Get current blog
 		$blogid = get_current_blog_id();
+		
+		// If this blog is in a language
+		if ( ! isset( $languages[ $blogid ][ 'lang' ] ) )
+			return;
 		
 		if ( 0 == $count ) 
 			return $languages[ $blogid ][ 'lang' ];
