@@ -249,7 +249,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			}
 			
 			// This check prevents the use of this plugin in a not-setted blog
-			if ( 'admin-post.php' != $pagenow && ! is_network_admin() && ! array_key_exists( get_current_blog_id(), get_site_option( 'inpsyde_multilingual', array() ) ) )
+			if ( 'admin-post.php' != $pagenow && 'admin-ajax.php' != $pagenow && ! is_network_admin() && ! array_key_exists( get_current_blog_id(), get_site_option( 'inpsyde_multilingual', array() ) ) )
 				return;
 			
 			// The Plugins Basename
