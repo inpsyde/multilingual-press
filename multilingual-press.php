@@ -37,6 +37,12 @@
  * 
  * Changelog
  * 
+ * 0.8.1 (not ready yet)
+ * - added check that prevents the use of this plugin in a not-setted blog
+ * - Codexified
+ * - Fixed Missing Table from external Module
+ * - Added filter for the list, fixed Style
+ * 
  * 0.8
  * - Codexified
  * - Renamed the files
@@ -232,10 +238,15 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		 */
 		public function __construct() {
 			
+			// This check prevents using this plugin not in a multisite
 			if ( function_exists( 'is_multisite' ) && ! is_multisite() && is_super_admin() ) {
 				add_filter( 'admin_notices',  array( $this, 'error_msg_no_multisite' ) );
 				return;
 			}
+			
+			// This check prevents the use of this plugin in a not-setted blog
+			if ( ! is_network_admin() && ! array_key_exists( get_current_blog_id(), get_site_option( 'inpsyde_multilingual', array() ) ) )
+				return;
 			
 			// The Plugins Basename
 			self::$plugin_base_name = plugin_basename( __FILE__ );
