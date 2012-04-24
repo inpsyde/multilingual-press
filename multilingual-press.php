@@ -38,6 +38,7 @@
  * Changelog
  * 
  * 0.8.1 (not ready yet)
+ * - Adding Plugin Settingspage, Code Cleanup
  * - added check that prevents the use of this plugin in a not-setted blog
  * - Codexified
  * - Fixed Missing Table from external Module
@@ -234,9 +235,11 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		 * @uses	add_filter, get_site_option, is_multisite, is_super_admin,
 		 * 			do_action, apply_filters
 		 * @global	$wpdb | WordPress Database Wrapper
+		 * @global	$pagenow | Current Page Wrapper
 		 * @return  void
 		 */
 		public function __construct() {
+			global $pagenow;
 			
 			// This check prevents using this plugin not in a multisite
 			if ( function_exists( 'is_multisite' ) && ! is_multisite() && is_super_admin() ) {
@@ -245,7 +248,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			}
 			
 			// This check prevents the use of this plugin in a not-setted blog
-			if ( ! is_network_admin() && ! array_key_exists( get_current_blog_id(), get_site_option( 'inpsyde_multilingual', array() ) ) )
+			if ( 'admin-post.php' != $pagenow && ! is_network_admin() && ! array_key_exists( get_current_blog_id(), get_site_option( 'inpsyde_multilingual', array() ) ) )
 				return;
 			
 			// The Plugins Basename
