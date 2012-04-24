@@ -238,24 +238,20 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 */
 	public function settings_form() {
 		?>
-		<div class="wrap">
-			<div class="icon32" id="icon-options-general"><br></div>
-			<h2><?php _e( 'Multilingual Press Options', $this->get_textdomain() ); ?></h2><br />
-			<form action="<?php echo admin_url( 'admin-post.php?action=mlp_update_settings' ); ?>" method="post">
-				<?php
-				wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
-				wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
-				?>
+		<form action="<?php echo admin_url( 'admin-post.php?action=mlp_update_settings' ); ?>" method="post">
+			<?php
+			wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
+			wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
+			?>
 
-				<div id="poststuff" class="metabox-holder">
-					<?php
-					wp_nonce_field( 'mlp_settings' );
-					do_meta_boxes( $this->options_page, 'normal', FALSE );
-					submit_button();
-					?>
-				</div>
-			</form>
-		</div>
+			<div id="poststuff" class="metabox-holder">
+				<?php
+				wp_nonce_field( 'mlp_settings' );
+				do_meta_boxes( $this->options_page, 'normal', FALSE );
+				submit_button();
+				?>
+			</div>
+		</form>
 		<?php
 	}
 	
