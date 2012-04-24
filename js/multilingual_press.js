@@ -21,6 +21,7 @@ jQuery.noConflict();
 		 * Initial Function
 		 */
 		init : function () {
+			this.do_blog_checkup();
 			this.draw_tab();
 			this.bind_ajax_tab_handler();
 			this.bind_submit_setting_form();
@@ -106,6 +107,37 @@ jQuery.noConflict();
 		form_fields_expandable : function() {
 			$( 'form#multilingualpress_settings .handlediv' ).live( 'click', function() {
 				$( this ).parent( '.postbox' ).toggleClass( 'closed' );
+			} );
+		},
+		
+		/**
+		 * Retrieves all responses from the blog checkup
+		 * 
+		 * @since	0.8
+		 */
+		do_blog_checkup : function() {
+			if ( ! '#multilingual_press_checkup' )
+				return;
+			
+			$( '#multilingual_press_checkup_link' ).live( 'click', function() {
+				var data = {
+					action: 'checkup_blogs'
+				};
+				
+				$.ajax( {
+    				url: ajaxurl,
+    				data: data,
+    				async: true,
+    				success: function ( response ) {
+    					$( '#multilingual_press_checkup' ).append( response ).delay( 250 ).animate( {
+    						backgroundColor: 'lightYellow',
+    						borderBottomColor: '#E6DB55', 
+    						borderLeftColor: '#E6DB55',
+    						borderRightColor: '#E6DB55',
+    						borderTopColor: '#E6DB55'
+    					}, 500 ).delay( 3500 ).slideUp();
+    				}
+    			} );
 			} );
 		}
 	};

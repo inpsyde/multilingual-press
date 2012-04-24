@@ -2,11 +2,10 @@
 Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle
 Tags: language, multilinguage, multisite
 Requires at least: 3.3
-Tested up to: 3.3
-Stable tag: 0.7.5a
+Tested up to: 3.3.2
+Stable tag: 0.8.
 
 Multilingual websites with WordPress Multisite
-
 
 == Description ==
 By using the powerful WordPress Multilingual-Press plugin it´s much easier to build multilingual sites and
@@ -46,7 +45,6 @@ We will also have a pro version of this plugin, which includes these additional 
 
 **Currently in development**
 
-
 == Installation ==
 = Requirements =
 * WordPress Multisite 3.3*
@@ -60,7 +58,6 @@ We will also have a pro version of this plugin, which includes these additional 
    settings for each Site
 
 Help tab for further explanation can be found on the right top of the page.
-
 
 == Screenshots ==
 1. List of Sites in network with new column for interlinked sites
@@ -90,6 +87,29 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
 [Localization](http://wordpress.org/extend/plugins/codestyling-localization/).
 
 == Changelog ==
+
+= 0.8.1 =
+* Adding Plugin Settingspage, Code Cleanup
+* added check that prevents the use of this plugin in a not-setted blog
+* Codexified several stuff
+* Fixed Missing Table from external Module
+* Added filter for the list, fixed Style
+* Fixed several notices
+* fixed language key output
+
+= 0.8 =
+* Codexified
+* Renamed the files
+* changed textdomain
+* fixed fi_FI language pack
+* fixed several widget bugs ( #10, #13, #18, #22 )
+* Documentation
+* Only load the Widget CSS when widget is used
+* added a check box to the editing view asking whether you want to create the drafts to other languages
+* Translation is availeable for drafts
+* Fixed up JS
+* Blog Checkup for invalid data
+
 = 0.7.5a =
 * Display an admin notice if the plugin was not activated on multisite
 * Set the parent page if this page was also handled by the plugin [Issue 2](https://github.com/inpsyde/multilingual-press/issues/2)

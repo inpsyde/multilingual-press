@@ -187,7 +187,7 @@ class Mlp_Default_Module extends Multilingual_Press {
 								else
 									$selected = '';
 								?>
-								<input id="related_blog_<?php echo $blog_id; ?>" <?php echo $selected; ?> type="checkbox" name="related_blogs[]" value="<?php echo $blog_id ?>" /> <?php echo $blog_name; ?> - <?php echo $meta[ 'lang' ] ?> - <?php echo $meta[ 'text' ] ?><br />
+								<input id="related_blog_<?php echo $blog_id; ?>" <?php echo $selected; ?> type="checkbox" name="related_blogs[]" value="<?php echo $blog_id ?>" /> <?php echo $blog_name; ?> - <?php echo substr( $meta[ 'lang' ], 0, 2 ); ?> - <?php echo $meta[ 'text' ] ?><br />
 								<?php
 							}
 							?>
@@ -261,11 +261,11 @@ class Mlp_Default_Module extends Multilingual_Press {
 			$key = array_search( $current_blog_id, $current_rel );
 
 			if ( in_array( $blog_id, $new_rel ) ) {
+
 				// Connect these blogs, if not already.
 				if ( FALSE === $key )
-					$current_rel[] = $current_blog_id;
-			}
-			else {
+					$current_rel[ ] = $current_blog_id;
+			} else {
 				// These blogs should not be connected. Delete
 				// possibly existing connection
 				if ( FALSE !== $key && ISSET( $current_rel[ $key ] ) )

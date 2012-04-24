@@ -1,23 +1,34 @@
 <?php
 /**
- * Helpers
+ * Module Name:	Multilingual Press Helpers
+ * Description:	Several helper functions
+ * Author:		Inpsyde GmbH
+ * Version:		0.6
+ * Author URI:	http://inpsyde.com
  *
- * @author		fb, rw, ms, th
- * @package		mlp
- * @subpackage	helpers
+ * Changelog
+ *
+ * 0.6
+ * - Codexified
+ * - Fixed Notices
+ *
+ * 0.5.2a
+ * - Initial Commit
+ * 
  */
-
 class Mlp_Helpers extends Multilingual_Press {
 	
 	/**
 	 * Check wheter redirect = on for specific blog
 	 * 
 	 * @since	0.5.2a 
+	 * @static
+	 * @access	public
 	 * @param	int $blogid | blog to check setting for
 	 * @uses	get_current_blog_id, get_blog_option
 	 * @return	bool $redirect | TRUE / FALSE
 	 */
-	static function is_redirect( $blogid = FALSE ) {
+	static public function is_redirect( $blogid = FALSE ) {
 		
 		$blogid = ( FALSE == $blogid ) ? get_current_blog_id() : $blogid;
 		$redirect = get_blog_option( $blogid, 'inpsyde_multilingual_redirect' );
@@ -28,18 +39,24 @@ class Mlp_Helpers extends Multilingual_Press {
 	/**
 	 * Get the language set by MlP. 
 	 * 
-	 * @param	string $count | Lenght of string to return
 	 * @since	0.5.2a
+	 * @static
+	 * @access	public
+	 * @param	string $count | Lenght of string to return
 	 * @uses	get_site_option, get_current_blog_id
 	 * @return	string | the language code 
 	 */
-	static function get_current_blog_language( $count = 0 ) {
+	static public function get_current_blog_language( $count = 0 ) {
 		
 		// Get all registered blogs
 		$languages = get_site_option( 'inpsyde_multilingual' );
 		
 		// Get current blog
 		$blogid = get_current_blog_id();
+		
+		// If this blog is in a language
+		if ( ! isset( $languages[ $blogid ][ 'lang' ] ) )
+			return;
 		
 		if ( 0 == $count ) 
 			return $languages[ $blogid ][ 'lang' ];
@@ -51,8 +68,9 @@ class Mlp_Helpers extends Multilingual_Press {
 	/**
 	 * Load the languages set for each blog
 	 *
-	 * @access  public
 	 * @since   0.1
+	 * @static
+	 * @access  public
 	 * @uses	get_site_option, get_blog_option, get_current_blog_id, format_code_lang
 	 * @param   $rel | filter out non-related blogs? By default
 	 * @return  array $options
@@ -109,12 +127,13 @@ class Mlp_Helpers extends Multilingual_Press {
 	 * Load the alternative title 
 	 * set for each blog language
 	 *
-	 * @access  public
 	 * @since   0.5.3b
+	 * @static
+	 * @access  public
 	 * @uses	get_site_option
 	 * @return  array $options
 	 */
-	static function get_available_languages_titles( $nonrelated = FALSE ) {
+	static public function get_available_languages_titles( $nonrelated = FALSE ) {
 		
 		$related_blogs = '';
 
@@ -153,8 +172,9 @@ class Mlp_Helpers extends Multilingual_Press {
 	 * in other blogs for 
 	 * the selected element 
 	 *
-	 * @access  public
 	 * @since   0.1
+	 * @static
+	 * @access  public
 	 * @uses	get_current_blog_id, get_results, get_results
 	 * @param   int $element_id ID of the selected element
 	 * @param   string $type | type of the selected element
@@ -162,8 +182,7 @@ class Mlp_Helpers extends Multilingual_Press {
 	 * @global	$wpdb WordPress Database Wrapper
 	 * @return  array $elements
 	 */
-	static function load_linked_elements( $element_id = FALSE, $type = '', $blog_id = 0 ) {
-
+	static public function load_linked_elements( $element_id = FALSE, $type = '', $blog_id = 0 ) {
 		global $wpdb;
 		
 		// if no element id is provides, use WP default
@@ -176,7 +195,7 @@ class Mlp_Helpers extends Multilingual_Press {
 
 		// Get linked elements
 		$results = $wpdb->get_results( $wpdb->prepare( 'SELECT t.ml_blogid, t.ml_elementid FROM ' . Multilingual_Press::$class_object->link_table . ' s INNER JOIN ' . Multilingual_Press::$class_object->link_table . ' t ON s.ml_source_blogid = t.ml_source_blogid && s.ml_source_elementid = t.ml_source_elementid WHERE s.ml_blogid = %d && s.ml_elementid = %d', $blog_id, $element_id ) );
-
+		
 		// No linked elements? Adios.
 		if ( 0 >= count( $results ) )
 			return array();
@@ -187,7 +206,6 @@ class Mlp_Helpers extends Multilingual_Press {
 		foreach ( $results as $resultelement ) {
 			if ( $blog_id != $resultelement->ml_blogid )
 				$elements[ $resultelement->ml_blogid ] = ( int ) $resultelement->ml_elementid;
-				
 		}
 
 		// Return linked elements in other blogs
@@ -198,14 +216,14 @@ class Mlp_Helpers extends Multilingual_Press {
 	/**
 	 * function for custom plugins to get activated on all language blogs  
 	 *
-	 * @access  public
 	 * @since   0.1
+	 * @access  public
 	 * @param   int $element_id ID of the selected element
 	 * @param   string $type type of the selected element
 	 * @param   int $blog_id ID of the selected blog
 	 * @return  array linked elements
 	 */
-	static function run_custom_plugin( $element_id, $type, $blog_id, $hook, $param ) {
+	static public function run_custom_plugin( $element_id, $type, $blog_id, $hook, $param ) {
 		
 		if ( empty( $element_id ) ) {
 			$error = new WP_Error( 'mlp_empty_custom_element', __( 'Empty Element', self::get_textdomain() ) );
@@ -250,14 +268,14 @@ class Mlp_Helpers extends Multilingual_Press {
 	 * Get the url of the 
 	 * flag from a blogid  
 	 *
-	 * @access	public
 	 * @since	0.1
+	 * @access	public
 	 * @uses	get_current_blog_id, get_blog_option, get_site_option
 	 * 			plugin_dir_path
 	 * @param	int $blog_id ID of a blog
 	 * @return	string url of the language image
 	 */
-	static function get_language_flag( $blog_id = 0 ) {
+	static public function get_language_flag( $blog_id = 0 ) {
 		
 		$url = '';
 
@@ -276,10 +294,11 @@ class Mlp_Helpers extends Multilingual_Press {
 		// Is this a shortcode (i.e. "fr"), or an ISO 
 		// formatted language code (i.e. fr_BE) ?
 		$language_code = ( 5 == strlen( $languages[ $blog_id ][ 'lang' ] ) ) ? strtolower( substr( $languages[ $blog_id ][ 'lang' ], 3, 2 ) ) : substr( $languages[ $blog_id ][ 'lang' ], 0, 2 );
+
 		// Check for existing file
-		if ( '' != $language_code && file_exists( plugin_dir_path( dirname( __FILE__ ) ) . '/flags/' . $language_code . '.gif' ) ) {
+		if ( '' != $language_code && file_exists( plugin_dir_path( dirname( __FILE__ ) ) . '/flags/' . $language_code . '.gif' ) )
 			$url = plugins_url( 'flags/' . $language_code . '.gif', dirname( __FILE__ ) );
-		}
+			
 		return $url;
 	}
 	
@@ -287,15 +306,15 @@ class Mlp_Helpers extends Multilingual_Press {
 	 * Get the linked elements and display them as a list 
 	 * flag from a blogid
 	 *
-	 * @access	public
 	 * @since	0.1
+	 * @access	public
 	 * @param	int $blog_id ID of a blog
 	 * @uses	mlp_get_available_languages, mlp_get_available_languages_titles, is_single,
 	 * 			is_page, mlp_get_linked_elements, mlp_get_language_flag, get_current_blog_id,
 	 * 			get_blog_post, get_site_url
 	 * @return	string output of the bloglist
 	 */
-	static function show_linked_elements( $link_type ) {
+	static public function show_linked_elements( $link_type ) {
 
 		$output				= '';
 		$languages			= mlp_get_available_languages( TRUE );
@@ -336,7 +355,7 @@ class Mlp_Helpers extends Multilingual_Press {
 
 			// Check post status
 			$post = ( isset( $linked_elements[ $language_blog ] ) ) ? get_blog_post( $language_blog, $linked_elements[ $language_blog ] ) : '';
-
+			
 			// Output link elements
 			$output .= '<li><a ' . $class . ' href="' . ( ( is_single() || is_page() ) && isset( $linked_elements[ $language_blog ] ) && 'publish' === $post->post_status ? get_blog_permalink( $language_blog, $linked_elements[ $language_blog ] ) : get_site_url( $language_blog ) ) . '?noredirect=' . $language_string . '">' . $display . '</a></li>';
 		}
