@@ -43,6 +43,7 @@
  * - Codexified
  * - Fixed Missing Table from external Module
  * - Added filter for the list, fixed Style
+ * - Fixed several notices
  * 
  * 0.8
  * - Codexified
@@ -770,7 +771,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		public function display_meta_box_translate( $post ) {
 			?>
 			<p>
-				<input type="checkbox" id="translate_this_post" name="translate_this_post" <?php echo $checked; ?> />
+				<input type="checkbox" id="translate_this_post" name="translate_this_post" />
 				<label for="translate_this_post"><?php _e( 'Translate this post', $this->get_textdomain() ); ?></label>
 			</p>
 			<?php
