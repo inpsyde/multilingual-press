@@ -1,26 +1,26 @@
 <?php
 /**
- * Plugin Name:	Multilingual Press
- * Plugin URI:	https://github.com/inpsyde/multilingual-press
- * Description:	By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature. 
- * Author:		Inpsyde GmbH
- * Author URI:	http://inpsyde.com
- * Version:		0.8.1
- * Text Domain:	multilingualpress
- * Domain Path:	/languages
- * License:		GPLv3
+ * Plugin Name: Multilingual Press
+ * Plugin URI:  https://github.com/inpsyde/multilingual-press
+ * Description: By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature. 
+ * Author:      Inpsyde GmbH
+ * Author URI:  http://inpsyde.com
+ * Version:     0.8.1
+ * Text Domain: multilingualpress
+ * Domain Path: /languages
+ * License:     GPLv3
  * 
  * By using the WordPress plugin Multilingual-Press it's much
  * easier to build multilingual sites and run them with
  * WordPress Multisite feature.
  * 
- * @author		fb, rw, ms, th
- * @version		0.8.1
- * @package		mlp
- * @subpackage	main
+ * @author      fb, rw, ms, th
+ * @version     0.8.1
+ * @package     mlp
+ * @subpackage  main
  * 
  * Available hooks
- * 
+ * =================
  * - mlp_blogs_add_fields - Allows modules to add form fields to the Multilingual Press blog settings screen
  * - mlp_blogs_add_fields_secondary - Same as above, with lower priority. 
  * - mlp_blogs_save_fields - Modules can hook in here to handle user data returned by their form fields
@@ -30,13 +30,13 @@
  * - mlp_modules_save_fields - Hooks into the module manager's saving routine.
  * 
  * Available filters
- * 
+ * =================
  * - mlp_pre_save_postdata - This filter is passed the postdata prior to creating blog interlinks.
  * - mlp-context-help - Is passed the content of the contextual help screen.
  * - mlp_language_codes - Is passed all the language codes used by Multilingual Press.
  * 
  * Changelog
- * 
+ * =================
  * 0.8.1
  * - Adding Plugin Settingspage, Code Cleanup
  * - added check that prevents the use of this plugin in a not-setted blog

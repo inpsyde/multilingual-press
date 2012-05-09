@@ -2,8 +2,8 @@
 Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle
 Tags: language, multilinguage, multisite
 Requires at least: 3.3
-Tested up to: 3.3.2
-Stable tag: 0.8.0
+Tested up to: 3.4-Beta4
+Stable tag: 0.8.1
 
 Multilingual websites with WordPress Multisite
 
@@ -17,10 +17,6 @@ and Multilingual-Press will automatically create a duplication of it in the othe
 posts and pages are interlinked and are easily accessible via the post/page editor screen - you can switch 
 back and forth to translate them! Multilingual-Press is WordPress conform, easy to install and doesn't make 
 any changes to the WordPress core. It doesn't harm your website's performance.  
-
-**Currently the plugin is under development; pure alpha. Before using this version of the plugin in your live 
-site, we recommend you to install it in a testing environment and to backup your database and site/blog 
-content**
 
 Please give us feedback, contribute and file technical bugs on 
 [GitHub Repo](https://github.com/inpsyde/multilingual-press).
@@ -43,7 +39,7 @@ We will also have a pro version of this plugin, which includes these additional 
 - global media library for all sites/blogs
 - Dashboard widget in root blog displaying all posts which still have to be translated
 
-**Currently in development**
+**Currently in development, but you can test it - write us**
 
 == Installation ==
 = Requirements =
@@ -91,14 +87,14 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
 
 = 0.8.1 =
 * Adding Plugin Settingspage, Code Cleanup
-* added check that prevents the use of this plugin in a not-setted blog
+* Added check that prevents the use of this plugin in a not-setted blog
 * Codexified several stuff
 * Fixed Missing Table from external Module
 * Added filter for the list, fixed Style
 * Fixed several notices
-* fixed language key output
+* Fixed language key output
 
-= 0.8 =
+= 0.8.0 =
 * Codexified
 * Renamed the files
 * changed textdomain
