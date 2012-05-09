@@ -47,6 +47,8 @@ We will also have a pro version of this plugin, which includes these additional 
 * PHP 5.2*
 
 = Installation =
+ * Use the installer via backend of your install or ...
+
 1. Unpack the download-package
 2. Upload the files to the `/wp-content/plugins/` directory
 3. Activate the plugin through the 'Network/Plugins' menu in WordPress and hit 'Network Activate'
