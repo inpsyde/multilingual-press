@@ -16,7 +16,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 * @since  0.1
 	 * @var    string
 	 */
-	static public $class_object = NULL;
+	static public $settings_class_object = NULL;
 
 	/**
 	 * Registered modules
@@ -63,12 +63,13 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 *
 	 * @access	public
 	 * @since	0.1
-	 * @return	$class_object
+	 * @return	$settings_class_object
 	 */
 	function get_object() {
-		if ( NULL == self::$class_object )
-			self::$class_object = new self;
-		return self::$class_object;
+
+		if ( NULL == self::$settings_class_object )
+			self::$settings_class_object = new self;
+		return self::$settings_class_object;
 	}
 
 	/**
@@ -370,7 +371,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 				if ( ISSET( $meta[ 'deactivation' ] ) && is_array( $meta[ 'deactivation' ] ) ) {
 					@list( $class, $method ) = $meta[ 'deactivation' ];
 					if ( method_exists( $class, $method ) )
-						$class::$method();		 
+						call_user_func( $class . '::' . $method );	 
 				}
 			}
 		}
