@@ -169,6 +169,7 @@ class Mlp_Default_Module extends Multilingual_Press {
 						<th><?php _e( 'Multilingual blog relationships', $this->get_textdomain() ) ?></th>
 						<td>
 							<?php
+							
 							foreach ( $siteoption as $blog_id => $meta ) {
 					
 								// Filter out current blog
@@ -177,7 +178,7 @@ class Mlp_Default_Module extends Multilingual_Press {
 					
 								// Get blog display name
 								switch_to_blog( $blog_id );
-								$blog_name = get_bloginfo( 'name' );
+								$blog_name = get_bloginfo( 'Name' );
 								restore_current_blog();
 					
 								// Get current settings
@@ -186,8 +187,12 @@ class Mlp_Default_Module extends Multilingual_Press {
 									$selected = 'checked="checked"';
 								else
 									$selected = '';
+								
+								if ( ! isset( $lang_codes[ $meta[ 'lang' ] ] ) )
+									$lang_codes[ $meta[ 'lang' ] ] = __( 'English (US)', $this->get_textdomain() );
+								
 								?>
-								<input id="related_blog_<?php echo $blog_id; ?>" <?php echo $selected; ?> type="checkbox" name="related_blogs[]" value="<?php echo $blog_id ?>" /> <?php echo $blog_name; ?> - <?php echo substr( $meta[ 'lang' ], 0, 2 ); ?> - <?php echo $meta[ 'text' ] ?><br />
+								<input id="related_blog_<?php echo $blog_id; ?>" <?php echo $selected; ?> type="checkbox" name="related_blogs[]" value="<?php echo $blog_id ?>" /> <?php echo $blog_name; ?> - <?php echo $lang_codes[ $meta[ 'lang' ] ]; ?><br />
 								<?php
 							}
 							?>

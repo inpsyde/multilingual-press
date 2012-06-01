@@ -56,6 +56,7 @@
  * - Code: Fixed Column Content
  * - Code: Fixed Relationship Error Notice
  * - Code: Better Error Message for blog relationships
+ * - Code: Constant Language Strings
  * 
  * 0.8.2
  * - PHP 5.2 Fix
