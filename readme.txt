@@ -3,7 +3,7 @@ Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle
 Tags: language, multilinguage, multisite
 Requires at least: 3.3
 Tested up to: 3.4-Beta4
-Stable tag: 0.8.1
+Stable tag: 0.8.2
 
 Multilingual websites with WordPress Multisite
 
@@ -86,6 +86,9 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
 [Localization](http://wordpress.org/extend/plugins/codestyling-localization/).
 
 == Changelog ==
+
+= 0.8.2 =
+* PHP 5.2 Fix
 
 = 0.8.1 =
 * Adding Plugin Settingspage, Code Cleanup
