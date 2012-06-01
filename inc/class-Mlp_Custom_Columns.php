@@ -64,8 +64,7 @@ class Mlp_Custom_Columns extends Multilingual_Press {
 			
 			$interlinked = mlp_get_available_languages_titles();
 			
-			// TODO WTF is $interlinked[ 4 ]??
-			if ( ! is_array( $interlinked ) || ( isset( $interlinked[ 4 ] ) && '-1' === $interlinked[ 4 ] ) ) {
+			if ( count( $interlinked ) < 2 || ! is_array( $interlinked ) ) {
 				_e( 'nothing', $this->get_textdomain() );
 				return;
 			}

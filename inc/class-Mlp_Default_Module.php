@@ -210,12 +210,13 @@ class Mlp_Default_Module extends Multilingual_Press {
 	 * @return	void
 	 */
 	public function save_blog_settings_form_fields( $data ) {
-
+		
 		$current_blog_id = intval( $data[ 'id' ] );
 
 		// Language and descriptions
 		$siteoption = get_site_option( 'inpsyde_multilingual' );
 		unset( $siteoption[ $current_blog_id ] );
+		
 		if ( '' != $data[ 'inpsyde_multilingual_lang' ] || '' != $data[ 'inpsyde_multilingual' ] ) {
 
 			if ( ! is_array( $siteoption ) )
@@ -248,6 +249,11 @@ class Mlp_Default_Module extends Multilingual_Press {
 		foreach ( $all_blogs as $blog_id => $blog_data ) {
 
 			if ( $current_blog_id == $blog_id )
+				continue;
+			
+			// Check if current blog is valid
+			$blog_details = get_blog_details( $blog_id );
+			if ( FALSE == $blog_details )
 				continue;
 
 			// 1. Get related blogs' current relationships 

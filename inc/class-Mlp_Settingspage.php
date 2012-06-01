@@ -275,7 +275,6 @@ class Mlp_Settingspage extends Multilingual_Press {
 		// process your fields from $_POST here and update_site_option
 		do_action( 'mlp_settings_save_fields', $_POST );
 
-		ob_end_clean();
 		wp_safe_redirect( admin_url( 'network/settings.php?page=mlp&tab?mlp-pro-options&message=updated' ) );
 		exit;
 	}
@@ -390,7 +389,6 @@ class Mlp_Settingspage extends Multilingual_Press {
 		// process your fields from $_POST here and update_site_option
 		do_action( 'mlp_modules_save_fields', $_POST );
 
-		ob_end_clean();
 		wp_safe_redirect( admin_url( 'network/settings.php?page=mlp&tab=mlp-modules&message=updated' ) );
 		exit;
 	}

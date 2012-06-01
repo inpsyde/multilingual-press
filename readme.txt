@@ -3,7 +3,7 @@ Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle
 Tags: language, multilinguage, multisite
 Requires at least: 3.3
 Tested up to: 3.4-Beta4
-Stable tag: 0.8.2
+Stable tag: 1.0
 
 Multilingual websites with WordPress Multisite
 

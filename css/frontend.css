@@ -7,9 +7,22 @@
  * 
  */
  
-.mlp_language_box ul li{ 
+.mlp_language_box ul li {
 	display: inline;
 	list-style-type: none;
 	margin: 0 5px 0 0;
 }
 
+#mlp_quicklink_container.tr,
+#mlp_quicklink_container.br {
+	float: right;
+}
+
+#mlp_quicklink_container.bl,
+#mlp_quicklink_container.tl {
+	float: left;
+}
+
+.clear {
+	clear: both;
+}

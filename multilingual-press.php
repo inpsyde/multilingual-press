@@ -5,7 +5,7 @@
  * Description: By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature. 
  * Author:      Inpsyde GmbH
  * Author URI:  http://inpsyde.com
- * Version:     0.8.2
+ * Version:     0.9
  * Text Domain: multilingualpress
  * Domain Path: /languages
  * License:     GPLv3
@@ -15,7 +15,7 @@
  * WordPress Multisite feature.
  * 
  * @author      fb, rw, ms, th
- * @version     0.8.2
+ * @version     0.9
  * @package     mlp
  * @subpackage  main
  * 
@@ -37,6 +37,26 @@
  * 
  * Changelog
  * =================
+ * 
+ * 1.0
+ * - Version: Hopping due to many changes
+ * - Pro Feature: Advanced Translator for Posts and Pages
+ * - Pro Feature: Support for Custom Post Types
+ * - Pro Feature: Dashboard Widget
+ * - Pro Feature: Duplicate Blogs
+ * - Pro Feature: Quick Load of new language packs
+ * - Pro Feature: Automatic browser redirection
+ * - Pro Feature: Systemwide Trash
+ * - Pro Feature: Individual backend language user settings
+ * 
+ * 0.9
+ * - Code: Fixed several notices
+ * - Code: Fixed Buffer Bug in Settingspage
+ * - Code: Fixed Notices on refresh of the blog settings
+ * - Code: Fixed Column Content
+ * - Code: Fixed Relationship Error Notice
+ * - Code: Better Error Message for blog relationships
+ * 
  * 0.8.2
  * - PHP 5.2 Fix
  * 
@@ -308,7 +328,8 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			add_filter( 'wp_ajax_checkup_blogs', array( $this, 'checkup_blog' ) );
 			
 			// Check for errors
-			if ( ! $this->check_for_user_errors() )
+			add_filter( 'all_admin_notices', array( $this, 'check_for_user_errors_admin_notice' ) );
+			if ( TRUE == $this->check_for_user_errors() )
 				return;
 			
 			// Load modules
@@ -564,7 +585,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 				return;
 			
 			// If checkbox is not checked, return
-			if ( 'on' != $_POST[ 'translate_this_post' ] )
+			if ( ! isset( $_POST[ 'translate_this_post' ] ) )
 				return;
 			
 			// Get the post
@@ -773,6 +794,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		 * @return  void
 		 */
 		public function display_meta_box_translate( $post ) {
+			
 			?>
 			<p>
 				<input type="checkbox" id="translate_this_post" name="translate_this_post" />
@@ -1259,26 +1281,57 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		 * @access	public
 		 * @since	0.8
 		 * @uses	
-		 * @return	void
+		 * @return	boolean
 		 */
 		public function check_for_user_errors() {
 			
-			if ( is_admin() && ! is_network_admin() ) {
-			
-				// Get blogs related to the current blog
-				$all_blogs = get_site_option( 'inpsyde_multilingual', array() );
-				$relationships = get_option( 'inpsyde_multilingual_blog_relationship' );
+			return $this->check_for_errors();
+		}
+		
+		/**
+		 * Checks for errors
+		 *
+		 * @access	public
+		 * @since	0.9
+		 * @uses
+		 * @return	void
+		 */
+		public function check_for_user_errors_admin_notice() {
 				
-				if ( array_key_exists( get_current_blog_id(), $all_blogs ) ) {
-					if ( 2 > count( $relationships ) ) {
-						if ( is_super_admin() ) {
-							?><div class="error"><p><?php _e( 'You didn\'t setup any blog relationships! You have to setup them first to use Multilingual Press.' , $this->get_textdomain() ); ?></p></div><?php
-						}
-						return FALSE;
-					}	
+			if ( TRUE == $this->check_for_errors() ) {
+				?><div class="error"><p><?php _e( 'You didn\'t setup any blog relationships! You have to setup them first to use Multilingual Press. For this, go to Network &raquo; Sites &raquo; and choose a blog to edit. Then go to the tab "Multilingiual Press" and set up the relationships.' , $this->get_textdomain() ); ?></p></div><?php
+			}
+		}
+		
+		/**
+		 * Checks for errors
+		 *
+		 * @access	public
+		 * @since	0.9
+		 * @uses
+		 * @return	boolean
+		 */
+		public function check_for_errors() {
+			
+			if ( defined( 'DOING_AJAX' ) )
+				return FALSE;
+				
+			if ( ! is_admin() && is_network_admin() )
+				return FALSE;
+			
+			// Get blogs related to the current blog
+			$all_blogs = get_site_option( 'inpsyde_multilingual', array() );
+			$relationships = get_option( 'inpsyde_multilingual_blog_relationship' );
+			
+			if ( array_key_exists( get_current_blog_id(), $all_blogs ) ) {
+				if ( 2 > count( $relationships ) ) {
+					if ( is_super_admin() ) {
+						return TRUE;
+					}
 				}
 			}
-			return TRUE;
+						
+			return FALSE;
 		}
 	}
 }
