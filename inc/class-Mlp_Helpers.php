@@ -322,9 +322,11 @@ class Mlp_Helpers extends Multilingual_Press {
 			
 		if ( ! ( 0 < count( $languages ) ) )
 			return $output;
+		
+		$current_element_id = ( get_the_ID() == NULL ) ? $wp_query->queried_object->ID : get_the_ID();
 
-		if ( is_single() || is_page() )
-			$linked_elements = mlp_get_linked_elements( get_the_id() );
+		if ( is_single() || is_page() || is_home() )
+			$linked_elements = mlp_get_linked_elements( $current_element_id );
 		
 		if ( 'blogid' == $sort_by )
 			ksort( $languages );
@@ -362,7 +364,7 @@ class Mlp_Helpers extends Multilingual_Press {
 			$post = ( isset( $linked_elements[ $language_blog ] ) ) ? get_blog_post( $language_blog, $linked_elements[ $language_blog ] ) : '';
 			
 			// Output link elements
-			$output .= '<li><a ' . $class . ' href="' . ( ( is_single() || is_page() ) && isset( $linked_elements[ $language_blog ] ) && 'publish' === $post->post_status ? get_blog_permalink( $language_blog, $linked_elements[ $language_blog ] ) : get_site_url( $language_blog ) ) . '?noredirect=' . $language_string . '">' . $display . '</a></li>';
+			$output .= '<li><a ' . $class . ' href="' . ( ( is_single() || is_page() || is_home() ) && isset( $linked_elements[ $language_blog ] ) && 'publish' === $post->post_status ? get_blog_permalink( $language_blog, $linked_elements[ $language_blog ] ) : get_site_url( $language_blog ) ) . '?noredirect=' . $language_string . '">' . $display . '</a></li>';
 		}
 		$output .= '</ul></div>';
 		return $output;

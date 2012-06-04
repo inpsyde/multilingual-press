@@ -39,7 +39,6 @@
  * =================
  * 
  * 1.0
- * - Version: Hopping due to many changes
  * - Pro Feature: Advanced Translator for Posts and Pages
  * - Pro Feature: Support for Custom Post Types
  * - Pro Feature: Dashboard Widget
@@ -50,6 +49,8 @@
  * - Pro Feature: Individual backend language user settings
  * 
  * 0.9
+ * - Feature: Added sort option to widget
+ * - Feature: Added is_home() to our queries
  * - Code: Fixed several notices
  * - Code: Fixed Buffer Bug in Settingspage
  * - Code: Fixed Notices on refresh of the blog settings
@@ -57,6 +58,7 @@
  * - Code: Fixed Relationship Error Notice
  * - Code: Better Error Message for blog relationships
  * - Code: Constant Language Strings
+ * - Code: Added Korean Language
  * 
  * 0.8.2
  * - PHP 5.2 Fix
@@ -465,7 +467,8 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 				'site-info.php',
 				'site-users.php',
 				'site-themes.php',
-				'site-settings.php'
+				'site-settings.php',
+				'settings.php'
 			);
 
 			if ( in_array( $pagenow, $pages ) ) {
@@ -486,9 +489,14 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 		 */
 		public function localize_script() {
 
+			if ( isset( $_GET[ 'id' ] ) )
+				$blog_id = $_GET[ 'id' ];
+			else 
+				$blog_id = 0;
+			
 			$loc = array(
 				'tab_label'						=> __( 'Multilingual Press', $this->get_textdomain() ),
-				'blog_id'						=> intval( $_GET[ 'id' ] ),
+				'blog_id'						=> intval( $blog_id ),
 				'ajax_tab_nonce'				=> wp_create_nonce( 'mlp_tab_nonce' ),
 				'ajax_form_nonce'				=> wp_create_nonce( 'mlp_form_nonce' ),
 				'ajax_select_nonce'				=> wp_create_nonce( 'mlp_select_nonce' ),
