@@ -60,6 +60,35 @@ class Mlp_Default_Module extends Multilingual_Press {
 
 		// Use this hook to handle the user input of your modules' blog settings form fields
 		add_filter( 'mlp_blogs_save_fields', array( $this, 'save_blog_settings_form_fields' ) );
+		
+		// Add Little Help
+		add_filter( 'mlp_options_page_add_metabox', array( $this, 'add_settings_metabox' ), 1 );
+	}
+	
+	/**
+	 * Add meta box to the MLP settingspage
+	 *
+	 * @access	public
+	 * @since	0.6
+	 * @uses	add_meta_box
+	 * @return	void
+	 */
+	public function add_settings_metabox() {
+		add_meta_box( 'help_metabox', __( 'Multilingual Press Settings', $this->get_textdomain() ), array( $this, 'draw_settings_help_tab' ), 'settings_page_mlp', 'normal', 'low', TRUE );
+	}
+	
+	/**
+	 * Add meta box to the MLP settingspage
+	 *
+	 * @access	public
+	 * @since	0.6
+	 * @uses	add_meta_box
+	 * @return	void
+	 */
+	public function draw_settings_help_tab() {
+		?>
+		<p><?php _e( 'In Multilingual Press it is possible to develope own modules with own setting boxes right under this box. If you want to know how, see our example module on <a href="https://github.com/inpsyde/multilingual-press">GitHub</a>', $this->get_textdomain() ); ?></p>
+		<?php
 	}
 
 	/**
@@ -373,13 +402,12 @@ class Mlp_Default_Module extends Multilingual_Press {
 	public function load_lang_codes( $lang_codes ) {
 
 		$obsolete_shortcodes = array( 
-			'fr', 'es', 'bg', 'it', 'da', 'de', 'gl', 'hu', 'is', 'id', 'kr', 'ky', 'mg', 'mk', 'ml', 'en',
+			'fr', 'es', 'bg', 'it', 'da', 'de', 'gl', 'hu', 'is', 'id', 'ky', 'mg', 'mk', 'ml', 'en',
 			'bs', 'ne', 'no', 'pa', 'pl', 'pt', 'ro', 'ru', 'sa', 'sd', 'si', 'sk', 'sl', 'so', 'sr', 'sv',
 			'tr', 'ug', 'uz', 'bn', 'cs', 'ms', 'my'
 		);
-		foreach ( $obsolete_shortcodes AS $os ) {
+		foreach ( $obsolete_shortcodes AS $os )
 			unset( $lang_codes[ $os ] );
-		}
 
 		$lang_codes[ 'fa_IR' ] =	__( 'Persian', $this->get_textdomain() );
 		$lang_codes[ 'zh_TW' ] =	__( 'Simplified Chinese (Taiwan)', $this->get_textdomain() );
@@ -441,6 +469,7 @@ class Mlp_Default_Module extends Multilingual_Press {
 		$lang_codes[ 'ru_RU' ] =	__( 'Russian', $this->get_textdomain() );
 		$lang_codes[ 'sa_IN' ] =	__( 'Sanskrit', $this->get_textdomain() );
 		$lang_codes[ 'sd_PK' ] =	__( 'Sindhi', $this->get_textdomain() );
+		$lang_codes[ 'kr_KO' ] =	__( 'Korean (Johab)', $this->get_textdomain() );
 
 		// Sort them according to
 		// language name
