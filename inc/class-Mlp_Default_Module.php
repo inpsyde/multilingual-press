@@ -469,7 +469,7 @@ class Mlp_Default_Module extends Multilingual_Press {
 		$lang_codes[ 'ru_RU' ] =	__( 'Russian', $this->get_textdomain() );
 		$lang_codes[ 'sa_IN' ] =	__( 'Sanskrit', $this->get_textdomain() );
 		$lang_codes[ 'sd_PK' ] =	__( 'Sindhi', $this->get_textdomain() );
-		$lang_codes[ 'kr_KO' ] =	__( 'Korean (Johab)', $this->get_textdomain() );
+		$lang_codes[ 'kr' ] =	__( 'Korean (Johab)', $this->get_textdomain() );
 
 		// Sort them according to
 		// language name

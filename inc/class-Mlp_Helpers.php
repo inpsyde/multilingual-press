@@ -314,7 +314,7 @@ class Mlp_Helpers extends Multilingual_Press {
 	 * 			get_blog_post, get_site_url
 	 * @return	string output of the bloglist
 	 */
-	static public function show_linked_elements( $link_type ) {
+	static public function show_linked_elements( $link_type, $sort_by = 'blogid' ) {
 
 		$output				= '';
 		$languages			= mlp_get_available_languages( TRUE );
@@ -325,7 +325,12 @@ class Mlp_Helpers extends Multilingual_Press {
 
 		if ( is_single() || is_page() )
 			$linked_elements = mlp_get_linked_elements( get_the_id() );
-
+		
+		if ( 'blogid' == $sort_by )
+			ksort( $languages );
+		else
+			asort( $languages );
+		
 		$output .= '<div class="mlp_language_box"><ul>';
 
 		foreach ( $languages as $language_blog => $language_string ) {
@@ -464,8 +469,8 @@ function mlp_get_language_flag( $blog_id = 0 ) {
 * @param	bool $echo to display the output or to return. default is display
 * @return	string output of the bloglist
 */
-function mlp_show_linked_elements( $link_type = 'text', $echo = TRUE ) {
-	$output = Mlp_Helpers::show_linked_elements( $link_type );
+function mlp_show_linked_elements( $link_type = 'text', $echo = TRUE, $sort_by = 'blogid' ) {
+	$output = Mlp_Helpers::show_linked_elements( $link_type, $sort_by );
 	if ( TRUE === $echo )
 		echo $output;
 	else
