@@ -49,6 +49,7 @@
  * - Pro Feature: Individual backend language user settings
  * 
  * 0.9
+ * - Feature: Added Demo Module
  * - Feature: Added sort option to widget
  * - Feature: Added is_home() to our queries
  * - Feature: Added mlp_get_interlinked_permalinks
