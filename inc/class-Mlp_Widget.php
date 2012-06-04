@@ -122,7 +122,7 @@ class Mlp_Widget extends WP_Widget {
 		
 		extract( $args );
 		
-		if ( ! $instance[ 'widget_sort_order' ] )
+		if ( ! isset( $instance[ 'widget_sort_order' ] ) )
 			$instance[ 'widget_sort_order' ] = 'blogid';
 		
 		$output = mlp_show_linked_elements( $instance[ 'widget_link_type' ], FALSE, $instance[ 'widget_sort_order' ] );

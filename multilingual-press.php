@@ -51,6 +51,8 @@
  * 0.9
  * - Feature: Added sort option to widget
  * - Feature: Added is_home() to our queries
+ * - Feature: Added mlp_get_interlinked_permalinks
+ * - Feature: Added mlp_get_blog_language
  * - Code: Fixed several notices
  * - Code: Fixed Buffer Bug in Settingspage
  * - Code: Fixed Notices on refresh of the blog settings

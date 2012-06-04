@@ -87,6 +87,30 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
 
 == Changelog ==
 
+= 1.0 =
+* Pro Feature: Advanced Translator for Posts and Pages
+* Pro Feature: Support for Custom Post Types
+* Pro Feature: Dashboard Widget
+* Pro Feature: Duplicate Blogs
+* Pro Feature: Quick Load of new language packs
+* Pro Feature: Automatic browser redirection
+* Pro Feature: Systemwide Trash
+* Pro Feature: Individual backend language user settings
+
+= 0.9 =
+* Feature: Added sort option to widget
+* Feature: Added is_home() to our queries
+* Feature: Added mlp_get_interlinked_permalinks
+* Feature: Added mlp_get_blog_language
+* Code: Fixed several notices
+* Code: Fixed Buffer Bug in Settingspage
+* Code: Fixed Notices on refresh of the blog settings
+* Code: Fixed Column Content
+* Code: Fixed Relationship Error Notice
+* Code: Better Error Message for blog relationships
+* Code: Constant Language Strings
+* Code: Added Korean Language
+
 = 0.8.2 =
 * PHP 5.2 Fix
 

@@ -7,6 +7,10 @@
  * Author URI:	http://inpsyde.com
  *
  * Changelog
+ * 
+ * 0.7
+ * - Added mlp_get_interlinked_permalinks
+ * - Added mlp_get_blog_language
  *
  * 0.6
  * - Codexified
@@ -214,6 +218,56 @@ class Mlp_Helpers extends Multilingual_Press {
 	}
 	
 	/**
+	 * Get the element ID
+	 * in other blogs for
+	 * the selected element
+	 * with additional informations
+	 *
+	 * @since   0.1
+	 * @static
+	 * @access  public
+	 * @uses	get_current_blog_id, get_results, get_results
+	 * @global	$wpdb WordPress Database Wrapper
+	 * @return  array $elements
+	 */
+	public function get_interlinked_permalinks( $element_id = 0 ) {
+		global $wpdb;
+		
+		// if no element id is provides, use WP default
+		if ( 0 == $element_id )
+			$element_id = get_the_ID();
+		
+		$blog_id = get_current_blog_id();
+		
+		// Get linked elements
+		$results = $wpdb->get_results( $wpdb->prepare( 'SELECT t.ml_blogid, t.ml_elementid FROM ' . Multilingual_Press::$class_object->link_table . ' s INNER JOIN ' . Multilingual_Press::$class_object->link_table . ' t ON s.ml_source_blogid = t.ml_source_blogid && s.ml_source_elementid = t.ml_source_elementid WHERE s.ml_blogid = %d && s.ml_elementid = %d', $blog_id, $element_id ) );
+		
+		// No linked elements? Adios.
+		if ( 0 >= count( $results ) )
+			return array();
+		
+		// Walk results
+		$elements = array();
+		
+		foreach ( $results as $resultelement ) {
+			if ( $blog_id != $resultelement->ml_blogid ) {
+				
+				switch_to_blog( $resultelement->ml_blogid );
+				$elements[ $resultelement->ml_blogid ] = array(
+					'post_id'		=> ( int ) $resultelement->ml_elementid,
+					'post_title'	=> get_the_title( $resultelement->ml_elementid ),
+					'permalink'		=> get_permalink( $resultelement->ml_elementid ),
+					'flag'			=> self::get_language_flag( $resultelement->ml_blogid ),
+					'lang'			=> self::get_blog_language( $resultelement->ml_blogid )
+				);
+				restore_current_blog();
+			}
+		}
+		
+		return $elements;
+	}
+	
+	/**
 	 * function for custom plugins to get activated on all language blogs  
 	 *
 	 * @since   0.1
@@ -259,9 +313,7 @@ class Mlp_Helpers extends Multilingual_Press {
 					restore_current_blog();
 				}
 			}
-		
 		}
-		
 	}
 	
 	/**
@@ -300,6 +352,33 @@ class Mlp_Helpers extends Multilingual_Press {
 			$url = plugins_url( 'flags/' . $language_code . '.gif', dirname( __FILE__ ) );
 			
 		return $url;
+	}
+	
+	/**
+	 * Get the url of the
+	 * flag from a blogid
+	 *
+	 * @since	0.7
+	 * @access	public
+	 * @uses	get_current_blog_id, get_blog_option, get_site_option
+	 * 			plugin_dir_path
+	 * @param	int $blog_id ID of a blog
+	 * @return	string url of the language image
+	 */
+	static public function get_blog_language( $blog_id = 0 ) {
+		
+		if ( 0 == $blog_id )
+			$blog_id = get_current_blog_id();
+		
+		// Get blog language code, which will make
+		// part of the flags' file name, ie. "de.gif"
+		$languages = get_site_option( 'inpsyde_multilingual' );
+		
+		// Is this a shortcode (i.e. "fr"), or an ISO
+		// formatted language code (i.e. fr_BE) ?
+		$language_code = ( 5 == strlen( $languages[ $blog_id ][ 'lang' ] ) ) ? strtolower( substr( $languages[ $blog_id ][ 'lang' ], 3, 2 ) ) : substr( $languages[ $blog_id ][ 'lang' ], 0, 2 );
+		
+		return $language_code;
 	}
 	
 	/**
@@ -388,7 +467,6 @@ function mlp_is_redirect( $blogid = FALSE ) {
  * return current blog's language code ( not the locale used by WordPress,
  * but the one set by MlP) 
  *
- * @access	public
  * @since	0.1
  * @return	array Available languages
  */
@@ -400,7 +478,6 @@ function mlp_get_current_blog_language( $count ) {
  * wrapper of Mlp_Helpers:get_available_languages
  * load the available languages  
  *
- * @access	public
  * @since	0.1
  * @return	array Available languages
  */
@@ -412,7 +489,6 @@ function mlp_get_available_languages( $nonrelated = FALSE ) {
  * wrapper of Mlp_Helpers:: get_available_language_title
  * load the available language titles  
  *
- * @access	public
  * @since	0.5.3b
  * @return	array Available languages
  */
@@ -423,7 +499,6 @@ function mlp_get_available_languages_titles( $nonrelated = FALSE ) {
 /**
  * wrapper of Mlp_Helpers function to get the element ID in other blogs for the selected element  
  *
- * @access	public
  * @since	0.1
  * @param	int $element_id ID of the selected element
  * @param	string $type type of the selected element
@@ -437,7 +512,6 @@ function mlp_get_linked_elements( $element_id = FALSE, $type = '', $blog_id = 0 
 /**
  * wrapper of Mlp_Helpers function for custom plugins to get activated on all language blogs  
  *
- * @access	public
  * @since	0.1
  * @param	int $element_id ID of the selected element
  * @param	string $type type of the selected element
@@ -453,7 +527,6 @@ function mlp_run_custom_plugin( $element_id = FALSE, $type = '', $blog_id = 0, $
 /**
  * wrapper of Mlp_Helpers function for function to get the url of the flag from a blogid  
 
- * @access	public
  * @since	0.1
  * @param	int $blog_id ID of a blog
  * @return	string url of the language image
@@ -463,18 +536,38 @@ function mlp_get_language_flag( $blog_id = 0 ) {
 }
 
 /**
-* wrapper of Mlp_Helpers function for function to get the linked elements and display them as a list
-*
-* @access	public
-* @since	0.8
-* @param	string $link_type available types: flag, text, text_flag
-* @param	bool $echo to display the output or to return. default is display
-* @return	string output of the bloglist
-*/
+ * wrapper of Mlp_Helpers function for function to get the linked elements and display them as a list
+ *
+ * @since	0.8
+ * @param	string $link_type available types: flag, text, text_flag
+ * @param	bool $echo to display the output or to return. default is display
+ * @return	string output of the bloglist
+ */
 function mlp_show_linked_elements( $link_type = 'text', $echo = TRUE, $sort_by = 'blogid' ) {
 	$output = Mlp_Helpers::show_linked_elements( $link_type, $sort_by );
 	if ( TRUE === $echo )
 		echo $output;
 	else
 		return $output;
+}
+
+/**
+ * get the linked elements with a lot of more information
+ *
+ * @since	0.7
+ * @param	int $element_id current post / page / whatever
+ * @return	array
+ */
+function mlp_get_interlinked_permalinks( $element_id = 0 ) {
+	return Mlp_Helpers::get_interlinked_permalinks( $element_id );
+}
+
+/**
+ * get the blog language
+ *
+ * @since	0.7
+ * @return	array
+ */
+function get_blog_language( $blog_id = 0 ) {
+	return Mlp_Helpers::get_blog_language( $blog_id );
 }
