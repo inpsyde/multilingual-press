@@ -54,6 +54,7 @@
  * - Feature: Added is_home() to our queries
  * - Feature: Added mlp_get_interlinked_permalinks
  * - Feature: Added mlp_get_blog_language
+ * - Code: Fixed Widget
  * - Code: Fixed several notices
  * - Code: Fixed Buffer Bug in Settingspage
  * - Code: Fixed Notices on refresh of the blog settings
@@ -1333,13 +1334,10 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			
 			// Get blogs related to the current blog
 			$all_blogs = get_site_option( 'inpsyde_multilingual', array() );
-			$relationships = get_option( 'inpsyde_multilingual_blog_relationship' );
 			
-			if ( array_key_exists( get_current_blog_id(), $all_blogs ) ) {
-				if ( 2 > count( $relationships ) ) {
-					if ( is_super_admin() ) {
-						return TRUE;
-					}
+			if ( 2 > count( $all_blogs ) ) {
+				if ( is_super_admin() ) {
+					return TRUE;
 				}
 			}
 						

@@ -103,6 +103,7 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
 * Feature: Added is_home() to our queries
 * Feature: Added mlp_get_interlinked_permalinks
 * Feature: Added mlp_get_blog_language
+* Code: Fixed Widget
 * Code: Fixed several notices
 * Code: Fixed Buffer Bug in Settingspage
 * Code: Fixed Notices on refresh of the blog settings
