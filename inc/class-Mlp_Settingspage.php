@@ -192,7 +192,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 						<div id="wp-liveticker-inpsyde" class="postbox">
 							<h3 class="hndle"><span><?php _e( 'Powered by', $this->get_textdomain() ); ?></span></h3>
 							<div class="inside">
-								<p style="text-align: center;"><a href="http://inpsyde.com"><img src="http://inpsyde.com/wp-content/themes/inpsyde/images/logo.jpg" style="border: 7px solid #fff;" /></a></p>
+								<p style="text-align: center;"><a href="http://inpsyde.com"><img src="<?php echo plugins_url( 'images/inpsyde_logo.jpg' , dirname( __FILE__ ) ) ?>" style="border: 7px solid #fff;" /></a></p>
 								<p><?php _e( 'This plugin is powered by <a href="http://inpsyde.com">Inpsyde.com</a> - Your expert for WordPress, BuddyPress and bbPress.', $this->get_textdomain() ); ?></p>
 							</div>
 						</div>

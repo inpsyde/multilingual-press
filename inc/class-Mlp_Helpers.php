@@ -149,6 +149,9 @@ class Mlp_Helpers extends Multilingual_Press {
 		if ( ! is_array( $related_blogs ) && FALSE === $nonrelated )
 			return;
 
+		if ( ! is_array( $languages ) )
+			return;
+
 		$options = array( );
 		
 		foreach ( $languages as $language_blogid => $language_data ) {
