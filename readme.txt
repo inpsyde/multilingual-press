@@ -2,8 +2,8 @@
 Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle
 Tags: language, multilinguage, multisite
 Requires at least: 3.3
-Tested up to: 3.4-Beta4
-Stable tag: 0.9
+Tested up to: 3.4.1
+Stable tag: 1.0.2
 
 Multilingual websites with WordPress Multisite
 
@@ -86,6 +86,17 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
 [Localization](http://wordpress.org/extend/plugins/codestyling-localization/).
 
 == Changelog ==
+
+= 1.0.2 =
+* Code: Fixed Auto Updater
+* Version: Hopping due to some Auto Update Issues
+
+= 1.0.1 =
+* Code: Fixed Wrong Encoding in different files
+* Code: Fixed several warnings, notices and small bugs
+* Pro Code: Fixed Auto Updater
+* Pro Code: Fixed several Advanced Translator Bugs
+* Pro Code: Fixed Post Relationships in Blog Duplicate
 
 = 1.0 =
 * Pro Feature: Advanced Translator for Posts and Pages

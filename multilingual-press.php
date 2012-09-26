@@ -5,7 +5,7 @@
  * Description: By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature. 
  * Author:      Inpsyde GmbH
  * Author URI:  http://inpsyde.com
- * Version:     1.0.1
+ * Version:     1.0.2
  * Text Domain: multilingualpress
  * Domain Path: /languages
  * License:     GPLv3
@@ -15,7 +15,7 @@
  * WordPress Multisite feature.
  * 
  * @author      fb, rw, ms, th
- * @version     0.9
+ * @version     1.0.2
  * @package     mlp
  * @subpackage  main
  * 
@@ -38,19 +38,26 @@
  * Changelog
  * =================
  * 
+ * 1.0.2
+ * - Code: Fixed Auto Updater
+ * - Version: Hopping due to some Auto Update Issues
+ * 
  * 1.0.1
- * - Code: Fixed Auto Updater [pro]
  * - Code: Fixed Wrong Encoding in different files
+ * - Code: Fixed several warnings, notices and small bugs
+ * - Code: Fixed Auto Updater
+ * - Code: Fixed several Advanced Translator Bugs
+ * - Code: Fixed Post Relationships in Blog Duplicate
  * 
  * 1.0
- * - Pro Feature: Advanced Translator for Posts and Pages
- * - Pro Feature: Support for Custom Post Types
- * - Pro Feature: Dashboard Widget
- * - Pro Feature: Duplicate Blogs
- * - Pro Feature: Quick Load of new language packs
- * - Pro Feature: Automatic browser redirection
- * - Pro Feature: Systemwide Trash
- * - Pro Feature: Individual backend language user settings
+ * - Feature: Advanced Translator for Posts and Pages
+ * - Feature: Support for Custom Post Types
+ * - Feature: Dashboard Widget
+ * - Feature: Duplicate Blogs
+ * - Feature: Quick Load of new language packs
+ * - Feature: Automatic browser redirection
+ * - Feature: Systemwide Trash
+ * - Feature: Individual backend language user settings
  * 
  * 0.9.1
  * - Using local logo 
