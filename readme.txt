@@ -19,7 +19,7 @@ back and forth to translate them! Multilingual-Press is WordPress conform, easy 
 any changes to the WordPress core. It doesn't harm your website's performance.  
 
 = doodleinnovation =
-We plugin authors supporten in our free time the free plugins. Please have a little patience and ask friendly, businesslike.
+We Plugin authors support in their leisure time our free Plugins. Please understand that we can't respond immediately. Please have a little patience and ask friendly, businesslike.
 
 Please give us feedback, contribute and file technical bugs on 
 [GitHub Repo](https://github.com/inpsyde/multilingual-press).
