@@ -28,8 +28,8 @@ Please give us feedback, contribute and file technical bugs on
 
 Have a look at the premium plugins in our [market](http://marketpress.com).
 
-= [Pro Version](http://marketpress.com/product/multilingual-press-pro/) =
-We also have a pro version of this plugin, which includes these additional features and many more:
+= Pro Version =
+We also have a [Pro Version](http://marketpress.com/product/multilingual-press-pro/) of this plugin, which includes these additional features and many more:
 
 - browser language detection and automatically forwarding to the correct language (can be 
   deactivated via settings)
