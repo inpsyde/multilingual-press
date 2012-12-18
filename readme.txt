@@ -1,5 +1,5 @@
 === Multilingual Press ===
-Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle
+Contributors: inpsyde, Bueltge, nullbyte, hughwillfayle
 Tags: language, multilinguage, multisite
 Requires at least: 3.3
 Tested up to: 3.5-RC4
@@ -24,8 +24,12 @@ We Plugin authors support in their leisure time our free Plugins. Please underst
 Please give us feedback, contribute and file technical bugs on 
 [GitHub Repo](https://github.com/inpsyde/multilingual-press).
 
-= Pro Version =
-We will also have a pro version of this plugin, which includes these additional features and many more:
+**Made by [Inpsyde](http://inpsyde.com) &middot; We love WordPress**
+
+Have a look at the premium plugins in our [market](http://marketpress.com).
+
+= [Pro Version](http://marketpress.com/product/multilingual-press-pro/) =
+We also have a pro version of this plugin, which includes these additional features and many more:
 
 - browser language detection and automatically forwarding to the correct language (can be 
   deactivated via settings)
@@ -42,7 +46,7 @@ We will also have a pro version of this plugin, which includes these additional 
 - global media library for all sites/blogs
 - Dashboard widget in root blog displaying all posts which still have to be translated
 
-**Currently in development, but you can test it - write us**
+**See more in our [Market](http://marketpress.com/product/multilingual-press-pro/)**
 
 == Installation ==
 = Requirements =
