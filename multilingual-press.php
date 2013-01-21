@@ -825,7 +825,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			
 			?>
 			<p>
-				<input type="checkbox" id="translate_this_post" name="translate_this_post" />
+				<input type="checkbox" id="translate_this_post" name="translate_this_post" <?php checked( TRUE, apply_filters( 'inpsyde_multilingualpress_translate_this_post_checkbox', FALSE ) ); ?> />
 				<label for="translate_this_post"><?php _e( 'Translate this post', $this->get_textdomain() ); ?></label>
 			</p>
 			<?php
