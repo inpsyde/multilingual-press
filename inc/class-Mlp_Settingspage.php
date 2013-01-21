@@ -306,7 +306,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 			</div>
 			
 				<?php foreach ( $loaded_modules AS $module => $reg ) :
-					if ( TRUE == apply_filters( 'mlp_dont_show_module', $module ) )
+					if ( TRUE === apply_filters( 'mlp_dont_show_module_' . $module, FALSE ) )
 						continue;
 				?>
 				
