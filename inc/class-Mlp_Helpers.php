@@ -7,10 +7,11 @@
  * Author URI:	http://inpsyde.com
  *
  * Changelog
- *
+ * 
  * 0.8
  * - added show_current_blog / added params for show_linked_elements
  * - removed get_linked_elements request for is_home
+ * - added filter to remove the static ?noredirect= parameter
  * 
  * 0.7
  * - Added mlp_get_interlinked_permalinks
@@ -413,16 +414,17 @@ class Mlp_Helpers extends Multilingual_Press {
 			
 		$current_element_id = ( get_the_ID() == NULL ) ? $wp_query->queried_object->ID : get_the_ID();
 
+		$linked_elements = array();
 		if ( is_single() || is_page() )
 			$linked_elements = mlp_get_linked_elements( $current_element_id );
-		
+
 		$defaults = array(
 			'link_text' => 'text', 'echo' => TRUE,
 			'sort' => 'blogid', 'show_current_blog' => FALSE,
 		);
 		
 		$params = wp_parse_args( $args, $defaults );
-			
+		
 		if ( 'blogid' == $params[ 'sort' ] )
 			ksort( $languages );
 		else
@@ -455,11 +457,30 @@ class Mlp_Helpers extends Multilingual_Press {
 
 			$class = ( get_current_blog_id() == $language_blog ) ? 'id="mlp_current_locale"' : '';
 
+			// set element to 0 to avoid empty element
+			if ( ! isset( $linked_elements[ $language_blog ] ) )
+				$linked_elements[ $language_blog ] = 0;
+			
 			// Check post status
 			$post = ( isset( $linked_elements[ $language_blog ] ) ) ? get_blog_post( $language_blog, $linked_elements[ $language_blog ] ) : '';
 			
+			$link = 
+				( is_single() || is_page() || is_home() ) && 
+				isset( $linked_elements[ $language_blog ] ) && 
+				isset( $post->post_status ) && 
+				( 'publish' === $post->post_status || ( 'private' === $post->post_status && is_super_admin() ) ) 
+				?
+				// get element link if available
+				get_blog_permalink( $language_blog, $linked_elements[ $language_blog ] ) 
+				:
+				// link to siteurl of blog
+				get_site_url( $language_blog );
+
+			// apply filter to help others to change the link
+			$link = apply_filters( 'mlp_linked_element_link', $link, $language_blog, $linked_elements[ $language_blog ] );
+				
 			// Output link elements
-			$output .= '<li><a ' . $class . ' href="' . ( ( is_single() || is_page() || is_home() ) && isset( $linked_elements[ $language_blog ] ) && isset( $post->post_status ) && 'publish' === $post->post_status ? get_blog_permalink( $language_blog, $linked_elements[ $language_blog ] ) : get_site_url( $language_blog ) ) . '?noredirect=' . $language_string . '">' . $display . '</a></li>';
+			$output .= '<li ' . ( $current_language == $language_string ? 'class="current"' : '' ) . '><a ' . $class . ' href="' . $link . '">' . $display . '</a></li>';
 		}
 		$output .= '</ul></div>';
 		return $output;
