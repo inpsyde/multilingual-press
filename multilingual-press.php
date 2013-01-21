@@ -5,7 +5,7 @@
  * Description: By using the WordPress plugin Multilingual-Press it's much easier to build multilingual sites and run them with WordPress Multisite feature. 
  * Author:      Inpsyde GmbH
  * Author URI:  http://inpsyde.com
- * Version:     1.0.2
+ * Version:     1.0.3
  * Text Domain: multilingualpress
  * Domain Path: /languages
  * License:     GPLv3
@@ -38,6 +38,30 @@
  * Changelog
  * =================
  * 
+ * 1.0.3
+ * - Code: Auto Updater Improvements
+ * - Code: Fixed Feature Loader
+ * - Removed link to blog posts on is_home()
+ * - Removed static ?noredirect parameter
+ * - Added modern greek as language
+ * - Added private posts for translations
+ * - Added parameter handling for mlp_show_linked_elements template function
+ * - Added parameter show_current_blog on mlp_show_linked_elements template function
+ * - Added show current blog at the MLP Widget 
+ * - Added hook for checkbox "translate this post"
+ * - Added hook to change the default meta box
+ * - Added hook to change the link to the blog
+ * - Changed admin_url into network_admin_url
+ * - Redirect Feature: Added better check for session_start
+ * - Redirect Feature: Added redirect on is_home()
+ * - Redirect Feature: Added ?noredirect link with core plugin hook
+ * - Redirect Feature: Added english as browser language
+ * - Quicklink Feature: Added blog language to quicklink
+ * - Dashboard Widget: Fixed "This post is translated" checkbox
+ * - Advanced Translator: Removed default metabox when  feature is active
+ * - Added Feature: Default Actions
+ * - Autoupdate Feature: Removed autoupdate module from module list
+ *  
  * 1.0.2
  * - Code: Fixed Auto Updater
  * - Version: Hopping due to some Auto Update Issues
