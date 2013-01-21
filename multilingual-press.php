@@ -742,14 +742,14 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 			// Do we have linked elements?
 			$linked = mlp_get_linked_elements( $post->ID );
 			if ( ! $linked ) {
-				add_meta_box( 'multilingual_press_translate', __( 'Multilingal Press: Translate Post', $this->get_textdomain() ), array( $this, 'display_meta_box_translate' ), 'post', 'normal', 'high' );
-				add_meta_box( 'multilingual_press_translate', __( 'Multilingal Press: Translate Page', $this->get_textdomain() ), array( $this, 'display_meta_box_translate' ), 'page', 'normal', 'high' );
+				add_meta_box( 'multilingual_press_translate', __( 'Multilingual Press: Translate Post', $this->get_textdomain() ), array( $this, 'display_meta_box_translate' ), 'post', 'normal', 'high' );
+				add_meta_box( 'multilingual_press_translate', __( 'Multilingual Press: Translate Page', $this->get_textdomain() ), array( $this, 'display_meta_box_translate' ), 'page', 'normal', 'high' );
 				return;
 			}
 			
 			// Register metaboxes
-			add_meta_box( 'multilingual_press_link', __( 'Multilingal Press: Linked posts', $this->get_textdomain() ), array( $this, 'display_meta_box' ), 'post', 'normal', 'high' );
-			add_meta_box( 'multilingual_press_link', __( 'Multilingal Press: Linked pages', $this->get_textdomain() ), array( $this, 'display_meta_box' ), 'page', 'normal', 'high' );
+			add_meta_box( 'multilingual_press_link', __( 'Multilingual Press: Linked posts', $this->get_textdomain() ), array( $this, 'display_meta_box' ), 'post', 'normal', 'high' );
+			add_meta_box( 'multilingual_press_link', __( 'Multilingual Press: Linked pages', $this->get_textdomain() ), array( $this, 'display_meta_box' ), 'page', 'normal', 'high' );
 		}
 
 		/**
