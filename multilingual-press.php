@@ -362,7 +362,8 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 				add_filter( 'save_post', array( $this, 'save_post' ) );
 			
 			// Add the meta box
-			add_filter( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+			$get_metabox_handler = apply_filters( 'inpsyde_multilingualpress_get_metabox_handler', array( $this, 'add_meta_boxes' ) );
+			add_filter( 'add_meta_boxes', $get_metabox_handler );
 		}
 		
 		/**
