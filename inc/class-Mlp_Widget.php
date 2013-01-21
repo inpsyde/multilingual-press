@@ -64,6 +64,7 @@ class Mlp_Widget extends WP_Widget {
 		$title = ( isset( $instance[ 'widget_title' ] ) ) ? strip_tags( $instance[ 'widget_title' ] ) : '';
 		$sort_order = ( isset( $instance[ 'widget_sort_order' ] ) ) ? strip_tags( $instance[ 'widget_sort_order' ] ) : '';
 		$link_type = ( isset( $instance[ 'widget_title' ] ) ) ? esc_attr( $instance[ 'widget_link_type' ] ) : '';
+		$show_current_blog = ( isset( $instance[ 'widget_show_current_blog' ] ) ) ? strip_tags( $instance[ 'widget_show_current_blog' ] ) : '';
 		?>
 		<p>
 			<label for='<?php echo $this->get_field_id( 'mlp_widget_title' ); ?>'><?php _e( 'Title:', $this->textdomain ); ?></label><br /> 
@@ -85,6 +86,10 @@ class Mlp_Widget extends WP_Widget {
 				<option <?php selected( $link_type, 'lang_code' ); ?> value="lang_code"><?php _e( 'Language code', $this->textdomain ); ?></option>
 			</select>
 		</p>
+		<p>
+			<label for='<?php echo $this->get_field_id( 'mlp_widget_show_current_blog' ); ?>'><?php _e( 'Show Current Blog:', $this->textdomain ); ?></label>
+			<input <?php checked( $show_current_blog, '1' ); ?> type="checkbox" id="<?php echo $this->get_field_id( 'mlp_widget_show_current_blog' ); ?>" name="<?php echo $this->get_field_name( 'mlp_widget_show_current_blog' ); ?>" />
+		</p>
 		<?php
 	}
 
@@ -104,6 +109,7 @@ class Mlp_Widget extends WP_Widget {
 		$instance[ 'widget_title' ] = strip_tags( $new_instance[ 'mlp_widget_title' ] );
 		$instance[ 'widget_link_type' ] = esc_attr( $new_instance[ 'mlp_widget_link_type' ] );
 		$instance[ 'widget_sort_order' ] = esc_attr( $new_instance[ 'mlp_widget_sort_order' ] );
+		$instance[ 'widget_show_current_blog' ] = $new_instance[ 'mlp_widget_show_current_blog' ] == 'on' ? TRUE : FALSE;
 
 		return $instance;
 	}
@@ -125,8 +131,15 @@ class Mlp_Widget extends WP_Widget {
 		if ( ! isset( $instance[ 'widget_sort_order' ] ) )
 			$instance[ 'widget_sort_order' ] = 'blogid';
 		
-		$output = mlp_show_linked_elements( $instance[ 'widget_link_type' ], FALSE, $instance[ 'widget_sort_order' ] );
-		
+		$output = mlp_show_linked_elements( 
+			array( 
+				'link_text' => $instance[ 'widget_link_type' ],
+				'sort' => $instance[ 'widget_sort_order' ],
+				'show_current_blog' => $instance[ 'widget_show_current_blog' ] == '1' ? TRUE : FALSE,
+				'echo' => FALSE 
+			) 
+		);
+
 		if ( '' == $output )
 			return;
 		

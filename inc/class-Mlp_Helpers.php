@@ -3,10 +3,13 @@
  * Module Name:	Multilingual Press Helpers
  * Description:	Several helper functions
  * Author:		Inpsyde GmbH
- * Version:		0.6
+ * Version:		0.8
  * Author URI:	http://inpsyde.com
  *
  * Changelog
+ *
+ * 0.8
+ * - added show_current_blog / added params for show_linked_elements
  * 
  * 0.7
  * - Added mlp_get_interlinked_permalinks
@@ -390,13 +393,13 @@ class Mlp_Helpers extends Multilingual_Press {
 	 *
 	 * @since	0.1
 	 * @access	public
-	 * @param	int $blog_id ID of a blog
+	 * @param	array params for function
 	 * @uses	mlp_get_available_languages, mlp_get_available_languages_titles, is_single,
 	 * 			is_page, mlp_get_linked_elements, mlp_get_language_flag, get_current_blog_id,
 	 * 			get_blog_post, get_site_url
 	 * @return	string output of the bloglist
 	 */
-	static public function show_linked_elements( $link_type, $sort_by = 'blogid' ) {
+	static public function show_linked_elements( $args ) {
 
 		$output				= '';
 		$languages			= mlp_get_available_languages();
@@ -410,7 +413,14 @@ class Mlp_Helpers extends Multilingual_Press {
 		if ( is_single() || is_page() || is_home() )
 			$linked_elements = mlp_get_linked_elements( $current_element_id );
 		
-		if ( 'blogid' == $sort_by )
+		$defaults = array(
+			'link_text' => 'text', 'echo' => TRUE,
+			'sort' => 'blogid', 'show_current_blog' => FALSE,
+		);
+		
+		$params = wp_parse_args( $args, $defaults );
+			
+		if ( 'blogid' == $params[ 'sort' ] )
 			ksort( $languages );
 		else
 			asort( $languages );
@@ -420,7 +430,7 @@ class Mlp_Helpers extends Multilingual_Press {
 		foreach ( $languages as $language_blog => $language_string ) {
 			
 			$current_language = mlp_get_current_blog_language( 2 );
-			if ( $current_language == $language_string )
+			if ( $current_language == $language_string && $params[ 'show_current_blog' ] == FALSE )
 				continue;
 
 			// Get params
@@ -428,11 +438,11 @@ class Mlp_Helpers extends Multilingual_Press {
 			$title = mlp_get_available_languages_titles( TRUE );
 
 			// Display type
-			if ( 'flag' == $link_type && '' != $flag )
+			if ( 'flag' == $params[ 'link_text' ] && '' != $flag )
 				$display = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
-			else if ( 'text' == $link_type && ! empty( $language_titles[ $language_blog ] ) )
+			else if ( 'text' == $params[ 'link_text' ] && ! empty( $language_titles[ $language_blog ] ) )
 				$display = $language_titles[ $language_blog ];
-			else if ( 'text_flag' == $link_type ) {
+			else if ( 'text_flag' == $params[ 'link_text' ] ) {
 				$display  = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '" />';
 				if ( ! empty( $language_titles[ $language_blog ] ) )
 					$display .= ' ' . $language_titles[ $language_blog ];
@@ -542,13 +552,32 @@ function mlp_get_language_flag( $blog_id = 0 ) {
  * wrapper of Mlp_Helpers function for function to get the linked elements and display them as a list
  *
  * @since	0.8
- * @param	string $link_type available types: flag, text, text_flag
+ * @param	mixed $link_type available types: flag, text, text_flag or param array
  * @param	bool $echo to display the output or to return. default is display
+ * @param	string sort param
  * @return	string output of the bloglist
  */
-function mlp_show_linked_elements( $link_type = 'text', $echo = TRUE, $sort_by = 'blogid' ) {
-	$output = Mlp_Helpers::show_linked_elements( $link_type, $sort_by );
-	if ( TRUE === $echo )
+function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecated_echo = TRUE, $deprecated_sort = 'blogid' ) {
+	
+	$args = is_array( $args_or_deprecated_text ) ? 
+		$args_or_deprecated_text 
+		:
+		array(
+			'link_text' => $args_or_deprecated_text,
+			'echo' => $deprecated_echo,
+			'sort' => $deprecated_sort,
+		);
+ 
+	$defaults = array(
+		'link_text' => 'text', 'echo' => TRUE,
+		'sort' => 'blogid', 'show_current_blog' => FALSE,
+	);
+		
+	$params = wp_parse_args( $args, $defaults );
+		
+	$output = Mlp_Helpers::show_linked_elements( $params );
+
+	if ( TRUE === $params[ 'echo' ] )
 		echo $output;
 	else
 		return $output;
