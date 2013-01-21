@@ -262,7 +262,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 * 
 	 * @since	0.1
 	 * @uses	check_admin_referer, current_user_can, wp_die, do_action,
-	 * 			wp_safe_redirect, admin_url
+	 * 			wp_safe_redirect, network_admin_url
 	 * @return	void
 	 */
 	public function update_settings() {
@@ -275,7 +275,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 		// process your fields from $_POST here and update_site_option
 		do_action( 'mlp_settings_save_fields', $_POST );
 
-		wp_safe_redirect( admin_url( 'network/settings.php?page=mlp&tab?mlp-pro-options&message=updated' ) );
+		wp_safe_redirect( network_admin_url( 'settings.php?page=mlp&tab?mlp-pro-options&message=updated' ) );
 		exit;
 	}
 
@@ -332,7 +332,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 	 * 
 	 * @since	0.1
 	 * @uses	check_admin_referer, current_user_can, get_site_option,
-	 * 			update_site_option, do_action, wp_redirect, admin_url
+	 * 			update_site_option, do_action, wp_redirect, network_admin_url
 	 * @return	void
 	 */
 	public function update_modules() {
@@ -389,7 +389,7 @@ class Mlp_Settingspage extends Multilingual_Press {
 		// process your fields from $_POST here and update_site_option
 		do_action( 'mlp_modules_save_fields', $_POST );
 
-		wp_safe_redirect( admin_url( 'network/settings.php?page=mlp&tab=mlp-modules&message=updated' ) );
+		wp_safe_redirect( network_admin_url( 'settings.php?page=mlp&tab=mlp-modules&message=updated' ) );
 		exit;
 	}
 
