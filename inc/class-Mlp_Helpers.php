@@ -10,6 +10,7 @@
  *
  * 0.8
  * - added show_current_blog / added params for show_linked_elements
+ * - removed get_linked_elements request for is_home
  * 
  * 0.7
  * - Added mlp_get_interlinked_permalinks
@@ -408,9 +409,11 @@ class Mlp_Helpers extends Multilingual_Press {
 		if ( ! ( 0 < count( $languages ) ) )
 			return $output;
 		
+		global $wp_query;
+			
 		$current_element_id = ( get_the_ID() == NULL ) ? $wp_query->queried_object->ID : get_the_ID();
 
-		if ( is_single() || is_page() || is_home() )
+		if ( is_single() || is_page() )
 			$linked_elements = mlp_get_linked_elements( $current_element_id );
 		
 		$defaults = array(
