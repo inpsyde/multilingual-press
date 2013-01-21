@@ -2,8 +2,8 @@
 Contributors: inpsyde, Bueltge, nullbyte, hughwillfayle
 Tags: language, multilinguage, multisite
 Requires at least: 3.3
-Tested up to: 3.5-RC4
-Stable tag: 1.0.2
+Tested up to: 3.5
+Stable tag: 1.0.3
 
 Multilingual websites with WordPress Multisite
 
@@ -93,6 +93,30 @@ be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poed
 [Localization](http://wordpress.org/extend/plugins/codestyling-localization/).
 
 == Changelog ==
+
+= 1.0.3 =
+* Removed link to blog posts on is_home()
+* Removed static ?noredirect parameter
+* Added modern greek as language
+* Added private posts for translations
+* Added parameter handling for mlp_show_linked_elements template function
+* Added parameter show_current_blog on mlp_show_linked_elements template function
+* Added show current blog at the MLP Widget 
+* Added hook to change the default meta box
+* Added hook to change the link to the blog
+* Changed admin_url into network_admin_url
+* Pro Code: Auto Updater Improvements
+* Pro Code: Fixed Feature Loader
+* Pro Added hook for checkbox "translate this post"
+* Pro Redirect Feature: Added better check for session_start
+* Pro Redirect Feature: Added redirect on is_home()
+* Pro Redirect Feature: Added ?noredirect link with core plugin hook
+* Pro Redirect Feature: Added english as browser language
+* Pro Quicklink Feature: Added blog language to quicklink
+* Pro Dashboard Widget: Fixed "This post is translated" checkbox
+* Pro Advanced Translator: Removed default metabox when feature is active
+* Pro Added Feature: Default Actions
+* Pro Autoupdate Feature: Removed autoupdate module from module list
 
 = 1.0.2 =
 * Code: Fixed Auto Updater
