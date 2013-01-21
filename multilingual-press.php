@@ -354,7 +354,7 @@ if ( ! class_exists( 'Multilingual_Press' ) ) {
 				return;
 			
 			// Load modules
-			add_filter( 'plugins_loaded', array( $this, 'load_modules' ), 9 );
+			$this->load_modules();
 			
 			// Does another plugin offer its own save method?
 			$external_save_method = apply_filters( 'inpsyde_multilingualpress_external_save_method', FALSE );
