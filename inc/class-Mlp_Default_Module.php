@@ -87,7 +87,7 @@ class Mlp_Default_Module extends Multilingual_Press {
 	 */
 	public function draw_settings_help_tab() {
 		?>
-		<p><?php _e( 'In Multilingual Press it is possible to develope own modules with own setting boxes right under this box. If you want to know how, see our example module on <a href="https://github.com/inpsyde/multilingual-press">GitHub</a>', $this->get_textdomain() ); ?></p>
+		<p><?php _e( 'In Multilingual Press it is possible to develop own modules with own setting boxes right under this box. If you want to know how, see our example module on <a href="https://github.com/inpsyde/multilingual-press">GitHub</a>', $this->get_textdomain() ); ?></p>
 		<?php
 	}
 
