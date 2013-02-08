@@ -462,7 +462,7 @@ class Mlp_Helpers extends Multilingual_Press {
 				$linked_elements[ $language_blog ] = 0;
 			
 			// Check post status
-			$post = ( isset( $linked_elements[ $language_blog ] ) ) ? get_blog_post( $language_blog, $linked_elements[ $language_blog ] ) : '';
+			$post = ( isset( $linked_elements[ $language_blog ] ) && $linked_elements[ $language_blog ] > 0 ) ? get_blog_post( $language_blog, $linked_elements[ $language_blog ] ) : '';
 			
 			$link = 
 				( is_single() || is_page() || is_home() ) && 
