@@ -43,7 +43,6 @@ We also have a [Pro Version](http://marketpress.com/product/multilingual-press-p
 - duplicate sites/blogs and create links    
 - frontend: cookies store which languages were selected
 - easily switching to another language from your editor while editing a post
-- global media library for all sites/blogs
 - Dashboard widget in root blog displaying all posts which still have to be translated
 
 **See more in our [Market](http://marketpress.com/product/multilingual-press-pro/)**
