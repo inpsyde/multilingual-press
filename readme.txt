@@ -10,8 +10,7 @@ Multilingual websites with WordPress Multisite
 == Description ==
 By using the powerful WordPress Multilingual-Press plugin it´s much easier to build multilingual sites and
 run them with WordPress' multisite feature. To get going with this plugin, you need to setup a WordPress 
-multisite installation first 
-(check the Codex for more infos on this topic: http://codex.wordpress.org/Create_A_Network). 
+multisite installation first. Check the Codex for more infos on this topic: codex.wordpress.org/Create_A_Network](http://codex.wordpress.org/Create_A_Network). 
 Each site/blog can then be attributed to a different language. Simply write a post or page in one language 
 and Multilingual-Press will automatically create a duplication of it in the other sites/blogs. These new 
 posts and pages are interlinked and are easily accessible via the post/page editor screen - you can switch 
