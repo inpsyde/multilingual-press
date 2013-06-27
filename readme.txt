@@ -1,6 +1,6 @@
 === Multilingual Press ===
 Contributors: inpsyde, Bueltge, nullbyte, hughwillfayle
-Tags: language, multilinguage, multisite
+Tags:  i18n, bilingual, international, internationalization, lang, language, localization,  multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation
 Requires at least: 3.3
 Tested up to: 3.5
 Stable tag: 1.0.3
