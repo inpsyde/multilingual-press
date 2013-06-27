@@ -8,17 +8,25 @@ Stable tag: 1.0.3
 Multilingual websites with WordPress Multisite
 
 == Description ==
-By using the powerful WordPress Multilingual-Press plugin it´s much easier to build multilingual sites and
+By using this free powerful WordPress Multilingual-Press plugin it´s much easier to **build multilingual sites** and
 run them with WordPress' multisite feature. To get going with this plugin, you need to setup a WordPress 
-multisite installation first. Check the Codex for more infos on this topic: codex.wordpress.org/Create_A_Network](http://codex.wordpress.org/Create_A_Network). 
+multisite installation first 
+(check the Codex for more infos on this topic: http://codex.wordpress.org/Create_A_Network). 
 Each site/blog can then be attributed to a different language. Simply write a post or page in one language 
 and Multilingual-Press will automatically create a duplication of it in the other sites/blogs. These new 
 posts and pages are interlinked and are easily accessible via the post/page editor screen - you can switch 
 back and forth to translate them! Multilingual-Press is WordPress conform, easy to install and doesn't make 
-any changes to the WordPress core. It doesn't harm your website's performance.  
+any changes to the WordPress core. It doesn't harm your website's performance. We also offer a [Multilingual-Press Pro Version](http://marketpress.com/product/multilingual-press-pro/), which includes additional features (see list below).  
+
+= Available languages = 
+* english (standard)
+* french / français (fr_FR)
+* german / deutsch (de_DE)
+* russian / pоссия (ru_RU)
+* simplified chinese (zh_CN)
 
 = doodleinnovation =
-We Plugin authors support in their leisure time our free Plugins. Please understand that we can't respond immediately. Please have a little patience and ask friendly, businesslike.
+We Plugin authors support in their leisure time our free Plugins. Please understand that we can't respond immediately. Please have a little patience and ask friendly, businesslike. If you need faster support: please get the [Multilingual-Press Pro Version](http://marketpress.com/product/multilingual-press-pro/). Beside the additional features (listed below) you get first class support on our helpdesks. 
 
 Please give us feedback, contribute and file technical bugs on 
 [GitHub Repo](https://github.com/inpsyde/multilingual-press).
@@ -28,7 +36,7 @@ Please give us feedback, contribute and file technical bugs on
 Have a look at the premium plugins in our [market](http://marketpress.com).
 
 = Pro Version =
-We also have a [Pro Version](http://marketpress.com/product/multilingual-press-pro/) of this plugin, which includes these additional features and many more:
+We also have a [Multilingual-Press Pro Version](http://marketpress.com/product/multilingual-press-pro/) of this plugin, which includes these additional features and many more:
 
 - browser language detection and automatically forwarding to the correct language (can be 
   deactivated via settings)
@@ -42,9 +50,10 @@ We also have a [Pro Version](http://marketpress.com/product/multilingual-press-p
 - duplicate sites/blogs and create links    
 - frontend: cookies store which languages were selected
 - easily switching to another language from your editor while editing a post
+- global media library for all sites/blogs
 - Dashboard widget in root blog displaying all posts which still have to be translated
 
-**See more in our [Market](http://marketpress.com/product/multilingual-press-pro/)**
+**See more on [MarketPress.com](http://marketpress.com/product/multilingual-press-pro/)**
 
 == Installation ==
 = Requirements =
