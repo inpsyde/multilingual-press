@@ -60,11 +60,13 @@ jQuery.noConflict();
 				async: false,
 				type: 'POST',
 				success: function ( response ) {
+					$( '.wrap > .updated' ).remove();
 					return response;
 				}
 			} ).responseText;
 			
 			$( '#multilingualpress_settings' ).before( multilang_saved_settings );
+			window.scrollTo(0,0);
 		},
 		
 		/**
