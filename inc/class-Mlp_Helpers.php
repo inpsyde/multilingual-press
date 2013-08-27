@@ -446,6 +446,8 @@ class Mlp_Helpers extends Multilingual_Press {
 	 */
 	static public function show_linked_elements( $args ) {
 
+		global $wp_query;
+
 		$output				= '';
 		$languages			= mlp_get_available_languages();
 		$language_titles	= mlp_get_available_languages_titles();
@@ -453,12 +455,21 @@ class Mlp_Helpers extends Multilingual_Press {
 		if ( ! ( 0 < count( $languages ) ) )
 			return $output;
 
-		global $wp_query;
+		// returns NULL if there is no post, get_the_ID() throws a notice,
+		// if we don' check this before.
+		$default_post = get_post();
 
-		$current_element_id = ( get_the_ID() == NULL ) ? $wp_query->queried_object->ID : get_the_ID();
+		if ( $default_post )
+			$current_element_id = get_the_ID();
+		elseif ( ! empty ( $wp_query->queried_object ) && ! empty ( $wp_query->queried_object->ID ) )
+			$current_element_id = $wp_query->queried_object->ID;
+		else
+			$current_element_id = 0;
 
 		$linked_elements = array();
-		if ( is_single() || is_page() )
+
+		// double check to avoid issues with a static front page.
+		if ( ! is_front_page() && ! is_home() && is_singular() )
 			$linked_elements = mlp_get_linked_elements( $current_element_id );
 
 		$defaults = array(
