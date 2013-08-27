@@ -2,7 +2,7 @@
 Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle, paddelboot, toscho
 Tags: l10n, i18n, bilingual, international, internationalization, lang, language, localization,  multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation, chinese, german, french, russian, widget
 
-Requires at least: 3.6
+Requires at least: 3.5
 Tested up to: 3.6
 Stable tag: 1.1.1
 
@@ -11,6 +11,7 @@ Multilingual websites with WordPress Multisite
 == Description ==
 
 Connect multiple sites as language alternatives in a multisite. Use a customizable widget to link to all sites.
+
 
 This plugin lets you connect an unlimited amount of sites with each other. Set a main language for 
 each site, create relationships (connections), and start writing. You get a new field now to create 
@@ -35,7 +36,7 @@ Our [pro-version](http://marketpress.com/product/multilingual-press-pro/) offers
 save your time and to improve your work flow and user experience:
 
 - Support for custom post types.
-- Automatic redirect to the user's preferred language version of a post.
+- Automatically redirect to the user's preferred language version of a post.
 - Edit all translations for a post from the original post editor without the need to switch sites.
 - Duplicate blogs. Use one blog as template for new blogs, copy *everything:* Posts, attachments, 
   settings for plugins and themes, navigation menus, categories, tags and custom taxonomies.
@@ -49,7 +50,7 @@ save your time and to improve your work flow and user experience:
 == Installation ==
 
 = Requirements =
-* WordPress Multisite 3.3+
+* WordPress Multisite 3.6+
 * PHP 5.2*, newer PHP versions will work faster.
 
 = Installation =
@@ -72,14 +73,20 @@ Help tab for further explanation can be found on the right top of the page.
 
 
 == Other Notes ==
-= Acknowledgements =
-
-* German language files by [ourselves](http://inpsyde.com)
 
 = Licence =
 Good news, this plugin is free for everyone! It is released under the GPLv3, you can use it free
 of charge on your personal or commercial blog.
 
+= Translations =
+
+The plugin comes with various translations, please refer to the
+[WordPress Codex](http://codex.wordpress.org/Installing_WordPress_in_Your_Language "Installing WordPress
+in Your Language") for more information about activating the translation. If you want to help to translate
+the plugin to your language, please have a look at the .pot file which contains all defintions and may
+be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poedit](http://www.poedit.net/)
+(Windows) or plugin for WordPress
+[Localization](http://wordpress.org/extend/plugins/codestyling-localization/).
 
 == Changelog ==
 
