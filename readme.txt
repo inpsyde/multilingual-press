@@ -4,7 +4,7 @@ Tags: l10n, i18n, bilingual, international, internationalization, lang, language
 
 Requires at least: 3.6
 Tested up to: 3.6
-Stable tag: 1.0.3
+Stable tag: 1.1.1
 
 Multilingual websites with WordPress Multisite
 
