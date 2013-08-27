@@ -33,7 +33,7 @@ We will also have a pro version of this plugin, which includes these additional 
 
 ## Installation
 ### Requirements
-* WordPress Multisite 3.3*
+* WordPress Multisite 3.6+
 * PHP 5.2*
 
 ### Installation

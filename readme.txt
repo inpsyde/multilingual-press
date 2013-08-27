@@ -2,16 +2,15 @@
 Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle, paddelboot, toscho
 Tags: l10n, i18n, bilingual, international, internationalization, lang, language, localization,  multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation, chinese, german, french, russian, widget
 
-Requires at least: 3.5
+Requires at least: 3.6
 Tested up to: 3.6
-Stable tag: 1.1
+Stable tag: 1.0.3
 
 Multilingual websites with WordPress Multisite
 
 == Description ==
 
 Connect multiple sites as language alternatives in a multisite. Use a customizable widget to link to all sites.
-
 
 This plugin lets you connect an unlimited amount of sites with each other. Set a main language for 
 each site, create relationships (connections), and start writing. You get a new field now to create 
@@ -74,27 +73,18 @@ Help tab for further explanation can be found on the right top of the page.
 
 == Other Notes ==
 = Acknowledgements =
-**Thanks to** different customer for trust in our know how and suggestion and release of solutions in
-this plugin.
 
-* German language files by [ourselves](http://inpsyde.com) ;)
-* Lithuanian translation files by [Vincent G](http://www.host1plus.com)
+* German language files by [ourselves](http://inpsyde.com)
 
 = Licence =
-Good news, this plugin is free for everyone! Since it's released under the GPLv3, you can use it free
+Good news, this plugin is free for everyone! It is released under the GPLv3, you can use it free
 of charge on your personal or commercial blog.
 
-= Translations =
-
-The plugin comes with various translations, please refer to the
-[WordPress Codex](http://codex.wordpress.org/Installing_WordPress_in_Your_Language "Installing WordPress
-in Your Language") for more information about activating the translation. If you want to help to translate
-the plugin to your language, please have a look at the .pot file which contains all defintions and may
-be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poedit](http://www.poedit.net/)
-(Windows) or plugin for WordPress
-[Localization](http://wordpress.org/extend/plugins/codestyling-localization/).
 
 == Changelog ==
+
+= 1.1.1 =
+- Fix incorrect URLs when front page is set as static page or custom post type.
 
 = 1.1 =
 - Better data handling during setup of post relationships.
