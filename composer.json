@@ -1,0 +1,19 @@
+{
+	"name": "inpsyde/multilingual-press",
+	"description": "Run WordPress Multisite with multiple languages.",
+	"license": "GPL 2+",
+	"version": "1.1.1",
+	"type": "wordpress-plugin",
+	"authors": [
+		{
+			"name": "Inpsyde GmbH",
+			"homepage": "http://inpsyde.com",
+			"email": "info@inpsyde.com",
+			"role": "Company"
+		}
+	],
+	"require": {
+		"php": ">5.2.4",
+		"composer/installers": "~1.0"
+	}
+}

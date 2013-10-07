@@ -8,7 +8,7 @@
  * Version:     1.1.1
  * Text Domain: multilingualpress
  * Domain Path: /languages
- * License:     GPLv3
+ * License:     GPLv2
  *
  * By using the WordPress plugin Multilingual-Press it's much
  * easier to build multilingual sites and run them with
