@@ -73,7 +73,7 @@ jQuery.noConflict();
 		 * 
 		 */
 		draw_tab: function() {
-			$( 'h3.nav-tab-wrapper:first' ).append( '<a id="mlp_settings_tab" class="nav-tab" href="#">' + mlp_loc.tab_label + '</a>' );
+			// $( 'h3.nav-tab-wrapper:first' ).append( '<a id="mlp_settings_tab" class="nav-tab" href="#">' + mlp_loc.tab_label + '</a>' );
 		},
 		
 		/**
