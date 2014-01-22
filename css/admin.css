@@ -1,7 +1,8 @@
 /**
  * Admin CSS
  * 
- * @author		fb, rw, ms, th
+ * @author		fb, rw, ms, th, toscho
+ * @version     2013.09.04
  * @package		mlp
  * @subpackage	admincss
  * 
@@ -14,4 +15,50 @@
 
 #inpsyde_multilingualpress_link textarea {
 	width: 98%;
+}
+.mlp-extra-settings-box,
+.mlp-admin-feature-table {
+	max-width: 50em;
+	color: #000;
+	background: #fff;
+	border-collapse: collapse;
+	border: 1px solid #f0f0f0;
+	border: 1px solid #ddd;
+	margin: 2em 0 0;
+	box-sizing: border-box;
+}
+.mlp-admin-settings-table td,
+.mlp-admin-settings-table th,
+.mlp-admin-feature-table td,
+.mlp-admin-feature-table th 
+{
+	vertical-align: top;
+}
+.mlp-extra-settings-box,
+.mlp-admin-feature-table label,
+.mlp-admin-feature-table .check-column,
+.mlp-callback-indent
+{
+	padding: 10px;
+}
+.mlp-admin-feature-table label
+{
+	padding: 10px 20px 10px 0px;
+}
+.mlp-block-label {
+	display: block;
+}
+.mlp-admin-feature-table .inactive {
+	background: #e9e9e9;
+}
+.mlp-extra-settings-box label:hover,
+.mlp-admin-feature-table tr:hover {
+	background: #f9f9f9;
+}
+.mlp-callback-indent,
+.mlp-extra-settings-box h4 {
+	margin: 0;
+}
+#mlp-cpt-settings table label {
+	padding: 5px 20px 5px 10px;
 }
