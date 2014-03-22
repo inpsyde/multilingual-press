@@ -1,67 +1,86 @@
 # Multilingual Press
-Multilingual websites with WordPress Multisite
+
+Create networks with multiple languages
 
 ## Description
-By using the powerful WordPress Multilingual-Press plugin it´s much easier to build multilingual sites and
-run them with WordPress' multisite feature. To get going with this plugin, you need to setup a WordPress 
-multisite installation first 
-(check the Codex for more infos on this topic: [Create_A_Network](http://codex.wordpress.org/Create_A_Network)). 
-Each site/blog can then be attributed to a different language. Simply write a post or page in one language 
-and Multilingual-Press will automatically create a duplication of it in the other sites/blogs. These new 
-posts and pages are interlinked and are easily accessible via the post/page editor screen - you can switch 
-back and forth to translate them! Multilingual-Press is WordPress conform, easy to install and doesn't make 
-any changes to the WordPress core. It doesn't harm your website's performance.
+
+Connect multiple sites as language alternatives in a multisite. Use a
+customizable widget to link to all sites.
+
+This plugin lets you connect an unlimited amount of sites with each other.
+Set a main language for each site, create relationships (connections), and start
+writing. You get a new field now to create a linked post on all the connected
+sites automatically.
+They are accessible via the post/page editor screen - you can switch back and
+forth to translate them.
+
+In contrast to most other translation plugins there is **no lock-in effect**:
+When you disable our plugin, all sites will still work as separate sites without
+any data-loss or garbage output.
+
+Our **Language Manager** offers 174 languages, and you can edit them.
+
+We cannot guarantee free ad hoc support. Please be patient, we are a small team.
+You can follow our progress and development notices on our
+[developer blog](http://make.marketpress.com/multilingualpress/).
+
+### Free version
+
+- Set up unlimited site relationships in the site manager.
+- Language Manager with 174 editable languages.
+- View the translations for each post or page underneath the post editor.
+- Show a list of links for all translations on each page in a flexible widget.
+- No lock-in: After deactivation, all sites will still work.
 
 ### Pro Version
-We will also have a pro version of this plugin, which includes these additional features and many more:
 
-* browser language detection and automatically forwarding to the correct language (can be 
-  deactivated via settings)
-* creating a draft is activated by default (can be deactivated globaly via settings or in 
-  metabox for specific posts)
-* possibility to publish posts just on selected sites/blogs
-* create new language -> copy of a complete site/blog:
-        posts, links, attachments, categories, tags
-        reminder which posts you have to translate
-        custom table column with language
-* duplicate sites/blogs and create links    
-* frontend: cookies store which languages were selected
-* easily switching to another language from your editor while editing a post
-* global media library for all sites/blogs
-* Dashboard widget in root blog displaying all posts which still have to be translated
-* much more ...
+Our [pro-version](http://marketpress.com/product/multilingual-press-pro/) offers many features to
+save your time and to improve your work flow and user experience:
+
+- Support for custom post types.
+- Automatically redirect to the user's preferred language version of a post.
+- Edit all translations for a post from the original post editor without the need to switch sites.
+- Duplicate sites. Use one site as template for new site, copy *everything:* Posts, attachments,
+  settings for plugins and themes, navigation menus, categories, tags and custom taxonomies.
+- Synchronized trash: move all connected post to trash with one click.
+- Change relationships between translations or connect existing posts.
+- Quicklinks. Add links to language alternatives to a post automatically to the post content. This
+  is especially useful when you don't use widgets or a sidebar.
+- User specific language settings for the back-end. Every user can choose a preferred language for
+  the user interface without affecting the output of the front-end.
+- Show posts with incomplete translations in a dashboard widget.
+
 
 ## Installation
-### Requirements
-* WordPress Multisite 3.6+
-* PHP 5.2*
 
-### Installation
- * Use the installer via backend of your install or ...
+= Requirements =
+* WordPress Multisite 3.3+
+* PHP 5.2.4, newer PHP versions will work faster.
 
-1. Unpack the download-package
-2. Upload the files to the `/wp-content/plugins/` directory
-3. Activate the plugin through the 'Network/Plugins' menu in WordPress and hit 'Network Activate'
-4. Go to 'All Sites' and then 'Edit' each Site and then select the tab 'Multilingual' to configure the 
-   settings for each Site
+Use the installer via back-end of your install or ...
 
-Help tab for further explanation can be found on the right top of the page.
+1. Unpack the download-package.
+2. Upload the files to the `/wp-content/plugins/` directory.
+3. Activate the plugin through the **Network/Plugins** menu in WordPress and 
+   click **Network Activate**.
+4. Go to **All Sites**, **Edit** each site, then select the tab 
+   **Multilingual Press** to configure the
+   settings. You need at least two sites with an assigned language.
 
-## Other Notes
-### License
-Good news, this plugin is free for everyone! Since it's released under the GPL, you can use it free of charge on your personal or commercial blog.
+## Frequently Asked Questions
 
-### Translations
-The plugin comes with various translations, please refer to the [WordPress Codex](http://codex.wordpress.org/Installing_WordPress_in_Your_Language "Installing WordPress in Your Language") for more information about activating the translation. If you want to help to translate the plugin to your language, please have a look at the .pot file which contains all defintions and may be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poedit](http://www.poedit.net/) (Linux, Mac OS X, Windows) or the WordPress plugin [Localization](http://wordpress.org/extend/plugins/codestyling-localization/).
+- *Will Multilingual Press translate my content?*
 
-### Contact & Feedback
-The plugin is designed and developed by the team of [Inpsyde GmbH](http://inpsyde.com)
+    No, it doesn't. It manages relationships between sites and translations, 
+    but it doesn't change the content.
 
-Please let us know if you like the plugin or you hate it or whatever ... Please fork it, add an issue for ideas and bugs.
+- *Where can I get additional language files?*
 
-### Disclaimer
-We are German and our English might be gruesome here and there. So please be patient with us and let us know of typos or grammatical farts. Thanks
+    You can find all official translation files in WordPress' 
+    [language repository](http://i18n.svn.wordpress.org/).
 
-## Changelog
+- *Can I use Multilingual Press on a single-site installation?*
 
- * [see on the page](http://wordpress.org/extend/plugins/multilingual-press/changelog/)
+    That would require changes to the way WordPress stores post content. Other 
+    plugins do that; we think this is wrong, because it creates a lock-in: you 
+    would lose access to your content after the plugin deactivation.
