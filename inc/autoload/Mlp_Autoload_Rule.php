@@ -21,7 +21,7 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 	/**
 	 * Constructor
 	 *
-	 * @param string $pattern
+	 * @param string $dir
 	 */
 	public function __construct( $dir ) {
 		$this->dir = $dir;
