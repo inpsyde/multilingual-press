@@ -53,7 +53,7 @@ save your time and to improve your work flow and user experience:
 
 ## Installation
 
-= Requirements =
+### Requirements
 * WordPress Multisite 3.3+
 * PHP 5.2.4, newer PHP versions will work faster.
 
