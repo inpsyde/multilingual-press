@@ -178,6 +178,8 @@ class Multilingual_Press {
 
 			new Mlp_Network_Site_Settings_Controller( $this->plugin_data );
 		}
+		// add hook to import active languages when reset is done
+		add_action( 'mlp_reset_table_done', array( $this, 'import_active_languages' ) );
 	}
 
 	public function late_load() {
@@ -190,6 +192,7 @@ class Multilingual_Press {
 
 		$last_version = get_site_option( 'mlp_version' );
 
+		// no mlp_version found -> version 1.x
 		if ( ! $last_version )
 			$this->update_plugin_data( 1 );
 
@@ -200,8 +203,60 @@ class Multilingual_Press {
 
 	private function update_plugin_data( $last_version ) {
 
-		$this->install_plugin();
+		$languages = new Mlp_Db_Languages_Schema;
+		$this->install_plugin( $languages );
+		if ( $last_version == 1 )
+			$this->import_active_languages( $languages );
+
 		update_site_option( 'mlp_version', $this->plugin_data->version );
+	}
+
+	/**
+	 * Load the localization
+	 *
+	 * @since 0.1
+	 * @uses load_plugin_textdomain, plugin_basename
+	 * @param Mlp_Db_Schema_Interface $languages
+	 * @return void
+	 */
+	private function import_active_languages( Mlp_Db_Schema_Interface $languages ) {
+		global $wpdb;
+
+		// get active languages
+		$mlp_settings = get_site_option( 'inpsyde_multilingual' );
+
+		if ( empty ( $mlp_settings ) )
+			return;
+
+		foreach ( $mlp_settings as $mlp_site ) {
+			$text    = $mlp_site[ 'text' ] != '' ? $mlp_site[ 'text' ] : $mlp_site[ 'lang' ];
+			$lang_id = $wpdb->get_var(
+				$wpdb->prepare( '
+					SELECT ID
+					FROM ' . $languages->get_table_name() .'
+					WHERE wp_locale = %s OR iso_639_1 = %s
+				', $mlp_site[ 'lang' ], $mlp_site[ 'lang' ] )
+			);
+			// language not found -> insert
+			if ( empty( $lang_id ) ) {
+				// @todo add custom name
+				$wpdb->insert( $languages->get_table_name(),
+					array (
+						'english_name' => $text,
+						'wp_locale'    => $mlp_site[ 'lang' ]
+					)
+				);
+			}
+			// language found -> change priority
+			else {
+				$wpdb->update(
+					$languages->get_table_name(),
+					array ( 'priority' => 10 ),
+					array ( 'ID'       => $lang_id )
+				);
+			}
+		}
+
 	}
 
 	public function register_stylesheets() {
@@ -257,8 +312,12 @@ class Multilingual_Press {
 	protected function load_features() {
 
 		$found = array();
+		$dirs  = array (
+			'core',
+			'pro'
+		);
 
-		foreach ( array ( 'core', 'pro' ) as $dir ) {
+		foreach ( $dirs as $dir ) {
 
 			$path = $this->plugin_data->plugin_dir_path . "inc/$dir";
 
@@ -357,9 +416,8 @@ class Multilingual_Press {
 	 * @global	$wpdb | WordPress Database Wrapper
 	 * @return	void
 	 */
-	public function install_plugin() {
+	public function install_plugin( $languages ) {
 
-		$languages = new Mlp_Db_Languages_Schema;
 		$relations = new Mlp_Db_Relationship_Schema;
 		$installer = new Mlp_Db_Installer( $languages );
 		$success   = $installer->install();
@@ -576,7 +634,6 @@ class Multilingual_Press {
 			}
 			update_site_option( 'inpsyde_multilingual', $blogs );
 
-			?><p><?php _e( 'Blogmap has been updated.' , 'multilingualpress' ); ?></p><?php
 			?><p><?php _e( 'All done!' , 'multilingualpress' ); ?></p><?php
 		}
 
@@ -608,7 +665,7 @@ class Multilingual_Press {
 	public function check_for_user_errors_admin_notice() {
 
 		if ( TRUE == $this->check_for_errors() ) {
-			?><div class="error"><p><?php _e( 'You didn\'t setup any blog relationships. You have to setup these first to use Multilingual Press. Please go to Network Admin &raquo; Sites &raquo; and choose a blog to edit. Then go to the tab Multilingual Press and set up the relationships.' , 'multilingualpress' ); ?></p></div><?php
+			?><div class="error"><p><?php _e( 'You didn\'t setup any site relationships. You have to setup these first to use Multilingual Press. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab Multilingual Press and set up the relationships.' , 'multilingualpress' ); ?></p></div><?php
 		}
 	}
 

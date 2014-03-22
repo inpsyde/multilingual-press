@@ -5,7 +5,7 @@
  * a blog's redirect setting
  *
  * @since	0.5.2a
- * @param	int $blogid
+ * @param	bool $blogid
  * @return	bool TRUE/FALSE
  */
 function mlp_is_redirect( $blogid = FALSE ) {
@@ -18,6 +18,7 @@ function mlp_is_redirect( $blogid = FALSE ) {
  * but the one set by MlP)
  *
  * @since	0.1
+ * @param  int $count
  * @return	array Available languages
  */
 function mlp_get_current_blog_language( $count = 0 ) {
@@ -29,6 +30,7 @@ function mlp_get_current_blog_language( $count = 0 ) {
  * load the available languages
  *
  * @since	0.1
+ * @param  bool $nonrelated
  * @return	array Available languages
  */
 function mlp_get_available_languages( $nonrelated = FALSE ) {
@@ -40,6 +42,7 @@ function mlp_get_available_languages( $nonrelated = FALSE ) {
  * load the available language titles
  *
  * @since	0.5.3b
+ * @param  bool $nonrelated
  * @return	array Available languages
  */
 function mlp_get_available_languages_titles( $nonrelated = FALSE ) {
@@ -55,7 +58,7 @@ function mlp_get_available_languages_titles( $nonrelated = FALSE ) {
  * @param	int $blog_id ID of the selected blog
  * @return	array linked elements
  */
-function mlp_get_linked_elements( $element_id = FALSE, $type = '', $blog_id = 0 ) {
+function mlp_get_linked_elements( $element_id = 0, $type = '', $blog_id = 0 ) {
 	return Mlp_Helpers::load_linked_elements( $element_id, $type, $blog_id );
 }
 
@@ -68,9 +71,9 @@ function mlp_get_linked_elements( $element_id = FALSE, $type = '', $blog_id = 0 
  * @param	int $blog_id ID of the selected blog
  * @param	string $hook name of the hook that will be executed
  * @param	array $param parameters for the function
- * @return	array linked elements
+ * @return	WP_Error|NULL
  */
-function mlp_run_custom_plugin( $element_id = FALSE, $type = '', $blog_id = 0, $hook = NULL, $param = NULL ) {
+function mlp_run_custom_plugin( $element_id = 0, $type = '', $blog_id = 0, $hook = NULL, $param = NULL ) {
 	return Mlp_Helpers::run_custom_plugin( $element_id, $type, $blog_id, $hook, $param );
 }
 
@@ -89,8 +92,9 @@ function mlp_get_language_flag( $blog_id = 0 ) {
  * wrapper of Mlp_Helpers function for function to get the linked elements and display them as a list
  *
  * @since	0.8
- * @param	string $link_type available types: flag, text, text_flag
- * @param	bool $echo to display the output or to return. default is display
+ * @param	string $args_or_deprecated_text available types: flag, text, text_flag
+ * @param	bool $deprecated_echo to display the output or to return. default is display
+ * @param string $deprecated_sort
  * @return	string output of the bloglist
  */
 function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecated_echo = TRUE, $deprecated_sort = 'blogid' ) {
@@ -115,8 +119,8 @@ function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecate
 
 	if ( TRUE === $params[ 'echo' ] )
 		echo $output;
-	else
-		return $output;
+
+	return $output;
 }
 
 /**
@@ -134,6 +138,7 @@ function mlp_get_interlinked_permalinks( $element_id = 0 ) {
  * get the blog language
  *
  * @since	0.7
+ * @param int $blog_id
  * @return	string Second part of language identifier
  */
 function get_blog_language( $blog_id = 0 ) {
@@ -151,5 +156,47 @@ function get_blog_language( $blog_id = 0 ) {
  *               array for $field = 'all' and string for specific fields
  */
 function mlp_get_lang_by_iso( $iso, $field = 'native' ) {
-	return Mlp_Helpers::mlp_get_lang_by_iso( $iso, $field );
+	return Mlp_Helpers::get_lang_by_iso( $iso, $field );
+}
+
+
+if ( ! function_exists( 'blog_exists' ) ) {
+
+	/**
+	 * Checks if a blog exists and is not marked as deleted.
+	 *
+	 * @link   http://wordpress.stackexchange.com/q/138300/73
+	 * @param  int $blog_id
+	 * @param  int $site_id
+	 * @return bool
+	 */
+	function blog_exists( $blog_id, $site_id = 0 ) {
+
+		global $wpdb;
+		static $cache = array ();
+
+		$site_id = (int) $site_id;
+
+		if ( 0 === $site_id )
+			$site_id = get_current_site()->id;
+
+		if ( empty ( $cache ) or empty ( $cache[ $site_id ] ) ) {
+
+			if ( wp_is_large_network() ) // we do not test large sites.
+				return TRUE;
+
+			$query = "SELECT `blog_id` FROM $wpdb->blogs
+					WHERE site_id = $site_id AND deleted = 0";
+
+			$result = $wpdb->get_col( $query );
+
+			// Make sure the array is always filled with something.
+			if ( empty ( $result ) )
+				$cache[ $site_id ] = array ( 'do not check again' );
+			else
+				$cache[ $site_id ] = $result;
+		}
+
+		return in_array( $blog_id, $cache[ $site_id ] );
+	}
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Multilingual Press Free
- * Plugin URI:  http://marketpress.com/product/multilingual-press-pro/
+ * Plugin Name: Multilingual Press Pro
+ * Plugin URI:  http://marketpress.com/product/multilingual-press-pro/?piwik_campaign=mlp&piwik_kwd=pro
  * Description: Run WordPress Multisite with multiple languages.
  * Author:      Inpsyde GmbH
  * Author URI:  http://inpsyde.com
- * Version:     2.0.0-beta1
+ * Version:     2.0.0-RC2
  * Text Domain: multilingualpress
  * Domain Path: /languages
  * License:     GPLv3
@@ -44,7 +44,7 @@ function mlp_init() {
 		array (
 			'text_domain_path' => 'Domain Path',
 			'plugin_uri'       => 'Plugin URI',
-			'plugin_name'      => 'Name',
+			'plugin_name'      => 'Plugin Name',
 			'version'          => 'Version'
 		)
 	);
