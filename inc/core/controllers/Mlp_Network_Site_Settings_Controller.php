@@ -79,7 +79,10 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function update_language( $blog_id ) {
 
-		$languages = get_site_option( 'inpsyde_multilingual', array() );
+		$languages = (array) get_site_option( 'inpsyde_multilingual', array() );
+
+		if ( empty ( $languages[ $blog_id ] ) )
+			$languages[ $blog_id ] = array ();
 
 		if ( ! isset ( $_POST[ 'inpsyde_multilingual_lang' ] )
 			or '-1' === $_POST[ 'inpsyde_multilingual_lang' ]
@@ -88,6 +91,11 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		}
 		else {
 			$languages[ $blog_id ][ 'lang' ] = $_POST[ 'inpsyde_multilingual_lang' ];
+
+			// Set alternate title
+			if ( isset( $_POST[ 'inpsyde_multilingual_text' ] ) ) {
+				$languages[ $blog_id ][ 'text' ] = $_POST[ 'inpsyde_multilingual_text' ];
+			}
 		}
 
 		return update_site_option( 'inpsyde_multilingual', $languages );
@@ -139,7 +147,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$processed = array();
 
 		foreach ( $new_related as $new_blog_id ) {
-			$remote_relations   = get_blog_option( $new_blog_id, 'inpsyde_multilingual_blog_relationship' );
+			$remote_relations   = get_blog_option( $new_blog_id, 'inpsyde_multilingual_blog_relationship', array() );
 			$remote_relations[] = $blog_id;
 			$remote_relations   = array_unique( $remote_relations );
 			update_blog_option( $new_blog_id, 'inpsyde_multilingual_blog_relationship', $remote_relations );
@@ -154,7 +162,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 			if ( isset ( $processed[ $old_blog_id ] ) )
 				continue;
 
-			$remote_relations = get_blog_option( $old_blog_id, 'inpsyde_multilingual_blog_relationship' );
+			$remote_relations = get_blog_option( $old_blog_id, 'inpsyde_multilingual_blog_relationship', array() );
 			$remote_relations = array_unique( $remote_relations );
 			$key              = array_search( $blog_id, $remote_relations );
 

@@ -20,12 +20,12 @@ class Mlp_Widget extends WP_Widget {
 
 		$widget_ops = array(
 			'classname'		=> self::$handle,
-			'description'	=> __( 'Multilingual Press Widget', 'multilingualpress' )
+			'description'	=> __( 'Multilingual Press Translations', 'multilingualpress' )
 		);
 
 		add_filter( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 
-		parent::__construct( 'Mlp_Widget', __( 'Multilingual Press Widget', 'multilingualpress' ), $widget_ops );
+		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingualpress' ), $widget_ops );
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Mlp_Widget extends WP_Widget {
 			<?php
 			$title_id = $this->get_field_id( 'mlp_widget_title' );
 			?>
-			<label for='<?php echo $title_id; ?>'><?php esc_html__( 'Title', 'multilingualpress' ); ?></label><br />
+			<label for='<?php echo $title_id; ?>'><?php esc_html_e( 'Title', 'multilingualpress' ); ?></label><br />
 			<input class="widefat" type ='text' id='<?php echo $title_id; ?>' name='<?php
 				echo $this->get_field_name( 'mlp_widget_title' );
 				?>' value='<?php

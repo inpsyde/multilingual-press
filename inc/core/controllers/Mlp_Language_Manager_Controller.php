@@ -142,9 +142,12 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			$this->page_data->get_nonce_name()
 		);
 
-		$installer = new Mlp_Db_Installer( new Mlp_Db_Languages_Schema );
+		$table_name = new Mlp_Db_Languages_Schema;
+		$installer = new Mlp_Db_Installer( $table_name );
 		$installer->uninstall();
 		$installer->install();
+
+		do_action( 'mlp_reset_table_done', $table_name );
 
 		$url = add_query_arg( 'msg', 'resettable', $_REQUEST[ '_wp_http_referer' ] );
 		wp_safe_redirect( $url );

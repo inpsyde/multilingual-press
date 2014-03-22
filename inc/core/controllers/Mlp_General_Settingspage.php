@@ -9,8 +9,8 @@
  */
 class Mlp_General_Settingspage {
 
-	protected $modules;
-	protected $page_hook;
+	private $modules;
+	private $page_hook;
 
 	/**
 	 * Constructor
@@ -43,7 +43,7 @@ class Mlp_General_Settingspage {
 	 *
 	 * @return	void
 	 */
-	function register_settings_page() {
+	public function register_settings_page() {
 
 		// Register options page
 		$this->page_hook = add_submenu_page(

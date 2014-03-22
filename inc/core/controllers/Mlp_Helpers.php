@@ -27,6 +27,9 @@
  */
 class Mlp_Helpers {
 
+	/**
+	 * @var string
+	 */
 	public static $link_table = '';
 
 	/**
@@ -210,7 +213,9 @@ class Mlp_Helpers {
 	 * @global	$wpdb wpdb WordPress Database Wrapper
 	 * @return  array $elements
 	 */
-	static public function load_linked_elements( $element_id = 0, $type = '', $blog_id = 0 ) {
+	static public function load_linked_elements( $element_id = 0,
+		/** @noinspection PhpUnusedParameterInspection */ $type = '',
+												 $blog_id = 0 ) {
 		global $wpdb;
 
 		// if no element id is provides, use WP default
@@ -259,7 +264,7 @@ class Mlp_Helpers {
 	 * @param int $element_id
 	 * @return  array $elements
 	 */
-	public function get_interlinked_permalinks( $element_id = 0 ) {
+	public static function get_interlinked_permalinks( $element_id = 0 ) {
 		global $wpdb;
 
 		// if no element id is provides, use WP default
@@ -314,9 +319,11 @@ class Mlp_Helpers {
 	 * @param   int $blog_id ID of the selected blog
 	 * @param   string $hook
 	 * @param   mixed $param
-	 * @return  WP_Error|null linked elements
+	 * @return  WP_Error|NULL
 	 */
-	static public function run_custom_plugin( $element_id, $type, $blog_id, $hook, $param ) {
+	static public function run_custom_plugin( $element_id, $type,
+		/** @noinspection PhpUnusedParameterInspection */ $blog_id,
+											  $hook, $param ) {
 
 		if ( empty( $element_id ) )
 			return new WP_Error( 'mlp_empty_custom_element', __( 'Empty Element', 'multilingualpress' ) );
@@ -332,7 +339,7 @@ class Mlp_Helpers {
 		$current_blog	= get_current_blog_id();
 
 		if ( 0 == count( $languages ) )
-			return;
+			return NULL;
 
 		foreach ( $languages as $language_id => $language_name ) {
 
@@ -344,6 +351,8 @@ class Mlp_Helpers {
 			do_action( $hook, $param );
 			restore_current_blog();
 		}
+
+		return NULL;
 	}
 
 	/**
@@ -407,14 +416,23 @@ class Mlp_Helpers {
 		// part of the flags' file name, ie. "de.gif"
 		$languages = get_site_option( 'inpsyde_multilingual' );
 
+		if ( empty ( $languages )
+			or empty ( $languages[ $blog_id ] )
+			or empty ( $languages[ $blog_id ][ 'lang' ] )
+		)
+			return '';
+
 		// Is this a shortcode (i.e. "fr"), or an ISO
 		// formatted language code (i.e. fr_BE) ?
-		$language_code = ( 5 == strlen( $languages[ $blog_id ][ 'lang' ] ) ) ? strtolower( substr( $languages[ $blog_id ][ 'lang' ], 3, 2 ) ) : substr( $languages[ $blog_id ][ 'lang' ], 0, 2 );
+		$language_code = ( 5 == strlen( $languages[ $blog_id ][ 'lang' ] ) )
+			? strtolower( substr( $languages[ $blog_id ][ 'lang' ], 3, 2 ) )
+			: substr( $languages[ $blog_id ][ 'lang' ], 0, 2 );
 
 		return $language_code;
 	}
 
 	// not used yet
+	/*
 	static public function get_blog_language_object( $blog_id = 0 ) {
 
 		if ( 0 == $blog_id )
@@ -422,6 +440,7 @@ class Mlp_Helpers {
 
 		// $languages = get_site_option( 'inpsyde_multilingual' );
 	}
+	*/
 
 	/**
 	 * Get the linked elements and display them as a list
@@ -532,6 +551,12 @@ class Mlp_Helpers {
 		return $output;
 	}
 
+	/**
+	 * Get HTML attributes width and height for a flag image.
+	 *
+	 * @param  string $flag_url
+	 * @return string
+	 */
 	private static function get_flag_dimension_attributes( $flag_url ) {
 		if ( 0 !== strpos( $flag_url, self::get_flag_dir_url() ) )
 			return '';
@@ -539,10 +564,20 @@ class Mlp_Helpers {
 		return ' width="16" height="11"';
 	}
 
+	/**
+	 * Get default directory for flags.
+	 *
+	 * @return string
+	 */
 	private static function get_flag_dir_url() {
 		return plugins_url( 'flags/', self::get_plugin_main_dir() );
 	}
 
+	/**
+	 * Temporary fix to get the main plugin directory.
+	 *
+	 * @return string
+	 */
 	private static function get_plugin_main_dir() {
 		return dirname( dirname( dirname( __FILE__ ) ) );
 	}
