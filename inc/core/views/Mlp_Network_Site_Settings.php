@@ -34,7 +34,7 @@ class Mlp_Network_Site_Settings {
 	 * Constructor.
 	 *
 	 * @param Mlp_Network_Site_Settings_Properties $config
-	 * @param Mlp_Network_Site_Settings_Tab_Content $subview
+	 * @param Mlp_Updatable $watcher
 	 */
 	public function __construct(
 		Mlp_Network_Site_Settings_Properties  $config,

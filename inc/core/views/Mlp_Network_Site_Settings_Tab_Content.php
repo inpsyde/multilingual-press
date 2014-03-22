@@ -55,6 +55,9 @@ class Mlp_Network_Site_Settings_Tab_Content {
 		//$lang_title = isset( $siteoption[ $this->blog_id ][ 'text' ] ) ? stripslashes( $siteoption[ $this->blog_id ][ 'text' ] ) : '';
 		$selected = isset( $siteoption[ $this->blog_id ][ 'lang' ] ) ? $siteoption[ $this->blog_id ][ 'lang' ] : '';
 		$blogoption_flag = esc_url( get_blog_option( $this->blog_id, 'inpsyde_multilingual_flag_url' ) );
+
+		// Sanitize lang title
+		$lang_title = isset( $siteoption[ $this->blog_id ][ 'text' ] ) ? stripslashes( $siteoption[ $this->blog_id ][ 'text' ] ) : '';
 		?>
 		<tr>
 			<td style="width:10em">
@@ -66,7 +69,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			</td>
 			<td>
 				<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang">
-					<option value="-1"><?php _e( 'choose language', 'multilingualpress' ); ?></option>
+					<option value="-1"><?php esc_html_e( 'choose language', 'multilingualpress' ); ?></option>
 					<?php
 					foreach ( $languages as $language ) {
 
@@ -82,6 +85,20 @@ class Mlp_Network_Site_Settings_Tab_Content {
 					}
 					?>
 				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="inpsyde_multilingual_text">
+					<?php
+					esc_html_e( 'Alternative language title', 'multilingualpress' );
+					?>
+				</label>
+			</td>
+			<td>
+				<input class="regular-text" type="text" id="inpsyde_multilingual_text" name="inpsyde_multilingual_text" value="<?php echo $lang_title; ?>" />
+				<br />
+				<span class="description"><?php esc_html_e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")', 'multilingualpress' ); ?></span>
 			</td>
 		</tr>
 		<tr>

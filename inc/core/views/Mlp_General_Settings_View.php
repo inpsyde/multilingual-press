@@ -10,7 +10,11 @@
  */
 class Mlp_General_Settings_View {
 
-	protected $module_mapper;
+	/**
+	 * @var Mlp_Module_Mapper_Interface
+	 */
+	private $module_mapper;
+
 	/**
 	 * Constructor.
 	 */
@@ -55,7 +59,6 @@ class Mlp_General_Settings_View {
 
 				if ( apply_filters( 'mlp_dont_show_module_' . $slug, FALSE ) )
 					continue;
-
 
 				print $this->module_row( $slug, $module );
 
@@ -120,7 +123,7 @@ EOD;
 		$marketpress_url = __( 'http://marketpress.com/', 'multilingualpress' );
 		$inpsyde_url     = __( 'http://inpsyde.com/',     'multilingualpress' );
 		$message         = __(
-			'This plugin has been developed by <a href="%1$s">MarketPress</a>, a subsidiary of <a href="%2$s">Inpsyde</a>.',
+			'This plugin has been developed by <a href="%1$s">MarketPress</a>, a project of <a href="%2$s">Inpsyde</a>.',
 			'multilingualpress'
 		);
 
