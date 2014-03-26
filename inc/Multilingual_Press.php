@@ -148,7 +148,7 @@ class Multilingual_Press {
 		do_action( 'inpsyde_mlp_init' );
 
 		// Enqueue scripts
-		//add_filter( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array ( $this, 'admin_scripts' ) );
 
 		add_action( 'wp_loaded', array ( $this, 'register_stylesheets' ) );
 
@@ -357,11 +357,13 @@ class Multilingual_Press {
 			'site-users.php',
 			'site-themes.php',
 			'site-settings.php',
-			'settings.php'
+			'settings.php',
+			'post-new.php',
+			'post.php'
 		);
 
 		if ( in_array( $pagenow, $pages ) ) {
-			wp_enqueue_script( 'mlp-js', plugins_url( 'js/', $this->plugin_file_path ) . 'multilingual_press.js' );
+			wp_enqueue_script( 'mlp-js', $this->plugin_data->js_url . 'multilingual_press.js' );
 			wp_localize_script( 'mlp-js', 'mlp_loc', $this->localize_script() );
 			wp_enqueue_style( 'mlp-admin-css' );
 		}
