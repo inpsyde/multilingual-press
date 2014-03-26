@@ -7,13 +7,18 @@
  *
  * @author     toscho
  * @since      2013.08.18
- * @version    2013.08.22
+ * @version    2014.03.26
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @package    Inpsyde
  * @subpackage Autoload
  */
 class Inpsyde_Autoload
 {
+	/**
+	 * List of auto-load rules
+	 *
+	 * @var array
+	 */
 	private $rules = array ();
 
 	/**
@@ -27,7 +32,7 @@ class Inpsyde_Autoload
 	/**
 	 * Add a rule as object instance.
 	 *
-	 * @param  Inpsyde_Suite_Autoload_Rule $rule
+	 * @param  Inpsyde_Autoload_Rule_Interface $rule
 	 * @return Inpsyde_Autoload
 	 */
 	public function add_rule( Inpsyde_Autoload_Rule_Interface $rule )
@@ -39,11 +44,11 @@ class Inpsyde_Autoload
 	/**
 	 * Callback for spl_autoload_register()
 	 *
-	 * @param  string  $class_name
-	 * @return boolean
+	 * @param  string  $name
 	 */
 	public function load( $name )
 	{
+		/** @var Inpsyde_Autoload_Rule_Interface $rule */
 		foreach ( $this->rules as $rule )
 			if ( $rule->load( $name ) )
 				return;
