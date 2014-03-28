@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Multilingual Press Free
- * Plugin URI:  http://marketpress.com/product/multilingual-press-pro/?piwik_campaign=mlp&piwik_kwd=pro
+ * Plugin URI:  http://marketpress.com/product/multilingual-press-pro/?piwik_campaign=mlp&piwik_kwd=free
  * Description: Run WordPress Multisite with multiple languages.
  * Author:      Inpsyde GmbH
  * Author URI:  http://inpsyde.com
