@@ -28,6 +28,13 @@ class Mlp_Translatable_Post_Data
 	private $link_table;
 
 	/**
+	 * Context for hook on save.
+	 *
+	 * @var array
+	 */
+	public $save_context = array ();
+
+	/**
 	 * @param Mlp_Request_Validator_Interface $request_validator
 	 * @param array $allowed_post_types
 	 * @param string $link_table
@@ -83,14 +90,20 @@ class Mlp_Translatable_Post_Data
 		if ( empty ( $_POST[ 'mlp_to_translate' ] ) )
 			return;
 
+		$this->save_context = array (
+			'source_blog'    => get_current_blog_id(),
+			'source_post'    => $post,
+			'real_post_type' => $post_type
+		);
+
 		// Get the post
 		$post_data  = get_post( $post_id, ARRAY_A );
 		$post_meta = $this->get_post_meta_to_transfer( $post_id );
 
 		// Apply a filter here so modules can play around
 		// with the post data before it is processed.
-		$post_data  = apply_filters( 'mlp_pre_save_postdata',  $post_data );
-		$post_meta = apply_filters( 'mlp_pre_save_post_meta', $post_meta );
+		$post_data = apply_filters( 'mlp_pre_save_postdata', $post_data, $this->save_context );
+		$post_meta = apply_filters( 'mlp_pre_save_post_meta', $post_meta, $this->save_context );
 
 		// When the filter returns FALSE, we'll stop here
 		if ( FALSE == $post_data || ! is_array( $post_data ) )
@@ -111,7 +124,7 @@ class Mlp_Translatable_Post_Data
 			}
 		}
 		// Create the post array
-		$newpost = array(
+		$new_post = array (
 			'post_title'	=> $post_data[ 'post_title' ],
 			'post_content'	=> $post_data[ 'post_content' ],
 			'post_status'	=> 'draft',
@@ -129,22 +142,33 @@ class Mlp_Translatable_Post_Data
 			$parent_elements = mlp_get_linked_elements( $post_data[ 'post_parent' ] );
 
 		// Create a copy of the item for every related blog
-		foreach ( $_POST[ 'mlp_to_translate' ] as $blogid ) {
+		foreach ( $_POST[ 'mlp_to_translate' ] as $blog_id ) {
 
-			if ( $blogid == get_current_blog_id() or ! blog_exists( $blogid ) )
+			if ( $blog_id == get_current_blog_id() or ! blog_exists( $blog_id ) )
 				continue;
 
-			switch_to_blog( $blogid );
+			switch_to_blog( $blog_id );
 
 			// Set the linked parent post
-			if ( ! empty ( $parent_elements ) && ! empty ( $parent_elements[ $blogid ] ) )
-				$newpost[ 'post_parent'] = $parent_elements[ $blogid ];
+			if ( ! empty ( $parent_elements ) && ! empty ( $parent_elements[ $blog_id ] ) )
+				$new_post[ 'post_parent' ] = $parent_elements[ $blog_id ];
 
-			// use filter to change postdata for every blog
-			$newpost = apply_filters( 'mlp_pre_insert_post', $newpost );
+			$this->save_context[ 'target_blog_id' ] = $blog_id;
+
+			/**
+			 * Filter post data before it is saved to the database.
+			 *
+			 * @param array $new_post
+			 * @param array $context
+			 */
+			$new_post = apply_filters(
+				'mlp_pre_insert_post',
+				$new_post,
+				$this->save_context
+			);
 
 			// Insert remote blog post
-			$remote_post_id = wp_insert_post( $newpost );
+			$remote_post_id = wp_insert_post( $new_post );
 			//echo $remote_post_id . '<br>';
 
 			if ( ! empty ( $post_meta ) )
@@ -255,10 +279,22 @@ class Mlp_Translatable_Post_Data
 	 */
 	public function update_remote_post_meta( $remote_post_id, $post_meta = array() ) {
 
-		if ( empty ( $post_meta ) )
+		/**
+		 * Filter post meta data before it is saved to the database.
+		 *
+		 * @param array $post_meta
+		 * @param array $context
+		 */
+		$new_post_meta = apply_filters(
+			'mlp_pre_insert_post_meta',
+			$post_meta,
+			$this->save_context
+		);
+
+		if ( empty ( $new_post_meta ) )
 			return;
 
-		foreach ( $post_meta as $key => $value )
+		foreach ( $new_post_meta as $key => $value )
 			update_post_meta( $remote_post_id, $key, $value );
 	}
 

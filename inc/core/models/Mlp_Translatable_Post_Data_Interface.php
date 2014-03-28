@@ -62,4 +62,14 @@ interface Mlp_Translatable_Post_Data_Interface {
 	 * @return void
 	 */
 	public function update_remote_post_meta( $remote_post_id, $post_meta = array() );
+
+	/**
+	 * Set the source id
+	 *
+	 * @param   int    $sourceid    ID of the selected element
+	 * @param   int    $source_blog ID of the selected blog
+	 * @param   string $source_type type of the selected element
+	 * @return  void
+	 */
+	public function set_source_id( $sourceid, $source_blog = 0, $source_type = '' );
 }
