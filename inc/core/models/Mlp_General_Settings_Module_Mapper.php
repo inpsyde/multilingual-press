@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
-class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface {
+class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface
+{
 
 	protected $modules;
 
@@ -9,7 +10,8 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 	/**
 	 * Constructor.
 	 */
-	public function __construct( Mlp_Module_Manager_Interface $modules ) {
+	public function __construct( Mlp_Module_Manager_Interface $modules )
+	{
 
 		$this->modules = $modules;
 	}
@@ -17,9 +19,10 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 	/**
 	 * Save module options.
 	 *
-	 * @return	void
+	 * @return    void
 	 */
-	public function update_modules() {
+	public function update_modules()
+	{
 
 		check_admin_referer( $this->nonce_action );
 
@@ -59,17 +62,21 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 
 	/**
 	 * (non-PHPdoc)
+	 *
 	 * @see Mlp_Module_Mapper_Interface::get_modules()
 	 */
-	public function get_modules( $status = 'all' ) {
+	public function get_modules( $status = 'all' )
+	{
 		return $this->modules->get_modules( $status );
 	}
 
 	/**
 	 * (non-PHPdoc)
+	 *
 	 * @see Mlp_Module_Mapper_Interface::get_nonce_action()
 	 */
-	public function get_nonce_action() {
+	public function get_nonce_action()
+	{
 		return $this->nonce_action;
 	}
 }

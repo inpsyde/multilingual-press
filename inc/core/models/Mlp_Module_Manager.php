@@ -8,7 +8,8 @@
  * @package    MultilingualPress
  * @subpackage mlp_base
  */
-class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
+class Mlp_Module_Manager implements Mlp_Module_Manager_Interface
+{
 
 	/**
 	 * Name of module option.
@@ -22,14 +23,14 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 *
 	 * @type array
 	 */
-	protected $modules = array();
+	protected $modules = array ();
 
 	/**
 	 * Activation status. Saved in option.
 	 *
 	 * @type array
 	 */
-	protected $states = array();
+	protected $states = array ();
 
 	/**
 	 * Constructor.
@@ -39,7 +40,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	public function __construct( $option_name )
 	{
 		$this->option_name = $option_name;
-		$this->states      = get_site_option( $option_name, array() );
+		$this->states      = get_site_option( $option_name, array () );
 	}
 
 	/**
@@ -47,10 +48,12 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 *
 	 * @return bool TRUE if saving was successful, FALSE if not.
 	 */
-	public function save() {
+	public function save()
+	{
 
 		$return       = update_site_option( $this->option_name, $this->states );
-		$this->states = get_site_option( $this->option_name, array() );
+		$this->states = get_site_option( $this->option_name, array () );
+
 		return $return;
 	}
 
@@ -60,7 +63,8 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * @param  array $module Required: slug, description and display_name
 	 * @return bool TRUE if the module is active, FALSE if it isn't.
 	 */
-	public function register( Array $module ) {
+	public function register( Array $module )
+	{
 
 		$slug = $module[ 'slug' ];
 
@@ -71,7 +75,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 
 		$module[ 'state' ] = $this->states[ $slug ];
 
-		$this->modules[ $slug ]  = $module;
+		$this->modules[ $slug ] = $module;
 
 		return $this->is_active( $slug );
 	}
@@ -82,12 +86,14 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * @param string $slug
 	 * @return bool
 	 */
-	public function unregister( $slug ) {
+	public function unregister( $slug )
+	{
 
 		if ( ! isset ( $this->modules[ $slug ] ) )
 			return FALSE;
 
 		unset ( $this->modules[ $slug ] );
+
 		return TRUE;
 	}
 
@@ -97,7 +103,8 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * @param  string $slug
 	 * @return bool
 	 */
-	public function is_active( $slug ) {
+	public function is_active( $slug )
+	{
 
 		if ( ! isset ( $this->states[ $slug ] ) )
 			return FALSE;
@@ -112,7 +119,8 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * @param  string $slug
 	 * @return array
 	 */
-	public function activate( $slug ) {
+	public function activate( $slug )
+	{
 		return $this->update_module( $slug, 'state', 'on' );
 	}
 
@@ -123,7 +131,8 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * @param  string $slug
 	 * @return array
 	 */
-	public function deactivate( $slug ) {
+	public function deactivate( $slug )
+	{
 		return $this->update_module( $slug, 'state', 'off' );
 	}
 
@@ -135,7 +144,8 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * @param  string $value
 	 * @return array Complete module data.
 	 */
-	public function update_module( $slug, $key, $value ) {
+	public function update_module( $slug, $key, $value )
+	{
 
 		$this->modules[ $slug ][ $key ] = $value;
 
@@ -151,7 +161,8 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * @param  string $status 'all', 'active' or 'inactive'.
 	 * @return array
 	 */
-	public function get_modules( $status = 'all' ) {
+	public function get_modules( $status = 'all' )
+	{
 
 		if ( 'all' === $status )
 			return $this->modules;
@@ -174,10 +185,11 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * @param  string $slug
 	 * @return array
 	 */
-	public function get_module( $slug ) {
+	public function get_module( $slug )
+	{
 
 		if ( ! isset ( $this->modules[ $slug ] ) )
-			return array();
+			return array ();
 
 		return $this->modules[ $slug ];
 	}
@@ -187,7 +199,8 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 *
 	 * @return bool
 	 */
-	public function has_modules() {
+	public function has_modules()
+	{
 
 		return ! empty( $this->modules );
 	}
