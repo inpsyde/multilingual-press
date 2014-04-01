@@ -4,7 +4,7 @@ Tags: l10n, i18n, bilingual, international, internationalization, lang, language
 
 Requires at least: 3.8
 Tested up to: 3.9
-Stable tag: 1.1
+Stable tag: 2.0.0
 
 Create networks with multiple languages
 
