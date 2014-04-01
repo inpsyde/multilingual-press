@@ -2,7 +2,7 @@
 	"name": "inpsyde/multilingual-press",
 	"description": "Run WordPress Multisite with multiple languages.",
 	"license": "GPL 2+",
-	"version": "1.1.1",
+	"version": "2.0.0",
 	"type": "wordpress-plugin",
 	"authors": [
 		{
