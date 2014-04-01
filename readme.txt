@@ -1,5 +1,5 @@
 === Multilingual Press ===
-Contributors: Inpsyde, Bueltge, nullbyte, hughwillfayle, paddelboot, toscho
+Contributors: Inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot
 Tags: l10n, i18n, bilingual, international, internationalization, lang, language, localization,  multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation, chinese, german, french, russian, widget
 
 Requires at least: 3.8
@@ -75,7 +75,7 @@ Use the installer via back-end of your install or ...
 
 = Will Multilingual Press translate my content? =
 
-No, it doesn't. It manages relationships between sites and translations, but it doesn't change the content.
+No, it will not. It manages relationships between sites and translations, but it doesn't change the content.
 
 = Where can I get additional language files? =
 
@@ -88,6 +88,7 @@ do that; we think this is wrong, because it creates a lock-in: you would lose
 access to your content after the plugin deactivation.
 
 == Screenshots ==
+
 1. Language Manager
 2. Site settings
 3. Post editor with translation preview
@@ -95,7 +96,7 @@ access to your content after the plugin deactivation.
 
 == Changelog ==
 
-= 2.0 =
+= 2.0.0 =
 
 - Code refactoring
 - New Language Manager with editable languages
