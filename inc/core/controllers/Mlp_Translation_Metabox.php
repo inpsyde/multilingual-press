@@ -42,6 +42,8 @@ class Mlp_Translation_Metabox {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param Inpsyde_Property_List_Interface $plugin_data
 	 */
 	public function __construct( Inpsyde_Property_List_Interface $plugin_data ) {
 
@@ -215,6 +217,7 @@ class Mlp_Translation_Metabox {
 		 *
 		 * @param array   $callbacks
 		 * @param WP_Post $post
+		 * @param int     $blog_id
 		 */
 		$callbacks = apply_filters(
 			'mlp_translation_meta_box_view_callbacks',
