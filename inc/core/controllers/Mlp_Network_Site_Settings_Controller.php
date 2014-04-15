@@ -10,9 +10,23 @@
  */
 class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 
+	/**
+	 * Plugin data
+	 *
+	 * @var Inpsyde_Property_List_Interface
+	 */
 	private $plugin_data;
+
+	/**
+	 * @var Mlp_Network_Site_Settings_Tab_Data
+	 */
 	private $tab_page_data;
+
+	/**
+	 * @var Mlp_Network_Site_Settings_Properties
+	 */
 	private $page_properties;
+
 	/**
 	 * Constructor.
 	 *
@@ -47,10 +61,20 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 			$this->create_tab_content();
 	}
 
+	/**
+	 * Load stylesheet.
+	 *
+	 * @return void
+	 */
 	public function enqueue_stylesheet() {
 		wp_enqueue_style( 'mlp-admin-css' );
 	}
 
+	/**
+	 * Combine all update actions.
+	 *
+	 * @return void
+	 */
 	public function update_settings() {
 
 		if ( ! check_admin_referer(
@@ -178,6 +202,11 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		return count( $processed );
 	}
 
+	/**
+	 * Inner markup for the tab.
+	 *
+	 * @return void
+	 */
 	private function create_tab_content() {
 
 		$this->show_update_message();
@@ -195,12 +224,17 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function get_blog_id() {
 
-		if ( ! isset ( $_REQUEST[ 'id' ] ) )
+		if ( empty ( $_REQUEST[ 'id' ] ) )
 			return get_current_blog_id();
 
 		return (int) $_REQUEST[ 'id' ];
 	}
 
+	/**
+	 * Admin notices.
+	 *
+	 * @return void
+	 */
 	private function show_update_message() {
 
 		if ( empty ( $_GET[ 'msg' ] ) or 'updated' !== $_GET[ 'msg' ] )
