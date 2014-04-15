@@ -13,14 +13,15 @@ jQuery.noConflict();
 	/**
 	 * Class Holder
 	 */
-	multilingual_press = {
+	var multilingual_press = {
 
 		/**
 		 * Initial Function
 		 */
 		init : function () {
-			this.do_blog_checkup();
+			// this.do_blog_checkup();
 			this.set_toggle();
+			this.copy_post();
 		},
 
 		/**
@@ -92,6 +93,35 @@ jQuery.noConflict();
 				toggle_container.toggle();
 
 				return false;
+			});
+		},
+
+		/**
+		 * Copy post buttons next to media buttons.
+		 */
+		copy_post: function () {
+
+			$( document ).on( "click", ".mlp_copy_button", function ( event ) {
+				event.stopPropagation();
+				event.preventDefault();
+
+				// @formatter:off
+				var blog_id = $( this ).data( "blog_id" ),
+					title   = $( "#title" ).val(),
+					content = $( "#content" ).val(),
+					prefix  = "mlp_translation_data_" + blog_id,
+					mce     = tinyMCE.get( prefix + "_content" );
+
+				if ( title )
+					$( "#" + prefix + "_title" ).val( title );
+
+				if ( content ) {
+					$( "#" + prefix + "_content" ).val( content );
+
+					if ( mce )
+						mce.setContent( content );
+				}
+				// @formatter:on
 			});
 		}
 	};
