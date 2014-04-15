@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.1
+
+- Extend return value of `Mlp_Helpers::get_blog_language()`: `lang` and
+  `language_short` return just the first part of a language tag, `language_long`
+  the complete language tag.
+- Make `get_available_languages_titles()` use the correct source, remove `language-list.php`.
+- 
+
 ## 2.0.0
 
 - Code refactoring
