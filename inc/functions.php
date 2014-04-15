@@ -18,11 +18,11 @@ function mlp_is_redirect( $blogid = FALSE ) {
  * but the one set by MlP)
  *
  * @since	0.1
- * @param  int $count
+ * @param   bool $short
  * @return	array Available languages
  */
-function mlp_get_current_blog_language( $count = 0 ) {
-	return Mlp_Helpers::get_current_blog_language( $count );
+function mlp_get_current_blog_language( $short = FALSE ) {
+	return Mlp_Helpers::get_current_blog_language( $short );
 }
 
 /**
@@ -137,12 +137,12 @@ function mlp_get_interlinked_permalinks( $element_id = 0 ) {
 /**
  * get the blog language
  *
- * @since	0.7
- * @param int $blog_id
- * @return	string Second part of language identifier
+ * @param  int  $blog_id
+ * @param  bool $short Return only the first part of the language code.
+ * @return string Second part of language identifier
  */
-function get_blog_language( $blog_id = 0 ) {
-	return Mlp_Helpers::get_blog_language( $blog_id );
+function get_blog_language( $blog_id = 0, $short = TRUE ) {
+	return Mlp_Helpers::get_blog_language( $blog_id, $short );
 }
 
 /**
