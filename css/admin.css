@@ -1,11 +1,11 @@
 /**
  * Admin CSS
- * 
+ *
  * @author		fb, rw, ms, th, toscho
  * @version     2013.09.04
  * @package		mlp
  * @subpackage	admincss
- * 
+ *
  */
 
 #multilingualpress_settings h3 {
@@ -22,7 +22,6 @@
 	color: #000;
 	background: #fff;
 	border-collapse: collapse;
-	border: 1px solid #f0f0f0;
 	border: 1px solid #ddd;
 	margin: 2em 0 0;
 	box-sizing: border-box;
@@ -30,7 +29,7 @@
 .mlp-admin-settings-table td,
 .mlp-admin-settings-table th,
 .mlp-admin-feature-table td,
-.mlp-admin-feature-table th 
+.mlp-admin-feature-table th
 {
 	vertical-align: top;
 }
@@ -43,7 +42,7 @@
 }
 .mlp-admin-feature-table label
 {
-	padding: 10px 20px 10px 0px;
+	padding: 10px 20px 10px 0;
 }
 .mlp-block-label {
 	display: block;
@@ -61,4 +60,47 @@
 }
 #mlp-cpt-settings table label {
 	padding: 5px 20px 5px 10px;
+}
+
+/* Quicklinks */
+#mlp_quicklink_position_setting label
+{
+	display:     inline-block;
+	color:       #000;
+	background:  #fff;
+	width:       120px;
+	text-align:  center;
+	border:      1px solid #eee;
+	padding:     10px;
+	margin-left: 10px;
+}
+
+#mlp_quicklink_position_setting label:hover
+{
+	background: #eee;
+}
+
+#mlp_quicklink_position_setting label:before
+{
+	content:       ' ';
+	display:       block;
+	width:         120px;
+	height:        78px;
+	margin-bottom: 10px;
+	background: url(../../images/quicklinkpositions.png) no-repeat top right #fff;
+}
+
+#mlp_quicklink_position_setting label.quicklink-position-tr:before
+{
+	background-position: top left;
+}
+
+#mlp_quicklink_position_setting label.quicklink-position-bl:before
+{
+	background-position: bottom left;
+}
+
+#mlp_quicklink_position_setting label.quicklink-position-br:before
+{
+	background-position: bottom right;
 }
