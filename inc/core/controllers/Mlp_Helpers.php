@@ -177,6 +177,8 @@ class Mlp_Helpers {
 	) {
 		global $wpdb;
 
+		static $cache = array ();
+
 		// if no element id is provides, use WP default
 		if ( ! $element_id )
 			$element_id = get_the_ID();
@@ -185,18 +187,21 @@ class Mlp_Helpers {
 		if ( 0 == $blog_id )
 			$blog_id = get_current_blog_id();
 
-		// Get linked elements
-		$results = $wpdb->get_results(
-						$wpdb->prepare(
-							 'SELECT t.ml_blogid, t.ml_elementid
-								FROM ' . self::$link_table . ' s
-					INNER JOIN ' . self::$link_table . ' t
-					ON s.ml_source_blogid = t.ml_source_blogid && s.ml_source_elementid = t.ml_source_elementid
-					WHERE s.ml_blogid = %d && s.ml_elementid = %d',
-								 $blog_id,
-								 $element_id
-						)
+		if ( isset ( $cache [ $blog_id ] ) && isset ( $cache [ $blog_id ][ $element_id ] ) )
+			return $cache [ $blog_id ][ $element_id ];
+
+		// Get linked elements @formatter:off
+		$query = $wpdb->prepare(
+			'SELECT t.ml_blogid, t.ml_elementid
+			FROM ' . self::$link_table . ' s
+			INNER JOIN ' . self::$link_table . ' t
+			ON s.ml_source_blogid = t.ml_source_blogid && s.ml_source_elementid = t.ml_source_elementid
+			WHERE s.ml_blogid = %d && s.ml_elementid = %d',
+			$blog_id,
+			$element_id
 		);
+		// @formatter:on
+		$results = $wpdb->get_results( $query );
 
 		// No linked elements? Adios.
 		if ( 0 >= count( $results ) )
@@ -205,10 +210,12 @@ class Mlp_Helpers {
 		// Walk results
 		$elements = array ();
 
-		foreach ( $results as $resultelement ) {
-			if ( $blog_id != $resultelement->ml_blogid )
-				$elements[ $resultelement->ml_blogid ] = ( int ) $resultelement->ml_elementid;
+		foreach ( $results as $result ) {
+			if ( $blog_id != $result->ml_blogid )
+				$elements[ $result->ml_blogid ] = ( int ) $result->ml_elementid;
 		}
+
+		$cache [ $blog_id ][ $element_id ] = $elements;
 
 		// Return linked elements in other blogs
 		// as an array containing blog_id => element_id
