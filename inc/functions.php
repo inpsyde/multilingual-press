@@ -42,11 +42,11 @@ function mlp_get_available_languages( $nonrelated = FALSE ) {
  * load the available language titles
  *
  * @since	0.5.3b
- * @param  bool $nonrelated
+ * @param  bool $related
  * @return	array Available languages
  */
-function mlp_get_available_languages_titles( $nonrelated = FALSE ) {
-	return Mlp_Helpers::get_available_languages_titles( $nonrelated );
+function mlp_get_available_languages_titles( $related = TRUE ) {
+	return Mlp_Helpers::get_available_languages_titles( $related );
 }
 
 /**
