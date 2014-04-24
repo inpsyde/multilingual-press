@@ -105,6 +105,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			return array ();
 
 		$options = array ();
+		$related_blogs[ ] = get_current_blog_id();
 
 		foreach ( $languages as $language_blogid => $language_data ) {
 
@@ -134,7 +135,12 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		global $wpdb;
 
+		static $cache = array ();
+
 		$iso = str_replace( '_', '-', $iso );
+
+		if ( isset ( $cache[ $iso ] ) )
+			return $cache[ $iso ];
 
 		$query  = $wpdb->prepare(
 					   "SELECT `native_name`
@@ -144,6 +150,10 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		);
 		$result = $wpdb->get_var( $query );
 
-		return NULL === $result ? '' : $result;
+		$return = NULL === $result ? '' : $result;
+
+		$cache[ $iso ] = $return;
+
+		return $cache[ $iso ];
 	}
 }

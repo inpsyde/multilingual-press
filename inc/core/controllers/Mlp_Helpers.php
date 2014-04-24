@@ -429,7 +429,7 @@ class Mlp_Helpers {
 
 		$output          = '';
 		$languages       = mlp_get_available_languages();
-		$language_titles = mlp_get_available_languages_titles( TRUE );
+		$language_titles = mlp_get_available_languages_titles();
 
 		if ( ! ( 0 < count( $languages ) ) )
 			return $output;
@@ -468,6 +468,7 @@ class Mlp_Helpers {
 			asort( $languages );
 
 		$output .= '<div class="mlp_language_box"><ul>';
+		$title = mlp_get_available_languages_titles();
 
 		foreach ( $languages as $language_blog => $language_string ) {
 
@@ -478,7 +479,6 @@ class Mlp_Helpers {
 			// Get params
 			$flag       = mlp_get_language_flag( $language_blog );
 			$dimensions = self::get_flag_dimension_attributes( $flag );
-			$title      = mlp_get_available_languages_titles( TRUE );
 			$flag_img   = '<img src="' . $flag . '" alt="' . $languages[ $language_blog ] . '" title="' . $title[ $language_blog ] . '"' . $dimensions . ' />';
 
 
