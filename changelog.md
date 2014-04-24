@@ -1,12 +1,27 @@
 # Changelog
 
+## 2.0.3
+
+- Show current site in mlp_get_available_languages_titles() with proper
+  language name.
+
+## 2.0.2
+
+- Add check to Quicklink to avoid broken links.
+- Avoid notice when duplicating blogs with broken attachments.
+
+
 ## 2.0.1
 
+- Bring Quicklink options back.
+- Add a button to the translation metabox to copy the source post.
 - Extend return value of `Mlp_Helpers::get_blog_language()`: `lang` and
   `language_short` return just the first part of a language tag, `language_long`
   the complete language tag.
-- Make `get_available_languages_titles()` use the correct source, remove `language-list.php`.
-- Better doc blocks and default values to avoid notices.
+- Include post status `private` in relationship changer.
+- Make `get_available_languages_titles()` use the correct source.
+- Remove `language-list.php`.
+
 
 ## 2.0.0
 
