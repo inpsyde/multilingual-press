@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.3
+
+- Show current site in mlp_get_available_languages_titles() with proper
+  language name.
+
+## 2.0.2
+
+- Add check to Quicklink to avoid broken links.
+- Avoid notice when duplicating blogs with broken attachments.
+
+
 ## 2.0.1
 
 - Extend return value of `Mlp_Helpers::get_blog_language()`: `lang` and
