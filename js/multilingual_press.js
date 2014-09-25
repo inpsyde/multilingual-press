@@ -1,5 +1,5 @@
 /**
- * jQuery Library for Multilingual Press
+ * jQuery Library for MultilingualPress
  *
  * @version        2014.03.24
  * @package		mlp
@@ -102,24 +102,22 @@ jQuery.noConflict();
 		copy_post: function () {
 
 			$( document ).on( "click", ".mlp_copy_button", function ( event ) {
-				event.stopPropagation();
 				event.preventDefault();
 
 				// @formatter:off
-				var blog_id = $( this ).data( "blog_id" ),
-					title   = $( "#title" ).val(),
-					content = $( "#content" ).val(),
-					prefix  = "mlp_translation_data_" + blog_id,
-					mce     = tinyMCE.get( prefix + "_content" );
+				var blog_id		= $( this ).data( "blog_id" ),
+					prefix		= "mlp_translation_data_" + blog_id,
+					mce 		= tinyMCE.get( prefix + "_content" ),
+					content		= $( '#content' ).val(), // plain content for "text"-view
+					title		= $( "#title" ).val()
+				;
 
 				if ( title )
 					$( "#" + prefix + "_title" ).val( title );
 
 				if ( content ) {
 					$( "#" + prefix + "_content" ).val( content );
-
-					if ( mce )
-						mce.setContent( content );
+					mce.setContent( content );
 				}
 				// @formatter:on
 			});
