@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Multilingual Press Pro v2.0.0\n"
+"Project-Id-Version: MultilingualPress Pro v2.1.0.RC.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-10 16:09:26+0000\n"
+"PO-Revision-Date: 2014-09-23 10:38:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,194 +20,168 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: inc/Multilingual_Press.php:639
+#: inc/Multilingual_Press.php:553
 #@ multilingualpress
 msgid "All done!"
 msgstr "Alles erledigt!"
 
-#: inc/core/controllers/Mlp_Widget.php:109
+#: inc/core/common/Mlp_Widget.php:83
 #@ multilingualpress
 msgid "Flag"
 msgstr "Flagge"
 
-#: inc/Multilingual_Press.php:389
-#: inc/core/controllers/Mlp_General_Settingspage.php:51
-#: inc/core/controllers/Mlp_General_Settingspage.php:52
-#: inc/core/models/Mlp_Network_Site_Settings_Properties.php:24
-#@ multilingualpress
-msgid "Multilingual Press"
-msgstr "Multilingual Press"
-
-#: inc/core/views/Mlp_Translation_Metabox_View.php:181
-#: inc/pro/controllers/Mlp_Cpt_Translator.php:265
+#: inc/core/post-translator/Mlp_Translation_Metabox_View.php:181
+#: inc/pro/advanced-translator/Mlp_Cpt_Translator.php:273
 #@ multilingualpress
 msgid "Translate this post"
 msgstr "Beitrag übersetzen"
 
-#: inc/Multilingual_Press.php:571
+#: inc/Multilingual_Press.php:492
 #@ multilingualpress
 msgid "Cleanup runs. Please stand by."
 msgstr "Überprüfung läuft. Bitte warten."
 
-#: inc/core/controllers/Mlp_Widget.php:108
+#: inc/core/common/Mlp_Widget.php:82
 #@ multilingualpress
 msgid "Text"
 msgstr "Text"
 
-#: inc/core/controllers/Mlp_Widget.php:110
+#: inc/core/common/Mlp_Widget.php:84
 #@ multilingualpress
 msgid "Text &amp; Flag"
 msgstr "Text & Flagge"
 
-#: inc/core/controllers/Mlp_Widget.php:111
+#: inc/core/common/Mlp_Widget.php:85
 #@ multilingualpress
 msgid "Language code"
 msgstr "Sprachcode"
 
-#: inc/core/views/Mlp_Network_Site_Settings_Tab_Content.php:66
+#: inc/core/nav-menu/Mlp_Language_Nav_Menu_Data.php:202
+#: inc/core/nav-menu/Mlp_Language_Nav_Menu_Data.php:229
+#: inc/core/site-settings/Mlp_Network_Site_Settings_Tab_Content.php:117
+#: inc/core/site-settings/Mlp_New_Site_View.php:45
 #@ multilingualpress
 msgid "Language"
 msgstr "Sprache"
 
-#: inc/core/views/Mlp_Network_Site_Settings_Tab_Content.php:72
+#: inc/core/site-settings/Mlp_Network_Site_Settings_Tab_Content.php:123
 #@ multilingualpress
 msgid "choose language"
 msgstr "Sprache w&auml;hlen"
 
-#: inc/core/controllers/Mlp_Helpers.php:329
+#: inc/core/common/Mlp_Helpers.php:261
 #@ multilingualpress
 msgid "Empty Element"
 msgstr "Leeres Element"
 
-#: inc/core/controllers/Mlp_Helpers.php:332
+#: inc/core/common/Mlp_Helpers.php:264
 #@ multilingualpress
 msgid "Empty Type"
 msgstr "Leerer Typ"
 
-#: inc/core/controllers/Mlp_Helpers.php:335
+#: inc/core/common/Mlp_Helpers.php:267
 #@ multilingualpress
 msgid "Invalid Hook"
 msgstr "Ungültiger Hook"
 
-#: inc/pro/controllers/Mlp_Redirect.php:454
+#: inc/pro/redirect/Mlp_Redirect_Column.php:81
 #@ multilingualpress
 msgid "Redirect"
 msgstr "Weiterleiten"
 
-#: inc/pro/views/Mlp_Advanced_Translator_View.php:229
+#: inc/pro/advanced-translator/Mlp_Advanced_Translator_View.php:231
 #@ multilingualpress
 msgid "Enter title here"
 msgstr "Gib hier den Titel ein."
 
-#: inc/pro/controllers/Mlp_Trasher.php:60
-#@ multilingualpress
-msgid "This module provides a new post meta and checkbox to trash the posts. If you enable the checkbox and move a post to the trash Multilingual Press also will trash the linked posts."
-msgstr "Dieses Modul bringt neue Beitragsmetadaten und Checkboxen, um den Beitrag in den Papierkorb zu verschieben. Falls du die Checkbox aktivierst und den Beitrag dann in den Papierkorb verschiebst, löscht Multilingual Press auch den verknüpften Beitrag in anderen Sprachen."
-
-#: inc/pro/controllers/Mlp_Auto_Update.php:298
+#: inc/pro/controllers/Mlp_Auto_Update.php:302
 #@ multilingualpress
 msgid "You are currently using a valid key for this plugin. You are able to renew the key in the MarketPress Dashboard. Or if you want to add an other valid code use the form below."
 msgstr "Du verwendest aktuell einen gültigen Schlüssel für dieses Plugin. Du kannst den Schlüssel im MarketPress-Dashboard erneuern oder im Feld unten einen anderen gültigen Schlüssel hinterlegen."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:319
+#: inc/pro/controllers/Mlp_Auto_Update.php:323
 #, php-format
 #@ multilingualpress
 msgid "You are currently using a valid key for this plugin. You are able to renew the key below or you can delete the key by <a href=\"%s\">clicking here</a>."
 msgstr "Du verwendest einen gültigen Schlüssel für dieses Plugin. Du kannst den Schlüssel im Feld unten erneuern oder <a href=\"%s\">löschen</a>"
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:326
+#: inc/pro/controllers/Mlp_Auto_Update.php:330
 #@ multilingualpress
 msgid "License Key"
 msgstr "Lizenzschlüssel"
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:329
+#: inc/pro/controllers/Mlp_Auto_Update.php:333
 #@ multilingualpress
 msgid "Activate"
 msgstr "Aktivieren"
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:500
+#: inc/pro/controllers/Mlp_Auto_Update.php:502
 #@ multilingualpress
 msgid "The License has been deleted."
 msgstr "Die Lizenz wurde gelöscht."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:507
+#: inc/pro/controllers/Mlp_Auto_Update.php:509
 #@ multilingualpress
 msgid "Plugin successfully activated."
 msgstr "Plugin erfolgreich aktiviert."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:514
+#: inc/pro/controllers/Mlp_Auto_Update.php:516
 #@ multilingualpress
 msgid "The entered license key is wrong."
 msgstr "Der eingegebene Lizenzschlüssel ist falsch."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:521
+#: inc/pro/controllers/Mlp_Auto_Update.php:523
 #@ multilingualpress
 msgid "You have reached the limit of urls. Please update your license at <a href=\"http://marketpress.com\">marketpress.com</a>."
 msgstr "Du hast das Limit der URLs erreicht. Bitte aktualisiere deine Lizenz auf  <a href=\"http://marketpress.de\">marketpress.de</a>."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:528
+#: inc/pro/controllers/Mlp_Auto_Update.php:530
 #@ multilingualpress
 msgid "Something went wrong. Please try again later or contact the <a href=\"http://marketpress.com/support/\">marketpress team</a>."
 msgstr "Irgendwas lief falsch. Bitte versuche es erneut oder kontaktiere das <a href=\"http://marketpress.de/support/\">MarketPress-Team</a>."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:535
+#: inc/pro/controllers/Mlp_Auto_Update.php:537
 #@ multilingualpress
 msgid "Due to a wrong license you are not allowed to activate this plugin. Please update your license at <a href=\"http://marketpress.com\">marketpress.com</a>."
 msgstr "Wegen eines falschen Lizenzschlüssels darfst du das Plugin leider nicht aktivieren. Bitte aktualisiere deine Lizenz auf <a href=\"http://marketpress.de\">marketpress.de</a>."
 
-#: inc/pro/models/Mlp_Quicklink_Positions_Data.php:155
+#: inc/pro/quicklink/Mlp_Quicklink_Positions_Data.php:155
 #@ multilingualpress
 msgid "Top left"
 msgstr "Oben links"
 
-#: inc/pro/models/Mlp_Quicklink_Positions_Data.php:156
+#: inc/pro/quicklink/Mlp_Quicklink_Positions_Data.php:156
 #@ multilingualpress
 msgid "Top right"
 msgstr "Oben rechts"
 
-#: inc/pro/models/Mlp_Quicklink_Positions_Data.php:157
+#: inc/pro/quicklink/Mlp_Quicklink_Positions_Data.php:157
 #@ multilingualpress
 msgid "Bottom left"
 msgstr "Unten links"
 
-#: inc/pro/models/Mlp_Quicklink_Positions_Data.php:158
+#: inc/pro/quicklink/Mlp_Quicklink_Positions_Data.php:158
 #@ multilingualpress
 msgid "Bottom right"
 msgstr "Unten rechts"
 
-#: inc/pro/controllers/Mlp_Dashboard_Widget.php:127
+#: inc/pro/controllers/Mlp_Dashboard_Widget.php:113
 #@ multilingualpress
 msgid "Pending Translations for"
 msgstr "Offene Übersetzungen für"
 
-#: inc/pro/controllers/Mlp_Dashboard_Widget.php:144
+#: inc/pro/controllers/Mlp_Dashboard_Widget.php:130
 #@ multilingualpress
 msgid "Translate"
 msgstr "Übersetzen"
 
-#: inc/pro/controllers/Mlp_Default_Actions.php:71
-#: inc/pro/controllers/Mlp_Default_Actions.php:110
-#@ multilingualpress
-msgid "Default Actions"
-msgstr "Standardaktionen"
-
-#: inc/pro/controllers/Mlp_Default_Actions.php:116
-#@ multilingualpress
-msgid "Always translate posts"
-msgstr "Alle Beiträge übersetzen"
-
-#: inc/pro/controllers/Mlp_Default_Actions.php:120
-#@ multilingualpress
-msgid "Always enable the \"Translate this post\" checkbox"
-msgstr "Die Checkbox »Diesen Beitrag übersetzen« immer aktivieren."
-
-#: inc/pro/controllers/Mlp_Quicklink.php:273
+#: inc/pro/quicklink/Mlp_Quicklink.php:270
 #@ multilingualpress
 msgctxt "Quicklink label"
 msgid "Read in:"
 msgstr "Lies auf:"
 
-#: inc/pro/controllers/Mlp_Quicklink.php:288
+#: inc/pro/quicklink/Mlp_Quicklink.php:285
 #@ multilingualpress
 msgctxt "quicklink submit button"
 msgid "Go"
@@ -225,7 +199,7 @@ msgstr "Inpsyde GmbH"
 msgid "http://inpsyde.com"
 msgstr "http://inpsyde.com/de/"
 
-#: inc/core/views/Mlp_Translation_Metabox_View.php:208
+#: inc/core/post-translator/Mlp_Translation_Metabox_View.php:208
 #@ multilingualpress
 msgid "http://marketpress.com/product/multilingual-press-pro/"
 msgstr "http://marketpress.de/product/multilingual-press-pro/"
@@ -236,43 +210,38 @@ msgstr "http://marketpress.de/product/multilingual-press-pro/"
 msgid "Run WordPress Multisite with multiple languages."
 msgstr "WordPress Multisite mit mehreren Sprachen verwenden."
 
-#: inc/pro/controllers/Mlp_Dashboard_Widget.php:93
+#: inc/pro/controllers/Mlp_Dashboard_Widget.php:79
 #@ multilingualpress
 msgid "Untranslated Posts"
 msgstr "Unübersetzte Beiträge"
 
-#: inc/pro/models/Mlp_Cpt_Translator_Extra_General_Settings_Box_Data.php:117
+#: inc/pro/advanced-translator/Mlp_Cpt_Translator_Extra_General_Settings_Box_Data.php:117
 #@ multilingualpress
 msgid "Use dynamic permalinks"
 msgstr "Benutze dynamische Permalinks"
 
-#: inc/Multilingual_Press.php:545
-#@ multilingualpress
-msgid "We found invalid Multilingual Press Data in your System. <a href=\"#\" id=\"multilingual_press_checkup_link\">Please try a repair.</a>"
-msgstr "Wir haben ungültige Multilingual-Press-Daten in deinem System gefunden. <a href=\\\"#\\\" id=\\\"multilingual_press_checkup_link\\\">Bitte versuche eine Reparatur.</a>"
-
-#: inc/Multilingual_Press.php:627
+#: inc/Multilingual_Press.php:541
 #@ multilingualpress
 msgid "Relationships have been deleted."
 msgstr "Verknüpfungen wurden aufgehoben."
 
-#: inc/core/controllers/Mlp_General_Settingspage.php:91
-#: inc/core/controllers/Mlp_Network_Site_Settings_Controller.php:209
+#: inc/core/general-settings/Mlp_General_Settingspage.php:98
+#: inc/core/site-settings/Mlp_Network_Site_Settings_Controller.php:212
 #@ multilingualpress
 msgid "Settings saved."
 msgstr "Einstellungen gespeichert."
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:37
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:73
 #@ multilingualpress
 msgid "Language Manager"
 msgstr "Sprachverwaltung"
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:134
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:179
 #@ multilingualpress
 msgid "Reset table to default values"
 msgstr "Tabelle auf Ursprungswerte zurücksetzen"
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:178
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:234
 #, php-format
 #@ multilingualpress
 msgid "One language changed."
@@ -280,146 +249,138 @@ msgid_plural "%s languages changed."
 msgstr[0] "Eine Sprache geändert."
 msgstr[1] "%s Sprachen geändert."
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:188
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:244
 #@ multilingualpress
 msgid "Table reset to default values."
 msgstr "Tabelle wurde auf die Ursprungswerte zurückgesetzt."
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:212
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:271
 #@ multilingualpress
 msgid "If you change the priority of a language to a higher value, it will show up on an earlier page."
 msgstr "Je höher die Priorität einer Sprache, desto weiter oben erscheint sie auf dieser Seite."
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:271
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:339
 #@ multilingualpress
 msgid "Native name"
 msgstr "Nativer Name"
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:278
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:346
 #@ multilingualpress
 msgid "English name"
 msgstr "Englischer Name"
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:285
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:353
 #@ multilingualpress
 msgid "RTL"
 msgstr "RTL"
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:292
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:360
 #@ multilingualpress
 msgid "HTTP"
 msgstr "HTTP"
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:299
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:367
 #@ multilingualpress
 msgid "ISO&#160;639-1"
 msgstr "ISO&#160;639-1"
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:306
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:374
 #@ multilingualpress
 msgid "ISO&#160;639-2"
 msgstr "ISO&#160;639-2"
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:313
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:381
 #@ multilingualpress
 msgid "wp_locale"
 msgstr "wp_locale"
 
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:320
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:388
 #@ multilingualpress
 msgid "Priority"
 msgstr "Priorität"
 
-#: inc/core/controllers/Mlp_Widget.php:65
+#: inc/core/common/Mlp_Widget.php:62
 #@ multilingualpress
 msgid "Title"
 msgstr "Titel"
 
-#: inc/core/controllers/Mlp_Widget.php:74
-#@ multilingualpress
-msgid "Sort by"
-msgstr "Sortiere nach"
-
-#: inc/core/controllers/Mlp_Widget.php:79
-#@ multilingualpress
-msgid "Name"
-msgstr "Name"
-
-#: inc/core/controllers/Mlp_Widget.php:101
+#: inc/core/common/Mlp_Widget.php:75
 #@ multilingualpress
 msgid "Link text"
 msgstr "Linktext"
 
-#: inc/core/controllers/Mlp_Widget.php:138
+#: inc/core/common/Mlp_Widget.php:112
 #@ multilingualpress
 msgid "Show current site"
 msgstr "Zeige aktuelle Site"
 
-#: inc/core/views/Mlp_Admin_Table_View.php:52
+#: inc/core/language-manager/Mlp_Admin_Table_View.php:102
 #@ multilingualpress
 msgid "No items found. We recommend to reinstall this plugin."
 msgstr "Keine Einträge gefunden. Wir empfehlen, das Plugin erneut zu installieren."
 
-#: inc/core/views/Mlp_General_Settings_View.php:73
-#: inc/core/views/Mlp_Language_Manager_Page_View.php:47
+#: inc/core/general-settings/Mlp_General_Settings_View.php:79
+#: inc/core/language-manager/Mlp_Language_Manager_Page_View.php:67
 #@ multilingualpress
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
-#: inc/core/views/Mlp_General_Settings_View.php:123
+#: inc/core/general-settings/Mlp_General_Settings_View.php:129
 #@ multilingualpress
 msgid "http://marketpress.com/"
 msgstr "http://marketpress.de/"
 
-#: inc/core/views/Mlp_General_Settings_View.php:124
+#: inc/core/general-settings/Mlp_General_Settings_View.php:130
 #@ multilingualpress
 msgid "http://inpsyde.com/"
 msgstr "http://inpsyde.com/de/"
 
-#: inc/core/views/Mlp_Network_Site_Settings_Tab_Content.php:108
+#: inc/core/site-settings/Mlp_Network_Site_Settings_Tab_Content.php:159
 #@ multilingualpress
 msgid "Flag image URL"
 msgstr "Flaggen-URL"
 
-#: inc/core/feature.connection_column.php:10
-#: inc/core/views/Mlp_Network_Site_Settings_Tab_Content.php:157
+#: inc/core/feature.connection_column.php:13
+#: inc/core/site-settings/Mlp_Network_Site_Settings_Tab_Content.php:212
+#: inc/core/site-settings/Mlp_New_Site_View.php:89
 #@ multilingualpress
 msgid "Relationships"
 msgstr "Verknüpfungen"
 
-#: inc/core/views/Mlp_Network_Site_Settings_Tab_Content.php:188
+#: inc/core/site-settings/Mlp_Network_Site_Settings_Tab_Content.php:242
+#: inc/core/site-settings/Mlp_New_Site_View.php:119
 #@ multilingualpress
 msgid "You can connect this site only to sites with an assigned language. Other sites will not show up here."
 msgstr "Du kannst diese Site nur mit solchen verknüpfen, denen du eine Sprache zugewiesen hast. Andere Sites sind hier nicht sichtbar."
 
-#: inc/core/views/Mlp_Table_Pagination_View.php:155
+#: inc/core/language-manager/Mlp_Table_Pagination_View.php:157
 #, php-format
 #@ multilingualpress
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr "%1$s von %2$s"
 
-#: inc/core/views/Mlp_Table_Pagination_View.php:171
+#: inc/core/language-manager/Mlp_Table_Pagination_View.php:173
 #@ multilingualpress
 msgid "Go to the last page"
 msgstr "Gehe zur letzten Seite"
 
-#: inc/core/views/Mlp_Table_Pagination_View.php:188
+#: inc/core/language-manager/Mlp_Table_Pagination_View.php:190
 #@ multilingualpress
 msgid "Go to the next page"
 msgstr "Gehe zur nächsten Seite"
 
-#: inc/core/views/Mlp_Table_Pagination_View.php:203
+#: inc/core/language-manager/Mlp_Table_Pagination_View.php:205
 #@ multilingualpress
 msgid "Go to the previous page"
 msgstr "Gehe zur vorherigen Seite"
 
-#: inc/core/views/Mlp_Table_Pagination_View.php:218
+#: inc/core/language-manager/Mlp_Table_Pagination_View.php:220
 #@ multilingualpress
 msgid "Go to the first page"
 msgstr "Gehe zur ersten Seite"
 
-#: inc/core/views/Mlp_Table_Pagination_View.php:247
+#: inc/core/language-manager/Mlp_Table_Pagination_View.php:249
 #, php-format
 #@ multilingualpress
 msgid "1 item"
@@ -427,257 +388,198 @@ msgid_plural "%s items"
 msgstr[0] "Ein Eintrag"
 msgstr[1] "%s Einträge"
 
-#: inc/pro/controllers/Mlp_Advanced_Translator.php:164
+#: inc/pro/advanced-translator/Mlp_Advanced_Translator.php:183
 #@ multilingualpress
 msgid "Advanced Translator"
 msgstr "Erweiterte Übersetzungsfunktionen"
 
-#: inc/pro/controllers/Mlp_Cpt_Translator.php:85
+#: inc/pro/advanced-translator/Mlp_Cpt_Translator.php:85
 #@ multilingualpress
 msgid "Enable translation of custom post types. Creates a second settings box below this. The post types must be activated for the whole network or on the main site."
 msgstr "Übersetze eigene Posttypen. Ist diese Funktion aktiviert, erscheint unter den Posttypen eine zusätzliche Einstellungsbox. Die Posttypen müssen dazu für das gesamte Netzwerk aktiviert werden oder zumindest in der Hauptsite."
 
-#: inc/pro/controllers/Mlp_Cpt_Translator.php:91
+#: inc/pro/advanced-translator/Mlp_Cpt_Translator.php:91
 #@ multilingualpress
 msgid "Custom Post Type Translator"
 msgstr "Custom-Posttype-Übersetzer"
 
-#: inc/pro/controllers/Mlp_Cpt_Translator.php:110
+#: inc/pro/advanced-translator/Mlp_Cpt_Translator.php:110
 #@ multilingualpress
 msgid "No custom post type found."
 msgstr "Keine eigenen Posttypen gefunden"
 
-#: inc/pro/models/Mlp_Cpt_Translator_Extra_General_Settings_Box_Data.php:51
+#: inc/pro/advanced-translator/Mlp_Cpt_Translator_Extra_General_Settings_Box_Data.php:51
 #@ multilingualpress
 msgid "Custom Post Type Translator Settings"
 msgstr "Einstellungen für den Custom-Posttype-Übersetzer"
 
-#: inc/pro/controllers/Mlp_Dashboard_Widget.php:74
+#: inc/pro/controllers/Mlp_Dashboard_Widget.php:60
 #@ multilingualpress
 msgid "Translation completed"
 msgstr "Übersetzung abgeschlossen"
 
-#: inc/pro/controllers/Mlp_Quicklink.php:62
+#: inc/pro/quicklink/Mlp_Quicklink.php:72
 #@ multilingualpress
 msgid "Show link to translations in post content."
 msgstr "Zeige Links zu vorhandenen Übersetzungen direkt innerhalb des Beitrags."
 
-#: inc/pro/controllers/Mlp_Quicklink.php:68
+#: inc/pro/quicklink/Mlp_Quicklink.php:78
 #@ multilingualpress
 msgid "Quicklink"
 msgstr "Quicklink"
 
-#: inc/pro/controllers/Mlp_Redirect.php:65
+#: inc/pro/redirect/Mlp_Redirect_Registration.php:35
 #@ multilingualpress
 msgid "Redirect visitors according to browser language settings."
 msgstr "Leite Besucher anhand ihrer Browsereinstellung direkt zur passenden Übersetzung um."
 
-#: inc/pro/controllers/Mlp_Redirect.php:71
+#: inc/pro/redirect/Mlp_Redirect_Registration.php:40
 #@ multilingualpress
 msgid "HTTP Redirect"
 msgstr "HTTP-Weiterleitung"
 
-#: inc/pro/controllers/Mlp_Redirect.php:494
+#: inc/pro/redirect/Mlp_Redirect_Site_Settings_Form.php:42
 #@ multilingualpress
 msgid "Enable automatic redirection"
 msgstr "Aktiviere automatische Weiterleitung"
 
-#: inc/pro/controllers/Mlp_Redirect.php:499
+#: inc/pro/redirect/Mlp_Redirect_Site_Settings_Form.php:47
 #@ multilingualpress
 msgid "Redirection"
 msgstr "Weiterleitung"
 
-#: inc/pro/controllers/Mlp_Trasher.php:66
+#: inc/pro/controllers/Mlp_Trasher.php:61
 #@ multilingualpress
 msgid "Trasher"
 msgstr "Kombinierter Papierkorb"
 
-#: inc/pro/controllers/Mlp_Trasher.php:96
+#: inc/pro/controllers/Mlp_Trasher.php:91
 #@ multilingualpress
 msgid "Send all the translations to trash when this post is trashed."
 msgstr "Schiebe alle Übersetzungen in den Papierkorb, wenn dieser Beitrag gelöscht wird."
 
-#: inc/pro/controllers/Mlp_User_Backend_Language.php:85
+#: inc/pro/user-backend-language/Mlp_User_Backend_Language.php:88
 #@ multilingualpress
 msgid "User Backend Language"
 msgstr "Nutzersprache in der Administration"
 
-#: inc/pro/controllers/Mlp_User_Backend_Language.php:72
+#: inc/pro/user-backend-language/Mlp_User_Backend_Language.php:75
 #@ multilingualpress
 msgid "Let each user choose a preferred language for the backend of all connected sites. Does not affect the frontend."
 msgstr "Lasse den Nutzer jeden die Sprache aussuchen, die er in der Administration aller Sites verwenden möchte. Dies beeinflusst nicht das Frontend."
 
-#: inc/pro/controllers/Mlp_User_Backend_Language.php:107
+#: inc/pro/user-backend-language/Mlp_User_Backend_Language.php:114
 #@ multilingualpress
 msgid "Your preferred backend language"
 msgstr "Deine bevorzugte Sprache in der Administration."
 
-#. translators: plugin header field 'Name'
-#: multilingual-press.php:0
-#@ multilingualpress
-msgid "Multilingual Press Pro"
-msgstr "Multilingual Press Pro"
-
-#: inc/core/feature.connection_column.php:28
+#: inc/core/feature.connection_column.php:36
 #@ multilingualpress
 msgid "none"
 msgstr "nichts"
 
-#: inc/Multilingual_Press.php:514
-#, php-format
-#@ multilingualpress
-msgid "Multilingual Press needs a <a href=\"%s\">multisite installation</a>."
-msgstr "Multilingual Press braucht eine <a href=\\\"%s\\\">Multisite-Installation</a>."
-
-#: inc/Multilingual_Press.php:519
-#@ multilingualpress
-msgid "http://codex.wordpress.org/Create_A_Network"
-msgstr "http://codex.wordpress.org/Create_A_Network"
-
-#: inc/core/controllers/Mlp_Language_Manager_Controller.php:204
+#: inc/core/language-manager/Mlp_Language_Manager_Controller.php:263
 #@ multilingualpress
 msgid "Languages are sorted descending by priority and ascending by their English name."
 msgstr "Sprachen werden absteigend nach Priorität sortiert und aufsteigend nach ihrem englischen Namen."
 
-#: inc/pro/controllers/Mlp_Duplicate_Blogs.php:53
-#@ multilingualpress
-msgid "Duplicate Site"
-msgstr "Seite duplizieren"
-
-#: inc/pro/models/Mlp_Cpt_Translator_Extra_General_Settings_Box_Data.php:63
-#@ multilingualpress
-msgid "In some cases the correct pretty permalinks are not available across multiple sites. Test it, and activate dynamic permalinks for those post types to avoid 404 errors. This will not change the permalink settings, just the URLs in Multilingual Press."
-msgstr "In einigen Fällen funktionieren die korrekten Permalinks nicht Seiten-übergreifend. Probiere das bitte aus, und schalte dynamische Permalinks an für die betroffenen Posttypen, um 404-Fehler zu vermeiden. Dies ändert nicht die allgemeinen Permalinkeinstellungen, nur die Handhabung in Multilingual Press."
-
-#: inc/core/controllers/Mlp_Widget.php:80
-#@ multilingualpress
-msgid "Site ID"
-msgstr "Site-ID"
-
-#: inc/core/controllers/Mlp_Widget.php:154
+#: inc/core/common/Mlp_Widget.php:151
 #@ default
 msgid "mlp_widget_title"
 msgstr ""
 
-#: inc/Multilingual_Press.php:670
-#@ multilingualpress
-msgid "You didn't setup any site relationships. You have to setup these first to use Multilingual Press. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab Multilingual Press and set up the relationships."
-msgstr "Du hast noch keine Seiten-Verknüpfungen angelegt. Bitte tu das, um Multilingual Press benutzen zu können. Gehe bitte zu Netzwerkverwaltung/Seiten und wähle eine Seite zum Bearbeiten aus. dann gehe in den Reiter Multilingual Press und setze die Verknüpfungen."
-
-#: inc/core/controllers/Mlp_Translation_Metabox.php:272
+#: inc/core/post-translator/Mlp_Translation_Metabox.php:295
 #@ multilingualpress
 msgid "Switch to site"
 msgstr "Zur Seite wechseln"
 
-#: inc/core/controllers/Mlp_Widget.php:23
-#@ multilingualpress
-msgid "Multilingual Press Translations"
-msgstr "Multilingual Press Übersetzungen"
-
-#: inc/core/controllers/Mlp_Widget.php:28
+#: inc/core/common/Mlp_Widget.php:25
 #@ multilingualpress
 msgid "Language Switcher"
 msgstr "Sprachwechsler"
 
-#: inc/core/views/Mlp_Translation_Metabox_View.php:159
+#: inc/core/post-translator/Mlp_Translation_Metabox_View.php:159
 #@ multilingualpress
 msgctxt "placeholder for empty translation textarea"
 msgid "No content yet."
 msgstr "Noch keine Inhalte."
 
-#: inc/core/views/Mlp_Translation_Metabox_View.php:202
-#, php-format
-#@ multilingualpress
-msgctxt "%s = link to Multilingual Press Pro"
-msgid "In <a href=\"%s\">Multilingual Press Pro</a>, you can edit the translation right here, copy the featured image, set tags and categories, and you can change the translation relationship."
-msgstr "In <a href=\\\"%s\\\">Multilingual Press Pro</a> kannst du die Übersetzung gleich hier bearbeiten, das Beitragsbild kopieren, Schlagwörter, Kategorien und eigene Taxonomien setzen und die Beziehung zu anderen Beiträgen nachträglich ändern."
-
-#: inc/pro/controllers/Mlp_Advanced_Translator.php:158
+#: inc/pro/advanced-translator/Mlp_Advanced_Translator.php:177
 #@ multilingualpress
 msgid "Use the WYSIWYG editor to write all translations on one screen, including thumbnails and taxonomies."
 msgstr "Benutze den WYSIWYG-Editor, um alle Übersetzungen auf einer Seite zu schreiben, einschließlich der Beitragsbilder und Taxonomien."
 
-#: inc/pro/views/Mlp_Advanced_Translator_View.php:123
+#: inc/pro/advanced-translator/Mlp_Advanced_Translator_View.php:125
 #@ multilingualpress
 msgid "Copy the featured image of the source post."
 msgstr "Kopiere das Beitragsbild des Ursprungsbeitrages."
 
-#: inc/pro/controllers/Mlp_Dashboard_Widget.php:113
+#: inc/pro/controllers/Mlp_Dashboard_Widget.php:99
 #@ multilingualpress
 msgid "Sorry, there are no connected sites in the system for this site."
 msgstr "Bedaure, es gibt keine verknüpften Seiten im System für diese Seite."
 
-#: inc/pro/controllers/Mlp_Default_Actions.php:89
-#@ multilingualpress
-msgid "Set default actions for every site."
-msgstr "Setze allgemeine Aktionen für jede Seite im Netzwerk."
-
-#: inc/pro/controllers/Mlp_Duplicate_Blogs.php:47
-#@ multilingualpress
-msgid "Create a new site and copy all data from the old site into the new and replace the old siteurl."
-msgstr "Erstelle eine neue Multisite-Seite, kopiere alle Daten von der alten Seite in die neue Seite, und ersetze die alte Seiten-URL."
-
-#: inc/pro/controllers/Mlp_Duplicate_Blogs.php:309
+#: inc/pro/copy-site/Mlp_Duplicate_Blogs.php:343
 #@ multilingualpress
 msgid "Choose site"
 msgstr "Wähle eine Seite"
 
-#: inc/pro/controllers/Mlp_Duplicate_Blogs.php:323
+#: inc/pro/copy-site/Mlp_Duplicate_Blogs.php:360
 #@ multilingualpress
 msgid "Based on site"
 msgstr "Basierend auf der Seite:"
 
-#: inc/pro/controllers/Mlp_User_Backend_Language.php:181
+#: inc/pro/user-backend-language/Mlp_User_Backend_Language.php:188
 #@ default
 msgid "Site Language"
 msgstr ""
 
-#: inc/pro/controllers/Mlp_User_Backend_Language.php:189
+#: inc/pro/user-backend-language/Mlp_User_Backend_Language.php:196
 #@ default
 msgid "English"
 msgstr ""
 
-#: inc/pro/views/Mlp_Advanced_Translator_View.php:125
+#: inc/pro/advanced-translator/Mlp_Advanced_Translator_View.php:127
 #@ multilingualpress
 msgid "Overwrites an existing featured image in the target post."
 msgstr "Überschreibt ein bestehendes Beitragsbild in der Übersetzung."
 
-#: inc/pro/views/Mlp_Relationship_Control_Ajax_Search.php:54
+#: inc/pro/relationship-control/Mlp_Relationship_Control_Ajax_Search.php:54
 #@ multilingualpress
 msgid "Nothing found."
 msgstr "Nichts gefunden."
 
-#: inc/pro/views/Mlp_Relationship_Control_Meta_Box_View.php:81
+#: inc/pro/relationship-control/Mlp_Relationship_Control_Meta_Box_View.php:76
 #@ multilingualpress
 msgid "Change relationship"
 msgstr "Beziehung ändern"
 
-#: inc/pro/views/Mlp_Relationship_Control_Meta_Box_View.php:96
+#: inc/pro/relationship-control/Mlp_Relationship_Control_Meta_Box_View.php:91
 #@ multilingualpress
 msgid "Leave as is"
 msgstr "Lassen, wie es ist"
 
-#: inc/pro/views/Mlp_Relationship_Control_Meta_Box_View.php:97
+#: inc/pro/relationship-control/Mlp_Relationship_Control_Meta_Box_View.php:92
 #@ multilingualpress
 msgid "Create new post"
 msgstr "Neuen Beitrag erstellen"
 
-#: inc/pro/views/Mlp_Relationship_Control_Meta_Box_View.php:101
+#: inc/pro/relationship-control/Mlp_Relationship_Control_Meta_Box_View.php:96
 #@ multilingualpress
 msgid "Remove relationship"
 msgstr "Beziehung löschen"
 
-#: inc/pro/views/Mlp_Relationship_Control_Meta_Box_View.php:128
+#: inc/pro/relationship-control/Mlp_Relationship_Control_Meta_Box_View.php:123
 #@ multilingualpress
 msgid "Select existing post &hellip;"
 msgstr "Bestehenden Beitrag auswählen &hellip;"
 
-#: inc/pro/views/Mlp_Relationship_Control_Meta_Box_View.php:139
+#: inc/pro/relationship-control/Mlp_Relationship_Control_Meta_Box_View.php:134
 #@ multilingualpress
 msgid "Live search"
 msgstr "Livesuche"
 
-#: inc/pro/views/Mlp_Relationship_Control_Meta_Box_View.php:160
+#: inc/pro/relationship-control/Mlp_Relationship_Control_Meta_Box_View.php:155
 #@ multilingualpress
 msgid "Save and reload this page"
 msgstr "Speichern und neu laden"
@@ -688,59 +590,207 @@ msgstr "Speichern und neu laden"
 msgid "http://marketpress.com/product/multilingual-press-pro/?piwik_campaign=mlp&piwik_kwd=pro"
 msgstr "http://marketpress.de/product/multilingual-press-pro/?piwik_campaign=mlp&piwik_kwd=pro"
 
-#: inc/core/views/Mlp_General_Settings_View.php:126
+#: inc/core/general-settings/Mlp_General_Settings_View.php:132
 #, php-format
 #@ multilingualpress
 msgid "This plugin has been developed by <a href=\"%1$s\">MarketPress</a>, a project of <a href=\"%2$s\">Inpsyde</a>."
 msgstr "Das Plugin wird entwickelt von <a href=\"%1$s\">MarketPress</a>, einem Projekt der <a href=\"%2$s\">Inpsyde GmbH</a>."
 
-#: inc/core/views/Mlp_Network_Site_Settings_Tab_Content.php:94
+#: inc/core/site-settings/Mlp_Network_Site_Settings_Tab_Content.php:145
+#: inc/core/site-settings/Mlp_New_Site_View.php:71
 #@ multilingualpress
 msgid "Alternative language title"
 msgstr "Alternativer Sprachtitel"
 
-#: inc/core/views/Mlp_Network_Site_Settings_Tab_Content.php:101
+#: inc/core/site-settings/Mlp_Network_Site_Settings_Tab_Content.php:152
+#: inc/core/site-settings/Mlp_New_Site_View.php:79
 #@ multilingualpress
 msgid "Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. \"My English Site\")"
 msgstr "Gib einen Titel ein, der im Frontend für die Sprache als Standard benutzt werden soll (z.B. &bdquo;Meine Deutsche Seite&ldquo;)"
 
-#: inc/pro/views/Mlp_Advanced_Translator_View.php:152
+#: inc/pro/advanced-translator/Mlp_Advanced_Translator_View.php:154
 #@ multilingualpress
 msgid "Change taxonomies"
 msgstr "Taxonomien ändern"
 
-#: inc/core/controllers/Mlp_Translation_Metabox.php:177
+#: inc/core/post-translator/Mlp_Translation_Metabox.php:199
 #, php-format
 #@ multilingualpress
 msgctxt "No HTML here. 1 = site name, 2 = language"
 msgid "Translation for %1$s (%2$s)"
 msgstr "Übersetzung für %1$s (%2$s)"
 
-#: inc/core/controllers/Mlp_Translation_Metabox.php:306
+#: inc/core/post-translator/Mlp_Translation_Metabox.php:329
 #, php-format
 #@ multilingualpress
 msgctxt "No HTML; 1 = post status, 2 = publish time"
 msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
-#: inc/pro/views/Mlp_Relationship_Control_Meta_Box_View.php:163
+#: inc/pro/relationship-control/Mlp_Relationship_Control_Meta_Box_View.php:158
 #@ multilingualpress
 msgid "Please save other changes first separately."
 msgstr "Bitte speichere andere Änderungen zuerst separat."
 
-#: inc/pro/models/Mlp_Quicklink_Positions_Data.php:46
+#: inc/pro/quicklink/Mlp_Quicklink_Positions_Data.php:46
 #@ multilingualpress
 msgid "Quicklink position"
 msgstr "Quicklinkposition"
 
-#: inc/pro/views/Mlp_Advanced_Translator_View.php:45
+#: inc/pro/advanced-translator/Mlp_Advanced_Translator_View.php:45
 #@ multilingualpress
 msgid "Copy source post"
 msgstr "Quellbeitrag kopieren"
 
+#: inc/core/nav-menu/Mlp_Nav_Menu_Controller.php:94
+#@ multilingualpress
+msgid "Languages"
+msgstr "Sprachen"
+
+#: inc/core/nav-menu/Mlp_Simple_Nav_Menu_Selectors.php:91
+#@ default
+msgid "Select All"
+msgstr ""
+
+#: inc/core/nav-menu/Mlp_Simple_Nav_Menu_Selectors.php:106
+#@ multilingualpress
+msgid "No languages found"
+msgstr "Keine Sprachen gefunden"
+
+#: inc/core/nav-menu/Mlp_Simple_Nav_Menu_Selectors.php:156
+#@ default
+msgid "Add to Menu"
+msgstr ""
+
+#: inc/core/site-settings/Mlp_New_Site_View.php:51
+#@ multilingualpress
+msgid "Choose language"
+msgstr "Wähle Sprache"
+
+#: inc/pro/advanced-translator/Mlp_Advanced_Translator_View.php:329
+#@ multilingualpress
+msgid "The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below."
+msgstr "Der verwandte Eintrag ist im Papierkorb. Du kannst diesen entweder wiederherstellen oder die Beziehung ändern."
+
+#: inc/pro/redirect/Mlp_Redirect_User_Settings_Html.php:38
+#@ multilingualpress
+msgid "Language redirect"
+msgstr "Sprachumleitung"
+
+#: inc/pro/redirect/Mlp_Redirect_User_Settings_Html.php:53
+#@ multilingualpress
+msgid "Do not redirect me automatically to the best matching language version."
+msgstr "Leite mich nicht automatisch um zur besten gefunden Sprachversion."
+
+#: inc/core/common/Mlp_Widget.php:135
+#@ multilingualpress
+msgid "Languages are sorted by priority."
+msgstr "Sprachen sind nach Priorität sortiert."
+
+#: inc/core/common/Mlp_Widget.php:133
+#, php-format
+#@ multilingualpress
+msgid "Languages are sorted by <a href=\"%s\">priority</a>."
+msgstr "Sprachen sind nach <a href=\"%s\">Priorität</a> sortiert."
+
+#: inc/core/common/Mlp_Widget.php:128
+#@ multilingualpress
+msgid "Show widget for translated content only."
+msgstr "Zeige Widget nur für übersetzte Beiträge."
+
+#: inc/Multilingual_Press.php:385
+#: inc/core/general-settings/Mlp_General_Settingspage.php:58
+#: inc/core/general-settings/Mlp_General_Settingspage.php:59
+#: inc/core/site-settings/Mlp_Network_Site_Settings_Properties.php:42
+#@ multilingualpress
+msgid "MultilingualPress"
+msgstr "MultilingualPress"
+
+#: inc/Multilingual_Press.php:466
+#@ multilingualpress
+msgid "We found invalid MultilingualPress Data in your System. <a href=\"#\" id=\"multilingual_press_checkup_link\">Please try a repair.</a>"
+msgstr "Wir haben ungültige MultilingualPress-Daten in deinem System gefunden. <a href=\"#\" id=\"multilingual_press_checkup_link\">Bitte versuche eine Reparatur.</a>"
+
+#: inc/Multilingual_Press.php:584
+#@ multilingualpress
+msgid "You didn't setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships."
+msgstr "Du hast noch keine Seiten-Verknüpfungen angelegt. Bitte tu das, um MultilingualPress benutzen zu können. Gehe bitte zu Netzwerkverwaltung/Seiten und wähle eine Seite zum Bearbeiten aus. dann gehe in den Reiter MultilingualPress und setze die Verknüpfungen."
+
+#: inc/core/common/Mlp_Widget.php:20
+#@ multilingualpress
+msgid "MultilingualPress Translations"
+msgstr "MultilingualPress Übersetzungen"
+
+#: inc/core/installation/Mlp_Plugin_Deactivation.php:67
+#, php-format
+#@ multilingualpress
+msgid "The plugin %s has been deactivated."
+msgstr "Das Plugin %s wurde deaktiviert."
+
+#: inc/core/installation/Mlp_Requirements_Check.php:97
+#, php-format
+#@ multilingualpress
+msgctxt "1 = required PHP version, 2 = current"
+msgid "This plugin requires PHP version %1$s, your version %2$s is too old. Please upgrade."
+msgstr "Dieses Plugin benötigt PHP Version %1$s, deine Version %2$s ist zu alt. Bitte aktualisiere."
+
+#: inc/core/installation/Mlp_Requirements_Check.php:116
+#, php-format
+#@ multilingualpress
+msgctxt "1 = required WordPress version, 2 = current"
+msgid "This plugin requires WordPress version %1$s, your version %2$s is too old. Please upgrade."
+msgstr "Dieses Plugin benötigt WordPress Version %1$s, deine Version %2$s ist zu alt. Bitte aktualisiere."
+
+#: inc/core/installation/Mlp_Requirements_Check.php:155
+#, php-format
+#@ multilingualpress
+msgctxt "%s = link to installation instructions"
+msgid "This plugin needs to run in a multisite. Please <a href=\"%s\">convert this WordPress installation to multisite</a>."
+msgstr "Dieses Plugin benötigt Multisite. Bitte <a href=\"%s\">stelle diese WordPress Installation auf Multisite um</a>."
+
+#: inc/core/installation/Mlp_Requirements_Check.php:183
+#, php-format
+#@ multilingualpress
+msgctxt "%s = link to network plugin screen"
+msgid "This plugin must be activated for the network. Please use the <a href=\"%s\">network plugin administration</a>."
+msgstr "Dieses Plugin muss für alle Seiten aktiviert werden. Bitte benutze die <a href=\"%s\">Netzwerkverwaltung</a>."
+
+#: inc/core/post-translator/Mlp_Translation_Metabox_View.php:202
+#, php-format
+#@ multilingualpress
+msgctxt "%s = link to MultilingualPress Pro"
+msgid "In <a href=\"%s\">MultilingualPress Pro</a>, you can edit the translation right here, copy the featured image, set tags and categories, and you can change the translation relationship."
+msgstr "In <a href=\"%s\">MultilingualPress Pro</a> kannst du die Übersetzung gleich hier bearbeiten, das Beitragsbild kopieren, Schlagwörter, Kategorien und eigene Taxonomien setzen und die Beziehung zu anderen Beiträgen nachträglich ändern."
+
+#: inc/core/term-translator/Mlp_Term_Translation_Presenter.php:123
+#@ multilingualpress
+msgid "Translations"
+msgstr "Übersetzungen"
+
+#: inc/core/term-translator/Mlp_Term_Translation_Selector.php:72
+#@ multilingualpress
+msgid "No translation"
+msgstr "Keine Übersetzung"
+
+#: inc/pro/advanced-translator/Mlp_Cpt_Translator_Extra_General_Settings_Box_Data.php:63
+#@ multilingualpress
+msgid "In some cases the correct pretty permalinks are not available across multiple sites. Test it, and activate dynamic permalinks for those post types to avoid 404 errors. This will not change the permalink settings, just the URLs in MultilingualPress."
+msgstr "In einigen Fällen funktionieren die korrekten Permalinks nicht Seiten-übergreifend. Probiere das bitte aus, und schalte dynamische Permalinks an für die betroffenen Posttypen, um 404-Fehler zu vermeiden. Dies ändert nicht die allgemeinen Permalinkeinstellungen, nur die Handhabung in MultilingualPress."
+
+#: inc/pro/controllers/Mlp_Trasher.php:55
+#@ multilingualpress
+msgid "This module provides a new post meta and checkbox to trash the posts. If you enable the checkbox and move a post to the trash MultilingualPress also will trash the linked posts."
+msgstr "Dieses Modul bringt neue Beitragsmetadaten und Checkboxen, um den Beitrag in den Papierkorb zu verschieben. Falls du die Checkbox aktivierst und den Beitrag dann in den Papierkorb verschiebst, löscht MultilingualPress auch den verknüpften Beitrag in anderen Sprachen."
+
+#. translators: plugin header field 'Name'
+#: multilingual-press.php:0
+#@ multilingualpress
+msgid "MultilingualPress Pro"
+msgstr "MultilingualPress Pro"
+
 #. translators: plugin header field 'Version'
 #: multilingual-press.php:0
 #@ multilingualpress
-msgid "2.0.0"
+msgid "2.1.0.RC.1"
 msgstr ""
 
