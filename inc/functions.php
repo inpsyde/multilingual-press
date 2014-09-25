@@ -99,18 +99,13 @@ function mlp_get_language_flag( $blog_id = 0 ) {
  */
 function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecated_echo = TRUE, $deprecated_sort = 'blogid' ) {
 
-	$args = is_array( $args_or_deprecated_text ) ?
-	$args_or_deprecated_text
-	:
-	array(
-		'link_text' => $args_or_deprecated_text,
-		'echo' => $deprecated_echo,
-		'sort' => $deprecated_sort,
-	);
+	$args = is_array( $args_or_deprecated_text ) ? $args_or_deprecated_text : array( 'link_text' => $args_or_deprecated_text, 'echo' => $deprecated_echo, 'sort' => $deprecated_sort, );
 
 	$defaults = array(
-		'link_text' => 'text', 'echo' => TRUE,
-		'sort' => 'blogid', 'show_current_blog' => FALSE,
+		'link_text' => 'text',
+		'echo' => TRUE,
+		'sort' => 'priority',
+		'show_current_blog' => FALSE,
 	);
 
 	$params = wp_parse_args( $args, $defaults );
@@ -155,7 +150,7 @@ function get_blog_language( $blog_id = 0, $short = TRUE ) {
  * @return boolean|array|string FALSE for unknown language codes or fields,
  *               array for $field = 'all' and string for specific fields
  */
-function mlp_get_lang_by_iso( $iso, $field = 'native' ) {
+function mlp_get_lang_by_iso( $iso, $field = 'native_name' ) {
 	return Mlp_Helpers::get_lang_by_iso( $iso, $field );
 }
 
@@ -172,6 +167,7 @@ if ( ! function_exists( 'blog_exists' ) ) {
 	 */
 	function blog_exists( $blog_id, $site_id = 0 ) {
 
+		/** @type wpdb $wpdb */
 		global $wpdb;
 		static $cache = array ();
 

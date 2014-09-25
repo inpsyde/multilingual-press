@@ -2,6 +2,9 @@
 if ( is_admin() && ! empty ( $GLOBALS['pagenow'] ) && $GLOBALS['pagenow'] === 'sites.php' )
 	add_action( 'inpsyde_mlp_loaded', 'mlp_feature_connection_column' );
 
+/**
+ * @return void
+ */
 function mlp_feature_connection_column() {
 
 	$columns = new Mlp_Custom_Columns(
@@ -16,6 +19,11 @@ function mlp_feature_connection_column() {
 	add_action( 'manage_sites_custom_column', array ( $columns, 'render_column' ), 10, 2 );
 }
 
+/**
+ * @param  string $column_name not used
+ * @param  int $blog_id
+ * @return string|void
+ */
 function mlp_render_related_blog_column( $column_name, $blog_id ) {
 
 	switch_to_blog( $blog_id );
