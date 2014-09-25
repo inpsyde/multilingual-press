@@ -43,8 +43,7 @@ class Mlp_Load_Controller {
 	 *
 	 * @return Inpsyde_Autoload
 	 */
-	public function get_loader()
-	{
+	public function get_loader() {
 		return $this->loader;
 	}
 
@@ -53,8 +52,7 @@ class Mlp_Load_Controller {
 	 *
 	 * @return void
 	 */
-	private function setup_autoloader()
-	{
+	private function setup_autoloader() {
 
 		$dir = dirname( __FILE__ );
 
@@ -62,14 +60,29 @@ class Mlp_Load_Controller {
 		if ( ! interface_exists( 'Inpsyde_Autoload_Rule_Interface' ) )
 			require "$dir/Inpsyde_Autoload_Rule_Interface.php";
 
-		if ( ! class_exists( 'Mlp_Autoload_Rule' ) )
-			require "$dir/Mlp_Autoload_Rule.php";
-
-		if ( ! class_exists( 'Inpsyde_Autoload' ) )
-			require "$dir/Inpsyde_Autoload.php";
+		foreach ( array ( 'Directory_Load', 'Autoload' ) as $class ) {
+			if ( ! class_exists( "Inpsyde_$class" ) )
+				require "$dir/Inpsyde_$class.php";
+		}
 
 		$this->loader = new Inpsyde_Autoload;
-		$rule         = new Mlp_Autoload_Rule( $this->plugin_dir );
-		$this->loader->add_rule( $rule );
+		$this->load_defaults( $this->loader );
+	}
+
+	/**
+	 * Register default directories.
+	 *
+	 * Searches for child directories of /core/ and /pro/ and registers them
+	 * for auto-loading.
+	 *
+	 * @param  Inpsyde_Autoload $loader
+	 * @return void
+	 */
+	private function load_defaults( Inpsyde_Autoload $loader ) {
+
+		$dirs = glob( "$this->plugin_dir/{core,pro}/*", GLOB_ONLYDIR ^ GLOB_BRACE );
+
+		foreach ( $dirs as $dir )
+			$loader->add_rule( new Inpsyde_Directory_Load( $dir ) );
 	}
 }

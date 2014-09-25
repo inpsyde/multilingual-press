@@ -21,7 +21,7 @@ interface Inpsyde_Autoload_Rule_Interface
 	 * Parse class/trait/interface name and load file.
 	 *
 	 * @param  string $name
-	 * @return boolean
+	 * @return bool
 	 */
 	public function load( $name );
 }

@@ -4,7 +4,7 @@
  *
  * @author     toscho
  * @since      2013.08.18
- * @version    2013.08.22
+ * @version    2014.07.04
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @package    MultilingualPress
  * @subpackage Autoload
@@ -16,7 +16,7 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 	 *
 	 * @type string
 	 */
-	protected $dir;
+	private $dir;
 
 	/**
 	 * Constructor
@@ -34,8 +34,9 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 	 * @return boolean
 	 */
 	public function load( $name ) {
+
 		if ( ! $name = $this->prepare_name( $name ) )
-			return;
+			return FALSE;
 
 		foreach ( array ( 'core', 'pro' ) as $main_dir ) {
 
@@ -51,11 +52,12 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 
 				if ( file_exists( $file ) ) {
 					include $file;
-					return;
+					return TRUE;
 				}
-				//'Mlp_Auto_Update' == $name && print $file . '<br>';
 			}
 		}
+
+		return FALSE;
 	}
 
 	/**
@@ -64,7 +66,7 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 	 * @param  string $name   The class/interface name.
 	 * @return string|boolean The class name or FALSE
 	 */
-	protected function prepare_name( $name ) {
+	private function prepare_name( $name ) {
 
 		$name = trim( $name, '\\' );
 
