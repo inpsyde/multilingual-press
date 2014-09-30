@@ -94,7 +94,7 @@ class Mlp_Update_Plugin_Data {
 		if ( $last_version === 1 )
 			$this->import_active_languages( new Mlp_Db_Languages_Schema( $this->wpdb ) );
 
-		if ( version_compare( $last_version, '2.1', '<' ) ) {
+		if ( version_compare( $last_version, '2.0.4', '<' ) ) {
 			$installer = new Mlp_Db_Installer( new Mlp_Site_Relations_Schema( $this->wpdb ) );
 			$installer->install();
 			$this->import_site_relations();
@@ -133,12 +133,15 @@ class Mlp_Update_Plugin_Data {
 	/**
 	 * Update mlp_multilingual_linked table and set type to "post" if empty
 	 *
+	 * @param Mlp_Db_Schema_Interface $linked
 	 * @return void
 	 */
 	private function update_type_column( Mlp_Db_Schema_Interface $linked ) {
 
 		$table = $linked->get_table_name();
-		$this->wpdb->query( 'UPDATE ' . $table . ' set ml_type = "post" WHERE ml_type != "term"' );
+		$this->wpdb->query(
+			'UPDATE ' . $table . ' set ml_type = "post" WHERE ml_type != "term"'
+		);
 	}
 
 	/**
@@ -172,7 +175,8 @@ class Mlp_Update_Plugin_Data {
 					$table,
 				   array (
 					   'english_name' => $text,
-					   'wp_locale'    => $mlp_site[ 'lang' ]
+					   'wp_locale'    => $mlp_site[ 'lang' ],
+					   'http_name'    => str_replace( '_', '-', $mlp_site[ 'lang' ] )
 				   )
 				);
 			}
