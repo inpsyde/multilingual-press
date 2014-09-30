@@ -4,7 +4,7 @@ Tags: l10n, i18n, bilingual, international, internationalization, lang, language
 
 Requires at least: 3.8
 Tested up to: 4.0
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 
 Create networks with multiple languages
 
@@ -98,11 +98,22 @@ access to your content after the plugin deactivation.
 
 == Changelog ==
 
+= 2.1.1 =
+
+- Fixed autoloading with `glob()` on Solaris systems.
+- Fixed database error when upgrading from a preview version of the 2.1 branch.
+- Custom flags are now fetched from the correct site.
+- Built-in flag icons are checked on the file system before we return an URL fro them.
+- Language switcher widget is now visible for all users.
+- Improved description of the widget options.
+- Search pages are translated correctly.
+- Pro: Table duplicator works with custom tables now.
+
 = 2.1.0 =
 
 - Added links to translations to the `head` element.
 - Relations between sites are now stored in a separate table `mlp_site_relations`. This is faster than the previous option call, and it is less error prone, because we don’t have to synchronize these relations between sites. The old options will be imported into the table automatically during the upgrade.
-- Post meta fields in poorly written plugins will not be overwritten anymore. We had many reports about plugins without a check for the current site when they write meta fields. Now we remove all global post data before we synchronize the posts, and we restore them when we are done.
+- Pro: Post meta fields in poorly written plugins will not be overwritten anymore. We had many reports about plugins without a check for the current site when they write meta fields. Now we remove all global post data before we synchronize the posts, and we restore them when we are done.
 - Installation and uninstallation are heavily improved now. We catch many more edge cases and switches from Free to Pro.
 - Languages are now synchronized between MultilingualPress and WordPress. When you assign a language in MultilingualPress to a site the first time and the language files are available, we set the site language in the WordPress option to that value.
 - You can add language links to regular navigation menus in the backend now. These links are adjusted automatically on each site: if there is a dedicated translation, the link will be changed to that page. It will point to the other site’s front page otherwise.
