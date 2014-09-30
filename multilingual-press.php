@@ -5,10 +5,11 @@
  * Description: Run WordPress Multisite with multiple languages.
  * Author:      Inpsyde GmbH
  * Author URI:  http://inpsyde.com
- * Version:     2.1.0
+ * Version:     2.1.1
  * Text Domain: multilingualpress
  * Domain Path: /languages
  * License:     GPLv3
+ * Network:     true
  */
 
 defined( 'ABSPATH' ) or die();
@@ -41,6 +42,7 @@ function mlp_init() {
 	$data->js_url           = "{$data->plugin_url}js/";
 	$data->image_url        = "{$data->plugin_url}images/";
 	$data->flag_url         = "{$data->plugin_url}flags/";
+	$data->flag_path        = "{$data->plugin_dir_path}flags/";
 
 	$headers = get_file_data(
 		__FILE__,
