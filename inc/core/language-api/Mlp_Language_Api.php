@@ -207,6 +207,9 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		if ( empty ( $languages ) || empty ( $sites ) )
 			return array();
 
+		if ( $arguments[ 'include_base' ] )
+			$sites[] = $arguments[ 'site_id' ];
+
 		$relations = $this->prepare_translation_relations( $arguments );
 
 		$out = array();
@@ -252,6 +255,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			$relations
 		);
 
+		$icon = $this->get_flag_by_language( $data[ 'http_name' ], $site_id );
+
 		$params = array (
 			'source_site_id'    => $arguments[ 'site_id' ],
 			'target_site_id'    => $site_id,
@@ -259,7 +264,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			'target_title'      => $target_title,
 			'target_url'        => $url,
 			'type'              => $arguments[ 'type' ],
-			'icon'              => $this->get_flag_by_language( $data[ 'http_name' ] )
+			'icon'              => $icon
 		);
 
 		return new Mlp_Translation( $params, new Mlp_Language( $data ) );
@@ -272,24 +277,19 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 */
 	public function get_flag_by_language( $language, $site_id = 0 ) {
 
-		if ( 0 !== $site_id )
-			switch_to_blog( $site_id );
-
-		$custom_flag = get_option( 'inpsyde_multilingual_flag_url' );
+		$custom_flag = get_blog_option( $site_id, 'inpsyde_multilingual_flag_url' );
 
 		if ( $custom_flag )
 			return new Mlp_Url( $custom_flag );
 
-		$language = str_replace( '-', '_', $language );
+		$language  = str_replace( '-', '_', $language );
+		$sub       = strtok( $language, '_' );
+		$file_name = $sub . '.gif';
 
-		$sub    = strtok( $language, '_' );
-		$url    = $this->data->flag_url . $sub . '.gif';
-		$return = new Mlp_Url( $url );
+		if ( is_readable( $this->data->flag_path . $file_name ) )
+			return new Mlp_Url( $this->data->flag_url . $file_name );
 
-		if ( 0 !== $site_id )
-			restore_current_blog();
-
-		return $return;
+		return new Mlp_Url( '' );
 	}
 
 	/**
