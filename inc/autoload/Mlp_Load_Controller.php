@@ -1,10 +1,10 @@
 <?php # -*- coding: utf-8 -*-
 /**
- * Set up auto-loader or load all available files immediately for PHP < 5.3.
+ * Set up auto-loader.
  *
  * @author     toscho
  * @since      2013.08.18
- * @version    2014.03.26
+ * @version    2014.09.28
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @package    MultilingualPress
  * @subpackage Autoload
@@ -75,12 +75,19 @@ class Mlp_Load_Controller {
 	 * Searches for child directories of /core/ and /pro/ and registers them
 	 * for auto-loading.
 	 *
+	 * Cannot use `GLOB_BRACE`, because that is not available on SunOS.
+	 *
 	 * @param  Inpsyde_Autoload $loader
 	 * @return void
 	 */
 	private function load_defaults( Inpsyde_Autoload $loader ) {
 
-		$dirs = glob( "$this->plugin_dir/{core,pro}/*", GLOB_ONLYDIR ^ GLOB_BRACE );
+		$dirs = glob( "$this->plugin_dir/core/*", GLOB_ONLYDIR );
+
+		if ( is_dir( "$this->plugin_dir/pro" ) ) {
+			$pro  = glob( "$this->plugin_dir/pro/*", GLOB_ONLYDIR );
+			$dirs = array_merge( $dirs, $pro );
+		}
 
 		foreach ( $dirs as $dir )
 			$loader->add_rule( new Inpsyde_Directory_Load( $dir ) );
