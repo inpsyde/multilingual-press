@@ -1,13 +1,16 @@
 <?php
 /**
- * Module Name:	MultilingualPress Widget
- * Description:	This Widget shows the flags
- * Author:		Inpsyde GmbH
- * Version:		0.3
- * Author URI:	http://inpsyde.com
+ * Language switcher widget
+ *
+ * @author  Inpsyde GmbH, toscho
+ * @version 2014.09.29
+ * @license GPL
  */
 class Mlp_Widget extends WP_Widget {
 
+	/**
+	 * @type string
+	 */
 	protected static $handle = 'mlp_widget';
 
 	/**
@@ -125,7 +128,7 @@ class Mlp_Widget extends WP_Widget {
 					echo $this->get_field_name( 'mlp_widget_toggle_view_on_translated_posts' );
 					?>" value="1" />
 			<?php
-				_e( 'Show widget for translated content only.', 'multilingualpress' );
+				_e( 'Show links for translated content only.', 'multilingualpress' );
 			?></label>
 		</p>
 		<p>
@@ -165,18 +168,13 @@ class Mlp_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		// check to show the widget only if there are linked elements
-		if ( isset( $instance[ 'widget_toggle_view_on_translated_posts' ] ) && $instance[ 'widget_toggle_view_on_translated_posts' ] == '1' ) {
-			$elements = mlp_get_linked_elements();
-			if ( empty( $elements ) )
-				return;
-		}
-
-		$output = mlp_show_linked_elements( array(
-			'link_text' => $instance[ 'widget_link_type' ],
-			'show_current_blog' => $instance[ 'widget_show_current_blog' ] == 1,
-			'echo' => FALSE
-		) );
+		$output = mlp_show_linked_elements(
+			array (
+				'link_text'         => $instance[ 'widget_link_type' ],
+				'show_current_blog' => $instance[ 'widget_show_current_blog' ] == 1,
+				'echo'              => FALSE
+			)
+		);
 
 		if ( '' == $output )
 			return;

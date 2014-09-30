@@ -353,26 +353,30 @@ class Mlp_Helpers {
 	 */
 	public static function show_linked_elements( $args ) {
 
-		/** @var Mlp_Language_Api $api */
-		$api        = self::$dependencies[ 'language_api' ];
-		$translations = $api->get_translations();
-		$current_id = get_current_blog_id();
-		$current_language = self::get_current_blog_language();
-
-		if ( empty ( $translations ) )
-			return '';
-
-		$language_titles = mlp_get_available_languages_titles();
-
 		$defaults = array (
 			'link_text'         => 'text',
 			'sort'              => 'priority',
 			'show_current_blog' => FALSE,
+			'strict'            => FALSE // get exact translations only
 		);
 
 		$params = wp_parse_args( $args, $defaults );
-		$items  = array();
-		$output = '<div class="mlp_language_box"><ul>';
+
+		/** @var Mlp_Language_Api $api */
+		$api              = self::$dependencies[ 'language_api' ];
+		$translations     = $api->get_translations(
+			array (
+				'strict'       => $params[ 'strict' ],
+				'include_base' => $params[ 'show_current_blog' ]
+			)
+		);
+
+		if ( empty ( $translations ) )
+			return '';
+
+		$current_id       = get_current_blog_id();
+		$items            = array ();
+		$output           = '<div class="mlp_language_box"><ul>';
 
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $translations as $site_id => $translation ) {
@@ -387,15 +391,7 @@ class Mlp_Helpers {
 				'http'     => $translation->get_language()->get_name( 'http' ),
 				'name'     => $translation->get_language()->get_name( 'native' ),
 				'priority' => $translation->get_language()->get_priority(),
-				'icon'     => $translation->get_icon_url()
-			);
-		}
-
-		if ( $params[ 'show_current_blog' ] ) {
-			$items[ $current_id ] = array (
-				'name'     => $language_titles[ $current_id ],
-				'priority' => $api->get_lang_data_by_iso( $current_language, 'priority' ),
-				'icon'     => $api->get_flag_by_language( $current_language )
+				'icon'     => (string) $translation->get_icon_url()
 			);
 		}
 
