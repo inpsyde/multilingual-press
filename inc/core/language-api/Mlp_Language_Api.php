@@ -193,6 +193,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 *
 	 *     - 'post_type'            for post type archives
 	 *
+	 *     - 'include_base'         bool. Include the base site in returned list
+	 *
 	 * @param  array $args Optional. If left out, some magic happens.
 	 * @return array Array of Mlp_Translation instances, site IDs are the keys
 	 */
