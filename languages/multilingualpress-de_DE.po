@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: MultilingualPress Pro v2.1.0.RC.1\n"
+"Project-Id-Version: MultilingualPress Pro v2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-23 10:38:32+0000\n"
+"PO-Revision-Date: 2014-09-30 12:50:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "All done!"
 msgstr "Alles erledigt!"
 
-#: inc/core/common/Mlp_Widget.php:83
+#: inc/core/common/Mlp_Widget.php:86
 #@ multilingualpress
 msgid "Flag"
 msgstr "Flagge"
@@ -41,17 +41,17 @@ msgstr "Beitrag übersetzen"
 msgid "Cleanup runs. Please stand by."
 msgstr "Überprüfung läuft. Bitte warten."
 
-#: inc/core/common/Mlp_Widget.php:82
+#: inc/core/common/Mlp_Widget.php:85
 #@ multilingualpress
 msgid "Text"
 msgstr "Text"
 
-#: inc/core/common/Mlp_Widget.php:84
+#: inc/core/common/Mlp_Widget.php:87
 #@ multilingualpress
 msgid "Text &amp; Flag"
 msgstr "Text & Flagge"
 
-#: inc/core/common/Mlp_Widget.php:85
+#: inc/core/common/Mlp_Widget.php:88
 #@ multilingualpress
 msgid "Language code"
 msgstr "Sprachcode"
@@ -84,7 +84,7 @@ msgstr "Leerer Typ"
 msgid "Invalid Hook"
 msgstr "Ungültiger Hook"
 
-#: inc/pro/redirect/Mlp_Redirect_Column.php:81
+#: inc/pro/redirect/Mlp_Redirect_Column.php:79
 #@ multilingualpress
 msgid "Redirect"
 msgstr "Weiterleiten"
@@ -115,32 +115,32 @@ msgstr "Lizenzschlüssel"
 msgid "Activate"
 msgstr "Aktivieren"
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:502
+#: inc/pro/controllers/Mlp_Auto_Update.php:501
 #@ multilingualpress
 msgid "The License has been deleted."
 msgstr "Die Lizenz wurde gelöscht."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:509
+#: inc/pro/controllers/Mlp_Auto_Update.php:508
 #@ multilingualpress
 msgid "Plugin successfully activated."
 msgstr "Plugin erfolgreich aktiviert."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:516
+#: inc/pro/controllers/Mlp_Auto_Update.php:515
 #@ multilingualpress
 msgid "The entered license key is wrong."
 msgstr "Der eingegebene Lizenzschlüssel ist falsch."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:523
+#: inc/pro/controllers/Mlp_Auto_Update.php:522
 #@ multilingualpress
 msgid "You have reached the limit of urls. Please update your license at <a href=\"http://marketpress.com\">marketpress.com</a>."
 msgstr "Du hast das Limit der URLs erreicht. Bitte aktualisiere deine Lizenz auf  <a href=\"http://marketpress.de\">marketpress.de</a>."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:530
+#: inc/pro/controllers/Mlp_Auto_Update.php:529
 #@ multilingualpress
 msgid "Something went wrong. Please try again later or contact the <a href=\"http://marketpress.com/support/\">marketpress team</a>."
 msgstr "Irgendwas lief falsch. Bitte versuche es erneut oder kontaktiere das <a href=\"http://marketpress.de/support/\">MarketPress-Team</a>."
 
-#: inc/pro/controllers/Mlp_Auto_Update.php:537
+#: inc/pro/controllers/Mlp_Auto_Update.php:536
 #@ multilingualpress
 msgid "Due to a wrong license you are not allowed to activate this plugin. Please update your license at <a href=\"http://marketpress.com\">marketpress.com</a>."
 msgstr "Wegen eines falschen Lizenzschlüssels darfst du das Plugin leider nicht aktivieren. Bitte aktualisiere deine Lizenz auf <a href=\"http://marketpress.de\">marketpress.de</a>."
@@ -299,17 +299,17 @@ msgstr "wp_locale"
 msgid "Priority"
 msgstr "Priorität"
 
-#: inc/core/common/Mlp_Widget.php:62
+#: inc/core/common/Mlp_Widget.php:65
 #@ multilingualpress
 msgid "Title"
 msgstr "Titel"
 
-#: inc/core/common/Mlp_Widget.php:75
+#: inc/core/common/Mlp_Widget.php:78
 #@ multilingualpress
 msgid "Link text"
 msgstr "Linktext"
 
-#: inc/core/common/Mlp_Widget.php:112
+#: inc/core/common/Mlp_Widget.php:115
 #@ multilingualpress
 msgid "Show current site"
 msgstr "Zeige aktuelle Site"
@@ -483,7 +483,7 @@ msgstr "nichts"
 msgid "Languages are sorted descending by priority and ascending by their English name."
 msgstr "Sprachen werden absteigend nach Priorität sortiert und aufsteigend nach ihrem englischen Namen."
 
-#: inc/core/common/Mlp_Widget.php:151
+#: inc/core/common/Mlp_Widget.php:154
 #@ default
 msgid "mlp_widget_title"
 msgstr ""
@@ -493,7 +493,7 @@ msgstr ""
 msgid "Switch to site"
 msgstr "Zur Seite wechseln"
 
-#: inc/core/common/Mlp_Widget.php:25
+#: inc/core/common/Mlp_Widget.php:28
 #@ multilingualpress
 msgid "Language Switcher"
 msgstr "Sprachwechsler"
@@ -519,12 +519,12 @@ msgstr "Kopiere das Beitragsbild des Ursprungsbeitrages."
 msgid "Sorry, there are no connected sites in the system for this site."
 msgstr "Bedaure, es gibt keine verknüpften Seiten im System für diese Seite."
 
-#: inc/pro/copy-site/Mlp_Duplicate_Blogs.php:343
+#: inc/pro/copy-site/Mlp_Duplicate_Blogs.php:348
 #@ multilingualpress
 msgid "Choose site"
 msgstr "Wähle eine Seite"
 
-#: inc/pro/copy-site/Mlp_Duplicate_Blogs.php:360
+#: inc/pro/copy-site/Mlp_Duplicate_Blogs.php:365
 #@ multilingualpress
 msgid "Based on site"
 msgstr "Basierend auf der Seite:"
@@ -682,21 +682,16 @@ msgstr "Sprachumleitung"
 msgid "Do not redirect me automatically to the best matching language version."
 msgstr "Leite mich nicht automatisch um zur besten gefunden Sprachversion."
 
-#: inc/core/common/Mlp_Widget.php:135
+#: inc/core/common/Mlp_Widget.php:138
 #@ multilingualpress
 msgid "Languages are sorted by priority."
 msgstr "Sprachen sind nach Priorität sortiert."
 
-#: inc/core/common/Mlp_Widget.php:133
+#: inc/core/common/Mlp_Widget.php:136
 #, php-format
 #@ multilingualpress
 msgid "Languages are sorted by <a href=\"%s\">priority</a>."
 msgstr "Sprachen sind nach <a href=\"%s\">Priorität</a> sortiert."
-
-#: inc/core/common/Mlp_Widget.php:128
-#@ multilingualpress
-msgid "Show widget for translated content only."
-msgstr "Zeige Widget nur für übersetzte Beiträge."
 
 #: inc/Multilingual_Press.php:385
 #: inc/core/general-settings/Mlp_General_Settingspage.php:58
@@ -716,7 +711,7 @@ msgstr "Wir haben ungültige MultilingualPress-Daten in deinem System gefunden. 
 msgid "You didn't setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships."
 msgstr "Du hast noch keine Seiten-Verknüpfungen angelegt. Bitte tu das, um MultilingualPress benutzen zu können. Gehe bitte zu Netzwerkverwaltung/Seiten und wähle eine Seite zum Bearbeiten aus. dann gehe in den Reiter MultilingualPress und setze die Verknüpfungen."
 
-#: inc/core/common/Mlp_Widget.php:20
+#: inc/core/common/Mlp_Widget.php:23
 #@ multilingualpress
 msgid "MultilingualPress Translations"
 msgstr "MultilingualPress Übersetzungen"
@@ -788,9 +783,14 @@ msgstr "Dieses Modul bringt neue Beitragsmetadaten und Checkboxen, um den Beitra
 msgid "MultilingualPress Pro"
 msgstr "MultilingualPress Pro"
 
+#: inc/core/common/Mlp_Widget.php:131
+#@ multilingualpress
+msgid "Show links for translated content only."
+msgstr "Zeige nur Links für übersetzte Inhalte."
+
 #. translators: plugin header field 'Version'
 #: multilingual-press.php:0
 #@ multilingualpress
-msgid "2.1.0.RC.1"
+msgid "2.1.0"
 msgstr ""
 
