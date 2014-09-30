@@ -490,8 +490,9 @@ LIMIT 1";
 			'content_id'           => get_queried_object_id(),
 			'type'                 => $this->get_request_type(),
 			'strict'               => TRUE,
-			'search_term'          => '',
-			'post_type'            => $this->get_request_post_type()
+			'search_term'          => get_search_query(),
+			'post_type'            => $this->get_request_post_type(),
+			'include_base'         => FALSE
 		);
 
 		$arguments = wp_parse_args( $args, $defaults );
