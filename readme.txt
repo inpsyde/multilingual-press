@@ -26,6 +26,8 @@ any data-loss or garbage output.
 
 Our **Language Manager** offers 174 languages, and you can edit them.
 
+**Translate our plugin, and get a free Pro license!** Please contact our lead developer @toscho before you start: `t.scholz` at `inpsyde.com`.
+
 We cannot guarantee free ad hoc support. Please be patient, we are a small team.
 You can follow our progress and development notices on our
 [developer blog](http://make.marketpress.com/multilingualpress/).
@@ -103,7 +105,7 @@ access to your content after the plugin deactivation.
 - Fixed autoloading with `glob()` on Solaris systems.
 - Fixed database error when upgrading from a preview version of the 2.1 branch.
 - Custom flags are now fetched from the correct site.
-- Built-in flag icons are checked on the file system before we return an URL fro them.
+- Built-in flag icons are checked on the file system before we return an URL for them.
 - Language switcher widget is now visible for all users.
 - Improved description of the widget options.
 - Search pages are translated correctly.
