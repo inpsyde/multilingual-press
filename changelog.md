@@ -1,11 +1,18 @@
 # Changelog
 
+## 2.1.2
+
+- Combine all scripts and stylesheets, separated for frontend and backend.
+- Minify scripts and stylesheets when `SCRIPT_DEBUG` and `MULTILINGUALPRESS_DEBUG` are not set.
+- Make the icon/flag for the current site available in nav menus.
+- Sites with custom name are now returned in `Mlp_Language_Api::get_translations()`.
+
 ## 2.1.1
 
 - Fixed autoloading with `glob()` on Solaris systems.
 - Fixed database error when upgrading from a preview version of the 2.1 branch.
 - Custom flags are now fetched from the correct site.
-- Built-in flag icons are checked on the file system before we return an URL fro them.
+- Built-in flag icons are checked on the file system before we return an URL for them.
 - Language switcher widget is now visible for all users.
 - Improved description of the widget options.
 - Search pages are translated correctly.
@@ -16,17 +23,17 @@
 
 - Added links to translations to the `head` element.
 - Relations between sites are now stored in a separate table `mlp_site_relations`. This is faster than the previous option call, and it is less error prone, because we don’t have to synchronize these relations between sites. The old options will be imported into the table automatically during the upgrade.
-- Pro: You cannot edit trashed translations anymore. If a translation has been moved to trash, you get a notice on the original editor page now, not the post content.
-- Pro: Post meta fields in poorly written plugins will not be overwritten anymore. We had many reports about plugins without a check for the current site when they write meta fields. Now we remove all global post data before we synchronize the posts, and we restore them when we are done.
-- Pro: The HTTP redirect will respect the visitor’s language preference now correctly.
-- Pro: All users who are logged in can disable the automatic redirection in their profile settings now.
-- Pro: You can see for which site the HTTP redirect is enabled in the global site table in the network administration in an extra column.
+- You cannot edit trashed translations anymore. If a translation has been moved to trash, you get a notice on the original editor page now, not the post content.
+- Post meta fields in poorly written plugins will not be overwritten anymore. We had many reports about plugins without a check for the current site when they write meta fields. Now we remove all global post data before we synchronize the posts, and we restore them when we are done.
+- The HTTP redirect will respect the visitor’s language preference now correctly.
+- All users who are logged in can disable the automatic redirection in their profile settings now.
+- You can see for which site the HTTP redirect is enabled in the global site table in the network administration in an extra column.
 - Installation and uninstallation are heavily improved now. We catch many more edge cases and switches from Free to Pro.
 - Languages are now synchronized between MultilingualPress and WordPress. When you assign a language in MultilingualPress to a site the first time and the language files are available, we set the site language in the WordPress option to that value.
 - You can add language links to regular navigation menus in the backend now. These links are adjusted automatically on each site: if there is a dedicated translation, the link will be changed to that page. It will point to the other site’s front page otherwise.
 - Users who are not logged in will not get permalinks for non-public sites anymore. You can work on a new site now safely, test all the links while being logged in, and your visitors will never see that until you set the site to public.
-- Pro: Post formats are now supported in the post translation page. We offer only formats that you have used on the other site at least once, because that is the onloy way to know that they are actually supported on that site.
-- Pro: Post parents are now synchronized when you save a hierarchical post type like a page.
+- Post formats are now supported in the post translation page. We offer only formats that you have used on the other site at least once, because that is the onloy way to know that they are actually supported on that site.
+- Post parents are now synchronized when you save a hierarchical post type like a page.
 - You can link existing terms (tags, categories, whatever) now. We will add support for term creation on that page later.
 - There are hundreds of other, minor improvements, too many to list them all.
 
