@@ -131,6 +131,9 @@ class Mlp_Translation_Metabox {
 			if ( $current_blog_id !== (int) $blog_id )
 				$this->register_metabox_per_language( $blog_id, $post );
 		}
+
+		$this->plugin_data->assets->provide( 'mlp_backend_css' );
+		$this->plugin_data->assets->provide( 'mlp_backend_js' );
 	}
 
 	/**

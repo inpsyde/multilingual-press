@@ -150,6 +150,8 @@ class Multilingual_Press {
 			$this->plugin_data->content_relations,
 			$this->wpdb
 		);
+		$this->plugin_data->assets = new Mlp_Assets( $this->plugin_data->locations );
+		$this->load_assets();
 
 		Mlp_Helpers::$link_table           = $this->link_table;
 		Mlp_Helpers::insert_dependency( 'site_relations', $this->plugin_data->site_relations );
@@ -278,13 +280,31 @@ class Multilingual_Press {
 	}
 
 	/**
+	 * Register assets internally
+	 *
+	 * @return void
+	 */
+	public function load_assets() {
+
+		/** @type Mlp_Assets $assets */
+		$assets = $this->plugin_data->assets;
+		$assets->add( 'mlp_backend_js',   'backend.js', array ( 'jquery' ) );
+		$assets->add( 'mlp_backend_css',  'backend.css' );
+		$assets->add( 'mlp_frontend_js',  'frontend.js', array ( 'jquery' ) );
+		$assets->add( 'mlp_frontend_css', 'frontend.css' );
+
+		add_action( 'init', array ( $assets, 'register' ), 0 );
+
+	}
+
+	/**
 	 * Create network settings page.
 	 *
 	 * @return  void
 	 */
 	private function load_module_settings_page() {
 
-		$settings = new Mlp_General_Settingspage( $this->plugin_data->module_manager );
+		$settings = new Mlp_General_Settingspage( $this->plugin_data->module_manager, $this->plugin_data->assets );
 		add_action( 'plugins_loaded', array ( $settings, 'setup' ), 8 );
 	}
 
@@ -295,7 +315,7 @@ class Multilingual_Press {
 	 */
 	private function load_site_settings_page() {
 
-		$settings = new Mlp_General_Settingspage( $this->plugin_data->site_manager );
+		$settings = new Mlp_General_Settingspage( $this->plugin_data->site_manager, $this->plugin_data->assets );
 		$settings->setup();
 		add_action( 'plugins_loaded', array ( $settings, 'setup' ), 8 );
 	}
@@ -359,9 +379,9 @@ class Multilingual_Press {
 		);
 
 		if ( in_array ( $pagenow, $pages ) ) {
-			wp_enqueue_script( 'mlp-js', $this->plugin_data->js_url . 'multilingual_press.js' );
-			wp_localize_script( 'mlp-js', 'mlp_loc', $this->localize_script() );
-			wp_enqueue_style( 'mlp-admin-css' );
+			//wp_enqueue_script( 'mlp-js', $this->plugin_data->js_url . 'multilingual_press.js' );
+			wp_localize_script( 'mlp_backend_js', 'mlp_loc', $this->localize_script() );
+			//wp_enqueue_style( 'mlp-admin-css' );
 		}
 	}
 

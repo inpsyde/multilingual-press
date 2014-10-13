@@ -2,7 +2,7 @@
 /**
  * Data read and write for backend nav menu management.
  *
- * @version 2014.07.15
+ * @version 2014.10.10
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
@@ -10,48 +10,49 @@ class Mlp_Language_Nav_Menu_Data
 	implements Mlp_Nav_Menu_Selector_Data_Interface {
 
 	/**
-	 * @var string
+	 * @type string
 	 */
 	private $meta_key;
 
 	/**
 	 * Button id.
 	 *
-	 * @var string
+	 * @type string
 	 */
 	private $button_id = 'mlp_language';
 
 	/**
-	 * @var string
+	 * @type string
 	 */
 	private $handle;
 
 	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
+	 * @type Inpsyde_Nonce_Validator_Interface
 	 */
 	private $nonce;
 
 	/**
-	 * @var string
+	 * @type Mlp_Assets_Interface
 	 */
-	private $js_url;
+	private $assets;
 
 	/**
+	 * Constructor
+	 *
 	 * @param string                            $handle
 	 * @param string                            $meta_key
 	 * @param Inpsyde_Nonce_Validator_Interface $nonce
-	 * @param string $js_url
+	 * @param Mlp_Assets_Interface              $assets
 	 */
-	function __construct(
-		                                  $handle,
+	function __construct(                 $handle,
 		                                  $meta_key,
 		Inpsyde_Nonce_Validator_Interface $nonce,
-                                          $js_url
+		Mlp_Assets_Interface              $assets
 	) {
 		$this->handle   = $handle;
 		$this->meta_key = $meta_key;
 		$this->nonce    = $nonce;
-		$this->js_url   = $js_url . "nav_menu.js";
+		$this->assets   = $assets;
 	}
 
 	/**
@@ -91,7 +92,7 @@ class Mlp_Language_Nav_Menu_Data
 	 */
 	public function register_script() {
 
-		wp_register_script( $this->handle, $this->js_url, array( 'jquery' ), 1, TRUE );
+		$this->assets->provide( array ( 'mlp_backend_js', 'mlp_backend_css' ) );
 	}
 
 	/**
@@ -103,8 +104,6 @@ class Mlp_Language_Nav_Menu_Data
 		if ( 'nav-menus.php' !== $hook )
 			return;
 
-		wp_enqueue_script( $this->handle );
-
 		$data = array (
 			'ajaxurl'         => admin_url( 'admin-ajax.php' ),
 			'metabox_id'      => $this->handle,
@@ -115,7 +114,7 @@ class Mlp_Language_Nav_Menu_Data
 		$data[ $this->nonce->get_name() ] = wp_create_nonce( $this->nonce->get_action() );
 		$data[ 'nonce_name' ] = $this->nonce->get_name();
 
-		wp_localize_script( $this->handle, $this->handle, $data );
+		wp_localize_script( 'mlp_backend_js', $this->handle, $data );
 	}
 
 	/**

@@ -3,7 +3,7 @@
  * Language switcher widget
  *
  * @author  Inpsyde GmbH, toscho
- * @version 2014.09.29
+ * @version 2014.10.10
  * @license GPL
  */
 class Mlp_Widget extends WP_Widget {
@@ -12,6 +12,11 @@ class Mlp_Widget extends WP_Widget {
 	 * @type string
 	 */
 	protected static $handle = 'mlp_widget';
+
+	/**
+	 * @type Mlp_Assets_Interface
+	 */
+	private static $assets;
 
 	/**
 	 * Registers the widget and set up the description
@@ -23,7 +28,7 @@ class Mlp_Widget extends WP_Widget {
 			'description'	=> __( 'MultilingualPress Translations', 'multilingualpress' )
 		);
 
-		add_filter( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'template_redirect', array ( $this, 'require_style' ) );
 
 		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingualpress' ), $widget_ops );
 	}
@@ -31,14 +36,23 @@ class Mlp_Widget extends WP_Widget {
 	/**
 	 * Load frontend CSS if the widget is active
 	 *
-	 * @return  void
+	 * @return  bool
 	 */
-	public function enqueue_styles() {
+	public function require_style() {
 
-		if ( is_active_widget( FALSE, FALSE, self::$handle )
-			//or 'off' !== $this->get_module_state( array( 'slug' => 'class-Multilingual_Press_Quicklink' ) )
+		if ( ! is_active_widget( FALSE, FALSE, self::$handle ) )
+			return FALSE;
+
+		$theme_support = get_theme_support( 'multilingualpress' );
+
+		if ( $theme_support
+			&& ! empty ( $theme_support[0][ 'language_switcher_widget_style' ] )
 		)
-			wp_enqueue_style( 'mlp-frontend-css' );
+			return FALSE;
+
+		self::$assets->provide( 'mlp_frontend_css' );
+
+		return TRUE;
 	}
 
 	/**
@@ -162,16 +176,29 @@ class Mlp_Widget extends WP_Widget {
 	/**
 	 * Frontend display
 	 *
+	 * When a widget is restored from trash, the instance might be incomplete.
+	 * Hence the preparations.
+	 *
 	 * @param	array $args
 	 * @param	array $instance | widget settings
 	 * @return	void
 	 */
 	public function widget( $args, $instance ) {
 
+		$link_type = 'text';
+
+		if ( ! empty ( $instance[ 'widget_link_type' ] ) )
+			$link_type = $instance[ 'widget_link_type' ];
+
+		$show_current = TRUE;
+
+		if ( isset ( $instance[ 'widget_show_current_blog' ] ) )
+			$show_current = (int) $instance[ 'widget_show_current_blog' ] === 1;
+
 		$output = mlp_show_linked_elements(
 			array (
-				'link_text'         => $instance[ 'widget_link_type' ],
-				'show_current_blog' => $instance[ 'widget_show_current_blog' ] == 1,
+				'link_text'         => $link_type,
+				'show_current_blog' => $show_current,
 				'echo'              => FALSE
 			)
 		);
@@ -179,16 +206,19 @@ class Mlp_Widget extends WP_Widget {
 		if ( '' == $output )
 			return;
 
-		echo $args['before_widget'];
+		$title = '';
 
-		// Display Title (optional)
-		if ( $instance[ 'widget_title' ] ) {
-			echo $args['before_title']
-				. apply_filters( 'widget_title', $instance[ 'widget_title' ] )
-				. $args['after_title'];
-		}
+		if ( isset ( $instance[ 'widget_title' ] ) )
+			$title = $instance[ 'widget_title' ];
 
-		echo $output . $args['after_widget'];
+		$title = apply_filters( 'widget_title', $title );
+
+		echo $args[ 'before_widget' ];
+
+		if ( ! empty ( $instance[ 'widget_title' ] ) )
+			echo $args[ 'before_title' ] . $title . $args[ 'after_title' ];
+
+		echo $output . $args[ 'after_widget' ];
 	}
 
 	/**
@@ -197,6 +227,18 @@ class Mlp_Widget extends WP_Widget {
 	 * @return	void
 	 */
 	public static function widget_register() {
+
 		register_widget( __CLASS__ );
+	}
+
+	/**
+	 * @param  Mlp_Assets_Interface $assets
+	 * @return void
+	 */
+	public static function insert_asset_instance(
+		Mlp_Assets_Interface $assets
+	) {
+
+		self::$assets = $assets;
 	}
 }

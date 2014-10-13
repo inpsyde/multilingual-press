@@ -20,12 +20,19 @@ class Mlp_General_Settingspage {
 	private $page_hook;
 
 	/**
+	 * @type Mlp_Assets_Interface
+	 */
+	private $assets;
+
+	/**
 	 * Constructor
 	 *
 	 * @param   Mlp_Module_Manager_Interface $modules
+	 * @param   Mlp_Assets_Interface         $assets
 	 */
-	public function __construct( Mlp_Module_Manager_Interface $modules ) {
+	public function __construct( Mlp_Module_Manager_Interface $modules, Mlp_Assets_Interface $assets ) {
 		$this->modules = $modules;
+		$this->assets = $assets;
 	}
 
 	/**
@@ -62,22 +69,7 @@ class Mlp_General_Settingspage {
 			array( $this->view, 'render_page' )
 		);
 
-		add_filter( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-	}
-
-	/**
-	 * Load the scripts for the options page
-	 *
-	 * @param	string $hook | current page identifier
-	 * @return	void
-	 */
-	public function admin_scripts( $hook = NULL ) {
-
-		if ( $this->page_hook === $hook ) {
-			wp_enqueue_script( 'dashboard' );
-			wp_enqueue_style( 'dashboard' );
-			wp_enqueue_style( 'mlp-admin-css' );
-		}
+		$this->assets->provide( array ( 'mlp_backend_js', 'mlp_backend_css' ) );
 	}
 
 	/**

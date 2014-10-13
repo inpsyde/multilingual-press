@@ -115,18 +115,15 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			array( $this->view, 'render' )
 		);
 
-		// for JavaScript use "admin_print_scripts-$id"
-		add_action( "admin_print_styles-$page_id", array ( $this, 'enqueue_style' ) );
+		add_action( "load-$page_id", array ( $this, 'enqueue_style' ) );
 	}
 
 	/**
 	 * @return void
 	 */
 	public function enqueue_style() {
-		wp_enqueue_style(
-			'language_manager',
-			$this->plugin_data->css_url . 'language-manager.css'
-		);
+
+		$this->plugin_data->assets->provide( 'mlp_backend_css' );
 	}
 
 	/**
