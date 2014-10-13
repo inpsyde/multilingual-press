@@ -2,7 +2,7 @@
 /**
  * Front controller for language menu items.
  *
- * @version 2014.05.13
+ * @version 2014.10.10
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
@@ -11,14 +11,14 @@ class Mlp_Nav_Menu_Controller {
 	/**
 	 * Basic identifier for all sort of operations.
 	 *
-	 * @var string
+	 * @type string
 	 */
 	private $handle   = 'mlp_nav_menu';
 
 	/**
 	 * Post meta key for nav items.
 	 *
-	 * @var string
+	 * @type string
 	 */
 	private $meta_key = '_blog_id';
 
@@ -98,9 +98,11 @@ class Mlp_Nav_Menu_Controller {
 	 */
 	public function add_meta_box() {
 
+		$title = esc_html__( 'Languages', 'multilingualpress' );
+
 		add_meta_box(
 			$this->handle,
-			__( 'Languages', 'multilingualpress' ),
+			$title,
 			array ( $this->view, 'show_available_languages' ),
 			'nav-menus',
 			'side',
@@ -140,14 +142,17 @@ class Mlp_Nav_Menu_Controller {
 			'wp_loaded',
 			array ( $this->data, 'register_script' )
 		);
+
 		add_action(
 			'admin_enqueue_scripts',
 			array ( $this->data, 'load_script' )
 		);
+
 		add_action(
 			"wp_ajax_$this->handle",
 			array ( $this->view, 'show_selected_languages' )
 		);
+
 		add_action(
 			'admin_init',
 			array( $this, 'add_meta_box' )

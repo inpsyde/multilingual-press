@@ -181,6 +181,7 @@ class Mlp_Language_Nav_Menu_Data
 	 * @return bool
 	 */
 	private function is_valid_blog_id( Array $titles, $blog_id ) {
+
 		return isset ( $titles[ $blog_id ] ) && blog_exists( $blog_id );
 	}
 
@@ -201,8 +202,11 @@ class Mlp_Language_Nav_Menu_Data
 			'menu_item-type-label' => esc_html__( 'Language', 'multilingualpress' ),
 		);
 
-		$item_id = wp_update_nav_menu_item( $_POST['menu'], 0, $menu_item_data );
-
+		$item_id   = wp_update_nav_menu_item(
+			$_POST[ 'menu' ],
+			0,
+			$menu_item_data
+		);
 		$menu_item = get_post( $item_id );
 
 		return $menu_item;
@@ -218,20 +222,21 @@ class Mlp_Language_Nav_Menu_Data
 	private function set_menu_item_meta( $menu_item, $blog_id ) {
 
 		// don't show "(pending)" in ajax-added items
-		$menu_item->post_type = 'nav_menu_item';
-		$menu_item->url       = get_home_url( $blog_id, '/' );
-		$menu_item->object    = 'mlp_language';
-		$menu_item->xfn       = 'alternate';
-		$menu_item            = wp_setup_nav_menu_item( $menu_item );
-		$menu_item->label     = $menu_item->title;
+		$menu_item->post_type  = 'nav_menu_item';
+		$menu_item->url        = get_home_url( $blog_id, '/' );
+		$menu_item->object     = 'mlp_language';
+		$menu_item->xfn        = 'alternate';
+		$menu_item             = wp_setup_nav_menu_item( $menu_item );
+		$menu_item->label      = $menu_item->title;
 		// Replace the "Custom" in the management screen
 		$menu_item->type_label = esc_html__( 'Language', 'multilingualpress' );
 		$menu_item->classes[ ] = "blog-id-$blog_id";
 		$menu_item->classes[ ] = "mlp-language-nav-item";
-		$menu_item->url       = get_home_url( $blog_id, '/' );
+		$menu_item->url        = get_home_url( $blog_id, '/' );
 
 		update_post_meta( $menu_item->ID, $this->meta_key, $blog_id );
-		update_post_meta( $menu_item->ID, '_menu_item_url', esc_url_raw(get_home_url( $blog_id, '/' )) );
+		$url = esc_url_raw( get_home_url( $blog_id, '/' ) );
+		update_post_meta( $menu_item->ID, '_menu_item_url', $url );
 
 		return $menu_item;
 	}
