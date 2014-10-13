@@ -60,7 +60,6 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 		wp_cache_set( $cache_key, $tables, $this->cache_group );
 
 		return $tables;
-
 	}
 
 	/**
@@ -92,14 +91,15 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	}
 
 	/**
-	 * Get core table only.
+	 * Get core tables only.
 	 *
 	 * @param  bool $do_prefix Should the table names be prefixed?
 	 * @return array
 	 */
 	public function get_core_site_tables( $do_prefix = TRUE ) {
 
-		$cache_key = "site-core-{$this->site_id}";
+		$cache_key = "site-core-{$this->site_id}-"
+			. ( $do_prefix ? 1 : 0 );
 		$cache     = wp_cache_get( $cache_key, $this->cache_group );
 
 		if ( $cache )
