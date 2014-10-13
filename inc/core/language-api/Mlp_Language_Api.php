@@ -367,18 +367,33 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		if ( empty ( $languages ) )
 			return array();
 
-		$tags = wp_list_pluck( $languages, 'lang' );
+		$tags = array();
+		$add_like = array();
 
-		foreach ( $tags as $site => $tag )
-			$tags[ $site ] = str_replace('_', '-', $tag );
+		foreach ( $languages as $site_id => $data ) {
+			if ( ! empty ( $data[ 'lang' ] ) )
+				$tags[ $site_id ] = str_replace('_', '-', $data[ 'lang' ] );
+			elseif ( ! empty ( $data[ 'text' ] ) && preg_match( '~[a-zA-Z-]+~', $data[ 'text' ] ) )
+				$tags[ $site_id ] = str_replace('_', '-', $data[ 'text' ] );
+
+			// a site might have just 'EN' as text and no other values
+			if ( FALSE === strpos( $tags[ $site_id ], '-' ) ) {
+				$tags[ $site_id ] = strtolower( $tags[ $site_id ] );
+				$add_like[ $site_id ] = $tags[ $site_id ];
+			}
+		}
 
 		$values = array_values( $tags );
 		$values = "'" .  join( "','", $values ) . "'";
 
 		$sql = "
-SELECT `english_name`, `native_name`, `custom_name`, `is_rtl`, `http_name`, `priority`, `wp_locale`
+SELECT `english_name`, `native_name`, `custom_name`, `is_rtl`, `http_name`, `priority`, `wp_locale`, `iso_639_1`
 FROM $this->table_name
-WHERE `http_name` IN( $values );";
+WHERE `http_name` IN( $values )";
+
+		if ( ! empty ( $add_like ) ) {
+			$sql .= " OR `iso_639_1` IN ('" . join("','", array_values( $add_like )) . "')";
+		}
 
 		$results = $this->wpdb->get_results( $sql, ARRAY_A );
 
@@ -386,6 +401,11 @@ WHERE `http_name` IN( $values );";
 
 			foreach ( $results as $arr ) {
 				if ( in_array( $lang, $arr ) ) {
+					$languages[ $site ] += $arr;
+				}
+				elseif ( isset ( $add_like[ $site ] )
+					&& $arr[ 'iso_639_1' ] === $add_like[ $site ]
+				) {
 					$languages[ $site ] += $arr;
 				}
 			}
