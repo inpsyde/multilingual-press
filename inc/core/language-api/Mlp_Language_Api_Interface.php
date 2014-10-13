@@ -43,6 +43,7 @@ interface Mlp_Language_Api_Interface {
 	 *     - 'strict'               When TRUE only matching exact translations will be included
 	 *     - 'search_term'          if you want to translate a search
 	 *     - 'post_type'            for post type archives
+	 *     - 'include_base'         bool. Include the base site in returned list
 	 *
 	 * @param  array $args Optional. If left out, some magic happens.
 	 * @return array Array of Mlp_Translation instances, site IDs are the keys
