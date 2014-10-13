@@ -238,7 +238,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 */
 	public function has_parent() {
 
-		return NULL === $this->parent;
+		return NULL !== $this->parent;
 	}
 
 	/**
