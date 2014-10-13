@@ -5,7 +5,7 @@
  * Description: Run WordPress Multisite with multiple languages.
  * Author:      Inpsyde GmbH
  * Author URI:  http://inpsyde.com
- * Version:     2.1.1
+ * Version:     2.1.2
  * Text Domain: multilingualpress
  * Domain Path: /languages
  * License:     GPLv3
