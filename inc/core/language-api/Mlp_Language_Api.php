@@ -293,7 +293,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$sub       = strtok( $language, '_' );
 		$file_name = $sub . '.gif';
 
-		if ( is_readable( $this->data->flag_path . $file_name ) )
+		if ( is_readable( "{$this->data->flag_path}/$file_name" ) )
 			return new Mlp_Url( $this->data->flag_url . $file_name );
 
 		return new Mlp_Url( '' );
