@@ -103,7 +103,7 @@ class Mlp_Helpers {
 		foreach ( $languages as $language_blogid => $language_data ) {
 
 			// no blogs with a link to other blogs
-			if ( '-1' === $language_data[ 'lang' ] )
+			if ( empty ( $language_data[ 'lang' ] ) || '-1' === $language_data[ 'lang' ] )
 				continue;
 
 			// Filter out blogs that are not related
