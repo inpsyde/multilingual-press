@@ -41,9 +41,11 @@ class Mlp_Nav_Menu_Frontend {
 	 */
 	public function filter_items( Array $items ) {
 
-		$translations = $this->language_api->get_translations(
-			array ( 'strict' => FALSE )
+		$args = array (
+			'strict'       => FALSE,
+			'include_base' => TRUE
 		);
+		$translations = $this->language_api->get_translations( $args );
 
 		if ( empty ( $translations ) )
 			return $items;
