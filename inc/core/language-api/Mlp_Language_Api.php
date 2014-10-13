@@ -255,6 +255,13 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			$relations
 		);
 
+		if ( ! isset ( $data[ 'http_name' ] ) ) {
+			if ( isset ( $data[ 'lang' ] ) )
+				$data[ 'http_name' ] = $data[ 'lang' ];
+			else
+				$data[ 'http_name' ] = '';
+		}
+
 		$icon = $this->get_flag_by_language( $data[ 'http_name' ], $site_id );
 
 		$params = array (
