@@ -25,24 +25,28 @@ function mlp_init() {
 
 	global $wp_version, $wpdb, $pagenow;
 
-	$path   = plugin_dir_path( __FILE__ );
+	$plugin_path   = plugin_dir_path( __FILE__ );
+	$plugin_url    = plugins_url( '/', __FILE__ );
 
 	if ( ! class_exists( 'Mlp_Load_Controller' ) )
-		require $path . 'inc/autoload/Mlp_Load_Controller.php';
+		require $plugin_path . 'inc/autoload/Mlp_Load_Controller.php';
 
-	$loader = new Mlp_Load_Controller( $path . 'inc' );
-	$data   = new Inpsyde_Property_List;
+	$loader          = new Mlp_Load_Controller( $plugin_path . 'inc' );
+	$data            = new Mlp_Plugin_Properties;
+	$data->loader    = $loader->get_loader();
+	$data->locations = new Mlp_Internal_Locations;
 
-	$data->loader           = $loader->get_loader();
-	$data->plugin_dir_path  = $path;
+	$data->locations->add_dir( $plugin_path, $plugin_url, 'plugin' );
+
+	foreach ( array ( 'css', 'js', 'flags', 'images' ) as $type ) {
+		$data->locations->add_dir(
+			$plugin_path . $type,
+			$plugin_url  . $type,
+			$type
+		);
+	}
 	$data->plugin_file_path = __FILE__;
 	$data->plugin_base_name = plugin_basename( __FILE__ );
-	$data->plugin_url       = plugins_url( '/', __FILE__ );
-	$data->css_url          = "{$data->plugin_url}css/";
-	$data->js_url           = "{$data->plugin_url}js/";
-	$data->image_url        = "{$data->plugin_url}images/";
-	$data->flag_url         = "{$data->plugin_url}flags/";
-	$data->flag_path        = "{$data->plugin_dir_path}flags/";
 
 	$headers = get_file_data(
 		__FILE__,
