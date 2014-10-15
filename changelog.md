@@ -1,11 +1,12 @@
 # Changelog
 
-## 2.1.2
+## 2.1.2 Edith Fellowes
 
 - Combine all scripts and stylesheets, separated for frontend and backend.
 - Minify scripts and stylesheets when `SCRIPT_DEBUG` and `MULTILINGUALPRESS_DEBUG` are not set.
 - Make the icon/flag for the current site available in nav menus.
 - Sites with custom name are now returned in `Mlp_Language_Api::get_translations()`.
+- Better updates: Make sure that site relations are not lost and languages are not duplicated.
 
 ## 2.1.1
 
