@@ -79,8 +79,8 @@ class Mlp_Update_Plugin_Data {
 		// version is a fallback, it is a version below 2.0.
 		if ( Mlp_Version_Number_Interface::FALLBACK_VERSION === $this->last_version )
 			$this->update_plugin_data( 1 );
-
-		$this->update_plugin_data( $this->last_version );
+		else
+			$this->update_plugin_data( $this->last_version );
 	}
 
 	/**
@@ -124,9 +124,9 @@ class Mlp_Update_Plugin_Data {
 			$linked = get_blog_option( $site['blog_id'], $option_name, array() );
 
 			if ( ! empty ( $linked ) )
-				$inserted += $relations->set_relation( $site['blog_id'], $linked );
+				$inserted += $relations->set_relation( $site[ 'blog_id' ], $linked );
 
-			delete_blog_option( $site['blog_id'], $option_name );
+			delete_blog_option( $site[ 'blog_id' ], $option_name );
 		}
 	}
 
@@ -194,8 +194,7 @@ class Mlp_Update_Plugin_Data {
 	/**
 	 * Install plugin tables.
 	 *
-	 * @needs-refactoring
-	 * @return void
+	 * @return bool
 	 */
 	public function install_plugin() {
 
@@ -203,5 +202,7 @@ class Mlp_Update_Plugin_Data {
 		$installer->install();
 		$installer->install( new Mlp_Content_Relations_Schema( $this->wpdb ) );
 		$installer->install( new Mlp_Site_Relations_Schema( $this->wpdb ) );
+
+		return update_site_option( 'mlp_version', $this->plugin_data->version );
 	}
 }
