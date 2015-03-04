@@ -26,13 +26,6 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 	private $related_sites = array ();
 
 	/**
-	 * List of site (blog) ids of public sites.
-	 *
-	 * @var array
-	 */
-	private $public_site_ids = array();
-
-	/**
 	 * Constructor
 	 *
 	 * @param wpdb   $wpdb
@@ -42,35 +35,26 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 
 		$this->wpdb            = $wpdb;
 		$this->link_table_name = $wpdb->base_prefix . $link_table_name;
-		$this->set_public_site_ids();
 	}
 
 	/**
 	 * Fetch related sites.
 	 *
 	 * @param  int  $site_id
-	 * @param  bool $public TRUE if you want just public sites.
 	 * @return array
 	 */
-	public function get_related_sites( $site_id = 0, $public = TRUE ) {
+	public function get_related_sites( $site_id = 0 ) {
 
 		$site_id = $this->empty_site_id_fallback( $site_id );
-		$key     = "$site_id-" . (int) $public;
 
-		if ( isset ( $this->related_sites[ $key ] ) )
-			return $this->related_sites[ $key ];
+		if ( isset ( $this->related_sites[ $site_id ] ) )
+			return $this->related_sites[ $site_id ];
 
-		// There are no public sites. No need to run a query in this case.
-		if ( $public && array() === $this->public_site_ids ) {
-			$this->related_sites[ $key ] = array();
-			return array();
-		}
+		$sql = $this->get_related_sites_sql( $site_id );
 
-		$sql = $this->get_related_sites_sql( $site_id, $public );
+		$this->related_sites[ $site_id ] = $this->wpdb->get_col( $sql );
 
-		$this->related_sites[ $key ] = $this->wpdb->get_col( $sql );
-
-		return $this->related_sites[ $key ];
+		return $this->related_sites[ $site_id ];
 	}
 
 	/**
@@ -122,20 +106,15 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 	 * Create SQL to fetch related sites.
 	 *
 	 * @param  int $site_id
-	 * @param  bool $public
 	 * @return string
 	 */
-	private function get_related_sites_sql( $site_id, $public ) {
+	private function get_related_sites_sql( $site_id ) {
 
 		$sql = 'SELECT DISTINCT IF (site_1 = %1$d, site_2, site_1) as blog_id
 			FROM ' . $this->link_table_name . '
 			WHERE (site_1 = %1$d OR site_2 = %1$d)';
-		$sql = sprintf( $sql, $site_id );
 
-		if ( $public )
-			$sql .= $this->get_public_sql( $site_id );
-
-		return $sql;
+		return sprintf( $sql, $site_id );
 	}
 
 	/**
@@ -152,47 +131,6 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 			list ( $site_1, $site_2 ) = array ( $site_2, $site_1 );
 
 		return '(' . (int) $site_1 . ', ' . (int) $site_2 . ')';
-	}
-
-	/**
-	 * Create SQL to restrict fetched sites to public ones only.
-	 * Adds the passed $site_id if it is not public.
-	 *
-	 * @param  int $site_id
-	 * @return string
-	 */
-	private function get_public_sql( $site_id = 0 ) {
-
-		$ids = $this->public_site_ids;
-
-		// Make sure the current site is included in the SQL query.
-		if ( 0 !== $site_id && ! in_array( $site_id, $ids ) )
-			$ids[] = $site_id;
-
-		$str = join( ', ', $ids );
-
-		return " AND (site_1 IN ($str) AND site_2 IN ($str))";
-	}
-
-	/**
-	 * Set list of public sites once, to be included in further queries.
-	 *
-	 * @return void
-	 */
-	private function set_public_site_ids() {
-
-		$public = wp_get_sites(
-			array (
-				'public'   => 1,
-				'archived' => 0,
-				'mature'   => 0,
-				'spam'     => 0,
-				'deleted'  => 0,
-			)
-		);
-
-		if ( ! empty ( $public ) )
-			$this->public_site_ids = wp_list_pluck( $public, 'blog_id' );
 	}
 
 	/**

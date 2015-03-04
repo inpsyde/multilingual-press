@@ -11,7 +11,7 @@ class Mlp_Term_Translation_Presenter {
 	/**
 	 * @var string
 	 */
-	private $taxonomy;
+	private $taxonomy_name;
 
 	/**
 	 * @var Inpsyde_Nonce_Validator_Interface
@@ -44,7 +44,7 @@ class Mlp_Term_Translation_Presenter {
 		$key_base
 	) {
 
-		$this->taxonomy          = get_current_screen()->taxonomy;
+		$this->taxonomy_name     = get_current_screen()->taxonomy;
 		$this->nonce             = $nonce;
 		$this->key_base          = $key_base;
 		$this->content_relations = $content_relations;
@@ -66,19 +66,37 @@ class Mlp_Term_Translation_Presenter {
 	 */
 	public function get_terms_for_site( $site_id ) {
 
-		switch_to_blog( $site_id );
-
-		$terms = get_terms( $this->taxonomy, array ( 'hide_empty' => FALSE ) );
-
-		restore_current_blog();
-
-		if ( empty ( $terms ) || is_wp_error( $terms ) )
-			return array();
 
 		$out = array();
 
-		foreach ( $terms as $term )
+		switch_to_blog( $site_id );
+
+		$taxonomy_object = get_taxonomy( $this->taxonomy_name );
+
+		if ( ! current_user_can( $taxonomy_object->cap->edit_terms ) )
+			$terms = array();
+		else
+			$terms = get_terms( $this->taxonomy_name, array ( 'hide_empty' => FALSE ) );
+
+		foreach ( $terms as $term ) {
+
+			if ( is_taxonomy_hierarchical( $this->taxonomy_name ) ) {
+
+				$ancestors = get_ancestors( $term->term_id, $this->taxonomy_name );
+
+				if ( ! empty ( $ancestors ) ) {
+					foreach ( $ancestors as $ancestor ) {
+						$parent_term = get_term( $ancestor, $this->taxonomy_name );
+						$term->name = $parent_term->name . '/' . $term->name;
+					}
+				}
+			}
 			$out[ $term->term_taxonomy_id ] = esc_html( $term->name );
+		}
+		restore_current_blog();
+
+		//uasort( $out, array ( $this, 'sort_terms_by_name' ) );
+		uasort( $out, 'strcasecmp' );
 
 		return $out;
 	}
@@ -88,7 +106,7 @@ class Mlp_Term_Translation_Presenter {
 	 */
 	public function get_taxonomy() {
 
-		return $this->taxonomy;
+		return $this->taxonomy_name;
 	}
 
 	/**
@@ -130,17 +148,53 @@ class Mlp_Term_Translation_Presenter {
 	 */
 	public function get_current_term( $site_id, $term_id ) {
 
-		if ( ! isset ( $this->site_terms[ $term_id ] ) ) {
+		$term = $this->get_term_from_site( $term_id, $site_id	);
+
+		if ( ! isset ( $term->term_taxonomy_id ) )
+			return 0;
+
+		if ( ! isset ( $this->site_terms[ $term->term_taxonomy_id ] ) ) {
 			$this->site_terms[ $term_id ] = $this->content_relations->get_relations(
 				$this->current_site_id,
-				$term_id,
+				$term->term_taxonomy_id,
 				'term'
 			);
 		}
 
-		if ( empty ( $this->site_terms[ $term_id ][ $site_id ] ) )
+		if ( empty ( $this->site_terms[ $term->term_taxonomy_id ][ $site_id ] ) )
 			return 0;
 
-		return $this->site_terms[ $term_id ][ $site_id ];
+		return $this->site_terms[ $term->term_taxonomy_id ][ $site_id ];
+	}
+
+	/**
+	 * Get the complete term object by term_id in a given site
+	 *
+	 * @param int $term_id
+	 * @param int $site_id
+	 * @return object
+	 */
+	private function get_term_from_site( $term_id, $site_id	) {
+
+		switch_to_blog( $site_id );
+
+		$term = get_term_by( 'id', $term_id, $this->taxonomy_name );
+
+		restore_current_blog();
+
+		return $term;
+	}
+
+	/**
+	 * Sort term by name
+	 *
+	 * @see get_terms_for_site()
+	 * @param stdClass $term1
+	 * @param stdClass $term2
+	 * @return int
+	 */
+	private function sort_terms_by_name( $term1, $term2 ) {
+
+		return strcasecmp( $term1, $term2 );
 	}
 }

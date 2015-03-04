@@ -1,3 +1,13 @@
-
-.gitmodules
+.settings
+.buildpath
+.project
+.externalToolBuilders
 .gitignore
+.gitattributes
+.release-notes
+plan.txt
+/hilfe.md
+/notes.php
+/Multilingual Press
+inc/core/common/Mlp_Allowed_Types.php
+inc/core/common/Mlp_Countable_Array_Access_Iterator_Interface.php

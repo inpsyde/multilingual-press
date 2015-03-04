@@ -48,7 +48,18 @@ class Mlp_Language implements Mlp_Language_Interface {
 	}
 
 	/**
-	 * @param  string $name
+	 * Get different possible language names
+	 *
+	 * @param  string $name Possible values:
+	 *                      - 'native' (default) ex: Deutsch for German
+	 *                      - 'english' English name of the language
+	 *                      - 'http' ex: 'de-AT'
+	 *                      - 'language_long' alias for 'http'.
+	 *                      - 'language_short' first part of 'http', ex: 'de' in 'de-AT'
+	 *                      - 'lang' alias for 'language_short'
+	 *                      - 'wp_locale' Identifier for translation files used by WordPress
+	 *                      - 'custom' Language name set in the site preferences
+	 *                      - 'text' alias for 'custom'
 	 * @return string
 	 */
 	public function get_name( $name = '' ) {
@@ -65,8 +76,16 @@ class Mlp_Language implements Mlp_Language_Interface {
 		if ( $name === 'language_long' )
 			return $this->names[ 'http_name' ];
 
+		if ( $name === 'custom_name' || $name === 'custom' ) {
+
+			if ( ! empty ( $this->names[ 'text' ] ) )
+				return $this->names[ 'text' ];
+
+			return $this->names[ 'custom_name' ];
+		}
+
 		// $name is empty or invalid, so ...
-		foreach ( array ( 'custom_name', 'native_name', 'english_name' ) as $match ) {
+		foreach ( array ( 'native_name', 'english_name' ) as $match ) {
 			if ( ! empty ( $this->names[ $match ] ) )
 				return $this->names[ $match ];
 		}
@@ -97,8 +116,12 @@ class Mlp_Language implements Mlp_Language_Interface {
 			'is_rtl'       => FALSE,
 			'http_name'    => '',
 			'priority'     => 1,
-			'wp_locale'    => ''
+			'wp_locale'    => '',
+			'text'         => ''
 		);
+
+		if ( isset ( $raw_data[ 'text' ] ) )
+			$default[ 'custom_name' ] = $raw_data[ 'text' ];
 
 		return wp_parse_args( $raw_data, $default );
 	}

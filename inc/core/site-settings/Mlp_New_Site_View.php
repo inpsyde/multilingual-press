@@ -99,7 +99,7 @@ class Mlp_New_Site_View {
 						switch_to_blog( $blog_id );
 						$blog_name = esc_html( get_bloginfo( 'Name' ) );
 						restore_current_blog();
-	
+
 						$id = "related_blog_$blog_id";
 						?>
 						<p>
@@ -128,6 +128,8 @@ class Mlp_New_Site_View {
 		</table>
 		<?php
 		$template = ob_get_contents();
+		// An FTP client might have changed the \n to \r\n.
+		$template = str_replace( array ("\n", "\r" ), "", $template );
 		ob_end_clean();
 
 		?>
@@ -136,7 +138,7 @@ class Mlp_New_Site_View {
 				$(document).ready( function(){
 
 					var submit      = $( 'form' ).find( '.submit' ),
-						template    = '<?php echo str_replace( "\n", "", $template ); ?>'
+						template    = '<?php echo $template; ?>'
 					;
 
 					submit.before( template );
@@ -146,4 +148,5 @@ class Mlp_New_Site_View {
 		</script>
 
 		<?php
-	}}
+	}
+}

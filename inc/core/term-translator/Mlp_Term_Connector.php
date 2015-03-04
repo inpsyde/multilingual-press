@@ -60,12 +60,12 @@ class Mlp_Term_Connector {
 	 * @wp-hook delete_term
 	 * @wp-hook edit_term
 	 * @param   int    $term_id  Term ID. Not used.
-	 * @param   int    $source_term_id    Term taxonomy ID.
+	 * @param   int    $term_taxonomy_id  Term taxonomy ID.
 	 * @param   string $taxonomy Taxonomy slug.
 	 * @return  bool
 	 */
 	public function change_term_relationships( /** @noinspection PhpUnusedParameterInspection */
-		$term_id, $source_term_id, $taxonomy ) {
+		$term_id, $term_taxonomy_id, $taxonomy ) {
 
 		if ( ! $this->is_valid_request( $taxonomy ) )
 			return FALSE;
@@ -79,31 +79,31 @@ class Mlp_Term_Connector {
 			 * Called in Mlp_Term_Connector::change_term_relationships before
 			 * terms are changed.
 			 *
-			 * @param int    $source_term_id
+			 * @param int    $term_taxonomy_id
 			 * @param string $taxonomy
 			 * @param string $filter
 			 */
 			do_action(
 				'mlp_before_term_synchronization',
-				$source_term_id,
+				$term_taxonomy_id,
 				$taxonomy,
 				$filter
 			);
 
-			$success = call_user_func( array ( $this, $filter ), $source_term_id );
+			$success = call_user_func( array ( $this, $filter ), $term_taxonomy_id );
 
 			/**
 			 * Called in Mlp_Term_Connector::change_term_relationships after
 			 * terms are changed.
 			 *
-			 * @param int    $source_term_id
+			 * @param int    $term_taxonomy_id
 			 * @param string $taxonomy
 			 * @param string $filter
 			 * @param bool   $success Whether or not the database was changed.
 			 */
 			do_action(
 				'mlp_after_term_synchronization',
-				$source_term_id,
+				$term_taxonomy_id,
 				$taxonomy,
 				$filter,
 				$success
@@ -116,10 +116,10 @@ class Mlp_Term_Connector {
 	/**
 	 * Handle term creations.
 	 *
-	 * @param   int    $source_term_id    Term taxonomy ID.
+	 * @param   int    $term_taxonomy_id    Term taxonomy ID.
 	 * @return  bool
 	 */
-	public function create_term( $source_term_id ) {
+	public function create_term( $term_taxonomy_id ) {
 
 		$success = FALSE;
 
@@ -131,7 +131,7 @@ class Mlp_Term_Connector {
 			if ( $this->content_relations->set_relation(
 				$this->current_site_id,
 				$target_site_id,
-				$source_term_id,
+				$term_taxonomy_id,
 				$target_term_id,
 				'term'
 				)
@@ -145,15 +145,15 @@ class Mlp_Term_Connector {
 	/**
 	 * Handle term deletions.
 	 *
-	 * @param   int     $source_term_id Term taxonomy ID.
+	 * @param   int     $term_taxonomy_id Term taxonomy ID.
 	 * @return bool
 	 */
-	public function delete_term( $source_term_id ) {
+	public function delete_term( $term_taxonomy_id ) {
 
 		$result = $this->content_relations->delete_relation(
 			 $this->current_site_id,
 			 0,
-			 $source_term_id,
+			 $term_taxonomy_id,
 			 0,
 			 'term'
 		);
@@ -164,15 +164,15 @@ class Mlp_Term_Connector {
 	/**
 	 * Handle term edits.
 	 *
-	 * @param   int    $source_term_id    Term taxonomy ID.
+	 * @param   int    $term_taxonomy_id    Term taxonomy ID.
 	 * @return  bool
 	 */
-	public function edit_term( $source_term_id ) {
+	public function edit_term( $term_taxonomy_id ) {
 
 		$success  = FALSE;
 		$existing = $this->content_relations->get_relations(
 			$this->current_site_id,
-			$source_term_id,
+			$term_taxonomy_id,
 			'term'
 		);
 
@@ -180,7 +180,7 @@ class Mlp_Term_Connector {
 
 			$update = $this->update_terms(
 				$existing,
-				$source_term_id,
+				$term_taxonomy_id,
 				$target_site_id,
 				(int) $target_term_id
 			);

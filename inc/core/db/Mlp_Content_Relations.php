@@ -24,19 +24,26 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	private $link_table;
 
 	/**
+	 * Prevent doubled queries.
+	 *
+	 * @type array
+	 */
+	private $checked = array();
+
+	/**
 	 * @param wpdb                         $wpdb
 	 * @param Mlp_Site_Relations_Interface $site_relations
-	 * @param string                       $link_table
+	 * @param Mlp_Db_Table_Name_Interface  $link_table
 	 */
 	public function __construct(
 		wpdb                         $wpdb,
 		Mlp_Site_Relations_Interface $site_relations,
 		                             $link_table
 	) {
-
-		$this->wpdb = $wpdb;
+		$this->wpdb           = $wpdb;
 		$this->site_relations = $site_relations;
-		$this->link_table = $link_table;
+		// Validated table name
+		$this->link_table     = $link_table->get_name();
 	}
 
 	/**
@@ -48,6 +55,11 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	 * @return array
 	 */
 	public function get_relations( $source_site_id, $source_content_id, $type = 'post' ) {
+
+		$key = "$source_site_id-$source_content_id-$type";
+
+		if ( array_key_exists( $key, $this->checked ) )
+			return $this->checked[ $key ];
 
 		$sql = "
 			SELECT
@@ -71,6 +83,8 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 
 		foreach ( $results as $set )
 			$output[ (int) $set[ 'site_id' ] ] = (int) $set[ 'content_id' ];
+
+		$this->checked[ $key ] = $output;
 
 		return $output;
 	}

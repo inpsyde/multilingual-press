@@ -68,7 +68,8 @@
 				var blog_id		= $( this ).data( "blog_id" ),
 					prefix		= "mlp_translation_data_" + blog_id,
 					mce 		= tinyMCE.get( prefix + "_content" ),
-					content		= $( '#content' ).val(), // plain content for "text"-view
+					content		= $( '#content' ).val(),// plain content for "text"-view,
+					orig_mce    = tinyMCE.get( "content" ),
 					title		= $( "#title" ).val()
 				;
 
@@ -77,7 +78,10 @@
 
 				if ( content ) {
 					$( "#" + prefix + "_content" ).val( content );
-					mce.setContent( content );
+				}
+				if ( orig_mce ) {
+					contentmce  = tinyMCE.get( "content" ).getContent();
+					mce.setContent( contentmce );
 				}
 				// @formatter:on
 			});

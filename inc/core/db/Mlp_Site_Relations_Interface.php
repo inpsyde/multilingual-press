@@ -12,10 +12,9 @@ interface Mlp_Site_Relations_Interface {
 	 * Fetch related sites.
 	 *
 	 * @param  int  $site_id
-	 * @param  bool $public TRUE if you want just public sites.
 	 * @return array
 	 */
-	public function get_related_sites( $site_id = 0, $public = TRUE );
+	public function get_related_sites( $site_id = 0 );
 
 	/**
 	 * Delete relationships.

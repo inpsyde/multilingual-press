@@ -48,7 +48,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	}
 
 	/**
-	 * @wp-hook load-edit-tags.php
+	 * @wp-hook mlp_and_wp_loaded
 	 * @return bool
 	 */
 	public function setup() {

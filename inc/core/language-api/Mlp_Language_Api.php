@@ -43,6 +43,15 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	private $content_relations;
 
 	/**
+	 * @type array
+	 */
+	private $published_post_checks = array();
+
+	/**@type array
+	 */
+	private $language_data_from_db = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @wp-hook plugins_loaded
@@ -108,16 +117,12 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 */
 	public function get_site_languages( $base_site = 0 ) {
 
-		static $languages;
-
-		$related_blogs = '';
-
-		if ( empty ( $languages ) )
-			$languages = get_site_option( 'inpsyde_multilingual' );
+		$related_blogs = $options = array();
+		$languages     = get_site_option( 'inpsyde_multilingual' );
 
 		if ( 0 !== $base_site ) {
 
-			$related_blogs = $this->get_related_sites( $base_site );
+			$related_blogs = $this->get_related_sites( $base_site, TRUE );
 
 			if ( empty ( $related_blogs ) )
 				return array();
@@ -126,13 +131,10 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		if ( ! is_array( $languages ) )
 			return array ();
 
-		$options = array ();
-		$related_blogs[ ] = get_current_blog_id();
-
-		foreach ( $languages as $language_blogid => $language_data ) {
+		foreach ( $languages as $site_id => $language_data ) {
 
 			// Filter out blogs that are not related
-			if ( is_array( $related_blogs ) && ! in_array( $language_blogid, $related_blogs ) && 0 !== $base_site )
+			if ( ! in_array( $site_id, $related_blogs ) && 0 !== $base_site )
 				continue;
 
 			$lang = '';
@@ -146,7 +148,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			if ( '' === $lang )
 				$lang = $this->get_lang_data_by_iso( $language_data[ 'lang' ] );
 
-			$options[ $language_blogid ] = $lang;
+			$options[ $site_id ] = $lang;
 		}
 
 		return $options;
@@ -178,103 +180,247 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	/**
 	 * Ask for specific translations with arguments.
 	 *
-	 * Possible arguments are:
 	 *
-	 *     - 'site_id'              Base site
+	 * @see prepare_translation_arguments()
+	 * @param array $args {
 	 *
-	 *     - 'content_id'           post or term_taxonomy ID, *not* term ID
+	 *     Optional. If left out, some magic happens.
 	 *
-	 *     - 'type'                 see Mlp_Language_Api::get_request_type(),
+	 *     @type int    $site_id       Base site
+	 *     @type int    $content_id    post or term_taxonomy ID, *not* term ID
+	 *     @type string $type          @see Mlp_Language_Api::get_request_type()
+	 *     @type bool   $strict        When TRUE (default) only matching exact
+	 *                                 translations will be included
+	 *     @type string $search_term   If you want to translate a search
+	 *     @type string $post_type     For post type archives
+	 *     @type bool   $include_base  Include the base site in returned list
 	 *
-	 *     - 'strict'               When TRUE (default) only matching exact
-	 *                                  translations will be included
-	 *
-	 *     - 'search_term'          if you want to translate a search
-	 *
-	 *     - 'post_type'            for post type archives
-	 *
-	 *     - 'include_base'         bool. Include the base site in returned list
-	 *
-	 * @param  array $args Optional. If left out, some magic happens.
+	 * }
 	 * @return array Array of Mlp_Translation instances, site IDs are the keys
 	 */
 	public function get_translations( Array $args = array() ) {
 
-		$arguments = $this->prepare_translation_arguments( $args );
-		$languages = $this->get_all_language_data();
-		$sites     = $this->get_related_sites( $arguments[ 'site_id' ] );
+		/** @type WP_Rewrite $wp_rewrite */
+		global $wp_rewrite;
 
-		if ( empty ( $languages ) || empty ( $sites ) )
-			return array();
+		$arguments         = $this->prepare_translation_arguments( $args );
+		$key               = md5( serialize( $arguments ) );
+		$content_relations = array();
+		$cached            = wp_cache_get( $key, 'mlp' );
 
-		if ( $arguments[ 'include_base' ] )
-			$sites[] = $arguments[ 'site_id' ];
+		if ( is_array( $cached ) )
+			return $cached;
 
-		$relations = $this->prepare_translation_relations( $arguments );
+		$sites = $this->get_related_sites(
+			$arguments[ 'site_id' ],
+			$arguments[ 'include_base' ]
+		);
 
-		$out = array();
+		if ( empty ( $sites ) )
+			return array ();
 
-		foreach ( $languages as $site_id => $data ) {
+		if ( ! empty ( $arguments[ 'content_id' ] ) ) {
 
-			if ( ! in_array( $site_id, $sites ) )
+			// array with site_ids as keys, content_ids as values
+			$content_relations = $this->get_related_content_ids(
+				$arguments[ 'site_id' ],
+				$arguments[ 'content_id' ],
+				$arguments[ 'type' ]
+			);
+
+			if ( empty ( $content_relations ) && $arguments[ 'strict' ] )
+				return array ();
+		}
+
+		$translations      = array();
+		$languages         = $this->get_all_language_data();
+
+		foreach ( $sites as $site_id ) {
+
+			if ( ! isset ( $languages[ $site_id ] ) )
 				continue;
 
-			$out[ $site_id ] = $this->build_translation_object(
-				$arguments,
-				$relations,
-				$data,
-				$site_id
+			$translations[ $site_id ] = array (
+				'source_site_id'    => $arguments[ 'site_id' ],
+				'target_site_id'    => $site_id,
+				'type'              => $arguments[ 'type' ],
+				'target_content_id' => 0,
+				'target_title'      => ''
 			);
 		}
 
-		return $out;
+		reset( $translations );
+
+		foreach ( $translations as $site_id => &$arr ) {
+
+			$valid = TRUE;
+
+			if ( ! empty ( $content_relations[ $site_id ] ) ) {
+
+				$content_id                 = $content_relations[ $site_id ];
+				$arr[ 'target_content_id' ] = $content_id;
+
+				if ( 'term' === $arguments[ 'type' ] ) {
+
+					$term_translation = new Mlp_Term_Translation( $this->wpdb, $wp_rewrite );
+					$translation      = $term_translation->get_translation( $content_id, $site_id );
+
+					if ( ! $translation )
+						$valid = FALSE;
+					else
+						$arr = array_merge( $arr, $translation );
+				}
+				elseif ( 'post' === $arguments[ 'type' ] ) {
+
+					switch_to_blog( $site_id );
+
+					$translation = $this->get_post_translation(
+						$content_relations[ $site_id ],
+						$arguments[ 'strict' ]
+					);
+
+					if ( ! $translation )
+						$valid = FALSE;
+					else
+						$arr = array_merge( $arr, $translation );
+
+					restore_current_blog();
+				}
+			}
+			else {
+
+				switch_to_blog( $site_id );
+
+				if ( 'search' === $arguments[ 'type' ] ) {
+
+					$url                 = get_search_link( $arguments[ 'search_term' ] );
+					$arr[ 'target_url' ] = new Mlp_Url( $url );
+				}
+				elseif ( 'post_type_archive' === $arguments[ 'type' ]
+					&& ! empty ( $arguments[ 'post_type' ] )
+				) {
+
+					$translation = $this->get_post_type_archive_translation(
+						$arguments[ 'post_type' ]
+					);
+					$arr = array_merge( $arr, $translation );
+				}
+
+				// Nothing found, use fallback if allowed
+				if ( ( empty ( $arr[ 'target_url' ] ) && ! $arguments[ 'strict' ] )
+					|| 'front_page' === $arguments[ 'type' ]
+				) {
+					$arr[ 'target_url' ] = get_site_url( $site_id, '/' );
+				}
+
+				if ( empty ( $arr[ 'target_url' ] ) )
+					$valid = FALSE;
+
+				restore_current_blog();
+			}
+
+			if ( ! $valid ) {
+				unset ( $translations[ $site_id ] );
+				continue;
+			}
+
+			$data = $languages[ $site_id ];
+
+			if ( ! isset ( $data[ 'http_name' ] ) ) {
+				if ( isset ( $data[ 'lang' ] ) )
+					$data[ 'http_name' ] = $data[ 'lang' ];
+				else
+					$data[ 'http_name' ] = '';
+			}
+
+			if ( '' !== $data[ 'http_name' ] ) {
+				$arr[ 'icon' ] = $this->get_flag_by_language(
+					$data[ 'http_name' ],
+					$site_id
+				);
+			}
+
+			$arr = new Mlp_Translation( $arr, new Mlp_Language( $data ) );
+		}
+
+		/**
+		 * Filter list of translations before they are used.
+		 *
+		 * @param array $translations Prepared translations
+		 * @param array $arguments    Prepared arguments
+		 */
+		$translations = apply_filters( 'mlp_translations', $translations, $arguments );
+		wp_cache_set( $key, $translations, 'mlp' );
+
+		return $translations;
 	}
 
 	/**
-	 * @param  array $arguments
-	 * @param  array $relations
-	 * @param  array $data
-	 * @param  int   $site_id
-	 * @return Mlp_Translation_Interface
+	 * Get translation for post type archive
+	 *
+	 * @param  string $post_type
+	 * @return array
 	 */
-	private function build_translation_object(
-		Array $arguments,
-		Array $relations,
-		Array $data,
-		      $site_id
-	) {
+	public function get_post_type_archive_translation( $post_type ) {
 
-		$target_content_id = 0;
+		$return = array ();
 
-		if ( ! empty ( $relations[ $site_id ] ) )
-			$target_content_id = $relations[ $site_id ];
+		$url                    = get_post_type_archive_link( $post_type );
+		$return[ 'target_url' ] = new Mlp_Url( $url );
+		$obj                    = get_post_type_object( $post_type );
 
-		list ( $url, $target_title ) = $this->get_remote_address(
-			$site_id,
-			$arguments,
-			$relations
-		);
+		if ( $obj )
+			$return[ 'target_title' ] = $obj->labels->name;
 
-		if ( ! isset ( $data[ 'http_name' ] ) ) {
-			if ( isset ( $data[ 'lang' ] ) )
-				$data[ 'http_name' ] = $data[ 'lang' ];
-			else
-				$data[ 'http_name' ] = '';
+		return $return;
+	}
+
+	/**
+	 * Get translation for posts of any post type.
+	 *
+	 * @param  int  $content_id
+	 * @param  bool $strict
+	 * @return array|bool
+	 */
+	private function get_post_translation( $content_id, $strict ) {
+
+		$post  = get_post( $content_id );
+
+		if ( ! $post )
+			return FALSE;
+
+		$title    = get_the_title( $content_id );
+		$editable = current_user_can( 'edit_post', $content_id );
+
+		// edit post screen
+		if ( is_admin() ) {
+
+			if ( ! $editable )
+				return FALSE;
+
+			return array (
+				'target_title' => $title,
+				'target_url'   => new Mlp_Url( get_edit_post_link( $content_id ) )
+			);
 		}
 
-		$icon = $this->get_flag_by_language( $data[ 'http_name' ], $site_id );
+		// frontend
+		$url = get_permalink( $content_id );
 
-		$params = array (
-			'source_site_id'    => $arguments[ 'site_id' ],
-			'target_site_id'    => $site_id,
-			'target_content_id' => $target_content_id,
-			'target_title'      => $target_title,
-			'target_url'        => $url,
-			'type'              => $arguments[ 'type' ],
-			'icon'              => $icon
+		if ( 'publish' === $post->post_status || $editable )
+			return array (
+				'target_title' => $title,
+				'target_url'   => empty ( $url ) ? '' : new Mlp_Url( $url )
+			);
+
+		// unpublished post, not editable
+		if ( $strict )
+			return FALSE;
+
+		return array (
+			'target_title' => $title,
+			'target_url'   => ''
 		);
-
-		return new Mlp_Translation( $params, new Mlp_Language( $data ) );
 	}
 
 	/**
@@ -300,75 +446,20 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	}
 
 	/**
-	 * @param  int   $site_id
-	 * @param  array $arguments Passed by reference
-	 * @param  array $relations
-	 * @return array Mlp_Url and title
-	 */
-	private function get_remote_address( $site_id, Array &$arguments, Array $relations ) {
-
-		$url = $title = '';
-
-		if ( $site_id !== get_current_blog_id() )
-			switch_to_blog( $site_id );
-
-		if ( 'term' === $arguments[ 'type' ]
-			&& ! empty ( $relations[ $site_id ] )
-		) {
-
-			$term  = $this->get_term_by_tt_id( $relations[ $site_id ] );
-			$title = $term[ 'name' ];
-			$url   = get_term_link( (int) $term[ 'term_id' ], $term[ 'taxonomy' ] );
-		}
-		elseif ( 'post' === $arguments[ 'type' ]
-			&& ! empty ( $relations[ $site_id ] )
-		) {
-
-			$url   = (string) get_permalink( $relations[ $site_id ] );
-			$title = get_the_title( $relations[ $site_id ] );
-		}
-		elseif ( 'post_type_archive' === $arguments[ 'type' ]
-			&& ! empty ( $arguments[ 'post_type' ] )
-		) {
-			$url = get_post_type_archive_link( $arguments[ 'post_type' ] );
-			$obj = get_post_type_object( $arguments[ 'post_type' ] );
-
-			if ( $obj )
-				$title = $obj->labels->name;
-		}
-		elseif ( 'home' === $arguments[ 'type' ] ) {
-			$url = get_home_url( $site_id );
-		}
-		elseif ( 'search'  === $arguments[ 'type' ]
-			&& ! empty ( $arguments[ 'search_term' ] )
-		) {
-			$url = get_search_link( $arguments[ 'search_term' ] );
-		}
-
-		// Nothing found, use fallback if allowed
-		if ( ( '' === $url && ! $arguments[ 'strict' ] )
-			|| 'front_page' === $arguments[ 'type' ]
-		) {
-			$url = get_site_url( $site_id, '/' );
-		}
-
-		restore_current_blog();
-
-		return array ( new Mlp_Url( $url ), $title );
-	}
-
-	/**
 	 * @return array
 	 */
 	private function get_all_language_data() {
+
+		if ( ! empty ( $this->language_data_from_db ) )
+			return $this->language_data_from_db;
 
 		$languages = (array) get_site_option( 'inpsyde_multilingual', array() );
 
 		if ( empty ( $languages ) )
 			return array();
 
-		$tags = array();
-		$add_like = array();
+		$tags     = array ();
+		$add_like = array ();
 
 		foreach ( $languages as $site_id => $data ) {
 			if ( ! empty ( $data[ 'lang' ] ) )
@@ -392,7 +483,7 @@ FROM $this->table_name
 WHERE `http_name` IN( $values )";
 
 		if ( ! empty ( $add_like ) ) {
-			$sql .= " OR `iso_639_1` IN ('" . join("','", array_values( $add_like )) . "')";
+			$sql .= " OR `iso_639_1` IN ('" . join( "','", array_values( $add_like ) ) . "')";
 		}
 
 		$results = $this->wpdb->get_results( $sql, ARRAY_A );
@@ -411,60 +502,88 @@ WHERE `http_name` IN( $values )";
 			}
 		}
 
+		$this->language_data_from_db = $languages;
+
 		return $languages;
 	}
 
-	/**
-	 * Get a term by its term_taxonomy_id.
-	 *
-	 * @param  int $tt_id term_taxonomy_id
-	 * @return array
-	 */
-	private function get_term_by_tt_id( $tt_id ) {
+	private function get_language_tag( $language_data ) {
 
-		$sql = "
-SELECT terms.`term_id`, terms.`name`, terms.`slug`, tax.`taxonomy`
-FROM {$this->wpdb->terms} terms
-  INNER JOIN {$this->wpdb->term_taxonomy} tax
-    ON tax.`term_taxonomy_id` = %d
-WHERE tax.`term_id` = terms.`term_id`
-LIMIT 1";
+		$tag = $like = '';
 
-		$query  = $this->wpdb->prepare( $sql, $tt_id );
-		$result = $this->wpdb->get_row( $query, ARRAY_A );
+		if ( ! empty ( $language_data[ 'lang' ] ) ) {
+			$tag = str_replace( '_', '-', $language_data[ 'lang' ] );
+		}
+		elseif ( ! empty ( $language_data[ 'text' ] )
+			&& preg_match( '~[a-zA-Z-]+~', $language_data[ 'text' ] )
+		) {
+			$tag = str_replace( '_', '-', $language_data[ 'text' ] );
+		}
 
-		// $result might be NULL, but we need a predictable return type.
-		return empty ( $result ) ? array() : $result;
+		// a site might have just 'EN' as text and no other values
+		if ( FALSE === strpos( $tag, '-' ) ) {
+			$tag  = strtolower( $tag );
+			$like = $tag;
+		}
+
+		return array ( $tag, $like );
 	}
 
 	/**
+	 * @uses get_request_type()
 	 * @return string
 	 */
 	private function get_request_type() {
 
-		if ( is_singular() )
-			return 'post';
+		$checks = array (
+			'admin'             => 'is_admin',
+			'post'              => array ( $this, 'is_singular' ),
+			'term'              => array (
+				$this,
+				'is_term_archive_request'
+			),
+			'post_type_archive' => 'is_post_type_archive',
+			'search'            => 'is_search',
+			'front_page'        => 'is_front_page',
+		);
 
-		if ( $this->is_term_archive_request() )
-			return 'term';
+		foreach ( $checks as $type => $callback ) {
 
-		if ( is_post_type_archive() )
-			return 'post_type_archive';
-
-		if ( is_search() )
-			return 'search';
-
-		if ( is_front_page() )
-			return 'front_page';
-
-		if ( is_home() )
-			return 'home';
+			if ( call_user_func( $callback ) ) {
+				return $type;
+			}
+		}
 
 		return '';
 	}
 
 	/**
+	 * Check for regular singular pages and separate page for posts
+	 *
 	 * @return bool
+	 */
+	private function is_singular() {
+
+		if ( is_singular() )
+			return TRUE;
+
+		return $this->is_separate_home_page();
+	}
+
+	/**
+	 * Check for separate page for posts
+	 *
+	 * @return bool
+	 */
+	private function is_separate_home_page() {
+
+		return is_home() && ! is_front_page();
+	}
+
+	/**
+	 * @used-by get_request_type()
+	 * @see     get_request_type()
+	 * @return  bool
 	 */
 	private function is_term_archive_request() {
 
@@ -477,21 +596,33 @@ LIMIT 1";
 	}
 
 	/**
-	 * @param $site_id
+	 * @param      $site_id
+	 * @param bool $include_base
 	 * @return array
 	 */
-	private function get_related_sites( $site_id ) {
+	private function get_related_sites( $site_id, $include_base ) {
 
 		if ( empty ( $site_id ) )
 			$site_id = get_current_blog_id();
 
-		return $this->site_relations->get_related_sites(
-			$site_id,
-			! is_user_logged_in()
-		);
+		$sites = $this->site_relations->get_related_sites( $site_id );
+
+		if ( empty ( $sites ) )
+			return array();
+
+		if ( $include_base )
+			$sites[] = $site_id;
+
+		return $sites;
 	}
 
 	/**
+	 * Get the current post type.
+	 *
+	 * When we have an archive with multiple post types, a custom query, we use
+	 * just the first post type. This is not ideal, but easier to handle further
+	 * down.
+	 *
 	 * @return string
 	 */
 	private function get_request_post_type() {
@@ -501,7 +632,7 @@ LIMIT 1";
 		if ( is_array( $post_type ) )
 			$post_type = reset( $post_type );
 
-		return $post_type;
+		return (string) $post_type;
 	}
 
 	/**
@@ -514,7 +645,7 @@ LIMIT 1";
 			// always greater than 0
 			'site_id'              => get_current_blog_id(),
 			// 0 if missing
-			'content_id'           => get_queried_object_id(),
+			'content_id'           => $this->get_query_id(),
 			'type'                 => $this->get_request_type(),
 			'strict'               => TRUE,
 			'search_term'          => get_search_query(),
@@ -524,26 +655,74 @@ LIMIT 1";
 
 		$arguments = wp_parse_args( $args, $defaults );
 
-		return $arguments;
+		return apply_filters( 'mlp_get_translations_arguments', $arguments );
 	}
 
 	/**
-	 * @param $arguments
+	 * Get ID of queried object, post type or term
+	 *
+	 * We need the term_taxonomy_id for terms.
+	 *
+	 * @return int
+	 */
+	private function get_query_id() {
+
+		if ( is_category() || is_tag() || is_tax() )
+			return get_queried_object()->term_taxonomy_id;
+
+		return get_queried_object_id();
+	}
+
+	/**
+	 * @param  array $arguments
 	 * @return array
 	 */
-	private function prepare_translation_relations( $arguments ) {
+	private function prepare_translation_relations( Array $arguments ) {
 
-		if ( empty ( $arguments[ 'content_id' ] ) )
+		if ( ! $this->can_have_relations( $arguments ) )
 			return array();
 
-		if ( ! in_array( $arguments[ 'type' ], array ( 'term', 'post' ) ) )
-			return array();
-
-		return $this->get_related_content_ids(
+		$relations = $this->get_related_content_ids(
 			$arguments[ 'site_id' ],
 			$arguments[ 'content_id' ],
 			$arguments[ 'type' ]
 		);
+
+		if ( 'post' !== $arguments[ 'type' ] || is_admin() )
+			return $relations;
+
+		return $this->remove_unpublished_posts( $relations );
+	}
+
+	/**
+	 * Check if the current request is worth to be queried for relations
+	 *
+	 * @param array $arguments
+	 * @return bool
+	 */
+	private function can_have_relations( Array $arguments ) {
+
+		if ( empty ( $arguments[ 'content_id' ] ) )
+			return FALSE;
+
+		return in_array( $arguments[ 'type' ], array ( 'term', 'post' ) );
+	}
+
+	/**
+	 * @param  array $relations
+	 * @return array
+	 */
+	private function remove_unpublished_posts( Array $relations ) {
+
+		foreach ( $relations as $site_id => $content_id ) {
+
+			$post = get_blog_post( $site_id, $content_id );
+
+			if ( ! $post || 'publish' !== $post->post_status )
+				unset( $relations[ $site_id ] );
+		}
+
+		return $relations;
 	}
 
 	/**

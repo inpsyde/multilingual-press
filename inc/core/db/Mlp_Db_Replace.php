@@ -1,45 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 /**
- * Replace one string with another in multiple tables at once.
- *
- * Usage:
- * <pre><code>
- * $tables = array (
- *    $wpdb->posts         => array (
- *        'post_content',
- *        'post_excerpt',
- *        'post_content_filtered',
- *    ),
- *    $wpdb->term_taxonomy => array (
- *        'description'
- *    ),
- *    $wpdb->comments      => array (
- *        'comment_content'
- *    )
- *);
- * $db_replace    = new Mlp_Db_Replace( $tables, 'Foo', 'Bar' );
- * $affected_rows = $db_replace->replace();
- * </code></pre>
+ * Replace one string with another in multiple columns at once.
  *
  * @author  Inpsyde GmbH, toscho
- * @version 2014.07.17
+ * @version 2015.01.13
  */
 class Mlp_Db_Replace {
-
-	/**
-	 * @var array
-	 */
-	private $tables;
-
-	/**
-	 * @var string
-	 */
-	private $from;
-
-	/**
-	 * @var string
-	 */
-	private $replacement;
 
 	/**
 	 * @type wpdb
@@ -47,63 +13,114 @@ class Mlp_Db_Replace {
 	private $wpdb;
 
 	/**
+	 * Column names that did not pass our validation
+	 *
+	 * @type array
+	 */
+	private $invalid_columns = array();
+
+	/**
 	 * Constructor
 	 *
-	 * @param  array  $tables Table names as keys, columns as value arrays
-	 * @param  string $from   String to find, will be escaped.
-	 * @param  string $replacement     String to use as replacement, will be escaped.
 	 * @param  wpdb   $wpdb
 	 */
-	public function __construct( Array $tables, $from, $replacement, wpdb $wpdb ) {
+	public function __construct( wpdb $wpdb ) {
 
-		$this->tables      = $tables;
-		$this->from        = $wpdb->_real_escape( $from );
-		$this->replacement = $wpdb->_real_escape( $replacement );
 		$this->wpdb = $wpdb;
 	}
 
 	/**
-	 * Replace references to old URI with the new one.
+	 * Replace string in multiple columns in a table
 	 *
-	 * @return int|FALSE Number of affected rows or FALSE on error
+	 * @param  Mlp_Db_Table_Name_Interface $table
+	 * @param  array  $columns
+	 * @param  string $search
+	 * @param  string $replacement
+	 * @return int    Number of affected rows
 	 */
-	public function replace() {
+	public function replace_string(
+		Mlp_Db_Table_Name_Interface $table,
+		Array                       $columns,
+		                            $search,
+		                            $replacement
+	) {
 
-		$sql = $this->get_replace_sql();
-		return $this->wpdb->query( $sql );
+		$name         = $table->get_name();
+		$replacements = $this->get_replacement_sql( $columns, $search, $replacement );
+
+		if ( empty ( $replacements ) )
+			return 0;
+
+		$this->wpdb->query( 'SET autocommit = 0;' );
+		$num = (int) $this->wpdb->query( "UPDATE `$name` SET $replacements" );
+		$this->wpdb->query( 'COMMIT;' );
+		$this->wpdb->query( 'SET autocommit = 1;' );
+
+		return $num;
 	}
 
 	/**
-	 * Create an SQL query to replace the same strings in multiple tables and columns.
+	 * Get the columns that did not pass our validation
 	 *
-	 * @return string Complete SQL query
+	 * This is mainly for debugging.
+	 *
+	 * @return array
 	 */
-	public function get_replace_sql() {
+	public function get_invalid_columns() {
 
-		$table_names = join( '`,`', array_keys( $this->tables ) );
-		$update      = "UPDATE `" . $table_names ."` SET \n";
-		$replace     = array();
-
-		foreach ( $this->tables as $table => $columns )
-			$replace[] = $this->get_column_replace_sql( $table, $columns );
-
-		return $update . join( ', ', $replace );
+		return $this->invalid_columns;
 	}
 
 	/**
-	 * Create replacement SQL for single table with multiple columns.
+	 * Get the SQL for the whole table
 	 *
-	 * @param  string $table   Table name
-	 * @param  array  $columns Column names
+	 * @param  array  $columns
+	 * @param  string $search
+	 * @param  string $replacement
 	 * @return string
 	 */
-	private function get_column_replace_sql( $table, Array $columns ) {
+	private function get_replacement_sql( Array $columns, $search, $replacement ) {
 
 		$rows = array ();
 
-		foreach ( $columns as $column )
-			$rows[] = "$table.$column = REPLACE( $table.$column, '$this->from', '$this->replacement' )";
+		foreach ( $columns as $column ) {
+			if ( ! $this->is_valid_column_name( $column ) ) {
+				$this->invalid_columns[] = $column;
+				continue;
+			}
+
+			$sql = $this->get_column_sql( $column, $search, $replacement );
+
+			if ( ! empty ( $sql ) )
+				$rows[] = $sql;
+		}
 
 		return join( ",\n", $rows );
+	}
+
+	/**
+	 * Get the SQL for one column
+	 *
+	 * @param  string $column
+	 * @param  string $search
+	 * @param  string $replacement
+	 * @return string
+	 */
+	private function get_column_sql( $column, $search, $replacement ) {
+
+		$sql = "$column = REPLACE( $column, %s, %s )";
+		// wpdb::prepare() returns null, false or a string. useless.
+		return (string) $this->wpdb->prepare( $sql, $search, $replacement );
+	}
+
+	/**
+	 * Validate the column name
+	 *
+	 * @param  string $column
+	 * @return bool
+	 */
+	private function is_valid_column_name( $column ) {
+
+		return (bool) preg_match( '~^[a-zA-Z_][a-zA-Z0-9_]*$~', $column );
 	}
 }

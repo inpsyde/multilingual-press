@@ -11,6 +11,26 @@ class Mlp_Term_Field_View {
 	/**
 	 * @type string
 	 */
+	const EDIT_TERM_BEFORE = 'edit_term_before';
+
+	/**
+	 * @type string
+	 */
+	const EDIT_TERM_AFTER = 'edit_term_after';
+
+	/**
+	 * @type string
+	 */
+	const ADD_TERM_BEFORE = 'add_term_before';
+
+	/**
+	 * @type string
+	 */
+	const ADD_TERM_AFTER = 'add_term_after';
+
+	/**
+	 * @type string
+	 */
 	const ADD_TERM_TITLE = 'add_term_title';
 
 	/**
@@ -53,6 +73,8 @@ class Mlp_Term_Field_View {
 	 */
 	public function edit_term() {
 
+		$this->updatable->update( self::EDIT_TERM_BEFORE );
+
 		?>
 		<tr class="form-field">
 			<th scope="row"><?php
@@ -66,6 +88,7 @@ class Mlp_Term_Field_View {
 		</tr>
 	<?php
 
+		$this->updatable->update( self::EDIT_TERM_AFTER );
 	}
 
 	/**
@@ -74,6 +97,8 @@ class Mlp_Term_Field_View {
 	 * @return void
 	 */
 	public function add_term() {
+
+		$this->updatable->update( self::ADD_TERM_BEFORE );
 
 		?>
 		<fieldset id="<?php
@@ -87,5 +112,6 @@ class Mlp_Term_Field_View {
 			?>
 		</fieldset>
 	<?php
+		$this->updatable->update( self::ADD_TERM_AFTER );
 	}
 }
