@@ -82,12 +82,7 @@ class Mlp_Load_Controller {
 	 */
 	private function load_defaults( Inpsyde_Autoload $loader ) {
 
-		$dirs = glob( "$this->plugin_dir/core/*", GLOB_ONLYDIR );
-
-		if ( is_dir( "$this->plugin_dir/pro" ) ) {
-			$pro  = glob( "$this->plugin_dir/pro/*", GLOB_ONLYDIR );
-			$dirs = array_merge( $dirs, $pro );
-		}
+		$dirs = glob( "$this->plugin_dir/*", GLOB_ONLYDIR );
 
 		foreach ( $dirs as $dir )
 			$loader->add_rule( new Inpsyde_Directory_Load( $dir ) );

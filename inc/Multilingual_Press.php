@@ -221,27 +221,20 @@ class Multilingual_Press {
 	protected function load_features() {
 
 		$found = array ();
-		$dirs  = array (
-			'core',
-			'pro'
-		);
 
-		foreach ( $dirs as $dir ) {
+		$path = $this->plugin_data->plugin_dir_path . "/inc";
 
-			$path = $this->plugin_data->plugin_dir_path . "/inc/$dir";
+		if ( ! is_readable( $path ) )
+			return $found;
 
-			if ( ! is_readable( $path ) )
-				continue;
+		$files = glob( "$path/feature.*.php" );
 
-			$files = glob( "$path/feature.*.php" );
+		if ( empty ( $files ) )
+			return $found;
 
-			if ( empty ( $files ) )
-				continue;
-
-			foreach ( $files as $file ) {
-				$found[] = $file;
-				require $file;
-			}
+		foreach ( $files as $file ) {
+			$found[] = $file;
+			require $file;
 		}
 
 		// We need the return value for tests.
