@@ -2,6 +2,10 @@
 
 Create networks with multiple languages
 
+MultilingualPress Pro and Free are merged now, so all features are the same. 
+We are still finishing up this process. Use the `master` branch to get a preview 
+of the upcoming fixes.
+
 ## Description
 
 Connect multiple sites as language alternatives in a multisite. Use a
