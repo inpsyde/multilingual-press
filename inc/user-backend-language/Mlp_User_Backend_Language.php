@@ -48,9 +48,7 @@ class Mlp_User_Backend_Language {
 	public function setup() {
 
 		// Load user specific language in the backend
-		if ( is_admin() ) {
-			add_filter( 'locale', array( $this, 'locale' ) );
-		}
+		add_filter( 'locale', array( $this, 'locale' ) );
 
 		$this->active = $this->module_manager->register(
 			array(
@@ -184,10 +182,6 @@ class Mlp_User_Backend_Language {
 	public function locale( $locale ) {
 
 		if ( ! $this->active ) {
-			return $locale;
-		}
-
-		if ( ! did_action( 'set_current_user' ) ) {
 			return $locale;
 		}
 
