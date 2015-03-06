@@ -66,6 +66,8 @@ class Mlp_User_Backend_Language {
 		// Add User Field for own blog language
 		add_filter( 'personal_options', array( $this, 'edit_user_profile' ) );
 		add_filter( 'profile_update', array( $this, 'profile_update' ) );
+
+		add_action( 'admin_footer-options-general.php', array( $this, 'set_selected_language' ) );
 	}
 
 	/**
@@ -230,6 +232,32 @@ class Mlp_User_Backend_Language {
 		uksort( $output, 'strnatcasecmp' );
 
 		echo implode( "\n\t", $output );
+	}
+
+	/**
+	 * Set the site language to what it actually is (i.e., not the user backend language).
+	 *
+	 * @wp-hook admin_footer-options-general.php
+	 *
+	 * @return void
+	 */
+	public function set_selected_language() {
+
+		global $locale;
+
+		$filtered_locale = $locale;
+		remove_filter( 'locale', array( $this, 'locale' ) );
+		$locale = NULL;
+		$locale = get_locale();
+
+		if ( $filtered_locale !== $locale ) : ?>
+			<script>
+				document.getElementById( 'WPLANG' ).value = '<?php echo 'en_US' === $locale ? '' : $locale; ?>';
+			</script>
+		<?php endif;
+
+		add_filter( 'locale', array( $this, 'locale' ) );
+		$locale = $filtered_locale;
 	}
 
 }
