@@ -243,21 +243,42 @@ class Mlp_User_Backend_Language {
 	 */
 	public function set_selected_language() {
 
-		global $locale;
+		unset ( $GLOBALS['locale'] );
 
-		$filtered_locale = $locale;
+		$filtered_locale = get_locale();
+
 		remove_filter( 'locale', array( $this, 'locale' ) );
-		$locale = NULL;
-		$locale = get_locale();
 
-		if ( $filtered_locale !== $locale ) : ?>
-			<script>
-				document.getElementById( 'WPLANG' ).value = '<?php echo 'en_US' === $locale ? '' : $locale; ?>';
-			</script>
-		<?php endif;
+		$unfiltered_locale = get_locale();
+
+		if ( $filtered_locale !== $unfiltered_locale ) {
+			$this->print_script( $unfiltered_locale );
+		}
 
 		add_filter( 'locale', array( $this, 'locale' ) );
-		$locale = $filtered_locale;
+	}
+
+	/**
+	 * Print the script to fix the visible value for the site language
+	 *
+	 * @link   https://github.com/inpsyde/multilingual-press/issues/89
+	 * @param  string $value
+	 * @return void
+	 */
+	private function print_script( $value ) {
+
+		if ( 'en_US' === $value ) {
+			$value = '';
+		}
+		else {
+			$value = esc_js( $value );
+		}
+
+		?>
+		<script>
+			document.getElementById( 'WPLANG' ).value = '<?php echo $value; ?>';
+		</script>
+		<?php
 	}
 
 }
