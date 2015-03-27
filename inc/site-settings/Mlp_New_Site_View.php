@@ -129,7 +129,7 @@ class Mlp_New_Site_View {
 		<?php
 		$template = ob_get_contents();
 		// An FTP client might have changed the \n to \r\n.
-		$template = str_replace( array ("\n", "\r" ), "", $template );
+		$template = str_replace( array ("\n", "\r", "'" ), array( '', '', "\\'" ), $template );
 		ob_end_clean();
 
 		?>

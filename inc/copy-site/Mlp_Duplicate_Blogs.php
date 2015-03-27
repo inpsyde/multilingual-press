@@ -134,6 +134,11 @@ class Mlp_Duplicate_Blogs {
 		$this->insert_post_relations( $source_blog_id, $blog_id );
 		$this->copy_attachments( $source_blog_id, $blog_id, $blog_id );
 
+		// Set the search engine visibility
+		if ( isset( $_POST[ 'blog' ][ 'visibility' ] ) ) {
+			update_option( 'blog_public', (bool) $_POST[ 'blog' ][ 'visibility' ] );
+		}
+
 		restore_current_blog();
 
 		/**
@@ -386,6 +391,39 @@ class Mlp_Duplicate_Blogs {
 			</td>
 		</tr>
 		<?php
+
+		/**
+		 * Customize default value for search engine visibility when adding a new site.
+		 *
+		 * @param bool $visibility Should the new site be visible by default?
+		 */
+		$visibility = (bool) apply_filters( 'mlp_default_search_engine_visibility', FALSE );
+
+		?>
+		<tr class="form-field">
+			<td>
+				<label for="inpsyde_multilingual_visibility">
+					<?php
+					esc_html_e( 'Search Engine Visibility' );
+					?>
+				</label>
+			</td>
+			<td>
+				<label for="inpsyde_multilingual_visibility">
+					<input type="checkbox" value="0" id="inpsyde_multilingual_visibility" name="blog[visibility]" <?php checked( $visibility, FALSE ); ?>>
+					<?php
+					esc_html_e( 'Discourage search engines from indexing this site' );
+					?>
+				</label>
+
+				<p class="description">
+					<?php
+					esc_html_e( 'It is up to search engines to honor this request.' );
+					?>
+				</p>
+			</td>
+		</tr>
+	<?php
 	}
 
 	/**
