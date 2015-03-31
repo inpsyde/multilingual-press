@@ -404,7 +404,7 @@ class Mlp_Duplicate_Blogs {
 			<td>
 				<label for="inpsyde_multilingual_visibility">
 					<?php
-					esc_html_e( 'Search Engine Visibility' );
+					esc_html_e( 'Search Engine Visibility', 'multilingualpress' );
 					?>
 				</label>
 			</td>
@@ -412,13 +412,13 @@ class Mlp_Duplicate_Blogs {
 				<label for="inpsyde_multilingual_visibility">
 					<input type="checkbox" value="0" id="inpsyde_multilingual_visibility" name="blog[visibility]" <?php checked( $visibility, FALSE ); ?>>
 					<?php
-					esc_html_e( 'Discourage search engines from indexing this site' );
+					esc_html_e( 'Discourage search engines from indexing this site', 'multilingualpress' );
 					?>
 				</label>
 
 				<p class="description">
 					<?php
-					esc_html_e( 'It is up to search engines to honor this request.' );
+					esc_html_e( 'It is up to search engines to honor this request.', 'multilingualpress' );
 					?>
 				</p>
 			</td>
