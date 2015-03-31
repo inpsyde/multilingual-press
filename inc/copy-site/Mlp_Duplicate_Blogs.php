@@ -402,11 +402,9 @@ class Mlp_Duplicate_Blogs {
 		?>
 		<tr class="form-field">
 			<td>
-				<label for="inpsyde_multilingual_visibility">
-					<?php
-					esc_html_e( 'Search Engine Visibility', 'multilingualpress' );
-					?>
-				</label>
+				<?php
+				esc_html_e( 'Search Engine Visibility', 'multilingualpress' );
+				?>
 			</td>
 			<td>
 				<label for="inpsyde_multilingual_visibility">
