@@ -72,7 +72,8 @@ class Mlp_Nav_Menu_Frontend {
 
 		list ( $url, $translation ) = $this->get_item_details( $translations, $site_id );
 
-		$item->url = apply_filters( 'mlp_linked_element_link', $url, $site_id, 0 );
+		/** This filter is documented in inc/types/Mlp_Translation.php */
+		$item->url = apply_filters( 'mlp_linked_element_link', $url, $site_id, 0, $translation );
 
 		/**
 		 * Filter a nav menu item before it is sent to the walker
