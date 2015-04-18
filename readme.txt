@@ -41,6 +41,9 @@ You can follow our progress and development notices on our
 - Translate posts, pages and taxonomy terms like categories or tags.
 - Add translation links to any nav menu.
 - No lock-in: After deactivation, all sites will still work.
+- SEO-friendly URLs and permalinks.
+- Support for top-level domains per language (via multisite domain mapping).
+- Automatic `hreflang` support.
 
 = Pro Version =
 
