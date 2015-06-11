@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.0-dev
+
+- Add new column to network site view to see the language of each site
+
 ## 2.1.2 Edith Fellowes
 
 - Combine all scripts and stylesheets, separated for frontend and backend.
