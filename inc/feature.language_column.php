@@ -35,7 +35,7 @@ function mlp_feature_language_column() {
  * @param  string $column_name not used
  * @param  int    $blog_id
  *
- * @return string|void
+ * @return string
  */
 function mlp_render_site_language_column( $column_name, $blog_id ) {
 
