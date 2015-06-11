@@ -128,7 +128,7 @@ class Mlp_Translation_Metabox {
 
 		foreach ( $related_blogs as $blog_id ) {
 
-			if ( $current_blog_id !== (int) $blog_id )
+			if ( $current_blog_id !== (int) $blog_id && current_user_can_for_blog( $blog_id, 'edit_posts'  ) )
 				$this->register_metabox_per_language( $blog_id, $post );
 		}
 
