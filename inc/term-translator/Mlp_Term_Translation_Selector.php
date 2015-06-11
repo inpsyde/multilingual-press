@@ -196,7 +196,7 @@ class Mlp_Term_Translation_Selector {
 	}
 
 	/**
-	 * @param  int $term_id
+	 * @param  int $term_taxonomy_id
 	 * @param  string $term_name
 	 * @param  int $current_term
 	 * @return string
