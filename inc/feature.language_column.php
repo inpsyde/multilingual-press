@@ -44,7 +44,7 @@ function mlp_render_site_language_column( $column_name, $blog_id ) {
 	restore_current_blog();
 
 	if ( empty( $lang ) ) {
-		return esc_attr__( 'none', 'multilingualpress' );
+		return esc_html__( 'none', 'multilingualpress' );
 	}
 
 	$lang = Mlp_Helpers::get_lang_by_iso( $lang );

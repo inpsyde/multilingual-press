@@ -44,7 +44,7 @@ function mlp_render_related_blog_column( $column_name, $blog_id ) {
 	unset( $blogs[ $blog_id ] );
 
 	if ( empty( $blogs ) ) {
-		return esc_attr__( 'none', 'multilingualpress' );
+		return esc_html__( 'none', 'multilingualpress' );
 	}
 
 	$blogs = array_map( 'esc_html', $blogs );
