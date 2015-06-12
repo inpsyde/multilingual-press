@@ -128,14 +128,6 @@ class Mlp_Translation_Metabox {
 
 		foreach ( $related_blogs as $blog_id ) {
 
-			/**
-			 * Do not allow enable translations if the user
-			 * is lacking capabilities for the remote blog
-			 */
-			if ( ! current_user_can_for_blog( $blog_id, 'edit_posts' ) ) {
-				return;
-			}
-
 			if ( $current_blog_id !== (int) $blog_id ) {
 				$this->register_metabox_per_language( $blog_id, $post );
 			}
