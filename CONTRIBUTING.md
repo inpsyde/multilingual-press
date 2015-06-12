@@ -1,36 +1,32 @@
-Thanks for contributing to MultilingualPress (MLP) — you rock!
-We'd love for you to contribute to our source code and to make MultilingualPress even better than it is today.
+Thanks for contributing to MultilingualPress (MLP)&mdash;you rock!
 
 # MultilingualPress
-MultilingualPress, Truly Localised WordPress.
-You find much information about the plugin for WordPress on this [landing page](http://multilingualpress.pro/).
-
-Before getting started, make sure your issue has not been discussed earlier. You can search for existing tickets [here](https://github.com/inpsyde/multilingual-press/search).
-
+* For general information please refer to the [MultilingualPress website](http://multilingualpress.pro/).
 * MLP should be backwards compatible with the two versions prior to the current stable version of WordPress.
-* MLP have a history, not all is fine, respect it or make it better via contribution.
-* MLP use the [Codex](https://codex.wordpress.org/Category:About_Codex) from WordPress. You find our codex additional in [this repository](https://github.com/inpsyde/Codex). 
-
-By contributing code to MultilingualPress, you grant its use under the [GNU General Public License v2 (or later)](http://www.gnu.org/licenses/gpl-2.0.html).
+* MLP respects the [WordPress Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/) and follows additional [conventions and best practices](https://github.com/inpsyde/Codex/blob/master/accepted/styleguide_conventions_bestpractices_EN.md). 
 
 # Getting Started
-* Make sure you have a [GitHub account](https://github.com/signup/free)
-* Submit a ticket for your issue, assuming one does not already exist.
+* Make sure you have a [GitHub account](https://github.com/signup/free).
+* See if your issue has been discussed (or even fixed) earlier. You can [search for existing issues](https://github.com/inpsyde/multilingual-press/issues?utf8=%E2%9C%93&q=is%3Aissue).
+* Assuming it does not already exist, [create a new issue](https://github.com/inpsyde/multilingual-press/issues/new).
 	* Clearly describe the issue including steps to reproduce when it is a bug.
 	* Make sure you fill in the earliest version that you know has the issue.
-* Fork the repository on GitHub
+* Fork the repository on GitHub.
 
 # Making Changes
 * Create a topic branch from where you want to base your work.
-	* This is usually the master branch.
+	* This is usually the `master` branch.
 	* Only target release branches if you are certain your fix must be on that branch.
-	* To quickly create a topic branch based on master; `git checkout -b fix/master/my_contribution master`.
-	* Use the naming convention for a branch `issue_{type-number}`
+	* To quickly create a topic branch based on the `master` branch:
+	    * `git checkout -b issue/%YOUR-ISSUE-NUMBER% master`
 	* Please avoid working directly on the `master` branch.
 * Make commits of logical units.
 * Make sure your commit messages are helpful.
 
 # Submitting Changes
-* Push your changes to a topic branch in your fork of the repository.
-* Submit a pull request to our repository.
-* We will give feedback about your pull request.
+* Push your changes to the according topic branch in your fork of the repository.
+* [Create a pull request](https://github.com/inpsyde/multilingual-press/compare) to our repository.
+* Wait for feedback. The MLP team looks at pull requests on a regular basis.
+
+# License
+By contributing code to MultilingualPress, you grant its use under the [GNU General Public License v2 (or later)](http://www.gnu.org/licenses/gpl-2.0.html).
