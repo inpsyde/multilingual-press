@@ -117,16 +117,26 @@ class Mlp_Translation_Metabox {
 	 */
 	public function register_meta_boxes( $post_type, WP_Post $post ) {
 
-		if ( ! in_array( $post_type, $this->allowed_post_types ) )
+		if ( ! in_array( $post_type, $this->allowed_post_types ) ) {
 			return;
+		}
 
 		$current_blog_id = get_current_blog_id();
-		$related_blogs = $this->plugin_data->site_relations->get_related_sites( $current_blog_id, FALSE );
+		$related_blogs   = $this->plugin_data->site_relations->get_related_sites( $current_blog_id, FALSE );
 
-		if ( empty ( $related_blogs ) )
+		if ( empty ( $related_blogs ) ) {
 			return;
+		}
 
 		foreach ( $related_blogs as $blog_id ) {
+
+			/**
+			 * Do not allow enable translations if the user
+			 * is lacking capabilities for the remote blog
+			 */
+			if ( ! $this->is_translatable_by_user( $post, $blog_id ) ) {
+				continue;
+			}
 
 			if ( $current_blog_id !== (int) $blog_id ) {
 				$this->register_metabox_per_language( $blog_id, $post );
@@ -135,6 +145,25 @@ class Mlp_Translation_Metabox {
 
 		$this->plugin_data->assets->provide( 'mlp_backend_css' );
 		$this->plugin_data->assets->provide( 'mlp_backend_js' );
+	}
+
+	/**
+	 * Checks if the current user has the appropriate capabilities to edit a given post
+	 *
+	 * @param WP_Post $post
+	 * @param bool    $blog_id
+	 *
+	 * @return bool
+	 */
+	private function is_translatable_by_user( WP_Post $post, $blog_id = FALSE ) {
+
+		$blog_id = ( ! $blog_id ) ? get_current_blog_id() : $blog_id;
+
+		if ( ! current_user_can_for_blog( $blog_id, 'edit_posts' ) ) {
+			return FALSE;
+		}
+
+		return TRUE;
 	}
 
 	/**
