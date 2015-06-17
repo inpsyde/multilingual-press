@@ -18,7 +18,8 @@ Thanks for contributing to MultilingualPress (MLP)&mdash;you rock!
 	* This is usually the `master` branch.
 	* Only target release branches if you are certain your fix must be on that branch.
 	* To quickly create a topic branch based on the `master` branch:
-	    * `git checkout -b issue/%YOUR-ISSUE-NUMBER% master`
+	    * `git checkout -b issue/%YOUR-ISSUE-NUMBER%_%DESCRIPTIVE-TITLE% master`
+	    * a good example is `issue/118_html_lang_attribute`
 	* Please avoid working directly on the `master` branch.
 * Make commits of logical units.
 * Make sure your commit messages are helpful.
