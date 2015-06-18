@@ -101,9 +101,6 @@ class Multilingual_Press {
 		// Check for errors
 		add_filter( 'all_admin_notices', array ( $this, 'check_for_user_errors_admin_notice' ) );
 
-		// Use correct language for html element
-		add_filter( 'language_attributes', array( $this, 'language_attributes' ) );
-
 		add_action( 'wp_loaded', array ( $this, 'late_load' ), 0 );
 
 		/**
@@ -447,7 +444,10 @@ class Multilingual_Press {
 	 */
 	private function run_frontend_actions() {
 
-// frontend-hooks
+		// Use correct language for html element
+		add_filter( 'language_attributes', array( $this, 'language_attributes' ) );
+
+		// frontend-hooks
 		$hreflang = new Mlp_Hreflang_Header_Output( $this->plugin_data->language_api );
 		add_action(
 			'template_redirect',
