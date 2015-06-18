@@ -101,6 +101,9 @@ class Multilingual_Press {
 		// Check for errors
 		add_filter( 'all_admin_notices', array ( $this, 'check_for_user_errors_admin_notice' ) );
 
+		// Use correct language for html element
+		add_filter( 'language_attributes', array( $this, 'language_attributes' ) );
+
 		add_action( 'wp_loaded', array ( $this, 'late_load' ), 0 );
 
 		/**
@@ -348,6 +351,29 @@ class Multilingual_Press {
 					$blog_id
 			 )
 		);
+	}
+
+	/**
+	 * Use the current blog's language for the html tag.
+	 *
+	 * @wp-hook language_attributes
+	 *
+	 * @param string $output Language attributes HTML.
+	 *
+	 * @return string
+	 */
+	public function language_attributes( $output ) {
+
+		$site_language = mlp_get_current_blog_language();
+		if ( ! $site_language ) {
+			return $output;
+		}
+
+		$language = get_bloginfo( 'language' );
+
+		$site_language = str_replace( '_', '-', $site_language );
+
+		return str_replace( $language, $site_language, $output );
 	}
 
 	/**
