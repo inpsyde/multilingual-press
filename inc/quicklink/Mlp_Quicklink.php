@@ -275,10 +275,12 @@ class Mlp_Quicklink implements Mlp_Updatable {
 
 		if ( 4 > count( $translated ) ) {
 			$type = 'links';
+			$element = 'a';
 			$glue = '<br>';
 			$container = 'links';
 		} else {
 			$type = 'options';
+			$element = 'option';
 			$glue = '';
 			$container = 'form';
 		}
@@ -289,12 +291,10 @@ class Mlp_Quicklink implements Mlp_Updatable {
 			$attributes = array();
 
 			if ( 'links' === $type ) {
-				$element = 'a';
 				$attributes[ 'href' ] = $url;
 				$attributes[ 'hreflang' ] = $language->get_name( 'http' );
 				$attributes[ 'rel' ] = 'alternate';
 			} else {
-				$element = 'option';
 				$attributes[ 'value' ] = $url;
 			}
 
