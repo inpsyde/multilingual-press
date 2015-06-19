@@ -361,7 +361,7 @@ class Multilingual_Press {
 	 */
 	public function language_attributes( $output ) {
 
-		$site_language = mlp_get_current_blog_language();
+		$site_language = Mlp_Helpers::get_current_blog_language();
 		if ( ! $site_language ) {
 			return $output;
 		}
