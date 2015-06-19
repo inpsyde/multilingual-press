@@ -58,17 +58,7 @@ class Mlp_Redirect {
 			return;
 		}
 
-		/**
-		 * Filter redirect behavior for AJAX requests not using admin-ajax.php.
-		 *
-		 * @param bool $redirect_frontend_ajax Redirect AJAX requests not using admin-ajax.php?
-		 */
-		$redirect_frontend_ajax = (bool) apply_filters( 'mlp_redirect_frontend_ajax', FALSE );
-
-		if (
-			! is_admin()
-			&& ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX || $redirect_frontend_ajax )
-		) {
+		if ( ! is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 			$this->frontend_redirect();
 
 			return;
