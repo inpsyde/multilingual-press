@@ -54,18 +54,31 @@ class Mlp_Redirect {
 	 */
 	public function setup() {
 
-		if ( ! $this->register_setting() )
+		if ( ! $this->register_setting() ) {
 			return;
+		}
 
-		if ( ! is_admin() ) {
+		/**
+		 * Filter redirect behavior for AJAX requests not using admin-ajax.php.
+		 *
+		 * @param bool $redirect_frontend_ajax Redirect AJAX requests not using admin-ajax.php?
+		 */
+		$redirect_frontend_ajax = (bool) apply_filters( 'mlp_redirect_frontend_ajax', FALSE );
+
+		if (
+			! is_admin()
+			&& ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX || $redirect_frontend_ajax )
+		) {
 			$this->frontend_redirect();
+
 			return;
 		}
 
 		$this->site_settings();
 
-		if ( is_network_admin() )
+		if ( is_network_admin() ) {
 			$this->activation_column();
+		}
 	}
 
 	/**
