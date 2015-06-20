@@ -468,7 +468,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				$tags[ $site_id ] = str_replace('_', '-', $data[ 'text' ] );
 
 			// a site might have just 'EN' as text and no other values
-			if ( FALSE === strpos( $tags[ $site_id ], '-' ) ) {
+			if ( isset( $tags[ $site_id ] ) && FALSE === strpos( $tags[ $site_id ], '-' ) ) {
 				$tags[ $site_id ] = strtolower( $tags[ $site_id ] );
 				$add_like[ $site_id ] = $tags[ $site_id ];
 			}
