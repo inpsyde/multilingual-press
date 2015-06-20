@@ -299,55 +299,59 @@ class Multilingual_Press {
 	}
 
 	/**
-	 * Delete removed blogs from site_option 'inpsyde_multilingual'
-	 * and cleanup linked elements table
+	 * Remove deleted blog from 'inpsyde_multilingual' site option and clean up linked elements table.
 	 *
-	 * @param	int $blog_id
-	 * @since	0.3
-	 * @uses	get_site_option, update_site_option
-	 * @global	$wpdb | WordPress Database Wrapper
-	 * @return	void
+	 * @wp-hook delete_blog
+	 *
+	 * @param int $blog_id ID of the deleted blog.
+	 *
+	 * @return void
 	 */
 	public function delete_blog( $blog_id ) {
 
 		global $wpdb;
 
-		$current_blog_id = $blog_id;
+		// Delete relations
+		$this->plugin_data->site_relations->delete_relation( $blog_id );
 
-		// Update Blog Relationships
-		// Get blogs related to the current blog
-		$all_blogs = get_site_option( 'inpsyde_multilingual' );
-
-		if ( ! $all_blogs )
-			$all_blogs = array ();
-
-		// The user defined new relationships for this blog. We add it's own ID
-		// for internal purposes
-		$data[ 'related_blogs' ][] = $current_blog_id;
-
-		// Loop through related blogs
-		foreach ( $all_blogs as $blog_id => $blog_data ) {
-
-			if ( $current_blog_id != $blog_id )
-				$this->plugin_data->site_relations->delete_relation( $blog_id );
-		}
-
-		// Update site_option
-		$blogs = (array) get_site_option( 'inpsyde_multilingual', array () );
-
-		if ( ! empty ( $blogs ) && array_key_exists( $current_blog_id, $blogs ) ) {
-			unset( $blogs[ $current_blog_id ] );
+		// Update site option
+		$blogs = (array) get_site_option( 'inpsyde_multilingual', array() );
+		if ( isset( $blogs[ $blog_id ] ) ) {
+			unset( $blogs[ $blog_id ] );
 			update_site_option( 'inpsyde_multilingual', $blogs );
 		}
 
-		// Cleanup linked elements table
-		$wpdb->query(
-			 $wpdb->prepare(
-				  'DELETE FROM ' . $this->link_table . ' WHERE `ml_source_blogid` = %d OR `ml_blogid` = %d',
-					$blog_id,
-					$blog_id
-			 )
-		);
+		// Clean up linked elements table
+		$sql = "
+			DELETE
+			FROM {$this->link_table}
+			WHERE ml_source_blogid = %d
+				OR ml_blogid = %d";
+		$sql = $wpdb->prepare( $sql, $blog_id, $blog_id );
+		$wpdb->query( $sql );
+	}
+
+	/**
+	 * Use the current blog's language for the html tag.
+	 *
+	 * @wp-hook language_attributes
+	 *
+	 * @param string $output Language attributes HTML.
+	 *
+	 * @return string
+	 */
+	public function language_attributes( $output ) {
+
+		$site_language = Mlp_Helpers::get_current_blog_language();
+		if ( ! $site_language ) {
+			return $output;
+		}
+
+		$language = get_bloginfo( 'language' );
+
+		$site_language = str_replace( '_', '-', $site_language );
+
+		return str_replace( $language, $site_language, $output );
 	}
 
 	/**
@@ -421,7 +425,10 @@ class Multilingual_Press {
 	 */
 	private function run_frontend_actions() {
 
-// frontend-hooks
+		// Use correct language for html element
+		add_filter( 'language_attributes', array( $this, 'language_attributes' ) );
+
+		// frontend-hooks
 		$hreflang = new Mlp_Hreflang_Header_Output( $this->plugin_data->language_api );
 		add_action(
 			'template_redirect',
