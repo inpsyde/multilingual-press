@@ -339,32 +339,38 @@ class Mlp_Advanced_Translator_Data
 	}
 
 	/**
-	 * Check if there is actually content in the translation. Prevents creation
-	 * of empty translation drafts.
+	 * Check if there actually is content in the translation. Prevents creation of empty translation drafts.
 	 *
-	 * @param  string $title
-	 * @param  string $content
-	 * @param  string $post_type
+	 * @param string $title     Post title.
+	 * @param string $content   Post content.
+	 * @param string $post_type Post type.
+	 *
 	 * @return bool
 	 */
 	private function is_empty_remote_post( $title, $content, $post_type ) {
 
-		if ( '' !== $title && '' !== $content )
+		if (
+			'' !== $title
+			&& '' !== $content
+		) {
 			return FALSE;
+		}
 
-		$title_support  = post_type_supports( $post_type, 'title' );
-		$editor_support = post_type_supports( $post_type, 'editor' );
+		if (
+			post_type_supports( $post_type, 'title' )
+			&& '' !== $title
+		) {
+			return FALSE;
+		}
 
-		if ( $title_support && $editor_support && '' === $title . $content )
-			return TRUE;
+		if (
+			post_type_supports( $post_type, 'editor' )
+			&& '' !== $content
+		) {
+			return FALSE;
+		}
 
-		if ( $title_support && '' === $title )
-			return TRUE;
-
-		if ( $editor_support && '' === $content )
-			return TRUE;
-
-		return FALSE;
+		return TRUE;
 	}
 
 	/**
