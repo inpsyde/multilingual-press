@@ -133,8 +133,7 @@ class Mlp_Translation_Metabox {
 			}
 		}
 
-		$this->plugin_data->assets->provide( 'mlp_backend_css' );
-		$this->plugin_data->assets->provide( 'mlp_backend_js' );
+		$this->plugin_data->assets->provide( array( 'mlp_admin_js', 'mlp_admin_css' ) );
 	}
 
 	/**
