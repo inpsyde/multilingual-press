@@ -20,49 +20,67 @@ if ( ! class_exists( 'Multilingual_Press' ) )
 // Kick-Off
 add_action( 'plugins_loaded', 'mlp_init', 0 );
 
-
+/**
+ * Initialize the plugin.
+ *
+ * @wp-hook plugins_loaded
+ *
+ * @return void
+ */
 function mlp_init() {
 
-	global $wp_version, $wpdb, $pagenow;
+	global $pagenow, $wp_version, $wpdb;
 
-	$plugin_path   = plugin_dir_path( __FILE__ );
-	$plugin_url    = plugins_url( '/', __FILE__ );
+	$plugin_path = plugin_dir_path( __FILE__ );
+	$plugin_url = plugins_url( '/', __FILE__ );
 
-	if ( ! class_exists( 'Mlp_Load_Controller' ) )
+	$assets_base = 'assets';
+
+	if ( ! class_exists( 'Mlp_Load_Controller' ) ) {
 		require $plugin_path . 'inc/autoload/Mlp_Load_Controller.php';
+	}
 
-	$loader          = new Mlp_Load_Controller( $plugin_path . 'inc' );
-	$data            = new Mlp_Plugin_Properties;
-	$data->loader    = $loader->get_loader();
-	$data->locations = new Mlp_Internal_Locations;
+	$loader = new Mlp_Load_Controller( $plugin_path . 'inc' );
+
+	$data = new Mlp_Plugin_Properties();
+	$data->loader = $loader->get_loader();
+	$data->locations = new Mlp_Internal_Locations();
 
 	$data->locations->add_dir( $plugin_path, $plugin_url, 'plugin' );
 
-	foreach ( array ( 'css', 'js', 'flags', 'images' ) as $type ) {
+	$asset_locations = array(
+		'css'    => 'css',
+		'js'     => 'js',
+		'images' => 'images',
+		'flags'  => 'images/flags',
+	);
+	foreach ( $asset_locations as $type => $dir ) {
 		$data->locations->add_dir(
-			$plugin_path . $type,
-			$plugin_url  . $type,
+			$plugin_path . $assets_base . '/' . $dir,
+			$plugin_url . $assets_base . '/' . $dir,
 			$type
 		);
 	}
+
 	$data->plugin_file_path = __FILE__;
 	$data->plugin_base_name = plugin_basename( __FILE__ );
 
 	$headers = get_file_data(
 		__FILE__,
-		array (
+		array(
 			'text_domain_path' => 'Domain Path',
 			'plugin_uri'       => 'Plugin URI',
 			'plugin_name'      => 'Plugin Name',
 			'version'          => 'Version'
 		)
 	);
-
-	foreach ( $headers as $name => $value )
+	foreach ( $headers as $name => $value ) {
 		$data->$name = $value;
+	}
 
-	if ( ! mlp_pre_run_test( $pagenow, $data, $wp_version, $wpdb ) )
+	if ( ! mlp_pre_run_test( $pagenow, $data, $wp_version, $wpdb ) ) {
 		return;
+	}
 
 	$mlp = new Multilingual_Press( $data, $wpdb );
 	$mlp->setup();

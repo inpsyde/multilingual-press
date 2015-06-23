@@ -54,18 +54,21 @@ class Mlp_Redirect {
 	 */
 	public function setup() {
 
-		if ( ! $this->register_setting() )
+		if ( ! $this->register_setting() ) {
 			return;
+		}
 
-		if ( ! is_admin() ) {
+		if ( ! is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 			$this->frontend_redirect();
+
 			return;
 		}
 
 		$this->site_settings();
 
-		if ( is_network_admin() )
+		if ( is_network_admin() ) {
 			$this->activation_column();
+		}
 	}
 
 	/**

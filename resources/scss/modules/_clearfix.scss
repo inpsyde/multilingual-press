@@ -1,0 +1,24 @@
+//
+// How to use .clearfix in 2015
+//
+// @see https://ihatetomatoes.net/what-ive-learned-at-cssconfau-2015/
+//
+@mixin clearfix($extend: true) {
+	@if $extend {
+		@extend %clearfix;
+	} @else {
+		&:after {
+			content: '';
+			display: table;
+			clear: both;
+		}
+	}
+}
+
+%clearfix {
+	@include clearfix($extend: false);
+}
+
+.clear {
+	clear: both;
+}

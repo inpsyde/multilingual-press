@@ -203,46 +203,44 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	}
 
 	/**
-	 * Create the tab and prepend it to the body-tag
+	 * Create the tab and prepend it to the body tag.
 	 *
-	 * @since	0.1
-	 * @access	public
-	 * @param	string $content
-	 * @uses	is_single, is_page, get_site_option, mlp_get_linked_elements, mlp_get_available_languages
-	 * 			__, plugins_url, esc_html
-	 * @return	string $content
+	 * @wp-hook the_content
+	 *
+	 * @param string $content HTML content.
+	 *
+	 * @return string
 	 */
 	public function frontend_tab( $content ) {
 
 		$translations = $this->get_translations();
-
-		if ( empty ( $translations ) )
+		if ( empty( $translations ) ) {
 			return $content;
+		}
 
-		// Get post link option
-		$option = get_site_option( 'inpsyde_multilingual_quicklink_options' );
-
-		if ( ! $option )
-			$option = array( 'mlp_quicklink_position' => 'tr' );
+		$current_blog_id = get_current_blog_id();
 
 		$translated = array();
 
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $translations as $site => $translation ) {
-
-			if ( get_current_blog_id() === $site )
+			if ( $current_blog_id === $site ) {
 				continue;
+			}
 
-			$url                = $translation->get_remote_url();
-			$translated[ $url ] = $translation->get_language()->get_name( 'native' );
+			$translated[ $translation->get_remote_url() ] = $translation->get_language();
 		}
 
-		$position = $option[ 'mlp_quicklink_position' ];
+		// Get post link option
+		$option = get_site_option( 'inpsyde_multilingual_quicklink_options' );
+		$position = isset( $option[ 'mlp_quicklink_position' ] ) ? $option[ 'mlp_quicklink_position' ] : 'tr';
+
 		$switcher = $this->to_html( $translated, $position );
 
-		// position at the top
-		if ( 't' === $position[0] )
+		// Position at the top
+		if ( 't' === $position[ 0 ] ) {
 			return $switcher . $content;
+		}
 
 		return $content . $switcher;
 	}
@@ -268,42 +266,54 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	/**
 	 * Convert the list of translated posts into HTML.
 	 *
-	 * @since  1.0.4
-	 * @param  array $translated
-	 * @param  string $position
+	 * @param Mlp_Language[] $translated Translated posts.
+	 * @param string         $position   Position of the quicklinks tab.
+	 *
 	 * @return string
 	 */
-	protected function to_html( Array $translated, $position ) {
-
-		$translated_raw = $translated;
+	protected function to_html( array $translated, $position ) {
 
 		if ( 4 > count( $translated ) ) {
-			array_walk( $translated, array ( $this, 'walk_translations' ), 'links' );
-			$selections = join( '<br />', $translated );
-			return $this->get_html_container( $selections, 'links', $translated, $position );
+			$type = 'links';
+			$element = 'a';
+			$glue = '<br>';
+			$container = 'links';
+		} else {
+			$type = 'options';
+			$element = 'option';
+			$glue = '';
+			$container = 'form';
 		}
 
-		array_walk( $translated, array ( $this, 'walk_translations' ), 'options' );
+		$elements = array();
 
-		$selections = join( '', $translated );
-		return $this->get_html_container( $selections, 'form', $translated_raw, $position );
+		foreach ( $translated as $url => $language ) {
+			$attributes = array();
 
-	}
+			if ( 'links' === $type ) {
+				$attributes[ 'href' ] = $url;
+				$attributes[ 'hreflang' ] = $language->get_name( 'http' );
+				$attributes[ 'rel' ] = 'alternate';
+			} else {
+				$attributes[ 'value' ] = $url;
+			}
 
-	/**
-	 * Convert list of translated posts into 'a' or 'option' elements.
-	 *
-	 * @since 1.0.4
-	 * @param string $text
-	 * @param string $url
-	 * @param  string $type 'links' or 'options'.
-	 */
-	protected function walk_translations( &$text, $url, $type ) {
+			$attributes_html = '';
+			foreach ( $attributes as $key => $value ) {
+				$attributes_html .= ' ' . $key . '="' . esc_attr( $value ) . '"';
+			}
 
-		if ( 'links' === $type )
-			$text = "<a href='$url' rel='alternate'>$text</a>";
-		else
-			$text = "<option value='$url'>$text</a>";
+			$elements[ ] = sprintf(
+				'<%1$s%2$s>%3$s</%1$s>',
+				$element,
+				$attributes_html,
+				$language->get_name( 'native' )
+			);
+		}
+
+		$html = implode( $glue, $elements );
+
+		return $this->get_html_container( $html, $container, $translated, $position );
 	}
 
 	/**

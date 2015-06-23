@@ -1,0 +1,54 @@
+.mlp_titlediv {
+	position: relative;
+	margin-bottom: 10px;
+}
+
+.mlp_title {
+	padding: 3px 8px;
+	width: 100%;
+	line-height: 1;
+	background: #fff;
+	outline: 0;
+	font-size: 1.7em;
+}
+
+.mlp_taxonomy_box {
+	float: left;
+	margin: 5px;
+	border: 1px solid #aaa;
+	padding: 10px 20px;
+
+	legend {
+		display: block;
+		margin: 0 auto;
+		font-weight: bold;
+		text-align: center;
+	}
+}
+
+.mlp_copy_button {
+	float: left;
+	position: relative;
+	z-index: 10;
+
+	&:before {
+		content: "\f167";
+		color: #888;
+		font: 14px dashicons;
+		font-weight: bold;
+		vertical-align: bottom;
+	}
+}
+
+.mlp-warning {
+	margin: 5px 0 15px;
+	border-left: 4px solid #dd3d36;
+	padding: 1px 12px;
+	background: #f1f1f1;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+
+	p {
+		margin: 0.5em 0;
+		padding: 2px;
+	}
+}
