@@ -1,0 +1,25 @@
+.clear {
+  clear: both;
+}
+
+.mlp_language_box ul li {
+  display: inline;
+  margin: 0 5px 0 0;
+  list-style-type: none;
+}
+
+.mlp_quicklinks {
+  max-width: 10em;
+  padding: 10px;
+}
+.mlp_quicklinks.bl, .mlp_quicklinks.tl {
+  float: left;
+  margin-right: 20px;
+}
+.mlp_quicklinks.br, .mlp_quicklinks.tr {
+  float: right;
+  margin-left: 20px;
+}
+.mlp_quicklinks input {
+  font-size: .9em;
+}

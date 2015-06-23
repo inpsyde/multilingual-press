@@ -179,8 +179,8 @@ class Multilingual_Press {
 
 		/** @type Mlp_Assets $assets */
 		$assets = $this->plugin_data->assets;
-		$assets->add( 'mlp_backend_js',   'backend.js', array ( 'jquery' ) );
-		$assets->add( 'mlp_backend_css',  'backend.css' );
+		$assets->add( 'mlp_admin_js',   'admin.js', array ( 'jquery' ) );
+		$assets->add( 'mlp_admin_css',  'admin.css' );
 		$assets->add( 'mlp_frontend_js',  'frontend.js', array ( 'jquery' ) );
 		$assets->add( 'mlp_frontend_css', 'frontend.css' );
 
@@ -259,13 +259,11 @@ class Multilingual_Press {
 			'site-settings.php',
 			'settings.php',
 			'post-new.php',
-			'post.php'
+			'post.php',
 		);
 
 		if ( in_array ( $pagenow, $pages ) ) {
-			//wp_enqueue_script( 'mlp-js', $this->plugin_data->js_url . 'multilingual_press.js' );
-			wp_localize_script( 'mlp_backend_js', 'mlp_loc', $this->localize_script() );
-			//wp_enqueue_style( 'mlp-admin-css' );
+			wp_localize_script( 'mlp_admin_js', 'mlp_loc', $this->localize_script() );
 		}
 	}
 

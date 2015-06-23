@@ -92,7 +92,7 @@ class Mlp_Language_Nav_Menu_Data
 	 */
 	public function register_script() {
 
-		$this->assets->provide( array ( 'mlp_backend_js', 'mlp_backend_css' ) );
+		$this->assets->provide( array ( 'mlp_admin_js', 'mlp_admin_css' ) );
 	}
 
 	/**
@@ -114,7 +114,7 @@ class Mlp_Language_Nav_Menu_Data
 		$data[ $this->nonce->get_name() ] = wp_create_nonce( $this->nonce->get_action() );
 		$data[ 'nonce_name' ] = $this->nonce->get_name();
 
-		wp_localize_script( 'mlp_backend_js', $this->handle, $data );
+		wp_localize_script( 'mlp_admin_js', $this->handle, $data );
 	}
 
 	/**

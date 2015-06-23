@@ -69,7 +69,7 @@ class Mlp_General_Settingspage {
 			array( $this->view, 'render_page' )
 		);
 
-		$this->assets->provide( array ( 'mlp_backend_js', 'mlp_backend_css' ) );
+		$this->assets->provide( array ( 'mlp_admin_js', 'mlp_admin_css' ) );
 	}
 
 	/**
