@@ -100,29 +100,35 @@ class Mlp_Advanced_Translator {
 		// check if the remote post is trashed
 		// if it is so, show the warning
 		if ( $is_trashed ) {
-			add_action( $base . 'top_' . $blog_id, array ( $this->view, 'show_trashed_message' ), 10, 3 );
+			add_action( $base . 'top_' . $blog_id, array( $this->view, 'show_trashed_message' ), 10, 3 );
+
 			return;
 		}
 
 		// add the actions if the remote is not trashed
-		add_action( $base . 'top_' . $blog_id, array ( $this->view, 'blog_id_input' ), 10, 3 );
+		add_action( $base . 'top_' . $blog_id, array( $this->view, 'blog_id_input' ), 10, 3 );
 
-		if ( post_type_supports( $post->post_type, 'title' ) )
-			add_action( $base . 'top_' . $blog_id, array ( $this->view, 'show_title' ), 10, 3 );
+		if ( post_type_supports( $post->post_type, 'title' ) ) {
+			add_action( $base . 'top_' . $blog_id, array( $this->view, 'show_title' ), 10, 3 );
+		}
 
-		if ( post_type_supports( $post->post_type, 'editor' ) )
-			add_action( $base . 'main_' . $blog_id, array ( $this->view, 'show_editor' ), 10, 3 );
-		else
-			remove_action( 'media_buttons', array ( $this->view, 'show_copy_button' ), 20 );
+		add_action( $base . 'top_' . $blog_id, array( $this->view, 'show_name' ), 10, 3 );
 
+		if ( post_type_supports( $post->post_type, 'editor' ) ) {
+			add_action( $base . 'main_' . $blog_id, array( $this->view, 'show_editor' ), 10, 3 );
+		} else {
+			remove_action( 'media_buttons', array( $this->view, 'show_copy_button' ), 20 );
+		}
 
-		if ( post_type_supports( $post->post_type, 'thumbnail' ) )
-			add_action( $base . 'main_' . $blog_id, array ( $this->view, 'show_thumbnail_checkbox' ), 11, 3 );
+		if ( post_type_supports( $post->post_type, 'thumbnail' ) ) {
+			add_action( $base . 'main_' . $blog_id, array( $this->view, 'show_thumbnail_checkbox' ), 11, 3 );
+		}
 
 		$taxonomies = get_object_taxonomies( $post, 'objects' );
 
-		if ( ! empty ( $taxonomies ) )
-			add_action( $base . 'bottom_' . $blog_id, array ( $this->view, 'show_taxonomies' ), 10, 3 );
+		if ( ! empty ( $taxonomies ) ) {
+			add_action( $base . 'bottom_' . $blog_id, array( $this->view, 'show_taxonomies' ), 10, 3 );
+		}
 	}
 
 	/**

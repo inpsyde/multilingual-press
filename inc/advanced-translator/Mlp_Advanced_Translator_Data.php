@@ -286,14 +286,17 @@ class Mlp_Advanced_Translator_Data
 	private function create_post_to_send( Array $post_data, $post_type, $blog_id ) {
 
 		$title   = $this->get_remote_post_title( $post_data );
+		$name    = $this->get_remote_post_name( $post_data );
 		$content = $this->get_remote_post_content( $post_data );
 
-		if ( $this->is_empty_remote_post( $title, $content, $post_type ) )
-			return array ();
+		if ( $this->is_empty_remote_post( $title, $content, $post_type ) ) {
+			return array();
+		}
 
-		$new = array (
+		$new = array(
 			'post_type'    => $post_type,
 			'post_title'   => $title,
+			'post_name'    => $name,
 			'post_content' => $content,
 			'post_parent'  => $this->basic_data->get_post_parent( $blog_id )
 		);
@@ -302,7 +305,7 @@ class Mlp_Advanced_Translator_Data
 			$new[ 'ID' ] = $post_data[ 'remote_post_id' ];
 
 			// deprecated notice for filter "mlp_pre_update_post"
-			if( has_filter( 'mlp_pre_update_post' ) ) {
+			if ( has_filter( 'mlp_pre_update_post' ) ) {
 				_doing_it_wrong(
 					'mlp_pre_update_post',
 					'mlp_pre_update_post is deprecated and will be removed in MultilingualPress 2.2, please use mlp_pre_save_post instead.',
@@ -313,6 +316,7 @@ class Mlp_Advanced_Translator_Data
 			 * Filter post data before it is saved to the database.
 			 *
 			 * @param       array $new_post
+			 *
 			 * @deprecated
 			 * @see         mlp_pre_save_post
 			 */
@@ -320,10 +324,12 @@ class Mlp_Advanced_Translator_Data
 
 			/**
 			 * Filter post data before it is saved to database.
+			 *
 			 * @param       array $new_post
 			 * TODO:        Adding 2. param context! See 'mlp_pre_save_post' in Mlp_Translatable_Post_Data.php
 			 */
 			$new = apply_filters( 'mlp_pre_save_post', $new );
+
 			return $new;
 		}
 
@@ -332,9 +338,11 @@ class Mlp_Advanced_Translator_Data
 
 		/**
 		 * Filter post data before it is insert to database.
+		 *
 		 * @param       array $new_post
 		 * TODO:        Adding 2. param context! See 'mlp_pre_insert_post' in Mlp_Translatable_Post_Data.php
 		 */
+
 		return apply_filters( 'mlp_pre_insert_post', $new );
 	}
 
@@ -488,6 +496,25 @@ class Mlp_Advanced_Translator_Data
 
 		if ( isset ( $this->post_request_data[ 'post_title' ] ) )
 			return (string) $this->post_request_data[ 'post_title' ];
+
+		return '';
+	}
+
+	/**
+	 * Prepare the title for the post we want to synchronize.
+	 *
+	 * @param array $data
+	 * @return string
+	 */
+	private function get_remote_post_name( Array $data ) {
+
+		if ( isset ( $data[ 'name' ] ) ) {
+			return $data[ 'name' ];
+		}
+
+		if ( isset ( $this->post_request_data[ 'post_name' ] ) ) {
+			return (string) $this->post_request_data[ 'post_name' ];
+		}
 
 		return '';
 	}

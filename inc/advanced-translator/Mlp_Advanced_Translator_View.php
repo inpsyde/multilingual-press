@@ -58,7 +58,7 @@ class Mlp_Advanced_Translator_View {
 		WP_Post $source_post, $remote_blog_id, WP_Post $post ) {
 
 		$title       = esc_attr( $post->post_title );
-		$placeholder = $this->get_place_holder( $post );
+		$placeholder = $this->get_place_holder_title( $post );
 		$name        = $this->get_name( $remote_blog_id, 'title' );
 		$id          = $this->get_id( $remote_blog_id, 'title' );
 
@@ -77,6 +77,44 @@ class Mlp_Advanced_Translator_View {
 			</div>
 		</div>
 		<?php
+	}
+
+
+	/**
+	 * @param WP_Post $source_post
+	 * @param int     $remote_blog_id
+	 * @param WP_Post $post Remote post
+	 * @return void
+	 */
+	public function show_name(
+		/** @noinspection PhpUnusedParameterInspection */
+		WP_Post $source_post, $remote_blog_id, WP_Post $post
+	) {
+
+		$value = $post->post_name;
+		if ( empty( $value ) ) {
+			$value = sanitize_title( $post->post_title );
+		}
+		$value       = esc_attr( $value );
+		$placeholder = $this->get_place_holder_name( $post );
+		$name        = $this->get_name( $remote_blog_id, 'name' );
+		$id          = $this->get_id( $remote_blog_id, 'name' );
+
+		?>
+		<div class="mlp_namediv">
+			<div>
+				<input
+					class="mlp_name"
+					type="text"
+					name="<?php print $name; ?>"
+					size="30"
+					placeholder="<?php print $placeholder ?>"
+					value="<?php print $value; ?>"
+					id="<?php print $id; ?>"
+					>
+			</div>
+		</div>
+	<?php
 	}
 
 	/**
@@ -226,10 +264,24 @@ class Mlp_Advanced_Translator_View {
 	 * @param WP_Post $post
 	 * @return string|void
 	 */
-	private function get_place_holder( WP_Post $post ) {
+	private function get_place_holder_title( WP_Post $post ) {
 
 		$placeholder = __( 'Enter title here', 'multilingualpress' );
 		$placeholder = apply_filters( 'enter_title_here', $placeholder, $post );
+
+		return esc_attr( $placeholder );
+	}
+
+	/**
+	 * Get placeholder attribute text.
+	 *
+	 * @param WP_Post $post
+	 * @return string|void
+	 */
+	private function get_place_holder_name( WP_Post $post ) {
+
+		$placeholder = __( 'Enter name here', 'multilingualpress' );
+		$placeholder = apply_filters( 'enter_name_here', $placeholder, $post );
 
 		return esc_attr( $placeholder );
 	}
