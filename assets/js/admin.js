@@ -213,7 +213,7 @@
 
 			var str = $.trim( $( this ).val() );
 
-			if ( !str || 0 == str.length ) {
+			if ( !str || 0 === str.length ) {
 				insert( original_content );
 			} else if ( 2 < str.length ) {
 				fetch( str );
@@ -246,7 +246,7 @@
 			connectExisting = function() {
 				new_post_id = $( 'input[name="mlp_add_post[' + remote_blog_id + ']"]:checked' ).val();
 
-				if ( !new_post_id || 0 == new_post_id ) {
+				if ( !new_post_id || '0' === new_post_id ) {
 					alert( 'Please select a post.' );
 				} else {
 					changeRelationship( 'connect_existing' );

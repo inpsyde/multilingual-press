@@ -1,0 +1,9 @@
+//
+// Shorthand function for image references with cache buster.
+//
+// @param string $file Image file.
+//
+@function image-url($file) {
+
+	@return url("../images/#{$file}?#{$version}");
+}

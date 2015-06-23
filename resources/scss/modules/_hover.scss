@@ -1,0 +1,13 @@
+//
+// Pseudo-class mixin for hover, active and focus state.
+//
+// @see https://gist.github.com/taupecat/4739443
+//
+@mixin hover-state {
+	&:hover,
+	&:active,
+	&:focus,
+	&.active {
+		@content;
+	}
+}

@@ -13,15 +13,27 @@ module.exports = function( grunt ) {
 	grunt.initConfig( {
 		globalConfig: globalConfig,
 
-		// https://github.com/gruntjs/grunt-contrib-compass
-		compass     : {
-			dist: {
-				options: {
-					sassDir    : '<%= globalConfig.styles_src %>',
-					cssDir     : '<%= globalConfig.styles %>',
-					imagesDir  : '<%= globalConfig.images %>',
-					outputStyle: 'compressed'
-				}
+		// https://github.com/nDmitry/grunt-autoprefixer
+		autoprefixer: {
+			options: {
+				browsers: [
+					'Android >= 2.1',
+					'Chrome >= 21',
+					'Explorer >= 7',
+					'Firefox >= 17',
+					'iOS >= 3',
+					'Opera >= 12.1',
+					'Safari >= 5.0'
+				]
+			},
+			styles : {
+				expand: true,
+				cwd   : '<%= globalConfig.styles %>',
+				dest  : '<%= globalConfig.styles %>',
+				src   : [
+					'*.css',
+					'!*.min.css'
+				]
 			}
 		},
 
@@ -38,11 +50,28 @@ module.exports = function( grunt ) {
 				dest: '<%= globalConfig.scripts %>admin.js'
 			},
 			frontend: {
-				src: [
+				src : [
 					'<%= globalConfig.scripts_src %>frontend.js',
 					'<%= globalConfig.scripts_src %>frontend/*.js'
 				],
 				dest: '<%= globalConfig.scripts %>frontend.js'
+			}
+		},
+
+		// https://github.com/gruntjs/grunt-contrib-cssmin
+		cssmin      : {
+			styles: {
+				options: {
+					processImport: true
+				},
+				expand : true,
+				cwd    : '<%= globalConfig.styles %>',
+				dest   : '<%= globalConfig.styles %>',
+				ext    : '.min.css',
+				src    : [
+					'*.css',
+					'!*.min.css'
+				]
 			}
 		},
 
@@ -79,7 +108,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/suisho/grunt-lineending
-		lineending: {
+		lineending  : {
 			options: {
 				eol      : 'lf',
 				overwrite: true
@@ -90,11 +119,27 @@ module.exports = function( grunt ) {
 				dest  : '<%= globalConfig.scripts %>',
 				src   : [ '*.js' ]
 			},
-			styles: {
+			styles : {
 				expand: true,
 				cwd   : '<%= globalConfig.styles %>',
 				dest  : '<%= globalConfig.styles %>',
 				src   : [ '*.css' ]
+			}
+		},
+
+		// https://github.com/gruntjs/grunt-contrib-sass
+		sass        : {
+			styles: {
+				expand : true,
+				cwd    : '<%= globalConfig.styles_src %>',
+				dest   : '<%= globalConfig.styles %>',
+				ext    : '.css',
+				options: {
+					style      : 'expanded',
+					lineNumbers: false,
+					noCache    : true
+				},
+				src    : [ '*.scss' ]
 			}
 		},
 
@@ -150,7 +195,7 @@ module.exports = function( grunt ) {
 			},
 			styles : {
 				files: [ '<%= globalConfig.scss_src %>**/*.scss' ],
-				tasks: [ 'compass', 'lineending:styles' ]
+				tasks: [ 'sass', 'autoprefixer', 'lineending:styles', 'cssmin' ]
 			}
 		}
 	} );
@@ -162,8 +207,9 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'grunt', [ 'jshint:grunt' ] );
 	grunt.registerTask( 'images', [ 'imagemin' ] );
 	grunt.registerTask( 'lineendings', [ 'lineending' ] );
+	grunt.registerTask( 'production', [ 'images', 'scripts', 'styles' ] );
 	grunt.registerTask( 'scripts', [ 'jshint:scripts', 'concat', 'uglify', 'lineending:scripts' ] );
 	grunt.registerTask( 'start', [ 'shell:workflow' ] );
-	grunt.registerTask( 'styles', [ 'compass', 'lineending:styles' ] );
+	grunt.registerTask( 'styles', [ 'sass', 'autoprefixer', 'lineending:styles', 'cssmin' ] );
 	grunt.registerTask( 'test', [ 'jshint' ] );
 };
