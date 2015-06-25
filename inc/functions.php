@@ -112,6 +112,7 @@ function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecate
 		'echo'              => TRUE,
 		'sort'              => 'priority',
 		'show_current_blog' => FALSE,
+		'display_flag'      => FALSE,
 		'strict'            => FALSE // get exact translations only
 	);
 

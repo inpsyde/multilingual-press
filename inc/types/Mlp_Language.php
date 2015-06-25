@@ -60,6 +60,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 	 *                      - 'wp_locale' Identifier for translation files used by WordPress
 	 *                      - 'custom' Language name set in the site preferences
 	 *                      - 'text' alias for 'custom'
+	 *                      - 'none' no text output (eg. for displaying just the flag icon)
 	 * @return string
 	 */
 	public function get_name( $name = '' ) {
@@ -82,6 +83,10 @@ class Mlp_Language implements Mlp_Language_Interface {
 				return $this->names[ 'text' ];
 
 			return $this->names[ 'custom_name' ];
+		}
+
+		if ( $name === 'none' ) {
+			return '';
 		}
 
 		// $name is empty or invalid, so ...

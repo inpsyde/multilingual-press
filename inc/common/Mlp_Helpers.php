@@ -353,8 +353,9 @@ class Mlp_Helpers {
 	 */
 	public static function show_linked_elements( $args ) {
 
-		$defaults = array (
-			'link_text'         => 'text',
+		$defaults = array(
+			'link_text'         => 'native',
+			'display_flag'      => FALSE, // flag_only or flag_text
 			'sort'              => 'priority',
 			'show_current_blog' => FALSE,
 			'strict'            => FALSE // get exact translations only
@@ -362,65 +363,83 @@ class Mlp_Helpers {
 
 		$params = wp_parse_args( $args, $defaults );
 
+		//TODO: Deprecate 'flag' & 'text_flag' in favour of the separate 'display_flag' option
+		if ( 'text_flag' == $params[ 'link_text' ] ){
+			$params[ 'link_text' ] = 'native';
+			$params[ 'display_flag' ] = TRUE;
+		}
+		if ( 'flag' === $params[ 'link_text' ] ){
+			$params[ 'link_text' ] = 'none';
+			$params[ 'display_flag' ] = TRUE;
+		}
+
+
 		/** @var Mlp_Language_Api $api */
-		$api              = self::$dependencies[ 'language_api' ];
-		$translations     = $api->get_translations(
-			array (
+		$api = apply_filters( 'mlp_language_api', NULL );
+		if ( ! is_a( $api, 'Mlp_Language_Api_Interface' ) ) {
+			return '';
+		}
+
+		$translations = $api->get_translations(
+			array(
 				'strict'       => $params[ 'strict' ],
 				'include_base' => $params[ 'show_current_blog' ]
 			)
 		);
 
-		if ( empty ( $translations ) )
+		if ( empty ( $translations ) ) {
 			return '';
+		}
 
-		$current_id       = get_current_blog_id();
-		$items            = array ();
-		$output           = '<div class="mlp_language_box"><ul>';
+		$current_id = get_current_blog_id();
+		$items      = array();
+		$output     = '<div class="mlp_language_box"><ul>';
 
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $translations as $site_id => $translation ) {
 
 			$url = $translation->get_remote_url();
 
-			if ( empty ( $url ) )
+			if ( empty ( $url ) ) {
 				continue;
+			}
 
-			$items[ $site_id ] = array (
+			$items[ $site_id ] = array(
 				'url'      => $url,
-				'http'     => $translation->get_language()->get_name( 'http' ),
-				'name'     => $translation->get_language()->get_name( 'native' ),
-				'priority' => $translation->get_language()->get_priority(),
+				'http'     => $translation->get_language()
+				                          ->get_name( 'http' ),
+				'name'     => $translation->get_language()
+				                          ->get_name( $params[ 'link_text' ] ),
+				'priority' => $translation->get_language()
+				                          ->get_priority(),
 				'icon'     => (string) $translation->get_icon_url()
 			);
 		}
 
-		if ( 'blogid' === $params[ 'sort' ] )
+		if ( 'blogid' === $params[ 'sort' ] ) {
 			ksort( $items );
-		elseif (  'priority' === $params[ 'sort' ] )
-			uasort( $items, array ( __CLASS__, 'sort_priorities' ) );
-		elseif (  'name' === $params[ 'sort' ] )
-			uasort( $items, array ( __CLASS__, 'strcasecmp_sort_names' ) );
+		} elseif ( 'priority' === $params[ 'sort' ] ) {
+			uasort( $items, array( __CLASS__, 'sort_priorities' ) );
+		} elseif ( 'name' === $params[ 'sort' ] ) {
+			uasort( $items, array( __CLASS__, 'strcasecmp_sort_names' ) );
+		}
 
 		foreach ( $items as $site_id => $item ) {
 
 			$text = $item[ 'name' ];
 
-			if ( ! empty ( $item[ 'icon'] ) ) {
+			if ( ! empty ( $item[ 'icon' ] ) ) {
 
-				$img = '<img src="' . $item[ 'icon'] . '" alt="' . esc_attr( $item[ 'name' ] ) . '" />';
+				$img = '<img src="' . $item[ 'icon' ] . '" alt="' . esc_attr( $item[ 'name' ] ) . '" />';
 
-				if ( 'text_flag' == $params[ 'link_text' ] )
+				if ( $params[ 'display_flag' ] ) {
 					$text = "$img $text";
-
-				if ( 'flag' === $params[ 'link_text' ] )
-					$text = $img;
+				}
 			}
 
 			if ( $site_id === $current_id ) {
 				$output .= sprintf( '<li><a class="current-language-item" href="">%s</a></li>', $text );
-			}
-			else {
+			} else {
 				$output .= sprintf(
 					'<li><a rel="alternate" hreflang="%1$s"  href="%2$s">%3$s</a></li>',
 					$item[ 'http' ],
