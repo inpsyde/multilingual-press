@@ -76,28 +76,34 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	}
 
 	/**
-	 * @param Mlp_Db_Schema_Interface $db_info
-	 * @param array                   $columns
-	 * @return false|int
+	 * Insert default content into the given table.
+	 *
+	 * @param Mlp_Db_Schema_Interface $db_info Table information.
+	 * @param array                   $columns Table columns.
+	 *
+	 * @return int|bool
 	 */
-	private function insert_default(
-		Mlp_Db_Schema_Interface $db_info,
-		Array                   $columns
-		) {
+	private function insert_default( Mlp_Db_Schema_Interface $db_info, array $columns ) {
+
+		$table = $db_info->get_table_name();
+
+		// Bail if the table already exists
+		if ( $this->wpdb->query( "SHOW TABLES LIKE '$table'" ) ) {
+			return 0;
+		}
 
 		$content = $db_info->get_default_content();
-
-		if ( empty ( $content ) )
+		if ( empty( $content ) ) {
 			return 0;
+		}
 
-		$table     = $db_info->get_table_name();
 		$to_remove = $db_info->get_autofilled_keys();
-
-		foreach ( $to_remove as $remove_key )
+		foreach ( $to_remove as $remove_key ) {
 			unset ( $columns[ $remove_key ] );
+		}
 
-		$keys     = join( ",", array_keys( $columns ) );
-		$sql      = "INSERT INTO $table ( $keys ) VALUES " . $content;
+		$keys = join( ",", array_keys( $columns ) );
+		$sql = "INSERT INTO $table ( $keys ) VALUES " . $content;
 
 		return $this->wpdb->query( $sql );
 	}
