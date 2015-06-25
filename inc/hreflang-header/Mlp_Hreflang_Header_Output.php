@@ -33,13 +33,14 @@ class Mlp_Hreflang_Header_Output {
 
 		$translations = $this->get_translations();
 
-		if ( empty ( $translations ) )
+		if ( empty ( $translations ) ) {
 			return;
+		}
 
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $translations as $lang => $url ) {
 			$html = sprintf(
-				'<link rel="alternate" hreflang="%1$s" href="%2$s" />',
+				'<link rel="alternate" hreflang="%1$s" href="%2$s" />' . PHP_EOL,
 				$lang,
 				$url
 			);
@@ -92,13 +93,15 @@ class Mlp_Hreflang_Header_Output {
 	 */
 	private function get_translations() {
 
-		if ( array ( 'failed' ) === $this->translations )
+		if ( array( 'failed' ) === $this->translations ) {
 			return array();
+		}
 
-		$translations = $this->language_api->get_translations();
+		$translations = $this->language_api->get_translations( array( 'include_base' => TRUE ) );
 
 		if ( empty ( $translations ) ) {
-			$this->translations = array ( 'failed' );
+			$this->translations = array( 'failed' );
+
 			return array();
 		}
 
@@ -107,15 +110,18 @@ class Mlp_Hreflang_Header_Output {
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $translations as $translation ) {
 
-			$lang = $translation->get_language()->get_name( 'http' );
+			$lang = $translation->get_language()
+			                    ->get_name( 'http' );
 			$url  = $translation->get_remote_url();
 
-			if ( ! empty ( $url ) )
+			if ( ! empty ( $url ) ) {
 				$prepared[ $lang ] = (string) $url;
+			}
 		}
 
 		if ( empty ( $prepared ) ) {
-			$this->translations = array ( 'failed' );
+			$this->translations = array( 'failed' );
+
 			return array();
 		}
 
