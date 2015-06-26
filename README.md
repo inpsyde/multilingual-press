@@ -51,6 +51,7 @@ without affecting the output of the front-end.
 * PHP 5.2.4, newer PHP versions will work faster.
 
 ### Installation
+
 Use the installer via back-end of your install or ...
 
 1. Unpack the download-package.

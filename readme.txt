@@ -2,7 +2,7 @@
 Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, ipm-frommen, Biont, dnaber-de
 Tags: l10n, i18n, bilingual, international, internationalization, lang, language, localization, multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation, chinese, german, french, russian, widget, menu, navigation, network, categories, taxonomy
 
-Requires at least: 3.8
+Requires at least: 4.0
 Tested up to: 4.2.2
 Stable tag: 2.2.0
 
@@ -90,7 +90,53 @@ because it creates a lock-in: you would lose access to your content after the pl
 == Changelog ==
 
 = 2.2.0 =
-- TODO
+- **Merge MultilingualPress Free and Pro.**
+- Pass `$wpdb` object to `inpsyde_mlp_init` and `inpsyde_mlp_loaded` hooks.
+- Remove `checkup_blog_message()` and `checkup_blog()`.
+- Pass original content from TinyMCE to translation editor.
+- Add hooks before and after the term translation boxes.
+- Do not show a translation box title when there are no linked sites.
+- Add Russian translation.
+- Cache some Language API queries internally to avoid duplication.
+- Cache query in `get_relations()`.
+- If specified, always use the Custom Name in `get_name()`.
+- Fallback to site URL when translation query is not strict.
+- Introduce `Mlp_Db_Table_List_Interface` interface and `Mlp_Db_Table_List` class.
+- Introduce `replace_string()` in `Mlp_Db_Replace`.
+- Add access to invalid column names in `Mlp_Db_Replace` class.
+- Introduce `mlp_hreflang_html` and `mlp_hreflang_http_header` filters in `Mlp_Hreflang_Header_Output` class.
+- Better table name query.
+- Introduce `mlp_translations` filter in `Mlp_Language_Api` class.
+- Do not exclude non-public sites for relations anymore.
+- Better check for separate home page (page for posts).
+- Introduce `mlp_dashboard_widget_access` filter in `Mlp_Dashboard_Widget` class.
+- Add `Mlp_Term_Translation` class.
+- Introduce `mlp_show_translation_completed_checkbox` filter in `Mlp_Dashboard_Widget` class.
+- Prevent lost site relations and duplicated languages, see
+[issue #78](https://github.com/inpsyde/multilingual-press/issues/78).
+- Add `README.md` file, see [issue #86](https://github.com/inpsyde/multilingual-press/issues/86).
+- Move all feature directories one level up, see [issue #84](https://github.com/inpsyde/multilingual-press/issues/84).
+- Improve User Backend Language, see [issue #89](https://github.com/inpsyde/multilingual-press/issues/89).
+- Add visibility checkbox to site duplication screen, see
+[issue #93](https://github.com/inpsyde/multilingual-press/issues/93).
+- Pass translation object to `mlp_linked_element_link` filter, see
+[issue #98](https://github.com/inpsyde/multilingual-press/issues/98).
+- Fix order when sorting by priority, see [issue #99](https://github.com/inpsyde/multilingual-press/issues/99).
+- Add French translation, props fxbenard.
+- Add important features to readme files, see [issue #106](https://github.com/inpsyde/multilingual-press/issues/106).
+- Add Language column to the network site table, see
+[issue #92](https://github.com/inpsyde/multilingual-press/issues/92).
+- Bugfix all relationships being removed on blog deletion, see
+[issue #97](https://github.com/inpsyde/multilingual-press/issues/97).
+- Add missing `hreflang` attribute to quicklinks, see
+[issue #120](https://github.com/inpsyde/multilingual-press/issues/120).
+- Use current blog language for `html` tag, see [issue #118](https://github.com/inpsyde/multilingual-press/issues/118).
+- Do not redirect while doing AJAX, no matter if `admin-ajax.php` or not, see
+[issue #121](https://github.com/inpsyde/multilingual-press/issues/121).
+- Prevent PHP Notice in `Mlp_Language_Api` class, props iamntz.
+- Save translations as long as title or content is given, see
+[issue #123](https://github.com/inpsyde/multilingual-press/issues/123).
+- Use grunt, and refactor and improve assets.
 
 = 2.1.2 =
 - Combine all scripts and stylesheets, separated for frontend and backend.
