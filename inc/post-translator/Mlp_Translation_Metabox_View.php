@@ -145,16 +145,17 @@ class Mlp_Translation_Metabox_View {
 	 * @param WP_Post $source_post
 	 * @param int     $remote_blog_id
 	 * @param WP_Post $remote_post
+	 *
 	 * @return void
 	 */
 	public function show_editor( /** @noinspection PhpUnusedParameterInspection */
 		WP_Post $source_post, $remote_blog_id, WP_Post $remote_post ) {
 
 		$lines = substr_count( $remote_post->post_content, "\n" ) + 1;
-		$rows  = min( $lines, 10 );
+		$rows = min( $lines, 10 );
 
 		printf(
-			'<textarea class="large-text cols="80" rows="%d$1" placeholder="%2$s" readonly>%3$s</textarea>',
+			'<textarea class="large-text" cols="80" rows="%d$1" placeholder="%2$s" readonly>%3$s</textarea>',
 			$rows,
 			esc_attr_x( 'No content yet.', 'placeholder for empty translation textarea', 'multilingualpress' ),
 			esc_textarea( $remote_post->post_content )
@@ -216,4 +217,5 @@ class Mlp_Translation_Metabox_View {
 
 		printf( "<p>$text</p>", $url );
 	}
+
 }

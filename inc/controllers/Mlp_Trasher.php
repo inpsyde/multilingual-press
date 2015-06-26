@@ -49,18 +49,28 @@ class Mlp_Trasher {
 		add_filter( 'save_post', array( $this, 'save_post' ) );
 	}
 
+	/**
+	 * Register our UI for the module manager.
+	 *
+	 * @return bool
+	 */
 	private function register_setting() {
 
-		$desc = __(
+		/** @var Mlp_Module_Manager_Interface $module_manager */
+		$module_manager = $this->plugin_data->get( 'module_manager' );
+
+		$display_name = __( 'Trasher', 'multilingualpress' );
+
+		$description = __(
 			'This module provides a new post meta and checkbox to trash the posts. If you enable the checkbox and move a post to the trash MultilingualPress also will trash the linked posts.',
 			'multilingualpress'
 		);
 
-		return $this->plugin_data->module_manager->register(
-			array (
-				'display_name'	=> __( 'Trasher', 'multilingualpress' ),
-				'slug'			=> 'class-' . __CLASS__,
-				'description'   => $desc
+		return $module_manager->register(
+			array(
+				'display_name' => $display_name,
+				'slug'         => 'class-' . __CLASS__,
+				'description'  => $description,
 			)
 		);
 	}
@@ -179,4 +189,5 @@ class Mlp_Trasher {
 			restore_current_blog();
 		}
 	}
+
 }

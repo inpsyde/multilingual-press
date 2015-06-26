@@ -18,11 +18,12 @@ class Mlp_Extra_General_Settings_Box {
 	private $data;
 
 	/**
-	 * Constructor.
+	 * Constructor. Set up the properties.
+	 *
+	 * @param Mlp_Extra_General_Settings_Box_Data_Interface $data Settings box data.
 	 */
-	public function __construct(
-		Mlp_Extra_General_Settings_Box_Data_Interface $data
-	) {
+	public function __construct( Mlp_Extra_General_Settings_Box_Data_Interface $data ) {
+
 		$this->data = $data;
 	}
 
@@ -67,4 +68,5 @@ class Mlp_Extra_General_Settings_Box {
 
 		return "<p>$desc</p>";
 	}
+
 }

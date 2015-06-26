@@ -5,11 +5,12 @@ if ( is_admin() ) {
 }
 
 /**
- * @param Inpsyde_Property_List_Interface $data
+ * @param Inpsyde_Property_List_Interface $data Plugin data.
+ *
  * @return void
  */
 function mlp_feature_user_backend_language( Inpsyde_Property_List_Interface $data ) {
 
-	$user_lang = new Mlp_User_Backend_Language( $data->module_manager );
+	$user_lang = new Mlp_User_Backend_Language( $data->get( 'module_manager' ) );
 	$user_lang->setup();
 }

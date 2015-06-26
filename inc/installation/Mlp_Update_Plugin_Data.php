@@ -86,13 +86,15 @@ class Mlp_Update_Plugin_Data {
 	/**
 	 * Handle updates.
 	 *
-	 * @param  string|int $last_version
+	 * @param string|int $last_version Last plugin version.
+	 *
 	 * @return bool
 	 */
 	private function update_plugin_data( $last_version ) {
 
-		if ( $last_version === 1 )
+		if ( $last_version === 1 ) {
 			$this->import_active_languages( new Mlp_Db_Languages_Schema( $this->wpdb ) );
+		}
 
 		if ( version_compare( $last_version, '2.0.4', '<' ) ) {
 			$installer = new Mlp_Db_Installer( new Mlp_Site_Relations_Schema( $this->wpdb ) );
@@ -104,7 +106,7 @@ class Mlp_Update_Plugin_Data {
 		// remove unneeded plugin data
 		delete_option( 'inpsyde_companyname' );
 
-		return update_site_option( 'mlp_version', $this->plugin_data->version );
+		return update_site_option( 'mlp_version', $this->plugin_data->get( 'version' ) );
 	}
 
 	/**
@@ -115,16 +117,17 @@ class Mlp_Update_Plugin_Data {
 	private function import_site_relations() {
 
 		/** @var Mlp_Site_Relations_Interface $db */
-		$relations   = $this->plugin_data->site_relations;
+		$relations = $this->plugin_data->get( 'site_relations' );
 		$option_name = 'inpsyde_multilingual_blog_relationship';
-		$inserted    = 0;
+		$inserted = 0;
 
 		foreach ( $this->all_sites as $site ) {
 
-			$linked = get_blog_option( $site['blog_id'], $option_name, array() );
+			$linked = get_blog_option( $site[ 'blog_id' ], $option_name, array() );
 
-			if ( ! empty ( $linked ) )
+			if ( ! empty( $linked ) ) {
 				$inserted += $relations->set_relation( $site[ 'blog_id' ], $linked );
+			}
 
 			delete_blog_option( $site[ 'blog_id' ], $option_name );
 		}
@@ -203,6 +206,7 @@ class Mlp_Update_Plugin_Data {
 		$installer->install( new Mlp_Content_Relations_Schema( $this->wpdb ) );
 		$installer->install( new Mlp_Site_Relations_Schema( $this->wpdb ) );
 
-		return update_site_option( 'mlp_version', $this->plugin_data->version );
+		return update_site_option( 'mlp_version', $this->plugin_data->get( 'version' ) );
 	}
+
 }

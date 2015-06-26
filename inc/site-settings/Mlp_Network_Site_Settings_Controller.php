@@ -28,26 +28,28 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	private $page_properties;
 
 	/**
-	 * Constructor.
+	 * Constructor. Set up the properties.
+	 *
+	 * @param Inpsyde_Property_List_Interface $plugin_data Plugin data.
 	 *
 	 * @wp-hook plugins_loaded
 	 */
 	public function __construct( Inpsyde_Property_List_Interface $plugin_data ) {
 
-		$this->plugin_data     = $plugin_data;
-		$this->tab_page_data   = new Mlp_Network_Site_Settings_Tab_Data;
+		$this->plugin_data = $plugin_data;
+		$this->tab_page_data = new Mlp_Network_Site_Settings_Tab_Data;
 		$this->page_properties = new Mlp_Network_Site_Settings_Properties( $plugin_data );
 
 		new Mlp_Network_Site_Settings( $this->page_properties, $this );
 
 		add_action(
 			'admin_post_' . $this->tab_page_data->get_action_name(),
-			array ( $this, 'update_settings' )
+			array( $this, 'update_settings' )
 		);
 
 		add_action(
 			'admin_print_styles-' . $this->page_properties->get_param_value(),
-			array ( $this, 'enqueue_stylesheet' )
+			array( $this, 'enqueue_stylesheet' )
 		);
 	}
 
@@ -150,7 +152,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	private function update_related_blogs( $blog_id ) {
 
 		/** @var Mlp_Site_Relations_Interface $relations */
-		$relations   = $this->plugin_data->site_relations;
+		$relations   = $this->plugin_data->get( 'site_relations' );
 		$changed     = 0;
 		$new_related = $this->get_new_related_blogs();
 		$old_related = $relations->get_related_sites( $blog_id, FALSE );
@@ -180,10 +182,10 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$this->show_update_message();
 
 		$view = new Mlp_Network_Site_Settings_Tab_Content(
-			$this->plugin_data->language_api,
+			$this->plugin_data->get( 'language_api' ),
 			$this->tab_page_data,
 			$this->get_blog_id(),
-			$this->plugin_data->site_relations
+			$this->plugin_data->get( 'site_relations' )
 		);
 		$view->render_content();
 	}
@@ -268,4 +270,5 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 
 		return $changed;
 	}
+
 }
