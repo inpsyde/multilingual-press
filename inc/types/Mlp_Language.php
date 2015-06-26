@@ -1,29 +1,32 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Language object
  *
- * @version 2014.09.22
+ * @version 2015.06.26
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
 class Mlp_Language implements Mlp_Language_Interface {
 
 	/**
-	 * @type int
+	 * @var int
 	 */
 	private $priority = 1;
 
 	/**
-	 * @type bool
+	 * @var bool
 	 */
 	private $is_rtl = FALSE;
 
 	/**
-	 * @type array
+	 * @var array
 	 */
 	private $names = array();
 
 	/**
+	 * Constructor. Set up the properies.
+	 *
 	 * @param array $raw_data
 	 */
 	public function __construct( Array $raw_data ) {
@@ -36,10 +39,12 @@ class Mlp_Language implements Mlp_Language_Interface {
 		$this->is_rtl = empty ( $data[ 'is_rtl' ] );
 		unset ( $data[ 'is_rtl' ] );
 
-		$this->names  = $data;
+		$this->names = $data;
 	}
 
 	/**
+	 * Check if the language left-to-right.
+	 *
 	 * @return bool
 	 */
 	public function is_rtl() {
@@ -97,6 +102,8 @@ class Mlp_Language implements Mlp_Language_Interface {
 	}
 
 	/**
+	 * Get the priority.
+	 *
 	 * @return int
 	 */
 	public function get_priority() {
@@ -105,14 +112,15 @@ class Mlp_Language implements Mlp_Language_Interface {
 	}
 
 	/**
-	 * Prepares data passed by a db query for example.
+	 * Prepares data passed by a DB query for example.
 	 *
-	 * @param  array $raw_data
+	 * @param array $raw_data Raw data array.
+	 *
 	 * @return array
 	 */
-	private function prepare_raw_data( Array $raw_data ) {
+	private function prepare_raw_data( array $raw_data ) {
 
-		$default = array (
+		$default = array(
 			'english_name' => '',
 			'native_name'  => '',
 			'custom_name'  => '',
@@ -120,12 +128,14 @@ class Mlp_Language implements Mlp_Language_Interface {
 			'http_name'    => '',
 			'priority'     => 1,
 			'wp_locale'    => '',
-			'text'         => ''
+			'text'         => '',
 		);
 
-		if ( isset ( $raw_data[ 'text' ] ) )
+		if ( isset( $raw_data[ 'text' ] ) ) {
 			$default[ 'custom_name' ] = $raw_data[ 'text' ];
+		}
 
 		return wp_parse_args( $raw_data, $default );
 	}
+
 }
