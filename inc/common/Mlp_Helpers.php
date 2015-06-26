@@ -494,19 +494,6 @@ class Mlp_Helpers {
 	}
 
 	/**
-	 * Get HTML attributes width and height for a flag image.
-	 *
-	 * @param  string $flag_url
-	 * @return string
-	 */
-	private static function get_flag_dimension_attributes( $flag_url ) {
-		if ( 0 !== strpos( $flag_url, self::get_flag_dir_url() ) )
-			return '';
-
-		return ' width="16" height="11"';
-	}
-
-	/**
 	 * @param  int $content_id
 	 * @return int
 	 */
@@ -519,26 +506,6 @@ class Mlp_Helpers {
 	}
 
 	/**
-	 * Get default directory for flags.
-	 *
-	 * @return string
-	 */
-	private static function get_flag_dir_url() {
-
-		return self::$dependencies[ 'plugin_data' ]->flag_url;
-	}
-
-	/**
-	 * Temporary fix to get the main plugin directory.
-	 *
-	 * @return string
-	 */
-	private static function get_plugin_main_dir() {
-
-		return self::$dependencies[ 'plugin_data' ]->plugin_dir_path;
-	}
-
-	/**
 	 * @param  string $name
 	 * @param  object $instance
 	 * @return void
@@ -547,4 +514,5 @@ class Mlp_Helpers {
 
 		self::$dependencies[ $name ] = $instance;
 	}
+
 }
