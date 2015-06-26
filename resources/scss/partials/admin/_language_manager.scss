@@ -1,0 +1,23 @@
+#mlp-language-manager-table {
+
+	th {
+		white-space: nowrap;
+	}
+
+	td {
+		padding-top: 3px;
+		padding-bottom: 3px;
+		width: 1em;
+		height: auto !important;
+		min-height: 0 !important;
+		line-height: 1;
+	}
+
+	.alternate {
+		background:  rgba(0, 0, 0, 0.05);
+	}
+
+	input[type="checkbox"]:focus {
+		outline: 2px solid #8cf;
+	}
+}

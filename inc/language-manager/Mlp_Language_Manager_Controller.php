@@ -123,7 +123,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	public function enqueue_style() {
 
-		$this->plugin_data->assets->provide( 'mlp_backend_css' );
+		$this->plugin_data->assets->provide( 'mlp_admin_css' );
 	}
 
 	/**

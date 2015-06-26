@@ -1,0 +1,35 @@
+#mlp_quicklink_position_setting label {
+	display: inline-block;
+	margin-left: 10px;
+	border: 1px solid #eee;
+	padding: 10px;
+	width: 120px;
+	background: #fff;
+	color: #000;
+	text-align: center;
+
+	&:hover {
+		background: #eee;
+	}
+
+	&:before {
+		content: ' ';
+		display: block;
+		margin-bottom: 10px;
+		width: 120px;
+		height: 78px;
+		background: image-url("quicklinkpositions.png") no-repeat top right #fff;
+	}
+
+	&.quicklink-position-tr:before {
+		background-position: top left;
+	}
+
+	&.quicklink-position-bl:before {
+		background-position: bottom left;
+	}
+
+	&.quicklink-position-br:before {
+		background-position: bottom right;
+	}
+}

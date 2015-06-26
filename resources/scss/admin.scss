@@ -1,0 +1,14 @@
+// Current version (YYYYMMDD).
+// Used as cache buster for images.
+$version: "20150623";
+
+// Base ************************************************************************
+
+@import "partials/base";
+
+// Partials ********************************************************************
+
+@import "partials/admin/advanced_translator";
+@import "partials/admin/language_manager";
+@import "partials/admin/quicklinks";
+@import "partials/admin/settings";

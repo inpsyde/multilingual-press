@@ -1,13 +1,20 @@
-.settings
-.buildpath
-.project
-.externalToolBuilders
-.gitignore
-.gitattributes
-.release-notes
-plan.txt
-/hilfe.md
-/notes.php
-/Multilingual Press
-inc/core/common/Mlp_Allowed_Types.php
-inc/core/common/Mlp_Countable_Array_Access_Iterator_Interface.php
+# General backup/log/swap files
+*~
+*.DS_Store
+*.log
+*.out
+*.so
+*.swp
+
+# Grunt
+node_modules
+
+# PhpStorm
+.idea
+
+# Custom files
+*.map
+*.sass-cache*
+
+# This should stay at the bottom
+!.gitkeep
