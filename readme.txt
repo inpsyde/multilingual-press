@@ -139,6 +139,8 @@ because it creates a lock-in: you would lose access to your content after the pl
 - Use grunt, and refactor and improve assets.
 - Add missing `hfreflang` attribute for content's own language, see
 [issue #114](https://github.com/inpsyde/multilingual-press/issues/114).
+- Improve Language Switcher widget, see [issue #112](https://github.com/inpsyde/multilingual-press/issues/112), props
+dboune.
 
 = 2.1.2 =
 - Combine all scripts and stylesheets, separated for frontend and backend.
