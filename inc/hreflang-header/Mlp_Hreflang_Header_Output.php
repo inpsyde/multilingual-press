@@ -1,14 +1,13 @@
 <?php
+
 /**
  * Send headers for alternative language representations.
  *
- * @link https://support.google.com/webmasters/answer/189077?hl=en
- * @version 2014.09.20
+ * @link    https://support.google.com/webmasters/answer/189077?hl=en
+ * @version 2015.06.26
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-
-
 class Mlp_Hreflang_Header_Output {
 
 	/**
@@ -19,7 +18,7 @@ class Mlp_Hreflang_Header_Output {
 	/**
 	 * @type array
 	 */
-	private $translations = array ();
+	private $translations = array();
 
 	/**
 	 * @param Mlp_Language_Api_Interface $language_api
@@ -29,6 +28,11 @@ class Mlp_Hreflang_Header_Output {
 		$this->language_api = $language_api;
 	}
 
+	/**
+	 * Prints language attributes into the HTML head
+	 *
+	 * @wp-hook wp_head
+	 */
 	public function wp_head() {
 
 		$translations = $this->get_translations();
@@ -40,7 +44,7 @@ class Mlp_Hreflang_Header_Output {
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $translations as $lang => $url ) {
 			$html = sprintf(
-				'<link rel="alternate" hreflang="%1$s" href="%2$s" />' . PHP_EOL,
+				'<link rel="alternate" hreflang="%1$s" href="%2$s" />',
 				$lang,
 				$url
 			);
@@ -57,12 +61,18 @@ class Mlp_Hreflang_Header_Output {
 		}
 	}
 
+	/**
+	 * Adds language attributes to the HTTP header
+	 *
+	 * @wp-hook template_redirect
+	 */
 	public function http_header() {
 
 		$translations = $this->get_translations();
 
-		if ( empty ( $translations ) )
+		if ( empty ( $translations ) ) {
 			return;
+		}
 
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $translations as $lang => $url ) {
@@ -81,8 +91,9 @@ class Mlp_Hreflang_Header_Output {
 			 */
 			$header = apply_filters( 'mlp_hreflang_http_header', $header, $lang, $url );
 
-			if ( ! empty ( $header ) )
+			if ( ! empty( $header ) ) {
 				header( $header, FALSE );
+			}
 		}
 	}
 
@@ -114,7 +125,7 @@ class Mlp_Hreflang_Header_Output {
 			                    ->get_name( 'http' );
 			$url  = $translation->get_remote_url();
 
-			if ( ! empty ( $url ) ) {
+			if ( ! empty( $url ) ) {
 				$prepared[ $lang ] = (string) $url;
 			}
 		}
