@@ -137,6 +137,8 @@ because it creates a lock-in: you would lose access to your content after the pl
 - Save translations as long as title or content is given, see
 [issue #123](https://github.com/inpsyde/multilingual-press/issues/123).
 - Use grunt, and refactor and improve assets.
+- Add missing `hfreflang` attribute for content's own language, see
+[issue #114](https://github.com/inpsyde/multilingual-press/issues/114).
 
 = 2.1.2 =
 - Combine all scripts and stylesheets, separated for frontend and backend.
