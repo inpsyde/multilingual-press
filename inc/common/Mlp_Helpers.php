@@ -367,10 +367,19 @@ class Mlp_Helpers {
 		if ( 'text_flag' == $params[ 'link_text' ] ){
 			$params[ 'link_text' ] = 'native';
 			$params[ 'display_flag' ] = TRUE;
-		}
-		if ( 'flag' === $params[ 'link_text' ] ){
+			_doing_it_wrong(
+				__CLASS__.'::'.__FUNCTION__,
+				'The argument "text_flag" is deprecated and will be removed in the future.',
+				'2.2'
+			);
+		}elseif ( 'flag' === $params[ 'link_text' ] ){
 			$params[ 'link_text' ] = 'none';
 			$params[ 'display_flag' ] = TRUE;
+			_doing_it_wrong(
+				'mlp_pre_update_post',
+				'The argument "flag" is deprecated and will be removed in the future.',
+				'2.2'
+			);
 		}
 
 
@@ -403,15 +412,12 @@ class Mlp_Helpers {
 			if ( empty ( $url ) ) {
 				continue;
 			}
-
+			$language = $translation->get_language();
 			$items[ $site_id ] = array(
 				'url'      => $url,
-				'http'     => $translation->get_language()
-				                          ->get_name( 'http' ),
-				'name'     => $translation->get_language()
-				                          ->get_name( $params[ 'link_text' ] ),
-				'priority' => $translation->get_language()
-				                          ->get_priority(),
+				'http'     => $language->get_name( 'http' ),
+				'name'     => $language->get_name( $params[ 'link_text' ] ),
+				'priority' => $language->get_priority(),
 				'icon'     => (string) $translation->get_icon_url()
 			);
 		}

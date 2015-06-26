@@ -103,8 +103,9 @@ class Mlp_Widget extends WP_Widget {
 				<?php
 				$options = array(
 					'none'           => __( 'None', 'multilingualpress' ),
-					'native'         => __( 'Text', 'multilingualpress' ),
-					'english'        => __( 'Text (English)', 'multilingualpress' ),
+					'native'         => __( 'Native name', 'multilingualpress' ),
+					'text'           => __( 'Cuatom name', 'multilingualpress' ),
+					'english'        => __( 'English name', 'multilingualpress' ),
 					'http'           => __( 'Language code', 'multilingualpress' ),
 					'language_short' => __( 'Language code (short)', 'multilingualpress' )
 				);

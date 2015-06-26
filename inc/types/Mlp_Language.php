@@ -82,7 +82,11 @@ class Mlp_Language implements Mlp_Language_Interface {
 			if ( ! empty ( $this->names[ 'text' ] ) )
 				return $this->names[ 'text' ];
 
-			return $this->names[ 'custom_name' ];
+			if ( ! empty ( $this->names[ 'custom_name' ] ) )
+				return $this->names[ 'custom_name' ];
+
+			if ( ! empty ( $this->names[ 'native_name' ] ) )
+				return $this->names[ 'native_name' ];
 		}
 
 		if ( $name === 'none' ) {
