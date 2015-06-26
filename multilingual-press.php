@@ -44,11 +44,11 @@ function mlp_init() {
 	$loader = new Mlp_Load_Controller( $plugin_path . 'inc' );
 
 	$data = new Mlp_Plugin_Properties();
-	$data->loader = $loader->get_loader();
-	$data->locations = new Mlp_Internal_Locations();
 
-	$data->locations->add_dir( $plugin_path, $plugin_url, 'plugin' );
+	$data->set( 'loader',$loader->get_loader() );
 
+	$locations = new Mlp_Internal_Locations();
+	$locations->add_dir( $plugin_path, $plugin_url, 'plugin' );
 	$assets_locations = array(
 		'css'    => 'css',
 		'js'     => 'js',
@@ -56,15 +56,16 @@ function mlp_init() {
 		'flags'  => 'images/flags',
 	);
 	foreach ( $assets_locations as $type => $dir ) {
-		$data->locations->add_dir(
+		$locations->add_dir(
 			$plugin_path . $assets_base . '/' . $dir,
 			$plugin_url . $assets_base . '/' . $dir,
 			$type
 		);
 	}
+	$data->set( 'locations',$locations );
 
-	$data->plugin_file_path = __FILE__;
-	$data->plugin_base_name = plugin_basename( __FILE__ );
+	$data->set( 'plugin_file_path', __FILE__ );
+	$data->set( 'plugin_base_name', plugin_basename( __FILE__ ) );
 
 	$headers = get_file_data(
 		__FILE__,
@@ -76,7 +77,7 @@ function mlp_init() {
 		)
 	);
 	foreach ( $headers as $name => $value ) {
-		$data->$name = $value;
+		$data->set( $name, $value );
 	}
 
 	if ( ! mlp_pre_run_test( $pagenow, $data, $wp_version, $wpdb ) ) {
@@ -101,8 +102,8 @@ function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_
 
 	$self_check = new Mlp_Self_Check( __FILE__, $pagenow );
 	$requirements_check = $self_check->pre_install_check(
-		$data->plugin_name,
-		$data->plugin_base_name,
+		$data->get( 'plugin_name' ),
+		$data->get( 'plugin_base_name' ),
 		$wp_version
 	);
 
@@ -110,7 +111,7 @@ function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_
 		return FALSE;
 	}
 
-	$data->site_relations = new Mlp_Site_Relations( $wpdb, 'mlp_site_relations' );
+	$data->set( 'site_relations', new Mlp_Site_Relations( $wpdb, 'mlp_site_relations' ) );
 
 	if ( Mlp_Self_Check::INSTALLATION_CONTEXT_OK === $requirements_check ) {
 
@@ -118,7 +119,7 @@ function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_
 
 		$last_version_option = get_site_option( 'mlp_version' );
 		$last_version = new Mlp_Semantic_Version_Number( $last_version_option );
-		$current_version = new Mlp_Semantic_Version_Number( $data->version );
+		$current_version = new Mlp_Semantic_Version_Number( $data->get( 'version' ) );
 		$upgrade_check = $self_check->is_current_version( $current_version, $last_version );
 		$updater = new Mlp_Update_Plugin_Data( $data, $wpdb, $current_version, $last_version );
 
