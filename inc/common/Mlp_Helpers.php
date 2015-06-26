@@ -1,11 +1,11 @@
 <?php
+
 /**
  * Various global helper methods
  *
- * Please use the functions in /inc/functions.php, do not access the methods of
- * this class directly.
+ * Please use the functions in /inc/functions.php, do not access the methods of this class directly.
  *
- * @version 2014.09.23
+ * @version 2015.06.26
  * @author  Inpsyde GmbH
  * @license GPL
  */
@@ -345,82 +345,113 @@ class Mlp_Helpers {
 	}
 
 	/**
-	 * Get the linked elements and display them as a list
-	 * flag from a blogid
+	 * Get the linked elements and display them as a list.
 	 *
-	 * @param    array $args
-	 * @return    string output of the bloglist
+	 * @param array $args
+	 *
+	 * @return string
 	 */
 	public static function show_linked_elements( $args ) {
 
-		$defaults = array (
-			'link_text'         => 'text',
+		$defaults = array(
+			'link_text'         => 'native',
+			'display_flag'      => FALSE,
 			'sort'              => 'priority',
 			'show_current_blog' => FALSE,
-			'strict'            => FALSE // get exact translations only
+			'strict'            => FALSE, // get exact translations only
 		);
-
 		$params = wp_parse_args( $args, $defaults );
 
+		// TODO: Eventually remove this, with version 2.3.0 at the earliest
+		switch ( $params[ 'link_text' ] ) {
+			case 'text_flag':
+				_doing_it_wrong(
+					__METHOD__,
+					"The value 'text_flag' for the argument 'link_text' is deprecated and will be removed in the future. Please use the value TRUE for the argument 'display_flag', and choose one of the possible options for the argument 'link_text'.",
+					'2.2.0'
+				);
+
+				$params[ 'link_text' ] = 'native';
+				$params[ 'display_flag' ] = TRUE;
+				break;
+
+			case 'flag':
+				_doing_it_wrong(
+					__METHOD__,
+					"The value 'flag' for the argument 'link_text' is deprecated and will be removed in the future. Please use the value TRUE for the argument 'display_flag', and the value 'none' for the argument 'link_text'.",
+					'2.2.0'
+				);
+
+				$params[ 'link_text' ] = 'none';
+				$params[ 'display_flag' ] = TRUE;
+				break;
+		}
+
 		/** @var Mlp_Language_Api $api */
-		$api              = self::$dependencies[ 'language_api' ];
-		$translations     = $api->get_translations(
-			array (
-				'strict'       => $params[ 'strict' ],
-				'include_base' => $params[ 'show_current_blog' ]
-			)
-		);
-
-		if ( empty ( $translations ) )
+		$api = apply_filters( 'mlp_language_api', NULL );
+		if ( ! is_a( $api, 'Mlp_Language_Api_Interface' ) ) {
 			return '';
+		}
 
-		$current_id       = get_current_blog_id();
-		$items            = array ();
-		$output           = '<div class="mlp_language_box"><ul>';
+		$translations_args = array(
+			'strict'       => $params[ 'strict' ],
+			'include_base' => $params[ 'show_current_blog' ],
+		);
+		$translations = $api->get_translations( $translations_args );
+		if ( empty( $translations ) ) {
+			return '';
+		}
+
+		$items = array();
 
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $translations as $site_id => $translation ) {
-
 			$url = $translation->get_remote_url();
-
-			if ( empty ( $url ) )
+			if ( empty( $url ) ) {
 				continue;
+			}
 
-			$items[ $site_id ] = array (
+			$language = $translation->get_language();
+
+			$items[ $site_id ] = array(
 				'url'      => $url,
-				'http'     => $translation->get_language()->get_name( 'http' ),
-				'name'     => $translation->get_language()->get_name( 'native' ),
-				'priority' => $translation->get_language()->get_priority(),
-				'icon'     => (string) $translation->get_icon_url()
+				'http'     => $language->get_name( 'http' ),
+				'name'     => $language->get_name( $params[ 'link_text' ] ),
+				'priority' => $language->get_priority(),
+				'icon'     => (string) $translation->get_icon_url(),
 			);
 		}
 
-		if ( 'blogid' === $params[ 'sort' ] )
-			ksort( $items );
-		elseif (  'priority' === $params[ 'sort' ] )
-			uasort( $items, array ( __CLASS__, 'sort_priorities' ) );
-		elseif (  'name' === $params[ 'sort' ] )
-			uasort( $items, array ( __CLASS__, 'strcasecmp_sort_names' ) );
+		switch ( $params[ 'sort' ] ) {
+			case 'blogid':
+				ksort( $items );
+				break;
+
+			case 'priority':
+				uasort( $items, array( __CLASS__, 'sort_priorities' ) );
+				break;
+
+			case 'name':
+				uasort( $items, array( __CLASS__, 'strcasecmp_sort_names' ) );
+				break;
+		}
+
+		$output = '<div class="mlp_language_box"><ul>';
 
 		foreach ( $items as $site_id => $item ) {
-
 			$text = $item[ 'name' ];
 
-			if ( ! empty ( $item[ 'icon'] ) ) {
+			if ( ! empty ( $item[ 'icon' ] ) ) {
+				$img = '<img src="' . $item[ 'icon' ] . '" alt="' . esc_attr( $item[ 'name' ] ) . '" />';
 
-				$img = '<img src="' . $item[ 'icon'] . '" alt="' . esc_attr( $item[ 'name' ] ) . '" />';
-
-				if ( 'text_flag' == $params[ 'link_text' ] )
+				if ( $params[ 'display_flag' ] ) {
 					$text = "$img $text";
-
-				if ( 'flag' === $params[ 'link_text' ] )
-					$text = $img;
+				}
 			}
 
-			if ( $site_id === $current_id ) {
-				$output .= sprintf( '<li><a class="current-language-item" href="">%s</a></li>', $text );
-			}
-			else {
+			if ( $site_id === get_current_blog_id() ) {
+				$output .= '<li><a class="current-language-item" href="">' . $text . '</a></li>';
+			} else {
 				$output .= sprintf(
 					'<li><a rel="alternate" hreflang="%1$s"  href="%2$s">%3$s</a></li>',
 					$item[ 'http' ],

@@ -1,29 +1,32 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Language object
  *
- * @version 2014.09.22
+ * @version 2015.06.26
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
 class Mlp_Language implements Mlp_Language_Interface {
 
 	/**
-	 * @type int
+	 * @var int
 	 */
 	private $priority = 1;
 
 	/**
-	 * @type bool
+	 * @var bool
 	 */
 	private $is_rtl = FALSE;
 
 	/**
-	 * @type array
+	 * @var array
 	 */
 	private $names = array();
 
 	/**
+	 * Constructor. Set up the properies.
+	 *
 	 * @param array $raw_data
 	 */
 	public function __construct( Array $raw_data ) {
@@ -36,10 +39,12 @@ class Mlp_Language implements Mlp_Language_Interface {
 		$this->is_rtl = empty ( $data[ 'is_rtl' ] );
 		unset ( $data[ 'is_rtl' ] );
 
-		$this->names  = $data;
+		$this->names = $data;
 	}
 
 	/**
+	 * Check if the language left-to-right.
+	 *
 	 * @return bool
 	 */
 	public function is_rtl() {
@@ -48,52 +53,57 @@ class Mlp_Language implements Mlp_Language_Interface {
 	}
 
 	/**
-	 * Get different possible language names
+	 * Get language name for given type.
 	 *
-	 * @param  string $name Possible values:
-	 *                      - 'native' (default) ex: Deutsch for German
-	 *                      - 'english' English name of the language
-	 *                      - 'http' ex: 'de-AT'
-	 *                      - 'language_long' alias for 'http'.
-	 *                      - 'language_short' first part of 'http', ex: 'de' in 'de-AT'
-	 *                      - 'lang' alias for 'language_short'
-	 *                      - 'wp_locale' Identifier for translation files used by WordPress
-	 *                      - 'custom' Language name set in the site preferences
-	 *                      - 'text' alias for 'custom'
+	 * @param string $name Possible values:
+	 *                     - 'native': Native name of the language (default, e.g., Deutsch for German).
+	 *                     - 'english': English name of the language.
+	 *                     - 'http': HTTP language code (e.g., 'de-AT').
+	 *                     - 'language_long': Alias for 'http'.
+	 *                     - 'language_short' First part of 'http' (e.g., 'de' for 'de-AT').
+	 *                     - 'lang': Alias for 'language_short'.
+	 *                     - 'wp_locale': Identifier for translation files used by WordPress.
+	 *                     - 'custom': Language name set in the site preferences.
+	 *                     - 'text': Alias for 'custom'.
+	 *                     - 'none': No text output (e.g,. for displaying the flag icon only).
+	 *
 	 * @return string
 	 */
 	public function get_name( $name = '' ) {
 
-		if ( isset ( $this->names[ $name ] ) )
+		if ( ! empty( $this->names[ $name ] ) ) {
 			return $this->names[ $name ];
+		}
 
-		if ( isset ( $this->names[ $name . '_name' ] ) )
+		if ( ! empty( $this->names[ $name . '_name' ] ) ) {
 			return $this->names[ $name . '_name' ];
+		}
 
-		if ( in_array( $name, array ( 'language_short', 'lang' ) ) )
-			return strtok( $this->names[ 'http_name'], '-' );
+		if ( in_array( $name, array( 'language_short', 'lang' ) ) ) {
+			return strtok( $this->names[ 'http_name' ], '-' );
+		}
 
-		if ( $name === 'language_long' )
+		if ( $name === 'language_long' ) {
 			return $this->names[ 'http_name' ];
+		}
 
-		if ( $name === 'custom_name' || $name === 'custom' ) {
-
-			if ( ! empty ( $this->names[ 'text' ] ) )
-				return $this->names[ 'text' ];
-
-			return $this->names[ 'custom_name' ];
+		if ( $name === 'none' ) {
+			return '';
 		}
 
 		// $name is empty or invalid, so ...
-		foreach ( array ( 'native_name', 'english_name' ) as $match ) {
-			if ( ! empty ( $this->names[ $match ] ) )
+		foreach ( array( 'native_name', 'english_name' ) as $match ) {
+			if ( ! empty( $this->names[ $match ] ) ) {
 				return $this->names[ $match ];
+			}
 		}
 
 		return '';
 	}
 
 	/**
+	 * Get the priority.
+	 *
 	 * @return int
 	 */
 	public function get_priority() {
@@ -102,14 +112,15 @@ class Mlp_Language implements Mlp_Language_Interface {
 	}
 
 	/**
-	 * Prepares data passed by a db query for example.
+	 * Prepares data passed by a DB query for example.
 	 *
-	 * @param  array $raw_data
+	 * @param array $raw_data Raw data array.
+	 *
 	 * @return array
 	 */
-	private function prepare_raw_data( Array $raw_data ) {
+	private function prepare_raw_data( array $raw_data ) {
 
-		$default = array (
+		$default = array(
 			'english_name' => '',
 			'native_name'  => '',
 			'custom_name'  => '',
@@ -117,12 +128,14 @@ class Mlp_Language implements Mlp_Language_Interface {
 			'http_name'    => '',
 			'priority'     => 1,
 			'wp_locale'    => '',
-			'text'         => ''
+			'text'         => '',
 		);
 
-		if ( isset ( $raw_data[ 'text' ] ) )
+		if ( isset( $raw_data[ 'text' ] ) ) {
 			$default[ 'custom_name' ] = $raw_data[ 'text' ];
+		}
 
 		return wp_parse_args( $raw_data, $default );
 	}
+
 }
