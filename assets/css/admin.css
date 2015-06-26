@@ -16,6 +16,14 @@
   font-size: 1.7em;
 }
 
+.mlp_name {
+  padding: 3px 8px;
+  line-height: 1;
+  background: #fff;
+  outline: 0;
+  font-size: 1.2em;
+}
+
 .mlp_taxonomy_box {
   float: left;
   margin: 5px;
