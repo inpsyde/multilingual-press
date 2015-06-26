@@ -82,16 +82,24 @@
 					translationContent.setContent( tinyMCEContent.getContent() );
 				}
 
-				$( document ).trigger( 'mlp_copy_post', {
-					blogId: blogId,
-					prefix: prefix,
-					data  : {
-						translationContent: translationContent,
-						content           : content,
-						title             : title,
-						postSlug          : postSlug
-					}
-				} );
+				/**
+				 * TODO: Figure out how to make this functionality more extensible and accessible
+				 *
+				 * The code below is a quick'n dirty draft that would provide a simple way to add
+				 * custom code with an easy access to relevant data.
+				 * Until there's consensus on how to extend the advanced Translator API, better keep it disabled
+				 *
+				 */
+				//$( document ).trigger( 'mlp_copy_post', {
+				//	blogId: blogId,
+				//	prefix: prefix,
+				//	data  : {
+				//		translationContent: translationContent,
+				//		content           : content,
+				//		title             : title,
+				//		postSlug          : postSlug
+				//	}
+				//} );
 				// @formatter:on
 			}
 		};
