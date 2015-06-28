@@ -142,6 +142,7 @@ because it creates a lock-in: you would lose access to your content after the pl
 dboune.
 - Remove long deprecated filters `mlp_pre_save_postdata` and `mlp_pre_update_post`.
 - Improve DB functions.
+- Deprecate `get_blog_language()` in favor of `mlp_get_blog_language()`.
 
 = 2.1.2 =
 - Combine all scripts and stylesheets, separated for frontend and backend.

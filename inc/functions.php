@@ -137,14 +137,40 @@ function mlp_get_interlinked_permalinks( $element_id = 0 ) {
 }
 
 /**
- * get the blog language
+ * Return the language for the given blog.
  *
- * @param  int  $blog_id
- * @param  bool $short Return only the first part of the language code.
- * @return string Second part of language identifier
+ * @param int  $blog_id Blog ID.
+ * @param bool $short   Return only the first part of the language code?
+ *
+ * @return string
  */
-function get_blog_language( $blog_id = 0, $short = TRUE ) {
+function mlp_get_blog_language( $blog_id = 0, $short = TRUE ) {
+
 	return Mlp_Helpers::get_blog_language( $blog_id, $short );
+}
+
+if ( ! function_exists( 'get_blog_language' ) ) {
+
+	/**
+	 * Deprecated! Return the language for the given blog.
+	 *
+	 * @param int  $blog_id Blog ID.
+	 * @param bool $short   Return only the first part of the language code?
+	 *
+	 * @return string
+	 */
+	function get_blog_language( $blog_id = 0, $short = TRUE ) {
+
+		// TODO: Eventually remove this, with version 2.3.0 at the earliest
+		_doing_it_wrong(
+			__FUNCTION__,
+			"get_blog_language is deprecated and will be removed in the future. Please use mlp_get_blog_language instead.",
+			'2.2.0'
+		);
+
+		return Mlp_Helpers::get_blog_language( $blog_id, $short );
+	}
+
 }
 
 /**
