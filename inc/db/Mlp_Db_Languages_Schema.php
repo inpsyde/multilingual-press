@@ -1,10 +1,11 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Class Mlp_Db_Languages_Schema
  *
  * Specific data for the language table.
  *
- * @version 2014.01.29
+ * @version 2015.06.28
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
@@ -16,31 +17,35 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 	private $wpdb;
 
 	/**
-	 * @param wpdb $wpdb
+	 * Constructor. Set up the properties.
+	 *
+	 * @param wpdb $wpdb Database object.
 	 */
 	public function __construct( wpdb $wpdb ) {
+
 		$this->wpdb = $wpdb;
 	}
 
 	/**
-	 * Get table name.
+	 * Return the table name.
 	 *
 	 * @return string
 	 */
-	public function get_table_name()
-	{
+	public function get_table_name() {
+
 		return $this->wpdb->base_prefix . 'mlp_languages';
 	}
 
 	/**
-	 * Get the table columns.
+	 * Return the table schema.
+	 *
+	 * See wp_get_db_schema() in wp-admin/includes/schema.php for the default schema.
 	 *
 	 * @return array
 	 */
-	public function get_schema()
-	{
+	public function get_schema() {
 
-		return array (
+		return array(
 			'ID'           => 'bigint unsigned NOT NULL auto_increment',
 			'english_name' => 'tinytext',
 			'native_name'  => 'tinytext',
@@ -58,46 +63,46 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 	}
 
 	/**
-	 * Get the primary key.
+	 * Return the primary key.
 	 *
 	 * @return string
 	 */
-	public function get_primary_key()
-	{
+	public function get_primary_key() {
+
 		return 'ID';
 	}
 
 	/**
-	 * Get keys which should be ignored when rows are inserted.
+	 * Return the array of autofilled keys.
 	 *
 	 * @return array
 	 */
-	public function get_autofilled_keys()
-	{
-		return array ( 'ID' );
+	public function get_autofilled_keys() {
+
+		return array(
+			'ID',
+		);
 	}
 
 	/**
-	 * @todo Useful indexes
-	 * (non-PHPdoc)
-	 * @see  Mlp_Db_Schema_Interface::get_index_sql()
-	 */
-	public function get_index_sql()
-	{
-	}
-
-	/**
-	 * Languages for db table installation. Will not be used later.
-	 *
-	 * @see Mlp_Db_Schema_Interface::get_default_content()
+	 * Return the SQL string for any indexes and unique keys.
 	 *
 	 * @return string
 	 */
-	public function get_default_content()
-	{
-		$out    = array ();
-		$fields = array (
-			'aa'    => array (
+	public function get_index_sql() {
+
+		return 'KEY (http_name)';
+	}
+
+	/**
+	 * Return the SQL string for any default content.
+	 *
+	 * @return string
+	 */
+	public function get_default_content() {
+
+		$fields = array(
+			'aa'    => array(
 				'english_name' => 'Afar',
 				'native_name'  => 'Afaraf',
 				'custom_name'  => '',
@@ -108,7 +113,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'aa',
 				'priority'     => 1,
 			),
-			'ae'    => array (
+			'ae'    => array(
 				'english_name' => 'Avestan',
 				'native_name'  => 'avesta',
 				'custom_name'  => '',
@@ -119,7 +124,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ae',
 				'priority'     => 1,
 			),
-			'af'    => array (
+			'af'    => array(
 				'english_name' => 'Afrikaans',
 				'native_name'  => 'Afrikaans',
 				'custom_name'  => '',
@@ -130,7 +135,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'af-ZA',
 				'priority'     => 1,
 			),
-			'ak'    => array (
+			'ak'    => array(
 				'english_name' => 'Akan',
 				'native_name'  => 'Akan',
 				'custom_name'  => '',
@@ -141,7 +146,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ak',
 				'priority'     => 1,
 			),
-			'am'    => array (
+			'am'    => array(
 				'english_name' => 'Amharic',
 				'native_name'  => 'አማርኛ',
 				'custom_name'  => '',
@@ -152,7 +157,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'am',
 				'priority'     => 1,
 			),
-			'an'    => array (
+			'an'    => array(
 				'english_name' => 'Aragonese',
 				'native_name'  => 'Aragonés',
 				'custom_name'  => '',
@@ -163,7 +168,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'an',
 				'priority'     => 1,
 			),
-			'ar'    => array (
+			'ar'    => array(
 				'english_name' => 'Arabic',
 				'native_name'  => 'العربية',
 				'custom_name'  => '',
@@ -174,7 +179,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ar-AR',
 				'priority'     => 1,
 			),
-			'as'    => array (
+			'as'    => array(
 				'english_name' => 'Assamese',
 				'native_name'  => 'অসমীয়া',
 				'custom_name'  => '',
@@ -185,7 +190,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'asm',
 				'priority'     => 1,
 			),
-			'ast'   => array (
+			'ast'   => array(
 				'english_name' => 'Asturian',
 				'native_name'  => 'Asturianu',
 				'custom_name'  => '',
@@ -196,7 +201,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ast',
 				'priority'     => 1,
 			),
-			'av'    => array (
+			'av'    => array(
 				'english_name' => 'Avaric',
 				'native_name'  => 'авар мацӀ',
 				'custom_name'  => '',
@@ -207,7 +212,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'av',
 				'priority'     => 1,
 			),
-			'ay'    => array (
+			'ay'    => array(
 				'english_name' => 'Aymara',
 				'native_name'  => 'aymar aru',
 				'custom_name'  => '',
@@ -218,7 +223,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ay',
 				'priority'     => 1,
 			),
-			'az'    => array (
+			'az'    => array(
 				'english_name' => 'Azerbaijani',
 				'native_name'  => 'Azərbaycan dili',
 				'custom_name'  => '',
@@ -229,7 +234,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'az-AZ',
 				'priority'     => 1,
 			),
-			'azb'   => array (
+			'azb'   => array(
 				'english_name' => 'South Azerbaijani',
 				'native_name'  => 'گؤنئی آذربایجان',
 				'custom_name'  => '',
@@ -240,7 +245,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'az',
 				'priority'     => 1,
 			),
-			'az-tr' => array (
+			'az-tr' => array(
 				'english_name' => 'Azerbaijani (Turkey)',
 				'native_name'  => 'Azərbaycan Türkcəsi',
 				'custom_name'  => '',
@@ -251,7 +256,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'az-TR',
 				'priority'     => 1,
 			),
-			'ba'    => array (
+			'ba'    => array(
 				'english_name' => 'Bashkir',
 				'native_name'  => 'башҡорт теле',
 				'custom_name'  => '',
@@ -262,7 +267,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ba',
 				'priority'     => 1,
 			),
-			'bal'   => array (
+			'bal'   => array(
 				'english_name' => 'Catalan (Balear)',
 				'native_name'  => 'Català (Balear)',
 				'custom_name'  => '',
@@ -273,7 +278,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ca',
 				'priority'     => 1,
 			),
-			'bel'   => array (
+			'bel'   => array(
 				'english_name' => 'Belarusian',
 				'native_name'  => 'Беларуская мова',
 				'custom_name'  => '',
@@ -284,7 +289,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'be-BY',
 				'priority'     => 1,
 			),
-			'bg'    => array (
+			'bg'    => array(
 				'english_name' => 'Bulgarian',
 				'native_name'  => 'Български',
 				'custom_name'  => '',
@@ -295,7 +300,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'bg-BG',
 				'priority'     => 1,
 			),
-			'bh'    => array (
+			'bh'    => array(
 				'english_name' => 'Bihari',
 				'native_name'  => 'भोजपुरी',
 				'custom_name'  => '',
@@ -306,7 +311,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'bh',
 				'priority'     => 1,
 			),
-			'bi'    => array (
+			'bi'    => array(
 				'english_name' => 'Bislama',
 				'native_name'  => 'Bislama',
 				'custom_name'  => '',
@@ -317,7 +322,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'bi',
 				'priority'     => 1,
 			),
-			'bm'    => array (
+			'bm'    => array(
 				'english_name' => 'Bambara',
 				'native_name'  => 'Bamanankan',
 				'custom_name'  => '',
@@ -328,7 +333,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'bm',
 				'priority'     => 1,
 			),
-			'bn'    => array (
+			'bn'    => array(
 				'english_name' => 'Bengali',
 				'native_name'  => 'বাংলা',
 				'custom_name'  => '',
@@ -339,7 +344,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'bn-BD',
 				'priority'     => 1,
 			),
-			'bo'    => array (
+			'bo'    => array(
 				'english_name' => 'Tibetan',
 				'native_name'  => 'བོད་སྐད',
 				'custom_name'  => '',
@@ -350,7 +355,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'bo',
 				'priority'     => 1,
 			),
-			'br'    => array (
+			'br'    => array(
 				'english_name' => 'Breton',
 				'native_name'  => 'brezhoneg',
 				'custom_name'  => '',
@@ -361,7 +366,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'br',
 				'priority'     => 1,
 			),
-			'bs'    => array (
+			'bs'    => array(
 				'english_name' => 'Bosnian',
 				'native_name'  => 'Bosanski',
 				'custom_name'  => '',
@@ -372,7 +377,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'bs-BA',
 				'priority'     => 1,
 			),
-			'ca'    => array (
+			'ca'    => array(
 				'english_name' => 'Catalan',
 				'native_name'  => 'Català',
 				'custom_name'  => '',
@@ -383,7 +388,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ca-ES',
 				'priority'     => 1,
 			),
-			'ce'    => array (
+			'ce'    => array(
 				'english_name' => 'Chechen',
 				'native_name'  => 'Нохчийн мотт',
 				'custom_name'  => '',
@@ -394,7 +399,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ce',
 				'priority'     => 1,
 			),
-			'ch'    => array (
+			'ch'    => array(
 				'english_name' => 'Chamorro',
 				'native_name'  => 'Chamoru',
 				'custom_name'  => '',
@@ -405,7 +410,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ch',
 				'priority'     => 1,
 			),
-			'ckb'   => array (
+			'ckb'   => array(
 				'english_name' => 'Kurdish (Sorani)',
 				'native_name'  => 'كوردی‎',
 				'custom_name'  => '',
@@ -416,7 +421,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ku',
 				'priority'     => 1,
 			),
-			'co'    => array (
+			'co'    => array(
 				'english_name' => 'Corsican',
 				'native_name'  => 'corsu',
 				'custom_name'  => '',
@@ -427,7 +432,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'co',
 				'priority'     => 1,
 			),
-			'cr'    => array (
+			'cr'    => array(
 				'english_name' => 'Cree',
 				'native_name'  => 'ᓀᐦᐃᔭᐍᐏᐣ',
 				'custom_name'  => '',
@@ -438,7 +443,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'cr',
 				'priority'     => 1,
 			),
-			'cs'    => array (
+			'cs'    => array(
 				'english_name' => 'Czech',
 				'native_name'  => 'čeština‎',
 				'custom_name'  => '',
@@ -449,7 +454,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'cs-CZ',
 				'priority'     => 1,
 			),
-			'csb'   => array (
+			'csb'   => array(
 				'english_name' => 'Kashubian',
 				'native_name'  => 'Kaszëbsczi',
 				'custom_name'  => '',
@@ -460,7 +465,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'csb',
 				'priority'     => 1,
 			),
-			'cu'    => array (
+			'cu'    => array(
 				'english_name' => 'Church Slavic',
 				'native_name'  => 'ѩзыкъ словѣньскъ',
 				'custom_name'  => '',
@@ -471,7 +476,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'cu',
 				'priority'     => 1,
 			),
-			'cv'    => array (
+			'cv'    => array(
 				'english_name' => 'Chuvash',
 				'native_name'  => 'чӑваш чӗлхи',
 				'custom_name'  => '',
@@ -482,7 +487,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'cv',
 				'priority'     => 1,
 			),
-			'cy'    => array (
+			'cy'    => array(
 				'english_name' => 'Welsh',
 				'native_name'  => 'Cymraeg',
 				'custom_name'  => '',
@@ -493,7 +498,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'cy-GB',
 				'priority'     => 1,
 			),
-			'da'    => array (
+			'da'    => array(
 				'english_name' => 'Danish',
 				'native_name'  => 'Dansk',
 				'custom_name'  => '',
@@ -504,7 +509,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'da-DK',
 				'priority'     => 1,
 			),
-			'de'    => array (
+			'de'    => array(
 				'english_name' => 'German',
 				'native_name'  => 'Deutsch',
 				'custom_name'  => '',
@@ -515,7 +520,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'de-DE',
 				'priority'     => 1,
 			),
-			'dv'    => array (
+			'dv'    => array(
 				'english_name' => 'Divehi',
 				'native_name'  => 'ދިވެހި',
 				'custom_name'  => '',
@@ -526,7 +531,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'dv',
 				'priority'     => 1,
 			),
-			'dz'    => array (
+			'dz'    => array(
 				'english_name' => 'Dzongkha',
 				'native_name'  => 'རྫོང་ཁ',
 				'custom_name'  => '',
@@ -537,7 +542,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'dz',
 				'priority'     => 1,
 			),
-			'ee'    => array (
+			'ee'    => array(
 				'english_name' => 'Ewe',
 				'native_name'  => 'Eʋegbe',
 				'custom_name'  => '',
@@ -548,7 +553,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ee',
 				'priority'     => 1,
 			),
-			'el-po' => array (
+			'el-po' => array(
 				'english_name' => 'Greek (Polytonic)',
 				'native_name'  => 'Greek (Polytonic)',
 				'custom_name'  => '',
@@ -559,7 +564,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'grc',
 				'priority'     => 1,
 			),
-			'el'    => array (
+			'el'    => array(
 				'english_name' => 'Greek',
 				'native_name'  => 'Ελληνικά',
 				'custom_name'  => '',
@@ -570,7 +575,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'el-GR',
 				'priority'     => 1,
 			),
-			'en'    => array (
+			'en'    => array(
 				'english_name' => 'English',
 				'native_name'  => 'English',
 				'custom_name'  => '',
@@ -581,7 +586,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'en-US',
 				'priority'     => 1,
 			),
-			'en-au' => array (
+			'en-au' => array(
 				'english_name' => 'English (Australia)',
 				'native_name'  => 'English (Australia)',
 				'custom_name'  => '',
@@ -592,7 +597,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'en-AU',
 				'priority'     => 1,
 			),
-			'en-ca' => array (
+			'en-ca' => array(
 				'english_name' => 'English (Canada)',
 				'native_name'  => 'English (Canada)',
 				'custom_name'  => '',
@@ -603,7 +608,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'en-CA',
 				'priority'     => 1,
 			),
-			'en-gb' => array (
+			'en-gb' => array(
 				'english_name' => 'English (UK)',
 				'native_name'  => 'English (UK)',
 				'custom_name'  => '',
@@ -614,7 +619,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'en-GB',
 				'priority'     => 1,
 			),
-			'eo'    => array (
+			'eo'    => array(
 				'english_name' => 'Esperanto',
 				'native_name'  => 'Esperanto',
 				'custom_name'  => '',
@@ -625,7 +630,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'eo-EO',
 				'priority'     => 1,
 			),
-			'es-cl' => array (
+			'es-cl' => array(
 				'english_name' => 'Spanish (Chile)',
 				'native_name'  => 'Español de Chile',
 				'custom_name'  => '',
@@ -636,7 +641,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'es-CL',
 				'priority'     => 1,
 			),
-			'es-mx' => array (
+			'es-mx' => array(
 				'english_name' => 'Spanish (Mexico)',
 				'native_name'  => 'Español de México',
 				'custom_name'  => '',
@@ -647,7 +652,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'es-MX',
 				'priority'     => 1,
 			),
-			'es-pe' => array (
+			'es-pe' => array(
 				'english_name' => 'Spanish (Peru)',
 				'native_name'  => 'Español de Perú',
 				'custom_name'  => '',
@@ -658,7 +663,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'es-PE',
 				'priority'     => 1,
 			),
-			'es-pr' => array (
+			'es-pr' => array(
 				'english_name' => 'Spanish (Puerto Rico)',
 				'native_name'  => 'Español de Puerto Rico',
 				'custom_name'  => '',
@@ -669,7 +674,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'es-PR',
 				'priority'     => 1,
 			),
-			'es-ve' => array (
+			'es-ve' => array(
 				'english_name' => 'Spanish (Venezuela)',
 				'native_name'  => 'Español de Venezuela',
 				'custom_name'  => '',
@@ -680,7 +685,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'es-VE',
 				'priority'     => 1,
 			),
-			'es-co' => array (
+			'es-co' => array(
 				'english_name' => 'Spanish (Colombia)',
 				'native_name'  => 'Español de Colombia',
 				'custom_name'  => '',
@@ -691,7 +696,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'es-CO',
 				'priority'     => 1,
 			),
-			'es'    => array (
+			'es'    => array(
 				'english_name' => 'Spanish (Spain)',
 				'native_name'  => 'Español',
 				'custom_name'  => '',
@@ -702,7 +707,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'es-ES',
 				'priority'     => 1,
 			),
-			'et'    => array (
+			'et'    => array(
 				'english_name' => 'Estonian',
 				'native_name'  => 'Eesti',
 				'custom_name'  => '',
@@ -713,7 +718,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'et-EE',
 				'priority'     => 1,
 			),
-			'eu'    => array (
+			'eu'    => array(
 				'english_name' => 'Basque',
 				'native_name'  => 'Euskara',
 				'custom_name'  => '',
@@ -724,7 +729,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'eu-ES',
 				'priority'     => 1,
 			),
-			'fa'    => array (
+			'fa'    => array(
 				'english_name' => 'Persian',
 				'native_name'  => 'فارسی',
 				'custom_name'  => '',
@@ -735,7 +740,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fa-IR',
 				'priority'     => 1,
 			),
-			'fa-af' => array (
+			'fa-af' => array(
 				'english_name' => 'Persian (Afghanistan)',
 				'native_name'  => '(فارسی (افغانستان',
 				'custom_name'  => '',
@@ -746,7 +751,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fa-AF',
 				'priority'     => 1,
 			),
-			'fi'    => array (
+			'fi'    => array(
 				'english_name' => 'Finnish',
 				'native_name'  => 'Suomi',
 				'custom_name'  => '',
@@ -757,7 +762,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fi-FI',
 				'priority'     => 1,
 			),
-			'fj'    => array (
+			'fj'    => array(
 				'english_name' => 'Fijian',
 				'native_name'  => 'vosa Vakaviti',
 				'custom_name'  => '',
@@ -768,7 +773,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fj',
 				'priority'     => 1,
 			),
-			'fo'    => array (
+			'fo'    => array(
 				'english_name' => 'Faroese',
 				'native_name'  => 'føroyskt',
 				'custom_name'  => '',
@@ -779,7 +784,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fo-FO',
 				'priority'     => 1,
 			),
-			'fr'    => array (
+			'fr'    => array(
 				'english_name' => 'French (France)',
 				'native_name'  => 'Français',
 				'custom_name'  => '',
@@ -790,7 +795,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fr-FR',
 				'priority'     => 1,
 			),
-			'fr-be' => array (
+			'fr-be' => array(
 				'english_name' => 'French (Belgium)',
 				'native_name'  => 'Français de Belgique',
 				'custom_name'  => '',
@@ -801,7 +806,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fr-BE',
 				'priority'     => 1,
 			),
-			'fr-ca' => array (
+			'fr-ca' => array(
 				'english_name' => 'French (Canada)',
 				'native_name'  => 'Français du Canada',
 				'custom_name'  => '',
@@ -812,7 +817,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fr-CA',
 				'priority'     => 1,
 			),
-			'fr-ch' => array (
+			'fr-ch' => array(
 				'english_name' => 'French (Switzerland)',
 				'native_name'  => 'Français de Suisse',
 				'custom_name'  => '',
@@ -823,7 +828,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fr',
 				'priority'     => 1,
 			),
-			'fy'    => array (
+			'fy'    => array(
 				'english_name' => 'Frisian',
 				'native_name'  => 'Frysk',
 				'custom_name'  => '',
@@ -834,7 +839,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'fy-NL',
 				'priority'     => 1,
 			),
-			'ga'    => array (
+			'ga'    => array(
 				'english_name' => 'Irish',
 				'native_name'  => 'Gaelige',
 				'custom_name'  => '',
@@ -845,7 +850,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ga-IE',
 				'priority'     => 1,
 			),
-			'gd'    => array (
+			'gd'    => array(
 				'english_name' => 'Scottish Gaelic',
 				'native_name'  => 'Gàidhlig',
 				'custom_name'  => '',
@@ -856,7 +861,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'gd',
 				'priority'     => 1,
 			),
-			'gl'    => array (
+			'gl'    => array(
 				'english_name' => 'Galician',
 				'native_name'  => 'Galego',
 				'custom_name'  => '',
@@ -867,7 +872,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'gl-ES',
 				'priority'     => 1,
 			),
-			'gn'    => array (
+			'gn'    => array(
 				'english_name' => 'Guaraní',
 				'native_name'  => 'Avañe’ẽ',
 				'custom_name'  => '',
@@ -878,7 +883,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'gn',
 				'priority'     => 1,
 			),
-			'gsw'   => array (
+			'gsw'   => array(
 				'english_name' => 'Swiss German',
 				'native_name'  => 'Schwyzerdütsch',
 				'custom_name'  => '',
@@ -889,7 +894,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'gu'    => array (
+			'gu'    => array(
 				'english_name' => 'Gujarati',
 				'native_name'  => 'ગુજરાતી',
 				'custom_name'  => '',
@@ -900,7 +905,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'gu',
 				'priority'     => 1,
 			),
-			'ha'    => array (
+			'ha'    => array(
 				'english_name' => 'Hausa',
 				'native_name'  => 'هَوُسَ',
 				'custom_name'  => '',
@@ -911,7 +916,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'he',
 				'priority'     => 1,
 			),
-			'haw'   => array (
+			'haw'   => array(
 				'english_name' => 'Hawaiian',
 				'native_name'  => 'Ōlelo Hawaiʻi',
 				'custom_name'  => '',
@@ -922,7 +927,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'haw-US',
 				'priority'     => 1,
 			),
-			'haz'   => array (
+			'haz'   => array(
 				'english_name' => 'Hazaragi',
 				'native_name'  => 'هزاره گی',
 				'custom_name'  => '',
@@ -933,7 +938,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'he'    => array (
+			'he'    => array(
 				'english_name' => 'Hebrew',
 				'native_name'  => 'עִבְרִית',
 				'custom_name'  => '',
@@ -944,7 +949,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'he-IL',
 				'priority'     => 1,
 			),
-			'hi'    => array (
+			'hi'    => array(
 				'english_name' => 'Hindi',
 				'native_name'  => 'हिन्दी',
 				'custom_name'  => '',
@@ -955,7 +960,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'hi-IN',
 				'priority'     => 1,
 			),
-			'hr'    => array (
+			'hr'    => array(
 				'english_name' => 'Croatian',
 				'native_name'  => 'Hrvatski',
 				'custom_name'  => '',
@@ -966,7 +971,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'hr-HR',
 				'priority'     => 1,
 			),
-			'hu'    => array (
+			'hu'    => array(
 				'english_name' => 'Hungarian',
 				'native_name'  => 'Magyar',
 				'custom_name'  => '',
@@ -977,7 +982,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'hu-HU',
 				'priority'     => 1,
 			),
-			'hy'    => array (
+			'hy'    => array(
 				'english_name' => 'Armenian',
 				'native_name'  => 'Հայերեն',
 				'custom_name'  => '',
@@ -988,7 +993,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'hy-AM',
 				'priority'     => 1,
 			),
-			'ia'    => array (
+			'ia'    => array(
 				'english_name' => 'Interlingua',
 				'native_name'  => 'Interlingua',
 				'custom_name'  => '',
@@ -999,7 +1004,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ia',
 				'priority'     => 1,
 			),
-			'id'    => array (
+			'id'    => array(
 				'english_name' => 'Indonesian',
 				'native_name'  => 'Bahasa Indonesia',
 				'custom_name'  => '',
@@ -1010,7 +1015,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'id-ID',
 				'priority'     => 1,
 			),
-			'ike'   => array (
+			'ike'   => array(
 				'english_name' => 'Inuktitut',
 				'native_name'  => 'ᐃᓄᒃᑎᑐᑦ',
 				'custom_name'  => '',
@@ -1021,7 +1026,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'iu',
 				'priority'     => 1,
 			),
-			'ilo'   => array (
+			'ilo'   => array(
 				'english_name' => 'Iloko',
 				'native_name'  => 'Pagsasao nga Iloko',
 				'custom_name'  => '',
@@ -1032,7 +1037,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'is'    => array (
+			'is'    => array(
 				'english_name' => 'Icelandic',
 				'native_name'  => 'Íslenska',
 				'custom_name'  => '',
@@ -1043,7 +1048,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'is-IS',
 				'priority'     => 1,
 			),
-			'it'    => array (
+			'it'    => array(
 				'english_name' => 'Italian',
 				'native_name'  => 'Italiano',
 				'custom_name'  => '',
@@ -1054,7 +1059,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'it-IT',
 				'priority'     => 1,
 			),
-			'ja'    => array (
+			'ja'    => array(
 				'english_name' => 'Japanese',
 				'native_name'  => '日本語',
 				'custom_name'  => '',
@@ -1065,7 +1070,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ja-JP',
 				'priority'     => 1,
 			),
-			'jv'    => array (
+			'jv'    => array(
 				'english_name' => 'Javanese',
 				'native_name'  => 'Basa Jawa',
 				'custom_name'  => '',
@@ -1076,7 +1081,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'jv-ID',
 				'priority'     => 1,
 			),
-			'ka'    => array (
+			'ka'    => array(
 				'english_name' => 'Georgian',
 				'native_name'  => 'ქართული',
 				'custom_name'  => '',
@@ -1087,7 +1092,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ka-GE',
 				'priority'     => 1,
 			),
-			'rw'    => array (
+			'rw'    => array(
 				'english_name' => 'Kinyarwanda',
 				'native_name'  => 'Kinyarwanda',
 				'custom_name'  => '',
@@ -1098,7 +1103,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'rw',
 				'priority'     => 1,
 			),
-			'kk'    => array (
+			'kk'    => array(
 				'english_name' => 'Kazakh',
 				'native_name'  => 'Қазақ тілі',
 				'custom_name'  => '',
@@ -1109,7 +1114,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'kk',
 				'priority'     => 1,
 			),
-			'km'    => array (
+			'km'    => array(
 				'english_name' => 'Khmer',
 				'native_name'  => 'ភាសាខ្មែរ',
 				'custom_name'  => '',
@@ -1120,7 +1125,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'km-KH',
 				'priority'     => 1,
 			),
-			'kn'    => array (
+			'kn'    => array(
 				'english_name' => 'Kannada',
 				'native_name'  => 'ಕನ್ನಡ',
 				'custom_name'  => '',
@@ -1131,7 +1136,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'kn',
 				'priority'     => 1,
 			),
-			'ko'    => array (
+			'ko'    => array(
 				'english_name' => 'Korean',
 				'native_name'  => '한국어',
 				'custom_name'  => '',
@@ -1142,7 +1147,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ko-KR',
 				'priority'     => 1,
 			),
-			'ks'    => array (
+			'ks'    => array(
 				'english_name' => 'Kashmiri',
 				'native_name'  => 'कश्मीरी',
 				'custom_name'  => '',
@@ -1153,7 +1158,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ks',
 				'priority'     => 1,
 			),
-			'ku'    => array (
+			'ku'    => array(
 				'english_name' => 'Kurdish (Kurmanji)',
 				'native_name'  => 'Kurdî',
 				'custom_name'  => '',
@@ -1164,7 +1169,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ku-TR',
 				'priority'     => 1,
 			),
-			'ky'    => array (
+			'ky'    => array(
 				'english_name' => 'Kirghiz',
 				'native_name'  => 'кыргыз тили',
 				'custom_name'  => '',
@@ -1175,7 +1180,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ky-KY',
 				'priority'     => 1,
 			),
-			'la'    => array (
+			'la'    => array(
 				'english_name' => 'Latin',
 				'native_name'  => 'latine',
 				'custom_name'  => '',
@@ -1186,7 +1191,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'la-VA',
 				'priority'     => 1,
 			),
-			'lb'    => array (
+			'lb'    => array(
 				'english_name' => 'Luxembourgish',
 				'native_name'  => 'Lëtzebuergesch',
 				'custom_name'  => '',
@@ -1197,7 +1202,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'lb-LU',
 				'priority'     => 1,
 			),
-			'li'    => array (
+			'li'    => array(
 				'english_name' => 'Limburgish',
 				'native_name'  => 'Limburgs',
 				'custom_name'  => '',
@@ -1208,7 +1213,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'li',
 				'priority'     => 1,
 			),
-			'lo'    => array (
+			'lo'    => array(
 				'english_name' => 'Lao',
 				'native_name'  => 'ພາສາລາວ',
 				'custom_name'  => '',
@@ -1219,7 +1224,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'lo',
 				'priority'     => 1,
 			),
-			'lt'    => array (
+			'lt'    => array(
 				'english_name' => 'Lithuanian',
 				'native_name'  => 'Lietuvių kalba',
 				'custom_name'  => '',
@@ -1230,7 +1235,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'lt-LT',
 				'priority'     => 1,
 			),
-			'lv'    => array (
+			'lv'    => array(
 				'english_name' => 'Latvian',
 				'native_name'  => 'latviešu valoda',
 				'custom_name'  => '',
@@ -1241,7 +1246,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'lv-LV',
 				'priority'     => 1,
 			),
-			'me'    => array (
+			'me'    => array(
 				'english_name' => 'Montenegrin',
 				'native_name'  => 'Crnogorski jezik',
 				'custom_name'  => '',
@@ -1252,7 +1257,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'me-ME',
 				'priority'     => 1,
 			),
-			'mg'    => array (
+			'mg'    => array(
 				'english_name' => 'Malagasy',
 				'native_name'  => 'Malagasy',
 				'custom_name'  => '',
@@ -1263,7 +1268,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'mg-MG',
 				'priority'     => 1,
 			),
-			'mhr'   => array (
+			'mhr'   => array(
 				'english_name' => 'Mari (Meadow)',
 				'native_name'  => 'олык марий',
 				'custom_name'  => '',
@@ -1274,7 +1279,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'mk'    => array (
+			'mk'    => array(
 				'english_name' => 'Macedonian',
 				'native_name'  => 'македонски јазик',
 				'custom_name'  => '',
@@ -1285,7 +1290,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'mk-MK',
 				'priority'     => 1,
 			),
-			'ml'    => array (
+			'ml'    => array(
 				'english_name' => 'Malayalam',
 				'native_name'  => 'മലയാളം',
 				'custom_name'  => '',
@@ -1296,7 +1301,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ml-IN',
 				'priority'     => 1,
 			),
-			'mn'    => array (
+			'mn'    => array(
 				'english_name' => 'Mongolian',
 				'native_name'  => 'Монгол',
 				'custom_name'  => '',
@@ -1307,7 +1312,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'mn',
 				'priority'     => 1,
 			),
-			'mr'    => array (
+			'mr'    => array(
 				'english_name' => 'Marathi',
 				'native_name'  => 'मराठी',
 				'custom_name'  => '',
@@ -1318,7 +1323,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'mr',
 				'priority'     => 1,
 			),
-			'mri'   => array (
+			'mri'   => array(
 				'english_name' => 'Maori',
 				'native_name'  => 'Te Reo Māori',
 				'custom_name'  => '',
@@ -1329,7 +1334,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'mrj'   => array (
+			'mrj'   => array(
 				'english_name' => 'Mari (Hill)',
 				'native_name'  => 'кырык мары',
 				'custom_name'  => '',
@@ -1340,7 +1345,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'ms'    => array (
+			'ms'    => array(
 				'english_name' => 'Malay',
 				'native_name'  => 'Bahasa Melayu',
 				'custom_name'  => '',
@@ -1351,7 +1356,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ms-MY',
 				'priority'     => 1,
 			),
-			'mwl'   => array (
+			'mwl'   => array(
 				'english_name' => 'Mirandese',
 				'native_name'  => 'Mirandés',
 				'custom_name'  => '',
@@ -1362,7 +1367,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'mya'   => array (
+			'mya'   => array(
 				'english_name' => 'Burmese',
 				'native_name'  => 'ဗမာစာ',
 				'custom_name'  => '',
@@ -1373,7 +1378,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'my-MM',
 				'priority'     => 1,
 			),
-			'ne'    => array (
+			'ne'    => array(
 				'english_name' => 'Nepali',
 				'native_name'  => 'नेपाली',
 				'custom_name'  => '',
@@ -1384,7 +1389,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ne-NP',
 				'priority'     => 1,
 			),
-			'nb'    => array (
+			'nb'    => array(
 				'english_name' => 'Norwegian (Bokmål)',
 				'native_name'  => 'Norsk bokmål',
 				'custom_name'  => '',
@@ -1395,7 +1400,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'nb-NO',
 				'priority'     => 1,
 			),
-			'nl'    => array (
+			'nl'    => array(
 				'english_name' => 'Dutch',
 				'native_name'  => 'Nederlands',
 				'custom_name'  => '',
@@ -1406,7 +1411,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'nl-NL',
 				'priority'     => 1,
 			),
-			'nl-be' => array (
+			'nl-be' => array(
 				'english_name' => 'Dutch (Belgium)',
 				'native_name'  => 'Nederlands (België)',
 				'custom_name'  => '',
@@ -1417,7 +1422,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'nl-BE',
 				'priority'     => 1,
 			),
-			'nn'    => array (
+			'nn'    => array(
 				'english_name' => 'Norwegian (Nynorsk)',
 				'native_name'  => 'Norsk nynorsk',
 				'custom_name'  => '',
@@ -1428,7 +1433,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'nn-NO',
 				'priority'     => 1,
 			),
-			'no'    => array (
+			'no'    => array(
 				'english_name' => 'Norwegian',
 				'native_name'  => 'Norsk',
 				'custom_name'  => '',
@@ -1439,7 +1444,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'no',
 				'priority'     => 1,
 			),
-			'oc'    => array (
+			'oc'    => array(
 				'english_name' => 'Occitan',
 				'native_name'  => 'Occitan',
 				'custom_name'  => '',
@@ -1450,7 +1455,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'oc',
 				'priority'     => 1,
 			),
-			'os'    => array (
+			'os'    => array(
 				'english_name' => 'Ossetic',
 				'native_name'  => 'Ирон',
 				'custom_name'  => '',
@@ -1461,7 +1466,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'os',
 				'priority'     => 1,
 			),
-			'pa'    => array (
+			'pa'    => array(
 				'english_name' => 'Punjabi',
 				'native_name'  => 'ਪੰਜਾਬੀ',
 				'custom_name'  => '',
@@ -1472,7 +1477,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'pa-IN',
 				'priority'     => 1,
 			),
-			'pl'    => array (
+			'pl'    => array(
 				'english_name' => 'Polish',
 				'native_name'  => 'Polski',
 				'custom_name'  => '',
@@ -1483,7 +1488,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'pl-PL',
 				'priority'     => 1,
 			),
-			'pt-br' => array (
+			'pt-br' => array(
 				'english_name' => 'Portuguese (Brazil)',
 				'native_name'  => 'Português do Brasil',
 				'custom_name'  => '',
@@ -1494,7 +1499,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'pt-BR',
 				'priority'     => 1,
 			),
-			'pt'    => array (
+			'pt'    => array(
 				'english_name' => 'Portuguese (Portugal)',
 				'native_name'  => 'Português',
 				'custom_name'  => '',
@@ -1505,7 +1510,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'pt-PT',
 				'priority'     => 1,
 			),
-			'ps'    => array (
+			'ps'    => array(
 				'english_name' => 'Pashto',
 				'native_name'  => 'پښتو',
 				'custom_name'  => '',
@@ -1516,7 +1521,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ps-AF',
 				'priority'     => 1,
 			),
-			'ro'    => array (
+			'ro'    => array(
 				'english_name' => 'Romanian',
 				'native_name'  => 'Română',
 				'custom_name'  => '',
@@ -1527,7 +1532,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ro-RO',
 				'priority'     => 1,
 			),
-			'ru'    => array (
+			'ru'    => array(
 				'english_name' => 'Russian',
 				'native_name'  => 'Русский',
 				'custom_name'  => '',
@@ -1538,7 +1543,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ru-RU',
 				'priority'     => 1,
 			),
-			'ru-ua' => array (
+			'ru-ua' => array(
 				'english_name' => 'Russian (Ukraine)',
 				'native_name'  => 'украї́нська мо́ва',
 				'custom_name'  => '',
@@ -1549,7 +1554,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ru-UA',
 				'priority'     => 1,
 			),
-			'rue'   => array (
+			'rue'   => array(
 				'english_name' => 'Rusyn',
 				'native_name'  => 'Русиньскый',
 				'custom_name'  => '',
@@ -1560,7 +1565,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'rup'   => array (
+			'rup'   => array(
 				'english_name' => 'Aromanian',
 				'native_name'  => 'Armãneashce',
 				'custom_name'  => '',
@@ -1571,7 +1576,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'rup-MK',
 				'priority'     => 1,
 			),
-			'sah'   => array (
+			'sah'   => array(
 				'english_name' => 'Sakha',
 				'native_name'  => 'Sakha',
 				'custom_name'  => '',
@@ -1582,7 +1587,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'sa-in' => array (
+			'sa-in' => array(
 				'english_name' => 'Sanskrit',
 				'native_name'  => 'भारतम्',
 				'custom_name'  => '',
@@ -1593,7 +1598,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'sa-IN',
 				'priority'     => 1,
 			),
-			'sd'    => array (
+			'sd'    => array(
 				'english_name' => 'Sindhi',
 				'native_name'  => 'سندھ',
 				'custom_name'  => '',
@@ -1604,7 +1609,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'sd-PK',
 				'priority'     => 1,
 			),
-			'si'    => array (
+			'si'    => array(
 				'english_name' => 'Sinhala',
 				'native_name'  => 'සිංහල',
 				'custom_name'  => '',
@@ -1615,7 +1620,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'si-LK',
 				'priority'     => 1,
 			),
-			'sk'    => array (
+			'sk'    => array(
 				'english_name' => 'Slovak',
 				'native_name'  => 'Slovenčina',
 				'custom_name'  => '',
@@ -1626,7 +1631,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'sk-SK',
 				'priority'     => 1,
 			),
-			'sl'    => array (
+			'sl'    => array(
 				'english_name' => 'Slovenian',
 				'native_name'  => 'slovenščina',
 				'custom_name'  => '',
@@ -1637,7 +1642,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'sl-SI',
 				'priority'     => 1,
 			),
-			'so'    => array (
+			'so'    => array(
 				'english_name' => 'Somali',
 				'native_name'  => 'Afsoomaali',
 				'custom_name'  => '',
@@ -1648,7 +1653,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'so-SO',
 				'priority'     => 1,
 			),
-			'sq'    => array (
+			'sq'    => array(
 				'english_name' => 'Albanian',
 				'native_name'  => 'Shqip',
 				'custom_name'  => '',
@@ -1659,7 +1664,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'sq-AL',
 				'priority'     => 1,
 			),
-			'sr'    => array (
+			'sr'    => array(
 				'english_name' => 'Serbian',
 				'native_name'  => 'Српски језик',
 				'custom_name'  => '',
@@ -1670,7 +1675,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'sr-RS',
 				'priority'     => 1,
 			),
-			'srd'   => array (
+			'srd'   => array(
 				'english_name' => 'Sardinian',
 				'native_name'  => 'sardu',
 				'custom_name'  => '',
@@ -1681,7 +1686,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'sc',
 				'priority'     => 1,
 			),
-			'su'    => array (
+			'su'    => array(
 				'english_name' => 'Sundanese',
 				'native_name'  => 'Basa Sunda',
 				'custom_name'  => '',
@@ -1692,7 +1697,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'su-ID',
 				'priority'     => 1,
 			),
-			'sv'    => array (
+			'sv'    => array(
 				'english_name' => 'Swedish',
 				'native_name'  => 'Svenska',
 				'custom_name'  => '',
@@ -1703,7 +1708,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'sv-SE',
 				'priority'     => 1,
 			),
-			'sw'    => array (
+			'sw'    => array(
 				'english_name' => 'Swahili',
 				'native_name'  => 'Kiswahili',
 				'custom_name'  => '',
@@ -1714,7 +1719,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'sw-KE',
 				'priority'     => 1,
 			),
-			'ta'    => array (
+			'ta'    => array(
 				'english_name' => 'Tamil',
 				'native_name'  => 'தமிழ்',
 				'custom_name'  => '',
@@ -1725,7 +1730,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ta-IN',
 				'priority'     => 1,
 			),
-			'ta-lk' => array (
+			'ta-lk' => array(
 				'english_name' => 'Tamil (Sri Lanka)',
 				'native_name'  => 'தமிழ்',
 				'custom_name'  => '',
@@ -1736,7 +1741,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ta-LK',
 				'priority'     => 1,
 			),
-			'te'    => array (
+			'te'    => array(
 				'english_name' => 'Telugu',
 				'native_name'  => 'తెలుగు',
 				'custom_name'  => '',
@@ -1747,7 +1752,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'te-IN',
 				'priority'     => 1,
 			),
-			'tg'    => array (
+			'tg'    => array(
 				'english_name' => 'Tajik',
 				'native_name'  => 'тоҷикӣ',
 				'custom_name'  => '',
@@ -1758,7 +1763,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'tg',
 				'priority'     => 1,
 			),
-			'th'    => array (
+			'th'    => array(
 				'english_name' => 'Thai',
 				'native_name'  => 'ไทย',
 				'custom_name'  => '',
@@ -1769,7 +1774,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'th-TH',
 				'priority'     => 1,
 			),
-			'tlh'   => array (
+			'tlh'   => array(
 				'english_name' => 'Klingon',
 				'native_name'  => 'TlhIngan',
 				'custom_name'  => '',
@@ -1780,7 +1785,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'tlh',
 				'priority'     => 1,
 			),
-			'tl'    => array (
+			'tl'    => array(
 				'english_name' => 'Tagalog',
 				'native_name'  => 'Tagalog',
 				'custom_name'  => '',
@@ -1791,7 +1796,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'tl-PH',
 				'priority'     => 1,
 			),
-			'tr'    => array (
+			'tr'    => array(
 				'english_name' => 'Turkish',
 				'native_name'  => 'Türkçe',
 				'custom_name'  => '',
@@ -1802,7 +1807,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'tr-TR',
 				'priority'     => 1,
 			),
-			'tt'    => array (
+			'tt'    => array(
 				'english_name' => 'Tatar',
 				'native_name'  => 'Татар теле',
 				'custom_name'  => '',
@@ -1813,7 +1818,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'tt-RU',
 				'priority'     => 1,
 			),
-			'tuk'   => array (
+			'tuk'   => array(
 				'english_name' => 'Turkmen',
 				'native_name'  => 'Türkmençe',
 				'custom_name'  => '',
@@ -1824,7 +1829,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'tk',
 				'priority'     => 1,
 			),
-			'tzm'   => array (
+			'tzm'   => array(
 				'english_name' => 'Tamazight (Central Atlas)',
 				'native_name'  => 'ⵜⴰⵎⴰⵣⵉⵖⵜ',
 				'custom_name'  => '',
@@ -1835,7 +1840,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'udm'   => array (
+			'udm'   => array(
 				'english_name' => 'Udmurt',
 				'native_name'  => 'удмурт кыл',
 				'custom_name'  => '',
@@ -1846,7 +1851,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'ug'    => array (
+			'ug'    => array(
 				'english_name' => 'Uighur',
 				'native_name'  => 'Uyƣurqə',
 				'custom_name'  => '',
@@ -1857,7 +1862,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ug-CN',
 				'priority'     => 1,
 			),
-			'uk'    => array (
+			'uk'    => array(
 				'english_name' => 'Ukrainian',
 				'native_name'  => 'Українська',
 				'custom_name'  => '',
@@ -1868,7 +1873,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'uk-UA',
 				'priority'     => 1,
 			),
-			'ur'    => array (
+			'ur'    => array(
 				'english_name' => 'Urdu',
 				'native_name'  => 'اردو',
 				'custom_name'  => '',
@@ -1879,7 +1884,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'ur',
 				'priority'     => 1,
 			),
-			'uz'    => array (
+			'uz'    => array(
 				'english_name' => 'Uzbek',
 				'native_name'  => 'O‘zbekcha',
 				'custom_name'  => '',
@@ -1890,7 +1895,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'uz-UZ',
 				'priority'     => 1,
 			),
-			'vec'   => array (
+			'vec'   => array(
 				'english_name' => 'Venetian',
 				'native_name'  => 'vèneta',
 				'custom_name'  => '',
@@ -1901,7 +1906,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'vi'    => array (
+			'vi'    => array(
 				'english_name' => 'Vietnamese',
 				'native_name'  => 'Tiếng Việt',
 				'custom_name'  => '',
@@ -1912,7 +1917,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'vi-VN',
 				'priority'     => 1,
 			),
-			'wa'    => array (
+			'wa'    => array(
 				'english_name' => 'Walloon',
 				'native_name'  => 'Walon',
 				'custom_name'  => '',
@@ -1923,7 +1928,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'wa',
 				'priority'     => 1,
 			),
-			'xmf'   => array (
+			'xmf'   => array(
 				'english_name' => 'Mingrelian',
 				'native_name'  => 'მარგალური ნინა',
 				'custom_name'  => '',
@@ -1934,7 +1939,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => '',
 				'priority'     => 1,
 			),
-			'yi'    => array (
+			'yi'    => array(
 				'english_name' => 'Yiddish',
 				'native_name'  => 'ייִדיש',
 				'custom_name'  => '',
@@ -1945,7 +1950,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'yi',
 				'priority'     => 1,
 			),
-			'yo'    => array (
+			'yo'    => array(
 				'english_name' => 'Yorùbá',
 				'native_name'  => 'èdè Yorùbá',
 				'custom_name'  => '',
@@ -1956,7 +1961,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'yo',
 				'priority'     => 1,
 			),
-			'zh-cn' => array (
+			'zh-cn' => array(
 				'english_name' => 'Chinese (China)',
 				'native_name'  => '中文',
 				'custom_name'  => '',
@@ -1967,7 +1972,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'zh-CN',
 				'priority'     => 1,
 			),
-			'zh-hk' => array (
+			'zh-hk' => array(
 				'english_name' => 'Chinese (Hong Kong)',
 				'native_name'  => '香港中文版	',
 				'custom_name'  => '',
@@ -1978,7 +1983,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'zh-HK',
 				'priority'     => 1,
 			),
-			'zh-sg' => array (
+			'zh-sg' => array(
 				'english_name' => 'Chinese (Singapore)',
 				'native_name'  => '中文',
 				'custom_name'  => '',
@@ -1989,7 +1994,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'zh',
 				'priority'     => 1,
 			),
-			'zh-tw' => array (
+			'zh-tw' => array(
 				'english_name' => 'Chinese (Taiwan)',
 				'native_name'  => '中文',
 				'custom_name'  => '',
@@ -2000,7 +2005,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'http_name'    => 'zh-TW',
 				'priority'     => 1,
 			),
-			'zh'    => array (
+			'zh'    => array(
 				'english_name' => 'Chinese',
 				'native_name'  => '中文',
 				'custom_name'  => '',
@@ -2013,9 +2018,13 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 			),
 		);
 
-		foreach ( $fields as $field )
-			$out[ ] = "('" . join( "','", array_values( $field ) ) . "')";
+		$out = array();
+
+		foreach ( $fields as $field ) {
+			$out[ ] = "( '" . join( "', '", array_values( $field ) ) . "' )";
+		}
 
 		return join( ",", $out );
 	}
+
 }

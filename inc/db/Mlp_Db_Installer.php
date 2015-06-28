@@ -1,10 +1,11 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Class Mlp_Db_Installer
  *
  * Install our tables.
  *
- * @version 2014.07.09
+ * @version 2015.06.28
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
@@ -21,55 +22,74 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	private $wpdb;
 
 	/**
-	 * @param Mlp_Db_Schema_Interface $db_info
+	 * Constructor. Set up the properties.
+	 *
+	 * @param Mlp_Db_Schema_Interface $db_info Table information.
 	 */
 	public function __construct( Mlp_Db_Schema_Interface $db_info ) {
 
+		global $wpdb;
+
 		$this->db_info = $db_info;
-		$this->wpdb    = $GLOBALS['wpdb'];
+		$this->wpdb = $wpdb;
 	}
 
 	/**
-	 * Delete table.
+	 * Delete the table.
 	 *
-	 * @param Mlp_Db_Schema_Interface $schema
-	 * @return  int|false Number of rows affected/selected or false on error
+	 * @param Mlp_Db_Schema_Interface $schema Table information.
+	 *
+	 * @return int|bool Number of rows affected/selected or FALSE on error.
 	 */
 	public function uninstall( Mlp_Db_Schema_Interface $schema = NULL ) {
 
-		$table = $this->get_schema( $schema )->get_table_name();
+		$schema = $this->get_schema( $schema );
+
+		$table = $schema->get_table_name();
+
 		return $this->wpdb->query( "DROP TABLE IF EXISTS $table" );
 	}
 
 	/**
-	 * Create table.
+	 * Create the table according to the given data.
 	 *
-	 * @param  Mlp_Db_Schema_Interface $schema
-	 * @return int Number of table operations run during installation
+	 * @param Mlp_Db_Schema_Interface $schema Table information.
+	 *
+	 * @return int Number of table operations run during installation.
 	 */
 	public function install( Mlp_Db_Schema_Interface $schema = NULL ) {
-
-		$db_info         = $this->get_schema( $schema );
-		$charset_collate = $this->get_wp_charset_collate();
-		$table           = $db_info->get_table_name();
-		$columns         = $db_info->get_schema();
-		$columns_sql     = $this->array_to_sql_columns( $columns );
-		$primary_key     = $db_info->get_primary_key();
-		$index_sql       = $db_info->get_index_sql();
-		$add             = '';
-
-		if ( ! empty ( $primary_key ) )
-			$add .= "PRIMARY KEY  ($primary_key)"; // two spaces!
-
-		if ( ! empty ( $index_sql ) )
-			$add .= ", $index_sql";
-
-		// the user could have just deleted the plugin without running the clean up.
-		$sql = 'CREATE TABLE ' . $table . ' ( ' . $columns_sql . ' ' . $add . ' ) ' . $charset_collate . ';';
 
 		// make dbDelta() available
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
+		$db_info = $this->get_schema( $schema );
+		$table = $db_info->get_table_name();
+		$columns = $db_info->get_schema();
+		$columns_sql = $this->array_to_sql_columns( $columns );
+
+		$add = '';
+
+		$primary_key = $db_info->get_primary_key();
+		if ( ! empty( $primary_key ) ) {
+			$add .= "\tPRIMARY KEY  ($primary_key)"; // two spaces!
+		}
+
+		$index_sql = $db_info->get_index_sql();
+		if ( ! empty( $index_sql ) ) {
+			if ( ! empty( $primary_key ) ) {
+				$add .= ",\n";
+			}
+			$add .= "\t$index_sql";
+		}
+
+		if ( $add ) {
+			$add .= "\n";
+		}
+
+		$charset_collate = $this->get_wp_charset_collate();
+
+		// the user could have just deleted the plugin without running the clean up.
+		$sql = "CREATE TABLE $table (\n{$columns_sql}{$add})$charset_collate;";
 		dbDelta( $sql );
 
 		return (int) $this->insert_default( $db_info, $columns );
@@ -87,8 +107,9 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 
 		$table = $db_info->get_table_name();
 
-		// Bail if the table already exists
-		if ( $this->wpdb->query( "SHOW TABLES LIKE '$table'" ) ) {
+		// Bail if the table is not empty
+		$temp = $this->wpdb->query( "SELECT 1 FROM $table LIMIT 1;" );
+		if ( $temp ) {
 			return 0;
 		}
 
@@ -103,40 +124,51 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 		}
 
 		$keys = join( ",", array_keys( $columns ) );
-		$sql = "INSERT INTO $table ( $keys ) VALUES " . $content;
+		$sql = "INSERT INTO $table ($keys) VALUES $content;";
 
 		return $this->wpdb->query( $sql );
 	}
 
 	/**
-	 * @param  array $array
+	 * Return SQL string for given columns.
+	 *
+	 * @param array $columns Key-properties array of SQL columns.
+	 *
 	 * @return string
 	 */
-	private function array_to_sql_columns( Array $array ) {
+	private function array_to_sql_columns( array $columns ) {
 
 		$out = '';
 
-		foreach ( $array as $key => $properties )
-			$out .= "$key $properties,\n";
+		foreach ( $columns as $key => $properties ) {
+			$out .= "\t$key $properties,\n";
+		}
 
 		return $out;
 	}
 
 	/**
-	 * Get table charset and collation.
+	 * Get the table charset and collation.
 	 *
 	 * @return string
 	 */
 	private function get_wp_charset_collate() {
 
-		// we need multibyte encoding for native names
-		if ( ! empty ( $this->wpdb->charset ) && FALSE !== stripos( $this->wpdb->charset, 'utf') )
-			$charset_collate = "DEFAULT CHARACTER SET " . $this->wpdb->charset;
-		else
-			$charset_collate = "DEFAULT CHARACTER SET utf8";
+		$charset_collate = ' DEFAULT CHARACTER SET ';
 
-		if ( ! empty ( $this->wpdb->collate ) )
-			$charset_collate .= " COLLATE " . $this->wpdb->collate;
+		// we need multibyte encoding for native names
+		if (
+			! empty( $this->wpdb->charset )
+			&& FALSE !== stripos( $this->wpdb->charset, 'utf' )
+		) {
+			$charset_collate .= $this->wpdb->charset;
+		} else {
+			$charset_collate .= 'utf8';
+		}
+
+		if ( ! empty( $this->wpdb->collate ) ) {
+			$charset_collate .= " COLLATE {$this->wpdb->collate}";
+		}
 
 		return $charset_collate;
 	}
@@ -146,14 +178,17 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	 *
 	 * Basically a check for NULL values.
 	 *
-	 * @param  Mlp_Db_Schema_Interface $schema
+	 * @param Mlp_Db_Schema_Interface $schema Table information.
+	 *
 	 * @return Mlp_Db_Schema_Interface
 	 */
 	private function get_schema( Mlp_Db_Schema_Interface $schema = NULL ) {
 
-		if ( NULL === $schema )
+		if ( NULL === $schema ) {
 			return $this->db_info;
+		}
 
 		return $schema;
 	}
+
 }
