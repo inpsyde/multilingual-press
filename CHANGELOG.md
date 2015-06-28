@@ -53,6 +53,7 @@
 - Improve Language Switcher widget, see [issue #112](https://github.com/inpsyde/multilingual-press/issues/112), props
 dboune.
 - Remove long deprecated filters `mlp_pre_save_postdata` and `mlp_pre_update_post`.
+- Improve DB functions.
 
 ## 2.1.2 Edith Fellowes
 - Combine all scripts and stylesheets, separated for frontend and backend.
