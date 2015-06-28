@@ -79,7 +79,7 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 */
 	public function get_index_sql() {
 
-		// prevent duplicates
+		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
 		return "KEY (site_1,site_2),\n\tUNIQUE KEY site_combinations (site_1,site_2)";
 	}
 

@@ -71,7 +71,8 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 
 		$primary_key = $db_info->get_primary_key();
 		if ( ! empty( $primary_key ) ) {
-			$add .= "\tPRIMARY KEY  ($primary_key)"; // two spaces!
+			// Due to dbDelta: two spaces after PRIMARY KEY!
+			$add .= "\tPRIMARY KEY  ($primary_key)";
 		}
 
 		$index_sql = $db_info->get_index_sql();
@@ -108,7 +109,7 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 		$table = $db_info->get_table_name();
 
 		// Bail if the table is not empty
-		$temp = $this->wpdb->query( "SELECT 1 FROM $table LIMIT 1;" );
+		$temp = $this->wpdb->query( "SELECT 1 FROM $table LIMIT 1" );
 		if ( $temp ) {
 			return 0;
 		}
@@ -167,7 +168,7 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 		}
 
 		if ( ! empty( $this->wpdb->collate ) ) {
-			$charset_collate .= " COLLATE {$this->wpdb->collate}";
+			$charset_collate .= ' COLLATE ' . $this->wpdb->collate;
 		}
 
 		return $charset_collate;
