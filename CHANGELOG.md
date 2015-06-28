@@ -55,6 +55,7 @@ dboune.
 - Remove long deprecated filters `mlp_pre_save_postdata` and `mlp_pre_update_post`.
 - Improve DB functions.
 - Deprecate `get_blog_language()` in favor of `mlp_get_blog_language()`.
+- Update language information.
 
 ## 2.1.2 Edith Fellowes
 - Combine all scripts and stylesheets, separated for frontend and backend.
