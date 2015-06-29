@@ -1,8 +1,9 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Mlp_Term_Field_View
  *
- * @version 2014.09.17
+ * @version 2015.06.29
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
@@ -54,7 +55,7 @@ class Mlp_Term_Field_View {
 	const EDIT_TERM_FIELDS = 'edit_term_fields';
 
 	/**
-	 * @type Mlp_Updatable
+	 * @var Mlp_Updatable
 	 */
 	private $updatable;
 
@@ -67,27 +68,19 @@ class Mlp_Term_Field_View {
 	}
 
 	/**
-	 * Template for an extra row in the "edit term" form.
+	 * Template for an extra row in the "Edit term" form.
 	 *
 	 * @return void
 	 */
 	public function edit_term() {
 
 		$this->updatable->update( self::EDIT_TERM_BEFORE );
-
 		?>
 		<tr class="form-field">
-			<th scope="row"><?php
-				$this->updatable->update( self::EDIT_TERM_TITLE );
-				?></th>
-			<td>
-				<?php
-				$this->updatable->update( self::EDIT_TERM_FIELDS );
-				?>
-			</td>
+			<th scope="row"><?php $this->updatable->update( self::EDIT_TERM_TITLE ); ?></th>
+			<td><?php $this->updatable->update( self::EDIT_TERM_FIELDS ); ?></td>
 		</tr>
-	<?php
-
+		<?php
 		$this->updatable->update( self::EDIT_TERM_AFTER );
 	}
 
@@ -99,19 +92,13 @@ class Mlp_Term_Field_View {
 	public function add_term() {
 
 		$this->updatable->update( self::ADD_TERM_BEFORE );
-
 		?>
-		<fieldset id="<?php
-		$this->updatable->update( self::ADD_TERM_FIELDSET_ID );
-		?>">
-			<legend><?php
-				$this->updatable->update( self::ADD_TERM_TITLE );
-				?></legend>
-			<?php
-			$this->updatable->update( self::ADD_TERM_FIELDS );
-			?>
+		<fieldset id="<?php $this->updatable->update( self::ADD_TERM_FIELDSET_ID ); ?>">
+			<legend><?php $this->updatable->update( self::ADD_TERM_TITLE ); ?></legend>
+			<?php $this->updatable->update( self::ADD_TERM_FIELDS ); ?>
 		</fieldset>
-	<?php
+		<?php
 		$this->updatable->update( self::ADD_TERM_AFTER );
 	}
+
 }

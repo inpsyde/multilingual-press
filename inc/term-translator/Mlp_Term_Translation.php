@@ -10,12 +10,12 @@
 class Mlp_Term_Translation {
 
 	/**
-	 * @type wpdb
+	 * @var wpdb
 	 */
 	private $wpdb;
 
 	/**
-	 * @type WP_Rewrite
+	 * @var WP_Rewrite
 	 */
 	private $wp_rewrite;
 
@@ -30,20 +30,21 @@ class Mlp_Term_Translation {
 	}
 
 	/**
-	 * Get term translation
+	 * Get term translation.
 	 *
 	 * Runs in the context of the source site.
 	 *
 	 * @param int $term_taxonomy_id
 	 * @param int $target_site_id
+	 *
 	 * @return array|bool
 	 */
 	public function get_translation( $term_taxonomy_id, $target_site_id ) {
 
 		$cache = (array) wp_cache_get( 'mlp_term_translations', 'mlp' );
-
-		if ( isset ( $cache[ $target_site_id ][ $term_taxonomy_id ] ) )
+		if ( isset ( $cache[ $target_site_id ][ $term_taxonomy_id ] ) ) {
 			return $cache[ $target_site_id ][ $term_taxonomy_id ];
+		}
 
 		switch_to_blog( $target_site_id );
 
@@ -67,7 +68,7 @@ class Mlp_Term_Translation {
 	 */
 	private function get_translation_in_target_site( $term_taxonomy_id ) {
 
-		$term = $this->get_term_by_tt_id( $term_taxonomy_id );
+		$term = $this->get_term_by_term_taxonomy_id( $term_taxonomy_id );
 
 		if ( empty ( $term ) )
 			return FALSE;
@@ -198,25 +199,25 @@ class Mlp_Term_Translation {
 	}
 
 	/**
-	 * Get a term by its term_taxonomy_id.
+	 * Get a term by its term taxonomy ID.
 	 *
-	 * @param  int $tt_id term_taxonomy_id
+	 * @param int $term_taxonomy_id Term taxonomy ID.
+	 *
 	 * @return array
 	 */
-	private function get_term_by_tt_id( $tt_id ) {
+	private function get_term_by_term_taxonomy_id( $term_taxonomy_id ) {
 
 		$sql = "
-SELECT terms.`term_id`, terms.`name`, tax.`taxonomy`
-FROM {$this->wpdb->terms} terms
-  INNER JOIN {$this->wpdb->term_taxonomy} tax
-    ON tax.`term_taxonomy_id` = %d
-WHERE tax.`term_id` = terms.`term_id`
+SELECT t.term_id, t.name, tt.taxonomy
+FROM {$this->wpdb->terms} t, {$this->wpdb->term_taxonomy} tt
+WHERE tt.term_id = t.term_id AND tt.term_taxonomy_id = %d
 LIMIT 1";
 
-		$query  = $this->wpdb->prepare( $sql, $tt_id );
+		$query = $this->wpdb->prepare( $sql, $term_taxonomy_id );
 		$result = $this->wpdb->get_row( $query, ARRAY_A );
 
 		// $result might be NULL, but we need a predictable return type.
-		return empty ( $result ) ? array() : $result;
+		return empty( $result ) ? array() : $result;
 	}
+
 }

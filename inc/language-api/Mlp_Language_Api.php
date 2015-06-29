@@ -670,16 +670,17 @@ WHERE `http_name` IN( $values )";
 	}
 
 	/**
-	 * Get ID of queried object, post type or term
+	 * Get ID of queried object, post type or term.
 	 *
-	 * We need the term_taxonomy_id for terms.
+	 * We need the term taxonomy ID for terms.
 	 *
 	 * @return int
 	 */
 	private function get_query_id() {
 
-		if ( is_category() || is_tag() || is_tax() )
+		if ( is_category() || is_tag() || is_tax() ) {
 			return get_queried_object()->term_taxonomy_id;
+		}
 
 		return get_queried_object_id();
 	}

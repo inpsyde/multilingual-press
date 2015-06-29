@@ -1,12 +1,12 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Generic controller to add fields to the term edit/add screens.
  *
- * @version 2014.09.17
+ * @version 2015.06.29
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-
 class Mlp_Term_Fields {
 
 	/**
@@ -23,10 +23,10 @@ class Mlp_Term_Fields {
 	 * @param array         $taxonomies
 	 * @param Mlp_Updatable $updatable
 	 */
-	public function __construct( Array $taxonomies, Mlp_Updatable $updatable ) {
+	public function __construct( array $taxonomies, Mlp_Updatable $updatable ) {
 
 		$this->taxonomies = $taxonomies;
-		$this->updatable  = $updatable;
+		$this->updatable = $updatable;
 	}
 
 	/**
@@ -35,14 +35,14 @@ class Mlp_Term_Fields {
 	public function setup() {
 
 		$taxonomy = $this->get_current_taxonomy();
-
-		if ( '' === $taxonomy )
+		if ( '' === $taxonomy ) {
 			return FALSE;
+		}
 
 		$view = new Mlp_Term_Field_View( $this->updatable );
 
-		add_action( "{$taxonomy}_add_form_fields",  array ( $view, 'add_term' ) );
-		add_action( "{$taxonomy}_edit_form_fields", array ( $view, 'edit_term' ) );
+		add_action( "{$taxonomy}_add_form_fields", array( $view, 'add_term' ) );
+		add_action( "{$taxonomy}_edit_form_fields", array( $view, 'edit_term' ) );
 
 		return TRUE;
 	}
@@ -54,13 +54,15 @@ class Mlp_Term_Fields {
 
 		$screen = get_current_screen();
 
-		if ( empty ( $screen->taxonomy ) )
+		if ( empty( $screen->taxonomy ) ) {
 			return '';
+		}
 
-		if ( ! in_array( $screen->taxonomy, $this->taxonomies ) )
+		if ( ! in_array( $screen->taxonomy, $this->taxonomies ) ) {
 			return '';
+		}
 
 		return $screen->taxonomy;
-
 	}
+
 }
