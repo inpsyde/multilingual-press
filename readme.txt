@@ -144,6 +144,9 @@ dboune.
 - Improve DB functions.
 - Deprecate `get_blog_language()` in favor of `mlp_get_blog_language()`.
 - Update language information.
+- Add post slug to Advanced Translator, see [issue #119](https://github.com/inpsyde/multilingual-press/issues/119).
+- Show Translation meta box only for users who have the required capability, see
+[issue #116](https://github.com/inpsyde/multilingual-press/issues/116).
 
 = 2.1.2 =
 - Combine all scripts and stylesheets, separated for frontend and backend.
