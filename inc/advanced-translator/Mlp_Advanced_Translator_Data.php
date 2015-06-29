@@ -306,6 +306,7 @@ class Mlp_Advanced_Translator_Data
 		$title = $this->get_remote_post_title( $post_data );
 		$name = $this->get_remote_post_name( $post_data );
 		$content = $this->get_remote_post_content( $post_data );
+		$excerpt = $this->get_remote_post_excerpt( $post_data );
 
 		if ( $this->is_empty_remote_post( $title, $content, $post_type ) ) {
 			return array();
@@ -316,6 +317,7 @@ class Mlp_Advanced_Translator_Data
 			'post_title'   => $title,
 			'post_name'    => $name,
 			'post_content' => $content,
+			'post_excerpt' => $excerpt,
 			'post_parent'  => $this->basic_data->get_post_parent( $blog_id ),
 		);
 
@@ -546,6 +548,26 @@ class Mlp_Advanced_Translator_Data
 
 		if ( isset ( $this->post_request_data[ 'post_content' ] ) ) {
 			return (string) $this->post_request_data[ 'post_content' ];
+		}
+
+		return '';
+	}
+
+	/**
+	 * Prepare the excerpt for the post we want to synchronize.
+	 *
+	 * @param array $data
+	 *
+	 * @return string
+	 */
+	private function get_remote_post_excerpt( array $data ) {
+
+		if ( isset ( $data[ 'excerpt' ] ) ) {
+			return $data[ 'excerpt' ];
+		}
+
+		if ( isset ( $this->post_request_data[ 'post_excerpt' ] ) ) {
+			return (string) $this->post_request_data[ 'post_excerpt' ];
 		}
 
 		return '';

@@ -129,6 +129,10 @@ class Mlp_Advanced_Translator {
 			remove_action( 'media_buttons', array( $this->view, 'show_copy_button' ), 20 );
 		}
 
+		if ( post_type_supports( $post->post_type, 'excerpt' ) ) {
+			add_action( $base . 'main_' . $blog_id, array( $this->view, 'show_excerpt' ), 10, 3 );
+		}
+
 		if ( post_type_supports( $post->post_type, 'thumbnail' ) ) {
 			add_action( $base . 'main_' . $blog_id, array( $this->view, 'show_thumbnail_checkbox' ), 11, 3 );
 		}

@@ -127,6 +127,41 @@ class Mlp_Advanced_Translator_View {
 	<?php
 	}
 
+
+	/**
+	 * @param WP_Post $source_post
+	 * @param int     $remote_blog_id
+	 * @param WP_Post $post Remote post
+	 *
+	 * @return void
+	 */
+	public function show_excerpt(
+		/** @noinspection PhpUnusedParameterInspection */
+		WP_Post $source_post, $remote_blog_id, WP_Post $post
+	) {
+
+		$value = $post->post_excerpt;
+
+		$value = esc_attr( $value );
+		$placeholder = $this->get_place_holder_excerpt( $post );
+		$name = $this->get_name( $remote_blog_id, 'excerpt' );
+		$id = $this->get_id( $remote_blog_id, 'excerpt' );
+
+		?>
+		<div class="mlp_excerptdiv">
+			<div>
+				<label for=""> <?php _e( 'Post Excerpt: ', 'multilingualpress' ) ?><br>
+					<textarea
+						class="mlp_excerpt"
+						name="<?php print $name; ?>"
+						placeholder="<?php print $placeholder ?>"
+						id="<?php print $id; ?>"
+						><?php print $value; ?></textarea>
+			</div>
+		</div>
+	<?php
+	}
+
 	/**
 	 * @param WP_Post $source_post
 	 * @param int     $remote_blog_id
@@ -312,6 +347,21 @@ class Mlp_Advanced_Translator_View {
 
 		$placeholder = __( 'Enter name here', 'multilingualpress' );
 		$placeholder = apply_filters( 'enter_name_here', $placeholder, $post );
+
+		return esc_attr( $placeholder );
+	}
+
+	/**
+	 * Get placeholder attribute text.
+	 *
+	 * @param WP_Post $post
+	 *
+	 * @return string|void
+	 */
+	private function get_place_holder_excerpt( WP_Post $post ) {
+
+		$placeholder = __( 'Enter excerpt here', 'multilingualpress' );
+		$placeholder = apply_filters( 'enter_excerpt_here', $placeholder, $post );
 
 		return esc_attr( $placeholder );
 	}
