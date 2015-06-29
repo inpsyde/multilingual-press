@@ -35,7 +35,10 @@ function mlp_feature_connection_column() {
  *
  * @return string
  */
-function mlp_render_related_blog_column( $column_name, $blog_id ) {
+function mlp_render_related_blog_column(
+	/** @noinspection PhpUnusedParameterInspection */
+	$column_name, $blog_id
+) {
 
 	switch_to_blog( $blog_id );
 	$blogs = (array) Mlp_Helpers::get_available_languages_titles();

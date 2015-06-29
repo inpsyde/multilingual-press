@@ -1,4 +1,5 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Class Mlp_General_Settings_Module_Mapper
  *
@@ -35,14 +36,16 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 
 		check_admin_referer( $this->nonce_action );
 
-		if ( ! current_user_can( 'manage_network_options' ) )
+		if ( ! current_user_can( 'manage_network_options' ) ) {
 			wp_die( 'FU' );
+		}
 
 		$this->set_module_activation_status();
 
 		/**
-		 * process your fields from $_POST here and update_site_option
-		 * @param   Array $_POST
+		 * Process your fields from $_POST here and update_site_option.
+		 *
+		 * @param array $_POST
 		 */
 		do_action( 'mlp_modules_save_fields', $_POST );
 
@@ -65,36 +68,43 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 		exit;
 	}
 
+	/**
+	 *
+	 * @return void
+	 */
 	private function set_module_activation_status() {
 
 		$modules = $this->modules->get_modules();
-		$slugs   = array_keys( $modules );
+		$slugs = array_keys( $modules );
 
 		foreach ( $slugs as $slug ) {
-			if ( isset ( $_POST[ "mlp_state_$slug" ] ) && '1' === $_POST[ "mlp_state_$slug" ] )
+			if ( isset( $_POST[ "mlp_state_$slug" ] ) && '1' === $_POST[ "mlp_state_$slug" ] ) {
 				$this->modules->activate( $slug );
-			else
+			} else {
 				$this->modules->deactivate( $slug );
+			}
 		}
 
 		$this->modules->save();
 	}
 
 	/**
-	 * (non-PHPdoc)
+	 * @param string $status
 	 *
-	 * @see Mlp_Module_Mapper_Interface::get_modules()
+	 * @return array
 	 */
 	public function get_modules( $status = 'all' ) {
+
 		return $this->modules->get_modules( $status );
 	}
 
 	/**
-	 * (non-PHPdoc)
 	 *
-	 * @see Mlp_Module_Mapper_Interface::get_nonce_action()
+	 * @return string
 	 */
 	public function get_nonce_action() {
+
 		return $this->nonce_action;
 	}
+
 }

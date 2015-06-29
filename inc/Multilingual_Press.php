@@ -191,7 +191,7 @@ class Multilingual_Press {
 	/**
 	 * Create network settings page.
 	 *
-	 * @return  void
+	 * @return void
 	 */
 	private function load_module_settings_page() {
 
@@ -199,13 +199,13 @@ class Multilingual_Press {
 			$this->plugin_data->get( 'module_manager' ),
 			$this->plugin_data->get( 'assets' )
 		);
-		add_action( 'plugins_loaded', array ( $settings, 'setup' ), 8 );
+		add_action( 'plugins_loaded', array( $settings, 'setup' ), 8 );
 	}
 
 	/**
 	 * Create site settings page.
 	 *
-	 * @return  void
+	 * @return void
 	 */
 	private function load_site_settings_page() {
 
@@ -214,7 +214,7 @@ class Multilingual_Press {
 			$this->plugin_data->get( 'assets' )
 		);
 		$settings->setup();
-		add_action( 'plugins_loaded', array ( $settings, 'setup' ), 8 );
+		add_action( 'plugins_loaded', array( $settings, 'setup' ), 8 );
 	}
 
 	/**

@@ -37,7 +37,10 @@ function mlp_feature_language_column() {
  *
  * @return string
  */
-function mlp_render_site_language_column( $column_name, $blog_id ) {
+function mlp_render_site_language_column(
+	/** @noinspection PhpUnusedParameterInspection */
+	$column_name, $blog_id
+) {
 
 	switch_to_blog( $blog_id );
 	$lang = Mlp_Helpers::get_current_blog_language();

@@ -256,19 +256,4 @@ class Mlp_Network_Site_Settings_Tab_Content {
 		<?php
 	}
 
-	/**
-	 * @return array
-	 */
-	public function load_lang_codes() {
-
-		$langs = $this->lang_table->get_languages();
-
-		$langs_formatted = array();
-
-		foreach ( $langs as $lang )
-			$langs_formatted[ $lang->key ] = $lang->name;
-
-		return $langs_formatted;
-	}
-
 }

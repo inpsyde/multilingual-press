@@ -38,16 +38,12 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	private $wpdb;
 
 	/**
-	 * @type Mlp_Content_Relations_Interface
+	 * @var Mlp_Content_Relations_Interface
 	 */
 	private $content_relations;
 
 	/**
-	 * @type array
-	 */
-	private $published_post_checks = array();
-
-	/**@type array
+	 * @var array
 	 */
 	private $language_data_from_db = array();
 
@@ -103,8 +99,12 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		return $this;
 	}
 
-	public function load_language_manager()
-	{
+	/**
+	 *
+	 * @return void
+	 */
+	public function load_language_manager() {
+
 		new Mlp_Language_Manager_Controller( $this->data, $this->language_db, $this->wpdb );
 	}
 
@@ -513,14 +513,19 @@ WHERE `http_name` IN( $values )";
 		return $languages;
 	}
 
+	/**
+	 * @param $language_data
+	 *
+	 * @return array
+	 */
 	private function get_language_tag( $language_data ) {
 
 		$tag = $like = '';
 
-		if ( ! empty ( $language_data[ 'lang' ] ) ) {
+		if ( ! empty( $language_data[ 'lang' ] ) ) {
 			$tag = str_replace( '_', '-', $language_data[ 'lang' ] );
-		}
-		elseif ( ! empty ( $language_data[ 'text' ] )
+		} elseif (
+			! empty( $language_data[ 'text' ] )
 			&& preg_match( '~[a-zA-Z-]+~', $language_data[ 'text' ] )
 		) {
 			$tag = str_replace( '_', '-', $language_data[ 'text' ] );
@@ -528,11 +533,11 @@ WHERE `http_name` IN( $values )";
 
 		// a site might have just 'EN' as text and no other values
 		if ( FALSE === strpos( $tag, '-' ) ) {
-			$tag  = strtolower( $tag );
+			$tag = strtolower( $tag );
 			$like = $tag;
 		}
 
-		return array ( $tag, $like );
+		return array( $tag, $like );
 	}
 
 	/**
