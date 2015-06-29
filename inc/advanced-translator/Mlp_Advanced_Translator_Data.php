@@ -112,7 +112,7 @@ class Mlp_Advanced_Translator_Data
 		if ( ! in_array( $post_type, $this->allowed_post_types ) )
 			return;
 
-		$this->basic_data->save_context = array (
+		$this->save_context = array (
 			'source_blog'    => get_current_blog_id(),
 			'source_post'    => $post,
 			'real_post_type' => $post_type,
@@ -139,7 +139,7 @@ class Mlp_Advanced_Translator_Data
 
 			switch_to_blog( $remote_blog_id );
 
-			$this->basic_data->save_context[ 'target_blog_id' ] = $remote_blog_id;
+			$this->save_context[ 'target_blog_id' ] = $remote_blog_id;
 
 			$new_post = $this->create_post_to_send( $post_data, $post_type, $remote_blog_id );
 
@@ -278,12 +278,13 @@ class Mlp_Advanced_Translator_Data
 	/**
 	 * Create the default post data for the save() method.
 	 *
-	 * @param  array  $post_data
-	 * @param  string $post_type
-	 * @param  int    $blog_id
+	 * @param  array  $post_data Post data.
+	 * @param  string $post_type Post type.
+	 * @param  int    $blog_id   Blog ID.
+	 *
 	 * @return array
 	 */
-	private function create_post_to_send( Array $post_data, $post_type, $blog_id ) {
+	private function create_post_to_send( array $post_data, $post_type, $blog_id ) {
 
 		$title   = $this->get_remote_post_title( $post_data );
 		$name    = $this->get_remote_post_name( $post_data );
@@ -301,34 +302,16 @@ class Mlp_Advanced_Translator_Data
 			'post_parent'  => $this->basic_data->get_post_parent( $blog_id )
 		);
 
-		if ( ! empty ( $post_data[ 'remote_post_id' ] ) ) {
+		if ( ! empty( $post_data[ 'remote_post_id' ] ) ) {
 			$new[ 'ID' ] = $post_data[ 'remote_post_id' ];
-
-			// deprecated notice for filter "mlp_pre_update_post"
-			if ( has_filter( 'mlp_pre_update_post' ) ) {
-				_doing_it_wrong(
-					'mlp_pre_update_post',
-					'mlp_pre_update_post is deprecated and will be removed in MultilingualPress 2.2, please use mlp_pre_save_post instead.',
-					'2.1'
-				);
-			}
-			/**
-			 * Filter post data before it is saved to the database.
-			 *
-			 * @param       array $new_post
-			 *
-			 * @deprecated
-			 * @see         mlp_pre_save_post
-			 */
-			$new = apply_filters( 'mlp_pre_update_post', $new );
 
 			/**
 			 * Filter post data before it is saved to database.
 			 *
-			 * @param       array $new_post
-			 * TODO:        Adding 2. param context! See 'mlp_pre_save_post' in Mlp_Translatable_Post_Data.php
+			 * @param array $new_post
+			 * @param array $save_context
 			 */
-			$new = apply_filters( 'mlp_pre_save_post', $new );
+			$new = apply_filters( 'mlp_pre_save_post', $new, $this->save_context );
 
 			return $new;
 		}
@@ -339,11 +322,12 @@ class Mlp_Advanced_Translator_Data
 		/**
 		 * Filter post data before it is insert to database.
 		 *
-		 * @param       array $new_post
-		 * TODO:        Adding 2. param context! See 'mlp_pre_insert_post' in Mlp_Translatable_Post_Data.php
+		 * @param array $new_post
+		 * @param array $save_context
 		 */
+		$new = apply_filters( 'mlp_pre_insert_post', $new, $this->save_context );
 
-		return apply_filters( 'mlp_pre_insert_post', $new );
+		return $new;
 	}
 
 	/**

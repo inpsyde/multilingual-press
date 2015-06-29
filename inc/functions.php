@@ -89,12 +89,14 @@ function mlp_get_language_flag( $blog_id = 0 ) {
 }
 
 /**
- * Wrapper for Mlp_Helpers::show_linked_elements()
+ * Wrapper for Mlp_Helpers::show_linked_elements().
  *
- * @see    Mlp_Helpers::show_linked_elements()
- * @param  array|string $args_or_deprecated_text
- * @param  bool $deprecated_echo to display the output or to return. default is display
- * @param  string $deprecated_sort
+ * @see Mlp_Helpers::show_linked_elements()
+ *
+ * @param array|string $args_or_deprecated_text Arguments array, or value for the 'link_text' argument.
+ * @param bool         $deprecated_echo         Optional. Display the output? Defaults to TRUE.
+ * @param string       $deprecated_sort         Optional. Sort elements. Defaults to 'blogid'.
+ *
  * @return string
  */
 function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecated_echo = TRUE, $deprecated_sort = 'blogid' ) {
@@ -103,23 +105,22 @@ function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecate
 		? $args_or_deprecated_text
 		: array(
 			'link_text' => $args_or_deprecated_text,
-			'echo'      => $deprecated_echo,
 			'sort'      => $deprecated_sort,
 		);
-
-	$defaults = array (
+	$defaults = array(
 		'link_text'         => 'text',
-		'echo'              => TRUE,
 		'sort'              => 'priority',
 		'show_current_blog' => FALSE,
-		'strict'            => FALSE // get exact translations only
+		'display_flag'      => FALSE,
+		'strict'            => FALSE, // get exact translations only
 	);
-
 	$params = wp_parse_args( $args, $defaults );
 	$output = Mlp_Helpers::show_linked_elements( $params );
 
-	if ( TRUE === $params[ 'echo' ] )
+	$echo = isset( $params[ 'echo' ] ) ? $params[ 'echo' ] : $deprecated_echo;
+	if ( $echo ) {
 		echo $output;
+	}
 
 	return $output;
 }
@@ -136,14 +137,36 @@ function mlp_get_interlinked_permalinks( $element_id = 0 ) {
 }
 
 /**
- * get the blog language
+ * Return the language for the given blog.
  *
- * @param  int  $blog_id
- * @param  bool $short Return only the first part of the language code.
- * @return string Second part of language identifier
+ * @param int  $blog_id Blog ID.
+ * @param bool $short   Return only the first part of the language code?
+ *
+ * @return string
  */
-function get_blog_language( $blog_id = 0, $short = TRUE ) {
+function mlp_get_blog_language( $blog_id = 0, $short = TRUE ) {
+
 	return Mlp_Helpers::get_blog_language( $blog_id, $short );
+}
+
+// TODO: Eventually remove the following function, with version 2.3.0 at the earliest
+if ( ! function_exists( 'get_blog_language' ) ) {
+
+	/**
+	 * Deprecated! Return the language for the given blog.
+	 *
+	 * @param int  $blog_id Blog ID.
+	 * @param bool $short   Return only the first part of the language code?
+	 *
+	 * @return string
+	 */
+	function get_blog_language( $blog_id = 0, $short = TRUE ) {
+
+		_deprecated_function( __FUNCTION__, '2.2.0', 'mlp_get_blog_language' );
+
+		return Mlp_Helpers::get_blog_language( $blog_id, $short );
+	}
+
 }
 
 /**

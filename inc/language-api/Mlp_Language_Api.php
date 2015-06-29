@@ -424,23 +424,29 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	}
 
 	/**
-	 * @param  string $language Formatted like en_GB
-	 * @param  int    $site_id
+	 * Get the flag URL for the given language.
+	 *
+	 * @param string $language Formatted like en_GB
+	 * @param int    $site_id  Site ID.
+	 *
 	 * @return Mlp_Url_Interface
 	 */
 	public function get_flag_by_language( $language, $site_id = 0 ) {
 
 		$custom_flag = get_blog_option( $site_id, 'inpsyde_multilingual_flag_url' );
-
-		if ( $custom_flag )
+		if ( $custom_flag ) {
 			return new Mlp_Url( $custom_flag );
+		}
 
-		$language  = str_replace( '-', '_', $language );
-		$sub       = strtok( $language, '_' );
+		$flag_path = $this->data->get( 'flag_path' );
+
+		$language = str_replace( '-', '_', $language );
+		$sub = strtok( $language, '_' );
 		$file_name = $sub . '.gif';
 
-		if ( is_readable( "{$this->data->flag_path}/$file_name" ) )
-			return new Mlp_Url( $this->data->flag_url . $file_name );
+		if ( is_readable( "$flag_path/$file_name" ) ) {
+			return new Mlp_Url( $this->data->get( 'flag_url' ) . $file_name );
+		}
 
 		return new Mlp_Url( '' );
 	}

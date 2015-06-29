@@ -403,43 +403,6 @@ document.getElementById("mlp_quicklink_container").onsubmit = function() {
 	}
 
 	/**
-	 * Get the selected blog's post permalink
-	 *
-	 * @since	0.1
-	 * @access	private
-	 * @param	int $blog_id
-	 * @param	int $post_id
-	 * @uses	mlp_get_linked_elements, get_current_blog_id, get_blog_post, get_blog_permalink
-	 * @return	string $permalink | the post permalink
-	 */
-	private function get_element_permalink( $blog_id, $post_id ) {
-
-		// Get blog id of desired blog
-		$remote_blog_id = intval( $blog_id );
-
-		// Get all elements linked to the current one
-		$elements = mlp_get_linked_elements( intval( $post_id ), '', get_current_blog_id() );
-
-		// No linked elements found
-		if ( array () == $elements || empty ( $elements[ $remote_blog_id ] ) )
-			return '';
-
-		$remote_post_id = intval( $elements[ $remote_blog_id ] );
-
-		$post = get_blog_post( $remote_blog_id, $remote_post_id );
-
-		if ( is_object( $post ) && 'publish' == $post->post_status )
-			$permalink = get_blog_permalink( $remote_blog_id, $remote_post_id );
-		else
-			return '';
-
-		if ( 1 < strlen( $permalink ) )
-			return $permalink;
-
-		return '';
-	}
-
-	/**
 	 * This is the callback of the metabox used to display
 	 * the modules options page form fields
 	 *

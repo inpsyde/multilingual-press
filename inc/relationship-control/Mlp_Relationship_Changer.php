@@ -51,7 +51,7 @@ class Mlp_Relationship_Changer {
 	 */
 	public function __construct( Inpsyde_Property_List_Interface $data ) {
 
-		$this->content_relations = $data->content_relations;
+		$this->content_relations = $data->get( 'content_relations' );
 		$this->prepare_values();
 	}
 
@@ -185,4 +185,5 @@ class Mlp_Relationship_Changer {
 			}
 		}
 	}
+
 }

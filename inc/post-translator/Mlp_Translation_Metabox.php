@@ -69,8 +69,8 @@ class Mlp_Translation_Metabox {
 		$this->data = new Mlp_Translatable_Post_Data(
 			$this->request_validator,
 			$this->allowed_post_types,
-			$this->plugin_data->link_table,
-			$this->plugin_data->content_relations
+			$this->plugin_data->get( 'link_table' ),
+			$this->plugin_data->get( 'content_relations' )
 		);
 
 		add_action( 'add_meta_boxes', array ( $this, 'register_meta_boxes' ), 10, 2 );
@@ -121,7 +121,8 @@ class Mlp_Translation_Metabox {
 			return;
 
 		$current_blog_id = get_current_blog_id();
-		$related_blogs = $this->plugin_data->site_relations->get_related_sites( $current_blog_id, FALSE );
+		$site_relations = $this->plugin_data->get( 'site_relations' );
+		$related_blogs = $site_relations->get_related_sites( $current_blog_id, FALSE );
 
 		if ( empty ( $related_blogs ) )
 			return;
@@ -133,7 +134,8 @@ class Mlp_Translation_Metabox {
 			}
 		}
 
-		$this->plugin_data->assets->provide( array( 'mlp_admin_js', 'mlp_admin_css' ) );
+		$assets = $this->plugin_data->get( 'assets' );
+		$assets->provide( array( 'mlp_admin_js', 'mlp_admin_css' ) );
 	}
 
 	/**
@@ -260,7 +262,7 @@ class Mlp_Translation_Metabox {
 			add_action( 'mlp_translation_meta_box_main_' . $blog_id, $callbacks[ 'editor' ], 10, 3 );
 
 		if ( ! empty ( $callbacks[ 'upgrade' ] )
-			&& 'MultilingualPress Pro' !== $this->plugin_data->plugin_name
+			&& 'MultilingualPress Pro' !== $this->plugin_data->get( 'plugin_name' )
 		)
 			add_action( 'mlp_translation_meta_box_bottom_' . $blog_id, $callbacks[ 'upgrade' ], 10, 3 );
 	}

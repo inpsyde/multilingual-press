@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Schema for site relations.
  *
- * @version 2014.07.09
+ * @version 2015.06.28
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
@@ -14,57 +15,82 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	private $wpdb;
 
 	/**
-	 * @param wpdb $wpdb
+	 * Constructor. Set up the properties.
+	 *
+	 * @param wpdb $wpdb Database object.
 	 */
 	public function __construct( wpdb $wpdb ) {
+
 		$this->wpdb = $wpdb;
 	}
 
 	/**
+	 * Return the table name.
+	 *
 	 * @return string
 	 */
 	public function get_table_name() {
+
 		return $this->wpdb->base_prefix . 'mlp_site_relations';
 	}
 
 	/**
-	 * Relationship schema.
+	 * Return the table schema.
 	 *
 	 * See wp_get_db_schema() in wp-admin/includes/schema.php for the default schema.
+	 *
 	 * @return array
 	 */
 	public function get_schema() {
-		return array (
+
+		return array(
 			'ID'     => 'INT NOT NULL AUTO_INCREMENT',
 			'site_1' => 'bigint(20) NOT NULL',
-			'site_2' => 'bigint(20) NOT NULL'
+			'site_2' => 'bigint(20) NOT NULL',
 		);
 	}
 
 	/**
+	 * Return the primary key.
+	 *
 	 * @return string
 	 */
 	public function get_primary_key() {
+
 		return 'ID';
 	}
 
 	/**
+	 * Return the array of autofilled keys.
+	 *
 	 * @return array
 	 */
 	public function get_autofilled_keys() {
-		return array ( 'ID' );
+
+		return array(
+			'ID',
+		);
 	}
 
 	/**
-	 * @return string SQL for INSERT
-	 */
-	public function get_default_content() {}
-
-	/**
+	 * Return the SQL string for any indexes and unique keys.
+	 *
 	 * @return string
 	 */
 	public function get_index_sql() {
-		return 'INDEX ( `site_1`, `site_2` ),
-		UNIQUE KEY `site_combinations` ( `site_1`, `site_2` )'; // prevent duplicates
+
+		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
+		return "KEY (site_1,site_2),\n\tUNIQUE KEY site_combinations (site_1,site_2)";
 	}
+
+	/**
+	 * Return the SQL string for any default content.
+	 *
+	 * @return string
+	 */
+	public function get_default_content() {
+
+		return '';
+	}
+
 }

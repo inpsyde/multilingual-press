@@ -1,4 +1,5 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Prepare data for the term edit form.
  *
@@ -95,7 +96,6 @@ class Mlp_Term_Translation_Presenter {
 		}
 		restore_current_blog();
 
-		//uasort( $out, array ( $this, 'sort_terms_by_name' ) );
 		uasort( $out, 'strcasecmp' );
 
 		return $out;
@@ -185,16 +185,4 @@ class Mlp_Term_Translation_Presenter {
 		return $term;
 	}
 
-	/**
-	 * Sort term by name
-	 *
-	 * @see get_terms_for_site()
-	 * @param stdClass $term1
-	 * @param stdClass $term2
-	 * @return int
-	 */
-	private function sort_terms_by_name( $term1, $term2 ) {
-
-		return strcasecmp( $term1, $term2 );
-	}
 }

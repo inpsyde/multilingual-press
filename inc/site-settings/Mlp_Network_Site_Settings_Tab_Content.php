@@ -1,4 +1,5 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Content of the per-site settings tab
  *
@@ -31,17 +32,23 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	private $relations;
 
 	/**
-	 * Constructor.
+	 * Constructor. Set up the properties.
+	 *
+	 * @param Mlp_Language_Api_Interface   $language_api Language API.
+	 * @param Mlp_Options_Page_Data        $page_data    Options page data.
+	 * @param int                          $blog_id      Blog ID
+	 * @param Mlp_Site_Relations_Interface $relations    Site relations.
 	 */
 	public function __construct(
 		Mlp_Language_Api_Interface $language_api,
-		Mlp_Options_Page_Data      $page_data,
-		                           $blog_id,
+		Mlp_Options_Page_Data $page_data,
+		$blog_id,
 		Mlp_Site_Relations_Interface $relations
-		) {
+	) {
+
 		$this->language_api = $language_api;
-		$this->page_data    = $page_data;
-		$this->blog_id      = $blog_id;
+		$this->page_data = $page_data;
+		$this->blog_id = $blog_id;
 		$this->relations = $relations;
 	}
 
@@ -263,4 +270,5 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 		return $langs_formatted;
 	}
+
 }
