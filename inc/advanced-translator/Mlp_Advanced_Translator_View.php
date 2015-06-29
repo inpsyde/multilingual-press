@@ -5,7 +5,7 @@
  *
  * Data model for post translation. Handles inserts of new posts only.
  *
- * @version 2014.03.14
+ * @version 2015.06.29
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
@@ -31,7 +31,7 @@ class Mlp_Advanced_Translator_View {
 	 *
 	 * @wp-hook media_buttons
 	 *
-	 * @param   string $editor_id
+	 * @param string $editor_id
 	 *
 	 * @return  void
 	 */
@@ -40,7 +40,7 @@ class Mlp_Advanced_Translator_View {
 		$matches = array();
 		preg_match( '~mlp_translation_data_(\d+)_content~', $editor_id, $matches );
 
-		if ( empty ( $matches[ 1 ] ) ) {
+		if ( empty( $matches[ 1 ] ) ) {
 			return;
 		}
 		?>
@@ -65,10 +65,10 @@ class Mlp_Advanced_Translator_View {
 		WP_Post $source_post, $remote_blog_id, WP_Post $post
 	) {
 
-		$title       = esc_attr( $post->post_title );
+		$title = esc_attr( $post->post_title );
 		$placeholder = $this->get_place_holder_title( $post );
-		$name        = $this->get_name( $remote_blog_id, 'title' );
-		$id          = $this->get_id( $remote_blog_id, 'title' );
+		$name = $this->get_name( $remote_blog_id, 'title' );
+		$id = $this->get_id( $remote_blog_id, 'title' );
 
 		?>
 		<div class="mlp_titlediv">
@@ -103,15 +103,15 @@ class Mlp_Advanced_Translator_View {
 		if ( empty( $value ) ) {
 			$value = sanitize_title( $post->post_title );
 		}
-		$value       = esc_attr( $value );
+		$value = esc_attr( $value );
 		$placeholder = $this->get_place_holder_name( $post );
-		$name        = $this->get_name( $remote_blog_id, 'name' );
-		$id          = $this->get_id( $remote_blog_id, 'name' );
+		$name = $this->get_name( $remote_blog_id, 'name' );
+		$id = $this->get_id( $remote_blog_id, 'name' );
 
 		?>
 		<div class="mlp_namediv">
 			<div>
-				<label for=""> <?php _e('Post Name: ','multilingualpress') ?><br>
+				<label for=""> <?php _e( 'Post Name: ', 'multilingualpress' ) ?><br>
 					<input
 						class="mlp_name"
 						type="text"
@@ -139,9 +139,9 @@ class Mlp_Advanced_Translator_View {
 		WP_Post $source_post, $remote_blog_id, WP_Post $remote_post
 	) {
 
-		$editor_id   = $this->get_id( $remote_blog_id, 'content' );
+		$editor_id = $this->get_id( $remote_blog_id, 'content' );
 		$editor_name = $this->get_name( $remote_blog_id, 'content' );
-		$settings    = array(
+		$settings = array(
 			'tabindex'      => FALSE,
 			'editor_height' => 150,
 			'resize'        => TRUE,
@@ -168,7 +168,7 @@ class Mlp_Advanced_Translator_View {
 		WP_Post $source_post, $remote_blog_id, WP_Post $post
 	) {
 
-		$id   = $this->get_id( $remote_blog_id, 'thumbnail' );
+		$id = $this->get_id( $remote_blog_id, 'thumbnail' );
 		$name = $this->get_name( $remote_blog_id, 'thumbnail' );
 		?>
 
@@ -200,8 +200,8 @@ class Mlp_Advanced_Translator_View {
 
 		$taxonomies = $this->data->get_taxonomies( $post, $remote_blog_id );
 
-		if ( empty ( $taxonomies )
-		     or ( empty ( $taxonomies[ 'inclusive' ] ) && empty ( $taxonomies[ 'exclusive' ] ) )
+		if ( empty( $taxonomies )
+			or ( empty( $taxonomies[ 'inclusive' ] ) && empty( $taxonomies[ 'exclusive' ] ) )
 		) {
 			return;
 		}
@@ -220,7 +220,7 @@ class Mlp_Advanced_Translator_View {
 
 		print "<div id='$toggle_id' class='hidden'>";
 
-		if ( ! empty ( $taxonomies[ 'inclusive' ] ) ) {
+		if ( ! empty( $taxonomies[ 'inclusive' ] ) ) {
 			foreach ( $taxonomies[ 'inclusive' ] as $taxonomy => $data ) {
 				$this->list_inclusive_terms( $taxonomy, $data, $remote_blog_id );
 			}
@@ -228,7 +228,7 @@ class Mlp_Advanced_Translator_View {
 			print '<br class="clear">';
 		}
 
-		if ( ! empty ( $taxonomies[ 'exclusive' ] ) ) {
+		if ( ! empty( $taxonomies[ 'exclusive' ] ) ) {
 			foreach ( $taxonomies[ 'exclusive' ] as $taxonomy => $data ) {
 				$this->list_exclusive_terms( $taxonomy, $data, $remote_blog_id );
 			}
@@ -263,8 +263,8 @@ class Mlp_Advanced_Translator_View {
 	/**
 	 * Get the value for the name attribute.
 	 *
-	 * @param  int    $blog_id
-	 * @param  string $name
+	 * @param int    $blog_id
+	 * @param string $name
 	 *
 	 * @return string
 	 */
@@ -276,8 +276,8 @@ class Mlp_Advanced_Translator_View {
 	/**
 	 * Get the value for the id attribute.
 	 *
-	 * @param  int    $blog_id
-	 * @param  string $name
+	 * @param int    $blog_id
+	 * @param string $name
 	 *
 	 * @return string
 	 */
@@ -319,17 +319,17 @@ class Mlp_Advanced_Translator_View {
 	/**
 	 * List terms which are mutually exclusive, like post formats.
 	 *
-	 * @param  string $taxonomy
-	 * @param  array  $data
-	 * @param  int    $remote_blog_id
+	 * @param string $taxonomy
+	 * @param array  $data
+	 * @param int    $remote_blog_id
 	 *
 	 * @return void
 	 */
 	private function list_exclusive_terms( $taxonomy, Array $data, $remote_blog_id ) {
 
 		$fields = array();
-		$name   = $this->get_name( $remote_blog_id, 'tax' ) . '[' . $taxonomy . ']';
-		$html   = '<label for="%2$s_id">
+		$name = $this->get_name( $remote_blog_id, 'tax' ) . '[' . $taxonomy . ']';
+		$html = '<label for="%2$s_id">
 					<input type="radio" name="%1$s[]" id="%2$s_id" value="%3$s"%4$s>
 					%5$s
 				</label>';
@@ -354,16 +354,16 @@ class Mlp_Advanced_Translator_View {
 	/**
 	 * List terms which can be combined like categories.
 	 *
-	 * @param  string $taxonomy
-	 * @param  array  $data
-	 * @param  int    $remote_blog_id
+	 * @param string $taxonomy
+	 * @param array  $data
+	 * @param int    $remote_blog_id
 	 *
 	 * @return void
 	 */
 	private function list_inclusive_terms( $taxonomy, $data, $remote_blog_id ) {
 
 		$fields = array();
-		$name   = $this->get_name( $remote_blog_id, 'tax' ) . '[' . $taxonomy . ']';
+		$name = $this->get_name( $remote_blog_id, 'tax' ) . '[' . $taxonomy . ']';
 
 		foreach ( $data[ 'terms' ] as $term ) {
 
@@ -388,8 +388,8 @@ class Mlp_Advanced_Translator_View {
 	/**
 	 * Container HTML for term selection.
 	 *
-	 * @param  string $title Taxonomy name
-	 * @param  string $html
+	 * @param string $title Taxonomy name
+	 * @param string $html
 	 *
 	 * @return void
 	 */
@@ -413,9 +413,12 @@ class Mlp_Advanced_Translator_View {
 
 		?>
 		<div class="mlp-warning">
-			<p><?php _e( 'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
-			             'multilingualpress' ); ?></p>
+			<p><?php _e(
+					'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
+					'multilingualpress'
+				); ?></p>
 		</div>
 	<?php
 	}
+
 }

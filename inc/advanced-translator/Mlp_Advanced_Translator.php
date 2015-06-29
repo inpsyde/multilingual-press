@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Class Mlp_Advanced_Translator
  *
- * @version 2014.10.10
+ * @version 2015.06.29
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
@@ -11,24 +12,24 @@ class Mlp_Advanced_Translator {
 	/**
 	 * Passed by main controller.
 	 *
-	 * @type Inpsyde_Property_List_Interface
+	 * @var Inpsyde_Property_List_Interface
 	 */
 	private $plugin_data;
 
 	/**
-	 * @type Mlp_Advanced_Translator_Data
+	 * @var Mlp_Advanced_Translator_Data
 	 */
 	private $translation_data;
 
 	/**
-	 * @type Mlp_Translatable_Post_Data_Interface
+	 * @var Mlp_Translatable_Post_Data_Interface
 	 */
 	private $basic_data;
 
 	/**
 	 * The view class.
 	 *
-	 * @type Mlp_Advanced_Translator_View
+	 * @var Mlp_Advanced_Translator_View
 	 */
 	private $view;
 
@@ -42,16 +43,17 @@ class Mlp_Advanced_Translator {
 		$this->plugin_data = $data;
 
 		// Quit here if module is turned off
-		if ( ! $this->register_setting() )
+		if ( ! $this->register_setting() ) {
 			return;
+		}
 
-		add_action( 'mlp_post_translator_init', array ( $this, 'setup' ) );
+		add_action( 'mlp_post_translator_init', array( $this, 'setup' ) );
 		add_filter( 'mlp_external_save_method', '__return_true' );
 
 		// Disable default actions
 		add_action(
 			'mlp_translation_meta_box_registered',
-			array ( $this, 'register_metabox_view_details' ),
+			array( $this, 'register_metabox_view_details' ),
 			10,
 			2
 		);
@@ -89,15 +91,17 @@ class Mlp_Advanced_Translator {
 	/**
 	 *
 	 * @wp-hook mlp_translation_meta_box_registered
-	 * @param  WP_Post $post
-	 * @param  int     $blog_id
+	 *
+	 * @param WP_Post $post
+	 * @param int     $blog_id
+	 *
 	 * @return void
 	 */
 	public function register_metabox_view_details( WP_Post $post, $blog_id ) {
 
 		// get the current remote post status
 		$remote_post = $this->basic_data->get_remote_post( $post, $blog_id );
-		$is_trashed  = isset( $remote_post->post_status ) && $remote_post->post_status == 'trash';
+		$is_trashed = isset( $remote_post->post_status ) && $remote_post->post_status == 'trash';
 
 		// set the base
 		$base = 'mlp_translation_meta_box_';
@@ -130,8 +134,7 @@ class Mlp_Advanced_Translator {
 		}
 
 		$taxonomies = get_object_taxonomies( $post, 'objects' );
-
-		if ( ! empty ( $taxonomies ) ) {
+		if ( ! empty( $taxonomies ) ) {
 			add_action( $base . 'bottom_' . $blog_id, array( $this->view, 'show_taxonomies' ), 10, 3 );
 		}
 	}
