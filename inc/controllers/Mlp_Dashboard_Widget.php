@@ -113,7 +113,9 @@ class Mlp_Dashboard_Widget {
 	 */
 	public function dashboard_widget() {
 
-		$related_blogs = $this->plugin_data->site_relations->get_related_sites( 0, FALSE );
+		$site_relations = $this->plugin_data->get( 'site_relations' );
+
+		$related_blogs = $site_relations->get_related_sites( 0, FALSE );
 
 		// We have no related blogs so we can stop here
 		if ( ! is_array( $related_blogs ) ) {
@@ -227,4 +229,5 @@ class Mlp_Dashboard_Widget {
 
 		return FALSE;
 	}
+
 }

@@ -23,6 +23,7 @@ Thanks for contributing to MultilingualPress (MLP)&mdash;you rock!
 	* Please avoid working directly on the `master` branch.
 * Make commits of logical units.
 * Make sure your commit messages are helpful.
+* If you want to work on assets, find all relevant files in the `resources` folder. There you can initialize grunt with `npm install` and then `grunt watch` your changes.
 
 # Submitting Changes
 * Push your changes to the according topic branch in your fork of the repository.

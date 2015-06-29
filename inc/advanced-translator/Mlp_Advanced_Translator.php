@@ -58,23 +58,28 @@ class Mlp_Advanced_Translator {
 	}
 
 	/**
+	 * Set up the properties.
+	 *
 	 * @wp-hook mlp_post_translator_init
-	 * @param  array $base_data
+	 *
+	 * @param array $base_data Base data.
+	 *
 	 * @return void
 	 */
-	public function setup( Array $base_data ) {
+	public function setup( array $base_data ) {
 
 		$this->translation_data = new Mlp_Advanced_Translator_Data(
-			$base_data['request_validator'],
-			$base_data['basic_data'],
-			$base_data['allowed_post_types'],
-			$this->plugin_data->site_relations
+			$base_data[ 'request_validator' ],
+			$base_data[ 'basic_data' ],
+			$base_data[ 'allowed_post_types' ],
+			$this->plugin_data->get( 'site_relations' )
 		);
-		$this->basic_data = $base_data['basic_data'];
-		$this->view       = new Mlp_Advanced_Translator_View( $this->translation_data );
+		$this->basic_data = $base_data[ 'basic_data' ];
+		$this->view = new Mlp_Advanced_Translator_View( $this->translation_data );
 
-		if ( 'POST' === $_SERVER['REQUEST_METHOD'] )
+		if ( 'POST' === $_SERVER[ 'REQUEST_METHOD' ] ) {
 			add_action( 'save_post', array( $this->translation_data, 'save' ), 10, 2 );
+		}
 
 		// Disable the checkbox, we can translate auto-drafts.
 		add_filter( 'mlp_post_translator_activation_checkbox', '__return_false' );
@@ -126,21 +131,29 @@ class Mlp_Advanced_Translator {
 	}
 
 	/**
+	 * Register our UI for the module manager.
+	 *
 	 * @return bool
 	 */
 	private function register_setting() {
 
-		$desc = __(
+		/** @var Mlp_Module_Manager_Interface $module_manager */
+		$module_manager = $this->plugin_data->get( 'module_manager' );
+
+		$display_name = __( 'Advanced Translator', 'multilingualpress' );
+
+		$description = __(
 			'Use the WYSIWYG editor to write all translations on one screen, including thumbnails and taxonomies.',
 			'multilingualpress'
 		);
 
-		return $this->plugin_data->module_manager->register(
-			array (
-				'display_name' => __( 'Advanced Translator', 'multilingualpress' ),
+		return $module_manager->register(
+			array(
+				'display_name' => $display_name,
 				'slug'         => 'class-' . __CLASS__,
-				'description'  => $desc
+				'description'  => $description,
 			)
 		);
 	}
+
 }

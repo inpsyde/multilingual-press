@@ -119,11 +119,16 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	}
 
 	/**
+	 * Enqueue style.
+	 *
+	 * @wp-hook load-{$page}
+	 *
 	 * @return void
 	 */
 	public function enqueue_style() {
 
-		$this->plugin_data->assets->provide( 'mlp_admin_css' );
+		$assets = $this->plugin_data->get( 'assets' );
+		$assets->provide( 'mlp_admin_css' );
 	}
 
 	/**

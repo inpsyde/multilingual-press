@@ -117,7 +117,7 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 		 * @param int                            $target_content_id ID of the target post.
 		 * @param Mlp_Translation_Interface|NULL $translation       Translation object. NULL, if there is no translation.
 		 */
-		return apply_filters(
+		return (string) apply_filters(
 			'mlp_linked_element_link',
 			(string) $this->remote_url,
 			$this->get_target_site_id(),

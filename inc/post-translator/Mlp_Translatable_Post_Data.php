@@ -127,23 +127,6 @@ class Mlp_Translatable_Post_Data
 		$post_data  = get_post( $post_id, ARRAY_A );
 		$post_meta = $this->get_post_meta_to_transfer( $post_id );
 
-		// checking if "mlp_pre_save_postdata" has an filter and showing the deprecated message
-		if( has_filter( 'mlp_pre_save_postdata' ) ){
-			_doing_it_wrong(
-				'mlp_pre_save_postdata',
-				'mlp_pre_save_postdata is deprecated and will be removed in MultilingualPress 2.2, please use mlp_pre_save_post instead.',
-				'2.1'
-			);
-		}
-		/**
-		 * Pre-Filter before Saving the Post
-		 * @param       Array $post_data
-		 * @param       Array $save_context
-		 * @deprecated
-		 * @see         mlp_pre_save_post
-		 */
-		$post_data = apply_filters( 'mlp_pre_save_postdata', $post_data, $this->save_context );
-
 		/**
 		 * Pre-Filter before Saving the Post
 		 * @param   Array $post_data

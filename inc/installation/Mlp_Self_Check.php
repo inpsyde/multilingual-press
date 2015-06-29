@@ -79,9 +79,11 @@ class Mlp_Self_Check {
 		if ( ! $this->is_plugin_page() )
 			return self::WRONG_PAGE_FOR_CHECK;
 
+		$php_version = phpversion();
+
 		$check = new Mlp_Requirements_Check(
 			new Mlp_Install_Requirements(),
-			new Mlp_Semantic_Version_Number( PHP_VERSION ), // todo remove dep on global constant
+			new Mlp_Semantic_Version_Number( $php_version ),
 			new Mlp_Semantic_Version_Number( $wp_version ),
 			$this->plugin_file
 		);

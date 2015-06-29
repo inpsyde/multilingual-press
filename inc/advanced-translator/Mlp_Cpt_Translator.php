@@ -81,17 +81,22 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 */
 	private function register_setting() {
 
-		$desc = __(
+		/** @var Mlp_Module_Manager_Interface $module_manager */
+		$module_manager = $this->plugin_data->get( 'module_manager' );
+
+		$display_name = __( 'Custom Post Type Translator', 'multilingualpress' );
+
+		$description = __(
 			'Enable translation of custom post types. Creates a second settings box below this. The post types must be activated for the whole network or on the main site.',
 			'multilingualpress'
 		);
 
-		return $this->plugin_data->module_manager->register(
-			array (
-				'display_name'	=> __( 'Custom Post Type Translator', 'multilingualpress' ),
-				'slug'			=> 'class-' . __CLASS__,
-				'description'   => $desc,
-				'callback'      => array ( $this, 'extend_settings_description' )
+		return $module_manager->register(
+			array(
+				'display_name' => $display_name,
+				'slug'         => 'class-' . __CLASS__,
+				'description'  => $description,
+				'callback'     => array( $this, 'extend_settings_description' ),
 			)
 		);
 	}
@@ -218,16 +223,14 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	/**
 	 * Sort post types by their display label.
 	 *
-	 * @param string $cpt1
-	 * @param string $cpt2
+	 * @param object $cpt1 First post type object.
+	 * @param object $cpt2 Second post type object.
+	 *
 	 * @return int
 	 */
 	private function sort_cpts_by_label( $cpt1, $cpt2 ) {
 
-		return strcasecmp(
-			$cpt1->labels->name,
-			$cpt2->labels->name
-		);
+		return strcasecmp( $cpt1->labels->name, $cpt2->labels->name );
 	}
 
 	/**

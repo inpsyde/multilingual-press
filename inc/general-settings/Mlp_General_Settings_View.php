@@ -16,7 +16,9 @@ class Mlp_General_Settings_View {
 	private $module_mapper;
 
 	/**
-	 * Constructor.
+	 * Constructor. Set up the properties.
+	 *
+	 * @param Mlp_Module_Mapper_Interface $module_mapper Module mapper.
 	 */
 	public function __construct( Mlp_Module_Mapper_Interface $module_mapper ) {
 
@@ -163,4 +165,5 @@ EOD;
 
 		return $module[ 'description' ];
 	}
+
 }

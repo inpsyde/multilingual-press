@@ -165,7 +165,7 @@ class Multilingual_Press {
 	public function load_plugin_textdomain() {
 
 		$rel_path = dirname( plugin_basename( $this->plugin_file_path ) )
-				. $this->plugin_data->text_domain_path;
+				. $this->plugin_data->get( 'text_domain_path' );
 
 		load_plugin_textdomain( 'multilingualpress', FALSE, $rel_path );
 	}
@@ -178,7 +178,7 @@ class Multilingual_Press {
 	public function load_assets() {
 
 		/** @type Mlp_Assets $assets */
-		$assets = $this->plugin_data->assets;
+		$assets = $this->plugin_data->get( 'assets' );
 		$assets->add( 'mlp_admin_js',   'admin.js', array ( 'jquery' ) );
 		$assets->add( 'mlp_admin_css',  'admin.css' );
 		$assets->add( 'mlp_frontend_js',  'frontend.js', array ( 'jquery' ) );
@@ -195,7 +195,10 @@ class Multilingual_Press {
 	 */
 	private function load_module_settings_page() {
 
-		$settings = new Mlp_General_Settingspage( $this->plugin_data->module_manager, $this->plugin_data->assets );
+		$settings = new Mlp_General_Settingspage(
+			$this->plugin_data->get( 'module_manager' ),
+			$this->plugin_data->get( 'assets' )
+		);
 		add_action( 'plugins_loaded', array ( $settings, 'setup' ), 8 );
 	}
 
@@ -206,7 +209,10 @@ class Multilingual_Press {
 	 */
 	private function load_site_settings_page() {
 
-		$settings = new Mlp_General_Settingspage( $this->plugin_data->site_manager, $this->plugin_data->assets );
+		$settings = new Mlp_General_Settingspage(
+			$this->plugin_data->get( 'site_manager' ),
+			$this->plugin_data->get( 'assets' )
+		);
 		$settings->setup();
 		add_action( 'plugins_loaded', array ( $settings, 'setup' ), 8 );
 	}
@@ -222,7 +228,7 @@ class Multilingual_Press {
 
 		$found = array ();
 
-		$path = $this->plugin_data->plugin_dir_path . "/inc";
+		$path = $this->plugin_data->get( 'plugin_dir_path' ) . "/inc";
 
 		if ( ! is_readable( $path ) )
 			return $found;
@@ -310,7 +316,8 @@ class Multilingual_Press {
 		global $wpdb;
 
 		// Delete relations
-		$this->plugin_data->site_relations->delete_relation( $blog_id );
+		$site_relations = $this->plugin_data->get( 'site_relations' );
+		$site_relations->delete_relation( $blog_id );
 
 		// Update site option
 		$blogs = (array) get_site_option( 'inpsyde_multilingual', array() );
@@ -407,15 +414,22 @@ class Multilingual_Press {
 	 */
 	private function run_admin_actions() {
 
-		if ( $this->plugin_data->module_manager->has_modules() )
+		$module_manager = $this->plugin_data->get( 'module_manager' );
+		if ( $module_manager->has_modules() ) {
 			$this->load_module_settings_page();
+		}
 
-		if ( $this->plugin_data->site_manager->has_modules() )
+		$site_manager = $this->plugin_data->get( 'site_manager' );
+		if ( $site_manager->has_modules() ) {
 			$this->load_site_settings_page();
+		}
 
 		new Mlp_Network_Site_Settings_Controller( $this->plugin_data );
 
-		new Mlp_Network_New_Site_Controller( $this->plugin_data->language_api, $this->plugin_data->site_relations );
+		new Mlp_Network_New_Site_Controller(
+			$this->plugin_data->get( 'language_api' ),
+			$this->plugin_data->get( 'site_relations' )
+		);
 	}
 
 	/**
@@ -427,7 +441,7 @@ class Multilingual_Press {
 		add_filter( 'language_attributes', array( $this, 'language_attributes' ) );
 
 		// frontend-hooks
-		$hreflang = new Mlp_Hreflang_Header_Output( $this->plugin_data->language_api );
+		$hreflang = new Mlp_Hreflang_Header_Output( $this->plugin_data->get( 'language_api' ) );
 		add_action(
 			'template_redirect',
 			array (
@@ -449,25 +463,34 @@ class Multilingual_Press {
 	 */
 	private function prepare_plugin_data() {
 
-		$this->link_table                     = $this->wpdb->base_prefix . 'multilingual_linked';
-		$this->plugin_file_path               = $this->plugin_data->plugin_file_path;
-		$this->plugin_data->module_manager    = new Mlp_Module_Manager( 'state_modules' );
-		$this->plugin_data->site_manager      = new Mlp_Module_Manager( 'inpsyde_multilingual' );
-		$this->plugin_data->table_list        = new Mlp_Db_Table_List( $this->wpdb );
-		$this->plugin_data->link_table        = $this->link_table;
-		$this->plugin_data->content_relations = new Mlp_Content_Relations(
-			$this->wpdb,
-			$this->plugin_data->site_relations,
-			new Mlp_Db_Table_Name( $this->link_table, $this->plugin_data->table_list )
+		$site_relations = $this->plugin_data->get( 'site_relations' );
+		$table_list = new Mlp_Db_Table_List( $this->wpdb );
+
+		$this->link_table = $this->wpdb->base_prefix . 'multilingual_linked';
+		$this->plugin_file_path = $this->plugin_data->get( 'plugin_file_path' );
+		$this->plugin_data->set( 'module_manager', new Mlp_Module_Manager( 'state_modules' ) );
+		$this->plugin_data->set( 'site_manager', new Mlp_Module_Manager( 'inpsyde_multilingual' ) );
+		$this->plugin_data->set( 'table_list', $table_list );
+		$this->plugin_data->set( 'link_table', $this->link_table );
+		$this->plugin_data->set(
+			'content_relations',
+			new Mlp_Content_Relations(
+				$this->wpdb,
+				$site_relations,
+				new Mlp_Db_Table_Name( $this->link_table, $table_list )
+			)
 		);
-		$this->plugin_data->language_api      = new Mlp_Language_Api(
-			$this->plugin_data,
-			'mlp_languages',
-			$this->plugin_data->site_relations,
-			$this->plugin_data->content_relations,
-			$this->wpdb
+		$this->plugin_data->set(
+			'language_api',
+			new Mlp_Language_Api(
+				$this->plugin_data,
+				'mlp_languages',
+				$site_relations,
+				$this->plugin_data->get( 'content_relations' ),
+				$this->wpdb
+			)
 		);
-		$this->plugin_data->assets            = new Mlp_Assets( $this->plugin_data->locations );
+		$this->plugin_data->set( 'assets', new Mlp_Assets( $this->plugin_data->get( 'locations' ) ) );
 	}
 
 	/**
@@ -476,8 +499,9 @@ class Multilingual_Press {
 	private function prepare_helpers() {
 
 		Mlp_Helpers::$link_table = $this->link_table;
-		Mlp_Helpers::insert_dependency( 'site_relations', $this->plugin_data->site_relations );
-		Mlp_Helpers::insert_dependency( 'language_api', $this->plugin_data->language_api );
+		Mlp_Helpers::insert_dependency( 'site_relations', $this->plugin_data->get( 'site_relations' ) );
+		Mlp_Helpers::insert_dependency( 'language_api', $this->plugin_data->get( 'language_api' ) );
 		Mlp_Helpers::insert_dependency( 'plugin_data', $this->plugin_data );
 	}
+
 }
