@@ -149,6 +149,7 @@ function mlp_get_blog_language( $blog_id = 0, $short = TRUE ) {
 	return Mlp_Helpers::get_blog_language( $blog_id, $short );
 }
 
+// TODO: Eventually remove the following function, with version 2.3.0 at the earliest
 if ( ! function_exists( 'get_blog_language' ) ) {
 
 	/**
@@ -161,12 +162,7 @@ if ( ! function_exists( 'get_blog_language' ) ) {
 	 */
 	function get_blog_language( $blog_id = 0, $short = TRUE ) {
 
-		// TODO: Eventually remove this, with version 2.3.0 at the earliest
-		_doing_it_wrong(
-			__FUNCTION__,
-			"get_blog_language is deprecated and will be removed in the future. Please use mlp_get_blog_language instead.",
-			'2.2.0'
-		);
+		_deprecated_function( __FUNCTION__, '2.2.0', 'mlp_get_blog_language' );
 
 		return Mlp_Helpers::get_blog_language( $blog_id, $short );
 	}
