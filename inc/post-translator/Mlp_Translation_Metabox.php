@@ -1,10 +1,11 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Class Mlp_Translation_Metabox
  *
  * Controller for the basic translation metabox set up.
  *
- * @version 2014.01.15
+ * @version 2015.06.29
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
@@ -38,7 +39,10 @@ class Mlp_Translation_Metabox {
 	/**
 	 * @var array
 	 */
-	private $allowed_post_types = array( 'post', 'page' );
+	private $allowed_post_types = array(
+		'post',
+		'page',
+	);
 
 	/**
 	 * Constructor.
@@ -51,15 +55,15 @@ class Mlp_Translation_Metabox {
 			return;
 		}
 
-		$this->plugin_data       = $plugin_data;
-		$this->nonce             = new Inpsyde_Nonce_Validator( $this->key, get_current_blog_id() );
+		$this->plugin_data = $plugin_data;
+		$this->nonce = new Inpsyde_Nonce_Validator( $this->key, get_current_blog_id() );
 		$this->request_validator = new Mlp_Save_Post_Request_Validator( $this->nonce );
 
 		/**
-		 * Filter to add or delete allowed post_types
+		 * Filter to add or delete allowed post types.
 		 *
-		 * @param   Array $allowed_post_types
-		 * @param         Mlp_Translation_Metabox
+		 * @param array                   $allowed_post_types
+		 * @param Mlp_Translation_Metabox $metabox
 		 */
 		$this->allowed_post_types = (array) apply_filters(
 			'mlp_allowed_post_types',
@@ -79,7 +83,7 @@ class Mlp_Translation_Metabox {
 		/**
 		 * Filter to remove the save_post-Action and to implement your own logic
 		 *
-		 * @param   Boolean false
+		 * @param bool $external_save_method Use external save method?
 		 */
 		$mlp_external_save_method = (bool) apply_filters( 'mlp_external_save_method', FALSE );
 
@@ -99,23 +103,20 @@ class Mlp_Translation_Metabox {
 		/**
 		 * Hook to add more options to the meta boxes.
 		 *
-		 * @param   array $translator_init_args array(
-		 *                                      'nonce'                 => String
-		 *                                      'request_validator'     => Mlp_Save_Post_Request_Validator,
-		 *                                      'allowed_post_types'    => Array
-		 *                                      'basic_data'            => Mlp_Translatable_Post_Data,
-		 *                                      'instance'            => Mlp_Translation_Metabox
-		 *                                      )
+		 * @param array $translator_init_args Arguments {
+		 *                                    'nonce'              => Inpsyde_Nonce_Validator
+		 *                                    'request_validator'  => Mlp_Save_Post_Request_Validator
+		 *                                    'allowed_post_types' => array
+		 *                                    'basic_data'         => Mlp_Translatable_Post_Data
+		 *                                    'instance'           => Mlp_Translation_Metabox
+		 *                                    }
 		 */
-		do_action(
-			'mlp_post_translator_init',
-			$translator_init_args
-		);
+		do_action( 'mlp_post_translator_init', $translator_init_args );
 	}
 
 	/**
-	 * @param  string  $post_type
-	 * @param  WP_Post $post
+	 * @param string  $post_type
+	 * @param WP_Post $post
 	 *
 	 * @return void
 	 */
@@ -129,16 +130,12 @@ class Mlp_Translation_Metabox {
 		$site_relations = $this->plugin_data->get( 'site_relations' );
 		$related_blogs = $site_relations->get_related_sites( $current_blog_id, FALSE );
 
-		if ( empty ( $related_blogs ) ) {
+		if ( empty( $related_blogs ) ) {
 			return;
 		}
 
 		foreach ( $related_blogs as $blog_id ) {
-
-			/**
-			 * Do not allow enable translations if the user
-			 * is lacking capabilities for the remote blog
-			 */
+			// Do not allow translations if the user is lacking capabilities for the remote blog
 			if ( ! $this->is_translatable_by_user( $post, $blog_id ) ) {
 				continue;
 			}
@@ -153,43 +150,39 @@ class Mlp_Translation_Metabox {
 	}
 
 	/**
-	 * Checks if the current user has the appropriate capabilities to edit a given post
+	 * Check if the current user has the appropriate capabilities to edit the given post.
 	 *
 	 * @param WP_Post $post
-	 * @param bool    $blog_id
+	 * @param int     $blog_id
 	 *
 	 * @return bool
 	 */
-	private function is_translatable_by_user( WP_Post $post, $blog_id = FALSE ) {
+	private function is_translatable_by_user( WP_Post $post, $blog_id ) {
 
-		$can = FALSE;
+		$blog_id = absint( $blog_id );
 
-		$blog_id     = ( ! $blog_id ) ? get_current_blog_id() : $blog_id;
 		$remote_post = $this->data->get_remote_post( $post, $blog_id );
-
 		if ( isset( $remote_post->dummy ) && $remote_post->dummy === TRUE ) {
-			$can = current_user_can_for_blog( $blog_id, 'publish' );
-		} else {
-			$can = current_user_can_for_blog( $blog_id, 'edit_post', $remote_post->ID );
+			return current_user_can_for_blog( $blog_id, 'publish' );
 		}
 
-		return $can;
+		return current_user_can_for_blog( $blog_id, 'edit_post', $remote_post->ID );
 	}
 
 	/**
 	 * Register one box for each connected site.
 	 *
-	 * @param  int     $blog_id
-	 * @param  WP_Post $post
+	 * @param int     $blog_id
+	 * @param WP_Post $post
 	 *
 	 * @return void
 	 */
 	private function register_metabox_per_language( $blog_id, WP_Post $post ) {
 
-		$view        = new Mlp_Translation_Metabox_View( $this->nonce );
-		$lang        = $this->data->get_remote_language( $blog_id );
+		$view = new Mlp_Translation_Metabox_View( $this->nonce );
+		$lang = $this->data->get_remote_language( $blog_id );
 		$remote_post = $this->data->get_remote_post( $post, $blog_id );
-		$title       = $this->get_metabox_title( $blog_id, $remote_post, $lang );
+		$title = $this->get_metabox_title( $blog_id, $remote_post, $lang );
 
 		$metabox_data = array(
 			'remote_blog_id' => $blog_id,
@@ -207,7 +200,7 @@ class Mlp_Translation_Metabox {
 			$metabox_data
 		);
 
-		if ( empty ( $remote_post->dummy ) ) {
+		if ( empty( $remote_post->dummy ) ) {
 			$this->register_metabox_view_details( $view, $post, $blog_id );
 		} else {
 			$checkbox_callback = apply_filters(
@@ -232,9 +225,9 @@ class Mlp_Translation_Metabox {
 	/**
 	 * Create the title for each metabox.
 	 *
-	 * @param  int     $blog_id
-	 * @param  WP_Post $post
-	 * @param  string  $language
+	 * @param int     $blog_id
+	 * @param WP_Post $post
+	 * @param string  $language
 	 *
 	 * @return string
 	 */
@@ -247,9 +240,9 @@ class Mlp_Translation_Metabox {
 		);
 
 		$site_name = get_blog_option( $blog_id, 'blogname' );
-		$title     = sprintf( $text, $site_name, $language );
+		$title = sprintf( $text, $site_name, $language );
 
-		if ( ! empty ( $post->dummy ) ) // this is a fake post
+		if ( ! empty( $post->dummy ) ) // this is a fake post
 		{
 			return $title;
 		}
@@ -263,9 +256,9 @@ class Mlp_Translation_Metabox {
 	/**
 	 * Register separate input fields.
 	 *
-	 * @param  Mlp_Translation_Metabox_View $view
-	 * @param  WP_Post                      $post
-	 * @param  int                          $blog_id
+	 * @param Mlp_Translation_Metabox_View $view
+	 * @param WP_Post                      $post
+	 * @param int                          $blog_id
 	 *
 	 * @return void
 	 */
@@ -295,21 +288,21 @@ class Mlp_Translation_Metabox {
 			$blog_id
 		);
 
-		if ( empty ( $callbacks ) ) {
+		if ( empty( $callbacks ) ) {
 			return;
 		}
 
-		if ( ! empty ( $callbacks[ 'title' ] ) && post_type_supports( $post->post_type, 'title' ) ) {
+		if ( ! empty( $callbacks[ 'title' ] ) && post_type_supports( $post->post_type, 'title' ) ) {
 			add_action( 'mlp_translation_meta_box_top_' . $blog_id, $callbacks[ 'title' ], 10, 3 );
 		}
 
-		if ( ! empty ( $callbacks[ 'editor' ] ) && post_type_supports( $post->post_type, 'editor' ) ) {
+		if ( ! empty( $callbacks[ 'editor' ] ) && post_type_supports( $post->post_type, 'editor' ) ) {
 			add_action( 'mlp_translation_meta_box_main_' . $blog_id, $callbacks[ 'editor' ], 10, 3 );
 		}
 
-		if ( ! empty ( $callbacks[ 'upgrade' ] )
+		if ( ! empty( $callbacks[ 'upgrade' ] )
 			&& 'MultilingualPress Pro' !== $this->plugin_data->get( 'plugin_name' )
-		)
+		) {
 			add_action( 'mlp_translation_meta_box_bottom_' . $blog_id, $callbacks[ 'upgrade' ], 10, 3 );
 		}
 	}
@@ -323,7 +316,7 @@ class Mlp_Translation_Metabox {
 
 		global $pagenow;
 
-		if ( empty ( $pagenow ) ) {
+		if ( empty( $pagenow ) ) {
 			return FALSE;
 		}
 
@@ -333,9 +326,9 @@ class Mlp_Translation_Metabox {
 	/**
 	 * Used for the metabox title.
 	 *
-	 * @param  int    $post_id
-	 * @param  int    $blog_id
-	 * @param  string $text
+	 * @param int    $post_id
+	 * @param int    $blog_id
+	 * @param string $text
 	 *
 	 * @return string
 	 */
@@ -355,8 +348,8 @@ class Mlp_Translation_Metabox {
 	/**
 	 * Status and, if available, publishing time.
 	 *
-	 * @param  int     $blog_id
-	 * @param  WP_Post $remote_post
+	 * @param int     $blog_id
+	 * @param WP_Post $remote_post
 	 *
 	 * @return string
 	 */
@@ -368,7 +361,7 @@ class Mlp_Translation_Metabox {
 
 		$status = get_post_status( $remote_post );
 
-		if ( ! empty ( $existing_statuses[ $status ] ) ) {
+		if ( ! empty( $existing_statuses[ $status ] ) ) {
 			$translated_status = $existing_statuses[ $status ];
 		} else {
 			$translated_status = ucfirst( $status );
@@ -382,7 +375,7 @@ class Mlp_Translation_Metabox {
 				$remote_post
 			);
 
-			$template          = esc_html_x(
+			$template = esc_html_x(
 				'%1$s (%2$s)',
 				'No HTML; 1 = post status, 2 = publish time',
 				'multilingualpress'
@@ -394,4 +387,5 @@ class Mlp_Translation_Metabox {
 
 		return $translated_status;
 	}
+
 }
