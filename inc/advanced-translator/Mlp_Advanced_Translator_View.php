@@ -45,7 +45,7 @@ class Mlp_Advanced_Translator_View {
 		}
 		?>
 		<a href="#" class="mlp_copy_button button"
-			data-blog_id="<?php print $matches[ 1 ]; ?>">
+			data-blog_id="<?php echo $matches[ 1 ]; ?>">
 			<?php
 			esc_attr_e( 'Copy source post', 'multilingualpress' );
 			?>
@@ -76,11 +76,11 @@ class Mlp_Advanced_Translator_View {
 				<input
 					class="mlp_title"
 					type="text"
-					name="<?php print $name; ?>"
+					name="<?php echo $name; ?>"
 					size="30"
-					placeholder="<?php print $placeholder ?>"
-					value="<?php print $title; ?>"
-					id="<?php print $id; ?>"
+					placeholder="<?php echo $placeholder ?>"
+					value="<?php echo $title; ?>"
+					id="<?php echo $id; ?>"
 					>
 			</div>
 		</div>
@@ -111,22 +111,22 @@ class Mlp_Advanced_Translator_View {
 		?>
 		<div class="mlp_namediv">
 			<div>
-				<label for=""> <?php _e( 'Post Name: ', 'multilingualpress' ) ?><br>
+				<label for="<?php echo $id; ?>">
+					<?php _e( 'Post Name: ', 'multilingualpress' ) ?><br>
 					<input
 						class="mlp_name"
 						type="text"
-						name="<?php print $name; ?>"
+						name="<?php echo $name; ?>"
 						size="30"
-						placeholder="<?php print $placeholder ?>"
-						value="<?php print $value; ?>"
-						id="<?php print $id; ?>"
+						placeholder="<?php echo $placeholder ?>"
+						value="<?php echo $value; ?>"
+						id="<?php echo $id; ?>"
 						>
 				</label>
 			</div>
 		</div>
 	<?php
 	}
-
 
 	/**
 	 * @param WP_Post $source_post
@@ -150,13 +150,14 @@ class Mlp_Advanced_Translator_View {
 		?>
 		<div class="mlp_excerptdiv">
 			<div>
-				<label for=""> <?php _e( 'Post Excerpt: ', 'multilingualpress' ) ?><br>
+				<label for="<?php echo $id; ?>">
+					<?php _e( 'Post Excerpt: ', 'multilingualpress' ) ?><br>
 					<textarea
 						class="mlp_excerpt"
-						name="<?php print $name; ?>"
-						placeholder="<?php print $placeholder ?>"
-						id="<?php print $id; ?>"
-						><?php print $value; ?></textarea>
+						name="<?php echo $name; ?>"
+						placeholder="<?php echo $placeholder ?>"
+						id="<?php echo $id; ?>"
+						><?php echo $value; ?></textarea>
 			</div>
 		</div>
 	<?php
@@ -208,9 +209,9 @@ class Mlp_Advanced_Translator_View {
 		?>
 
 		<p>
-			<label for="<?php print $id; ?>_id">
-				<input type="checkbox" name="<?php print $name; ?>"
-					id="<?php print $id; ?>_id" value="1" />
+			<label for="<?php echo $id; ?>_id">
+				<input type="checkbox" name="<?php echo $name; ?>"
+					id="<?php echo $id; ?>_id" value="1" />
 				<?php _e( 'Copy the featured image of the source post.', 'multilingualpress' ); ?>
 				<span class="description"><?php
 					_e( 'Overwrites an existing featured image in the target post.', 'multilingualpress' );
@@ -253,14 +254,14 @@ class Mlp_Advanced_Translator_View {
 			)
 		);
 
-		print "<div id='$toggle_id' class='hidden'>";
+		echo "<div id='$toggle_id' class='hidden'>";
 
 		if ( ! empty( $taxonomies[ 'inclusive' ] ) ) {
 			foreach ( $taxonomies[ 'inclusive' ] as $taxonomy => $data ) {
 				$this->list_inclusive_terms( $taxonomy, $data, $remote_blog_id );
 			}
 
-			print '<br class="clear">';
+			echo '<br class="clear">';
 		}
 
 		if ( ! empty( $taxonomies[ 'exclusive' ] ) ) {
@@ -268,10 +269,10 @@ class Mlp_Advanced_Translator_View {
 				$this->list_exclusive_terms( $taxonomy, $data, $remote_blog_id );
 			}
 
-			print '<br class="clear">';
+			echo '<br class="clear">';
 		}
 
-		print '</div>';
+		echo '</div>';
 	}
 
 	/**
@@ -447,8 +448,8 @@ class Mlp_Advanced_Translator_View {
 
 		?>
 		<fieldset class="mlp_taxonomy_box">
-			<legend><?php print $title; ?></legend>
-			<?php print $html; ?>
+			<legend><?php echo $title; ?></legend>
+			<?php echo $html; ?>
 		</fieldset>
 	<?php
 	}

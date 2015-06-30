@@ -562,11 +562,11 @@ class Mlp_Advanced_Translator_Data
 	 */
 	private function get_remote_post_excerpt( array $data ) {
 
-		if ( isset ( $data[ 'excerpt' ] ) ) {
+		if ( isset( $data[ 'excerpt' ] ) ) {
 			return $data[ 'excerpt' ];
 		}
 
-		if ( isset ( $this->post_request_data[ 'post_excerpt' ] ) ) {
+		if ( isset( $this->post_request_data[ 'post_excerpt' ] ) ) {
 			return (string) $this->post_request_data[ 'post_excerpt' ];
 		}
 
