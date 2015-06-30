@@ -55,80 +55,69 @@ class Mlp_Term_Translation_Selector {
 	 */
 	public function print_table() {
 
-		if ( empty ( $this->related_sites ) )
+		if ( empty( $this->related_sites ) ) {
 			return FALSE;
+		}
 
-		print $this->presenter->get_nonce_field();
+		echo $this->presenter->get_nonce_field();
+
 		$this->print_style();
 		?>
-
 		<table class="mlp_term_selections">
-			<?php
-			foreach ( $this->related_sites as $site_id => $language ) {
-
-				$key          = $this->presenter->get_key_base( $site_id );
-				$label_id     = $this->get_label_id( $key );
-				$terms        = $this->presenter->get_terms_for_site( $site_id );
+			<?php foreach ( $this->related_sites as $site_id => $language ) : ?>
+				<?php
+				$key = $this->presenter->get_key_base( $site_id );
+				$label_id = $this->get_label_id( $key );
+				$terms = $this->presenter->get_terms_for_site( $site_id );
 				?>
 				<tr>
 					<th>
-						<label for="<?php print $label_id; ?>"><?php
-							print $language;
-						?></label>
+						<label for="<?php print $label_id; ?>"><?php echo $language; ?></label>
 					</th>
 					<td>
-						<?php
-						if ( empty ( $terms ) ) {
-							print $this->get_no_terms_found_message( $site_id );
-						}
-						else {
-							?>
-							<select name="<?php print $key; ?>"
-									id="<?php print $label_id; ?>">
-								<option value="0" class="mlp_empty_option"><?php
-									esc_html_e( 'No translation', 'multilingualpress' );
-									?></option>
-								<?php
-								$this->print_term_options( $site_id, $terms );
-								?>
+						<?php if ( empty( $terms ) ) : ?>
+							<?php echo $this->get_no_terms_found_message( $site_id ); ?>
+						<?php else : ?>
+							<select name="<?php echo $key; ?>" id="<?php echo $label_id; ?>">
+								<option value="0" class="mlp_empty_option">
+									<?php esc_html_e( 'No translation', 'multilingualpress' ); ?>
+								</option>
+								<?php $this->print_term_options( $site_id, $terms ); ?>
 							</select>
-						<?php
-						}
-						?>
+						<?php endif; ?>
 					</td>
 				</tr>
-				<?php
-			}
-			?>
+			<?php endforeach; ?>
 		</table>
 		<?php
-
 		return TRUE;
 	}
 
 	/**
-	 * Create the message to display when there are not terms on the other site
+	 * Create the message to display when there are no terms on the other site.
 	 *
-	 * @param  int $site_id
+	 * @param int $site_id
+	 *
 	 * @return string
 	 */
 	private function get_no_terms_found_message( $site_id ) {
 
-		$taxonomy_name     = $this->presenter->get_taxonomy();
-		$taxonomy_object   = get_taxonomy( $taxonomy_name );
-		$taxonomy_labels   = get_taxonomy_labels( $taxonomy_object );
-		$text              = esc_html( $taxonomy_labels->not_found );
-		$admin_url         = get_admin_url( $site_id, 'edit-tags.php' );
+		$taxonomy_name = $this->presenter->get_taxonomy();
+
+		$admin_url = get_admin_url( $site_id, 'edit-tags.php' );
 		$taxonomy_edit_url = add_query_arg(
 			'taxonomy',
 			$taxonomy_name,
 			$admin_url
 		);
-		$url               = esc_url( $taxonomy_edit_url );
+		$url = esc_url( $taxonomy_edit_url );
+
+		$taxonomy_object = get_taxonomy( $taxonomy_name );
+		$text = isset( $taxonomy_object->labels->not_found )
+			? esc_html( $taxonomy_object->labels->not_found )
+			: esc_html__( 'No terms found.', 'multilingualpress' );
 
 		return sprintf( '<p><a href="%1$s">%2$s</a></p>', $url, $text );
-
-
 	}
 
 	/**
@@ -222,4 +211,5 @@ class Mlp_Term_Translation_Selector {
 
 		return str_replace( array( '[', ']' ), '', $key );
 	}
+
 }

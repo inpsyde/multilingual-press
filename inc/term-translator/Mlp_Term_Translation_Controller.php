@@ -48,23 +48,22 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	}
 
 	/**
-	 * @wp-hook mlp_and_wp_loaded
 	 * @return bool
 	 */
 	public function setup() {
 
 		$taxonomies = $this->get_valid_taxonomies();
-
-		if ( empty ( $taxonomies ) )
+		if ( empty( $taxonomies ) ) {
 			return FALSE;
+		}
 
 		$fields = new Mlp_Term_Fields( $taxonomies, $this );
-		add_action( 'load-edit-tags.php', array ( $fields, 'setup' ) );
+		add_action( 'load-edit-tags.php', array( $fields, 'setup' ) );
 
 		$post_data = $this->get_post_data();
-
-		if ( empty ( $post_data ) )
+		if ( empty( $post_data ) ) {
 			return TRUE;
+		}
 
 		$this->activate_switcher();
 		$this->activate_term_connector( $taxonomies, $post_data );
@@ -92,31 +91,33 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	/**
 	 * Called by the generic view Mlp_Term_Field_View.
 	 *
-	 * @param  string $name
-	 * @return bool  TRUE when an action was called, FALSE for an unrecognized $name.
+	 * @param string $name
+	 *
+	 * @return bool
 	 */
 	public function update( $name ) {
 
 		$view = $this->get_view();
 
-		if ( Mlp_Term_Field_View::ADD_TERM_FIELDSET_ID === $name )
+		if ( Mlp_Term_Field_View::ADD_TERM_FIELDSET_ID === $name ) {
 			return $view->print_fieldset_id();
+		}
 
-		$table_positions = array (
+		$table_positions = array(
 			Mlp_Term_Field_View::ADD_TERM_FIELDS,
 			Mlp_Term_Field_View::EDIT_TERM_FIELDS
 		);
-
-		if ( in_array( $name, $table_positions ) )
+		if ( in_array( $name, $table_positions ) ) {
 			return $view->print_table();
+		}
 
-		$title_positions = array (
+		$title_positions = array(
 			Mlp_Term_Field_View::ADD_TERM_TITLE,
 			Mlp_Term_Field_View::EDIT_TERM_TITLE
 		);
-
-		if ( in_array( $name, $title_positions ) )
+		if ( in_array( $name, $title_positions ) ) {
 			return $view->print_title();
+		}
 
 		return FALSE;
 	}
@@ -197,4 +198,5 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			);
 		}
 	}
+
 }

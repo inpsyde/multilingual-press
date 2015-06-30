@@ -54,13 +54,15 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	}
 
 	/**
-	 * (non-PHPdoc)
-	 * @see Mlp_Updatable::update()
+	 * @param string $name
+	 *
+	 * @return void
 	 */
 	public function update( $name ) {
 
-		if ( 'create_tab_content' === $name )
+		if ( 'create_tab_content' === $name ) {
 			$this->create_tab_content();
+		}
 	}
 
 	/**
