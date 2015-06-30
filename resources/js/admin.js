@@ -61,6 +61,7 @@
 			var prefix = 'mlp_translation_data_' + blogId,
 				translationContent = tinyMCE.get( prefix + '_content' ),
 				content = $( '#content' ).val(), // plain content for "text"-view,
+				excerpt = $( '#excerpt' ).val(), // plain content for "text"-view,
 				tinyMCEContent = tinyMCE.get( 'content' ),
 				title = $( '#title' ).val(),
 				postSlug = $( '#editable-post-name' ).html();
@@ -75,6 +76,10 @@
 
 			if ( postSlug ) {
 				$( '#' + prefix + '_name' ).val( postSlug );
+			}
+
+			if ( excerpt ) {
+				$( '#' + prefix + '_excerpt' ).val( excerpt );
 			}
 
 			if ( tinyMCEContent ) {
