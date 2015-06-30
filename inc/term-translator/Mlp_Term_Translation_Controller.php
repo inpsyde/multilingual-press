@@ -89,11 +89,9 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	}
 
 	/**
-	 * Called by the generic view Mlp_Term_Field_View.
-	 *
 	 * @param string $name
 	 *
-	 * @return bool
+	 * @return mixed|void Either a value, or void for actions.
 	 */
 	public function update( $name ) {
 

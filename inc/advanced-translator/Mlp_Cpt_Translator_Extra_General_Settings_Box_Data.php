@@ -84,13 +84,15 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	}
 
 	/**
-	 * @param  string $name
-	 * @return void|mixed  Either void for actions or a value.
+	 * @param string $name
+	 *
+	 * @return mixed|void Either a value, or void for actions.
 	 */
 	public function update( $name ) {
 
-		if ( 'general.settings.extra.box' === $name )
+		if ( 'general.settings.extra.box' === $name ) {
 			return $this->get_box_content();
+		}
 
 		return '';
 	}
@@ -211,4 +213,5 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 
 		return $this->post_types;
 	}
+
 }

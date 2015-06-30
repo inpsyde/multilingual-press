@@ -56,7 +56,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	/**
 	 * @param string $name
 	 *
-	 * @return void
+	 * @return mixed|void Either a value, or void for actions.
 	 */
 	public function update( $name ) {
 

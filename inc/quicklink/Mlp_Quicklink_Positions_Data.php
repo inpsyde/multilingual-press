@@ -80,17 +80,15 @@ class Mlp_Quicklink_Positions_Data
 	}
 
 	/**
-	 * Respond to request for more content from the view.
+	 * @param string $name
 	 *
-	 * This is not ideal, I know.
-	 *
-	 * @param  string $name
-	 * @return mixed  Either void for actions or a value.
+	 * @return mixed|void Either a value, or void for actions.
 	 */
 	public function update( $name ) {
 
-		if ( 'general.settings.extra.box' === $name )
+		if ( 'general.settings.extra.box' === $name ) {
 			return $this->get_box_content();
+		}
 
 		return '';
 	}
@@ -158,4 +156,5 @@ class Mlp_Quicklink_Positions_Data
 			'br' => esc_attr__( 'Bottom right', 'multilingualpress' ),
 		);
 	}
+
 }

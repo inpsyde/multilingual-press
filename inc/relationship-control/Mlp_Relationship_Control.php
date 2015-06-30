@@ -147,11 +147,9 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	}
 
 	/**
-	 * Simple event handler.
+	 * @param string $name
 	 *
-	 * @uses   Mlp_Relationship_Control_Ajax_Search
-	 * @param  string $name
-	 * @return void
+	 * @return mixed|void Either a value, or void for actions.
 	 */
 	public function update( $name ) {
 
@@ -177,4 +175,5 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 		// Our AJAX actions start with $this->prefix
 		return 0 === strpos( $_REQUEST['action'], $this->prefix );
 	}
+
 }

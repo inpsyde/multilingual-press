@@ -142,15 +142,17 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	}
 
 	/**
-	 * @param  string $name
-	 * @return mixed|void  Either void for actions or a value.
+	 * @param string $name
+	 *
+	 * @return mixed|void Either a value, or void for actions.
 	 */
 	public function update( $name ) {
 
-		if ( 'custom.post-type.list' === $name )
+		if ( 'custom.post-type.list' === $name ) {
 			return $this->get_custom_post_types();
+		}
 
-		return;
+		return '';
 	}
 
 	/**

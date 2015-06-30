@@ -91,12 +91,12 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	}
 
 	/**
-	 * @param  string $name
-	 * @return mixed|void  Either void for actions or a value.
+	 * @param string $name
+	 *
+	 * @return mixed|void Either a value, or void for actions.
 	 */
 	public function update( $name ) {
 
-		//
 	}
 
 	/**

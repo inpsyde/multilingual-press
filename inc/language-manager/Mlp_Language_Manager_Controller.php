@@ -133,32 +133,38 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 	/**
 	 * @param string $name
-	 * @return void
+	 *
+	 * @return mixed|void Either a value, or void for actions.
 	 */
 	public function update( $name ) {
 
 		if ( 'before_form' === $name ) {
 			$this->before_form();
+
 			return;
 		}
 
 		if ( 'before_table' === $name ) {
 			$this->before_table();
+
 			return;
 		}
 
 		if ( 'show_table' === $name ) {
 			$this->show_table();
+
 			return;
 		}
 
 		if ( 'after_table' === $name ) {
 			$this->after_table();
+
 			return;
 		}
 
-		if ( 'after_form' === $name )
+		if ( 'after_form' === $name ) {
 			$this->after_form();
+		}
 	}
 
 	/**
