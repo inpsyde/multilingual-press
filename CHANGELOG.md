@@ -59,6 +59,7 @@ dboune.
 - Add post slug to Advanced Translator, see [issue #119](https://github.com/inpsyde/multilingual-press/issues/119).
 - Show Translation meta box only for users who have the required capability, see
 [issue #116](https://github.com/inpsyde/multilingual-press/issues/116).
+- Add post excerpt to Advanced Translator, see [issue #102](https://github.com/inpsyde/multilingual-press/issues/102).
 
 ## 2.1.2 Edith Fellowes
 - Combine all scripts and stylesheets, separated for frontend and backend.
