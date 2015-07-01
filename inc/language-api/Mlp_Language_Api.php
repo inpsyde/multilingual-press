@@ -89,8 +89,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 * Usage:
 	 * <code>
 	 * $mlp_language_api = apply_filters( 'mlp_language_api', NULL );
-	 * if ( is_a( $mlp_language_api, 'Mlp_Language_Api_Interface' ) )
-	 * {
+	 * if ( is_a( $mlp_language_api, 'Mlp_Language_Api_Interface' ) ) {
 	 *     // do something
 	 * }
 	 * </code>
@@ -344,10 +343,12 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		}
 
 		/**
-		 * Filter list of translations before they are used.
+		 * Filter the translations before they are used.
 		 *
-		 * @param array $translations Prepared translations
-		 * @param array $arguments    Prepared arguments
+		 * @param array $translations Translations.
+		 * @param array $arguments    Translation arguments.
+		 *
+		 * @return array
 		 */
 		$translations = apply_filters( 'mlp_translations', $translations, $arguments );
 		wp_cache_set( $key, $translations, 'mlp' );
@@ -666,7 +667,16 @@ WHERE `http_name` IN( $values )";
 
 		$arguments = wp_parse_args( $args, $defaults );
 
-		return apply_filters( 'mlp_get_translations_arguments', $arguments );
+		/**
+		 * Filter the translation arguments.
+		 *
+		 * @param array $arguments Translation arguments.
+		 *
+		 * @return array
+		 */
+		$arguments = apply_filters( 'mlp_get_translations_arguments', $arguments );
+
+		return $arguments;
 	}
 
 	/**

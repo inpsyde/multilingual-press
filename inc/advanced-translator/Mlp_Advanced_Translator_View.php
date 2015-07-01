@@ -329,6 +329,7 @@ class Mlp_Advanced_Translator_View {
 	private function get_placeholder_title( WP_Post $post ) {
 
 		$placeholder = __( 'Enter title here', 'multilingualpress' );
+		/** This filter is documented in wp-admin/edit-form-advanced.php */
 		$placeholder = apply_filters( 'enter_title_here', $placeholder, $post );
 
 		return esc_attr( $placeholder );

@@ -200,13 +200,15 @@ class Mlp_Duplicate_Blogs {
 		);
 
 		/**
-		 * Filter tables to copy.
+		 * Filter the to-be-duplicated tables.
 		 *
-		 * Use this if you want to add custom tables to the copy process.
+		 * @param string[] $tables  Table names.
+		 * @param int[]    $context Duplication context. {
+		 *                          'source_blog_id' => int
+		 *                          'new_blog_id'    => int
+		 *                          }
 		 *
-		 * @param  array $tables
-		 * @param  array $context Two blog ids: 'source_blog_id' and 'new_blog_id'.
-		 * @return array
+		 * @return string[]
 		 */
 		$tables = apply_filters( 'mlp_tables_to_duplicate', $tables, $context );
 
@@ -393,31 +395,30 @@ class Mlp_Duplicate_Blogs {
 		<?php
 
 		/**
-		 * Customize default value for search engine visibility when adding a new site.
+		 * Filter the default value for the search engine visibility when adding a new site.
 		 *
-		 * @param bool $visibility Should the new site be visible by default?
+		 * @param bool $visible Should the new site be visible by default?
+		 *
+		 * @return bool
 		 */
-		$visibility = (bool) apply_filters( 'mlp_default_search_engine_visibility', FALSE );
+		$visible = (bool) apply_filters( 'mlp_default_search_engine_visibility', FALSE );
 
 		?>
 		<tr class="form-field">
 			<td>
-				<?php
-				esc_html_e( 'Search Engine Visibility', 'multilingualpress' );
-				?>
+				<?php esc_html_e( 'Search Engine Visibility', 'multilingualpress' ); ?>
 			</td>
 			<td>
 				<label for="inpsyde_multilingual_visibility">
-					<input type="checkbox" value="0" id="inpsyde_multilingual_visibility" name="blog[visibility]" <?php checked( $visibility, FALSE ); ?>>
+					<input type="checkbox" value="0" id="inpsyde_multilingual_visibility" name="blog[visibility]"
+						<?php checked( $visible, FALSE ); ?>>
 					<?php
 					esc_html_e( 'Discourage search engines from indexing this site', 'multilingualpress' );
 					?>
 				</label>
 
 				<p class="description">
-					<?php
-					esc_html_e( 'It is up to search engines to honor this request.', 'multilingualpress' );
-					?>
+					<?php esc_html_e( 'It is up to search engines to honor this request.', 'multilingualpress' ); ?>
 				</p>
 			</td>
 		</tr>

@@ -21,8 +21,7 @@ interface Mlp_Language_Api_Interface {
 	 * Usage:
 	 * <code>
 	 * $mlp_language_api = apply_filters( 'mlp_language_api', NULL );
-	 * if ( is_a( $mlp_language_api, 'Mlp_Language_Api_Interface' ) )
-	 * {
+	 * if ( is_a( $mlp_language_api, 'Mlp_Language_Api_Interface' ) ) {
 	 *     // do something
 	 * }
 	 * </code>
@@ -83,4 +82,5 @@ interface Mlp_Language_Api_Interface {
 	 * @return Mlp_Url_Interface
 	 */
 	public function get_flag_by_language( $language, $site_id = 0 );
+
 }

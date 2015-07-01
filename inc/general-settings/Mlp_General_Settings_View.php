@@ -59,8 +59,16 @@ class Mlp_General_Settings_View {
 
 			foreach ( $modules as $slug => $module ) {
 
-				if ( apply_filters( 'mlp_dont_show_module_' . $slug, FALSE ) )
+				/**
+				 * Filter the visibility of the module in the features table.
+				 *
+				 * @param bool $invisible Should the module be hidden?
+				 *
+				 * @return bool
+				 */
+				if ( apply_filters( "mlp_dont_show_module_$slug", FALSE ) ) {
 					continue;
+				}
 
 				print $this->module_row( $slug, $module );
 

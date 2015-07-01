@@ -218,6 +218,7 @@ class Mlp_Widget extends WP_Widget {
 		if ( isset( $instance[ 'widget_title' ] ) ) {
 			$title = $instance[ 'widget_title' ];
 		}
+		/** This filter is documented in wp-includes/default-widgets.php */
 		$title = apply_filters( 'widget_title', $title );
 
 		echo $args[ 'before_widget' ];

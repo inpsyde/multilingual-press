@@ -47,25 +47,24 @@ class Mlp_Dashboard_Widget {
 
 		$context = array (
 			'post_id'       => $post_id,
-			'is_translated' => $is_translated
+			'is_translated' => $is_translated,
 		);
 
 		/**
-		 * Whether to show the checkbox
+		 * Filter the visibility of the 'Translation completed' checkbox.
 		 *
-		 * Use this when you want to hide the checkbox for certain users.
+		 * @param bool  $show_checkbox Show the checkbox?
+		 * @param array $context       Post context. {
+		 *                             'post_id'       => int
+		 *                             'is_translated' => bool
+		 *                             }
 		 *
-		 * @param array $context {
-		 *     @type int  $post_id        Current post ID. 0 for auto-drafts.
-		 *     @type bool $is_translated  Whether the post has been marked as a completed translation already.
-		 * }
 		 * @return bool
 		 */
-		$show = apply_filters( 'mlp_show_translation_completed_checkbox', TRUE, $context );
-
-		if ( ! $show )
+		$show_checkbox = (bool) apply_filters( 'mlp_show_translation_completed_checkbox', TRUE, $context );
+		if ( ! $show_checkbox ) {
 			return;
-
+		}
 		?>
 		<div class="misc-pub-section">
 			<label for="post_is_translated">
@@ -90,13 +89,15 @@ class Mlp_Dashboard_Widget {
 		/**
 		 * Filter the capability required to view the dashboard widget.
 		 *
-		 * @param string $capability
+		 * @param string $capability Capability required to view the dashboard widget.
+		 *
+		 * @return string
 		 */
 		$capability = apply_filters( 'mlp_dashboard_widget_access', 'edit_others_posts' );
 
-		if ( user_can( get_current_user_id(), $capability ) )
+		if ( current_user_can( $capability ) )
 			wp_add_dashboard_widget(
-				'multilingualpress' . '-dashboard-widget',
+				'multilingualpress-dashboard-widget',
 				__( 'Untranslated Posts', 'multilingualpress' ),
 				array( $this, 'dashboard_widget' )
 			);

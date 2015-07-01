@@ -325,10 +325,12 @@ class Mlp_Advanced_Translator_Data
 			$new[ 'ID' ] = $post_data[ 'remote_post_id' ];
 
 			/**
-			 * Filter post data before it is saved to database.
+			 * Filter the new post data before it is saved to the database.
 			 *
-			 * @param array $new_post
-			 * @param array $save_context
+			 * @param array $new_post_data New post data.
+			 * @param array $post_data     Original post data.
+			 *
+			 * @return array
 			 */
 			$new = apply_filters( 'mlp_pre_save_post', $new, $this->save_context );
 
@@ -339,10 +341,12 @@ class Mlp_Advanced_Translator_Data
 		$new[ 'post_status' ] = 'draft';
 
 		/**
-		 * Filter post data before it is insert to database.
+		 * Filter the new post data before it is inserted into the database.
 		 *
-		 * @param array $new_post
-		 * @param array $save_context
+		 * @param array $new_post_data New post data.
+		 * @param array $post_data     Original post data.
+		 *
+		 * @return array
 		 */
 		$new = apply_filters( 'mlp_pre_insert_post', $new, $this->save_context );
 
@@ -669,21 +673,20 @@ class Mlp_Advanced_Translator_Data
 	/**
 	 * Checks if more than one term can be assigned to a taxonomy.
 	 *
-	 * @param $taxonomy
+	 * @param string $taxonomy Taxonomy name.
 	 *
 	 * @return bool
 	 */
 	private function taxonomy_is_mutually_exclusive( $taxonomy ) {
 
 		/**
-		 * Filter to exclude taxonomies
+		 * Filter mutually exclusive taxonomies.
 		 *
-		 * @param array $taxonomies
+		 * @param string[] $taxonomies Mutually exclusive taxonomy names.
+		 *
+		 * @return string[]
 		 */
-		$exclusive = apply_filters(
-			'mlp_mutually_exclusive_taxonomies',
-			array( 'post_format' )
-		);
+		$exclusive = apply_filters( 'mlp_mutually_exclusive_taxonomies', array( 'post_format' ) );
 
 		return in_array( $taxonomy, $exclusive );
 	}
