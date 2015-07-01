@@ -110,20 +110,22 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 	public function get_remote_url() {
 
 		/**
-		 * Customize the remote URL of the linked element.
+		 * Filter the remote URL of the linked element.
 		 *
-		 * @param string                         $remote_url        URL of the remote post.
-		 * @param int                            $target_site_id    ID of the target site.
-		 * @param int                            $target_content_id ID of the target post.
-		 * @param Mlp_Translation_Interface|NULL $translation       Translation object. NULL, if there is no translation.
+		 * @param string                    $remote_url        URL of the remote post.
+		 * @param int                       $target_site_id    ID of the target site.
+		 * @param int                       $target_content_id ID of the target post.
+		 * @param Mlp_Translation_Interface $translation       Translation object. NULL, if there is no translation.
 		 */
-		return (string) apply_filters(
+		$remote_url = (string) apply_filters(
 			'mlp_linked_element_link',
 			(string) $this->remote_url,
 			$this->get_target_site_id(),
 			$this->get_target_content_id(),
 			$this
 		);
+
+		return $remote_url;
 	}
 
 	/**

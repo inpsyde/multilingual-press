@@ -87,13 +87,17 @@ class Mlp_Redirect_Frontend {
 			return FALSE;
 
 		/**
-		 * Use this hook to intercept the redirection early.
+		 * Filter whether the user should be redirected.
 		 *
-		 * @param bool TRUE Should the redirect happen or not.
+		 * @param bool $do_redirect Redirect or not?
+		 *
+		 * @return bool
 		 */
-		if ( ! apply_filters( 'mlp_do_redirect', TRUE ) )
+		if ( ! apply_filters( 'mlp_do_redirect', TRUE ) ) {
 			return FALSE;
+		}
 
 		return (bool) get_option( $this->option_name );
 	}
+
 }

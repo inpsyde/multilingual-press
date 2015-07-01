@@ -127,11 +127,7 @@ class Mlp_Translatable_Post_Data
 		$post_data  = get_post( $post_id, ARRAY_A );
 		$post_meta = $this->get_post_meta_to_transfer( $post_id );
 
-		/**
-		 * Pre-Filter before Saving the Post
-		 * @param   Array $post_data
-		 * @param   Array $save_context
-		 */
+		/** This filter is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		$post_data = apply_filters( 'mlp_pre_save_post', $post_data, $this->save_context );
 
 		// When the filter returns FALSE, we'll stop here
@@ -180,17 +176,8 @@ class Mlp_Translatable_Post_Data
 
 			$this->save_context[ 'target_blog_id' ] = $blog_id;
 
-			/**
-			 * Filter post data before it is saved to the database.
-			 *
-			 * @param array $new_post
-			 * @param array $context
-			 */
-			$new_post = apply_filters(
-				'mlp_pre_insert_post',
-				$new_post,
-				$this->save_context
-			);
+			/** This filter is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
+			$new_post = apply_filters( 'mlp_pre_insert_post', $new_post, $this->save_context );
 
 			// Insert remote blog post
 			$remote_post_id = wp_insert_post( $new_post );
@@ -315,16 +302,14 @@ class Mlp_Translatable_Post_Data
 	public function update_remote_post_meta( $remote_post_id, $post_meta = array() ) {
 
 		/**
-		 * Filter post meta data before it is saved to the database.
+		 * Filter post meta data before saving.
 		 *
-		 * @param array $post_meta
-		 * @param array $context
+		 * @param array $post_meta    Post meta data.
+		 * @param array $save_context Context of the to-be-saved post.
+		 *
+		 * @return array
 		 */
-		$new_post_meta = apply_filters(
-			'mlp_pre_insert_post_meta',
-			$post_meta,
-			$this->save_context
-		);
+		$new_post_meta = apply_filters( 'mlp_pre_insert_post_meta', $post_meta, $this->save_context );
 
 		if ( empty ( $new_post_meta ) )
 			return;
@@ -346,19 +331,15 @@ class Mlp_Translatable_Post_Data
 	 */
 	public function get_post_meta_to_transfer() {
 
-		$post_meta = array();
-
 		/**
-		 * Array of post meta fields to synchronize. Defaults to an empty array.
+		 * Filter the to-be-synchronized post meta fields.
 		 *
-		 * @param Array $post_meta
-		 * @param Array $save_context
+		 * @param array $post_meta    Post meta fields.
+		 * @param array $save_context Context of the to-be-saved post.
 		 */
-		return apply_filters(
-			'mlp_pre_save_post_meta',
-			$post_meta,
-			$this->save_context
-		);
+		$post_meta = apply_filters( 'mlp_pre_save_post_meta', array(), $this->save_context );
+
+		return $post_meta;
 	}
 
 	/**

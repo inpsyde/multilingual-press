@@ -368,14 +368,17 @@ class Mlp_Quicklink implements Mlp_Updatable {
 			$html .= '<br class="clear" />';
 
 		/**
-		 * Return-Filter to Change the Quicklinks
-		 * @param   String $html
-		 * @param   String $type
-		 * @param   Array  $translated
-		 * @param   string $selections
-		 * @param   String $position
+		 * Filter the quicklinks HTML.
+		 *
+		 * @param string $html       HTML output.
+		 * @param string $type       Quicklinks type, 'links' or 'form'.
+		 * @param array  $translated Array of translated posts.
+		 * @param string $selections Selections, 'option' or 'a' elements.
+		 * @param string $position   Quicklinks position.
+		 *
+		 * @return string
 		 */
-		return apply_filters(
+		return (string) apply_filters(
 			'mlp_quicklinks_html',
 			$html,
 			$type,

@@ -24,6 +24,7 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 
 		$this->negotiation = $negotiation;
 	}
+
 	/**
 	 * Redirect if needed.
 	 *
@@ -40,23 +41,26 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 			return;
 
 		$url             = $match[ 'url' ];
-		$current_site_id = get_current_blog_id();
+		$current_blog_id = get_current_blog_id();
 
 		/**
-		 * Change the URL for redirects. You might add support for other types
-		 * than singular posts and home here.
-		 * If you return an empty value, the redirect will not happen.
-		 * The result will be validated with esc_url().
+		 * Filter the redirect URL.
 		 *
-		 * @param string $url   might be empty
-		 * @param array  $match
-		 *                      - priority
-		 *                      - url
-		 *                      - language
-		 *                      - site_id
-		 * @param int    $current_site_id Current blog id
+		 * You might add support for other types than singular posts and home here.
+		 * If you return an empty string, the redirect will not happen. The result will be validated with esc_url().
+		 *
+		 * @param string $url             Redirect URL.
+		 * @param array  $match           Redirect match. {
+		 *                                'priority' => int
+		 *                                'url'      => string
+		 *                                'language' => string
+		 *                                'site_id'  => int
+		 *                                }
+		 * @param int    $current_blog_id Current blog ID.
+		 *
+		 * @return string
 		 */
-		$url = apply_filters( 'mlp_redirect_url', $url, $match, $current_site_id );
+		$url = apply_filters( 'mlp_redirect_url', $url, $match, $current_blog_id );
 
 		if ( empty ( $url ) )
 			return; // no URL found
@@ -77,4 +81,5 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 		wp_redirect( $url ); // finally!
 		exit;
 	}
+
 }

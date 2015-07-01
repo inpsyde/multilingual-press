@@ -60,10 +60,12 @@ class Mlp_Translation_Metabox {
 		$this->request_validator = new Mlp_Save_Post_Request_Validator( $this->nonce );
 
 		/**
-		 * Filter to add or delete allowed post types.
+		 * Filter the allowed post types.
 		 *
-		 * @param array                   $allowed_post_types
-		 * @param Mlp_Translation_Metabox $metabox
+		 * @param string[]                $allowed_post_types Allowed post type names.
+		 * @param Mlp_Translation_Metabox $meta_box           Translation meta box object.
+		 *
+		 * @return string[]
 		 */
 		$this->allowed_post_types = (array) apply_filters(
 			'mlp_allowed_post_types',
@@ -81,13 +83,16 @@ class Mlp_Translation_Metabox {
 		add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ), 10, 2 );
 
 		/**
-		 * Filter to remove the save_post-Action and to implement your own logic
+		 * Filter whether to use an external save method instead of the built-in method.
 		 *
-		 * @param bool $external_save_method Use external save method?
+		 * @param bool $external_save_method Use an external save method?
+		 *
+		 * @return bool
 		 */
 		$mlp_external_save_method = (bool) apply_filters( 'mlp_external_save_method', FALSE );
 
-		if ( 'POST' === $_SERVER[ 'REQUEST_METHOD' ]
+		if (
+			'POST' === $_SERVER[ 'REQUEST_METHOD' ]
 			&& ! $mlp_external_save_method
 		) {
 			add_action( 'save_post', array( $this->data, 'save' ), 10, 2 );
@@ -106,7 +111,7 @@ class Mlp_Translation_Metabox {
 		 * @param array $translator_init_args Translator arguments {
 		 *                                    'nonce'              => Inpsyde_Nonce_Validator
 		 *                                    'request_validator'  => Mlp_Save_Post_Request_Validator
-		 *                                    'allowed_post_types' => array
+		 *                                    'allowed_post_types' => string[]
 		 *                                    'basic_data'         => Mlp_Translatable_Post_Data
 		 *                                    'instance'           => Mlp_Translation_Metabox
 		 *                                    }
@@ -203,10 +208,15 @@ class Mlp_Translation_Metabox {
 		if ( empty( $remote_post->dummy ) ) {
 			$this->register_metabox_view_details( $view, $post, $blog_id );
 		} else {
-			$checkbox_callback = apply_filters(
-				'mlp_post_translator_activation_checkbox',
-				array( $view, 'show_translation_checkbox' )
-			);
+			$callback = array( $view, 'show_translation_checkbox' );
+			/**
+			 * Filter the post translator activation checkbox callback.
+			 *
+			 * @param array|string $callback Callback name or class-method array.
+			 *
+			 * @return array|string
+			 */
+			$checkbox_callback = apply_filters( 'mlp_post_translator_activation_checkbox', $callback );
 
 			if ( $checkbox_callback ) {
 				add_action( "mlp_translation_meta_box_top_$blog_id", $checkbox_callback, 10, 3 );
@@ -275,19 +285,15 @@ class Mlp_Translation_Metabox {
 		);
 
 		/**
-		 * You can change the default actions here.
+		 * Filter the meta box view callbacks.
 		 *
-		 * @param array   $callbacks
-		 * @param WP_Post $post
-		 * @param int     $blog_id
+		 * @param array   $callbacks Array of callback names or class-method arrays.
+		 * @param WP_Post $post      Post object.
+		 * @param int     $blog_id   Blog ID.
+		 *
+		 * @return array
 		 */
-		$callbacks = apply_filters(
-			'mlp_translation_meta_box_view_callbacks',
-			$callbacks,
-			$post,
-			$blog_id
-		);
-
+		$callbacks = apply_filters( 'mlp_translation_meta_box_view_callbacks', $callbacks, $post, $blog_id );
 		if ( empty( $callbacks ) ) {
 			return;
 		}

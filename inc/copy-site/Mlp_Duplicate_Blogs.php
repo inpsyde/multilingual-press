@@ -144,7 +144,10 @@ class Mlp_Duplicate_Blogs {
 		/**
 		 * Runs after successful blog duplication.
 		 *
-		 * @param array $context Two blog ids: 'source_blog_id' and 'new_blog_id'.
+		 * @param int[] $context Duplication context. {
+		 *                       'source_blog_id' => int
+		 *                       'new_blog_id'    => int
+		 *                       }
 		 */
 		do_action( 'mlp_duplicated_blog', $context );
 	}

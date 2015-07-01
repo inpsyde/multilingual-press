@@ -312,7 +312,7 @@ class Mlp_Advanced_Translator_Data
 			return array();
 		}
 
-		$new = array(
+		$new_post_data = array(
 			'post_type'    => $post_type,
 			'post_title'   => $title,
 			'post_name'    => $name,
@@ -322,35 +322,35 @@ class Mlp_Advanced_Translator_Data
 		);
 
 		if ( ! empty( $post_data[ 'remote_post_id' ] ) ) {
-			$new[ 'ID' ] = $post_data[ 'remote_post_id' ];
+			$new_post_data[ 'ID' ] = $post_data[ 'remote_post_id' ];
 
 			/**
-			 * Filter the new post data before it is saved to the database.
+			 * Filter the post data before saving the post.
 			 *
-			 * @param array $new_post_data New post data.
-			 * @param array $post_data     Original post data.
+			 * @param array $post_data    Post data.
+			 * @param array $save_context Context of the to-be-saved post.
 			 *
 			 * @return array
 			 */
-			$new = apply_filters( 'mlp_pre_save_post', $new, $this->save_context );
+			$new_post_data = apply_filters( 'mlp_pre_save_post', $new_post_data, $this->save_context );
 
-			return $new;
+			return $new_post_data;
 		}
 
 		// new post
-		$new[ 'post_status' ] = 'draft';
+		$new_post_data[ 'post_status' ] = 'draft';
 
 		/**
-		 * Filter the new post data before it is inserted into the database.
+		 * Filter the new post data before inserting the post into the database.
 		 *
-		 * @param array $new_post_data New post data.
-		 * @param array $post_data     Original post data.
+		 * @param array $post_data    Post data.
+		 * @param array $save_context Context of the to-be-saved post.
 		 *
 		 * @return array
 		 */
-		$new = apply_filters( 'mlp_pre_insert_post', $new, $this->save_context );
+		$new_post_data = apply_filters( 'mlp_pre_insert_post', $new_post_data, $this->save_context );
 
-		return $new;
+		return $new_post_data;
 	}
 
 	/**
