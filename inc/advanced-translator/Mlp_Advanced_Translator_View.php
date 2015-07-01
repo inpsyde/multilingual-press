@@ -66,7 +66,7 @@ class Mlp_Advanced_Translator_View {
 	) {
 
 		$title = esc_attr( $post->post_title );
-		$placeholder = $this->get_place_holder_title( $post );
+		$placeholder = $this->get_placeholder_title( $post );
 		$name = $this->get_name( $remote_blog_id, 'title' );
 		$id = $this->get_id( $remote_blog_id, 'title' );
 
@@ -104,10 +104,9 @@ class Mlp_Advanced_Translator_View {
 			$value = sanitize_title( $post->post_title );
 		}
 		$value = esc_attr( $value );
-		$placeholder = $this->get_place_holder_name( $post );
+		$placeholder = esc_attr__( 'Enter name here', 'multilingualpress' );
 		$name = $this->get_name( $remote_blog_id, 'name' );
 		$id = $this->get_id( $remote_blog_id, 'name' );
-
 		?>
 		<div class="mlp_namediv">
 			<div>
@@ -141,12 +140,10 @@ class Mlp_Advanced_Translator_View {
 	) {
 
 		$value = $post->post_excerpt;
-
 		$value = esc_attr( $value );
-		$placeholder = $this->get_place_holder_excerpt( $post );
+		$placeholder = esc_attr__( 'Enter excerpt here', 'multilingualpress' );
 		$name = $this->get_name( $remote_blog_id, 'excerpt' );
 		$id = $this->get_id( $remote_blog_id, 'excerpt' );
-
 		?>
 		<div class="mlp_excerptdiv">
 			<div>
@@ -329,40 +326,10 @@ class Mlp_Advanced_Translator_View {
 	 *
 	 * @return string|void
 	 */
-	private function get_place_holder_title( WP_Post $post ) {
+	private function get_placeholder_title( WP_Post $post ) {
 
 		$placeholder = __( 'Enter title here', 'multilingualpress' );
 		$placeholder = apply_filters( 'enter_title_here', $placeholder, $post );
-
-		return esc_attr( $placeholder );
-	}
-
-	/**
-	 * Get placeholder attribute text.
-	 *
-	 * @param WP_Post $post
-	 *
-	 * @return string|void
-	 */
-	private function get_place_holder_name( WP_Post $post ) {
-
-		$placeholder = __( 'Enter name here', 'multilingualpress' );
-		$placeholder = apply_filters( 'enter_name_here', $placeholder, $post );
-
-		return esc_attr( $placeholder );
-	}
-
-	/**
-	 * Get placeholder attribute text.
-	 *
-	 * @param WP_Post $post
-	 *
-	 * @return string|void
-	 */
-	private function get_place_holder_excerpt( WP_Post $post ) {
-
-		$placeholder = __( 'Enter excerpt here', 'multilingualpress' );
-		$placeholder = apply_filters( 'enter_excerpt_here', $placeholder, $post );
 
 		return esc_attr( $placeholder );
 	}
