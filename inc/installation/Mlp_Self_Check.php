@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Applies some checks before the main code can run.
  *
@@ -10,8 +11,6 @@
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-
-
 class Mlp_Self_Check {
 
 	/**
@@ -72,12 +71,14 @@ class Mlp_Self_Check {
 	 * @param  string $name
 	 * @param  string $base_name
 	 * @param  string $wp_version
+	 *
 	 * @return string
 	 */
 	public function pre_install_check( $name, $base_name, $wp_version ) {
 
-		if ( ! $this->is_plugin_page() )
+		if ( ! $this->is_plugin_page() ) {
 			return self::WRONG_PAGE_FOR_CHECK;
+		}
 
 		$php_version = phpversion();
 
@@ -88,14 +89,15 @@ class Mlp_Self_Check {
 			$this->plugin_file
 		);
 
-		if ( $check->is_compliant() )
+		if ( $check->is_compliant() ) {
 			return self::INSTALLATION_CONTEXT_OK;
+		}
 
-		$errors     = $check->get_error_messages();
+		$errors = $check->get_error_messages();
 		$deactivate = new Mlp_Plugin_Deactivation( $errors, $name, $base_name );
 
-		add_action( 'admin_notices',         array ( $deactivate, 'deactivate' ), 0 );
-		add_action( 'network_admin_notices', array ( $deactivate, 'deactivate' ), 0 );
+		add_action( 'admin_notices', array( $deactivate, 'deactivate' ), 0 );
+		add_action( 'network_admin_notices', array( $deactivate, 'deactivate' ), 0 );
 
 		return self::PLUGIN_DEACTIVATED;
 	}
@@ -105,17 +107,20 @@ class Mlp_Self_Check {
 	 *
 	 * @param  Mlp_Version_Number_Interface $current_version
 	 * @param  Mlp_Version_Number_Interface $last_version
+	 *
 	 * @return int
 	 */
 	public function is_current_version( Mlp_Version_Number_Interface $current_version, Mlp_Version_Number_Interface $last_version ) {
 
-		if ( version_compare( $current_version, $last_version, '=<' ) )
+		if ( version_compare( $current_version, $last_version, '=<' ) ) {
 			return self::NO_UPGRADE_NEEDED;
+		}
 
 		$mlp_settings = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty ( $mlp_settings ) )
+		if ( empty ( $mlp_settings ) ) {
 			return self::NEEDS_INSTALLATION;
+		}
 
 		return self::NEEDS_UPGRADE;
 	}
@@ -127,12 +132,15 @@ class Mlp_Self_Check {
 	 */
 	private function is_plugin_page() {
 
-		if ( ! is_admin() )
+		if ( ! is_admin() ) {
 			return FALSE;
+		}
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			return FALSE;
+		}
 
 		return 'plugins.php' === $this->pagenow;
 	}
+
 }
