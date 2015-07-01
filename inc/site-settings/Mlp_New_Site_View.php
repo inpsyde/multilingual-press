@@ -124,7 +124,12 @@ class Mlp_New_Site_View {
 				</td>
 			</tr>
 
-			<?php do_action( 'mlp_after_new_blog_fields' ); ?>
+			<?php
+			/**
+			 * Runs at the end but still inside the new blog fields table.
+			 */
+			do_action( 'mlp_after_new_blog_fields' );
+			?>
 		</table>
 		<?php
 		$template = ob_get_contents();
@@ -149,4 +154,5 @@ class Mlp_New_Site_View {
 
 		<?php
 	}
+
 }

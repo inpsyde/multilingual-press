@@ -43,7 +43,9 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 		$this->set_module_activation_status();
 
 		/**
-		 * Process your fields from $_POST here and update_site_option.
+		 * Runs before the redirect.
+		 *
+		 * Process your fields in the $_POST superglobal here and then call update_site_option().
 		 *
 		 * @param array $_POST
 		 */

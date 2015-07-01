@@ -76,8 +76,9 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			$this->show_blog_relationships( $siteoption, $languages );
 
 			/**
-			 * Action to add own Settings to the "MultilingualPress"-Tab on "site-edit"
-			 * @param   Int $blog_id
+			 * Runs at the end of but still inside the site settings table.
+			 *
+			 * @param int $blog_id Blog ID.
 			 */
 			do_action( 'mlp_blogs_add_fields', $this->blog_id );
 

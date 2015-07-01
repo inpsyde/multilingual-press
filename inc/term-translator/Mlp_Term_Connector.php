@@ -64,48 +64,48 @@ class Mlp_Term_Connector {
 	 * @param   string $taxonomy Taxonomy slug.
 	 * @return  bool
 	 */
-	public function change_term_relationships( /** @noinspection PhpUnusedParameterInspection */
-		$term_id, $term_taxonomy_id, $taxonomy ) {
+	public function change_term_relationships(
+		/** @noinspection PhpUnusedParameterInspection */
+		$term_id, $term_taxonomy_id, $taxonomy
+	) {
 
 		if ( ! $this->is_valid_request( $taxonomy ) )
 			return FALSE;
 
 		$success = FALSE;
-		$filter  = current_filter();
+		$current_filter  = current_filter();
 
-		if ( is_callable( array ( $this, $filter ) ) ) {
+		if ( is_callable( array ( $this, $current_filter ) ) ) {
 
 			/**
-			 * Called in Mlp_Term_Connector::change_term_relationships before
-			 * terms are changed.
+			 * Runs before the terms are changed.
 			 *
-			 * @param int    $term_taxonomy_id
-			 * @param string $taxonomy
-			 * @param string $filter
+			 * @param int    $term_taxonomy_id Term taxonomy ID.
+			 * @param string $taxonomy         Taxonomy name.
+			 * @param string $current_filter   Current filter.
 			 */
 			do_action(
 				'mlp_before_term_synchronization',
 				$term_taxonomy_id,
 				$taxonomy,
-				$filter
+				$current_filter
 			);
 
-			$success = call_user_func( array ( $this, $filter ), $term_taxonomy_id );
+			$success = call_user_func( array ( $this, $current_filter ), $term_taxonomy_id );
 
 			/**
-			 * Called in Mlp_Term_Connector::change_term_relationships after
-			 * terms are changed.
+			 * Runs after the terms have been changed.
 			 *
-			 * @param int    $term_taxonomy_id
-			 * @param string $taxonomy
-			 * @param string $filter
-			 * @param bool   $success Whether or not the database was changed.
+			 * @param int    $term_taxonomy_id Term taxonomy ID.
+			 * @param string $taxonomy         Taxonomy name.
+			 * @param string $current_filter   Current filter.
+			 * @param bool   $success          Denotes whether or not the database was changed.
 			 */
 			do_action(
 				'mlp_after_term_synchronization',
 				$term_taxonomy_id,
 				$taxonomy,
-				$filter,
+				$current_filter,
 				$success
 			);
 		}
@@ -253,4 +253,5 @@ class Mlp_Term_Connector {
 
 		return TRUE;
 	}
+
 }

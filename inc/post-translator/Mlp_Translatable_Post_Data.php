@@ -164,11 +164,7 @@ class Mlp_Translatable_Post_Data
 
 		$this->find_post_parents( $post_data[ 'post_type' ], $post->post_parent );
 
-		/**
-		 * Run before the first save_post action is called in other blogs.
-		 *
-		 * @param Array $save_context
-		 */
+		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_before_post_synchronization', $this->save_context );
 
 		// Create a copy of the item for every related blog
@@ -241,11 +237,7 @@ class Mlp_Translatable_Post_Data
 
 		}
 
-		/**
-		 * Run after all save_post actions are called in other blogs.
-		 *
-		 * @param Array $save_context
-		 */
+		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_after_post_synchronization', $this->save_context );
 	}
 

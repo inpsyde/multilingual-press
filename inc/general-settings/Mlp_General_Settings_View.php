@@ -67,7 +67,7 @@ class Mlp_General_Settings_View {
 			}
 
 			/**
-			 * Action to add custom Fields to the table in settings page
+			 * Runs at the end of but still inside the features table.
 			 */
 			do_action( 'mlp_modules_add_fields_to_table' );
 
@@ -75,7 +75,7 @@ class Mlp_General_Settings_View {
 			</table>
 			<?php
 			/**
-			 * Action to add custom Fields to the in settings page
+			 * Runs after the features table.
 			 */
 			do_action( 'mlp_modules_add_fields' );
 			submit_button( __( 'Save changes', 'multilingualpress' ) );

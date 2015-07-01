@@ -204,9 +204,9 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		$installer->install();
 
 		/**
-		 * Action after resetting the database-tables of MLP
+		 * Runs after having reset the database table.
 		 *
-*@param   Mlp_Db_Languages_Schema $table_schema
+		 * @param Mlp_Db_Languages_Schema $table_schema Languages table schema.
 		 */
 		do_action( 'mlp_reset_table_done', $table_schema );
 

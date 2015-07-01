@@ -76,10 +76,10 @@ class Mlp_Nav_Menu_Frontend {
 		$item->url = apply_filters( 'mlp_linked_element_link', $url, $site_id, 0, $translation );
 
 		/**
-		 * Filter a nav menu item before it is sent to the walker
+		 * Runs before a nav menu item is sent to the walker.
 		 *
-		 * @param WP_Post                   $item
-		 * @param Mlp_Translation_Interface $translation
+		 * @param WP_Post                   $item        Nav menu item object.
+		 * @param Mlp_Translation_Interface $translation Translation object.
 		 */
 		do_action( 'mlp_prepare_nav_menu_item_output', $item, $translation );
 	}

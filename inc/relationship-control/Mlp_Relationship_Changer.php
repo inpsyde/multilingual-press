@@ -69,7 +69,15 @@ class Mlp_Relationship_Changer {
 		if ( ! $source_post )
 			return 'source not found';
 
-		do_action( 'mlp_before_post_synchronization' );
+		$save_context = array(
+			'source_blog'    => $this->source_blog_id,
+			'source_post'    => $source_post,
+			'real_post_type' => $this->get_real_post_type( $source_post ),
+			'real_post_id'   => $this->get_real_post_id( $this->source_post_id ),
+		);
+
+		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
+		do_action( 'mlp_before_post_synchronization', $save_context );
 
 		switch_to_blog( $this->remote_blog_id );
 
@@ -84,7 +92,10 @@ class Mlp_Relationship_Changer {
 
 		restore_current_blog();
 
-		do_action( 'mlp_after_post_synchronization' );
+		$save_context[ 'target_blog_id' ] = $this->remote_blog_id;
+
+		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
+		do_action( 'mlp_after_post_synchronization', $save_context );
 
 		if ( is_a( $post_id, 'WP_Error' ) )
 			return $post_id->get_error_messages();
@@ -119,6 +130,24 @@ class Mlp_Relationship_Changer {
 			return $_POST[ 'post_type' ]; // auto-draft
 
 		return $post->post_type;
+	}
+
+	/**
+	 * Figure out the post ID.
+	 *
+	 * Inspects POST request data and too, because we get two IDs on auto-drafts.
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return int
+	 */
+	public function get_real_post_id( $post_id ) {
+
+		if ( ! empty( $_POST[ 'post_ID' ] ) ) {
+			return (int) $_POST[ 'post_ID' ];
+		}
+
+		return $post_id;
 	}
 
 	/**

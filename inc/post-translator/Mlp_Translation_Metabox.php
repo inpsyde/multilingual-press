@@ -101,9 +101,9 @@ class Mlp_Translation_Metabox {
 			'instance'           => $this
 		);
 		/**
-		 * Hook to add more options to the meta boxes.
+		 * Runs before internal actions are registered.
 		 *
-		 * @param array $translator_init_args Arguments {
+		 * @param array $translator_init_args Translator arguments {
 		 *                                    'nonce'              => Inpsyde_Nonce_Validator
 		 *                                    'request_validator'  => Mlp_Save_Post_Request_Validator
 		 *                                    'allowed_post_types' => array
@@ -214,10 +214,10 @@ class Mlp_Translation_Metabox {
 		}
 
 		/**
-		 * Runs once per language.
+		 * Runs after registration of the meta box for the given blog's language.
 		 *
-		 * @param WP_Post $post
-		 * @param int     $blog_id
+		 * @param WP_Post $post    Post object.
+		 * @param int     $blog_id Blog ID.
 		 */
 		do_action( 'mlp_translation_meta_box_registered', $post, $blog_id );
 	}

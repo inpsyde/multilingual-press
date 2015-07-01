@@ -40,11 +40,11 @@ class Mlp_Translation_Metabox_View {
 		$data = (object) $meta_box['args'];
 
 		/**
-		 * Perform additional actions on top of the translation box.
+		 * Runs before the main content of the meta box.
 		 *
-		 * @param WP_Post $post
-		 * @param int     $data->remote_blog_id
-		 * @param WP_Post $data->remote_post
+		 * @param WP_Post $post           Post object.
+		 * @param int     $remote_blog_id Remote blog ID.
+		 * @param WP_Post $remote_post    Remote post object.
 		 */
 		do_action(
 			'mlp_translation_meta_box_top',
@@ -54,25 +54,25 @@ class Mlp_Translation_Metabox_View {
 		);
 
 		/**
-		 * Perform additional actions on top of the translation box.
+		 * Runs before the main content of the meta box.
 		 *
-		 * @param WP_Post $post
-		 * @param int     $data->remote_blog_id
-		 * @param WP_Post $data->remote_post
+		 * @param WP_Post $post           Post object.
+		 * @param int     $remote_blog_id Remote blog ID.
+		 * @param WP_Post $remote_post    Remote post object.
 		 */
 		do_action(
-			'mlp_translation_meta_box_top_' . $data->remote_blog_id,
+			"mlp_translation_meta_box_top_{$data->remote_blog_id}",
 			$post,
 			$data->remote_blog_id,
 			$data->remote_post
 		);
 
 		/**
-		 * Meta box main content.
+		 * Runs with the main content of the meta box.
 		 *
-		 * @param WP_Post $post
-		 * @param int     $data->remote_blog_id
-		 * @param WP_Post $data->remote_post
+		 * @param WP_Post $post           Post object.
+		 * @param int     $remote_blog_id Remote blog ID.
+		 * @param WP_Post $remote_post    Remote post object.
 		 */
 		do_action(
 			'mlp_translation_meta_box_main',
@@ -82,25 +82,25 @@ class Mlp_Translation_Metabox_View {
 		);
 
 		/**
-		 * Meta box main content.
+		 * Runs with the main content of the meta box.
 		 *
-		 * @param WP_Post $post
-		 * @param int     $data->remote_blog_id
-		 * @param WP_Post $data->remote_post
+		 * @param WP_Post $post           Post object.
+		 * @param int     $remote_blog_id Remote blog ID.
+		 * @param WP_Post $remote_post    Remote post object.
 		 */
 		do_action(
-			'mlp_translation_meta_box_main_' . $data->remote_blog_id,
+			"mlp_translation_meta_box_main_{$data->remote_blog_id}",
 			$post,
 			$data->remote_blog_id,
 			$data->remote_post
 		);
 
 		/**
-		 * Perform additional actions below the translation box.
+		 * Runs before the main content of the meta box.
 		 *
-		 * @param WP_Post $post
-		 * @param int     $data->remote_blog_id
-		 * @param WP_Post $data->remote_post
+		 * @param WP_Post $post           Post object.
+		 * @param int     $remote_blog_id Remote blog ID.
+		 * @param WP_Post $remote_post    Remote post object.
 		 */
 		do_action(
 			'mlp_translation_meta_box_bottom',
@@ -110,14 +110,14 @@ class Mlp_Translation_Metabox_View {
 		);
 
 		/**
-		 * Perform additional actions below the translation box.
+		 * Runs before the main content of the meta box.
 		 *
-		 * @param WP_Post $post
-		 * @param int     $data->remote_blog_id
-		 * @param WP_Post $data->remote_post
+		 * @param WP_Post $post           Post object.
+		 * @param int     $remote_blog_id Remote blog ID.
+		 * @param WP_Post $remote_post    Remote post object.
 		 */
 		do_action(
-			'mlp_translation_meta_box_bottom_' . $data->remote_blog_id,
+			"mlp_translation_meta_box_bottom_{$data->remote_blog_id}",
 			$post,
 			$data->remote_blog_id,
 			$data->remote_post

@@ -84,11 +84,10 @@ class Multilingual_Press {
 		$this->load_features();
 
 		/**
-		 * First entry for MultilingualPress.
 		 * Runs before internal actions are registered.
 		 *
-		 * @param Inpsyde_Property_List_Interface $plugin_data
-		 * @param wpdb                            $wpdb
+		 * @param Inpsyde_Property_List_Interface $plugin_data Plugin data object.
+		 * @param wpdb                            $wpdb        Database object.
 		 */
 		do_action( 'inpsyde_mlp_init', $this->plugin_data, $this->wpdb );
 
@@ -104,12 +103,10 @@ class Multilingual_Press {
 		add_action( 'wp_loaded', array ( $this, 'late_load' ), 0 );
 
 		/**
-		 * Second entry for MultilingualPress
+		 * Runs after internal actions have been registered.
 		 *
-		 * Runs after internal actions are registered.
-		 *
-		 * @param Inpsyde_Property_List_Interface $plugin_data
-		 * @param wpdb                            $wpdb
+		 * @param Inpsyde_Property_List_Interface $plugin_data Plugin data object.
+		 * @param wpdb                            $wpdb        Database object.
 		 */
 		do_action( 'inpsyde_mlp_loaded', $this->plugin_data, $this->wpdb );
 
@@ -147,10 +144,10 @@ class Multilingual_Press {
 	public function late_load() {
 
 		/**
-		 * Late loading event for MLP.
+		 * Late loading event for MultilingualPress.
 		 *
-		 * @param Inpsyde_Property_List_Interface $plugin_data
-		 * @param wpdb                            $wpdb
+		 * @param Inpsyde_Property_List_Interface $plugin_data Plugin data object.
+		 * @param wpdb                            $wpdb        Database object.
 		 */
 		do_action( 'mlp_and_wp_loaded', $this->plugin_data, $this->wpdb );
 	}

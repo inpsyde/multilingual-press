@@ -80,7 +80,7 @@ class Mlp_Duplicate_Blogs {
 		// Hook information
 		$context = array (
 			'source_blog_id' => $source_blog_id,
-			'new_blog_id'    => $blog_id
+			'new_blog_id'    => $blog_id,
 		);
 
 		// Switch to the base blog
@@ -142,7 +142,7 @@ class Mlp_Duplicate_Blogs {
 		restore_current_blog();
 
 		/**
-		 * Called after successful blog duplication.
+		 * Runs after successful blog duplication.
 		 *
 		 * @param array $context Two blog ids: 'source_blog_id' and 'new_blog_id'.
 		 */
@@ -437,4 +437,5 @@ class Mlp_Duplicate_Blogs {
 
 		return $this->wpdb->get_results( $sql, ARRAY_A );
 	}
+
 }

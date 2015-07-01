@@ -131,9 +131,9 @@ class Mlp_Advanced_Translator_Data
 		$this->basic_data->find_post_parents( $post_type, $post->post_parent );
 
 		/**
-		 * Run before the first save_post action is called in other blogs.
+		 * Runs before the first save_post action is called for the remote blogs.
 		 *
-		 * @param array $save_context
+		 * @param array $save_context Context of the to-be-saved post.
 		 */
 		do_action( 'mlp_before_post_synchronization', $this->save_context );
 
@@ -172,7 +172,7 @@ class Mlp_Advanced_Translator_Data
 		}
 
 		/**
-		 * Run after all save_post actions are called in other blogs.
+		 * Runs after all save_post actions have been called for the remote blogs.
 		 *
 		 * @param array $save_context
 		 */
