@@ -574,10 +574,12 @@ WHERE `http_name` IN( $values )";
 	 *
 	 * @return bool
 	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function is_singular() {
 
-		if ( is_singular() )
+		if ( is_singular() ) {
 			return TRUE;
+		}
 
 		return $this->is_separate_home_page();
 	}
@@ -597,6 +599,7 @@ WHERE `http_name` IN( $values )";
 	 * @see     get_request_type()
 	 * @return  bool
 	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function is_term_archive_request() {
 
 		$queried_object = get_queried_object();
