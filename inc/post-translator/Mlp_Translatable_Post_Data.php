@@ -213,8 +213,9 @@ class Mlp_Translatable_Post_Data
 							wp_update_attachment_metadata(
 								$attach_id, wp_generate_attachment_metadata( $attach_id, $filedir[ 'path' ] . '/' . $filename )
 							);
+							// update the image data
 							set_post_thumbnail( $remote_post_id, $attach_id );
-						} // update the image data
+						}
 					}
 				}
 			}

@@ -221,16 +221,18 @@ class Mlp_Advanced_Translator_Data
 		$filedir = wp_upload_dir();
 
 		if ( ! is_dir( $filedir[ 'path' ] ) and ! wp_mkdir_p( $filedir[ 'path' ] ) ) {
+			// failed to make the directory
 			return FALSE;
-		} // failed to make the directory
+		}
 
 		$filename = wp_unique_filename( $filedir[ 'path' ], $thumb_data->meta[ 'file' ] );
 		$copy = copy( $thumb_data->file_path, $filedir[ 'path' ] . '/' . $filename );
 
 		// Now insert it into the posts
 		if ( ! $copy ) {
+			// failed to write the file
 			return FALSE;
-		} // failed to write the file
+		}
 
 		$wp_filetype = wp_check_filetype( $filedir[ 'url' ] . '/' . $filename );
 		$attachment = array(
@@ -248,8 +250,9 @@ class Mlp_Advanced_Translator_Data
 
 		// Everything went well?
 		if ( is_wp_error( $attach_id ) ) {
+			// failed to insert the image
 			return FALSE;
-		} // failed to insert the image
+		}
 
 		wp_update_attachment_metadata(
 			$attach_id,
@@ -471,9 +474,9 @@ class Mlp_Advanced_Translator_Data
 		foreach ( $taxonomies as $taxonomy ) {
 
 			if ( empty( $tax_data[ $taxonomy ] ) ) {
+				// all existing terms removed
 				$term_ids = array();
-			} // all existing terms removed
-			else {
+			} else {
 				$term_ids = (array) $tax_data[ $taxonomy ];
 			}
 
