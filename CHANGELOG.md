@@ -61,7 +61,7 @@ dboune.
 [issue #116](https://github.com/inpsyde/multilingual-press/issues/116).
 - Add post excerpt to Advanced Translator, see [issue #102](https://github.com/inpsyde/multilingual-press/issues/102).
 - Update German translation.
-- Add Dutch translation.
+- Add Dutch and Greek translation.
 
 ## 2.1.2 Edith Fellowes
 - Combine all scripts and stylesheets, separated for frontend and backend.
