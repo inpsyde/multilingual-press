@@ -72,7 +72,8 @@ No, it will not. It manages relationships between sites and translations, but it
 
 = Where can I get additional language files? =
 
-You can find all official translation files in the [WordPress language repository](http://i18n.svn.wordpress.org/).
+You can find all official translation files in the according
+[GlotPress project](http://translate.marketpress.com/projects/plugins/multilingualpress).
 
 = Can I use MultilingualPress on a single-site installation? =
 
