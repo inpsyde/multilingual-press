@@ -72,15 +72,13 @@ class Mlp_Relationship_Control_Meta_Box_View {
 		<div class="mlp-relationship-control-box"
 			 style="margin: .5em 0 .5em auto ">
 			<?php
-			submit_button(
-				esc_attr__( 'Change relationship', 'multilingualpress' ),
-				'secondary mlp-rsc-button mlp_toggler',
-				"mlp_rsc_{$this->remote_blog_id}", // unique name
-				FALSE,
-				array (
-					'data-toggle_selector' => "#$action_selector_id",
-					'data-search_box_id'   => $search_selector_id
-				)
+			printf(
+				'<button type="button" class="button secondary mlp-rsc-button mlp_toggler" name="mlp_rsc_%2$d"
+					data-toggle_selector="#%3$s" data-search_box_id="%4$s">%1$s</button>',
+				esc_html__( 'Change relationship', 'multilingualpress' ),
+				$this->remote_blog_id,
+				$action_selector_id,
+				$search_selector_id
 			);
 			?>
 			<div id="<?php print $action_selector_id; ?>" class='hidden'>
@@ -108,20 +106,14 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 					?>
 					<p>
-						<label
-							for="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search"
-							class="mlp_toggler"
-							data-toggle_selector="#<?php print $search_selector_id; ?>"
-							>
+						<label for="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search" class="mlp_toggler"
+							data-toggle_selector="#<?php print $search_selector_id; ?>">
 							<input
 								type="radio"
 								name="mlp_rsc_action[<?php print $this->remote_blog_id; ?>]"
 								value="search"
-								id="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search"
-								>
-							<?php
-							esc_html_e( 'Select existing post &hellip;', 'multilingualpress' )
-							?>
+								id="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search">
+							<?php esc_html_e( 'Select existing post &hellip;', 'multilingualpress' ) ?>
 						</label>
 					</p>
 				</div>

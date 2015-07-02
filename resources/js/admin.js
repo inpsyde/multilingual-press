@@ -15,23 +15,13 @@
 				self.copyPost( blogId );
 
 			} );
-
 		},
 
-		// Toggle handler, show/hide elements with class 'mlp_toggler'
+		// Toggle handler
 		setToggle: function() {
-			$( document ).on( 'click', '.mlp_toggler', function( event ) {
+			$( document ).on( 'click', '[data-toggle_selector]', function( event ) {
 				var $this = $( this ),
 					$toggle_container = $( $this.data( 'toggle_selector' ) );
-
-				if ( 'submit' === this.type || 'A' === this.tagName ) {
-					event.preventDefault();
-					event.stopPropagation();
-
-					$toggle_container.toggle();
-
-					return false;
-				}
 
 				if ( 'LABEL' === this.tagName ) {
 					var $target = $( '#' + $this.attr( 'for' ) );
@@ -56,9 +46,7 @@
 
 		// Copy post buttons next to media buttons
 		copyPost : function( blogId ) {
-
 			// @formatter:off
-
 			var prefix = 'mlp_translation_data_' + blogId,
 				translationContent = tinyMCE.get( prefix + '_content' ),
 				content = $( '#content' ).val(), // plain content for "text"-view,

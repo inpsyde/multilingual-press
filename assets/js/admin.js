@@ -20,18 +20,9 @@
 
 		// Toggle handler, show/hide elements with class 'mlp_toggler'
 		setToggle: function() {
-			$( document ).on( 'click', '.mlp_toggler', function( event ) {
+			$( document ).on( 'click', '[data-toggle_selector]', function( event ) {
 				var $this = $( this ),
 					$toggle_container = $( $this.data( 'toggle_selector' ) );
-
-				if ( 'submit' === this.type || 'A' === this.tagName ) {
-					event.preventDefault();
-					event.stopPropagation();
-
-					$toggle_container.toggle();
-
-					return false;
-				}
 
 				if ( 'LABEL' === this.tagName ) {
 					var $target = $( '#' + $this.attr( 'for' ) );
