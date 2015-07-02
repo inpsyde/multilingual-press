@@ -1,5 +1,5 @@
-# Translation of MultilingualPress Pro in Dutch
-# This file is distributed under the same license as the MultilingualPress Pro package.
+# Translation of MultilingualPress in Dutch
+# This file is distributed under the same license as the MultilingualPress package.
 msgid ""
 msgstr ""
 "PO-Revision-Date: 2015-06-16 17:03:34+0000\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: GlotPress/0.1\n"
-"Project-Id-Version: MultilingualPress Pro\n"
+"Project-Id-Version: MultilingualPress\n"
 
 #: inc/advanced-translator/Mlp_Advanced_Translator_View.php:107
 msgid "Enter name here"
