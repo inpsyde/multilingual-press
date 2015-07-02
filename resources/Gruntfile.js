@@ -81,7 +81,7 @@ module.exports = function( grunt ) {
 			languages: {
 				options: {
 					domainPath: '<%= globalConfig.languages %>',
-					url       : 'http://translate.marketpress.com/',
+					url       : 'http://translate.marketpress.com',
 					slug      : 'plugins/multilingualpress',
 					textdomain: 'multilingualpress'
 				}
