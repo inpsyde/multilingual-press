@@ -4,18 +4,19 @@ module.exports = function( grunt ) {
 		path       : require( 'path' ),
 		images_src : 'images/',
 		images     : '../assets/images/',
-		languages  : '../languages',
+		languages  : '../languages/',
 		scripts_src: 'js/',
 		scripts    : '../assets/js/',
 		styles_src : 'scss/',
-		styles     : '../assets/css/'
+		styles     : '../assets/css/',
+		textdomain : 'multilingualpress'
 	};
 
 	grunt.initConfig( {
-		globalConfig: globalConfig,
+		globalConfig      : globalConfig,
 
 		// https://github.com/nDmitry/grunt-autoprefixer
-		autoprefixer: {
+		autoprefixer      : {
 			options: {
 				browsers: [
 					'Android >= 2.1',
@@ -39,7 +40,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-concat
-		concat      : {
+		concat            : {
 			options : {
 				separator: '\n'
 			},
@@ -60,7 +61,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-cssmin
-		cssmin      : {
+		cssmin            : {
 			styles: {
 				options: {
 					processImport: true
@@ -83,13 +84,13 @@ module.exports = function( grunt ) {
 					domainPath: '<%= globalConfig.languages %>',
 					url       : 'http://translate.marketpress.com',
 					slug      : 'plugins/multilingualpress',
-					textdomain: 'multilingualpress'
+					textdomain: '<%= globalConfig.textdomain %>'
 				}
 			}
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-imagemin
-		imagemin    : {
+		imagemin          : {
 			dynamic: {
 				options: {
 					optimizationLevel: 7
@@ -106,7 +107,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-jshint
-		jshint      : {
+		jshint            : {
 			grunt  : {
 				src: [ 'Gruntfile.js' ]
 			},
@@ -121,7 +122,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/suisho/grunt-lineending
-		lineending  : {
+		lineending        : {
 			options: {
 				eol      : 'lf',
 				overwrite: true
@@ -140,8 +141,26 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		// https://github.com/cedaro/grunt-wp-i18n
+		makepot           : {
+			pot: {
+				options: {
+					cwd        : '..',
+					exclude    : [ 'resources' ],
+					mainFile   : 'multilingual-press.php',
+					potComments: 'Copyright (C) {{year}} MultilingualPress\nThis file is distributed under the same license as the MultilingualPress package.',
+					potFilename: '<%= globalConfig.textdomain %>.pot',
+					potHeaders : {
+						poedit                 : true,
+						'report-msgid-bugs-to' : 'https://github.com/inpsyde/multilingual-press/issues',
+						'x-poedit-keywordslist': true
+					}
+				}
+			}
+		},
+
 		// https://github.com/gruntjs/grunt-contrib-sass
-		sass        : {
+		sass              : {
 			styles: {
 				expand : true,
 				cwd    : '<%= globalConfig.styles_src %>',
@@ -157,7 +176,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/sindresorhus/grunt-shell
-		shell       : {
+		shell             : {
 			start: {
 				command: [
 					'cd ..',
@@ -169,7 +188,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-uglify
-		uglify      : {
+		uglify            : {
 			scripts: {
 				expand: true,
 				cwd   : '<%= globalConfig.scripts %>',
@@ -188,7 +207,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-watch
-		watch       : {
+		watch             : {
 			options: {
 				dot     : true,
 				spawn   : true,
@@ -219,7 +238,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'default', [ 'watch' ] );
 	grunt.registerTask( 'grunt', [ 'jshint:grunt' ] );
 	grunt.registerTask( 'images', [ 'imagemin' ] );
-	grunt.registerTask( 'languages', [ 'glotpress_download' ] );
+	grunt.registerTask( 'languages', [ 'makepot', 'glotpress_download' ] );
 	grunt.registerTask( 'lineendings', [ 'lineending' ] );
 	grunt.registerTask( 'production', [ 'images', 'languages', 'scripts', 'styles' ] );
 	grunt.registerTask( 'scripts', [ 'jshint:scripts', 'concat', 'uglify', 'lineending:scripts' ] );

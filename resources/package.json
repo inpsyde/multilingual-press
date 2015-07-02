@@ -20,6 +20,7 @@
 		"grunt-glotpress": "^0.2.1",
 		"grunt-lineending": "^0.2.4",
 		"grunt-shell": "^1.1.2",
+		"grunt-wp-i18n": "^0.5.2",
 		"load-grunt-tasks": "^3.2.0"
 	}
 }
