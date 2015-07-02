@@ -4,6 +4,7 @@ module.exports = function( grunt ) {
 		path       : require( 'path' ),
 		images_src : 'images/',
 		images     : '../assets/images/',
+		languages  : '../languages',
 		scripts_src: 'js/',
 		scripts    : '../assets/js/',
 		styles_src : 'scss/',
@@ -72,6 +73,18 @@ module.exports = function( grunt ) {
 					'*.css',
 					'!*.min.css'
 				]
+			}
+		},
+
+		// https://github.com/markoheijnen/grunt-glotpress
+		glotpress_download: {
+			languages: {
+				options: {
+					domainPath: '<%= globalConfig.languages %>',
+					url       : 'http://translate.marketpress.com/',
+					slug      : 'plugins/multilingualpress',
+					textdomain: 'multilingualpress'
+				}
 			}
 		},
 
@@ -206,8 +219,9 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'default', [ 'watch' ] );
 	grunt.registerTask( 'grunt', [ 'jshint:grunt' ] );
 	grunt.registerTask( 'images', [ 'imagemin' ] );
+	grunt.registerTask( 'languages', [ 'glotpress_download' ] );
 	grunt.registerTask( 'lineendings', [ 'lineending' ] );
-	grunt.registerTask( 'production', [ 'images', 'scripts', 'styles' ] );
+	grunt.registerTask( 'production', [ 'images', 'languages', 'scripts', 'styles' ] );
 	grunt.registerTask( 'scripts', [ 'jshint:scripts', 'concat', 'uglify', 'lineending:scripts' ] );
 	grunt.registerTask( 'start', [ 'shell:workflow' ] );
 	grunt.registerTask( 'styles', [ 'sass', 'autoprefixer', 'lineending:styles', 'cssmin' ] );
