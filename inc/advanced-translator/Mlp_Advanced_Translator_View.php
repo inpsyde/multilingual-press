@@ -111,7 +111,7 @@ class Mlp_Advanced_Translator_View {
 		<div class="mlp_namediv">
 			<div>
 				<label for="<?php echo $id; ?>">
-					<?php _e( 'Post Name: ', 'multilingualpress' ) ?><br>
+					<?php _e( 'Post Name:', 'multilingualpress' ) ?><br>
 					<input
 						class="mlp_name"
 						type="text"
@@ -148,7 +148,7 @@ class Mlp_Advanced_Translator_View {
 		<div class="mlp_excerptdiv">
 			<div>
 				<label for="<?php echo $id; ?>">
-					<?php _e( 'Post Excerpt: ', 'multilingualpress' ) ?><br>
+					<?php _e( 'Post Excerpt:', 'multilingualpress' ) ?><br>
 					<textarea
 						class="mlp_excerpt"
 						name="<?php echo $name; ?>"

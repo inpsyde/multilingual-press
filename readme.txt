@@ -1,6 +1,6 @@
 === MultilingualPress ===
 Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, ipm-frommen, Biont, dnaber-de
-Tags: l10n, i18n, bilingual, international, internationalization, lang, language, localization, multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation, chinese, german, french, russian, widget, menu, navigation, network, categories, taxonomy
+Tags: l10n, i18n, bilingual, international, internationalization, lang, language, localization, multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation, german, french, russian, durch, widget, menu, navigation, network, categories, taxonomy
 
 Requires at least: 4.0
 Tested up to: 4.2.2
@@ -148,6 +148,8 @@ dboune.
 - Show Translation meta box only for users who have the required capability, see
 [issue #116](https://github.com/inpsyde/multilingual-press/issues/116).
 - Add post excerpt to Advanced Translator, see [issue #102](https://github.com/inpsyde/multilingual-press/issues/102).
+- Update German translation.
+- Add Dutch translation.
 
 = 2.1.2 =
 - Combine all scripts and stylesheets, separated for frontend and backend.

@@ -205,7 +205,8 @@ class Mlp_User_Backend_Language {
 		$output = array();
 
 		// Inherit site specific language
-		$output[ ] = '<option value=""' . selected( $current, '', FALSE ) . '>' . __( 'Site Language' ) . "</option>";
+		$output[ ] = '<option value=""' . selected( $current, '', FALSE ) . '>'
+			. __( 'Site Language', 'multilingualpress' ) . "</option>";
 
 		foreach ( (array) $lang_files as $file_name ) {
 			$code_lang = basename( $file_name, '.mo' );
@@ -213,7 +214,7 @@ class Mlp_User_Backend_Language {
 
 			if ( 'en_US' === $code_lang ) {
 				// American English
-				$lang = __( 'English' );
+				$lang = __( 'English', 'multilingualpress' );
 			} else {
 				$lang = format_code_lang( $code_lang );
 			}

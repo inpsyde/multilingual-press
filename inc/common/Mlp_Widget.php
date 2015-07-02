@@ -159,7 +159,7 @@ class Mlp_Widget extends WP_Widget {
 
 		$instance = $old_instance;
 
-		$instance[ 'widget_title' ] = esc_html__( $new_instance[ 'mlp_widget_title' ] );
+		$instance[ 'widget_title' ] = esc_html( $new_instance[ 'mlp_widget_title' ] );
 		$instance[ 'widget_link_type' ] = esc_attr( $new_instance[ 'mlp_widget_link_type' ] );
 		$instance[ 'widget_show_current_blog' ] = (int) (
 			isset( $new_instance[ 'mlp_widget_show_current_blog' ] )

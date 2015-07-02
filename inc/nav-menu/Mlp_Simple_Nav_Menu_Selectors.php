@@ -88,7 +88,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 			<a href="<?php
 			print $this->get_select_all_url( $list_id );
 			?>" class="select-all"><?php
-				_e( 'Select All' );
+				_e( 'Select All', 'multilingualpress' );
 				?></a>
 		</span>
 		<?php
@@ -153,7 +153,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 		<span class="add-to-menu">
 				<?php
 				submit_button(
-					esc_attr__( 'Add to Menu' ),
+					esc_attr__( 'Add to Menu', 'multilingualpress' ),
 					'button-secondary submit-add-to-menu right',
 					"add-$button_id-item",
 					FALSE,
@@ -193,4 +193,5 @@ class Mlp_Simple_Nav_Menu_Selectors {
 
 		return esc_url( $url ) . "#mlp-$list_id";
 	}
+
 }

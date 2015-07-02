@@ -15,10 +15,9 @@
 				self.copyPost( blogId );
 
 			} );
-
 		},
 
-		// Toggle handler, show/hide elements with class 'mlp_toggler'
+		// Toggle handler
 		setToggle: function() {
 			$( document ).on( 'click', '[data-toggle_selector]', function( event ) {
 				var $this = $( this ),
@@ -47,9 +46,7 @@
 
 		// Copy post buttons next to media buttons
 		copyPost : function( blogId ) {
-
 			// @formatter:off
-
 			var prefix = 'mlp_translation_data_' + blogId,
 				translationContent = tinyMCE.get( prefix + '_content' ),
 				content = $( '#content' ).val(), // plain content for "text"-view,
