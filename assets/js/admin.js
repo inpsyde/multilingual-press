@@ -19,28 +19,27 @@
 
 		// Toggle handler
 		setToggle: function() {
-			$( document ).on( 'click', '[data-toggle_selector]', function( event ) {
-				var $this = $( this ),
-					$toggle_container = $( $this.data( 'toggle_selector' ) );
-
-				if ( 'LABEL' === this.tagName ) {
-					var $target = $( '#' + $this.attr( 'for' ) );
-
-					event.stopPropagation();
-
-					// TODO: Get rid of this nested event handler binding
-					$( 'input[name="' + $target.attr( 'name' ) + '"]' ).on( 'change', function() {
-						$toggle_container.toggle( $target.val() === $( this ).val() );
-
-						return true;
-					} );
-
+			$( document ).on( 'click', '[data-toggle_selector]', function() {
+				if ( 'INPUT' === this.tagName ) {
 					return true;
 				}
 
-				$toggle_container.toggle();
+				$( $( this ).data( 'toggle_selector' ) ).toggle();
 
 				return false;
+			} );
+
+			$( 'label.mlp_toggler' ).each( function() {
+				var $inputs = $( 'input[name="' + $( '#' + $( this ).attr( 'for' ) ).attr( 'name' ) + '"]' ),
+					$toggler = $inputs.filter( '[data-toggle_selector]' );
+
+				if ( $toggler.length ) {
+					$inputs.on( 'change', function() {
+						 $( $toggler.data( 'toggle_selector' ) ).toggle( $toggler.is( ':checked' ) );
+
+						return true;
+					} );
+				}
 			} );
 		},
 

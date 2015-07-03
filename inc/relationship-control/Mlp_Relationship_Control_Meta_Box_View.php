@@ -106,13 +106,13 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 					?>
 					<p>
-						<label for="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search"
-							data-toggle_selector="#<?php print $search_selector_id; ?>">
+						<label for="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search" class="mlp_toggler">
 							<input
 								type="radio"
 								name="mlp_rsc_action[<?php print $this->remote_blog_id; ?>]"
 								value="search"
-								id="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search">
+								id="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search"
+								data-toggle_selector="#<?php print $search_selector_id; ?>">
 							<?php esc_html_e( 'Select existing post &hellip;', 'multilingualpress' ) ?>
 						</label>
 					</p>
