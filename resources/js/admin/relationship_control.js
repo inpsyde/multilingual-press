@@ -1,6 +1,57 @@
 ;( function( $ ) {
 	"use strict";
 
+	var relChanged = [];
+	var $body = $( 'body' );
+
+	$( '.mlp_rsc_action_list input' ).on( 'change', function( event ) {
+		var $this = $( this ),
+			metabox = $( this ).parent( '.mlp_advanced_translator_metabox' ),
+			stay = $this.val() === 'stay',
+			elIndex = containsElement( relChanged, metabox );
+
+		if ( elIndex === -1 ) {
+			if ( !stay ) {
+				relChanged.push( metabox );
+			}
+
+		} else {
+			if ( stay ) {
+				relChanged.splice( elIndex, 1 );
+			}
+		}
+	} );
+
+	if ( $body.hasClass( 'post-php' ) ) {
+		$( '#publish' ).on( 'click', function( e ) {
+			if ( relChanged.length ) {
+				if ( !confirm( 'You have unsaved changes in your Post Relationships. These will be discarded if you continue' ) ) {
+					e.preventDefault();
+					e.stopPropagation();
+				} else {
+					//TODO: We may want to fire an event or call an existing function here
+				}
+
+			}
+		} );
+	}
+
+	/**
+	 * Checks if a jQuery object is already in an array
+	 * @param array
+	 * @param element
+	 * @returns {number}
+	 */
+	function containsElement( array, element ) {
+		for ( var i = 0; i < array.length; i++ ) {
+			if ( array[ i ][ 0 ] === element[ 0 ] ) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
 	$.fn.mlp_search = function( options ) {
 
 		var settings = $.extend( {
