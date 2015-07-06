@@ -208,7 +208,7 @@ class Mlp_Term_Translation_Selector {
 
 		return sprintf(
 			'<option value="%1$d" data-relation="%4$s"%2$s>%3$s</option>',
-			$is_current ? -1 : $term_taxonomy_id,
+			$term_taxonomy_id,
 			$is_current ? ' selected="selected"' : '',
 			$term_name,
 			$relation_id
