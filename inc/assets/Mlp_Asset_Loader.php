@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Enqueues scripts and stylesheets.
  *
@@ -9,31 +10,48 @@
 class Mlp_Asset_Loader {
 
 	/**
-	 * @type array
+	 * @var array
 	 */
 	private $handles;
 
 	/**
-	 * @param array $handles
+	 * @var array
 	 */
-	public function __construct( Array $handles ) {
+	private $l10n;
+
+	/**
+	 * Constructor. Set up the properties.
+	 *
+	 * @param array $handles One or more asset handles.
+	 * @param array $l10n    Optional. Localized data. Defaults to array().
+	 */
+	public function __construct( array $handles, array $l10n = array() ) {
 
 		$this->handles = $handles;
+		$this->l10n = $l10n;
 	}
 
 	/**
-	 * Called by Mlp_Assets::provide() on one of the enqueue actions
+	 * Called for one of the enqueue actions.
 	 *
-	 * @see    Mlp_Assets::provide()
+	 * @see Mlp_Assets::provide()
+	 *
 	 * @return void
 	 */
 	public function enqueue() {
 
 		foreach ( $this->handles as $handle => $extension ) {
-			if ( 'css' === $extension )
+			if ( 'css' === $extension ) {
 				wp_enqueue_style( $handle );
-			else
+			} else {
 				wp_enqueue_script( $handle );
+				if ( ! empty( $this->l10n[ $handle ] ) ) {
+					foreach ( $this->l10n[ $handle ] as $object => $data ) {
+						wp_localize_script( $handle, $object, $data );
+					}
+				}
+			}
 		}
 	}
+
 }

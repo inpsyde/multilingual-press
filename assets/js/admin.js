@@ -155,23 +155,22 @@
 
 } )( jQuery );
 
-;( function( $ ) {
+/* global ajaxurl, mlpRelationshipControlL10n */
+;( function( $, mlpL10n ) {
 	"use strict";
 
 	var relChanged = [];
-	var $body = $( 'body' );
 
-	$( '.mlp_rsc_action_list input' ).on( 'change', function( event ) {
+	$( '.mlp_rsc_action_list input' ).on( 'change', function() {
 		var $this = $( this ),
-			metabox = $( this ).parent( '.mlp_advanced_translator_metabox' ),
+			$metabox = $this.parent( '.mlp_advanced_translator_metabox' ),
 			stay = $this.val() === 'stay',
-			elIndex = containsElement( relChanged, metabox );
+			elIndex = containsElement( relChanged, $metabox );
 
 		if ( elIndex === -1 ) {
 			if ( !stay ) {
-				relChanged.push( metabox );
+				relChanged.push( $metabox );
 			}
-
 		} else {
 			if ( stay ) {
 				relChanged.splice( elIndex, 1 );
@@ -179,16 +178,11 @@
 		}
 	} );
 
-	if ( $body.hasClass( 'post-php' ) ) {
+	if ( $( 'body' ).hasClass( 'post-php' ) ) {
 		$( '#publish' ).on( 'click', function( e ) {
-			if ( relChanged.length ) {
-				if ( !confirm( 'You have unsaved changes in your Post Relationships. These will be discarded if you continue' ) ) {
-					e.preventDefault();
-					e.stopPropagation();
-				} else {
-					//TODO: We may want to fire an event or call an existing function here
-				}
-
+			if ( relChanged.length && !confirm( mlpL10n.unsavedPostRelationships ) ) {
+				e.preventDefault();
+				e.stopPropagation();
 			}
 		} );
 	}
@@ -201,7 +195,7 @@
 	 */
 	function containsElement( array, element ) {
 		for ( var i = 0; i < array.length; i++ ) {
-			if ( array[ i ][ 0 ] === element[ 0 ] ) {
+			if ( array[ i ][ 0 ] !== undefined && element[ 0 ] !== undefined && array[ i ][ 0 ] === element[ 0 ] ) {
 				return i;
 			}
 		}
@@ -303,7 +297,7 @@
 				new_post_id = $( 'input[name="mlp_add_post[' + remote_blog_id + ']"]:checked' ).val();
 
 				if ( !new_post_id || '0' === new_post_id ) {
-					alert( 'Please select a post.' );
+					alert( mlpL10n.noPostSelected );
 				} else {
 					changeRelationship( 'connect_existing' );
 				}
@@ -349,4 +343,4 @@
 		}
 	} );
 
-} )( jQuery );
+} )( jQuery, mlpRelationshipControlL10n );

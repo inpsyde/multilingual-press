@@ -168,7 +168,7 @@ class Multilingual_Press {
 	}
 
 	/**
-	 * Register assets internally
+	 * Register assets internally.
 	 *
 	 * @return void
 	 */
@@ -176,13 +176,25 @@ class Multilingual_Press {
 
 		/** @type Mlp_Assets $assets */
 		$assets = $this->plugin_data->get( 'assets' );
-		$assets->add( 'mlp_admin_js',   'admin.js', array ( 'jquery' ) );
-		$assets->add( 'mlp_admin_css',  'admin.css' );
-		$assets->add( 'mlp_frontend_js',  'frontend.js', array ( 'jquery' ) );
+
+		$l10n = array(
+			'mlpRelationshipControlL10n' => array(
+				'unsavedPostRelationships' => __(
+					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
+					'multilingualpress'
+				),
+				'noPostSelected'           => __( 'Please select a post.', 'multilingualpress' ),
+			),
+		);
+		$assets->add( 'mlp_admin_js', 'admin.js', array( 'jquery' ), $l10n );
+
+		$assets->add( 'mlp_admin_css', 'admin.css' );
+
+		$assets->add( 'mlp_frontend_js', 'frontend.js', array( 'jquery' ) );
+
 		$assets->add( 'mlp_frontend_css', 'frontend.css' );
 
-		add_action( 'init', array ( $assets, 'register' ), 0 );
-
+		add_action( 'init', array( $assets, 'register' ), 0 );
 	}
 
 	/**
