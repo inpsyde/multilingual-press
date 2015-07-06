@@ -185,4 +185,29 @@ class Mlp_Term_Translation_Presenter {
 		return $term;
 	}
 
+	/**
+	 * Return the relation ID for the given blog ID and term taxonomy ID.
+	 *
+	 * @param int $site_id          Blog ID.
+	 * @param int $term_taxonomy_id Term taxonomy ID.
+	 *
+	 * @return string
+	 */
+	public function get_relation_id( $site_id, $term_taxonomy_id ) {
+
+		$translation_ids = $this->content_relations->get_existing_translation_ids(
+			$site_id,
+			0,
+			$term_taxonomy_id,
+			0,
+			'term'
+		);
+		if ( ! $translation_ids ) {
+			return '';
+		}
+		$relation = reset( $translation_ids );
+
+		return $relation[ 'ml_source_blogid' ] . '-' . $relation[ 'ml_source_elementid' ];
+	}
+
 }

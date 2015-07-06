@@ -370,7 +370,7 @@ WHERE s.ml_blogid = %d
 	 *
 	 * @return array
 	 */
-	private function get_existing_translation_ids(
+	public function get_existing_translation_ids(
 		$source_site_id,
 		$target_site_id,
 		$source_content_id,
