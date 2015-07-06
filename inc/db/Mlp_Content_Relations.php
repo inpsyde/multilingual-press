@@ -408,4 +408,43 @@ WHERE (
 		return $result;
 	}
 
+	/**
+	 * Return the term taxonomy ID of the given target site for the given source term.
+	 *
+	 * @param int    $source_site_id    Source blog ID.
+	 * @param int    $target_site_id    Target blog ID.
+	 * @param int    $source_content_id Source post ID or term taxonomy ID.
+	 * @param string $type              Content type.
+	 *
+	 * @return int
+	 */
+	public function get_element_for_site( $source_site_id, $target_site_id, $source_content_id, $type ) {
+
+		$sql = "
+SELECT t.ml_elementid
+FROM {$this->link_table} s
+INNER JOIN {$this->link_table} t
+	ON s.ml_source_blogid = t.ml_source_blogid
+		AND s.ml_source_elementid = t.ml_source_elementid
+WHERE s.ml_blogid = %d
+	AND s.ml_source_elementid = %d
+	AND s.ml_elementid = %d
+	AND t.ml_elementid != %d
+	AND t.ml_blogid = %d
+	AND s.ml_type = %s
+LIMIT 1";
+
+		$query = $this->wpdb->prepare(
+			$sql,
+			$source_site_id,
+			$source_content_id,
+			$source_content_id,
+			$source_content_id,
+			$target_site_id,
+			$type
+		);
+
+		return (int) $this->wpdb->get_var( $query );
+	}
+
 }

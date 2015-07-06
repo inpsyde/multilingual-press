@@ -3,8 +3,8 @@
 /**
  * Prepare data for the term edit form.
  *
- * @version 2014.09.18
- * @author  Inpsyde GmbH, toscho
+ * @version 2015.07.06
+ * @author  Inpsyde GmbH, toscho, tf
  * @license GPL
  */
 class Mlp_Term_Translation_Presenter {
@@ -35,38 +35,48 @@ class Mlp_Term_Translation_Presenter {
 	private $site_terms = array();
 
 	/**
-	 * @param Mlp_Content_Relations_Interface   $content_relations
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce
-	 * @param string                            $key_base
+	 * Constructor. Set up the properties.
+	 *
+	 * @param Mlp_Content_Relations_Interface   $content_relations Content relations object.
+	 * @param Inpsyde_Nonce_Validator_Interface $nonce             Nonce validator object.
+	 * @param string                            $key_base          Term key base.
 	 */
 	public function __construct(
-		Mlp_Content_Relations_Interface   $content_relations,
+		Mlp_Content_Relations_Interface $content_relations,
 		Inpsyde_Nonce_Validator_Interface $nonce,
 		$key_base
 	) {
 
-		$this->taxonomy_name     = get_current_screen()->taxonomy;
-		$this->nonce             = $nonce;
-		$this->key_base          = $key_base;
 		$this->content_relations = $content_relations;
-		$this->current_site_id   = get_current_blog_id();
+		$this->nonce = $nonce;
+		$this->key_base = $key_base;
+
+		$this->current_site_id = get_current_blog_id();
+
+		$current_screen = get_current_screen();
+		$this->taxonomy_name = $current_screen->taxonomy;
 	}
 
 	/**
-	 * @param  int $site_id
+	 * Term key base for given site.
+	 *
+	 * @param int $site_id Blog ID.
+	 *
 	 * @return string
 	 */
 	public function get_key_base( $site_id ) {
 
-		return "$this->key_base[$site_id]";
+		return "{$this->key_base}[$site_id]";
 	}
 
 	/**
-	 * @param  int $site_id
+	 * Return the terms for the given type.
+	 *
+	 * @param int $site_id Blog ID.
+	 *
 	 * @return array
 	 */
 	public function get_terms_for_site( $site_id ) {
-
 
 		$out = array();
 
@@ -74,17 +84,15 @@ class Mlp_Term_Translation_Presenter {
 
 		$taxonomy_object = get_taxonomy( $this->taxonomy_name );
 
-		if ( ! current_user_can( $taxonomy_object->cap->edit_terms ) )
+		if ( ! current_user_can( $taxonomy_object->cap->edit_terms ) ) {
 			$terms = array();
-		else
-			$terms = get_terms( $this->taxonomy_name, array ( 'hide_empty' => FALSE ) );
+		} else {
+			$terms = get_terms( $this->taxonomy_name, array( 'hide_empty' => FALSE ) );
+		}
 
 		foreach ( $terms as $term ) {
-
 			if ( is_taxonomy_hierarchical( $this->taxonomy_name ) ) {
-
 				$ancestors = get_ancestors( $term->term_id, $this->taxonomy_name );
-
 				if ( ! empty ( $ancestors ) ) {
 					foreach ( $ancestors as $ancestor ) {
 						$parent_term = get_term( $ancestor, $this->taxonomy_name );
@@ -102,6 +110,8 @@ class Mlp_Term_Translation_Presenter {
 	}
 
 	/**
+	 * Return the current taxonomy name.
+	 *
 	 * @return string
 	 */
 	public function get_taxonomy() {
@@ -110,17 +120,23 @@ class Mlp_Term_Translation_Presenter {
 	}
 
 	/**
+	 * Return the available site languages.
+	 *
 	 * @return array
 	 */
 	public function get_site_languages() {
 
 		$languages = mlp_get_available_languages_titles();
-		unset ( $languages[ get_current_blog_id() ] );
+
+		$current_blog_id = get_current_blog_id();
+		unset( $languages[ $current_blog_id ] );
 
 		return $languages;
 	}
 
 	/**
+	 * Return the nonce field.
+	 *
 	 * @return string
 	 */
 	public function get_nonce_field() {
@@ -128,12 +144,14 @@ class Mlp_Term_Translation_Presenter {
 		return wp_nonce_field(
 			$this->nonce->get_action(),
 			$this->nonce->get_name(),
-			TRUE ,
+			TRUE,
 			FALSE
 		);
 	}
 
 	/**
+	 * Return the group title.
+	 *
 	 * @return string
 	 */
 	public function get_group_title() {
@@ -142,41 +160,49 @@ class Mlp_Term_Translation_Presenter {
 	}
 
 	/**
-	 * @param  int $site_id
-	 * @param  int $term_id // currently edited term
+	 * Return the current term taxonomy ID for the given site and the given term ID in the current site.
+	 *
+	 * @param int $site_id Blog ID.
+	 * @param int $term_id Term ID of the currently edited term.
+	 *
 	 * @return int
 	 */
 	public function get_current_term( $site_id, $term_id ) {
 
-		$term = $this->get_term_from_site( $term_id, $site_id	);
-
-		if ( ! isset ( $term->term_taxonomy_id ) )
+		$term = $this->get_term_from_site( $term_id, $site_id );
+		if ( ! isset( $term->term_taxonomy_id ) ) {
 			return 0;
+		}
 
-		if ( ! isset ( $this->site_terms[ $term->term_taxonomy_id ] ) ) {
-			$this->site_terms[ $term_id ] = $this->content_relations->get_relations(
+		if ( ! isset( $this->site_terms[ $term->term_taxonomy_id ] ) ) {
+			$term_taxonomy_id = $this->content_relations->get_element_for_site(
 				$this->current_site_id,
+				$site_id,
 				$term->term_taxonomy_id,
 				'term'
 			);
+			if ( $term_taxonomy_id ) {
+				$this->site_terms[ $term->term_taxonomy_id ][ $site_id ] = $term_taxonomy_id;
+			}
 		}
 
-		if ( empty ( $this->site_terms[ $term->term_taxonomy_id ][ $site_id ] ) )
+		if ( empty( $this->site_terms[ $term->term_taxonomy_id ][ $site_id ] ) ) {
 			return 0;
+		}
 
 		return $this->site_terms[ $term->term_taxonomy_id ][ $site_id ];
 	}
 
 	/**
-	 * Get the complete term object by term_id in a given site
+	 * Return the term object for the given term ID and the current site.
 	 *
-	 * @param int $term_id
-	 * @param int $site_id
+	 * @param int $term_id Term ID.
+	 *
 	 * @return object
 	 */
-	private function get_term_from_site( $term_id, $site_id	) {
+	private function get_term_from_site( $term_id ) {
 
-		switch_to_blog( $site_id );
+		switch_to_blog( $this->current_site_id );
 
 		$term = get_term_by( 'id', $term_id, $this->taxonomy_name );
 
@@ -205,6 +231,7 @@ class Mlp_Term_Translation_Presenter {
 		if ( ! $translation_ids ) {
 			return '';
 		}
+
 		$relation = reset( $translation_ids );
 
 		return $relation[ 'ml_source_blogid' ] . '-' . $relation[ 'ml_source_elementid' ];
