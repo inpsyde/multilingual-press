@@ -429,7 +429,6 @@ INNER JOIN {$this->link_table} t
 WHERE s.ml_blogid = %d
 	AND s.ml_source_elementid = %d
 	AND s.ml_elementid = %d
-	AND t.ml_elementid != %d
 	AND t.ml_blogid = %d
 	AND s.ml_type = %s
 LIMIT 1";
@@ -437,7 +436,6 @@ LIMIT 1";
 		$query = $this->wpdb->prepare(
 			$sql,
 			$source_site_id,
-			$source_content_id,
 			$source_content_id,
 			$source_content_id,
 			$target_site_id,
