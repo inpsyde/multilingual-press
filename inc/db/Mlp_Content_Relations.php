@@ -49,51 +49,6 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	}
 
 	/**
-	 * Return an array with site IDs as keys and content IDs as values.
-	 *
-	 * @param int    $source_site_id    Source blog ID.
-	 * @param int    $source_content_id Source post ID or term taxonomy ID.
-	 * @param string $type              Content type.
-	 *
-	 * @return array
-	 */
-	public function get_relations( $source_site_id, $source_content_id, $type = 'post' ) {
-
-		$key = "$source_site_id-$source_content_id-$type";
-
-		if ( array_key_exists( $key, $this->checked ) ) {
-			return $this->checked[ $key ];
-		}
-
-		$sql = "
-SELECT t.ml_blogid as site_id, t.ml_elementid as content_id
-FROM {$this->link_table} s
-INNER JOIN {$this->link_table} t
-	ON s.ml_source_blogid = t.ml_source_blogid
-		AND s.ml_source_elementid = t.ml_source_elementid
-WHERE s.ml_blogid = %d
-	AND s.ml_elementid = %d
-	AND s.ml_type = %s";
-
-		$query = $this->wpdb->prepare( $sql, $source_site_id, $source_content_id, $type );
-
-		$results = $this->wpdb->get_results( $query, ARRAY_A );
-		if ( ! $results ) {
-			return array();
-		}
-
-		$output = array();
-
-		foreach ( $results as $set ) {
-			$output[ (int) $set[ 'site_id' ] ] = (int) $set[ 'content_id' ];
-		}
-
-		$this->checked[ $key ] = $output;
-
-		return $output;
-	}
-
-	/**
 	 * Set a relation according to the given parameters.
 	 *
 	 * @param int    $source_site_id    Source blog ID.
@@ -152,6 +107,51 @@ WHERE s.ml_blogid = %d
 		);
 
 		return $result;
+	}
+
+	/**
+	 * Return an array with site IDs as keys and content IDs as values.
+	 *
+	 * @param int    $source_site_id    Source blog ID.
+	 * @param int    $source_content_id Source post ID or term taxonomy ID.
+	 * @param string $type              Content type.
+	 *
+	 * @return array
+	 */
+	public function get_relations( $source_site_id, $source_content_id, $type = 'post' ) {
+
+		$key = "$source_site_id-$source_content_id-$type";
+
+		if ( array_key_exists( $key, $this->checked ) ) {
+			return $this->checked[ $key ];
+		}
+
+		$sql = "
+SELECT t.ml_blogid as site_id, t.ml_elementid as content_id
+FROM {$this->link_table} s
+INNER JOIN {$this->link_table} t
+ON s.ml_source_blogid = t.ml_source_blogid
+	AND s.ml_source_elementid = t.ml_source_elementid
+WHERE s.ml_blogid = %d
+	AND s.ml_elementid = %d
+	AND s.ml_type = %s";
+
+		$query = $this->wpdb->prepare( $sql, $source_site_id, $source_content_id, $type );
+
+		$results = $this->wpdb->get_results( $query, ARRAY_A );
+		if ( ! $results ) {
+			return array();
+		}
+
+		$output = array();
+
+		foreach ( $results as $set ) {
+			$output[ (int) $set[ 'site_id' ] ] = (int) $set[ 'content_id' ];
+		}
+
+		$this->checked[ $key ] = $output;
+
+		return $output;
 	}
 
 	/**
@@ -424,22 +424,22 @@ WHERE (
 SELECT t.ml_elementid
 FROM {$this->link_table} s
 INNER JOIN {$this->link_table} t
-	ON s.ml_source_blogid = t.ml_source_blogid
-		AND s.ml_source_elementid = t.ml_source_elementid
-WHERE s.ml_blogid = %d
-	AND s.ml_source_elementid = %d
+ON s.ml_source_blogid = t.ml_source_blogid
+	AND s.ml_source_elementid = t.ml_source_elementid
+	AND s.ml_type = t.ml_type
+WHERE s.ml_id != t.ml_id
+	AND s.ml_blogid = %d
 	AND s.ml_elementid = %d
-	AND t.ml_blogid = %d
 	AND s.ml_type = %s
+	AND t.ml_blogid = %d
 LIMIT 1";
 
 		$query = $this->wpdb->prepare(
 			$sql,
 			$source_site_id,
 			$source_content_id,
-			$source_content_id,
-			$target_site_id,
-			$type
+			$type,
+			$target_site_id
 		);
 
 		return (int) $this->wpdb->get_var( $query );
