@@ -169,12 +169,12 @@ class Mlp_Term_Translation_Presenter {
 	 */
 	public function get_current_term( $site_id, $term_id ) {
 
-		$term = $this->get_term_from_site( $term_id, $site_id );
+		$term = $this->get_term_from_site( $term_id );
 		if ( ! isset( $term->term_taxonomy_id ) ) {
 			return 0;
 		}
 
-		if ( ! isset( $this->site_terms[ $term->term_taxonomy_id ] ) ) {
+		if ( ! isset( $this->site_terms[ $term->term_taxonomy_id ][ $site_id ] ) ) {
 			$term_taxonomy_id = $this->content_relations->get_element_for_site(
 				$this->current_site_id,
 				$site_id,
