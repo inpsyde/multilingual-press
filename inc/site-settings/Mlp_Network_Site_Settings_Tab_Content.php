@@ -127,7 +127,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 				</label>
 			</td>
 			<td>
-				<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang">
+				<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang" autocomplete="off">
 					<option value="-1"><?php esc_html_e( 'choose language', 'multilingualpress' ); ?></option>
 					<?php
 					foreach ( $languages as $language ) {

@@ -349,7 +349,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 			$html = "<form method='post' class='$position mlp_quicklinks mlp_quicklinks_form' action='$action'>
 				<div class='$class_inner'>
 					<label for='{$select_name}_id'>$label_text<br />
-					<select name='$select_name' id='{$select_name}_id'>
+					<select name='$select_name' id='{$select_name}_id' autocomplete='off'>
 						$selections
 					</select>
 					$go_button

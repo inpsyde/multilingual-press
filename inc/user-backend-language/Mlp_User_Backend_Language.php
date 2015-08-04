@@ -126,7 +126,7 @@ class Mlp_User_Backend_Language {
 				</label>
 			</th>
 			<td>
-				<select name="<?php echo $this->key; ?>" id="<?php echo $this->key; ?>">
+				<select name="<?php echo $this->key; ?>" id="<?php echo $this->key; ?>" autocomplete="off">
 					<?php $this->dropdown_languages( $languages, $user_language ); ?>
 				</select>
 			</td>
