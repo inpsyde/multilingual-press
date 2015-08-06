@@ -99,6 +99,12 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 			$type
 		);
 
+		$key = "$source_site_id-$source_content_id-$type";
+
+		if ( array_key_exists( $key, $this->checked ) ) {
+			unset( $this->checked[ $key ] );
+		}
+
 		do_action(
 			'mlp_debug',
 			current_filter()
@@ -195,6 +201,12 @@ WHERE s.ml_blogid = %d
 		}
 
 		$result = (int) $this->wpdb->delete( $this->link_table, $where, $where_format );
+
+		$key = "$source_site_id-$source_content_id-$type";
+
+		if ( array_key_exists( $key, $this->checked ) ) {
+			unset( $this->checked[ $key ] );
+		}
 
 		do_action(
 			'mlp_debug',
