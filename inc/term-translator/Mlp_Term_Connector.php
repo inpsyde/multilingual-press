@@ -138,6 +138,13 @@ class Mlp_Term_Connector {
 		$success = FALSE;
 
 		foreach ( $this->post_data as $target_site_id => $target_term_taxonomy_id ) {
+			$target_term_taxonomy_id = (int) $target_term_taxonomy_id;
+
+			// There's nothing to do here
+			if ( -1 === $target_term_taxonomy_id ) {
+				continue;
+			}
+
 			$translation_ids = $this->content_relations->get_translation_ids(
 				$this->current_site_id,
 				$target_site_id,
