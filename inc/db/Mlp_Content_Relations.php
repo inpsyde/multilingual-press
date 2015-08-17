@@ -41,11 +41,73 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 		Mlp_Site_Relations_Interface $site_relations,
 		$link_table
 	) {
-
-		$this->wpdb = $wpdb;
+		$this->wpdb           = $wpdb;
 		$this->site_relations = $site_relations;
 		// Validated table name
 		$this->link_table = $link_table->get_name();
+	}
+
+	/**
+	 * Cache an item
+	 *
+	 * @param $source_site_id
+	 * @param $source_content_id
+	 * @param $type
+	 * @param $value
+	 */
+	private function set_cache( $source_site_id, $source_content_id, $type, $value ) {
+
+		$key                   = $this->get_cache_key( $source_site_id, $source_content_id, $type );
+		$this->checked[ $key ] = $value;
+	}
+
+	/**
+	 * Return a cached item
+	 *
+	 * @param $source_site_id
+	 * @param $source_content_id
+	 * @param $type
+	 *
+	 * @return bool
+	 */
+	private function get_cache( $source_site_id, $source_content_id, $type ) {
+
+		$key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
+
+		if ( array_key_exists( $key, $this->checked ) ) {
+			return $this->checked[ $key ];
+		}
+
+		return FALSE;
+	}
+
+	/**
+	 * Delete a cached item
+	 *
+	 * @param $source_site_id
+	 * @param $source_content_id
+	 * @param $type
+	 */
+	private function delete_cache( $source_site_id, $source_content_id, $type ) {
+
+		$key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
+		if ( array_key_exists( $key, $this->checked ) ) {
+			unset( $this->checked[ $key ] );
+		}
+	}
+
+	/**
+	 * Construct a cache key
+	 *
+	 * @param $source_site_id
+	 * @param $source_content_id
+	 * @param $type
+	 *
+	 * @return string
+	 */
+	private function get_cache_key( $source_site_id, $source_content_id, $type ) {
+
+		return "$source_site_id-$source_content_id-$type";
 	}
 
 	/**
@@ -99,11 +161,7 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 			$type
 		);
 
-		$key = "$source_site_id-$source_content_id-$type";
-
-		if ( array_key_exists( $key, $this->checked ) ) {
-			unset( $this->checked[ $key ] );
-		}
+		$this->delete_cache( $source_site_id, $source_content_id, $type );
 
 		do_action(
 			'mlp_debug',
@@ -126,10 +184,8 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	 */
 	public function get_relations( $source_site_id, $source_content_id, $type = 'post' ) {
 
-		$key = "$source_site_id-$source_content_id-$type";
-
-		if ( array_key_exists( $key, $this->checked ) ) {
-			return $this->checked[ $key ];
+		if ( $cache = $this->get_cache( $source_site_id, $source_content_id, $type ) ) {
+			return $cache;
 		}
 
 		$sql = "
@@ -155,7 +211,7 @@ WHERE s.ml_blogid = %d
 			$output[ (int) $set[ 'site_id' ] ] = (int) $set[ 'content_id' ];
 		}
 
-		$this->checked[ $key ] = $output;
+		$this->set_cache( $source_site_id, $source_content_id, $type, $output );
 
 		return $output;
 	}
@@ -179,7 +235,7 @@ WHERE s.ml_blogid = %d
 		$type = 'post'
 	) {
 
-		$where = array(
+		$where        = array(
 			'ml_source_blogid'    => $source_site_id,
 			'ml_source_elementid' => $source_content_id,
 			'ml_type'             => $type,
@@ -192,21 +248,17 @@ WHERE s.ml_blogid = %d
 
 		if ( 0 < $target_site_id ) {
 			$where[ 'ml_blogid' ] = $target_site_id;
-			$where_format[ ] = '%d';
+			$where_format[]       = '%d';
 		}
 
 		if ( 0 < $target_content_id ) {
 			$where[ 'ml_elementid' ] = $target_content_id;
-			$where_format[ ] = '%d';
+			$where_format[]          = '%d';
 		}
 
 		$result = (int) $this->wpdb->delete( $this->link_table, $where, $where_format );
 
-		$key = "$source_site_id-$source_content_id-$type";
-
-		if ( array_key_exists( $key, $this->checked ) ) {
-			unset( $this->checked[ $key ] );
-		}
+		$this->delete_cache( $source_site_id, $source_content_id, $type );
 
 		do_action(
 			'mlp_debug',
