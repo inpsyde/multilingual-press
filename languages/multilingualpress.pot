@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MultilingualPress 2.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/inpsyde/multilingual-press/issues\n"
-"POT-Creation-Date: 2015-07-03 08:34:17+00:00\n"
+"POT-Creation-Date: 2015-07-06 13:04:25+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,11 +24,21 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
+#: inc/Multilingual_Press.php:182
+msgid ""
+"You have unsaved changes in your post relationships. The changes you made "
+"will be lost if you navigate away from this page."
+msgstr ""
+
+#: inc/Multilingual_Press.php:186
+msgid "Please select a post."
+msgstr ""
+
 #. Plugin Name of the plugin/theme
 msgid "MultilingualPress"
 msgstr ""
 
-#: inc/Multilingual_Press.php:383
+#: inc/Multilingual_Press.php:395
 msgid ""
 "You didn't setup any site relationships. You have to setup these first to "
 "use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and "
