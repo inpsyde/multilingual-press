@@ -280,8 +280,7 @@ class Mlp_Translation_Metabox {
 
 		$callbacks = array(
 			'title'   => array( $view, 'show_title' ),
-			'editor'  => array( $view, 'show_editor' ),
-			'upgrade' => array( $view, 'show_upgrade_notice' )
+			'editor'  => array( $view, 'show_editor' )
 		);
 
 		/**
@@ -306,11 +305,6 @@ class Mlp_Translation_Metabox {
 			add_action( 'mlp_translation_meta_box_main_' . $blog_id, $callbacks[ 'editor' ], 10, 3 );
 		}
 
-		if ( ! empty( $callbacks[ 'upgrade' ] )
-			&& 'MultilingualPress Pro' !== $this->plugin_data->get( 'plugin_name' )
-		) {
-			add_action( 'mlp_translation_meta_box_bottom_' . $blog_id, $callbacks[ 'upgrade' ], 10, 3 );
-		}
 	}
 
 	/**
