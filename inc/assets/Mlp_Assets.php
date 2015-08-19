@@ -1,32 +1,40 @@
 <?php
+
 /**
  * Handle scripts and stylesheets
  *
- * @version 2014.10.04
- * @author  Inpsyde GmbH, toscho
+ * @version 2015.07.06
+ * @author  Inpsyde GmbH, toscho, tf
  * @license GPL
  */
 class Mlp_Assets implements Mlp_Assets_Interface {
 
 	/**
-	 * @type Mlp_Locations_Interface
+	 * @var Mlp_Locations_Interface
 	 */
 	private $locations;
 
 	/**
 	 * List of registered resources
 	 *
-	 * @type array
+	 * @var array
 	 */
 	private $registered = array();
 
 	/**
-	 * @type array
+	 * @var array
 	 */
 	private $assets;
 
 	/**
-	 * @param Mlp_Locations_Interface $locations
+	 * @var array
+	 */
+	private $l10n;
+
+	/**
+	 * Constructor. Set up the properties.
+	 *
+	 * @param Mlp_Locations_Interface $locations Asset locations object.
 	 */
 	public function __construct( Mlp_Locations_Interface $locations ) {
 
@@ -34,46 +42,60 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	}
 
 	/**
-	 * @param  string $handle
-	 * @param  string $file
-	 * @param  array  $dependencies
+	 * Add an asset.
+	 *
+	 * @param string $handle       Unique handle.
+	 * @param string $file         File.
+	 * @param array  $dependencies Optional. Dependencies. Defaults to array().
+	 * @param array  $l10n         Optional. Localized data. Defaults to array().
+	 *
 	 * @return bool
 	 */
-	public function add( $handle, $file, $dependencies = array() ) {
+	public function add( $handle, $file, $dependencies = array(), $l10n = array() ) {
 
 		$ext = $this->get_extension( $file );
 
-		if ( ! $this->locations->has_dir( $ext ) )
+		if ( ! $this->locations->has_dir( $ext ) ) {
 			return FALSE;
+		}
 
-		$url = new Mlp_Asset_Url( $file,
+		$url = new Mlp_Asset_Url(
+			$file,
 			$this->locations->get_dir( $ext, 'path' ),
 			$this->locations->get_dir( $ext, 'url' )
 		);
+
 		$this->assets[ $handle ] = array(
 			'url'          => $url,
 			'ext'          => $ext,
-			'dependencies' => $dependencies
+			'dependencies' => $dependencies,
 		);
+
+		if ( $l10n ) {
+			$this->l10n[ $handle ] = $l10n;
+		}
 
 		return TRUE;
 	}
 
 	/**
+	 * Register the assets.
+	 *
 	 * @wp-hook wp_loaded
+	 *
 	 * @return void
 	 */
 	public function register() {
 
 		foreach ( $this->assets as $handle => $properties ) {
-
-			if ( ! in_array( $properties[ 'ext' ], array ( 'js', 'css' ) ) )
+			if ( ! in_array( $properties[ 'ext' ], array( 'js', 'css' ) ) ) {
 				continue;
+			}
 
-			/** @type Mlp_Asset_Url_Interface $url_object  */
+			/** @var Mlp_Asset_Url_Interface $url_object */
 			$url_object = $properties[ 'url' ];
-			$url        = $url_object->__toString();
-			$version    = $url_object->get_version();
+			$url = $url_object->__toString();
+			$version = $url_object->get_version();
 
 			if ( 'js' === $properties[ 'ext' ] ) {
 				wp_register_script(
@@ -83,9 +105,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 					$version,
 					TRUE
 				);
-			}
-
-			if ( 'css' === $properties[ 'ext' ] ) {
+			} elseif ( 'css' === $properties[ 'ext' ] ) {
 				wp_register_style(
 					$handle,
 					$url,
@@ -99,30 +119,36 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	}
 
 	/**
-	 * @param $handles
+	 * Provide assets for the given handles.
+	 *
+	 * @param array|string $handles One or more asset handles.
+	 *
 	 * @return bool
 	 */
 	public function provide( $handles ) {
 
 		$to_load = $this->get_valid_handles( (array) $handles );
 
-		if ( empty ( $to_load ) )
+		if ( empty ( $to_load ) ) {
 			return FALSE;
+		}
 
 		$action = $this->get_enqueue_action();
 
-		if ( '' === $action )
+		if ( '' === $action ) {
 			return FALSE;
+		}
 
-		$loader = new Mlp_Asset_Loader( $to_load );
+		$loader = new Mlp_Asset_Loader( $to_load, $this->l10n );
 
-		add_action( $action, array ( $loader, 'enqueue' ) );
+		add_action( $action, array( $loader, 'enqueue' ) );
 
 		return TRUE;
 	}
 
 	/**
 	 * @param array $handles
+	 *
 	 * @return array
 	 */
 	private function get_valid_handles( Array $handles ) {
@@ -130,8 +156,9 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 		$to_load = array();
 
 		foreach ( $handles as $handle ) {
-			if ( ! empty ( $this->registered[ $handle ] ) )
+			if ( ! empty ( $this->registered[ $handle ] ) ) {
 				$to_load[ $handle ] = $this->registered[ $handle ];
+			}
 		}
 
 		return $to_load;
@@ -144,17 +171,20 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 
 		if ( $this->is_login_page() ) {
 
-			if ( empty ( $GLOBALS[ 'interim_login' ] ) )
+			if ( empty ( $GLOBALS[ 'interim_login' ] ) ) {
 				return 'login_enqueue_scripts';
+			}
 
 			return '';
 		}
 
-		if ( is_admin() )
+		if ( is_admin() ) {
 			return 'admin_enqueue_scripts';
+		}
 
-		if ( is_customize_preview() )
+		if ( is_customize_preview() ) {
 			return 'customize_controls_enqueue_scripts';
+		}
 
 		return 'wp_enqueue_scripts';
 	}
@@ -164,22 +194,25 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	 */
 	private function is_login_page() {
 
-		return 0 === strpos( $_SERVER['REQUEST_URI' ], '/wp-login.php' );
+		return 0 === strpos( $_SERVER[ 'REQUEST_URI' ], '/wp-login.php' );
 	}
 
 	/**
 	 * Get the file extension.
 	 *
-	 * @param  string $file_name
+	 * @param string $file_name
+	 *
 	 * @return string
 	 */
 	private function get_extension( $file_name ) {
 
 		$last_dot = strrchr( $file_name, '.' );
 
-		if ( FALSE === $last_dot )
+		if ( FALSE === $last_dot ) {
 			return '_invalid_';
+		}
 
 		return substr( $last_dot, 1 );
 	}
+
 }

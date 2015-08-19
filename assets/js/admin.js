@@ -155,8 +155,53 @@
 
 } )( jQuery );
 
-;( function( $ ) {
+/* global ajaxurl, mlpRelationshipControlL10n */
+;( function( $, mlpL10n ) {
 	"use strict";
+
+	var relChanged = [];
+
+	$( '.mlp_rsc_action_list input' ).on( 'change', function() {
+		var $this = $( this ),
+			$metabox = $this.parent( '.mlp_advanced_translator_metabox' ),
+			stay = $this.val() === 'stay',
+			elIndex = containsElement( relChanged, $metabox );
+
+		if ( elIndex === -1 ) {
+			if ( !stay ) {
+				relChanged.push( $metabox );
+			}
+		} else {
+			if ( stay ) {
+				relChanged.splice( elIndex, 1 );
+			}
+		}
+	} );
+
+	if ( $( 'body' ).hasClass( 'post-php' ) ) {
+		$( '#publish' ).on( 'click', function( e ) {
+			if ( relChanged.length && !confirm( mlpL10n.unsavedPostRelationships ) ) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		} );
+	}
+
+	/**
+	 * Checks if a jQuery object is already in an array
+	 * @param array
+	 * @param element
+	 * @returns {number}
+	 */
+	function containsElement( array, element ) {
+		for ( var i = 0; i < array.length; i++ ) {
+			if ( array[ i ][ 0 ] !== undefined && element[ 0 ] !== undefined && array[ i ][ 0 ] === element[ 0 ] ) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
 
 	$.fn.mlp_search = function( options ) {
 
@@ -252,7 +297,7 @@
 				new_post_id = $( 'input[name="mlp_add_post[' + remote_blog_id + ']"]:checked' ).val();
 
 				if ( !new_post_id || '0' === new_post_id ) {
-					alert( 'Please select a post.' );
+					alert( mlpL10n.noPostSelected );
 				} else {
 					changeRelationship( 'connect_existing' );
 				}
@@ -298,54 +343,4 @@
 		}
 	} );
 
-} )( jQuery );
-
-;( function( $ ) {
-	"use strict";
-
-	var term_translator = {
-
-		init: function() {
-			this.isPropagating = false;
-
-			this.propagate_term_selection();
-		},
-
-		propagate_term_selection: function() {
-			var $table = $( '.mlp_term_selections' );
-
-			if ( $table.length ) {
-				var $selects = $table.find( 'select' );
-
-				$table.on( 'change', 'select', function() {
-					if ( term_translator.isPropagating ) {
-						return;
-					}
-
-					term_translator.isPropagating = true;
-
-					var $this = $( this ),
-						relation = $this.find( '[value="' + $this.val() + '"]' ).data( 'relation' );
-
-					$selects.not( $this ).each( function() {
-						var $this = $( this ),
-							$option = $this.find( 'option[data-relation="' + relation + '"]' );
-
-						if ( $option.length ) {
-							$this.val( $option.val() );
-						} else {
-							$this.val( $this.find( 'option' ).first().val() );
-						}
-					} );
-
-					term_translator.isPropagating = false;
-				} );
-			}
-		}
-	};
-
-	$( function() {
-		term_translator.init();
-	} );
-
-} )( jQuery );
+} )( jQuery, mlpRelationshipControlL10n );

@@ -91,9 +91,6 @@ class Multilingual_Press {
 		 */
 		do_action( 'inpsyde_mlp_init', $this->plugin_data, $this->wpdb );
 
-		// Enqueue scripts
-		add_action( 'admin_enqueue_scripts', array ( $this, 'admin_scripts' ) );
-
 		// Cleanup upon blog delete
 		add_filter( 'delete_blog', array ( $this, 'delete_blog' ), 10, 2 );
 
@@ -168,7 +165,7 @@ class Multilingual_Press {
 	}
 
 	/**
-	 * Register assets internally
+	 * Register assets internally.
 	 *
 	 * @return void
 	 */
@@ -176,13 +173,25 @@ class Multilingual_Press {
 
 		/** @type Mlp_Assets $assets */
 		$assets = $this->plugin_data->get( 'assets' );
-		$assets->add( 'mlp_admin_js',   'admin.js', array ( 'jquery' ) );
-		$assets->add( 'mlp_admin_css',  'admin.css' );
-		$assets->add( 'mlp_frontend_js',  'frontend.js', array ( 'jquery' ) );
+
+		$l10n = array(
+			'mlpRelationshipControlL10n' => array(
+				'unsavedPostRelationships' => __(
+					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
+					'multilingualpress'
+				),
+				'noPostSelected'           => __( 'Please select a post.', 'multilingualpress' ),
+			),
+		);
+		$assets->add( 'mlp_admin_js', 'admin.js', array( 'jquery' ), $l10n );
+
+		$assets->add( 'mlp_admin_css', 'admin.css' );
+
+		$assets->add( 'mlp_frontend_js', 'frontend.js', array( 'jquery' ) );
+
 		$assets->add( 'mlp_frontend_css', 'frontend.css' );
 
-		add_action( 'init', array ( $assets, 'register' ), 0 );
-
+		add_action( 'init', array( $assets, 'register' ), 0 );
 	}
 
 	/**
@@ -242,61 +251,6 @@ class Multilingual_Press {
 
 		// We need the return value for tests.
 		return $found;
-	}
-
-	/**
-	 * Load admin javascript and CSS
-	 *
-	 * @global	$pagenow | current page identifier
-	 * @return  void
-	 */
-	public function admin_scripts() {
-
-		global $pagenow;
-
-		// We only need our Scripts on our pages
-		$pages = array (
-			'site-info.php',
-			'site-users.php',
-			'site-themes.php',
-			'site-settings.php',
-			'settings.php',
-			'post-new.php',
-			'post.php',
-		);
-
-		if ( in_array ( $pagenow, $pages ) ) {
-			wp_localize_script( 'mlp_admin_js', 'mlp_loc', $this->localize_script() );
-		}
-	}
-
-	/**
-	 * Make localized strings available in javascript
-	 *
-	 * @access  public
-	 * @since	0.1
-	 * @uses	wp_create_nonce
-	 * @global	$pagenow | current page identifier
-	 * @return	array $loc | Array containing localized strings
-	 */
-	public function localize_script() {
-
-		if ( isset( $_GET[ 'id' ] ) )
-			$blog_id = $_GET[ 'id' ];
-		else
-			$blog_id = 0;
-
-		$loc = array (
-			'tab_label'							=> __( 'MultilingualPress', 'multilingualpress' ),
-			'blog_id'							=> intval( $blog_id ),
-			'ajax_tab_nonce'					=> wp_create_nonce( 'mlp_tab_nonce' ),
-			'ajax_form_nonce'					=> wp_create_nonce( 'mlp_form_nonce' ),
-			'ajax_select_nonce'					=> wp_create_nonce( 'mlp_select_nonce' ),
-			'ajax_switch_language_nonce'		=> wp_create_nonce( 'mlp_switch_language_nonce' ),
-			'ajax_check_single_nonce'			=> wp_create_nonce( 'mlp_check_single_nonce' )
-		);
-
-		return $loc;
 	}
 
 	/**

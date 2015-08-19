@@ -64,6 +64,8 @@ dboune.
 - Add Dutch and Greek translation.
 - Remove upgrade notice, see [issue #147](https://github.com/inpsyde/multilingual-press/issues/147), props
 kraftner.
+- Add confirmation to post saving when relationships were changed, see
+[issue #131](https://github.com/inpsyde/multilingual-press/issues/131).
 
 ## 2.1.2 Edith Fellowes
 - Combine all scripts and stylesheets, separated for frontend and backend.
