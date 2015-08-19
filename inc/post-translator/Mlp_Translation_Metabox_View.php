@@ -185,37 +185,4 @@ class Mlp_Translation_Metabox_View {
 	<?php
 	}
 
-	/**
-	 * Explain what the pro version can do here.
-	 *
-	 * @return void
-	 */
-	public function show_upgrade_notice() {
-
-		static $called = FALSE;
-
-		if ( $called )
-			return;
-
-		$called = TRUE;
-
-		$text = _x(
-			'In <a href="%s">MultilingualPress Pro</a>, you can edit the translation right here, copy the featured image, set tags and categories, and you can change the translation relationship.',
-			'%s = link to MultilingualPress Pro',
-			'multilingualpress'
-		);
-
-		$url = __(
-			'http://marketpress.com/product/multilingual-press-pro/',
-			'multilingualpress'
-		);
-		$url = esc_url( $url );
-
-		// A broken translation might mess up the URL.
-		if ( '' === $url )
-			$url = 'http://marketpress.com/product/multilingual-press-pro/';
-
-		printf( "<p>$text</p>", $url );
-	}
-
 }
