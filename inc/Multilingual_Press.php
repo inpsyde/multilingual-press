@@ -91,9 +91,6 @@ class Multilingual_Press {
 		 */
 		do_action( 'inpsyde_mlp_init', $this->plugin_data, $this->wpdb );
 
-		// Enqueue scripts
-		add_action( 'admin_enqueue_scripts', array ( $this, 'admin_scripts' ) );
-
 		// Cleanup upon blog delete
 		add_filter( 'delete_blog', array ( $this, 'delete_blog' ), 10, 2 );
 
@@ -254,61 +251,6 @@ class Multilingual_Press {
 
 		// We need the return value for tests.
 		return $found;
-	}
-
-	/**
-	 * Load admin javascript and CSS
-	 *
-	 * @global	$pagenow | current page identifier
-	 * @return  void
-	 */
-	public function admin_scripts() {
-
-		global $pagenow;
-
-		// We only need our Scripts on our pages
-		$pages = array (
-			'site-info.php',
-			'site-users.php',
-			'site-themes.php',
-			'site-settings.php',
-			'settings.php',
-			'post-new.php',
-			'post.php',
-		);
-
-		if ( in_array ( $pagenow, $pages ) ) {
-			wp_localize_script( 'mlp_admin_js', 'mlp_loc', $this->localize_script() );
-		}
-	}
-
-	/**
-	 * Make localized strings available in javascript
-	 *
-	 * @access  public
-	 * @since	0.1
-	 * @uses	wp_create_nonce
-	 * @global	$pagenow | current page identifier
-	 * @return	array $loc | Array containing localized strings
-	 */
-	public function localize_script() {
-
-		if ( isset( $_GET[ 'id' ] ) )
-			$blog_id = $_GET[ 'id' ];
-		else
-			$blog_id = 0;
-
-		$loc = array (
-			'tab_label'							=> __( 'MultilingualPress', 'multilingualpress' ),
-			'blog_id'							=> intval( $blog_id ),
-			'ajax_tab_nonce'					=> wp_create_nonce( 'mlp_tab_nonce' ),
-			'ajax_form_nonce'					=> wp_create_nonce( 'mlp_form_nonce' ),
-			'ajax_select_nonce'					=> wp_create_nonce( 'mlp_select_nonce' ),
-			'ajax_switch_language_nonce'		=> wp_create_nonce( 'mlp_switch_language_nonce' ),
-			'ajax_check_single_nonce'			=> wp_create_nonce( 'mlp_check_single_nonce' )
-		);
-
-		return $loc;
 	}
 
 	/**
