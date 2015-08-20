@@ -1,16 +1,16 @@
 === MultilingualPress ===
 Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, ipm-frommen, Biont, dnaber-de
-Tags: l10n, i18n, bilingual, international, internationalization, lang, language, localization, multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation, german, french, russian, durch, widget, menu, navigation, network, categories, taxonomy
-
+Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.0
 Tested up to: 4.2.2
 Stable tag: 2.2.0
 
-Run WordPress Multisite with multiple languages.
+Create a fast translation network on WordPress multisite.
 
 == Description ==
 
-Connect multiple sites as language alternatives in a multisite. Use a customizable widget to link to all sites.
+Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
+to link to all sites.
 
 This plugin lets you connect an unlimited amount of sites with each other.
 Set a main language for each site, create relationships (connections), and start writing. You get a new field now to
