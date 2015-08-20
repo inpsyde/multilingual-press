@@ -1,19 +1,48 @@
 {
 	"name": "inpsyde/multilingual-press",
-	"description": "Run WordPress Multisite with multiple languages.",
-	"license": "GPLv3",
+	"description": "Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites.",
 	"version": "2.2.0",
 	"type": "wordpress-plugin",
+	"keywords": [
+		"bilingual",
+		"i18n",
+		"international",
+		"internationalization",
+		"l10n",
+		"lang",
+		"language",
+		"localization",
+		"multi",
+		"multilanguage",
+		"multilingual",
+		"multisite",
+		"network",
+		"translation"
+	],
+	"license": "GPL-3.0",
 	"authors": [
 		{
 			"name": "Inpsyde GmbH",
-			"homepage": "http://inpsyde.com",
 			"email": "hello@inpsyde.com",
+			"homepage": "http://inpsyde.com",
 			"role": "Company"
 		}
 	],
+	"support": {
+		"issues": "https://github.com/inpsyde/multilingual-press/issues",
+		"forum": "https://wordpress.org/support/plugin/multilingual-press",
+		"wiki": "https://github.com/inpsyde/multilingual-press/wiki",
+		"source": "https://github.com/inpsyde/multilingual-press",
+		"docs": "https://marketpress.com/documentation/multilingual-press/"
+	},
 	"require": {
-		"php": ">5.2.4",
+		"php": ">=5.2.4",
 		"composer/installers": "~1.0"
-	}
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/inpsyde/multilingual-press"
+		}
+	]
 }
