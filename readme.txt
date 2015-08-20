@@ -1,6 +1,6 @@
 === MultilingualPress ===
 Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, ipm-frommen, Biont, dnaber-de
-Tags: l10n, i18n, bilingual, international, internationalization, lang, language, localization, multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation, german, french, russian, durch, widget, menu, navigation, network, categories, taxonomy
+Tags: l10n, i18n, bilingual, international, internationalization, lang, language, localization, multilanguage, multi language, multilingual, multi lingual, multisite, switcher, translation, website translation, wordpress translation, german, french, russian, dutch, widget, menu, navigation, network, categories, taxonomy
 
 Requires at least: 4.0
 Tested up to: 4.2.2
