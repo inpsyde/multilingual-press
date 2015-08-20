@@ -337,6 +337,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 					$data[ 'http_name' ],
 					$site_id
 				);
+			} else {
+				$arr[ 'icon' ] = '';
 			}
 
 			$arr = new Mlp_Translation( $arr, new Mlp_Language( $data ) );
