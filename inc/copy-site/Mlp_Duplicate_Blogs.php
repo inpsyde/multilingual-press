@@ -392,7 +392,9 @@ class Mlp_Duplicate_Blogs {
 				</label>
 			</td>
 			<td>
-				<select id="inpsyde_multilingual_based" name="blog[basedon]"><?php echo $options; ?></select>
+				<select id="inpsyde_multilingual_based" name="blog[basedon]" autocomplete="off">
+					<?php echo $options; ?>
+				</select>
 			</td>
 		</tr>
 		<?php

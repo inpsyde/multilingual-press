@@ -47,7 +47,7 @@ class Mlp_New_Site_View {
 					</label>
 				</td>
 				<td>
-					<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang">
+					<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang" autocomplete="off">
 						<option value="-1"><?php esc_html_e( 'Choose language', 'multilingualpress' ); ?></option>
 						<?php
 						foreach ( $languages as $language ) {

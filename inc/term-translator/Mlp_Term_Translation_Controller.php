@@ -1,35 +1,36 @@
 <?php
+
 /**
  * Mlp_Term_Translation_Controller
  *
- * @version 2014.09.19
- * @author  Inpsyde GmbH, toscho
+ * @version 2015.08.21
+ * @author  Inpsyde GmbH, toscho, tf
  * @license GPL
  */
 class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 	/**
-	 * @type Mlp_Term_Translation_Selector
+	 * @var Mlp_Term_Translation_Selector
 	 */
 	private $view = NULL;
 
 	/**
-	 * @type Inpsyde_Nonce_Validator
+	 * @var Inpsyde_Nonce_Validator
 	 */
 	private $nonce;
 
 	/**
-	 * @type Mlp_Term_Translation_Presenter
+	 * @var Mlp_Term_Translation_Presenter
 	 */
 	private $presenter;
 
 	/**
-	 * @type Mlp_Content_Relations_Interface
+	 * @var Mlp_Content_Relations_Interface
 	 */
 	private $content_relations;
 
 	/**
-	 * @type string
+	 * @var string
 	 */
 	private $key_base = 'mlp[term_translation]';
 
@@ -39,12 +40,11 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	public function __construct( Mlp_Content_Relations_Interface $content_relations ) {
 
 		$this->content_relations = $content_relations;
-		$current_site            = get_current_blog_id();
-		$this->nonce             = new Inpsyde_Nonce_Validator(
+		$current_site = get_current_blog_id();
+		$this->nonce = new Inpsyde_Nonce_Validator(
 			'mlp_term_translation',
 			$current_site
 		);
-
 	}
 
 	/**
@@ -61,14 +61,20 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 		add_action( 'load-edit-tags.php', array( $fields, 'setup' ) );
 
 		$post_data = $this->get_post_data();
-		if ( empty( $post_data ) ) {
+
+		$delete = isset( $_POST[ 'action' ] ) && 'delete-tag' === $_POST[ 'action' ];
+
+		if ( $post_data ) {
+			$this->activate_switcher();
+		}
+
+		if ( $post_data || $delete ) {
+			$this->activate_term_connector( $taxonomies, $post_data, $delete );
+
 			return TRUE;
 		}
 
-		$this->activate_switcher();
-		$this->activate_term_connector( $taxonomies, $post_data );
-
-		return TRUE;
+		return FALSE;
 	}
 
 	/**
@@ -76,16 +82,15 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	 */
 	private function get_post_data() {
 
-		if ( 'POST' !== $_SERVER[ 'REQUEST_METHOD' ] )
+		if ( 'POST' !== $_SERVER[ 'REQUEST_METHOD' ] ) {
 			return array();
+		}
 
-		if ( empty ( $_POST[ 'mlp' ] ) )
+		if ( empty( $_POST[ 'mlp' ][ 'term_translation' ] ) ) {
 			return array();
+		}
 
-		if ( empty ( $_POST[ 'mlp' ][ 'term_translation' ] ) )
-			return array();
-
-		return $_POST[ 'mlp' ][ 'term_translation' ];
+		return (array) $_POST[ 'mlp' ][ 'term_translation' ];
 	}
 
 	/**
@@ -103,7 +108,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		$table_positions = array(
 			Mlp_Term_Field_View::ADD_TERM_FIELDS,
-			Mlp_Term_Field_View::EDIT_TERM_FIELDS
+			Mlp_Term_Field_View::EDIT_TERM_FIELDS,
 		);
 		if ( in_array( $name, $table_positions ) ) {
 			return $view->print_table();
@@ -111,7 +116,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		$title_positions = array(
 			Mlp_Term_Field_View::ADD_TERM_TITLE,
-			Mlp_Term_Field_View::EDIT_TERM_TITLE
+			Mlp_Term_Field_View::EDIT_TERM_TITLE,
 		);
 		if ( in_array( $name, $title_positions ) ) {
 			return $view->print_title();
@@ -125,8 +130,9 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	 */
 	private function get_view() {
 
-		if ( ! is_null( $this->view ) )
+		if ( ! is_null( $this->view ) ) {
 			return $this->view;
+		}
 
 		$this->presenter = new Mlp_Term_Translation_Presenter(
 			$this->content_relations,
@@ -162,20 +168,22 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		add_action(
 			'mlp_before_term_synchronization',
-			array ( $switcher, 'strip' )
+			array( $switcher, 'strip' )
 		);
 		add_action(
 			'mlp_after_term_synchronization',
-			array ( $switcher, 'fill' )
+			array( $switcher, 'fill' )
 		);
 	}
 
 	/**
 	 * @param array $taxonomies
 	 * @param array $post_data
+	 * @param bool  $delete
+	 *
 	 * @return void
 	 */
-	private function activate_term_connector( Array $taxonomies, Array $post_data ) {
+	private function activate_term_connector( array $taxonomies, array $post_data, $delete ) {
 
 		$connector = new Mlp_Term_Connector(
 			$this->content_relations,
@@ -184,14 +192,14 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			$post_data
 		);
 
-		$actions = array ( 'create', 'delete', 'edit' );
+		$actions = $delete ? array( 'delete' ) : array( 'create', 'edit' );
 
 		foreach ( $actions as $action ) {
 			add_action(
 				"{$action}_term",
-				array ( $connector, 'change_term_relationships' ),
+				array( $connector, 'change_term_relationships' ),
 				10,
-				4
+				3
 			);
 		}
 	}

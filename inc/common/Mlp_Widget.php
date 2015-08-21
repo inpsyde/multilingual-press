@@ -86,7 +86,7 @@ class Mlp_Widget extends WP_Widget {
 			<?php $type_id = $this->get_field_id( 'mlp_widget_link_type' ); ?>
 			<label for="<?php echo $type_id; ?>"><?php _e( 'Link text', 'multilingualpress' ); ?></label>
 			<select class="widefat" id="<?php echo $type_id; ?>"
-				name="<?php echo $this->get_field_name( 'mlp_widget_link_type' ); ?>">
+				name="<?php echo $this->get_field_name( 'mlp_widget_link_type' ); ?>" autocomplete="off">
 				<?php
 				$options = array(
 					'none'           => __( 'None', 'multilingualpress' ),

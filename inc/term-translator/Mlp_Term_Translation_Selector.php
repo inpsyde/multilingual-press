@@ -80,7 +80,7 @@ class Mlp_Term_Translation_Selector {
 						<?php if ( empty( $terms ) ) : ?>
 							<?php echo $this->get_no_terms_found_message( $site_id ); ?>
 						<?php else : ?>
-							<select name="<?php echo $key; ?>" id="<?php echo $label_id; ?>">
+							<select name="<?php echo $key; ?>" id="<?php echo $label_id; ?>" autocomplete="off">
 								<option value="<?php echo $empty_option_value; ?>" class="mlp_empty_option">
 									<?php esc_html_e( 'No translation', 'multilingualpress' ); ?>
 								</option>
