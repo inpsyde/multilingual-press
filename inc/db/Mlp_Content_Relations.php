@@ -3,21 +3,16 @@
 /**
  * Relationships between content blocks (posts, terms, whatever).
  *
- * @version 2015.07.03
- * @author  Inpsyde GmbH, toscho
+ * @version 2015.08.21
+ * @author  Inpsyde GmbH, toscho, tf
  * @license GPL
  */
 class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 
 	/**
-	 * @var wpdb
+	 * @var string
 	 */
-	private $wpdb;
-
-	/**
-	 * @var Mlp_Site_Relations_Interface
-	 */
-	private $site_relations;
+	private $cache_group = 'mlp';
 
 	/**
 	 * @var string
@@ -25,9 +20,14 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	private $link_table;
 
 	/**
-	 * @var array
+	 * @var Mlp_Site_Relations_Interface
 	 */
-	private $checked = array();
+	private $site_relations;
+
+	/**
+	 * @var wpdb
+	 */
+	private $wpdb;
 
 	/**
 	 * Constructor. Set up the properties.
@@ -41,73 +41,10 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 		Mlp_Site_Relations_Interface $site_relations,
 		$link_table
 	) {
-		$this->wpdb           = $wpdb;
+
+		$this->wpdb = $wpdb;
 		$this->site_relations = $site_relations;
-		// Validated table name
 		$this->link_table = $link_table->get_name();
-	}
-
-	/**
-	 * Cache an item
-	 *
-	 * @param $source_site_id
-	 * @param $source_content_id
-	 * @param $type
-	 * @param $value
-	 */
-	private function set_cache( $source_site_id, $source_content_id, $type, $value ) {
-
-		$key                   = $this->get_cache_key( $source_site_id, $source_content_id, $type );
-		$this->checked[ $key ] = $value;
-	}
-
-	/**
-	 * Return a cached item
-	 *
-	 * @param $source_site_id
-	 * @param $source_content_id
-	 * @param $type
-	 *
-	 * @return bool
-	 */
-	private function get_cache( $source_site_id, $source_content_id, $type ) {
-
-		$key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
-
-		if ( array_key_exists( $key, $this->checked ) ) {
-			return $this->checked[ $key ];
-		}
-
-		return FALSE;
-	}
-
-	/**
-	 * Delete a cached item
-	 *
-	 * @param $source_site_id
-	 * @param $source_content_id
-	 * @param $type
-	 */
-	private function delete_cache( $source_site_id, $source_content_id, $type ) {
-
-		$key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
-		if ( array_key_exists( $key, $this->checked ) ) {
-			unset( $this->checked[ $key ] );
-		}
-	}
-
-	/**
-	 * Construct a cache key
-	 *
-	 * @param $source_site_id
-	 * @param $source_content_id
-	 * @param $type
-	 *
-	 * @return string
-	 */
-	private function get_cache_key( $source_site_id, $source_content_id, $type ) {
-
-		return "$source_site_id-$source_content_id-$type";
 	}
 
 	/**
@@ -161,7 +98,8 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 			$type
 		);
 
-		$this->delete_cache( $source_site_id, $source_content_id, $type );
+		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
+		wp_cache_delete( $cache_key, $this->cache_group );
 
 		do_action(
 			'mlp_debug',
@@ -171,6 +109,20 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 		);
 
 		return $result;
+	}
+
+	/**
+	 * Return the cache key for the given arguments.
+	 *
+	 * @param int    $source_site_id    Blog ID.
+	 * @param int    $source_content_id Content ID.
+	 * @param string $type              Content type.
+	 *
+	 * @return string
+	 */
+	private function get_cache_key( $source_site_id, $source_content_id, $type ) {
+
+		return "mlp_{$type}_relations_{$source_site_id}_{$source_content_id}";
 	}
 
 	/**
@@ -184,7 +136,10 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	 */
 	public function get_relations( $source_site_id, $source_content_id, $type = 'post' ) {
 
-		if ( $cache = $this->get_cache( $source_site_id, $source_content_id, $type ) ) {
+		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
+
+		$cache = (array) wp_cache_get( $cache_key, $this->cache_group );
+		if ( $cache ) {
 			return $cache;
 		}
 
@@ -211,7 +166,7 @@ WHERE s.ml_blogid = %d
 			$output[ (int) $set[ 'site_id' ] ] = (int) $set[ 'content_id' ];
 		}
 
-		$this->set_cache( $source_site_id, $source_content_id, $type, $output );
+		wp_cache_set( $cache_key, $output, $this->cache_group );
 
 		return $output;
 	}
@@ -235,7 +190,7 @@ WHERE s.ml_blogid = %d
 		$type = 'post'
 	) {
 
-		$where        = array(
+		$where = array(
 			'ml_source_blogid'    => $source_site_id,
 			'ml_source_elementid' => $source_content_id,
 			'ml_type'             => $type,
@@ -248,17 +203,18 @@ WHERE s.ml_blogid = %d
 
 		if ( 0 < $target_site_id ) {
 			$where[ 'ml_blogid' ] = $target_site_id;
-			$where_format[]       = '%d';
+			$where_format[] = '%d';
 		}
 
 		if ( 0 < $target_content_id ) {
 			$where[ 'ml_elementid' ] = $target_content_id;
-			$where_format[]          = '%d';
+			$where_format[] = '%d';
 		}
 
 		$result = (int) $this->wpdb->delete( $this->link_table, $where, $where_format );
 
-		$this->delete_cache( $source_site_id, $source_content_id, $type );
+		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
+		wp_cache_delete( $cache_key, $this->cache_group );
 
 		do_action(
 			'mlp_debug',
