@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MultilingualPress 2.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/inpsyde/multilingual-press/issues\n"
-"POT-Creation-Date: 2015-07-06 13:04:25+00:00\n"
+"POT-Creation-Date: 2015-08-21 14:27:44+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,21 +24,17 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: inc/Multilingual_Press.php:182
+#: inc/Multilingual_Press.php:179
 msgid ""
 "You have unsaved changes in your post relationships. The changes you made "
 "will be lost if you navigate away from this page."
 msgstr ""
 
-#: inc/Multilingual_Press.php:186
+#: inc/Multilingual_Press.php:183
 msgid "Please select a post."
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "MultilingualPress"
-msgstr ""
-
-#: inc/Multilingual_Press.php:395
+#: inc/Multilingual_Press.php:337
 msgid ""
 "You didn't setup any site relationships. You have to setup these first to "
 "use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and "
@@ -251,15 +247,15 @@ msgstr ""
 msgid "Based on site"
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:412
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:414
 msgid "Search Engine Visibility"
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:419
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:421
 msgid "Discourage search engines from indexing this site"
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:424
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:426
 msgid "It is up to search engines to honor this request."
 msgstr ""
 
@@ -295,6 +291,10 @@ msgstr ""
 msgid ""
 "This plugin has been developed by <a href=\"%1$s\">MarketPress</a>, a "
 "project of <a href=\"%2$s\">Inpsyde</a>."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "MultilingualPress"
 msgstr ""
 
 #: inc/general-settings/Mlp_General_Settingspage.php:99
@@ -409,12 +409,8 @@ msgstr ""
 msgid "Add to Menu"
 msgstr ""
 
-#: inc/post-translator/Mlp_Translation_Metabox.php:348
+#: inc/post-translator/Mlp_Translation_Metabox.php:342
 msgid "Switch to site"
-msgstr ""
-
-#: inc/post-translator/Mlp_Translation_Metabox_View.php:208
-msgid "http://marketpress.com/product/multilingual-press-pro/"
 msgstr ""
 
 #: inc/quicklink/Mlp_Quicklink.php:107
@@ -540,15 +536,15 @@ msgstr ""
 msgid "Choose language"
 msgstr ""
 
-#: inc/term-translator/Mlp_Term_Translation_Presenter.php:141
+#: inc/term-translator/Mlp_Term_Translation_Presenter.php:159
 msgid "Translations"
 msgstr ""
 
-#: inc/term-translator/Mlp_Term_Translation_Selector.php:83
+#: inc/term-translator/Mlp_Term_Translation_Selector.php:85
 msgid "No translation"
 msgstr ""
 
-#: inc/term-translator/Mlp_Term_Translation_Selector.php:118
+#: inc/term-translator/Mlp_Term_Translation_Selector.php:120
 msgid "No terms found."
 msgstr ""
 
@@ -571,11 +567,14 @@ msgid "English"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/multilingual-press"
+msgid "https://wordpress.org/plugins/multilingual-press/"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid "Run WordPress Multisite with multiple languages."
+msgid ""
+"Create a fast translation network on WordPress multisite. Run each language "
+"in a separate site, and connect the content in a lightweight user "
+"interface. Use a customizable widget to link to all sites."
 msgstr ""
 
 #. Author of the plugin/theme
@@ -624,7 +623,7 @@ msgctxt "No HTML here. 1 = site name, 2 = language"
 msgid "Translation for %1$s (%2$s)"
 msgstr ""
 
-#: inc/post-translator/Mlp_Translation_Metabox.php:384
+#: inc/post-translator/Mlp_Translation_Metabox.php:378
 msgctxt "No HTML; 1 = post status, 2 = publish time"
 msgid "%1$s (%2$s)"
 msgstr ""
@@ -632,14 +631,6 @@ msgstr ""
 #: inc/post-translator/Mlp_Translation_Metabox_View.php:160
 msgctxt "placeholder for empty translation textarea"
 msgid "No content yet."
-msgstr ""
-
-#: inc/post-translator/Mlp_Translation_Metabox_View.php:202
-msgctxt "%s = link to MultilingualPress Pro"
-msgid ""
-"In <a href=\"%s\">MultilingualPress Pro</a>, you can edit the translation "
-"right here, copy the featured image, set tags and categories, and you can "
-"change the translation relationship."
 msgstr ""
 
 #: inc/quicklink/Mlp_Quicklink.php:332
