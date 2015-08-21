@@ -4,8 +4,8 @@
  *
  * Data model for post translation. Handles inserts of new posts only.
  *
- * @version 2014.03.14
- * @author  Inpsyde GmbH, toscho
+ * @version 2015.08.21
+ * @author  Inpsyde GmbH, toscho, tf
  * @license GPL
  */
 class Mlp_Translatable_Post_Data
@@ -38,16 +38,12 @@ class Mlp_Translatable_Post_Data
 	private $parent_elements = array ();
 
 	/**
-	 * Context for hook on save.
-	 *
 	 * @var array
 	 */
 	public $save_context = array ();
 
 	/**
-	 *
-	 *
-	 * @type Mlp_Content_Relations_Interface
+	 * @var Mlp_Content_Relations_Interface
 	 */
 	private $content_relations;
 
@@ -125,7 +121,7 @@ class Mlp_Translatable_Post_Data
 
 		// Get the post
 		$post_data  = get_post( $post_id, ARRAY_A );
-		$post_meta = $this->get_post_meta_to_transfer( $post_id );
+		$post_meta = $this->get_post_meta_to_transfer();
 
 		/** This filter is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		$post_data = apply_filters( 'mlp_pre_save_post', $post_data, $this->save_context );
@@ -181,7 +177,6 @@ class Mlp_Translatable_Post_Data
 
 			// Insert remote blog post
 			$remote_post_id = wp_insert_post( $new_post );
-			//echo $remote_post_id . '<br>';
 
 			if ( ! empty ( $post_meta ) )
 				$this->update_remote_post_meta( $remote_post_id, $post_meta );
@@ -407,4 +402,17 @@ class Mlp_Translatable_Post_Data
 
 		return $language;
 	}
+
+	/**
+	 * Set the context of the to-be-saved post.
+	 *
+	 * @param array $save_context Save context.
+	 *
+	 * @return void
+	 */
+	public function set_save_context( array $save_context = array() ) {
+
+		$this->save_context = $save_context;
+	}
+
 }
