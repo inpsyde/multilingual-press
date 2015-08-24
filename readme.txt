@@ -161,6 +161,8 @@ props deantomasevic.
 [issue #138](https://github.com/inpsyde/multilingual-press/issues/138), props dboune.
 - Get rid of possibly mixed content relations, see
 [issue #155](https://github.com/inpsyde/multilingual-press/issues/155), props kraftner.
+- Allow removing all terms of a remote post in the advanced translator, see
+[issue #154](https://github.com/inpsyde/multilingual-press/issues/154), props kraftner.
 
 = 2.1.2 =
 - Combine all scripts and stylesheets, separated for frontend and backend.
