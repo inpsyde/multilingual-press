@@ -24,7 +24,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	/**
 	 * @var array
 	 */
-	private $assets;
+	private $assets = array();
 
 	/**
 	 * @var array
