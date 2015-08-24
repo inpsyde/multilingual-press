@@ -347,6 +347,10 @@ class Mlp_Advanced_Translator_Data
 		// new post
 		$new_post_data[ 'post_status' ] = 'draft';
 
+		// add post_author if override is available
+		if ( isset ( $this->post_request_data[ 'post_author_override' ] ) )
+			$new_post_data[ 'post_author' ] = $this->post_request_data[ 'post_author_override' ];
+
 		/**
 		 * Filter the new post data before inserting the post into the database.
 		 *
