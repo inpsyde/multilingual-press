@@ -157,6 +157,8 @@ kraftner.
 [issue #131](https://github.com/inpsyde/multilingual-press/issues/131).
 - Get rid of an Undefined index PHP notice, see [issue #132](https://github.com/inpsyde/multilingual-press/issues/132),
 props deantomasevic.
+- Bugfix no-redirect links don't properly set session to not redirect, see
+[issue #138](https://github.com/inpsyde/multilingual-press/issues/138), props dboune.
 
 = 2.1.2 =
 - Combine all scripts and stylesheets, separated for frontend and backend.

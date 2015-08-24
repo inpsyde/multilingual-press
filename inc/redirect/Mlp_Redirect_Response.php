@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Send redirect headers.
  *
- * @version    2014.09.26
+ * @version    2015.08.24
  * @author     Inpsyde GmbH, toscho
  * @license    GPL
  * @package    MultilingualPress
@@ -11,7 +12,7 @@
 class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 
 	/**
-	 * @type Mlp_Language_Negotiation_Interface
+	 * @var Mlp_Language_Negotiation_Interface
 	 */
 	private $negotiation;
 
@@ -32,17 +33,19 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 	 */
 	public function redirect() {
 
-		if ( ! empty ( $_GET[ 'noredirect' ] ) ) {
+		if ( ! empty( $_GET[ 'noredirect' ] ) ) {
 			$this->save_session( $_GET[ 'noredirect' ] );
+
 			return;
 		}
 
 		$match = $this->negotiation->get_redirect_match();
-
-		if ( $match[ 'site_id' ] === get_current_blog_id() )
+		if ( $match[ 'site_id' ] === get_current_blog_id() ) {
 			return;
+		}
 
-		$url             = $match[ 'url' ];
+		$url = $match[ 'url' ];
+
 		$current_blog_id = get_current_blog_id();
 
 		/**
@@ -63,34 +66,39 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 		 * @return string
 		 */
 		$url = apply_filters( 'mlp_redirect_url', $url, $match, $current_blog_id );
-
-		if ( empty ( $url ) )
-			return; // no URL found
+		if ( empty( $url ) ) {
+			return;
+		}
 
 		$this->save_session( $match[ 'language' ] );
 
-		wp_redirect( $url ); // finally!
+		wp_redirect( $url );
 		exit;
 	}
 
 	/**
-	 * save no redirect data in session
+	 * Save no redirect data in session
+	 *
+	 * @param string $language Language code.
 	 *
 	 * @return void
-     */
+	 */
 	function save_session( $language ) {
 
-		// check to only session_start if no session is active
-		if ( ! isset ( $_SESSION ) && ! session_id() )
+		// Check to only session_start if no session is active
+		if ( ! isset( $_SESSION ) && ! session_id() ) {
 			session_start();
+		}
 
-		if ( isset ( $_SESSION[ 'noredirect' ] ) ) {
+		if ( isset( $_SESSION[ 'noredirect' ] ) ) {
 			$existing = (array) $_SESSION[ 'noredirect' ];
 
-			if ( in_array( $language, $existing ) )
+			if ( in_array( $language, $existing ) ) {
 				return;
+			}
 
 		}
+
 		$_SESSION[ 'noredirect' ][] = $language;
 	}
 

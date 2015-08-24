@@ -24,12 +24,12 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	/**
 	 * @var array
 	 */
-	private $assets;
+	private $assets = array();
 
 	/**
 	 * @var array
 	 */
-	private $l10n;
+	private $l10n = array();
 
 	/**
 	 * Constructor. Set up the properties.
