@@ -159,6 +159,8 @@ kraftner.
 props deantomasevic.
 - Bugfix no-redirect links don't properly set session to not redirect, see
 [issue #138](https://github.com/inpsyde/multilingual-press/issues/138), props dboune.
+- Get rid of possibly mixed content relations, see
+[issue #155](https://github.com/inpsyde/multilingual-press/issues/155), props kraftner.
 
 = 2.1.2 =
 - Combine all scripts and stylesheets, separated for frontend and backend.
