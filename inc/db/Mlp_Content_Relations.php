@@ -138,8 +138,8 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 
 		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
 
-		$cache = (array) wp_cache_get( $cache_key, $this->cache_group );
-		if ( $cache ) {
+		$cache = wp_cache_get( $cache_key, $this->cache_group );
+		if ( is_array( $cache ) ) {
 			return $cache;
 		}
 
