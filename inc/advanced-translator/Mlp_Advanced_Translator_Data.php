@@ -348,8 +348,9 @@ class Mlp_Advanced_Translator_Data
 		$new_post_data[ 'post_status' ] = 'draft';
 
 		// add post_author if override is available
-		if ( isset ( $this->post_request_data[ 'post_author_override' ] ) )
+		if ( isset( $this->post_request_data[ 'post_author_override' ] ) ) {
 			$new_post_data[ 'post_author' ] = $this->post_request_data[ 'post_author_override' ];
+		}
 
 		/**
 		 * Filter the new post data before inserting the post into the database.
@@ -494,7 +495,7 @@ class Mlp_Advanced_Translator_Data
 				$term = get_term_by( 'id', (int) $term_id, $taxonomy );
 
 				if ( $term ) {
-					$terms[ ] = $term->term_id;
+					$terms[] = $term->term_id;
 				}
 			}
 
@@ -717,7 +718,7 @@ class Mlp_Advanced_Translator_Data
 
 		foreach ( $terms as $term ) {
 			$term->active = has_term( $term->term_id, $taxonomy, $post );
-			$out[ ] = $term;
+			$out[] = $term;
 		}
 
 		return $out;
