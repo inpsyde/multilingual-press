@@ -77,7 +77,7 @@ class Mlp_Redirect_Frontend {
 	}
 
 	/**
-	 * Is there an accept header and the feature is active for the site?
+	 * Is there an accept header and the feature is active for the site and the current language is not in the noredirect cookie?
 	 *
 	 * @return bool
 	 */
@@ -85,6 +85,19 @@ class Mlp_Redirect_Frontend {
 
 		if ( empty ( $_SERVER[ 'HTTP_ACCEPT_LANGUAGE' ] ) )
 			return FALSE;
+
+		if ( ! isset ( $_SESSION ) && ! session_id() )
+			session_start();
+
+		if ( isset ( $_SESSION[ 'noredirect' ] ) ) {
+			// get the current site language
+			$current_site_language = mlp_get_current_blog_language();
+			$existing = (array)$_SESSION[ 'noredirect' ];
+
+			if ( in_array( $current_site_language, $existing ) ) {
+				return FALSE;
+			}
+		}
 
 		/**
 		 * Filter whether the user should be redirected.

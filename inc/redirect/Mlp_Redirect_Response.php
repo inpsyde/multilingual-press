@@ -32,8 +32,10 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 	 */
 	public function redirect() {
 
-		if ( ! empty ( $_GET[ 'noredirect' ] ) )
+		if ( ! empty ( $_GET[ 'noredirect' ] ) ) {
+			$this->save_session( $_GET[ 'noredirect' ] );
 			return;
+		}
 
 		$match = $this->negotiation->get_redirect_match();
 
@@ -65,6 +67,19 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 		if ( empty ( $url ) )
 			return; // no URL found
 
+		$this->save_session( $match[ 'language' ] );
+
+		wp_redirect( $url ); // finally!
+		exit;
+	}
+
+	/**
+	 * save no redirect data in session
+	 *
+	 * @return void
+     */
+	function save_session( $language ) {
+
 		// check to only session_start if no session is active
 		if ( ! isset ( $_SESSION ) && ! session_id() )
 			session_start();
@@ -72,14 +87,11 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 		if ( isset ( $_SESSION[ 'noredirect' ] ) ) {
 			$existing = (array) $_SESSION[ 'noredirect' ];
 
-			if ( in_array( $match[ 'language' ], $existing ) )
+			if ( in_array( $language, $existing ) )
 				return;
+
 		}
-
-		$_SESSION[ 'noredirect' ][] = $match[ 'language' ];
-
-		wp_redirect( $url ); // finally!
-		exit;
+		$_SESSION[ 'noredirect' ][] = $language;
 	}
 
 }
