@@ -98,7 +98,6 @@ class Mlp_Advanced_Translator_Data
 		}
 
 		$available_blogs = get_site_option( 'inpsyde_multilingual' );
-
 		if ( empty( $available_blogs ) ) {
 			return;
 		}
@@ -106,10 +105,12 @@ class Mlp_Advanced_Translator_Data
 		// auto-drafts
 		$post_id = $this->basic_data->get_real_post_id( $post_id );
 		$post_type = $this->basic_data->get_real_post_type( $post );
-		$source_blog_id = get_current_blog_id();
-		$thumb_data = $this->get_source_thumb_data( $post_id );
-		$related_blogs = $this->relations->get_related_sites( $source_blog_id, FALSE );
 
+		$source_blog_id = get_current_blog_id();
+
+		$thumb_data = $this->get_source_thumb_data( $post_id );
+
+		$related_blogs = $this->relations->get_related_sites( $source_blog_id );
 		if ( empty( $related_blogs ) ) {
 			return;
 		}
@@ -140,9 +141,9 @@ class Mlp_Advanced_Translator_Data
 		do_action( 'mlp_before_post_synchronization', $this->save_context );
 
 		foreach ( $this->post_request_data[ $this->name_base ] as $remote_blog_id => $post_data ) {
-
-			if ( ! blog_exists( $remote_blog_id )
-				or ! in_array( $remote_blog_id, $related_blogs )
+			if (
+				! blog_exists( $remote_blog_id )
+				|| ! in_array( $remote_blog_id, $related_blogs )
 			) {
 				continue;
 			}
@@ -154,7 +155,6 @@ class Mlp_Advanced_Translator_Data
 			$new_post = $this->create_post_to_send( $post_data, $post_type, $remote_blog_id );
 
 			if ( array() !== $new_post ) {
-
 				$sync_thumb = ! empty( $post_data[ 'thumbnail' ] );
 				$update = ! empty( $post_data[ 'remote_post_id' ] ) && 0 < $post_data[ 'remote_post_id' ];
 				$new_id = $this->sync_post( $new_post, $post_id, $remote_blog_id, $update );
@@ -167,9 +167,8 @@ class Mlp_Advanced_Translator_Data
 					$this->copy_thumb( $new_id, $thumb_data );
 				}
 
-				if ( ! empty( $post_data[ 'tax' ] ) ) {
-					$this->set_remote_tax_terms( $new_id, $post_data[ 'tax' ] );
-				}
+				$tax_data = empty( $post_data[ 'tax' ] ) ? array() : (array) $post_data[ 'tax' ];
+				$this->set_remote_tax_terms( $new_id, $tax_data );
 			}
 
 			restore_current_blog();
@@ -472,35 +471,31 @@ class Mlp_Advanced_Translator_Data
 	 * @param  int   $new_id
 	 * @param  array $tax_data
 	 *
-	 * @return bool  TRUE on complete success, FALSE when there were errors.
+	 * @return bool TRUE on complete success, FALSE when there were errors.
 	 */
 	private function set_remote_tax_terms( $new_id, array $tax_data ) {
 
 		$errors = array();
+
 		$post = get_post( $new_id );
-		$taxonomies = get_object_taxonomies( $post, 'names' );
 
-		foreach ( $taxonomies as $taxonomy ) {
-
-			if ( empty( $tax_data[ $taxonomy ] ) ) {
-				// all existing terms removed
-				$term_ids = array();
-			} else {
-				$term_ids = (array) $tax_data[ $taxonomy ];
+		$taxonomies = get_object_taxonomies( $post, 'objects' );
+		foreach ( $taxonomies as $taxonomy => $properties ) {
+			if ( ! current_user_can( $properties->cap->assign_terms, $taxonomy ) ) {
+				continue;
 			}
 
 			$terms = array();
 
+			$term_ids = empty( $tax_data[ $taxonomy ] ) ? array() : (array) $tax_data[ $taxonomy ];
 			foreach ( $term_ids as $term_id ) {
 				$term = get_term_by( 'id', (int) $term_id, $taxonomy );
-
 				if ( $term ) {
 					$terms[] = $term->term_id;
 				}
 			}
 
 			$set = wp_set_object_terms( $new_id, $terms, $taxonomy );
-
 			if ( is_wp_error( $set ) ) {
 				$errors[ $taxonomy ] = $set;
 			}
