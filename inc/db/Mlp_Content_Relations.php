@@ -149,6 +149,7 @@ FROM {$this->link_table} s
 INNER JOIN {$this->link_table} t
 ON s.ml_source_blogid = t.ml_source_blogid
 	AND s.ml_source_elementid = t.ml_source_elementid
+	AND s.ml_type = t.ml_type
 WHERE s.ml_blogid = %d
 	AND s.ml_elementid = %d
 	AND s.ml_type = %s";
