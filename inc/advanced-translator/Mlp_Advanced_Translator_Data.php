@@ -5,8 +5,8 @@
  *
  * Data model for advanced post translation. Handles inserts and updates.
  *
- * @version 2015.06.29
- * @author  Inpsyde GmbH, toscho
+ * @version 2015.08.21
+ * @author  Inpsyde GmbH, toscho, tf
  * @license GPL
  */
 class Mlp_Advanced_Translator_Data
@@ -126,6 +126,8 @@ class Mlp_Advanced_Translator_Data
 			'real_post_id'   => $post_id,
 		);
 
+		$this->basic_data->set_save_context( $this->save_context );
+
 		$post_meta = $this->basic_data->get_post_meta_to_transfer();
 
 		$this->basic_data->find_post_parents( $post_type, $post->post_parent );
@@ -156,6 +158,8 @@ class Mlp_Advanced_Translator_Data
 				$sync_thumb = ! empty( $post_data[ 'thumbnail' ] );
 				$update = ! empty( $post_data[ 'remote_post_id' ] ) && 0 < $post_data[ 'remote_post_id' ];
 				$new_id = $this->sync_post( $new_post, $post_id, $remote_blog_id, $update );
+
+				$this->basic_data->set_save_context( $this->save_context );
 
 				$this->basic_data->update_remote_post_meta( $new_id, $post_meta );
 
