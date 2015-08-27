@@ -43,6 +43,9 @@ when you don't use widgets or a sidebar.
 without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
 
+## WPML to MultilingualPress
+If you want to switch from the plugin WPML to this multilingual plugin MultilingualPress, then use the helping hands of the plugin [WPML to MultilingualPress](https://wordpress.org/plugins/wpml-to-multilingualpress/). This plugin convert posts from an existing WPML multilingual site via XLIFF Export/Import for MultilingualPress.
+
 ## Installation and prerequisites
 
 ### Requirements
