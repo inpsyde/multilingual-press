@@ -2,15 +2,14 @@
 Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, ipm-frommen, Biont, dnaber-de
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.0
-Tested up to: 4.2.2
+Tested up to: 4.3
 Stable tag: 2.2.0
 
 Create a fast translation network on WordPress multisite.
 
 == Description ==
 
-Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
-to link to all sites.
+Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites.
 
 This plugin lets you connect an unlimited amount of sites with each other.
 Set a main language for each site, create relationships (connections), and start writing. You get a new field now to
@@ -49,6 +48,9 @@ when you don't use widgets or a sidebar.
 - User specific language settings for the back-end. Every user can choose a preferred language for the user interface
 without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
+
+= WPML to MultilingualPress =
+If you want to switch from the plugin WPML to this multilingual plugin MultilingualPress, then use the helping hands of the plugin [WPML to MultilingualPress](https://wordpress.org/plugins/wpml-to-multilingualpress/). This plugin convert posts from an existing WPML multilingual site via XLIFF Export/Import for MultilingualPress.
 
 == Installation ==
 
