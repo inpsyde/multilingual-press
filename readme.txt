@@ -9,7 +9,8 @@ Create a fast translation network on WordPress multisite.
 
 == Description ==
 
-Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites.
+Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
+to link to all sites.
 
 This plugin lets you connect an unlimited amount of sites with each other.
 Set a main language for each site, create relationships (connections), and start writing. You get a new field now to
@@ -50,7 +51,9 @@ without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
 
 = WPML to MultilingualPress =
-If you want to switch from the plugin WPML to this multilingual plugin MultilingualPress, then use the helping hands of the plugin [WPML to MultilingualPress](https://wordpress.org/plugins/wpml-to-multilingualpress/). This plugin convert posts from an existing WPML multilingual site via XLIFF Export/Import for MultilingualPress.
+If you want to switch from the plugin WPML to this multilingual plugin MultilingualPress, then use the helping hands of
+the plugin [WPML to MultilingualPress](https://wordpress.org/plugins/wpml-to-multilingualpress/). This plugin convert
+posts from an existing WPML multilingual site via XLIFF Export/Import for MultilingualPress.
 
 == Installation ==
 
