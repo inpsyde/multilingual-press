@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.0
+## 2.2.0 Michael Ende
 - **Merge MultilingualPress Free and Pro.**
 - Pass `$wpdb` object to `inpsyde_mlp_init` and `inpsyde_mlp_loaded` hooks.
 - Remove `checkup_blog_message()` and `checkup_blog()`.
