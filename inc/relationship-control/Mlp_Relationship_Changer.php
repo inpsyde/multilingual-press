@@ -175,15 +175,34 @@ class Mlp_Relationship_Changer {
 	}
 
 	/**
-	 * @return false|int
+	 * @return int
 	 */
 	public function disconnect() {
 
-		return $this->content_relations->delete_relation(
+		$translation_ids = $this->content_relations->get_translation_ids(
 			$this->source_blog_id,
 			$this->remote_blog_id,
 			$this->source_post_id,
 			$this->remote_post_id,
+			'post'
+		);
+
+		$remote_blog_id = $this->remote_blog_id;
+
+		$remote_post_id = $this->remote_post_id;
+
+		if ( $translation_ids[ 'ml_source_blogid' ] !== $this->source_blog_id ) {
+			$remote_blog_id = $this->source_blog_id;
+			if ( 0 !== $this->remote_post_id ) {
+				$remote_post_id = $this->source_post_id;
+			}
+		}
+
+		return $this->content_relations->delete_relation(
+			$translation_ids[ 'ml_source_blogid' ],
+			$remote_blog_id,
+			$translation_ids[ 'ml_source_elementid' ],
+			$remote_post_id,
 			'post'
 		);
 	}
