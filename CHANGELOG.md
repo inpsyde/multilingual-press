@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.1
+- Handle deletion of post relations no matter from what site, see
+[issue #156](https://github.com/inpsyde/multilingual-press/issues/156), props kraftner.
+
 ## 2.2.0 Michael Ende
 - **Merge MultilingualPress Free and Pro.**
 - Pass `$wpdb` object to `inpsyde_mlp_init` and `inpsyde_mlp_loaded` hooks.

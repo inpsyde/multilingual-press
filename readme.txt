@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, ipm
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.0
 Tested up to: 4.3
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 
 Create a fast translation network on WordPress multisite.
 
@@ -99,6 +99,10 @@ because it creates a lock-in: you would lose access to your content after the pl
 4. Language switcher widget.
 
 == Changelog ==
+
+= 2.2.1 =
+- Handle deletion of post relations no matter from what site, see
+[issue #156](https://github.com/inpsyde/multilingual-press/issues/156), props kraftner.
 
 = 2.2.0 =
 - **Merge MultilingualPress Free and Pro.**
