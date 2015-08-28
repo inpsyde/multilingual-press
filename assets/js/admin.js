@@ -376,7 +376,7 @@
 						var $this = $( this ),
 							$option = $this.find( 'option[data-relation="' + relation + '"]' );
 
-						if ( $option.length ) {
+						if ( relation !== '' && $option.length ) {
 							$this.val( $option.val() );
 						} else {
 							$this.val( $this.find( 'option' ).first().val() );
