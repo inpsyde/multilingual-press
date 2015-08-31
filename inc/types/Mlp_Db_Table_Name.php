@@ -1,39 +1,37 @@
-<?php
+<?php # -*- coding: utf-8 -*-
 /**
- * Provide a validated table name
+ * Provide a table name.
  *
- * @version 2015.01.08
- * @author  Inpsyde GmbH, toscho
+ * @version 2015.08.31
+ * @author  Inpsyde GmbH, toscho, tf
  * @license GPL
  */
-
 class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 
 	/**
-	 * Current table name
-	 *
-	 * @type string
+	 * @var string
 	 */
 	private $table_name;
 
 	/**
-	 * All WordPress table names for the current installation.
-	 *
-	 * @type array
+	 * @var array
 	 */
 	private $all_table_names = array();
 
 	/**
-	 * @param string                      $table_name
-	 * @param Mlp_Db_Table_List_Interface $table_list
+	 * Constructor. Set up the properties.
+	 *
+	 * @param string                      $table_name Current table name.
+	 * @param Mlp_Db_Table_List_Interface $table_list All WordPress table names for the current installation.
 	 */
 	public function __construct(
-		                            $table_name,
+		$table_name,
 		Mlp_Db_Table_List_Interface $table_list
 	) {
 
 		$this->table_name = $table_name;
 
+		// TODO: Most propbably completely remove is_valid() check, and thus remove this class...
 		if ( ! $this->is_valid() ) {
 			trigger_error(
 				'Invalid table name: ' . esc_html( $table_name ),
@@ -45,7 +43,7 @@ class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 	}
 
 	/**
-	 * Get the table name as string.
+	 * Return the table name.
 	 *
 	 * @return string
 	 */
@@ -55,7 +53,7 @@ class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 	}
 
 	/**
-	 * Does the table exists already?
+	 * Check whether or not the table already exists.
 	 *
 	 * @return bool
 	 */
@@ -65,27 +63,29 @@ class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 	}
 
 	/**
-	 * Whether the current name is a valid table name
+	 * Check whether or not the current name is a valid table name.
 	 *
-	 * We allow just a limited set of characters for compatibility reasons.
-	 * A quoted identifier may contain almost any character, but we expect
-	 * only identifiers that can be used unquoted and in any SQL implementation.
+	 * We allow just a limited set of characters for compatibility reasons. A quoted identifier may contain almost any
+	 * character, but we expect only identifiers that can be used unquoted and in any SQL implementation.
 	 *
 	 * @return bool
 	 */
 	private function is_valid() {
 
 		// too long
-		if ( isset ( $this->table_name[64] ) )
+		if ( isset( $this->table_name[ 64 ] ) ) {
 			return FALSE;
+		}
 
 		// too short
-		if ( ! isset ( $this->table_name[0] ) )
+		if ( ! isset( $this->table_name[ 0 ] ) ) {
 			return FALSE;
+		}
 
-		return (bool) preg_match(
-			'~^[a-zA-Z_][a-zA-Z0-9_]*$~',
+		return (bool) ! preg_match(
+			'|[^a-z0-9_]|i',
 			$this->table_name
 		);
 	}
+
 }
