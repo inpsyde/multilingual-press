@@ -4,6 +4,7 @@
 - Handle deletion of post relations no matter from what site, see
 [issue #156](https://github.com/inpsyde/multilingual-press/issues/156), props kraftner.
 - Bugfix auto-selecting the first remote term without relationships.
+- Improve validity check for table names (don't be more restrictive than WP core).
 
 ## 2.2.0 Michael Ende
 - **Merge MultilingualPress Free and Pro.**
