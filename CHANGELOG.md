@@ -1,5 +1,8 @@
 # Changelog
 
+## Current Version
+- Bugfix term auto-selecting, again.
+
 ## 2.2.1
 - Handle deletion of post relations no matter from what site, see
 [issue #156](https://github.com/inpsyde/multilingual-press/issues/156), props kraftner.
