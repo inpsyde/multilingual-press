@@ -1,9 +1,10 @@
-<?php
+<?php # -*- coding: utf-8 -*-
+
 /**
- * Check the current system if it matches the minimum requirements.
+ * Check whether or not current system matches the minimum requirements.
  *
- * @version 2014.08.29
- * @author  Inpsyde GmbH, toscho
+ * @version 2015.09.01
+ * @author  Inpsyde GmbH, toscho, tf
  * @license GPL
  */
 class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
@@ -24,15 +25,11 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	private $current_wp_version;
 
 	/**
-	 * Directory of the plugin to check.
-	 *
 	 * @var string
 	 */
 	private $current_plugin_file;
 
 	/**
-	 * What went wrong?
-	 *
 	 * @var array
 	 */
 	private $errors = array();
@@ -44,15 +41,19 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	 * @param string                       $current_plugin_file
 	 */
 	public function __construct(
-		Mlp_Requirements_Interface   $requirements,
+		Mlp_Requirements_Interface $requirements,
 		Mlp_Version_Number_Interface $current_php_version,
 		Mlp_Version_Number_Interface $current_wp_version,
-		                             $current_plugin_file
+		$current_plugin_file
 	) {
 
-		$this->requirements        = $requirements;
+		$this->requirements = $requirements;
+
 		$this->current_php_version = $current_php_version;
-		$this->current_wp_version  = $current_wp_version;
+
+		$this->current_wp_version = $current_wp_version;
+
+		$current_plugin_file = realpath( $current_plugin_file );
 		$this->current_plugin_file = $this->normalize_path( $current_plugin_file );
 	}
 
@@ -64,19 +65,25 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	public function is_compliant() {
 
 		$this->check_php_version();
+
 		$this->check_wp_version();
+
 		$this->check_installation();
 
-		if ( $this->requirements->network_activation_required() && is_multisite() )
+		if ( $this->requirements->network_activation_required() && is_multisite() ) {
 			$this->check_activation();
+		}
 
-		return empty ( $this->errors );
+		return empty( $this->errors );
 	}
 
 	/**
+	 * Return all collected errors.
+	 *
 	 * @return array
 	 */
 	public function get_error_messages() {
+
 		return $this->errors;
 	}
 
@@ -87,11 +94,13 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	 */
 	private function check_php_version() {
 
-		$current  = $this->current_php_version;
+		$current = $this->current_php_version;
+
 		$required = $this->requirements->get_min_php_version();
 
-		if ( version_compare( $current, $required, '>=' ) )
+		if ( version_compare( $current, $required, '>=' ) ) {
 			return;
+		}
 
 		$msg = esc_html_x(
 			'This plugin requires PHP version %1$s, your version %2$s is too old. Please upgrade.',
@@ -102,15 +111,19 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	}
 
 	/**
+	 * Check WordPress version.
+	 *
 	 * @return void
 	 */
 	private function check_wp_version() {
 
-		$current  = $this->current_wp_version;
+		$current = $this->current_wp_version;
+
 		$required = $this->requirements->get_min_wp_version();
 
-		if ( version_compare( $current, $required, '>=' ) )
+		if ( version_compare( $current, $required, '>=' ) ) {
 			return;
+		}
 
 		$msg = esc_html_x(
 			'This plugin requires WordPress version %1$s, your version %2$s is too old. Please upgrade.',
@@ -123,17 +136,19 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	/**
 	 * Make all slashes unique.
 	 *
-	 * @param  string $path
+	 * @param string $path
+	 *
 	 * @return string
 	 */
 	private function normalize_path( $path ) {
 
 		// WP 3.9 and newer.
-		if ( function_exists( 'wp_normalize_path' ) )
+		if ( function_exists( 'wp_normalize_path' ) ) {
 			return wp_normalize_path( $path );
+		}
 
 		$path = str_replace( '\\', '/', $path );
-		$path = preg_replace( '|/+|','/', $path );
+		$path = preg_replace( '|/+|', '/', $path );
 
 		return $path;
 	}
@@ -145,11 +160,13 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	 */
 	private function check_installation() {
 
-		if ( ! $this->requirements->multisite_required() )
+		if ( ! $this->requirements->multisite_required() ) {
 			return;
+		}
 
-		if ( is_multisite() )
+		if ( is_multisite() ) {
 			return;
+		}
 
 		$msg = _x(
 			'This plugin needs to run in a multisite. Please <a href="%s">convert this WordPress installation to multisite</a>.',
@@ -169,14 +186,12 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	 */
 	private function check_activation() {
 
-		$plugins = wp_get_active_network_plugins();
+		foreach ( wp_get_active_network_plugins() as $plugin ) {
+			$plugin_file = realpath( $plugin );
 
-		foreach ( $plugins as $plugin ) {
-
-			$plugin_file = $this->normalize_path( $plugin );
-
-			if ( $this->current_plugin_file === $plugin_file )
+			if ( $this->current_plugin_file === $this->normalize_path( $plugin_file ) ) {
 				return;
+			}
 		}
 
 		$msg = _x(
@@ -187,4 +202,5 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		$url = network_admin_url( 'plugins.php' );
 		$this->errors[ 'activation' ] = sprintf( $msg, $url );
 	}
+
 }
