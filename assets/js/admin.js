@@ -370,16 +370,19 @@
 					term_translator.isPropagating = true;
 
 					var $this = $( this ),
-						relation = $this.find( '[value="' + $this.val() + '"]' ).data( 'relation' );
+						relation = $this.find( '[value="' + $this.val() + '"]' ).data( 'relation' ) || '';
 
 					$selects.not( $this ).each( function() {
 						var $this = $( this ),
-							$option = $this.find( 'option[data-relation="' + relation + '"]' );
+							$option = $this.find( 'option[data-relation="' + relation + '"]' ),
+							currentRelation = $this.find( '[value="' + $this.val() + '"]' ).data( 'relation' ) || '';
 
-						if ( relation !== '' && $option.length ) {
-							$this.val( $option.val() );
-						} else {
-							$this.val( $this.find( 'option' ).first().val() );
+						if ( relation !== '' ) {
+							if ( $option.length ) {
+								$this.val( $option.val() );
+							} else if ( currentRelation !== '' ) {
+								$this.val( $this.find( 'option' ).first().val() );
+							}
 						}
 					} );
 
