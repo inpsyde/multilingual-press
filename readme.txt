@@ -93,18 +93,18 @@ because it creates a lock-in: you would lose access to your content after the pl
 
 == Screenshots ==
 
-1. New columns for fast overview about language and relationship.
-2. Edit site with the additional MultilingualPress settings.
-3. Create new site with additional MultilingualPress settings.
-4. The global feature settings, include support for custom post types.
-5. The language manager.
-6. Dashboard widget to see non translated content.
-7. Create new posts in all languages, there have a relation.
-8. Create relationship between taxonomies, like category on create new category.
-9. Edit relationship on existings tagonomy, like category.
-10. Set your preferred back end language, on user profile for each user and de/activate optional the global redirect.
-11. Language switcher widget.
-12. Frontend example with the Quicklink and the Language switcher widget.
+1. New columns in the site list table for the _Relationships_ (i.e., connections with other sites) and the _Site Language_.
+2. New settings tab on the _Edit Site_ page.
+3. New settings tab on the _Add New Site_ page.
+4. Plugin settings, including Custom Post Type translation.
+5. The _Language Manager_.
+6. Dashboard widget informing about currently untranslated posts.
+7. Translate a post directly from the _Edit Post_ page, and set the translation status and _Trasher_ setting.
+8. Translate a term directly from the _Add New Category_ page.
+9. Edit term translations on the _Edit Category_ page.
+10. New user settings for the sitewide _Backend Language_ and the _Language Redirect_.
+11. New _Language Switcher_ widget.
+12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
 
