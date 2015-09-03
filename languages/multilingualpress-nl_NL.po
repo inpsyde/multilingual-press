@@ -235,12 +235,12 @@ msgstr "Prioriteit"
 msgid "Quicklink position"
 msgstr "Snelkoppeling positie"
 
-#: inc/installation/Mlp_Requirements_Check.php:96
+#: inc/installation/Mlp_Requirements_Check.php:111
 msgctxt "1 = required PHP version, 2 = current"
 msgid "This plugin requires PHP version %1$s, your version %2$s is too old. Please upgrade."
 msgstr "Deze plugin heeft minimaal PHP versie %1$s nodig, jouw versie %2$s is te oud. Upgrade PHP zodat alle functionaliteit correct werkt."
 
-#: inc/installation/Mlp_Requirements_Check.php:115
+#: inc/installation/Mlp_Requirements_Check.php:134
 msgctxt "1 = required WordPress version, 2 = current"
 msgid "This plugin requires WordPress version %1$s, your version %2$s is too old. Please upgrade."
 msgstr "Deze plugin heeft minimaal WordPress versie %1$s nodig, jouw versie %2$s is te oud. Upgrade WordPress zodat alle functionaliteit correct werkt."
@@ -500,12 +500,12 @@ msgstr "Vertalingen zijn gesorteerd op prioriteit."
 msgid "Select All"
 msgstr "Selecteer alles"
 
-#: inc/installation/Mlp_Requirements_Check.php:154
+#: inc/installation/Mlp_Requirements_Check.php:157
 msgctxt "%s = link to installation instructions"
 msgid "This plugin needs to run in a multisite. Please <a href=\"%s\">convert this WordPress installation to multisite</a>."
 msgstr "Deze plugin moet actief zijn op een multisite. <a href=\"%s\">Zet deze WordPress installation om in een multisite</a>."
 
-#: inc/installation/Mlp_Requirements_Check.php:182
+#: inc/installation/Mlp_Requirements_Check.php:183
 msgctxt "%s = link to network plugin screen"
 msgid "This plugin must be activated for the network. Please use the <a href=\"%s\">network plugin administration</a>."
 msgstr "Deze plugin moet op netwerk niveau zijn geactiveerd. Gebruik <a href=\"%s\">het netwerk plugin overzicht</a> om deze te activeren."

@@ -235,12 +235,12 @@ msgstr "Priorité"
 msgid "Quicklink position"
 msgstr "Emplacement de l'accès rapide"
 
-#: inc/installation/Mlp_Requirements_Check.php:96
+#: inc/installation/Mlp_Requirements_Check.php:111
 msgctxt "1 = required PHP version, 2 = current"
 msgid "This plugin requires PHP version %1$s, your version %2$s is too old. Please upgrade."
 msgstr "Cette extension nécessite PHP en version %1$s, votre version %2$s est trop ancienne. Veuillez faire la mise à jour."
 
-#: inc/installation/Mlp_Requirements_Check.php:115
+#: inc/installation/Mlp_Requirements_Check.php:134
 msgctxt "1 = required WordPress version, 2 = current"
 msgid "This plugin requires WordPress version %1$s, your version %2$s is too old. Please upgrade."
 msgstr "Cette extension nécessite WordPress en version %1$s, votre version %2$s est trop ancienne. Veuillez faire la mise à jour."
@@ -500,12 +500,12 @@ msgstr "Les langues sont triées par ordre de priorité."
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-#: inc/installation/Mlp_Requirements_Check.php:154
+#: inc/installation/Mlp_Requirements_Check.php:157
 msgctxt "%s = link to installation instructions"
 msgid "This plugin needs to run in a multisite. Please <a href=\"%s\">convert this WordPress installation to multisite</a>."
 msgstr "Cette extension a besoin de fonctionner sur un multisite. Veuillez <a href=\\\"%s\\\">convertir cette installation de WordPress en multisite</a> ."
 
-#: inc/installation/Mlp_Requirements_Check.php:182
+#: inc/installation/Mlp_Requirements_Check.php:183
 msgctxt "%s = link to network plugin screen"
 msgid "This plugin must be activated for the network. Please use the <a href=\"%s\">network plugin administration</a>."
 msgstr "Cette extension doit être activée sur le réseau. Veuillez utiliser le <a href=\\\"%s\\\">panneau d'administration des extensions du réseau</a> ."
