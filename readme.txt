@@ -93,10 +93,18 @@ because it creates a lock-in: you would lose access to your content after the pl
 
 == Screenshots ==
 
-1. Language manager.
-2. Site settings.
-3. Post editor with translation preview.
-4. Language switcher widget.
+1. New columns for fast overview about language and relationship.
+2. Edit site with the additional MultilingualPress settings.
+3. Create new site with additional MultilingualPress settings.
+4. The global feature settings, include support for custom post types.
+5. The language manager.
+6. Dashboard widget to see non translated content.
+7. Create new posts in all languages, there have a relation.
+8. Create relationship between taxonomies, like category on create new category.
+9. Edit relationship on existings tagonomy, like category.
+10. Set your preferred back end language, on user profile for each user and de/activate optional the global redirect.
+11. Language switcher widget.
+12. Frontend example with the Quicklink and the Language switcher widget.
 
 == Changelog ==
 
