@@ -1,11 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 /**
- * Check whether or not current system matches the minimum requirements.
- *
- * @version 2015.09.01
- * @author  Inpsyde GmbH, toscho, tf
- * @license GPL
+ * Check whether or not the current system matches the minimum requirements.
  */
 class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 
@@ -58,6 +54,26 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	}
 
 	/**
+	 * Make all slashes unique.
+	 *
+	 * @param string $path
+	 *
+	 * @return string
+	 */
+	private function normalize_path( $path ) {
+
+		// WP 3.9 and newer.
+		if ( function_exists( 'wp_normalize_path' ) ) {
+			return wp_normalize_path( $path );
+		}
+
+		$path = str_replace( '\\', '/', $path );
+		$path = preg_replace( '|/+|', '/', $path );
+
+		return $path;
+	}
+
+	/**
 	 * Check all given requirements.
 	 *
 	 * @return bool
@@ -75,16 +91,6 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		}
 
 		return empty( $this->errors );
-	}
-
-	/**
-	 * Return all collected errors.
-	 *
-	 * @return array
-	 */
-	public function get_error_messages() {
-
-		return $this->errors;
 	}
 
 	/**
@@ -131,26 +137,6 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 			'multilingualpress'
 		);
 		$this->errors[ 'wp' ] = sprintf( $msg, $required, $current );
-	}
-
-	/**
-	 * Make all slashes unique.
-	 *
-	 * @param string $path
-	 *
-	 * @return string
-	 */
-	private function normalize_path( $path ) {
-
-		// WP 3.9 and newer.
-		if ( function_exists( 'wp_normalize_path' ) ) {
-			return wp_normalize_path( $path );
-		}
-
-		$path = str_replace( '\\', '/', $path );
-		$path = preg_replace( '|/+|', '/', $path );
-
-		return $path;
 	}
 
 	/**
@@ -201,6 +187,16 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		);
 		$url = network_admin_url( 'plugins.php' );
 		$this->errors[ 'activation' ] = sprintf( $msg, $url );
+	}
+
+	/**
+	 * Return all collected errors.
+	 *
+	 * @return array
+	 */
+	public function get_error_messages() {
+
+		return $this->errors;
 	}
 
 }
