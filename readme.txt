@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, ipm
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.0
 Tested up to: 4.3
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 
 Create a fast translation network on WordPress multisite.
 
@@ -100,8 +100,10 @@ because it creates a lock-in: you would lose access to your content after the pl
 
 == Changelog ==
 
-= Current Version =
+= 2.2.2 =
 - Bugfix term auto-selecting, again.
+- Use `realptah()` for plugin file in requirements check to allow for symlinked plugin folder, see
+[issue #162](https://github.com/inpsyde/multilingual-press/issues/162), props jackblackCH.
 
 = 2.2.1 =
 - Handle deletion of post relations no matter from what site, see
