@@ -110,7 +110,7 @@ because it creates a lock-in: you would lose access to your content after the pl
 
 = 2.2.2 =
 - Bugfix term auto-selecting, again.
-- Use `realptah()` for plugin file in requirements check to allow for symlinked plugin folder, see
+- Use `realpath()` for plugin file in requirements check to allow for symlinked plugin folder, see
 [issue #162](https://github.com/inpsyde/multilingual-press/issues/162), props jackblackCH.
 
 = 2.2.1 =
