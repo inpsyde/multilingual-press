@@ -87,4 +87,44 @@ You can find all official translation files in the according
 That would require changes to the way WordPress stores post content. Other plugins do that; we think this is wrong,
 because it creates a lock-in: you would lose access to your content after the plugin deactivation.
 
+## Screenshots
+
+![Screenshot 1](assets/screenshot-1.png)  
+New columns in the site list table for the _Relationships_ (i.e., connections with other sites) and the _Site Language_.
+
+![Screenshot 2](assets/screenshot-2.png)  
+New settings tab on the _Edit Site_ page.
+
+![Screenshot 3](assets/screenshot-3.png)  
+New settings tab on the _Add New Site_ page.
+
+![Screenshot 4](assets/screenshot-4.png)  
+Plugin settings, including Custom Post Type translation.
+
+![Screenshot 5](assets/screenshot-5.png)  
+The _Language Manager_.
+
+![Screenshot 6](assets/screenshot-6.png)  
+Dashboard widget informing about currently untranslated posts.
+
+![Screenshot 7](assets/screenshot-7.png)  
+Translate a post directly from the _Edit Post_ page, and set the translation status and _Trasher_ setting.
+
+![Screenshot 8](assets/screenshot-8.png)  
+Translate a term directly from the _Add New Category_ page.
+
+![Screenshot 9](assets/screenshot-9.png)  
+Edit term translations on the _Edit Category_ page.
+
+![Screenshot 10](assets/screenshot-10.png)  
+New user settings for the sitewide _Backend Language_ and the _Language Redirect_.
+
+![Screenshot 11](assets/screenshot-11.png)  
+New _Language Switcher_ widget.
+
+![Screenshot 12](assets/screenshot-12.png)  
+Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
+
+## Changelog
+
 [Changelog](CHANGELOG.md)
