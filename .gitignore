@@ -6,15 +6,21 @@
 *.so
 *.swp
 
+# Custom files
+*.map
+*.sass-cache*
+
+# Composer
+vendor
+
 # Grunt
 node_modules
 
 # PhpStorm
 .idea
 
-# Custom files
-*.map
-*.sass-cache*
+# PHPUnit
+phpunit.xml
 
 # This should stay at the bottom
 !.gitkeep
