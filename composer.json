@@ -39,6 +39,10 @@
 		"php": ">=5.2.4",
 		"composer/installers": "~1.0"
 	},
+	"require-dev": {
+		"php": ">=5.3.3",
+		"phpunit/phpunit": "~4.8"
+	},
 	"repositories": [
 		{
 			"type": "vcs",
