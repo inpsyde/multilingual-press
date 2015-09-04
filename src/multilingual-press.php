@@ -1,4 +1,4 @@
-<?php
+<?php # -*- coding: utf-8 -*-
 /**
  * Plugin Name: MultilingualPress
  * Plugin URI:  https://wordpress.org/plugins/multilingual-press/
