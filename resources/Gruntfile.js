@@ -1,22 +1,25 @@
 module.exports = function( grunt ) {
 
-	var globalConfig = {
-		path       : require( 'path' ),
-		images_src : 'images/',
-		images     : '../assets/images/',
-		languages  : '../languages/',
-		scripts_src: 'js/',
-		scripts    : '../assets/js/',
-		styles_src : 'scss/',
-		styles     : '../assets/css/',
-		textdomain : 'multilingualpress'
-	};
+	var src = '../src/',
+		globalConfig = {
+			file       : 'multilingual-press.php',
+			images     : src + 'assets/images/',
+			images_src : 'images/',
+			languages  : src + 'languages/',
+			name       : 'MultilingualPress',
+			path       : require( 'path' ),
+			scripts    : src + 'assets/js/',
+			scripts_src: 'js/',
+			styles     : src + 'assets/css/',
+			styles_src : 'scss/',
+			textdomain : 'multilingualpress'
+		};
 
 	grunt.initConfig( {
-		globalConfig      : globalConfig,
+		globalConfig: globalConfig,
 
 		// https://github.com/nDmitry/grunt-autoprefixer
-		autoprefixer      : {
+		autoprefixer: {
 			options: {
 				browsers: [
 					'Android >= 2.1',
@@ -40,7 +43,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-concat
-		concat            : {
+		concat: {
 			options : {
 				separator: '\n'
 			},
@@ -61,7 +64,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-cssmin
-		cssmin            : {
+		cssmin: {
 			styles: {
 				options: {
 					processImport: true
@@ -90,7 +93,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-imagemin
-		imagemin          : {
+		imagemin: {
 			dynamic: {
 				options: {
 					optimizationLevel: 7
@@ -107,7 +110,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-jshint
-		jshint            : {
+		jshint: {
 			grunt  : {
 				src: [ 'Gruntfile.js' ]
 			},
@@ -122,7 +125,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/suisho/grunt-lineending
-		lineending        : {
+		lineending: {
 			options: {
 				eol      : 'lf',
 				overwrite: true
@@ -142,13 +145,13 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/cedaro/grunt-wp-i18n
-		makepot           : {
+		makepot: {
 			pot: {
 				options: {
-					cwd        : '..',
-					exclude    : [ 'resources' ],
-					mainFile   : 'multilingual-press.php',
-					potComments: 'Copyright (C) {{year}} MultilingualPress\nThis file is distributed under the same license as the MultilingualPress package.',
+					cwd        : '../src',
+					domainPath : '<%= globalConfig.languages %>',
+					mainFile   : '<%= globalConfig.file %>',
+					potComments: 'Copyright (C) {{year}} <%= globalConfig.name %>\nThis file is distributed under the same license as the <%= globalConfig.name %> package.',
 					potFilename: '<%= globalConfig.textdomain %>.pot',
 					potHeaders : {
 						poedit                 : true,
@@ -160,7 +163,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-sass
-		sass              : {
+		sass: {
 			styles: {
 				expand : true,
 				cwd    : '<%= globalConfig.styles_src %>',
@@ -175,20 +178,8 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/sindresorhus/grunt-shell
-		shell             : {
-			start: {
-				command: [
-					'cd ..',
-					'git pull',
-					'cd resources/',
-					'grunt'
-				].join( '&&' )
-			}
-		},
-
 		// https://github.com/gruntjs/grunt-contrib-uglify
-		uglify            : {
+		uglify: {
 			scripts: {
 				expand: true,
 				cwd   : '<%= globalConfig.scripts %>',
@@ -207,7 +198,7 @@ module.exports = function( grunt ) {
 		},
 
 		// https://github.com/gruntjs/grunt-contrib-watch
-		watch             : {
+		watch: {
 			options: {
 				dot     : true,
 				spawn   : true,
@@ -242,7 +233,6 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'lineendings', [ 'lineending' ] );
 	grunt.registerTask( 'production', [ 'images', 'languages', 'scripts', 'styles' ] );
 	grunt.registerTask( 'scripts', [ 'jshint:scripts', 'concat', 'uglify', 'lineending:scripts' ] );
-	grunt.registerTask( 'start', [ 'shell:workflow' ] );
 	grunt.registerTask( 'styles', [ 'sass', 'autoprefixer', 'lineending:styles', 'cssmin' ] );
 	grunt.registerTask( 'test', [ 'jshint' ] );
 };
