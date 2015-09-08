@@ -50,10 +50,10 @@ when you don't use widgets or a sidebar.
 without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
 
-= Premium Version =
+= Premium Support =
 
-Our [premium-version](http://marketpress.com/product/multilingual-press-pro/) offers premium support to save your time.
-The features are the same, but you support the development and get help from the developers of the plugin.
+We also offer [premium support](http://marketpress.com/product/multilingual-press-pro/) to save your time.
+You get direct help from the developers of the plugin-and support the development.
 
 = WPML to MultilingualPress =
 
@@ -107,6 +107,10 @@ because it creates a lock-in: you would lose access to your content after the pl
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.2.3 =
+- Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),
+props gabsoftware.
 
 = 2.2.2 =
 - Bugfix term auto-selecting, again.

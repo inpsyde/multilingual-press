@@ -1,13 +1,11 @@
 # MultilingualPress
 
-Run WordPress Multisite with multiple languages.
-
-MultilingualPress Pro and Free are merged now, so all features are the same. 
-We are still finishing up this process. Use the `master` branch to get a preview of the upcoming fixes.
+Create a fast translation network on WordPress multisite.
 
 ## Description
 
-Connect multiple sites as language alternatives in a multisite. Use a customizable widget to link to all sites.
+Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
+to link to all sites.
 
 This plugin lets you connect an unlimited amount of sites with each other.
 Set a main language for each site, create relationships (connections), and start writing. You get a new field now to
@@ -18,6 +16,10 @@ In contrast to most other translation plugins there is **no lock-in effect**: Wh
 will still work as separate sites without any data-loss or garbage output.
 
 Our **Language Manager** offers 174 languages, and you can edit them.
+
+We cannot guarantee free ad hoc support. Please be patient, we are a small team.
+You can follow our progress and development notices on our
+[developer blog](http://make.marketpress.com/multilingualpress/).
 
 ## Features
 
@@ -43,10 +45,10 @@ when you don't use widgets or a sidebar.
 without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
 
-## Premium Version
+## Premium Support
 
-Our [premium-version](http://marketpress.com/product/multilingual-press-pro/) offers premium support to save your time.
-The features are the same, but you support the development and get help from the developers of the plugin.
+We also offer [premium support](http://marketpress.com/product/multilingual-press-pro/) to save your time.
+You get direct help from the developers of the plugin-and support the development.
 
 ## WPML to MultilingualPress
 

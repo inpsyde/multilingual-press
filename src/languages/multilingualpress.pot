@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the MultilingualPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: MultilingualPress 2.2.2\n"
+"Project-Id-Version: MultilingualPress 2.2.3\n"
 "Report-Msgid-Bugs-To: https://github.com/inpsyde/multilingual-press/issues\n"
-"POT-Creation-Date: 2015-09-04 12:12:33+00:00\n"
+"POT-Creation-Date: 2015-09-08 11:36:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -585,28 +585,28 @@ msgstr ""
 msgid "http://inpsyde.com"
 msgstr ""
 
-#: inc/installation/Mlp_Requirements_Check.php:111
+#: inc/installation/Mlp_Requirements_Check.php:114
 msgctxt "1 = required PHP version, 2 = current"
 msgid ""
 "This plugin requires PHP version %1$s, your version %2$s is too old. Please "
 "upgrade."
 msgstr ""
 
-#: inc/installation/Mlp_Requirements_Check.php:134
+#: inc/installation/Mlp_Requirements_Check.php:137
 msgctxt "1 = required WordPress version, 2 = current"
 msgid ""
 "This plugin requires WordPress version %1$s, your version %2$s is too old. "
 "Please upgrade."
 msgstr ""
 
-#: inc/installation/Mlp_Requirements_Check.php:157
+#: inc/installation/Mlp_Requirements_Check.php:160
 msgctxt "%s = link to installation instructions"
 msgid ""
 "This plugin needs to run in a multisite. Please <a href=\"%s\">convert this "
 "WordPress installation to multisite</a>."
 msgstr ""
 
-#: inc/installation/Mlp_Requirements_Check.php:183
+#: inc/installation/Mlp_Requirements_Check.php:186
 msgctxt "%s = link to network plugin screen"
 msgid ""
 "This plugin must be activated for the network. Please use the <a "

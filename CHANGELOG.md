@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.3
+- Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),
+props gabsoftware.
+
 ## 2.2.2
 - Bugfix term auto-selecting, again.
 - Use `realpath()` for plugin file in requirements check to allow for symlinked plugin folder, see
