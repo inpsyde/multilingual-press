@@ -235,12 +235,12 @@ msgstr ""
 msgid "Quicklink position"
 msgstr ""
 
-#: inc/installation/Mlp_Requirements_Check.php:111
+#: inc/installation/Mlp_Requirements_Check.php:114
 msgctxt "1 = required PHP version, 2 = current"
 msgid "This plugin requires PHP version %1$s, your version %2$s is too old. Please upgrade."
 msgstr ""
 
-#: inc/installation/Mlp_Requirements_Check.php:134
+#: inc/installation/Mlp_Requirements_Check.php:137
 msgctxt "1 = required WordPress version, 2 = current"
 msgid "This plugin requires WordPress version %1$s, your version %2$s is too old. Please upgrade."
 msgstr ""
@@ -500,12 +500,12 @@ msgstr "Οι γλώσσες είναι ταξινομημένες κατά πρ�
 msgid "Select All"
 msgstr "Επιλογή Όλων"
 
-#: inc/installation/Mlp_Requirements_Check.php:157
+#: inc/installation/Mlp_Requirements_Check.php:160
 msgctxt "%s = link to installation instructions"
 msgid "This plugin needs to run in a multisite. Please <a href=\"%s\">convert this WordPress installation to multisite</a>."
 msgstr "Το πρόσθετο τρέχει μόνο σε multisite. Παρακαλώ <a href=\"%s\">μετατρέψτε αυτή την WordPress εγκατάσταση σε multisite</a>."
 
-#: inc/installation/Mlp_Requirements_Check.php:183
+#: inc/installation/Mlp_Requirements_Check.php:186
 msgctxt "%s = link to network plugin screen"
 msgid "This plugin must be activated for the network. Please use the <a href=\"%s\">network plugin administration</a>."
 msgstr "Το πρόσθετο πρέπει να ενεργοποιηθεί για το δίκτυο. Παρακαλώ χρησιμοποιήστε την επιλογή <a href=\"%s\">διαχείρισης προσθέτων δικτύου</a>."

@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the MultilingualPress package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-07-02 15:36:34+0000\n"
+"PO-Revision-Date: 2015-09-08 13:04:46+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,53 +12,53 @@ msgstr ""
 
 #: inc/Multilingual_Press.php:179
 msgid "You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page."
-msgstr ""
+msgstr "Vous avez des modifications non enregistrées dans les relations de votre article. Les modifications apportées seront perdues si vous quittez cette page."
 
 #: inc/Multilingual_Press.php:183
 msgid "Please select a post."
-msgstr ""
+msgstr "Veuillez sélectionner un article."
 
 msgid "https://wordpress.org/plugins/multilingual-press/"
-msgstr ""
+msgstr "https://wordpress.org/plugins/multilingual-press/"
 
 msgid "Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites."
-msgstr ""
+msgstr "Créer un réseau rapide de traduction sur un WordPress multisite. Utiliser chaque langue sur un site séparé et connecter le contenu via une interface utilisateur légère. Utiliser un widget personnalisé pour publier un lien vers tous les sites."
 
 #: inc/advanced-translator/Mlp_Advanced_Translator_View.php:107
 msgid "Enter name here"
-msgstr ""
+msgstr "Saisissez le nouveau nom ici"
 
 #: inc/advanced-translator/Mlp_Advanced_Translator_View.php:144
 msgid "Enter excerpt here"
-msgstr ""
+msgstr "Saisissez votre extrait ici"
 
 #: inc/common/Mlp_Widget.php:92
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: inc/common/Mlp_Widget.php:94
 msgid "Custom name"
-msgstr ""
+msgstr "Nom personalisé"
 
 #: inc/common/Mlp_Widget.php:97
 msgid "Language code (short)"
-msgstr ""
+msgstr "Code de langue (court)"
 
 #: inc/common/Mlp_Widget.php:115
 msgid "Show flag"
-msgstr ""
+msgstr "Afficher le drapeau"
 
 #: inc/term-translator/Mlp_Term_Translation_Selector.php:120
 msgid "No terms found."
-msgstr ""
+msgstr "Aucun terme trouvé."
 
 #: inc/advanced-translator/Mlp_Advanced_Translator_View.php:114
 msgid "Post Name:"
-msgstr ""
+msgstr "Nom de l'article&nbsp;:"
 
 #: inc/advanced-translator/Mlp_Advanced_Translator_View.php:151
 msgid "Post Excerpt:"
-msgstr ""
+msgstr "Extrait de l’article&nbsp;:"
 
 #: inc/nav-menu/Mlp_Simple_Nav_Menu_Selectors.php:156
 msgid "Add to Menu"
@@ -235,12 +235,12 @@ msgstr "Priorité"
 msgid "Quicklink position"
 msgstr "Emplacement de l'accès rapide"
 
-#: inc/installation/Mlp_Requirements_Check.php:111
+#: inc/installation/Mlp_Requirements_Check.php:114
 msgctxt "1 = required PHP version, 2 = current"
 msgid "This plugin requires PHP version %1$s, your version %2$s is too old. Please upgrade."
 msgstr "Cette extension nécessite PHP en version %1$s, votre version %2$s est trop ancienne. Veuillez faire la mise à jour."
 
-#: inc/installation/Mlp_Requirements_Check.php:134
+#: inc/installation/Mlp_Requirements_Check.php:137
 msgctxt "1 = required WordPress version, 2 = current"
 msgid "This plugin requires WordPress version %1$s, your version %2$s is too old. Please upgrade."
 msgstr "Cette extension nécessite WordPress en version %1$s, votre version %2$s est trop ancienne. Veuillez faire la mise à jour."
@@ -500,12 +500,12 @@ msgstr "Les langues sont triées par ordre de priorité."
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-#: inc/installation/Mlp_Requirements_Check.php:157
+#: inc/installation/Mlp_Requirements_Check.php:160
 msgctxt "%s = link to installation instructions"
 msgid "This plugin needs to run in a multisite. Please <a href=\"%s\">convert this WordPress installation to multisite</a>."
 msgstr "Cette extension a besoin de fonctionner sur un multisite. Veuillez <a href=\\\"%s\\\">convertir cette installation de WordPress en multisite</a> ."
 
-#: inc/installation/Mlp_Requirements_Check.php:183
+#: inc/installation/Mlp_Requirements_Check.php:186
 msgctxt "%s = link to network plugin screen"
 msgid "This plugin must be activated for the network. Please use the <a href=\"%s\">network plugin administration</a>."
 msgstr "Cette extension doit être activée sur le réseau. Veuillez utiliser le <a href=\\\"%s\\\">panneau d'administration des extensions du réseau</a> ."
