@@ -65,6 +65,8 @@ class Mlp_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 
+		$instance = $this->adapt_settings( $instance );
+
 		$title = isset( $instance[ 'widget_title' ] )
 			? esc_attr( $instance[ 'widget_title' ] ) : '';
 		$link_type = isset( $instance[ 'widget_title' ] )
@@ -144,7 +146,7 @@ class Mlp_Widget extends WP_Widget {
 			}
 			?>
 		</p>
-	<?php
+		<?php
 	}
 
 	/**
@@ -189,6 +191,8 @@ class Mlp_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
+		$instance = $this->adapt_settings( $instance );
+
 		$link_type = 'text';
 		if ( ! empty( $instance[ 'widget_link_type' ] ) ) {
 			$link_type = $instance[ 'widget_link_type' ];
@@ -230,6 +234,56 @@ class Mlp_Widget extends WP_Widget {
 		echo $output;
 
 		echo $args[ 'after_widget' ];
+	}
+
+	/**
+	 * Adapt the internal settings to changes introduced in MultilingualPress 2.2.0.
+	 *
+	 * @see  https://github.com/inpsyde/multilingual-press/issues/112
+	 *
+	 * @todo Eventually remove this, with version 2.6.0 at the earliest
+	 *
+	 * @param array $instance Widget settings.
+	 *
+	 * @return array
+	 */
+	private function adapt_settings( array $instance ) {
+
+		$settings = $this->get_settings();
+
+		if ( empty( $settings[ $this->number ] ) ) {
+			// This should not happen (if it does, there's something wrong with WP_Widget)
+			return $instance;
+		}
+
+		$instance = $settings[ $this->number ];
+
+		if ( empty( $instance[ 'widget_link_type' ] ) ) {
+			// No need to adapt anything
+			return $instance;
+		}
+
+		switch ( $instance[ 'widget_link_type' ] ) {
+			case 'text_flag':
+				$instance[ 'widget_link_type' ] = 'native';
+				$instance[ 'widget_display_flag' ] = TRUE;
+				break;
+
+			case 'flag':
+				$instance[ 'widget_link_type' ] = 'none';
+				$instance[ 'widget_display_flag' ] = TRUE;
+				break;
+
+			default:
+				// No need to adapt anything
+				return $instance;
+		}
+
+		$settings[ $this->number ] = $instance;
+
+		$this->save_settings( $settings );
+
+		return $instance;
 	}
 
 	/**
