@@ -1,19 +1,18 @@
 module.exports = function( grunt ) {
 
-	var src = '../src/',
-		globalConfig = {
-			file       : 'multilingual-press.php',
-			images     : src + 'assets/images/',
-			images_src : 'images/',
-			languages  : src + 'languages/',
-			name       : 'MultilingualPress',
-			path       : require( 'path' ),
-			scripts    : src + 'assets/js/',
-			scripts_src: 'js/',
-			styles     : src + 'assets/css/',
-			styles_src : 'scss/',
-			textdomain : 'multilingualpress'
-		};
+	var globalConfig = {
+		file       : 'multilingual-press.php',
+		images     : 'src/assets/images/',
+		images_src : 'resources/images/',
+		languages  : 'languages/',
+		name       : 'MultilingualPress',
+		path       : require( 'path' ),
+		scripts    : 'src/assets/js/',
+		scripts_src: 'resources/js/',
+		styles     : 'src/assets/css/',
+		styles_src : 'resources/scss/',
+		textdomain : 'multilingualpress'
+	};
 
 	grunt.initConfig( {
 		globalConfig: globalConfig,
@@ -84,7 +83,7 @@ module.exports = function( grunt ) {
 		glotpress_download: {
 			languages: {
 				options: {
-					domainPath: '<%= globalConfig.languages %>',
+					domainPath: 'src/<%= globalConfig.languages %>',
 					url       : 'http://translate.marketpress.com',
 					slug      : 'plugins/multilingualpress',
 					textdomain: '<%= globalConfig.textdomain %>'
@@ -148,7 +147,7 @@ module.exports = function( grunt ) {
 		makepot: {
 			pot: {
 				options: {
-					cwd        : '../src',
+					cwd        : 'src',
 					domainPath : '<%= globalConfig.languages %>',
 					mainFile   : '<%= globalConfig.file %>',
 					potComments: 'Copyright (C) {{year}} <%= globalConfig.name %>\nThis file is distributed under the same license as the <%= globalConfig.name %> package.',
@@ -189,7 +188,7 @@ module.exports = function( grunt ) {
 					'!*.min.js'
 				],
 				rename: function( destBase, destPath ) {
-					// Fix for files with mulitple dots
+					// Fix for files with multiple dots
 					destPath = destPath.replace( /(\.[^\/.]*)?$/, '.min.js' );
 
 					return globalConfig.path.join( destBase || '', destPath );
@@ -214,7 +213,7 @@ module.exports = function( grunt ) {
 			},
 			scripts: {
 				files: '<%= globalConfig.scripts_src %>**/*.js',
-				tasks: [ 'jshint:scripts', 'concat', 'uglify', 'lineending:scripts' ]
+				tasks: [ 'jshint:scripts', 'concat', 'lineending:scripts', 'uglify' ]
 			},
 			styles : {
 				files: [ '<%= globalConfig.scss_src %>**/*.scss' ],
@@ -232,7 +231,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'languages', [ 'makepot', 'glotpress_download' ] );
 	grunt.registerTask( 'lineendings', [ 'lineending' ] );
 	grunt.registerTask( 'production', [ 'images', 'languages', 'scripts', 'styles' ] );
-	grunt.registerTask( 'scripts', [ 'jshint:scripts', 'concat', 'uglify', 'lineending:scripts' ] );
+	grunt.registerTask( 'scripts', [ 'jshint:scripts', 'concat', 'lineending:scripts', 'uglify' ] );
 	grunt.registerTask( 'styles', [ 'sass', 'autoprefixer', 'lineending:styles', 'cssmin' ] );
 	grunt.registerTask( 'test', [ 'jshint' ] );
 };

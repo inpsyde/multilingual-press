@@ -13,7 +13,7 @@
 # Composer
 vendor
 
-# Grunt
+# Node
 node_modules
 
 # PhpStorm
