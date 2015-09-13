@@ -1,8 +1,8 @@
 {
 	"name": "multilingualpress",
-	"description": "Run WordPress Multisite with multiple languages",
+	"description": "Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites.",
 	"author": "Inpsyde GmbH",
-	"version": "2.2.2",
+	"version": "2.2.3",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/inpsyde/multilingual-press"
