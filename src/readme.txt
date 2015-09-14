@@ -108,6 +108,10 @@ because it creates a lock-in: you would lose access to your content after the pl
 
 == Changelog ==
 
+= 2.3.0-alpha =
+- Adapt potentially deprecated settings of Language Switcher widget, see
+[issue #170](https://github.com/inpsyde/multilingual-press/issues/170).
+
 = 2.2.3 =
 - Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),
 props gabsoftware.
