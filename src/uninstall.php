@@ -56,6 +56,7 @@ foreach ( array ( 'mlp_languages', 'multilingual_linked', 'mlp_site_relations' )
 delete_site_option( 'inpsyde_multilingual' );
 delete_site_option( 'inpsyde_multilingual_cpt' );
 delete_site_option( 'inpsyde_multilingual_quicklink_options' );
+delete_site_option( 'state_modules' );
 delete_site_option( 'mlp_version' );
 delete_site_option( 'multilingual_press_check_db' );
 
