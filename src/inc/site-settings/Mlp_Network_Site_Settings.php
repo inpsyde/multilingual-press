@@ -100,16 +100,17 @@ class Mlp_Network_Site_Settings {
 			$page    = $marked[ 1 ];
 			$content = $marked[ 0 ] . $marked[ 2 ];
 		}
-
-		$parts = explode( '</h3>', $content, 2 );
+		$closing_tag = '</h3>';
+		$parts       = explode( $closing_tag, $content, 2 );
 		/**
 		 * With WP 4.4, this was changed to a h2
 		 */
 		if ( count( $parts ) < 2 ) {
-			$parts = explode( '</h2>', $content, 2 );
+			$closing_tag = '</h2>';
+			$parts       = explode( $closing_tag, $content, 2 );
 		}
 
-		$nav = $parts[ 0 ] . $link . '</h3>';
+		$nav = $parts[ 0 ] . $link . $closing_tag;
 
 		if ( ! $this->is_active_page() ) {
 			return $nav . $parts[ 1 ];
