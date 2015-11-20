@@ -100,13 +100,14 @@ class Mlp_Network_Site_Settings {
 			$page    = $marked[ 1 ];
 			$content = $marked[ 0 ] . $marked[ 2 ];
 		}
-		$closing_tag = '</h3>';
+
+		$closing_tag = '</h2>';
 		$parts       = explode( $closing_tag, $content, 2 );
 		/**
-		 * With WP 4.4, this was changed to a h2
+		 * On WP versions prior to 4.4, this used to be a h3 tag
 		 */
 		if ( count( $parts ) < 2 ) {
-			$closing_tag = '</h2>';
+			$closing_tag = '</h3>';
 			$parts       = explode( $closing_tag, $content, 2 );
 		}
 
