@@ -86,6 +86,7 @@ class Mlp_Network_Site_Settings {
 	 *
 	 * @param  string $content Complete content of the page
 	 *                         'wp-admin/network/site-settings.php'
+	 *
 	 * @return string
 	 */
 	public function reorder_output( $content ) {
@@ -101,12 +102,20 @@ class Mlp_Network_Site_Settings {
 		}
 
 		$parts = explode( '</h3>', $content, 2 );
-		$nav   = $parts[ 0 ] . $link . '</h3>';
+		/**
+		 * With WP 4.4, this was changed to a h2
+		 */
+		if ( count( $parts ) < 2 ) {
+			$parts = explode( '</h2>', $content, 2 );
+		}
 
-		if ( ! $this->is_active_page() )
+		$nav = $parts[ 0 ] . $link . '</h3>';
+
+		if ( ! $this->is_active_page() ) {
 			return $nav . $parts[ 1 ];
+		}
 
-		$form  = explode( '</form>', $parts[ 1 ], 2 );
+		$form = explode( '</form>', $parts[ 1 ], 2 );
 
 		return $nav . $page . $form[ 1 ];
 	}
