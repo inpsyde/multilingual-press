@@ -1,5 +1,5 @@
 === MultilingualPress ===
-Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, ipm-frommen, Biont, dnaber-de
+Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, tfrommen, Biont, dnaber-de
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.0
 Tested up to: 4.3
