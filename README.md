@@ -67,6 +67,9 @@ an existing WPML multilingual site via XLIFF export/import for MultilingualPress
 * WordPress Multisite 4.0+.
 * PHP 5.2.4, newer PHP versions will work faster.
 
+If you're new to WordPress multisite, you might find our [WordPress multisite installation
+tutorial](https://marketpress.com/2015/wordpress-multisite-installation/) helpful.
+
 ### Installation
 
 Use the installer via back-end of your install or ...
@@ -92,6 +95,11 @@ You can find all official translation files in the according
 
 That would require changes to the way WordPress stores post content. Other plugins do that; we think this is wrong,
 because it creates a lock-in: you would lose access to your content after the plugin deactivation.
+
+### I'm new to WordPress multisite. Are there any tutorials to get me started?
+
+Yes, just have a look at our [WordPress multisite installation
+tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 
 ## Screenshots
 
