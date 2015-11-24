@@ -28,7 +28,7 @@ class Mlp_General_Settings_View {
 	public function render_page() {
 		?>
 		<div class="wrap">
-			<h2><?php print $GLOBALS[ 'title' ]; ?></h2>
+			<h1><?php print $GLOBALS[ 'title' ]; ?></h1>
 			<?php
 			$this->modules_form();
 			print $this->get_marketpress_pointer();
