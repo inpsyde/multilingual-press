@@ -112,6 +112,7 @@ because it creates a lock-in: you would lose access to your content after the pl
 - Adapt potentially deprecated settings of Language Switcher widget, see
 [issue #170](https://github.com/inpsyde/multilingual-press/issues/170).
 - Delete `state_modules` site option on uninstall, props tiagoschenkel.
+- Update several heading levels.
 
 = 2.2.3 =
 - Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),
