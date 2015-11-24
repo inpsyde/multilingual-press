@@ -4,7 +4,8 @@
 - Adapt potentially deprecated settings of Language Switcher widget, see
 [issue #170](https://github.com/inpsyde/multilingual-press/issues/170).
 - Delete `state_modules` site option on uninstall, props tiagoschenkel.
-- Update several heading levels.
+- Adapt Site Settings tab code for WordPress 4.4, props patricia70.
+- Change settings page headings from h2 to h1.
 - Integrate WordPress multisite installation tutorial into readme, see
 [issue #178](https://github.com/inpsyde/multilingual-press/issues/178).
 
