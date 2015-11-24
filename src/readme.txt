@@ -121,6 +121,8 @@ tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 [issue #170](https://github.com/inpsyde/multilingual-press/issues/170).
 - Delete `state_modules` site option on uninstall, props tiagoschenkel.
 - Update several heading levels.
+- Integrate WordPress multisite installation tutorial into readme, see
+[issue #178](https://github.com/inpsyde/multilingual-press/issues/178).
 
 = 2.2.3 =
 - Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),
