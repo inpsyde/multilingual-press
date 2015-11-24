@@ -8,6 +8,8 @@
 - Change settings page headings from h2 to h1.
 - Integrate WordPress multisite installation tutorial into readme, see
 [issue #178](https://github.com/inpsyde/multilingual-press/issues/178).
+- Hide Redirect UI if the Redirect feature is disabled, see
+[issue #177](https://github.com/inpsyde/multilingual-press/issues/177).
 
 ## 2.2.3
 - Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),
