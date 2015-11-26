@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-$parent_dir = dirname( __DIR__ ) . '/';
+$parent_dir = dirname( dirname( __DIR__ ) ) . '/';
 
 require_once $parent_dir . 'vendor/autoload.php';
 
