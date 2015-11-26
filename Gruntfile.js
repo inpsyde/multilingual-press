@@ -8,6 +8,10 @@ module.exports = function( grunt ) {
 	var configObject = {
 		config: {
 			dest: 'src/',
+			glotpress: {
+				url: 'http://translate.marketpress.com',
+				slug: 'plugins/multilingualpress'
+			},
 			images: {
 				src: 'resources/images/',
 				dest: 'src/assets/images/'
@@ -18,8 +22,8 @@ module.exports = function( grunt ) {
 			},
 			plugin: {
 				file: 'multilingual-press.php',
+				issues: 'https://github.com/inpsyde/multilingual-press/issues',
 				name: 'MultilingualPress',
-				slug: 'multilingualpress',
 				textdomain: 'multilingualpress'
 			},
 			scripts: {
@@ -29,10 +33,6 @@ module.exports = function( grunt ) {
 			styles: {
 				src: 'resources/scss/',
 				dest: 'src/assets/css/'
-			},
-			urls: {
-				glotpress: 'http://translate.marketpress.com',
-				repository: 'https://github.com/inpsyde/multilingual-press'
 			}
 		},
 
@@ -79,8 +79,8 @@ module.exports = function( grunt ) {
 		glotpress_download: {
 			languages: {
 				options: {
-					url: '<%= config.urls.glotpress %>',
-					slug: 'plugins/<%= config.plugin.slug %>',
+					url: '<%= config.glotpress.url %>',
+					slug: '<%= config.glotpress.slug %>',
 					domainPath: '<%= config.languages.dest %>',
 					textdomain: '<%= config.plugin.textdomain %>'
 				}
@@ -193,7 +193,7 @@ module.exports = function( grunt ) {
 					potFilename: '<%= config.plugin.textdomain %>.pot',
 					potHeaders: {
 						poedit: true,
-						'report-msgid-bugs-to': '<%= config.urls.repository %>/issues',
+						'report-msgid-bugs-to': '<%= config.plugin.issues %>',
 						'x-poedit-keywordslist': true
 					},
 					processPot: function( pot ) {
