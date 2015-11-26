@@ -36,7 +36,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-clean
 		clean: {
 			images: [ '<%= config.images.dest %>' ],
 			languages: [ '<%= config.languages.dest %>' ],
@@ -44,7 +43,6 @@ module.exports = function( grunt ) {
 			styles: [ '<%= config.styles.dest %>' ]
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-concat
 		concat: {
 			options: {
 				separator: '\n'
@@ -65,7 +63,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-cssmin
 		cssmin: {
 			options: {
 				compatibility: 'ie7'
@@ -79,7 +76,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/markoheijnen/grunt-glotpress
 		glotpress_download: {
 			languages: {
 				options: {
@@ -91,7 +87,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-imagemin
 		imagemin: {
 			dynamic: {
 				options: {
@@ -108,7 +103,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/jscs-dev/grunt-jscs
 		jscs: {
 			options: {
 				config: true
@@ -125,10 +119,10 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-jshint
 		jshint: {
 			options: {
-				jshintrc: true
+				jshintrc: true,
+				reporter: require( 'jshint-stylish' )
 			},
 			grunt: {
 				src: [ 'Gruntfile.js' ]
@@ -140,21 +134,33 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/ariya/grunt-jsvalidate
+		jsonlint: {
+			configs: {
+				src: [ '.{jscs,jshint}rc' ]
+			},
+			json: {
+				src: [ '*.json' ]
+			}
+		},
+
 		jsvalidate: {
 			options: {
 				globals: {},
 				esprimaOptions: {},
 				verbose: false
 			},
-			scripts: {
+			src: {
+				files: {
+					src: [ '<%= config.scripts.src %>**/*.js' ]
+				}
+			},
+			dest: {
 				files: {
 					src: [ '<%= config.scripts.dest %>**/*.js' ]
 				}
 			}
 		},
 
-		// https://github.com/suisho/grunt-lineending
 		lineending: {
 			options: {
 				eol: 'lf',
@@ -177,7 +183,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/cedaro/grunt-wp-i18n
 		makepot: {
 			pot: {
 				options: {
@@ -200,7 +205,7 @@ module.exports = function( grunt ) {
 							'translators: do not translate'
 						];
 
-						// Skip translations with the above defined meta comments
+						// Skip translations with the above defined meta comments.
 						var translation;
 						for ( translation in pot.translations[ '' ] ) {
 							if ( ! pot.translations[ '' ].hasOwnProperty( translation ) ) {
@@ -222,7 +227,15 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/nDmitry/grunt-postcss
+		phplint: {
+			options: {
+				phpArgs: {
+					'-lf': null
+				}
+			},
+			files: [ '<%= config.dest %>**/*.php' ]
+		},
+
 		postcss: {
 			options: {
 				processors: [
@@ -249,11 +262,16 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-sass
 		sass: {
 			options: {
 				style: 'expanded',
 				noCache: true
+			},
+			check: {
+				options: {
+					check: true
+				},
+				src: [ '<%= config.styles.src %>*.scss' ]
 			},
 			styles: {
 				expand: true,
@@ -264,7 +282,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-uglify
 		uglify: {
 			options: {
 				ASCIIOnly: true
@@ -278,12 +295,17 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-watch
 		watch: {
 			options: {
 				dot: true,
 				spawn: true,
 				interval: 2000
+			},
+			configs: {
+				files: [ '.{jscs,jshint}rc' ],
+				tasks: [
+					'jsonlint:configs'
+				]
 			},
 			grunt: {
 				files: [ 'Gruntfile.js' ],
@@ -300,23 +322,36 @@ module.exports = function( grunt ) {
 					'imagemin'
 				]
 			},
+			json: {
+				files: [ '*.json' ],
+				tasks: [
+					'jsonlint:json'
+				]
+			},
+			php: {
+				files: [ '<%= config.dest %>**/*.php' ],
+				tasks: [
+					'phplint'
+				]
+			},
 			scripts: {
 				files: [ '<%= config.scripts.src %>**/*.js' ],
 				tasks: [
-					'jscs:force',
+					'jsvalidate:src',
 					'jshint:force',
+					'jscs:force',
 					'clean:scripts',
 					'concat',
 					'lineending:scripts',
 					'uglify',
-					'jsvalidate'
+					'jsvalidate:dest'
 				]
 			},
 			styles: {
 				files: [ '<%= config.styles.src %>**/*.scss' ],
 				tasks: [
 					'clean:styles',
-					'sass',
+					'sass:styles',
 					'postcss',
 					'lineending:styles',
 					'cssmin'
@@ -348,14 +383,17 @@ module.exports = function( grunt ) {
 		}
 	);
 
-	// https://github.com/sindresorhus/load-grunt-tasks
 	require( 'load-grunt-tasks' )( grunt );
 
 	grunt.initConfig( configObject );
 
+	grunt.registerTask( 'configs', configObject.watch.configs.tasks );
+
 	grunt.registerTask( 'grunt', configObject.watch.grunt.tasks );
 
 	grunt.registerTask( 'images', configObject.watch.images.tasks );
+
+	grunt.registerTask( 'json', configObject.watch.json.tasks );
 
 	grunt.registerTask( 'languages', [
 		'clean:languages',
@@ -363,32 +401,48 @@ module.exports = function( grunt ) {
 		'glotpress_download'
 	] );
 
-	grunt.registerTask( 'forcescripts', configObject.watch.scripts.tasks );
+	grunt.registerTask( 'php', configObject.watch.php.tasks );
 
 	grunt.registerTask( 'scripts', [
-		'jscs:scripts',
+		'jsvalidate:src',
 		'jshint:scripts',
+		'jscs:scripts',
 		'clean:scripts',
 		'concat',
 		'lineending:scripts',
 		'uglify',
-		'jsvalidate'
+		'jsvalidate:dest'
 	] );
+
+	grunt.registerTask( 'forcescripts', configObject.watch.scripts.tasks );
 
 	grunt.registerTask( 'styles', configObject.watch.styles.tasks );
 
+	grunt.registerTask( 'lint', [
+		'jshint',
+		'jsonlint',
+		'sass:check',
+		'phplint'
+	] );
+
 	grunt.registerTask( 'precommit', [
+		'configs',
 		'grunt',
 		'images',
+		'json',
 		'languages',
+		'php',
 		'scripts',
 		'styles'
 	] );
 
 	grunt.registerTask( 'default', [
+		'configs',
 		'grunt',
 		'images',
+		'json',
 		'languages',
+		'php',
 		'forcescripts',
 		'styles'
 	] );
