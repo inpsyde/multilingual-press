@@ -1,0 +1,26 @@
+{
+	"curly": true,
+	"eqeqeq": true,
+	"es3": true,
+	"forin": true,
+	"freeze": true,
+	"futurehostile": true,
+	"globals": {
+		"_": false,
+		"Backbone": false,
+		"jQuery": false,
+		"JSON": false,
+		"wp": false
+	},
+	"latedef": true,
+	"noarg": true,
+	"nonbsp": true,
+	"nonew": true,
+	"singleGroups": true,
+	"strict": true,
+	"undef": true,
+	"unused": true,
+
+	"browser": true,
+	"qunit": false
+}
