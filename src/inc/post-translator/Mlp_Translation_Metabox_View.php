@@ -132,13 +132,17 @@ class Mlp_Translation_Metabox_View {
 	 * @param WP_Post $source_post
 	 * @param int     $remote_blog_id
 	 * @param WP_Post $post
+	 *
 	 * @return void
 	 */
-	public function show_title( /** @noinspection PhpUnusedParameterInspection */
-		WP_Post $source_post, $remote_blog_id, WP_Post $post ) {
+	public function show_title(
+		/** @noinspection PhpUnusedParameterInspection */
+		WP_Post $source_post, $remote_blog_id, WP_Post $post
+	) {
 
-		if ( ! empty ( $post->post_title ) )
-			print "<h2 class='headline' style='margin:0;'>$post->post_title</h2>";
+		if ( ! empty( $post->post_title ) ) {
+			echo '<h2 class="headline" style="margin: 0;">' . $post->post_title . '</h2>';
+		}
 	}
 
 	/**
@@ -148,8 +152,10 @@ class Mlp_Translation_Metabox_View {
 	 *
 	 * @return void
 	 */
-	public function show_editor( /** @noinspection PhpUnusedParameterInspection */
-		WP_Post $source_post, $remote_blog_id, WP_Post $remote_post ) {
+	public function show_editor(
+		/** @noinspection PhpUnusedParameterInspection */
+		WP_Post $source_post, $remote_blog_id, WP_Post $remote_post
+	) {
 
 		$lines = substr_count( $remote_post->post_content, "\n" ) + 1;
 		$rows = min( $lines, 10 );
@@ -167,8 +173,10 @@ class Mlp_Translation_Metabox_View {
 	 * @param  int     $blog_id
 	 * @return void
 	 */
-	public function show_translation_checkbox( /** @noinspection PhpUnusedParameterInspection */
-		WP_Post $post, $blog_id ) {
+	public function show_translation_checkbox(
+		/** @noinspection PhpUnusedParameterInspection */
+		WP_Post $post, $blog_id
+	) {
 
 		$id = (int) $blog_id;
 		?>

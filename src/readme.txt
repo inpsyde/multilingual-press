@@ -1,5 +1,5 @@
 === MultilingualPress ===
-Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, ipm-frommen, Biont, dnaber-de
+Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, tfrommen, Biont, dnaber-de
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.0
 Tested up to: 4.3
@@ -71,6 +71,9 @@ Yes, we also run that [marketplace for premium WordPress plugins and themes](htt
 - WordPress Multisite 4.0+.
 - PHP 5.2.4, newer PHP versions will work faster.
 
+If you're new to WordPress multisite, you might find our [WordPress multisite installation
+tutorial](https://marketpress.com/2015/wordpress-multisite-installation/) helpful.
+
 Use the installer via back-end of your install or ...
 
 1. Unpack the download-package.
@@ -95,6 +98,11 @@ You can find all official translation files in the according
 That would require changes to the way WordPress stores post content. Other plugins do that; we think this is wrong,
 because it creates a lock-in: you would lose access to your content after the plugin deactivation.
 
+= I'm new to WordPress multisite. Are there any tutorials to get me started? =
+
+Yes, just have a look at our [WordPress multisite installation
+tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
+
 == Screenshots ==
 
 1. New columns in the site list table for the _Relationships_ (i.e., connections with other sites) and the _Site Language_.
@@ -116,6 +124,12 @@ because it creates a lock-in: you would lose access to your content after the pl
 - Adapt potentially deprecated settings of Language Switcher widget, see
 [issue #170](https://github.com/inpsyde/multilingual-press/issues/170).
 - Delete `state_modules` site option on uninstall, props tiagoschenkel.
+- Adapt Site Settings tab code for WordPress 4.4, props patricia70.
+- Change settings page headings from h2 to h1.
+- Integrate WordPress multisite installation tutorial into readme, see
+[issue #178](https://github.com/inpsyde/multilingual-press/issues/178).
+- Hide Redirect UI if the Redirect feature is disabled, see
+[issue #177](https://github.com/inpsyde/multilingual-press/issues/177).
 
 = 2.2.3 =
 - Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),

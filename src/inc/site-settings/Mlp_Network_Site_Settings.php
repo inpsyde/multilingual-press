@@ -1,42 +1,39 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Class Mlp_Network_Site_Settings
- *
- * @version 2014.07.16
- * @author  Inpsyde GmbH, toscho
- * @license GPL
  */
 class Mlp_Network_Site_Settings {
 
 	/**
-	 * @var array
+	 * Tab configuration.
+	 *
+	 * @var Inpsyde_Property_List_Interface
 	 */
-	private $targets = array (
-		'site-info.php',
-		'site-users.php',
-		'site-themes.php',
-		'site-settings.php'
-	);
+	private $config;
 
 	/**
 	 * HTML comment to identify the page content.
 	 *
 	 * @see reorder_output()
-	 * @type string
+	 * @var string
 	 */
 	private $marker;
 
 	/**
-	 * Tab configuration.
-	 *
-	 * @type Inpsyde_Property_List_Interface
+	 * @var string[]
 	 */
-	private $config;
+	private $targets = array(
+		'site-info.php',
+		'site-users.php',
+		'site-themes.php',
+		'site-settings.php',
+	);
 
 	/**
 	 * Updatable object. Currently used for tab content only.
 	 *
-	 * @type Mlp_Updatable
+	 * @var Mlp_Updatable
 	 */
 	private $watcher;
 
@@ -44,95 +41,125 @@ class Mlp_Network_Site_Settings {
 	 * Constructor.
 	 *
 	 * @param Mlp_Network_Site_Settings_Properties $config
-	 * @param Mlp_Updatable $watcher
+	 * @param Mlp_Updatable                        $watcher
 	 */
-	public function __construct(
-		Mlp_Network_Site_Settings_Properties  $config,
-		Mlp_Updatable                         $watcher
-	)
-	{
+	public function __construct( Mlp_Network_Site_Settings_Properties $config, Mlp_Updatable $watcher ) {
+
 		global $pagenow;
 
-		$this->config    = $config;
-		$this->watcher   = $watcher;
+		$this->config = $config;
+
+		$this->marker = "<!--" . $config->get_param_value() . "-->";
+
 		$this->targets[] = $config->get_param_value();
-		$this->marker    = "<!--" . $config->get_param_value() . "-->";
+
+		$this->watcher = $watcher;
 
 		$this->set_pagenow();
 
-		if ( ! empty ( $pagenow ) and in_array ( $pagenow, $this->targets ) )
-			add_action( 'network_admin_notices', array ( $this, 'start_buffer' ) );
+		if ( ! empty( $pagenow ) && in_array( $pagenow, $this->targets ) ) {
+			add_action( 'network_admin_notices', array( $this, 'start_buffer' ) );
+		}
 	}
 
 	/**
-	 * Start output buffering and call "render_callback".
+	 * Starts output buffering and call "render_callback".
 	 *
 	 * @return void
 	 */
 	public function start_buffer() {
 
-		ob_start( array ( $this, 'reorder_output' ) );
+		ob_start( array( $this, 'reorder_output' ) );
 
-		if ( ! $this->is_active_page() )
+		if ( ! $this->is_active_page() ) {
 			return;
+		}
 
-		print $this->marker;
+		echo $this->marker;
+
 		$this->watcher->update( 'create_tab_content' );
-		print $this->marker;
+
+		echo $this->marker;
 	}
 
 	/**
-	 * Change the page content, adds navigation tab.
+	 * Changes the page content, adds navigation tab.
 	 *
-	 * @param  string $content Complete content of the page
-	 *                         'wp-admin/network/site-settings.php'
+	 * @param string $content Complete content of the page 'wp-admin/network/site-settings.php'.
+	 *
 	 * @return string
 	 */
 	public function reorder_output( $content ) {
 
 		// Our extra tab.
 		$link = $this->get_nav_link();
+
 		$page = '';
 
 		if ( $this->is_active_page() ) {
-			$marked  = explode( $this->marker, $content, 3 );
-			$page    = $marked[ 1 ];
-			$content = $marked[ 0 ] . $marked[ 2 ];
+			$marked = explode( $this->marker, $content, 3 );
+
+			$page = $marked[1];
+
+			$content = $marked[0] . $marked[2];
 		}
 
-		$parts = explode( '</h3>', $content, 2 );
-		$nav   = $parts[ 0 ] . $link . '</h3>';
+		$closing_tag = '</' . $this->get_heading_level() . '>';
 
-		if ( ! $this->is_active_page() )
-			return $nav . $parts[ 1 ];
+		$parts = explode( $closing_tag, $content, 2 );
 
-		$form  = explode( '</form>', $parts[ 1 ], 2 );
+		$nav = $parts[0] . $link . $closing_tag;
 
-		return $nav . $page . $form[ 1 ];
+		if ( ! $this->is_active_page() ) {
+			return $nav . $parts[1];
+		}
+
+		$form = explode( '</form>', $parts[1], 2 );
+
+		return $nav . $page . $form[1];
 	}
 
 	/**
-	 * Check if global pagenow matches the tab identifier.
+	 * Returns the heading level wrt. the current WordPress version.
 	 *
-	 * @return boolean
+	 * @return string
+	 */
+	private function get_heading_level() {
+
+		// Get the unaltered WordPress version.
+		require_once ABSPATH . 'wp-includes/version.php';
+
+		$heading_level = version_compare( $wp_version, '4.4.0' ) ? 'h3' : 'h2';
+
+		return $heading_level;
+	}
+
+	/**
+	 * Checks if the global pagenow matches the tab identifier.
+	 *
+	 * @return bool
 	 */
 	private function is_active_page() {
 
-		return $GLOBALS[ 'pagenow' ] === $this->config->get_param_value();
+		return $GLOBALS['pagenow'] === $this->config->get_param_value();
 	}
 
 	/**
-	 * Creates HTML for the navigation link.
+	 * Creates the HTML for the navigation link.
 	 *
 	 * @return string
 	 */
 	private function get_nav_link() {
 
-		$active  = $this->is_active_page() ? ' nav-tab-active' : '';
-		$site_id = empty ( $_GET[ 'id' ] ) ? SITE_ID_CURRENT_SITE : (int) $_GET[ 'id' ];
-		$name    = $this->config->get_param_name();
-		$value   = $this->config->get_param_value();
-		$url     = "site-settings.php?id=$site_id&amp;$name=$value";
+		$site_id = empty( $_GET['id'] ) ? SITE_ID_CURRENT_SITE : (int) $_GET['id'];
+
+		$name = $this->config->get_param_name();
+
+		$value = $this->config->get_param_value();
+
+		$url = "site-settings.php?id=$site_id&amp;$name=$value";
+
+		$active = $this->is_active_page() ? ' nav-tab-active' : '';
 
 		return sprintf(
 			'<a href="%1$s" class="nav-tab%2$s" id="%3$s">%4$s</a>',
@@ -144,21 +171,24 @@ class Mlp_Network_Site_Settings {
 	}
 
 	/**
-	 * Changes the global variable to prevent wrong classes on the tab navigation.
+	 * Changes the global pagenow to prevent wrong classes on the tab navigation.
 	 *
 	 * @return void
 	 */
 	private function set_pagenow() {
 
-		$name  = $this->config->get_param_name();
+		$name = $this->config->get_param_name();
+
+		if ( ! isset( $_GET[ $name ] ) ) {
+			return;
+		}
+
 		$value = $this->config->get_param_value();
 
-		if ( ! isset ( $_GET[ $name ] ) )
+		if ( $value !== $_GET[ $name ] ) {
 			return;
+		}
 
-		if ( $value !== $_GET[ $name ] )
-			return;
-
-		$GLOBALS[ 'pagenow' ] = $value;
+		$GLOBALS['pagenow'] = $value;
 	}
 }

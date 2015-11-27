@@ -58,8 +58,10 @@ class Mlp_Redirect_Column {
 	 * @param  int    $blog_id
 	 * @return string
 	 */
-	public function render_cell( /** @noinspection PhpUnusedParameterInspection */
-		$column_name, $blog_id ) {
+	public function render_cell(
+		/** @noinspection PhpUnusedParameterInspection */
+		$column_name, $blog_id
+	) {
 
 		if ( ! get_blog_option( $blog_id, 'inpsyde_multilingual_redirect' ) )
 			return '';

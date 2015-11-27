@@ -47,7 +47,7 @@ class Mlp_Language_Manager_Page_View {
 		?>
 		<div class="wrap">
 			<?php
-			print '<h2>' . $this->page_data->get_title() . '</h2>';
+			print '<h1>' . $this->page_data->get_title() . '</h1>';
 
 			$this->watcher->update( 'before_form' );
 			?>

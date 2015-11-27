@@ -44,13 +44,11 @@ class Mlp_Advanced_Translator_View {
 			return;
 		}
 		?>
-		<a href="#" class="mlp_copy_button button"
-			data-blog_id="<?php echo $matches[ 1 ]; ?>">
-			<?php
+		<a href="#" class="button mlp_copy_button dashicons-before dashicons-image-rotate-right"
+				data-blog_id="<?php echo $matches[1]; ?>"><?php
 			esc_attr_e( 'Copy source post', 'multilingualpress' );
-			?>
-		</a>
-	<?php
+			?></a>
+		<?php
 	}
 
 	/**

@@ -1,237 +1,449 @@
+/* jshint node:true */
 module.exports = function( grunt ) {
+	'use strict';
 
-	var globalConfig = {
-		file       : 'multilingual-press.php',
-		images     : 'src/assets/images/',
-		images_src : 'resources/images/',
-		languages  : 'languages/',
-		name       : 'MultilingualPress',
-		path       : require( 'path' ),
-		scripts    : 'src/assets/js/',
-		scripts_src: 'resources/js/',
-		styles     : 'src/assets/css/',
-		styles_src : 'resources/scss/',
-		textdomain : 'multilingualpress'
-	};
+	var _ = require( 'lodash' ),
+		autoprefixer = require( 'autoprefixer' );
 
-	grunt.initConfig( {
-		globalConfig: globalConfig,
-
-		// https://github.com/nDmitry/grunt-autoprefixer
-		autoprefixer: {
-			options: {
-				browsers: [
-					'Android >= 2.1',
-					'Chrome >= 21',
-					'Explorer >= 7',
-					'Firefox >= 17',
-					'iOS >= 3',
-					'Opera >= 12.1',
-					'Safari >= 5.0'
-				]
+	var configObject = {
+		config: {
+			dest: 'src/',
+			glotpress: {
+				url: 'http://translate.marketpress.com',
+				slug: 'plugins/multilingualpress'
 			},
-			styles : {
-				expand: true,
-				cwd   : '<%= globalConfig.styles %>',
-				dest  : '<%= globalConfig.styles %>',
-				src   : [
-					'*.css',
-					'!*.min.css'
-				]
+			images: {
+				src: 'resources/images/',
+				dest: 'src/assets/images/'
+			},
+			languages: {
+				dest: 'src/languages/',
+				dir: 'languages/'
+			},
+			plugin: {
+				file: 'multilingual-press.php',
+				issues: 'https://github.com/inpsyde/multilingual-press/issues',
+				name: 'MultilingualPress',
+				textdomain: 'multilingualpress'
+			},
+			scripts: {
+				src: 'resources/js/',
+				dest: 'src/assets/js/'
+			},
+			styles: {
+				src: 'resources/scss/',
+				dest: 'src/assets/css/'
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-concat
+		clean: {
+			images: [ '<%= config.images.dest %>' ],
+			languages: [ '<%= config.languages.dest %>' ],
+			scripts: [ '<%= config.scripts.dest %>' ],
+			styles: [ '<%= config.styles.dest %>' ]
+		},
+
 		concat: {
-			options : {
+			options: {
 				separator: '\n'
 			},
-			admin   : {
-				src : [
-					'<%= globalConfig.scripts_src %>admin.js',
-					'<%= globalConfig.scripts_src %>admin/*.js'
+			admin: {
+				src: [
+					'<%= config.scripts.src %>admin.js',
+					'<%= config.scripts.src %>admin/*.js'
 				],
-				dest: '<%= globalConfig.scripts %>admin.js'
+				dest: '<%= config.scripts.dest %>admin.js'
 			},
 			frontend: {
-				src : [
-					'<%= globalConfig.scripts_src %>frontend.js',
-					'<%= globalConfig.scripts_src %>frontend/*.js'
+				src: [
+					'<%= config.scripts.src %>frontend.js',
+					'<%= config.scripts.src %>frontend/*.js'
 				],
-				dest: '<%= globalConfig.scripts %>frontend.js'
+				dest: '<%= config.scripts.dest %>frontend.js'
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-cssmin
 		cssmin: {
+			options: {
+				compatibility: 'ie7'
+			},
 			styles: {
-				options: {
-					processImport: true
-				},
-				expand : true,
-				cwd    : '<%= globalConfig.styles %>',
-				dest   : '<%= globalConfig.styles %>',
-				ext    : '.min.css',
-				src    : [
-					'*.css',
-					'!*.min.css'
-				]
+				expand: true,
+				cwd: '<%= config.styles.dest %>',
+				src: [ '*.css', '!*.min.css' ],
+				dest: '<%= config.styles.dest %>',
+				ext: '.min.css'
 			}
 		},
 
-		// https://github.com/markoheijnen/grunt-glotpress
 		glotpress_download: {
 			languages: {
 				options: {
-					domainPath: 'src/<%= globalConfig.languages %>',
-					url       : 'http://translate.marketpress.com',
-					slug      : 'plugins/multilingualpress',
-					textdomain: '<%= globalConfig.textdomain %>'
+					url: '<%= config.glotpress.url %>',
+					slug: '<%= config.glotpress.slug %>',
+					domainPath: '<%= config.languages.dest %>',
+					textdomain: '<%= config.plugin.textdomain %>'
 				}
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-imagemin
 		imagemin: {
 			dynamic: {
 				options: {
 					optimizationLevel: 7
 				},
-				files  : [
+				files: [
 					{
 						expand: true,
-						cwd   : '<%= globalConfig.images_src %>',
-						dest  : '<%= globalConfig.images %>',
-						src   : [ '**/*.{gif,jpeg,jpg,png}' ]
+						cwd: '<%= config.images.src %>',
+						src: [ '**/*.{gif,jpeg,jpg,png}' ],
+						dest: '<%= config.images.dest %>'
 					}
 				]
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-jshint
+		jscs: {
+			options: {
+				config: true
+			},
+			grunt: {
+				files: {
+					src: [ 'Gruntfile.js' ]
+				}
+			},
+			scripts: {
+				files: {
+					src: [ '<%= config.scripts.src %>**/*.js' ]
+				}
+			}
+		},
+
 		jshint: {
-			grunt  : {
+			options: {
+				jshintrc: true,
+				reporter: require( 'jshint-stylish' )
+			},
+			grunt: {
 				src: [ 'Gruntfile.js' ]
 			},
 			scripts: {
 				expand: true,
-				cwd   : '<%= globalConfig.scripts_src %>',
-				src   : [
-					'**/*.js',
-					'!**/*.min.js'
-				]
+				cwd: '<%= config.scripts.src %>',
+				src: [ '**/*.js' ]
 			}
 		},
 
-		// https://github.com/suisho/grunt-lineending
+		jsonlint: {
+			configs: {
+				src: [ '.{jscs,jshint}rc' ]
+			},
+			json: {
+				src: [ '*.json' ]
+			}
+		},
+
+		jsvalidate: {
+			options: {
+				globals: {},
+				esprimaOptions: {},
+				verbose: false
+			},
+			src: {
+				files: {
+					src: [ '<%= config.scripts.src %>**/*.js' ]
+				}
+			},
+			dest: {
+				files: {
+					src: [ '<%= config.scripts.dest %>**/*.js' ]
+				}
+			}
+		},
+
 		lineending: {
 			options: {
-				eol      : 'lf',
+				eol: 'lf',
 				overwrite: true
+			},
+			grunt: {
+				src: [ 'Gruntfile.js' ]
 			},
 			scripts: {
 				expand: true,
-				cwd   : '<%= globalConfig.scripts %>',
-				dest  : '<%= globalConfig.scripts %>',
-				src   : [ '*.js' ]
+				cwd: '<%= config.scripts.dest %>',
+				src: [ '*.js' ],
+				dest: '<%= config.scripts.dest %>'
 			},
-			styles : {
+			styles: {
 				expand: true,
-				cwd   : '<%= globalConfig.styles %>',
-				dest  : '<%= globalConfig.styles %>',
-				src   : [ '*.css' ]
+				cwd: '<%= config.styles.dest %>',
+				src: [ '*.css' ],
+				dest: '<%= config.styles.dest %>'
 			}
 		},
 
-		// https://github.com/cedaro/grunt-wp-i18n
 		makepot: {
 			pot: {
 				options: {
-					cwd        : 'src',
-					domainPath : '<%= globalConfig.languages %>',
-					mainFile   : '<%= globalConfig.file %>',
-					potComments: 'Copyright (C) {{year}} <%= globalConfig.name %>\nThis file is distributed under the same license as the <%= globalConfig.name %> package.',
-					potFilename: '<%= globalConfig.textdomain %>.pot',
-					potHeaders : {
-						poedit                 : true,
-						'report-msgid-bugs-to' : 'https://github.com/inpsyde/multilingual-press/issues',
+					cwd: '<%= config.dest %>',
+					domainPath: '<%= config.languages.dir %>',
+					mainFile: '<%= config.plugin.file %>',
+					potComments: 'Copyright (C) {{year}} <%= config.plugin.name %>\nThis file is distributed under the same license as the <%= config.plugin.name %> package.',
+					potFilename: '<%= config.plugin.textdomain %>.pot',
+					potHeaders: {
+						poedit: true,
+						'report-msgid-bugs-to': '<%= config.plugin.issues %>',
 						'x-poedit-keywordslist': true
+					},
+					processPot: function( pot ) {
+						var exclude = [
+							'Plugin Name of the plugin/theme',
+							'Plugin URI of the plugin/theme',
+							'Author of the plugin/theme',
+							'Author URI of the plugin/theme',
+							'translators: do not translate'
+						];
+
+						// Skip translations with the above defined meta comments.
+						var translation;
+						for ( translation in pot.translations[ '' ] ) {
+							if ( ! pot.translations[ '' ].hasOwnProperty( translation ) ) {
+								continue;
+							}
+
+							if ( 'undefined' === typeof pot.translations[ '' ][ translation ].comments.extracted ) {
+								continue;
+							}
+
+							if ( exclude.indexOf( pot.translations[ '' ][ translation ].comments.extracted ) >= 0 ) {
+								delete pot.translations[ '' ][ translation ];
+							}
+						}
+
+						return pot;
 					}
 				}
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-sass
-		sass: {
+		phplint: {
+			options: {
+				phpArgs: {
+					'-lf': null
+				}
+			},
+			files: [ '<%= config.dest %>**/*.php' ]
+		},
+
+		postcss: {
+			options: {
+				processors: [
+					autoprefixer( {
+						browsers: [
+							'Android >= 2.1',
+							'Chrome >= 21',
+							'Edge >= 12',
+							'Explorer >= 7',
+							'Firefox >= 17',
+							'iOS >= 3',
+							'Opera >= 12.1',
+							'Safari >= 6.0'
+						],
+						cascade: false
+					} )
+				]
+			},
 			styles: {
-				expand : true,
-				cwd    : '<%= globalConfig.styles_src %>',
-				dest   : '<%= globalConfig.styles %>',
-				ext    : '.css',
-				options: {
-					style      : 'expanded',
-					lineNumbers: false,
-					noCache    : true
-				},
-				src    : [ '*.scss' ]
+				expand: true,
+				cwd: '<%= config.styles.dest %>',
+				src: [ '*.css', '!*.min.css' ],
+				dest: '<%= config.styles.dest %>'
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-uglify
+		sass: {
+			options: {
+				style: 'expanded',
+				noCache: true
+			},
+			check: {
+				options: {
+					check: true
+				},
+				src: [ '<%= config.styles.src %>*.scss' ]
+			},
+			styles: {
+				expand: true,
+				cwd: '<%= config.styles.src %>',
+				src: [ '*.scss' ],
+				dest: '<%= config.styles.dest %>',
+				ext: '.css'
+			}
+		},
+
 		uglify: {
+			options: {
+				ASCIIOnly: true
+			},
 			scripts: {
 				expand: true,
-				cwd   : '<%= globalConfig.scripts %>',
-				dest  : '<%= globalConfig.scripts %>',
-				src   : [
-					'*.js',
-					'!*.min.js'
-				],
-				rename: function( destBase, destPath ) {
-					// Fix for files with multiple dots
-					destPath = destPath.replace( /(\.[^\/.]*)?$/, '.min.js' );
-
-					return globalConfig.path.join( destBase || '', destPath );
-				}
+				cwd: '<%= config.scripts.dest %>',
+				src: [ '*.js' ],
+				dest: '<%= config.scripts.dest %>',
+				ext: '.min.js'
 			}
 		},
 
-		// https://github.com/gruntjs/grunt-contrib-watch
 		watch: {
 			options: {
-				dot     : true,
-				spawn   : true,
+				dot: true,
+				spawn: true,
 				interval: 2000
 			},
-			grunt  : {
-				files: 'Gruntfile.js',
-				tasks: [ 'jshint:grunt' ]
+			configs: {
+				files: [ '.{jscs,jshint}rc' ],
+				tasks: [
+					'jsonlint:configs'
+				]
 			},
-			images : {
-				files: '<%= globalConfig.images_src %>**/*.{gif,jpeg,jpg,png}',
-				tasks: [ 'imagemin' ]
+			grunt: {
+				files: [ 'Gruntfile.js' ],
+				tasks: [
+					'jscs:grunt',
+					'jshint:grunt',
+					'lineending:grunt'
+				]
+			},
+			images: {
+				files: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ],
+				tasks: [
+					'clean:images',
+					'imagemin'
+				]
+			},
+			json: {
+				files: [ '*.json' ],
+				tasks: [
+					'jsonlint:json'
+				]
+			},
+			php: {
+				files: [ '<%= config.dest %>**/*.php' ],
+				tasks: [
+					'phplint'
+				]
 			},
 			scripts: {
-				files: '<%= globalConfig.scripts_src %>**/*.js',
-				tasks: [ 'jshint:scripts', 'concat', 'lineending:scripts', 'uglify' ]
+				files: [ '<%= config.scripts.src %>**/*.js' ],
+				tasks: [
+					'jsvalidate:src',
+					'jshint:force',
+					'jscs:force',
+					'clean:scripts',
+					'concat',
+					'lineending:scripts',
+					'uglify',
+					'jsvalidate:dest'
+				]
 			},
-			styles : {
-				files: [ '<%= globalConfig.scss_src %>**/*.scss' ],
-				tasks: [ 'sass', 'autoprefixer', 'lineending:styles', 'cssmin' ]
+			styles: {
+				files: [ '<%= config.styles.src %>**/*.scss' ],
+				tasks: [
+					'clean:styles',
+					'sass:styles',
+					'postcss',
+					'lineending:styles',
+					'cssmin'
+				]
 			}
 		}
-	} );
+	};
 
-	// https://github.com/sindresorhus/load-grunt-tasks
+	// Add development target for JSCS.
+	configObject.jscs.force = _.merge(
+		{},
+		configObject.jscs.scripts,
+		{
+			options: {
+				force: true
+			}
+		}
+	);
+
+	// Add development target for JSHint.
+	configObject.jshint.force = _.merge(
+		{},
+		configObject.jshint.scripts,
+		{
+			options: {
+				devel: true,
+				force: true
+			}
+		}
+	);
+
 	require( 'load-grunt-tasks' )( grunt );
 
-	grunt.registerTask( 'default', [ 'watch' ] );
-	grunt.registerTask( 'grunt', [ 'jshint:grunt' ] );
-	grunt.registerTask( 'images', [ 'imagemin' ] );
-	grunt.registerTask( 'languages', [ 'makepot', 'glotpress_download' ] );
-	grunt.registerTask( 'lineendings', [ 'lineending' ] );
-	grunt.registerTask( 'production', [ 'images', 'languages', 'scripts', 'styles' ] );
-	grunt.registerTask( 'scripts', [ 'jshint:scripts', 'concat', 'lineending:scripts', 'uglify' ] );
-	grunt.registerTask( 'styles', [ 'sass', 'autoprefixer', 'lineending:styles', 'cssmin' ] );
-	grunt.registerTask( 'test', [ 'jshint' ] );
+	grunt.initConfig( configObject );
+
+	grunt.registerTask( 'configs', configObject.watch.configs.tasks );
+
+	grunt.registerTask( 'grunt', configObject.watch.grunt.tasks );
+
+	grunt.registerTask( 'images', configObject.watch.images.tasks );
+
+	grunt.registerTask( 'json', configObject.watch.json.tasks );
+
+	grunt.registerTask( 'languages', [
+		'clean:languages',
+		'makepot',
+		'glotpress_download'
+	] );
+
+	grunt.registerTask( 'php', configObject.watch.php.tasks );
+
+	grunt.registerTask( 'scripts', [
+		'jsvalidate:src',
+		'jshint:scripts',
+		'jscs:scripts',
+		'clean:scripts',
+		'concat',
+		'lineending:scripts',
+		'uglify',
+		'jsvalidate:dest'
+	] );
+
+	grunt.registerTask( 'forcescripts', configObject.watch.scripts.tasks );
+
+	grunt.registerTask( 'styles', configObject.watch.styles.tasks );
+
+	grunt.registerTask( 'lint', [
+		'jshint',
+		'jsonlint',
+		'sass:check',
+		'phplint'
+	] );
+
+	grunt.registerTask( 'precommit', [
+		'configs',
+		'grunt',
+		'images',
+		'json',
+		'languages',
+		'php',
+		'scripts',
+		'styles'
+	] );
+
+	grunt.registerTask( 'default', [
+		'configs',
+		'grunt',
+		'images',
+		'json',
+		'languages',
+		'php',
+		'forcescripts',
+		'styles'
+	] );
 };
