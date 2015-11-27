@@ -33,15 +33,14 @@ module.exports = function( grunt ) {
 			styles: {
 				src: 'resources/scss/',
 				dest: 'src/assets/css/'
+			},
+			tests: {
+				phpunit: 'tests/phpunit/'
 			}
 		},
 
-		clean: {
-			images: [ '<%= config.images.dest %>' ],
-			languages: [ '<%= config.languages.dest %>' ],
-			scripts: [ '<%= config.scripts.dest %>' ],
-			styles: [ '<%= config.styles.dest %>' ]
-		},
+		// Will soon be used for QUnit.
+		clean: {},
 
 		concat: {
 			options: {
@@ -88,18 +87,14 @@ module.exports = function( grunt ) {
 		},
 
 		imagemin: {
-			dynamic: {
-				options: {
-					optimizationLevel: 7
-				},
-				files: [
-					{
-						expand: true,
-						cwd: '<%= config.images.src %>',
-						src: [ '**/*.{gif,jpeg,jpg,png}' ],
-						dest: '<%= config.images.dest %>'
-					}
-				]
+			options: {
+				optimizationLevel: 7
+			},
+			images: {
+				expand: true,
+				cwd: '<%= config.images.src %>',
+				src: [ '**/*.{gif,jpeg,jpg,png}' ],
+				dest: '<%= config.images.dest %>'
 			}
 		},
 
@@ -150,14 +145,10 @@ module.exports = function( grunt ) {
 				verbose: false
 			},
 			src: {
-				files: {
-					src: [ '<%= config.scripts.src %>**/*.js' ]
-				}
+				src: [ '<%= config.scripts.src %>**/*.js' ]
 			},
 			dest: {
-				files: {
-					src: [ '<%= config.scripts.dest %>**/*.js' ]
-				}
+				src: [ '<%= config.scripts.dest %>**/*.js' ]
 			}
 		},
 
@@ -201,8 +192,7 @@ module.exports = function( grunt ) {
 							'Plugin Name of the plugin/theme',
 							'Plugin URI of the plugin/theme',
 							'Author of the plugin/theme',
-							'Author URI of the plugin/theme',
-							'translators: do not translate'
+							'Author URI of the plugin/theme'
 						];
 
 						// Skip translations with the above defined meta comments.
@@ -233,7 +223,15 @@ module.exports = function( grunt ) {
 					'-lf': null
 				}
 			},
-			files: [ '<%= config.dest %>**/*.php' ]
+			file: {
+				src: [ '<%= config.plugin.file %>' ]
+			},
+			src: {
+				src: [ '<%= config.dest %>**/*.php' ]
+			},
+			tests: {
+				src: [ '<%= config.tests.phpunit %>**/*.php' ]
+			}
 		},
 
 		postcss: {
@@ -289,7 +287,7 @@ module.exports = function( grunt ) {
 			scripts: {
 				expand: true,
 				cwd: '<%= config.scripts.dest %>',
-				src: [ '*.js' ],
+				src: [ '*.js', '!*.min.js' ],
 				dest: '<%= config.scripts.dest %>',
 				ext: '.min.js'
 			}
@@ -301,12 +299,14 @@ module.exports = function( grunt ) {
 				spawn: true,
 				interval: 2000
 			},
+
 			configs: {
 				files: [ '.{jscs,jshint}rc' ],
 				tasks: [
 					'jsonlint:configs'
 				]
 			},
+
 			grunt: {
 				files: [ 'Gruntfile.js' ],
 				tasks: [
@@ -315,42 +315,50 @@ module.exports = function( grunt ) {
 					'lineending:grunt'
 				]
 			},
+
+			// TODO: Somehow make "newer:imagemin" actually work...?!
 			images: {
 				files: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ],
 				tasks: [
-					'clean:images',
-					'imagemin'
+					'newer:imagemin'
 				]
 			},
+
 			json: {
 				files: [ '*.json' ],
 				tasks: [
 					'jsonlint:json'
 				]
 			},
+
 			php: {
-				files: [ '<%= config.dest %>**/*.php' ],
+				files: [
+					'<%= config.plugin.file %>',
+					'<%= config.dest %>**/*.php',
+					'<%= config.tests.phpunit %>**/*.php'
+				],
 				tasks: [
 					'phplint'
 				]
 			},
+
 			scripts: {
 				files: [ '<%= config.scripts.src %>**/*.js' ],
 				tasks: [
 					'jsvalidate:src',
 					'jshint:force',
 					'jscs:force',
-					'clean:scripts',
-					'concat',
-					'lineending:scripts',
-					'uglify',
+					'newer:concat',
+					'newer:lineending:scripts',
+					'newer:uglify',
 					'jsvalidate:dest'
 				]
 			},
+
+			// TODO: Somehow make "newer:sass:styles" work...?!
 			styles: {
 				files: [ '<%= config.styles.src %>**/*.scss' ],
 				tasks: [
-					'clean:styles',
 					'sass:styles',
 					'postcss',
 					'lineending:styles',
@@ -396,7 +404,6 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'json', configObject.watch.json.tasks );
 
 	grunt.registerTask( 'languages', [
-		'clean:languages',
 		'makepot',
 		'glotpress_download'
 	] );
@@ -407,10 +414,9 @@ module.exports = function( grunt ) {
 		'jsvalidate:src',
 		'jshint:scripts',
 		'jscs:scripts',
-		'clean:scripts',
-		'concat',
-		'lineending:scripts',
-		'uglify',
+		'newer:concat',
+		'newer:lineending:scripts',
+		'newer:uglify',
 		'jsvalidate:dest'
 	] );
 
@@ -439,9 +445,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'default', [
 		'configs',
 		'grunt',
-		'images',
 		'json',
-		'languages',
 		'php',
 		'forcescripts',
 		'styles'
