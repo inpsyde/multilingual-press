@@ -7,6 +7,10 @@ module.exports = function( grunt ) {
 
 	var configObject = {
 		config: {
+			assets: {
+				src: 'resources/assets/',
+				dest: 'assets/'
+			},
 			dest: 'src/',
 			glotpress: {
 				url: 'http://translate.marketpress.com',
@@ -86,9 +90,16 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		// TODO: Somehow make "newer:imagemin:*" work...?! Currently, always all images get minified.
 		imagemin: {
 			options: {
 				optimizationLevel: 7
+			},
+			assets: {
+				expand: true,
+				cwd: '<%= config.assets.src %>',
+				src: [ '*.{gif,jpeg,jpg,png}' ],
+				dest: '<%= config.assets.dest %>'
 			},
 			images: {
 				expand: true,
@@ -103,14 +114,10 @@ module.exports = function( grunt ) {
 				config: true
 			},
 			grunt: {
-				files: {
-					src: [ 'Gruntfile.js' ]
-				}
+				src: [ 'Gruntfile.js' ]
 			},
 			scripts: {
-				files: {
-					src: [ '<%= config.scripts.src %>**/*.js' ]
-				}
+				src: [ '<%= config.scripts.src %>**/*.js' ]
 			}
 		},
 
@@ -123,9 +130,7 @@ module.exports = function( grunt ) {
 				src: [ 'Gruntfile.js' ]
 			},
 			scripts: {
-				expand: true,
-				cwd: '<%= config.scripts.src %>',
-				src: [ '**/*.js' ]
+				src: [ '<%= config.scripts.src %>**/*.js' ]
 			}
 		},
 
@@ -161,15 +166,11 @@ module.exports = function( grunt ) {
 				src: [ 'Gruntfile.js' ]
 			},
 			scripts: {
-				expand: true,
-				cwd: '<%= config.scripts.dest %>',
-				src: [ '*.js' ],
+				src: [ '<%= config.scripts.dest %>*.js' ],
 				dest: '<%= config.scripts.dest %>'
 			},
 			styles: {
-				expand: true,
-				cwd: '<%= config.styles.dest %>',
-				src: [ '*.css' ],
+				src: [ '<%= config.styles.dest %>*.css' ],
 				dest: '<%= config.styles.dest %>'
 			}
 		},
@@ -195,7 +196,6 @@ module.exports = function( grunt ) {
 							'Author URI of the plugin/theme'
 						];
 
-						// Skip translations with the above defined meta comments.
 						var translation;
 						for ( translation in pot.translations[ '' ] ) {
 							if ( ! pot.translations[ '' ].hasOwnProperty( translation ) ) {
@@ -206,6 +206,7 @@ module.exports = function( grunt ) {
 								continue;
 							}
 
+							// Skip translations with the above defined meta comments.
 							if ( exclude.indexOf( pot.translations[ '' ][ translation ].comments.extracted ) >= 0 ) {
 								delete pot.translations[ '' ][ translation ];
 							}
@@ -300,6 +301,13 @@ module.exports = function( grunt ) {
 				interval: 2000
 			},
 
+			assets: {
+				files: [ '<%= config.assets.src %>*.{gif,jpeg,jpg,png}' ],
+				tasks: [
+					'newer:imagemin:assets'
+				]
+			},
+
 			configs: {
 				files: [ '.{jscs,jshint}rc' ],
 				tasks: [
@@ -316,11 +324,10 @@ module.exports = function( grunt ) {
 				]
 			},
 
-			// TODO: Somehow make "newer:imagemin" actually work...?!
 			images: {
 				files: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ],
 				tasks: [
-					'newer:imagemin'
+					'newer:imagemin:images'
 				]
 			},
 
@@ -355,7 +362,7 @@ module.exports = function( grunt ) {
 				]
 			},
 
-			// TODO: Somehow make "newer:sass:styles" work...?!
+			// TODO: Somehow make "newer:sass:styles" work...?! Then all subsequent tasks may be used with "newer", too.
 			styles: {
 				files: [ '<%= config.styles.src %>**/*.scss' ],
 				tasks: [
@@ -395,6 +402,8 @@ module.exports = function( grunt ) {
 
 	grunt.initConfig( configObject );
 
+	grunt.registerTask( 'assets', configObject.watch.assets.tasks );
+
 	grunt.registerTask( 'configs', configObject.watch.configs.tasks );
 
 	grunt.registerTask( 'grunt', configObject.watch.grunt.tasks );
@@ -432,6 +441,7 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'precommit', [
+		'assets',
 		'configs',
 		'grunt',
 		'images',
