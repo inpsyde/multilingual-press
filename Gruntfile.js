@@ -79,6 +79,13 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		// Run the sass task if there are new .scss files (even in subfolders).
+		delegate: {
+			sass: {
+				src: [ '<%= config.styles.src %>**/*.scss' ]
+			}
+		},
+
 		glotpress_download: {
 			languages: {
 				options: {
@@ -362,14 +369,13 @@ module.exports = function( grunt ) {
 				]
 			},
 
-			// TODO: Somehow make "newer:sass:styles" work...?! Then all subsequent tasks may be used with "newer", too.
 			styles: {
 				files: [ '<%= config.styles.src %>**/*.scss' ],
 				tasks: [
-					'sass:styles',
-					'postcss',
-					'lineending:styles',
-					'cssmin'
+					'newer:delegate:sass:styles',
+					'newer:postcss',
+					'newer:lineending:styles',
+					'newer:cssmin'
 				]
 			}
 		}
@@ -460,4 +466,9 @@ module.exports = function( grunt ) {
 		'forcescripts',
 		'styles'
 	] );
+
+	// Delegation task for grunt-newer to check files different from the individual task's files.
+	grunt.registerTask( 'delegate', function() {
+		grunt.task.run( this.args.join( ':' ) );
+	} );
 };
