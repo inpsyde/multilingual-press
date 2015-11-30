@@ -125,7 +125,7 @@ New _Language Switcher_ widget.
 ![Screenshot 12](assets/screenshot-12.png)  
 Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
-## Crafted by [Inpsyde](http://inpsyde.com) · Engineering the Web since 2006.###
+## Crafted by [Inpsyde](http://inpsyde.com) · Engineering the Web since 2006.
 Yes, we also run that [marketplace for premium WordPress plugins and themes](https://marketpress.com).
 
 ## License
