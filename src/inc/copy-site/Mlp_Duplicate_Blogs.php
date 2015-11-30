@@ -112,6 +112,14 @@ class Mlp_Duplicate_Blogs {
 			);
 		}
 
+		if ( isset ( $_POST[ 'blog' ][ 'plugin_action' ] ) ) {
+			if ( $_POST[ 'blog' ][ 'plugin_action' ] === 'activate' ) {
+				$this->activate_plugins();
+			} else {
+				$this->deactivate_plugins();
+			}
+		}
+
 		$this->update_admin_email( $current_admin_email );
 
 		// if an url was used in the old blog, we set it to this url to change all content elements
@@ -324,6 +332,25 @@ class Mlp_Duplicate_Blogs {
 	}
 
 	/**
+	 * Fires the plugin activation hooks of all activa plugins on the cloned site
+	 */
+	private function activate_plugins() {
+
+		$active = get_option( 'active_plugins' );
+		foreach ( $active as $plugin_basename ) {
+			do_action( 'activate_' . $plugin_basename );
+
+		}
+	}
+
+	/**
+	 * Deactivates all plugins on the new site
+	 */
+	private function deactivate_plugins() {
+		update_option( 'active_plugins', array() );
+	}
+
+	/**
 	 * Replace file URLs in new blog.
 	 *
 	 * @param Mlp_Copy_Attachments $copy_files
@@ -395,6 +422,31 @@ class Mlp_Duplicate_Blogs {
 				<select id="inpsyde_multilingual_based" name="blog[basedon]" autocomplete="off">
 					<?php echo $options; ?>
 				</select>
+			</td>
+		</tr>
+
+		<tr class="form-field">
+			<td>
+				<label for="inpsyde_multilingual_based">
+					<?php
+					esc_html_e( 'Plugin Status', 'multilingualpress' );
+					?>
+				</label>
+			</td>
+			<td>
+				<input type="radio" id="blog_plugins_activate" name="blog[plugin_action]" value="activate" checked>
+				<label for="blog_plugins_activate">
+					<?php esc_html_e( 'Activate', 'multilingualpress' );?>
+				</label>
+				<br>
+				<input type="radio" id="blog_plugins_deactivate" name="blog[plugin_action]" value="deactivate">
+				<label for="blog_plugins_deactivate">
+					<?php esc_html_e( 'Deactivate', 'multilingualpress' );?>
+				</label>
+				<br>
+				<p class="description">
+					<?php 	esc_html_e( 'Choose how to handle active plugins on the cloned site.', 'multilingualpress' );	?>
+				</p>
 			</td>
 		</tr>
 		<?php
