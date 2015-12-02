@@ -1,51 +1,31 @@
-<?php
+<?php # -*- coding: utf-8 -*-
+
 /**
- * Allow users to disable automatic redirects in their profile.
- *
- * @version 2014.07.05
- * @author  Inpsyde GmbH, toscho
- * @license GPL
+ * Allows users to disable automatic redirects in their profile.
  */
 class Mlp_Redirect_User_Settings {
 
 	/**
 	 * @var string
 	 */
-	private $key = 'mlp_redirect';
+	private $meta_key = 'mlp_redirect';
 
 	/**
-	 * Initialize the objects.
+	 * Initializes the objects.
 	 *
 	 * @return void
 	 */
 	public function setup() {
 
-		$nonce      = new Inpsyde_Nonce_Validator( $this->key );
-		$view       = new Mlp_Redirect_User_Settings_Html( $this->key, $nonce );
-		$updater    = new Mlp_User_Settings_Updater( $this->key, $nonce );
-		$controller = new Mlp_User_Settings_Controller( $view, $updater );
-		$controller->setup();
+		$nonce = new Inpsyde_Nonce_Validator( $this->meta_key );
 
-		add_filter( 'mlp_do_redirect', array ( $this, 'intercept_redirect' ) );
-	}
+		$user_settings_controller = new Mlp_User_Settings_Controller(
+			new Mlp_Redirect_User_Settings_Html( $this->meta_key, $nonce ),
+			new Mlp_User_Settings_Updater( $this->meta_key, $nonce )
+		);
+		$user_settings_controller->setup();
 
-	/**
-	 * Stop redirect when the user has turned it off.
-	 *
-	 * This needs a better place.
-	 *
-	 * @param  bool $bool
-	 * @return bool
-	 */
-	public function intercept_redirect( $bool ) {
-
-		$user = wp_get_current_user();
-
-		if ( ! is_a( $user, 'WP_User' ) )
-			return $bool;
-
-		$current = (int) get_user_meta( $user->ID, $this->key );
-
-		return 1 === $current ? FALSE : $bool;
+		$redirect_filter = new Mlp_Redirect_Filter( $this->meta_key );
+		add_filter( 'mlp_do_redirect', array( $redirect_filter, 'filter_redirect' ) );
 	}
 }

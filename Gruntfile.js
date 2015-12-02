@@ -79,8 +79,19 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// Run the sass task if there are new .scss files (even in subfolders).
+		// Allow grunt-newer to run tasks if files other than the individual src files have changed since the last run.
 		delegate: {
+			'imagemin-assets': {
+				task: 'imagemin:assets',
+				src: [ '<%= config.assets.src %>*.{gif,jpeg,jpg,png}' ]
+			},
+			'imagemin-images': {
+				task: 'imagemin:images',
+				src: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ]
+			},
+			makepot: {
+				src: [ '<%= config.dest %>**/*.php' ]
+			},
 			sass: {
 				src: [ '<%= config.styles.src %>**/*.scss' ]
 			}
@@ -97,7 +108,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// TODO: Somehow make "newer:imagemin:*" work...?! Currently, always all images get minified.
 		imagemin: {
 			options: {
 				optimizationLevel: 7
@@ -123,8 +133,11 @@ module.exports = function( grunt ) {
 			grunt: {
 				src: [ 'Gruntfile.js' ]
 			},
-			scripts: {
+			src: {
 				src: [ '<%= config.scripts.src %>**/*.js' ]
+			},
+			dest: {
+				src: [ '<%= config.scripts.dest %>*.js' ]
 			}
 		},
 
@@ -136,8 +149,11 @@ module.exports = function( grunt ) {
 			grunt: {
 				src: [ 'Gruntfile.js' ]
 			},
-			scripts: {
+			src: {
 				src: [ '<%= config.scripts.src %>**/*.js' ]
+			},
+			dest: {
+				src: [ '<%= config.scripts.dest %>*.js' ]
 			}
 		},
 
@@ -156,11 +172,14 @@ module.exports = function( grunt ) {
 				esprimaOptions: {},
 				verbose: false
 			},
+			grunt: {
+				src: [ 'Gruntfile.js' ]
+			},
 			src: {
 				src: [ '<%= config.scripts.src %>**/*.js' ]
 			},
 			dest: {
-				src: [ '<%= config.scripts.dest %>**/*.js' ]
+				src: [ '<%= config.scripts.dest %>*.js' ]
 			}
 		},
 
@@ -173,12 +192,10 @@ module.exports = function( grunt ) {
 				src: [ 'Gruntfile.js' ]
 			},
 			scripts: {
-				src: [ '<%= config.scripts.dest %>*.js' ],
-				dest: '<%= config.scripts.dest %>'
+				src: [ '<%= config.scripts.dest %>*.js' ]
 			},
 			styles: {
-				src: [ '<%= config.styles.dest %>*.css' ],
-				dest: '<%= config.styles.dest %>'
+				src: [ '<%= config.styles.dest %>*.css' ]
 			}
 		},
 
@@ -273,12 +290,6 @@ module.exports = function( grunt ) {
 				style: 'expanded',
 				noCache: true
 			},
-			check: {
-				options: {
-					check: true
-				},
-				src: [ '<%= config.styles.src %>*.scss' ]
-			},
 			styles: {
 				expand: true,
 				cwd: '<%= config.styles.src %>',
@@ -311,7 +322,7 @@ module.exports = function( grunt ) {
 			assets: {
 				files: [ '<%= config.assets.src %>*.{gif,jpeg,jpg,png}' ],
 				tasks: [
-					'newer:imagemin:assets'
+					'newer:delegate:imagemin-assets'
 				]
 			},
 
@@ -327,14 +338,15 @@ module.exports = function( grunt ) {
 				tasks: [
 					'jscs:grunt',
 					'jshint:grunt',
-					'lineending:grunt'
+					'newer:lineending:grunt',
+					'jsvalidate:grunt'
 				]
 			},
 
 			images: {
 				files: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ],
 				tasks: [
-					'newer:imagemin:images'
+					'newer:delegate:imagemin-images'
 				]
 			},
 
@@ -352,7 +364,17 @@ module.exports = function( grunt ) {
 					'<%= config.tests.phpunit %>**/*.php'
 				],
 				tasks: [
-					'phplint'
+					'phplint',
+					'phpunit'
+				]
+			},
+
+			pot: {
+				files: [
+					'<%= config.dest %>**/*.php'
+				],
+				tasks: [
+					'newer:delegate:makepot'
 				]
 			},
 
@@ -372,7 +394,7 @@ module.exports = function( grunt ) {
 			styles: {
 				files: [ '<%= config.styles.src %>**/*.scss' ],
 				tasks: [
-					'newer:delegate:sass:styles',
+					'newer:delegate:sass',
 					'newer:postcss',
 					'newer:lineending:styles',
 					'newer:cssmin'
@@ -381,10 +403,10 @@ module.exports = function( grunt ) {
 		}
 	};
 
-	// Add development target for JSCS.
+	// Add "force" target to JSCS for development.
 	configObject.jscs.force = _.merge(
 		{},
-		configObject.jscs.scripts,
+		configObject.jscs.src,
 		{
 			options: {
 				force: true
@@ -392,10 +414,10 @@ module.exports = function( grunt ) {
 		}
 	);
 
-	// Add development target for JSHint.
+	// Add "force" target to JSHint for development.
 	configObject.jshint.force = _.merge(
 		{},
-		configObject.jshint.scripts,
+		configObject.jshint.src,
 		{
 			options: {
 				devel: true,
@@ -408,6 +430,31 @@ module.exports = function( grunt ) {
 
 	grunt.initConfig( configObject );
 
+	// Delegation task for grunt-newer to check files different from the individual task's files.
+	grunt.registerMultiTask( 'delegate', function() {
+		var data = this.data,
+			task = this.target,
+			target = Array.prototype.join.call( arguments, ':' );
+
+		if ( data.task ) {
+			task = data.task;
+		} else if ( target ) {
+			task = task + ':' + target;
+		}
+
+		grunt.task.run( task );
+	} );
+
+	// PHPUnit task.
+	grunt.registerTask( 'phpunit', function() {
+		grunt.util.spawn( {
+			cmd: 'phpunit',
+			opts: {
+				stdio: 'inherit'
+			}
+		}, this.async() );
+	} );
+
 	grunt.registerTask( 'assets', configObject.watch.assets.tasks );
 
 	grunt.registerTask( 'configs', configObject.watch.configs.tasks );
@@ -418,57 +465,48 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'json', configObject.watch.json.tasks );
 
-	grunt.registerTask( 'languages', [
-		'makepot',
-		'glotpress_download'
-	] );
-
 	grunt.registerTask( 'php', configObject.watch.php.tasks );
+
+	grunt.registerTask( 'pot', configObject.watch.pot.tasks );
 
 	grunt.registerTask( 'scripts', [
 		'jsvalidate:src',
-		'jshint:scripts',
-		'jscs:scripts',
+		'jshint:src',
+		'jscs:src',
 		'newer:concat',
 		'newer:lineending:scripts',
 		'newer:uglify',
-		'jsvalidate:dest'
+		'jsvalidate:dest',
+		'jshint:dest',
+		'jscs:dest'
 	] );
 
-	grunt.registerTask( 'forcescripts', configObject.watch.scripts.tasks );
+	grunt.registerTask( 'force-scripts', configObject.watch.scripts.tasks );
 
 	grunt.registerTask( 'styles', configObject.watch.styles.tasks );
 
-	grunt.registerTask( 'lint', [
-		'jshint',
-		'jsonlint',
-		'sass:check',
-		'phplint'
+	grunt.registerTask( 'common', [
+		'configs',
+		'grunt',
+		'json',
+		'php',
+		'pot',
+		'styles'
 	] );
 
-	grunt.registerTask( 'precommit', [
+	grunt.registerTask( 'develop', [
+		'common',
+		'force-scripts'
+	] );
+
+	grunt.registerTask( 'pre-commit', [
+		'newer-clean',
+		'common',
 		'assets',
-		'configs',
-		'grunt',
+		'glotpress_download',
 		'images',
-		'json',
-		'languages',
-		'php',
-		'scripts',
-		'styles'
+		'scripts'
 	] );
 
-	grunt.registerTask( 'default', [
-		'configs',
-		'grunt',
-		'json',
-		'php',
-		'forcescripts',
-		'styles'
-	] );
-
-	// Delegation task for grunt-newer to check files different from the individual task's files.
-	grunt.registerTask( 'delegate', function() {
-		grunt.task.run( this.args.join( ':' ) );
-	} );
+	grunt.registerTask( 'default', 'develop' );
 };
