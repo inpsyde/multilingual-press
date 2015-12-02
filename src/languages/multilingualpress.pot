@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MultilingualPress 2.2.3\n"
 "Report-Msgid-Bugs-To: https://github.com/inpsyde/multilingual-press/issues\n"
-"POT-Creation-Date: 2015-09-08 11:36:55+00:00\n"
+"POT-Creation-Date: 2015-12-02 16:08:47+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -52,43 +52,43 @@ msgid ""
 "thumbnails and taxonomies."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:50
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:49
 msgid "Copy source post"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:107
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:105
 msgid "Enter name here"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:114
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:112
 msgid "Post Name:"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:144
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:142
 msgid "Enter excerpt here"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:151
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:149
 msgid "Post Excerpt:"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:212
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:210
 msgid "Copy the featured image of the source post."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:214
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:212
 msgid "Overwrites an existing featured image in the target post."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:247
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:245
 msgid "Change taxonomies"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:329
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:327
 msgid "Enter title here"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:433
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:431
 msgid ""
 "The remote post is trashed. You are not able to edit it here. If you want "
 "to, restore the remote post. Also mind the options below."
@@ -110,7 +110,7 @@ msgid "No custom post type found."
 msgstr ""
 
 #: inc/advanced-translator/Mlp_Cpt_Translator.php:281
-#: inc/post-translator/Mlp_Translation_Metabox_View.php:182
+#: inc/post-translator/Mlp_Translation_Metabox_View.php:190
 msgid "Translate this post"
 msgstr ""
 
@@ -150,57 +150,57 @@ msgstr ""
 msgid "Language Switcher"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:81
+#: inc/common/Mlp_Widget.php:83
 msgid "Title"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:87
+#: inc/common/Mlp_Widget.php:89
 msgid "Link text"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:92
+#: inc/common/Mlp_Widget.php:94
 msgid "None"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:93
+#: inc/common/Mlp_Widget.php:95
 #: inc/language-manager/Mlp_Language_Manager_Controller.php:347
 msgid "Native name"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:94
+#: inc/common/Mlp_Widget.php:96
 msgid "Custom name"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:95
+#: inc/common/Mlp_Widget.php:97
 #: inc/language-manager/Mlp_Language_Manager_Controller.php:354
 msgid "English name"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:96
+#: inc/common/Mlp_Widget.php:98
 msgid "Language code"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:97
+#: inc/common/Mlp_Widget.php:99
 msgid "Language code (short)"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:115
+#: inc/common/Mlp_Widget.php:117
 msgid "Show flag"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:123
+#: inc/common/Mlp_Widget.php:125
 msgid "Show current site"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:132
+#: inc/common/Mlp_Widget.php:134
 msgid "Show links for translated content only."
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:139
+#: inc/common/Mlp_Widget.php:141
 msgid "Languages are sorted by <a href=\"%s\">priority</a>."
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:143
+#: inc/common/Mlp_Widget.php:145
 msgid "Languages are sorted by priority."
 msgstr ""
 
@@ -291,10 +291,6 @@ msgstr ""
 msgid ""
 "This plugin has been developed by <a href=\"%1$s\">MarketPress</a>, a "
 "project of <a href=\"%2$s\">Inpsyde</a>."
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "MultilingualPress"
 msgstr ""
 
 #: inc/general-settings/Mlp_General_Settingspage.php:99
@@ -441,7 +437,7 @@ msgstr ""
 msgid "Bottom right"
 msgstr ""
 
-#: inc/redirect/Mlp_Redirect_Column.php:79
+#: inc/redirect/Mlp_Redirect_Column.php:81
 msgid "Redirect"
 msgstr ""
 
@@ -566,23 +562,11 @@ msgstr ""
 msgid "English"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/multilingual-press/"
-msgstr ""
-
 #. Description of the plugin/theme
 msgid ""
 "Create a fast translation network on WordPress multisite. Run each language "
 "in a separate site, and connect the content in a lightweight user "
 "interface. Use a customizable widget to link to all sites."
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "Inpsyde GmbH"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "http://inpsyde.com"
 msgstr ""
 
 #: inc/installation/Mlp_Requirements_Check.php:114
@@ -628,7 +612,7 @@ msgctxt "No HTML; 1 = post status, 2 = publish time"
 msgid "%1$s (%2$s)"
 msgstr ""
 
-#: inc/post-translator/Mlp_Translation_Metabox_View.php:160
+#: inc/post-translator/Mlp_Translation_Metabox_View.php:166
 msgctxt "placeholder for empty translation textarea"
 msgid "No content yet."
 msgstr ""
