@@ -132,6 +132,7 @@ tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 [issue #177](https://github.com/inpsyde/multilingual-press/issues/177).
 - Fix missing noredirect query var for all URLs of linked elements, see
 [issue #174](https://github.com/inpsyde/multilingual-press/issues/174).
+- Fire plugin activation hooks for active plugins when a site has been duplicated.
 
 = 2.2.3 =
 - Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),
