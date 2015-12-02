@@ -112,7 +112,7 @@ class Mlp_Duplicate_Blogs {
 			);
 		}
 
-		if ( isset ( $_POST[ 'blog' ][ 'activate_plugins' ] ) ) {
+		if ( isset( $_POST['blog']['activate_plugins'] ) ) {
 			$this->activate_plugins();
 		} else {
 			$this->deactivate_plugins();
@@ -330,23 +330,32 @@ class Mlp_Duplicate_Blogs {
 	}
 
 	/**
-	 * Fires the plugin activation hooks of all activa plugins on the cloned site
+	 * Fires the plugin activation hooks for all active plugins on the duplicated site.
+	 *
+	 * @return void
 	 */
 	private function activate_plugins() {
 
-		$active = get_option( 'active_plugins' );
-		foreach ( $active as $plugin_basename ) {
-			do_action( 'activate_plugin', $plugin_basename, FALSE );
-			do_action( 'activate_' . $plugin_basename, FALSE );
-			do_action( 'activated_plugin', $plugin_basename, FALSE );
+		$active_plugins = get_option( 'active_plugins' );
+		foreach ( $active_plugins as $plugin ) {
+			/** This action is documented in wp-admin/includes/plugin.php */
+			do_action( 'activate_plugin', $plugin, false );
 
+			/** This action is documented in wp-admin/includes/plugin.php */
+			do_action( 'activate_' . $plugin, false );
+
+			/** This action is documented in wp-admin/includes/plugin.php */
+			do_action( 'activated_plugin', $plugin, false );
 		}
 	}
 
 	/**
-	 * Deactivates all plugins on the new site
+	 * Deactivates all plugins on the duplicated site.
+	 *
+	 * @retuvn void
 	 */
 	private function deactivate_plugins() {
+
 		update_option( 'active_plugins', array() );
 	}
 
@@ -427,21 +436,15 @@ class Mlp_Duplicate_Blogs {
 
 		<tr class="form-field">
 			<td>
-				<label for="inpsyde_multilingual_based">
-					<?php
-					esc_html_e( 'Plugins', 'multilingualpress' );
-					?>
-				</label>
+				<?php esc_html_e( 'Plugins', 'multilingualpress' ); ?>
 			</td>
 			<td>
-				<input type="checkbox" id="blog_plugins_activate" name="blog[activate_plugins]" value="1" checked>
-				<label for="blog_plugins_activate">
-					<?php esc_html_e( 'Activate all Plugins', 'multilingualpress' );?>
+				<label for="blog_activate_plugins">
+					<input type="checkbox" value="1" id="blog_activate_plugins" name="blog[activate_plugins]" checked>
+					<?php
+					esc_html_e( 'Activate all plugins that are active on the source site', 'multilingualpress' );
+					?>
 				</label>
-				<br>
-				<p class="description">
-					<?php 	esc_html_e( 'After duplicating the site, activate all plugins that are currently active on the source site. If unchecked, all plugins on the new site will be deactivated', 'multilingualpress' );	?>
-				</p>
 			</td>
 		</tr>
 		<?php
