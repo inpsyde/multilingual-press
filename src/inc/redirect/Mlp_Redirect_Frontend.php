@@ -1,13 +1,7 @@
-<?php
+<?php # -*- coding: utf-8 -*-
 
 /**
- * Redirect visitors to the best matching language alternative.
- *
- * @version    2015.08.24
- * @author     Inpsyde GmbH, toscho
- * @license    GPL
- * @package    MultilingualPress
- * @subpackage Redirect
+ * Redirects visitors to the best matching language alternative.
  */
 class Mlp_Redirect_Frontend {
 
@@ -24,17 +18,18 @@ class Mlp_Redirect_Frontend {
 	/**
 	 * Constructor.
 	 *
-	 * @param Mlp_Redirect_Response_Interface $response
-	 * @param string                          $option_name
+	 * @param Mlp_Redirect_Response_Interface $response    Redirect response object.
+	 * @param string                          $option_name Option name.
 	 */
 	public function __construct( Mlp_Redirect_Response_Interface $response, $option_name ) {
 
 		$this->response = $response;
+
 		$this->option_name = $option_name;
 	}
 
 	/**
-	 * Initialize redirect data and response classes.
+	 * Initializes the redirect data and response classes.
 	 *
 	 * @return void
 	 */
@@ -50,68 +45,69 @@ class Mlp_Redirect_Frontend {
 	}
 
 	/**
-	 * add noredirect query var to the links
+	 * Adds the noredirect query var to the given URL.
 	 *
 	 * @wp-hook mlp_linked_element_link
 	 *
-	 * @param   string $link
-	 * @param   int    $site_id
+	 * @param string $url     URL.
+	 * @param int    $site_id Site ID.
 	 *
-	 * @return  string
+	 * @return string
 	 */
-	public function add_noredirect_parameter( $link, $site_id ) {
+	public function add_noredirect_parameter( $url, $site_id ) {
 
-		$link = (string) $link;
-		if ( empty( $link ) ) {
-			return $link;
+		$url = (string) $url;
+		if ( ! $url ) {
+			return $url;
 		}
 
 		$languages = mlp_get_available_languages();
 		if ( empty( $languages[ $site_id ] ) ) {
-			return $link;
+			return $url;
 		}
 
-		return add_query_arg( 'noredirect', $languages[ $site_id ], $link );
+		$url = add_query_arg( 'noredirect', $languages[ $site_id ], $url );
+
+		return $url;
 	}
 
 	/**
-	 * Is there an accept header and the feature is active for the site and the current language is not in the
-	 * noredirect cookie?
+	 * Checks if the current request should be redirected.
+	 *
+	 * Requires an accept header, the redirect feature being active for the current site, and the current language not
+	 * being included in the $_SESSION's noredirect element.
 	 *
 	 * @return bool
 	 */
 	public function is_redirectable() {
 
-		if ( empty( $_SERVER[ 'HTTP_ACCEPT_LANGUAGE' ] ) ) {
-			return FALSE;
+		if ( empty( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+			return false;
+		}
+
+		if ( ! get_option( $this->option_name ) ) {
+			return false;
 		}
 
 		if ( ! isset( $_SESSION ) && ! session_id() ) {
 			session_start();
 		}
 
-		if ( isset( $_SESSION[ 'noredirect' ] ) ) {
+		if ( isset( $_SESSION['noredirect'] ) ) {
 			$current_site_language = mlp_get_current_blog_language();
 
-			$existing = (array) $_SESSION[ 'noredirect' ];
-
-			if ( in_array( $current_site_language, $existing ) ) {
-				return FALSE;
+			if ( in_array( $current_site_language, (array) $_SESSION['noredirect'] ) ) {
+				return false;
 			}
 		}
 
 		/**
-		 * Filter whether the user should be redirected.
+		 * Filters if the current request should be redirected.
 		 *
-		 * @param bool $do_redirect Redirect or not?
+		 * @param bool $redirect Redirect the current request?
 		 *
 		 * @return bool
 		 */
-		if ( ! apply_filters( 'mlp_do_redirect', TRUE ) ) {
-			return FALSE;
-		}
-
-		return (bool) get_option( $this->option_name );
+		return (bool) apply_filters( 'mlp_do_redirect', true );
 	}
-
 }
