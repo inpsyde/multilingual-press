@@ -10,6 +10,14 @@ msgstr ""
 "X-Generator: GlotPress/0.1\n"
 "Project-Id-Version: MultilingualPress\n"
 
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:439
+msgid "Plugins"
+msgstr ""
+
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:446
+msgid "Activate all plugins that are active on the source site"
+msgstr ""
+
 #: inc/Multilingual_Press.php:179
 msgid "You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page."
 msgstr ""
@@ -18,33 +26,30 @@ msgstr ""
 msgid "Please select a post."
 msgstr ""
 
-msgid "https://wordpress.org/plugins/multilingual-press/"
-msgstr ""
-
 msgid "Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:107
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:105
 msgid "Enter name here"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:144
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:142
 msgid "Enter excerpt here"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:92
+#: inc/common/Mlp_Widget.php:94
 msgid "None"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:94
+#: inc/common/Mlp_Widget.php:96
 msgid "Custom name"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:97
+#: inc/common/Mlp_Widget.php:99
 msgid "Language code (short)"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:115
+#: inc/common/Mlp_Widget.php:117
 msgid "Show flag"
 msgstr ""
 
@@ -52,11 +57,11 @@ msgstr ""
 msgid "No terms found."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:114
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:112
 msgid "Post Name:"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:151
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:149
 msgid "Post Excerpt:"
 msgstr ""
 
@@ -64,15 +69,15 @@ msgstr ""
 msgid "Add to Menu"
 msgstr "Toevoegen aan menu"
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:414
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:465
 msgid "Search Engine Visibility"
 msgstr "Zoekmachine zichtbaarheid"
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:421
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:472
 msgid "Discourage search engines from indexing this site"
 msgstr "Voorkom dat zoekmachine's deze site indexeren"
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:426
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:477
 msgid "It is up to search engines to honor this request."
 msgstr "Het is aan de zoekmachine's om hier gehoor aan te geven."
 
@@ -108,7 +113,7 @@ msgstr "Spring naar site"
 msgid "Table reset to default values."
 msgstr "Tabel terugzetten naar standaard waarden."
 
-#: inc/common/Mlp_Widget.php:81
+#: inc/common/Mlp_Widget.php:83
 msgid "Title"
 msgstr "Titel"
 
@@ -137,10 +142,7 @@ msgstr "Je voorkeur backend taal"
 msgid "choose language"
 msgstr "selecteer taal"
 
-msgid "http://inpsyde.com"
-msgstr "http://inpsyde.com"
-
-#: inc/post-translator/Mlp_Translation_Metabox_View.php:160
+#: inc/post-translator/Mlp_Translation_Metabox_View.php:166
 msgctxt "placeholder for empty translation textarea"
 msgid "No content yet."
 msgstr "Nog geen content beschikbaar."
@@ -165,9 +167,6 @@ msgstr "ISO&#160;639-2"
 #: inc/language-manager/Mlp_Language_Manager_Controller.php:278
 msgid "If you change the priority of a language to a higher value, it will show up on an earlier page."
 msgstr "Als je de prioriteit aanpast van een taal naar een hogere waarde, zal het eerder naar voren komen op een oudere pagina."
-
-msgid "Inpsyde GmbH"
-msgstr "Inpsyde GmbH"
 
 #: inc/nav-menu/Mlp_Language_Nav_Menu_Data.php:202
 #: inc/nav-menu/Mlp_Language_Nav_Menu_Data.php:232
@@ -196,7 +195,7 @@ msgstr "Laat zoals het is"
 msgid "Live search"
 msgstr "Live zoeken"
 
-#: inc/common/Mlp_Widget.php:93
+#: inc/common/Mlp_Widget.php:95
 #: inc/language-manager/Mlp_Language_Manager_Controller.php:347
 msgid "Native name"
 msgstr "Naam"
@@ -250,7 +249,7 @@ msgstr "Deze plugin heeft minimaal WordPress versie %1$s nodig, jouw versie %2$s
 msgid "Alternative language title"
 msgstr "Alternatieve taal titel"
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:390
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:426
 msgid "Based on site"
 msgstr "Gebaseerd op website"
 
@@ -266,7 +265,7 @@ msgstr "Rechtsonder"
 msgid "Change relationship"
 msgstr "Wijzig relatie"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:247
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:245
 msgid "Change taxonomies"
 msgstr "Wijzig taxonomieën"
 
@@ -274,7 +273,7 @@ msgstr "Wijzig taxonomieën"
 msgid "Choose language"
 msgstr "Selecteer taal"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:50
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:49
 msgid "Copy source post"
 msgstr "Kopieer originele post"
 
@@ -290,7 +289,7 @@ msgstr "Redirect niet automatisch naar de beste bijbehorende taal."
 msgid "Enable automatic redirection"
 msgstr "Zet automatisch redirecten aan"
 
-#: inc/common/Mlp_Widget.php:95
+#: inc/common/Mlp_Widget.php:97
 #: inc/language-manager/Mlp_Language_Manager_Controller.php:354
 msgid "English name"
 msgstr "Engelse naam"
@@ -324,11 +323,11 @@ msgstr "Ga naar de vorige pagina"
 msgid "HTTP"
 msgstr "HTTP"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:329
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:327
 msgid "Enter title here"
 msgstr "Vul hier de titel in"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:433
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:431
 msgid "The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below."
 msgstr "Het remote bericht lijkt zich in de prullenbak te bevinden. U kunt het bericht hier niet aanpassen. Als u wilt, herstel dan het afstands bericht. Denk ook aan de opties hieronder."
 
@@ -377,11 +376,11 @@ msgstr "Prullenbak"
 msgid "Send all the translations to trash when this post is trashed."
 msgstr "Zet alle vertalingen in de prullenbak wanneer deze post wordt verwijderd."
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:373
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:409
 msgid "Choose site"
 msgstr "Kies site"
 
-#: inc/redirect/Mlp_Redirect_Column.php:79
+#: inc/redirect/Mlp_Redirect_Column.php:81
 msgid "Redirect"
 msgstr "Redirect"
 
@@ -409,9 +408,6 @@ msgstr "Site taal"
 #: inc/user-backend-language/Mlp_User_Backend_Language.php:217
 msgid "English"
 msgstr "Engels"
-
-msgid "MultilingualPress"
-msgstr "MultilingualPress"
 
 #: inc/Multilingual_Press.php:337
 msgid "You didn't setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships."
@@ -472,27 +468,27 @@ msgstr "MultilingualPress vertalingen"
 msgid "Language Switcher"
 msgstr "Taal wisselaar"
 
-#: inc/common/Mlp_Widget.php:87
+#: inc/common/Mlp_Widget.php:89
 msgid "Link text"
 msgstr "Link tekst"
 
-#: inc/common/Mlp_Widget.php:96
+#: inc/common/Mlp_Widget.php:98
 msgid "Language code"
 msgstr "Taal code"
 
-#: inc/common/Mlp_Widget.php:123
+#: inc/common/Mlp_Widget.php:125
 msgid "Show current site"
 msgstr "Geef huidige site weer"
 
-#: inc/common/Mlp_Widget.php:132
+#: inc/common/Mlp_Widget.php:134
 msgid "Show links for translated content only."
 msgstr "Geef alleen links voor vertaalde content weer."
 
-#: inc/common/Mlp_Widget.php:139
+#: inc/common/Mlp_Widget.php:141
 msgid "Languages are sorted by <a href=\"%s\">priority</a>."
 msgstr "Vertalingen zijn gesorteerd op <a href=\"%s\">prioriteit</a>."
 
-#: inc/common/Mlp_Widget.php:143
+#: inc/common/Mlp_Widget.php:145
 msgid "Languages are sorted by priority."
 msgstr "Vertalingen zijn gesorteerd op prioriteit."
 
@@ -515,7 +511,7 @@ msgid "The plugin %s has been deactivated."
 msgstr "Deze plugin %s is gedeactiveerd."
 
 #: inc/advanced-translator/Mlp_Cpt_Translator.php:281
-#: inc/post-translator/Mlp_Translation_Metabox_View.php:182
+#: inc/post-translator/Mlp_Translation_Metabox_View.php:190
 msgid "Translate this post"
 msgstr "Vertaal deze post"
 
@@ -573,10 +569,10 @@ msgstr "Aangepaste bericht type Vertaler"
 msgid "No custom post type found."
 msgstr "Geen aangepast bericht type gevonden."
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:212
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:210
 msgid "Copy the featured image of the source post."
 msgstr "Kopieer het gepromote plaatje van het bron bericht."
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:214
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:212
 msgid "Overwrites an existing featured image in the target post."
 msgstr "Overschrijf een bestaand gepromoot plaatje in het doel bericht."

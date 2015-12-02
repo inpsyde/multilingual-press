@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MultilingualPress 2.2.3\n"
 "Report-Msgid-Bugs-To: https://github.com/inpsyde/multilingual-press/issues\n"
-"POT-Creation-Date: 2015-12-02 16:08:47+00:00\n"
+"POT-Creation-Date: 2015-12-02 18:01:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -239,23 +239,31 @@ msgstr ""
 msgid "Send all the translations to trash when this post is trashed."
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:373
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:409
 msgid "Choose site"
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:390
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:426
 msgid "Based on site"
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:414
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:439
+msgid "Plugins"
+msgstr ""
+
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:446
+msgid "Activate all plugins that are active on the source site"
+msgstr ""
+
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:465
 msgid "Search Engine Visibility"
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:421
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:472
 msgid "Discourage search engines from indexing this site"
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:426
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:477
 msgid "It is up to search engines to honor this request."
 msgstr ""
 

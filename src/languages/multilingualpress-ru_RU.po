@@ -10,6 +10,14 @@ msgstr ""
 "X-Generator: GlotPress/0.1\n"
 "Project-Id-Version: MultilingualPress\n"
 
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:439
+msgid "Plugins"
+msgstr ""
+
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:446
+msgid "Activate all plugins that are active on the source site"
+msgstr ""
+
 #: inc/Multilingual_Press.php:179
 msgid "You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page."
 msgstr ""
@@ -18,33 +26,30 @@ msgstr ""
 msgid "Please select a post."
 msgstr ""
 
-msgid "https://wordpress.org/plugins/multilingual-press/"
-msgstr ""
-
 msgid "Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:107
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:105
 msgid "Enter name here"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:144
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:142
 msgid "Enter excerpt here"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:92
+#: inc/common/Mlp_Widget.php:94
 msgid "None"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:94
+#: inc/common/Mlp_Widget.php:96
 msgid "Custom name"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:97
+#: inc/common/Mlp_Widget.php:99
 msgid "Language code (short)"
 msgstr ""
 
-#: inc/common/Mlp_Widget.php:115
+#: inc/common/Mlp_Widget.php:117
 msgid "Show flag"
 msgstr ""
 
@@ -52,11 +57,11 @@ msgstr ""
 msgid "No terms found."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:114
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:112
 msgid "Post Name:"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:151
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:149
 msgid "Post Excerpt:"
 msgstr ""
 
@@ -64,15 +69,15 @@ msgstr ""
 msgid "Add to Menu"
 msgstr "Добавить в меню"
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:414
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:465
 msgid "Search Engine Visibility"
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:421
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:472
 msgid "Discourage search engines from indexing this site"
 msgstr ""
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:426
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:477
 msgid "It is up to search engines to honor this request."
 msgstr ""
 
@@ -108,7 +113,7 @@ msgstr "Переключить сайт"
 msgid "Table reset to default values."
 msgstr "Таблица возвращена к стандартным настройкам."
 
-#: inc/common/Mlp_Widget.php:81
+#: inc/common/Mlp_Widget.php:83
 msgid "Title"
 msgstr "Заголовок"
 
@@ -137,10 +142,7 @@ msgstr "Предпочитаемый язык (консоль)"
 msgid "choose language"
 msgstr "Выбор языка"
 
-msgid "http://inpsyde.com"
-msgstr "http://inpsyde.com"
-
-#: inc/post-translator/Mlp_Translation_Metabox_View.php:160
+#: inc/post-translator/Mlp_Translation_Metabox_View.php:166
 msgctxt "placeholder for empty translation textarea"
 msgid "No content yet."
 msgstr "Нет записей еще."
@@ -165,9 +167,6 @@ msgstr "ISO&#160;639-2"
 #: inc/language-manager/Mlp_Language_Manager_Controller.php:278
 msgid "If you change the priority of a language to a higher value, it will show up on an earlier page."
 msgstr "Если вы измените приоритет языка на большее значение, он будет отображен первым на странице"
-
-msgid "Inpsyde GmbH"
-msgstr "Inpsyde GmbH"
 
 #: inc/nav-menu/Mlp_Language_Nav_Menu_Data.php:202
 #: inc/nav-menu/Mlp_Language_Nav_Menu_Data.php:232
@@ -196,7 +195,7 @@ msgstr "Оставить как есть"
 msgid "Live search"
 msgstr "Живой поиск"
 
-#: inc/common/Mlp_Widget.php:93
+#: inc/common/Mlp_Widget.php:95
 #: inc/language-manager/Mlp_Language_Manager_Controller.php:347
 msgid "Native name"
 msgstr "Имя"
@@ -250,7 +249,7 @@ msgstr "Этот плагин требует версию WordPress  %1$s, ва�
 msgid "Alternative language title"
 msgstr "Альтернативный заголовок для языка"
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:390
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:426
 msgid "Based on site"
 msgstr "Основан на сайте"
 
@@ -266,7 +265,7 @@ msgstr "Низ право"
 msgid "Change relationship"
 msgstr "Изменить связь"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:247
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:245
 msgid "Change taxonomies"
 msgstr "Изменить таксономии"
 
@@ -274,7 +273,7 @@ msgstr "Изменить таксономии"
 msgid "Choose language"
 msgstr "Выберите язык"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:50
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:49
 msgid "Copy source post"
 msgstr "Копировать запись"
 
@@ -290,7 +289,7 @@ msgstr "Не перенаправлять автоматически на бол
 msgid "Enable automatic redirection"
 msgstr "Активировать автоматическое перенаправление"
 
-#: inc/common/Mlp_Widget.php:95
+#: inc/common/Mlp_Widget.php:97
 #: inc/language-manager/Mlp_Language_Manager_Controller.php:354
 msgid "English name"
 msgstr "Имя на английском"
@@ -324,11 +323,11 @@ msgstr "Прейти к предыдущей странице"
 msgid "HTTP"
 msgstr "HTTP"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:329
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:327
 msgid "Enter title here"
 msgstr "Введите заголовок"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:433
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:431
 msgid "The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below."
 msgstr "Подключенная запись удалена. Вы не можете редактировать ее здесь. Если вы хотите восстановить подключенную запись. Также выберите опции ниже."
 
@@ -377,11 +376,11 @@ msgstr "Очистка"
 msgid "Send all the translations to trash when this post is trashed."
 msgstr "Если запись удалена, также удалять ее переводы."
 
-#: inc/copy-site/Mlp_Duplicate_Blogs.php:373
+#: inc/copy-site/Mlp_Duplicate_Blogs.php:409
 msgid "Choose site"
 msgstr "Выбор сайта"
 
-#: inc/redirect/Mlp_Redirect_Column.php:79
+#: inc/redirect/Mlp_Redirect_Column.php:81
 msgid "Redirect"
 msgstr "Редирект (перенаправление)"
 
@@ -409,9 +408,6 @@ msgstr "Язык сайта"
 #: inc/user-backend-language/Mlp_User_Backend_Language.php:217
 msgid "English"
 msgstr "Английский"
-
-msgid "MultilingualPress"
-msgstr "MultilingualPress"
 
 #: inc/Multilingual_Press.php:337
 msgid "You didn't setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships."
@@ -474,27 +470,27 @@ msgstr "Переводы MultilingualPress"
 msgid "Language Switcher"
 msgstr "Переключатель языка"
 
-#: inc/common/Mlp_Widget.php:87
+#: inc/common/Mlp_Widget.php:89
 msgid "Link text"
 msgstr "Ссылка"
 
-#: inc/common/Mlp_Widget.php:96
+#: inc/common/Mlp_Widget.php:98
 msgid "Language code"
 msgstr "Код языка"
 
-#: inc/common/Mlp_Widget.php:123
+#: inc/common/Mlp_Widget.php:125
 msgid "Show current site"
 msgstr "Показать данный сайт"
 
-#: inc/common/Mlp_Widget.php:132
+#: inc/common/Mlp_Widget.php:134
 msgid "Show links for translated content only."
 msgstr "Показывать ссылки только на переведенный контент"
 
-#: inc/common/Mlp_Widget.php:139
+#: inc/common/Mlp_Widget.php:141
 msgid "Languages are sorted by <a href=\"%s\">priority</a>."
 msgstr "Языки отсортированы<a href=\"%s\">по приоритету</a>"
 
-#: inc/common/Mlp_Widget.php:143
+#: inc/common/Mlp_Widget.php:145
 msgid "Languages are sorted by priority."
 msgstr "Языки отсортированы по приоритету"
 
@@ -517,7 +513,7 @@ msgid "The plugin %s has been deactivated."
 msgstr "Плагин %s деактивирован."
 
 #: inc/advanced-translator/Mlp_Cpt_Translator.php:281
-#: inc/post-translator/Mlp_Translation_Metabox_View.php:182
+#: inc/post-translator/Mlp_Translation_Metabox_View.php:190
 msgid "Translate this post"
 msgstr "Перевести эту запись"
 
@@ -575,10 +571,10 @@ msgstr "Переводчик произвольных типов записей"
 msgid "No custom post type found."
 msgstr "Произвольные типы записей ненайдены"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:212
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:210
 msgid "Copy the featured image of the source post."
 msgstr "Копировать миниатюру основной записи"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:214
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:212
 msgid "Overwrites an existing featured image in the target post."
 msgstr "Перезаписать существующие миниатюры в целевую запись"
