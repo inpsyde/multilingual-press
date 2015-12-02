@@ -35,13 +35,11 @@ class Mlp_Redirect_Frontend {
 	 */
 	public function setup() {
 
-		if ( ! $this->is_redirectable() ) {
-			return;
-		}
-
-		add_action( 'template_redirect', array( $this->response, 'redirect' ), 1 );
-
 		add_filter( 'mlp_linked_element_link', array( $this, 'add_noredirect_parameter' ), 10, 2 );
+
+		if ( $this->is_redirectable() ) {
+			add_action( 'template_redirect', array( $this->response, 'redirect' ), 1 );
+		}
 	}
 
 	/**
