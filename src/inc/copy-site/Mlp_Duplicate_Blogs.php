@@ -440,7 +440,8 @@ class Mlp_Duplicate_Blogs {
 			</td>
 			<td>
 				<label for="blog_activate_plugins">
-					<input type="checkbox" value="1" id="blog_activate_plugins" name="blog[activate_plugins]" checked>
+					<input type="checkbox" value="1" id="blog_activate_plugins" name="blog[activate_plugins]"
+						checked="checked">
 					<?php
 					esc_html_e( 'Activate all plugins that are active on the source site', 'multilingualpress' );
 					?>
