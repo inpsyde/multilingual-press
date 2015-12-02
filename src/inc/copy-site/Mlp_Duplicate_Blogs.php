@@ -112,12 +112,10 @@ class Mlp_Duplicate_Blogs {
 			);
 		}
 
-		if ( isset ( $_POST[ 'blog' ][ 'plugin_action' ] ) ) {
-			if ( $_POST[ 'blog' ][ 'plugin_action' ] === 'activate' ) {
-				$this->activate_plugins();
-			} else {
-				$this->deactivate_plugins();
-			}
+		if ( isset ( $_POST[ 'blog' ][ 'activate_plugins' ] ) ) {
+			$this->activate_plugins();
+		} else {
+			$this->deactivate_plugins();
 		}
 
 		$this->update_admin_email( $current_admin_email );
@@ -338,7 +336,9 @@ class Mlp_Duplicate_Blogs {
 
 		$active = get_option( 'active_plugins' );
 		foreach ( $active as $plugin_basename ) {
-			do_action( 'activate_' . $plugin_basename );
+			do_action( 'activate_plugin', $plugin_basename, FALSE );
+			do_action( 'activate_' . $plugin_basename, FALSE );
+			do_action( 'activated_plugin', $plugin_basename, FALSE );
 
 		}
 	}
@@ -429,23 +429,18 @@ class Mlp_Duplicate_Blogs {
 			<td>
 				<label for="inpsyde_multilingual_based">
 					<?php
-					esc_html_e( 'Plugin Status', 'multilingualpress' );
+					esc_html_e( 'Plugins', 'multilingualpress' );
 					?>
 				</label>
 			</td>
 			<td>
-				<input type="radio" id="blog_plugins_activate" name="blog[plugin_action]" value="activate" checked>
+				<input type="checkbox" id="blog_plugins_activate" name="blog[activate_plugins]" value="1" checked>
 				<label for="blog_plugins_activate">
-					<?php esc_html_e( 'Activate', 'multilingualpress' );?>
-				</label>
-				<br>
-				<input type="radio" id="blog_plugins_deactivate" name="blog[plugin_action]" value="deactivate">
-				<label for="blog_plugins_deactivate">
-					<?php esc_html_e( 'Deactivate', 'multilingualpress' );?>
+					<?php esc_html_e( 'Activate all Plugins', 'multilingualpress' );?>
 				</label>
 				<br>
 				<p class="description">
-					<?php 	esc_html_e( 'Choose how to handle active plugins on the cloned site.', 'multilingualpress' );	?>
+					<?php 	esc_html_e( 'After duplicating the site, activate all plugins that are currently active on the source site. If unchecked, all plugins on the new site will be deactivated', 'multilingualpress' );	?>
 				</p>
 			</td>
 		</tr>
