@@ -104,16 +104,12 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 */
 	private function register_setting() {
 
-		$desc = __(
-			'Show link to translations in post content.',
-			'multilingualpress'
-		);
-
 		return $this->module_manager->register(
-			array (
-				'display_name'	=> __( 'Quicklink', 'multilingualpress' ),
-				'slug'			=> 'class-' . __CLASS__,
-				'description'   => $desc
+			array(
+				'description'  => __( 'Show link to translations in post content.', 'multilingualpress' ),
+				'display_name' => __( 'Quicklink', 'multilingualpress' ),
+				'slug'         => 'class-' . __CLASS__,
+				'state'        => 'off',
 			)
 		);
 	}
