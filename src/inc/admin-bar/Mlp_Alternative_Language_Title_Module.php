@@ -13,7 +13,7 @@ class Mlp_Alternative_Language_Title_Module {
 	/**
 	 * Constructor. Sets up the properties.
 	 *
-	 * @param Mlp_Module_Manager_Interface $module_manager Module mangaer object.
+	 * @param Mlp_Module_Manager_Interface $module_manager Module manager object.
 	 */
 	public function __construct( Mlp_Module_Manager_Interface $module_manager ) {
 

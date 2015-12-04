@@ -16,7 +16,7 @@ class Mlp_Admin_Bar_Customizer {
 	private $cache_key = 'mlp_alternative_language_titles';
 
 	/**
-	 * Replaces all sites names with the sites's alternative language title, if not empty.
+	 * Replaces all site names with the individual site's alternative language title, if not empty.
 	 *
 	 * @param WP_Admin_Bar $wp_admin_bar
 	 *
