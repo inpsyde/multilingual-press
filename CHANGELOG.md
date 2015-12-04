@@ -13,6 +13,8 @@
 - Fix missing noredirect query var for all URLs of linked elements, see
 [issue #174](https://github.com/inpsyde/multilingual-press/issues/174).
 - Fire plugin activation hooks for active plugins when a site has been duplicated.
+- Feature: Show sites with their alternative language title in the admin bar, see
+[issue #110](https://github.com/inpsyde/multilingual-press/issues/110).
 
 ## 2.2.3
 - Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),
