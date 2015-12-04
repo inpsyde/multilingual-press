@@ -129,8 +129,11 @@ class Mlp_Network_Site_Settings {
 		// Get the unaltered WordPress version.
 		require_once ABSPATH . 'wp-includes/version.php';
 
-		/** @var string $wp_version */
-		$heading_level = version_compare( $wp_version, '4.4.0', '<' ) ? 'h3' : 'h2';
+		/**
+		 * The WordPress version.
+		 * @var string $wp_version
+		 */
+		$heading_level = version_compare( $wp_version, '4.4alpha', '>=' ) ? 'h3' : 'h2';
 
 		return $heading_level;
 	}
