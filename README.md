@@ -1,6 +1,7 @@
 # MultilingualPress
 [![Latest Stable Version](https://poser.pugx.org/inpsyde/multilingual-press/v/stable)](https://packagist.org/packages/inpsyde/multilingual-press)
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
+[![Build Status](https://travis-ci.org/inpsyde/multilingual-press.svg?branch=master)](http://travis-ci.org/inpsyde/multilingual-press)
 [![License](https://poser.pugx.org/inpsyde/multilingual-press/license)](https://packagist.org/packages/inpsyde/multilingual-press)
 
 Create a fast translation network on WordPress multisite.
