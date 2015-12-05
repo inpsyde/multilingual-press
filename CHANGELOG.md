@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.0-alpha
+## 2.3.0 Saint Nicholas
 - Adapt potentially deprecated settings of Language Switcher widget, see
 [issue #170](https://github.com/inpsyde/multilingual-press/issues/170).
 - Delete `state_modules` site option on uninstall, props tiagoschenkel.
@@ -12,7 +12,7 @@
 [issue #177](https://github.com/inpsyde/multilingual-press/issues/177).
 - Fix missing noredirect query var for all URLs of linked elements, see
 [issue #174](https://github.com/inpsyde/multilingual-press/issues/174).
-- Fire plugin activation hooks for active plugins when a site has been duplicated.
+- New setting: Fire plugin activation hooks for active plugins when a site has been duplicated.
 - Feature: Show sites with their alternative language title in the admin bar, see
 [issue #110](https://github.com/inpsyde/multilingual-press/issues/110).
 

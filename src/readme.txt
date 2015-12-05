@@ -2,8 +2,8 @@
 Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, tfrommen, Biont, dnaber-de
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.0
-Tested up to: 4.3
-Stable tag: 2.2.3
+Tested up to: 4.4
+Stable tag: 2.3.0
 
 Create a fast translation network on WordPress multisite.
 
@@ -120,7 +120,7 @@ tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 
 == Changelog ==
 
-= 2.3.0-alpha =
+= 2.3.0 =
 - Adapt potentially deprecated settings of Language Switcher widget, see
 [issue #170](https://github.com/inpsyde/multilingual-press/issues/170).
 - Delete `state_modules` site option on uninstall, props tiagoschenkel.
@@ -132,7 +132,7 @@ tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 [issue #177](https://github.com/inpsyde/multilingual-press/issues/177).
 - Fix missing noredirect query var for all URLs of linked elements, see
 [issue #174](https://github.com/inpsyde/multilingual-press/issues/174).
-- Fire plugin activation hooks for active plugins when a site has been duplicated.
+- New setting: Fire plugin activation hooks for active plugins when a site has been duplicated.
 - Feature: Show sites with their alternative language title in the admin bar, see
 [issue #110](https://github.com/inpsyde/multilingual-press/issues/110).
 

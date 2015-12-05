@@ -10,6 +10,14 @@ msgstr ""
 "X-Generator: GlotPress/0.1\n"
 "Project-Id-Version: MultilingualPress\n"
 
+#: inc/admin-bar/Mlp_Alternative_Language_Title_Module.php:31
+msgid "Show sites with their alternative language title in the admin bar."
+msgstr ""
+
+#: inc/admin-bar/Mlp_Alternative_Language_Title_Module.php:35
+msgid "Alternative Language Title"
+msgstr ""
+
 #: inc/copy-site/Mlp_Duplicate_Blogs.php:439
 msgid "Plugins"
 msgstr ""
@@ -147,7 +155,7 @@ msgctxt "placeholder for empty translation textarea"
 msgid "No content yet."
 msgstr "Pas encore de contenu."
 
-#: inc/quicklink/Mlp_Quicklink.php:347
+#: inc/quicklink/Mlp_Quicklink.php:343
 msgctxt "quicklink submit button"
 msgid "Go"
 msgstr "Aller"
@@ -331,15 +339,15 @@ msgstr "Saisissez votre titre ici."
 msgid "The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below."
 msgstr "L'article distant a été supprimé. Vous n&#39;êtes donc plus en mesure de le modifier ici. Si vous voulez, restaurer l'article distant. jetez un oeil aux options ci-dessous."
 
-#: inc/quicklink/Mlp_Quicklink.php:107
+#: inc/quicklink/Mlp_Quicklink.php:109
 msgid "Show link to translations in post content."
 msgstr "Afficher le lien vers les traductions dans le contenu de l'article."
 
-#: inc/quicklink/Mlp_Quicklink.php:114
+#: inc/quicklink/Mlp_Quicklink.php:110
 msgid "Quicklink"
 msgstr "Accès rapide"
 
-#: inc/quicklink/Mlp_Quicklink.php:332
+#: inc/quicklink/Mlp_Quicklink.php:328
 msgctxt "Quicklink label"
 msgid "Read in:"
 msgstr "Lire en :"

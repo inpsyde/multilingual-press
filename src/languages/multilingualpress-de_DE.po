@@ -2,13 +2,21 @@
 # This file is distributed under the same license as the MultilingualPress package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-12-02 18:03:38+0000\n"
+"PO-Revision-Date: 2015-12-05 15:05:45+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: GlotPress/0.1\n"
 "Project-Id-Version: MultilingualPress\n"
+
+#: inc/admin-bar/Mlp_Alternative_Language_Title_Module.php:31
+msgid "Show sites with their alternative language title in the admin bar."
+msgstr "Zeige Seiten mit ihrem alternativen Sprachtitel in der Admin-Bar."
+
+#: inc/admin-bar/Mlp_Alternative_Language_Title_Module.php:35
+msgid "Alternative Language Title"
+msgstr "Alternativer Sprachtitel"
 
 #: inc/copy-site/Mlp_Duplicate_Blogs.php:439
 msgid "Plugins"
@@ -147,7 +155,7 @@ msgctxt "placeholder for empty translation textarea"
 msgid "No content yet."
 msgstr "Noch keine Inhalte."
 
-#: inc/quicklink/Mlp_Quicklink.php:347
+#: inc/quicklink/Mlp_Quicklink.php:343
 msgctxt "quicklink submit button"
 msgid "Go"
 msgstr "Los"
@@ -331,15 +339,15 @@ msgstr "Titel hier eingeben"
 msgid "The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below."
 msgstr "Der verwandte Eintrag ist im Papierkorb. Du kannst diesen entweder wiederherstellen oder die Beziehung ändern."
 
-#: inc/quicklink/Mlp_Quicklink.php:107
+#: inc/quicklink/Mlp_Quicklink.php:109
 msgid "Show link to translations in post content."
 msgstr "Zeige Links zu vorhandenen Übersetzungen direkt innerhalb des Beitrags."
 
-#: inc/quicklink/Mlp_Quicklink.php:114
+#: inc/quicklink/Mlp_Quicklink.php:110
 msgid "Quicklink"
 msgstr "Quicklink"
 
-#: inc/quicklink/Mlp_Quicklink.php:332
+#: inc/quicklink/Mlp_Quicklink.php:328
 msgctxt "Quicklink label"
 msgid "Read in:"
 msgstr "Lies auf:"
