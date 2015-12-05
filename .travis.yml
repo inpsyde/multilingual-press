@@ -29,3 +29,6 @@ script:
 #  - jscs src
   - find src \( -name '*.php' \) -exec php -lf {} \;
   - phpunit
+
+notifications:
+  slack: inpsyde:Qr1HAtG5koIbTu0nnwWYofSj
