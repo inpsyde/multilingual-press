@@ -434,7 +434,7 @@ class Mlp_Duplicate_Blogs {
 			</td>
 		</tr>
 
-		<tr class="form-field">
+		<tr class="form-field hide-if-js">
 			<td>
 				<?php esc_html_e( 'Plugins', 'multilingualpress' ); ?>
 			</td>
