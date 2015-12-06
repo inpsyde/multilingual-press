@@ -61,7 +61,7 @@ If you would like to switch from the WPML plugin to MultilingualPress, you can u
 [WPML to MultilingualPress](https://wordpress.org/plugins/wpml-to-multilingualpress/). This plugin converts posts from
 an existing WPML multilingual site via XLIFF export/import for MultilingualPress.
 
-= Crafted by [Inpsyde](http://inpsyde.com) · Engineering the Web since 2006. =
+** Crafted by [Inpsyde](http://inpsyde.com) · Engineering the Web since 2006. **
 
 Yes, we also run that [marketplace for premium WordPress plugins and themes](https://marketpress.com).
 
