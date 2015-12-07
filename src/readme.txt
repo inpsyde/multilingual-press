@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, Bueltge, nullbyte, hughwillfayle, paddelboot, tfr
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.0
 Tested up to: 4.4
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 
 Create a fast translation network on WordPress multisite.
 
@@ -61,9 +61,9 @@ If you would like to switch from the WPML plugin to MultilingualPress, you can u
 [WPML to MultilingualPress](https://wordpress.org/plugins/wpml-to-multilingualpress/). This plugin converts posts from
 an existing WPML multilingual site via XLIFF export/import for MultilingualPress.
 
-**Crafted by [Inpsyde](http://inpsyde.com) · Engineering the Web since 2006.**
-
-Yes, we also run that [marketplace for premium WordPress plugins and themes](https://marketpress.com).
+= Crafted by Inpsyde =
+The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006. And yes, we also run that
+[marketplace for premium WordPress plugins and themes](https://marketpress.com).
 
 == Installation ==
 
@@ -119,6 +119,9 @@ tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.3.1 =
+- Fix potentially invalid semi-hard-coded paths.
 
 = 2.3.0 =
 - Adapt potentially deprecated settings of Language Switcher widget, see

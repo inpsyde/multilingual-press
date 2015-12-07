@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.3.1
+- Fix potentially invalid semi-hard-coded paths.
+
 ## 2.3.0 Saint Nicholas
 - Adapt potentially deprecated settings of Language Switcher widget, see
 [issue #170](https://github.com/inpsyde/multilingual-press/issues/170).
