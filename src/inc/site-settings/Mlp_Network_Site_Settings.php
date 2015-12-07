@@ -127,7 +127,7 @@ class Mlp_Network_Site_Settings {
 	private function get_heading_level() {
 
 		// Get the unaltered WordPress version.
-		require_once ABSPATH . 'wp-includes/version.php';
+		require ABSPATH . WPINC . '/version.php';
 
 		/** @var string $wp_version */
 		$heading_level = version_compare( $wp_version, '4.4-alpha', '<' ) ? 'h3' : 'h2';

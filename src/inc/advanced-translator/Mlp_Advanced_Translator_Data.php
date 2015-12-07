@@ -284,8 +284,8 @@ class Mlp_Advanced_Translator_Data
 
 		$data->has_thumb = TRUE;
 
-		include_once( ABSPATH . 'wp-admin/includes/image.php' );
-		include_once( ABSPATH . 'wp-includes/media.php' );
+		include_once ABSPATH . 'wp-admin/includes/image.php';
+		include_once ABSPATH . WPINC . '/media.php';
 
 		// Load Original Image
 		$data->id = get_post_thumbnail_id( $post_id );
