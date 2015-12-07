@@ -40,7 +40,8 @@
 	},
 	"require-dev": {
 		"php": ">=5.3.3",
-		"phpunit/phpunit": "~4.8"
+		"phpunit/phpunit": "~4.8",
+		"symfony/yaml": "<2.7"
 	},
 	"repositories": [
 		{
