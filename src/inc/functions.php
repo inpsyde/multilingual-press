@@ -149,7 +149,7 @@ function mlp_get_blog_language( $blog_id = 0, $short = TRUE ) {
 	return Mlp_Helpers::get_blog_language( $blog_id, $short );
 }
 
-// TODO: Eventually remove the following function, with version 2.3.0 at the earliest
+// TODO: Eventually remove this, with version 2.6.0 at the earliest.
 if ( ! function_exists( 'get_blog_language' ) ) {
 
 	/**

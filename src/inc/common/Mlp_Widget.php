@@ -241,7 +241,7 @@ class Mlp_Widget extends WP_Widget {
 	 *
 	 * @see  https://github.com/inpsyde/multilingual-press/issues/112
 	 *
-	 * @todo Eventually remove this, with version 2.6.0 at the earliest
+	 * @todo Eventually remove this, with version 2.6.0 at the earliest.
 	 *
 	 * @param array $instance Widget settings.
 	 *
