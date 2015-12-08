@@ -1,10 +1,7 @@
-<?php
+<?php # -*- coding: utf-8 -*-
+
 /**
- * Module Name:	MultilingualPress Quicklink Module
- * Description:	Display an element link flyout tab in the frontend
- * Author:		Inpsyde GmbH
- * Version:		0.3
- * Author URI:	http://inpsyde.com
+ * Displays an element link flyout tab in the frontend.
  */
 class Mlp_Quicklink implements Mlp_Updatable {
 
@@ -56,7 +53,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 		if ( ! $this->register_setting() )
 			return;
 
-		$this->nonce_validator = new Inpsyde_Nonce_Validator( 'cpt_translator' );
+		$this->nonce_validator = new Inpsyde_Nonce_Validator( 'save_quicklink_position' );
 
 		$this->redirect_quick_link();
 
@@ -427,6 +424,10 @@ document.getElementById("mlp_quicklink_container").onsubmit = function() {
 	 * @return	void
 	 */
 	public function save_options_page_form_fields() {
+
+		if ( ! $this->nonce_validator->is_valid() ) {
+			return;
+		}
 
 		// Get current site options
 		$options = get_site_option( 'inpsyde_multilingual_quicklink_options' );
