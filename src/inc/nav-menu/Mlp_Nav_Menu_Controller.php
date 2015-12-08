@@ -81,12 +81,12 @@ class Mlp_Nav_Menu_Controller {
 	 * Set up backend management.
 	 *
 	 * @wp-hook inpsyde_mlp_loaded
-	 * @param string $js_url
-	 * @return  void
+	 *
+	 * @return void
 	 */
-	public function backend_setup( $js_url ) {
+	public function backend_setup() {
 
-		$this->create_instances( $js_url );
+		$this->create_instances();
 		$this->add_actions();
 	}
 
