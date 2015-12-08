@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4.0-alpha
+- Overall improvement of nonce usage.
+
 ## 2.3.1
 - Fix potentially invalid semi-hard-coded paths.
 
