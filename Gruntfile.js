@@ -329,7 +329,7 @@ module.exports = function( grunt ) {
 			configs: {
 				files: [ '.{jscs,jshint}rc' ],
 				tasks: [
-					'jsonlint:configs'
+					'newer:jsonlint:configs'
 				]
 			},
 
@@ -338,7 +338,7 @@ module.exports = function( grunt ) {
 				tasks: [
 					'jscs:grunt',
 					'jshint:grunt',
-					'newer:lineending:grunt',
+					'lineending:grunt',
 					'jsvalidate:grunt'
 				]
 			},
@@ -353,7 +353,7 @@ module.exports = function( grunt ) {
 			json: {
 				files: [ '*.json' ],
 				tasks: [
-					'jsonlint:json'
+					'newer:jsonlint:json'
 				]
 			},
 
@@ -364,7 +364,7 @@ module.exports = function( grunt ) {
 					'<%= config.tests.phpunit %>**/*.php'
 				],
 				tasks: [
-					'phplint',
+					'newer:phplint',
 					'phpunit'
 				]
 			},
@@ -381,13 +381,13 @@ module.exports = function( grunt ) {
 			scripts: {
 				files: [ '<%= config.scripts.src %>**/*.js' ],
 				tasks: [
-					'jsvalidate:src',
-					'jshint:force',
-					'jscs:force',
+					'newer:jsvalidate:src',
+					'newer:jshint:force',
+					'newer:jscs:force',
 					'newer:concat',
 					'newer:lineending:scripts',
 					'newer:uglify',
-					'jsvalidate:dest'
+					'newer:jsvalidate:dest'
 				]
 			},
 
@@ -470,15 +470,15 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'pot', configObject.watch.pot.tasks );
 
 	grunt.registerTask( 'scripts', [
-		'jsvalidate:src',
-		'jshint:src',
-		'jscs:src',
+		'newer:jsvalidate:src',
+		'newer:jshint:src',
+		'newer:jscs:src',
 		'newer:concat',
 		'newer:lineending:scripts',
 		'newer:uglify',
-		'jsvalidate:dest',
-		'jshint:dest',
-		'jscs:dest'
+		'newer:jsvalidate:dest',
+		'newer:jshint:dest',
+		'newer:jscs:dest'
 	] );
 
 	grunt.registerTask( 'force-scripts', configObject.watch.scripts.tasks );
