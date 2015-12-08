@@ -31,7 +31,8 @@ script:
   - phpunit
 
 notifications:
-  slack: inpsyde:Qr1HAtG5koIbTu0nnwWYofSj
+  slack:
+    rooms: inpsyde:Qr1HAtG5koIbTu0nnwWYofSj
     on_start: never
     on_failure: always
     on_success: change
