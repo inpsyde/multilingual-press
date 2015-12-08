@@ -13,7 +13,6 @@ sudo: false
 
 matrix:
   allow_failures:
-    - php: hhvm
     - php: nightly
 
 before_script:
