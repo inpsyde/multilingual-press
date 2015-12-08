@@ -114,22 +114,19 @@ class Mlp_Nav_Menu_Controller {
 	 * Create nonce, view and data objects.
 	 *
 	 * @wp-hook inpsyde_mlp_loaded
-	 * @return  void
+	 *
+	 * @return void
 	 */
 	private function create_instances() {
 
-		$nonce = new Inpsyde_Nonce_Validator(
-			$this->handle
-		);
 		$this->data = new Mlp_Language_Nav_Menu_Data(
 			$this->handle,
 			$this->meta_key,
-			$nonce,
+			new Inpsyde_Nonce_Validator( 'add_languages_to_nav_menu' ),
 			$this->assets
 		);
-		$this->view = new Mlp_Simple_Nav_Menu_Selectors(
-			$this->data
-		);
+
+		$this->view = new Mlp_Simple_Nav_Menu_Selectors( $this->data );
 	}
 
 	/**
