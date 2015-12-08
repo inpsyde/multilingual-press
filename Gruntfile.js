@@ -399,6 +399,13 @@ module.exports = function( grunt ) {
 					'newer:lineending:styles',
 					'newer:cssmin'
 				]
+			},
+
+			travis: {
+				files: [ '.travis.yml' ],
+				tasks: [
+					'travis-lint'
+				]
 			}
 		}
 	};
@@ -485,13 +492,16 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'styles', configObject.watch.styles.tasks );
 
+	grunt.registerTask( 'travis', configObject.watch.travis.tasks );
+
 	grunt.registerTask( 'common', [
 		'configs',
 		'grunt',
 		'json',
 		'php',
 		'pot',
-		'styles'
+		'styles',
+		'travis'
 	] );
 
 	grunt.registerTask( 'develop', [
