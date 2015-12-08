@@ -45,7 +45,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	public function __construct( Inpsyde_Property_List_Interface $data ) {
 
 		$this->plugin_data = $data;
-		$this->nonce_validator = new Inpsyde_Nonce_Validator( 'cpt_translator' );
+		$this->nonce_validator = new Inpsyde_Nonce_Validator( 'save_cpt_translator_settings' );
 
 		// Quit here if module is turned off
 		if ( ! $this->register_setting() )
