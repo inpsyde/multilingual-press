@@ -40,11 +40,24 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	public function __construct( Mlp_Content_Relations_Interface $content_relations ) {
 
 		$this->content_relations = $content_relations;
-		$current_site = get_current_blog_id();
-		$this->nonce = new Inpsyde_Nonce_Validator(
-			'mlp_term_translation',
-			$current_site
-		);
+
+		$this->nonce = new Inpsyde_Nonce_Validator( $this->get_nonce_action(), get_current_blog_id() );
+	}
+
+	/**
+	 * Returns the nonce action for the current request wrt. the current taxonomy and term, if any.
+	 *
+	 * @return string
+	 */
+	private function get_nonce_action() {
+
+		$taxonomy = empty( $_REQUEST['taxonomy'] ) ? '' : (string) $_REQUEST['taxonomy'];
+
+		$term_taxonomy_id = empty( $_REQUEST['tag_ID'] ) ? 0 : (int) $_REQUEST['tag_ID'];
+
+		$action = "save_{$taxonomy}_translations_$term_taxonomy_id";
+
+		return $action;
 	}
 
 	/**
