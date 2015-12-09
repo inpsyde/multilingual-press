@@ -122,7 +122,7 @@ class Mlp_Nav_Menu_Controller {
 		$this->data = new Mlp_Language_Nav_Menu_Data(
 			$this->handle,
 			$this->meta_key,
-			new Inpsyde_Nonce_Validator( 'add_languages_to_nav_menu' ),
+			Inpsyde_Nonce_Validator_Factory::create( 'add_languages_to_nav_menu' ),
 			$this->assets
 		);
 

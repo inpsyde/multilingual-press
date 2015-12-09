@@ -53,7 +53,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 		if ( ! $this->register_setting() )
 			return;
 
-		$this->nonce_validator = new Inpsyde_Nonce_Validator( 'save_quicklink_position' );
+		$this->nonce_validator = Inpsyde_Nonce_Validator_Factory::create( 'save_quicklink_position' );
 
 		$this->redirect_quick_link();
 

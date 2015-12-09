@@ -27,7 +27,7 @@ class Mlp_Redirect_Site_Settings {
 	 */
 	public function setup() {
 
-		$nonce = new Inpsyde_Nonce_Validator( 'save_redirect_site_setting' );
+		$nonce = Inpsyde_Nonce_Validator_Factory::create( 'save_redirect_site_setting' );
 
 		$data = new Mlp_Redirect_Settings_Data( $nonce, $this->option_name );
 
