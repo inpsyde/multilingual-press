@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.2
+- Fix leftover entry from site option included in languages data, see
+[issue #183](https://github.com/inpsyde/multilingual-press/issues/183), props kraftner.
+
 ## 2.3.1
 - Fix potentially invalid semi-hard-coded paths.
 
