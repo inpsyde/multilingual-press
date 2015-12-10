@@ -481,6 +481,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				$tags[ $site_id ] = strtolower( $tags[ $site_id ] );
 				$add_like[ $site_id ] = $tags[ $site_id ];
 			}
+
+			unset( $languages[ $site_id ]['lang'] );
 		}
 
 		$values = array_values( $tags );
