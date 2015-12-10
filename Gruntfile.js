@@ -243,11 +243,6 @@ module.exports = function( grunt ) {
 		},
 
 		phplint: {
-			options: {
-				phpArgs: {
-					'-lf': null
-				}
-			},
 			file: {
 				src: [ '<%= config.plugin.file %>' ]
 			},

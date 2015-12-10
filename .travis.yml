@@ -28,7 +28,7 @@ script:
 # TODO: Fix JavaScript, then use JSCS and JSHint.
 #  - jshint src
 #  - jscs src
-  - find src \( -name '*.php' \) -exec php -lf {} \;
+  - find src \( -name '*.php' \) -exec php -l {} \;
   - phpunit
 
 notifications:
