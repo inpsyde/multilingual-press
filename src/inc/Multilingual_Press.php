@@ -187,7 +187,7 @@ class Multilingual_Press {
 
 		$assets->add( 'mlp_admin_css', 'admin.css' );
 
-		$assets->add( 'mlp_frontend_js', 'frontend.js', array( 'jquery' ) );
+		$assets->add( 'mlp-frontend', 'frontend.js' );
 
 		$assets->add( 'mlp_frontend_css', 'frontend.css' );
 

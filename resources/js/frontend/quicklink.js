@@ -1,21 +1,27 @@
-;( function( $ ) {
-	"use strict";
+/* global MultilingualPress */
+(function() {
+	'use strict';
 
-	var mlp_quicklink = {
-		init: function() {
-			$( '#mlp_quicklink_container' ).on( 'submit', function() {
-				var $this = $( this );
-
-				$this.attr( 'method', 'get' );
-				document.location.href = $this.find( 'option:selected' ).val();
-
-				return false;
-			} );
+	var Quicklink = {
+		initialize: function() {
+			var form = document.getElementById( 'mlp-quicklink-form' );
+			if ( form ) {
+				form.onsubmit = Quicklink.submitForm;
+			}
+		},
+		submitForm: function( event ) {
+			var select = document.getElementById( 'mlp-quicklink-select' );
+			if ( select ) {
+				event.preventDefault();
+				document.location.href = Quicklink.getSelectValue( select );
+			}
+		},
+		getSelectValue: function( select ) {
+			return select.options[ select.selectedIndex ].value;
 		}
 	};
 
-	$( function() {
-		mlp_quicklink.init();
-	} );
+	Quicklink.initialize();
 
-} )( jQuery );
+	MultilingualPress.Quicklink = Quicklink;
+})();
