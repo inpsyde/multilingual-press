@@ -7,6 +7,10 @@
 - Fix leftover entry from site option included in languages data, see
 [issue #183](https://github.com/inpsyde/multilingual-press/issues/183), props kraftner.
 - Fix potentially invisibe plugin activation row on Add New Site page.
+- **Developers:** As we would like to use [the official WordPress.org GlotPress for translating
+MultilingualPress](https://translate.wordpress.org/projects/wp-plugins/multilingual-press), we will (have to) change the
+plugin text domain from `multilingualpress` to `multilingual-press` with the next (major) release. So, in case you are
+doing _crazy_ things with our translations (which you basically should really not), please be informed.
 
 ## 2.3.1
 - Fix potentially invalid semi-hard-coded paths.
