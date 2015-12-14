@@ -2,6 +2,7 @@
 
 ## 2.4.0-alpha
 - Overall improvement of nonce usage.
+- Rename plugin text domain, and adapt gettext calls and translations files.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
