@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the MultilingualPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: MultilingualPress 2.3.1\n"
+"Project-Id-Version: MultilingualPress 2.4.0-alpha\n"
 "Report-Msgid-Bugs-To: https://github.com/inpsyde/multilingual-press/issues\n"
-"POT-Creation-Date: 2015-12-07 17:25:13+00:00\n"
+"POT-Creation-Date: 2015-12-14 14:59:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -50,11 +50,11 @@ msgstr ""
 msgid "Alternative Language Title"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator.php:156
+#: inc/advanced-translator/Mlp_Advanced_Translator.php:157
 msgid "Advanced Translator"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator.php:158
+#: inc/advanced-translator/Mlp_Advanced_Translator.php:159
 msgid ""
 "Use the WYSIWYG editor to write all translations on one screen, including "
 "thumbnails and taxonomies."
@@ -318,6 +318,34 @@ msgstr ""
 msgid "The plugin %s has been deactivated."
 msgstr ""
 
+#: inc/installation/Mlp_Requirements_Check.php:115
+#. translators: 1: required PHP version, 2: current PHP version
+msgid ""
+"This plugin requires PHP version %1$s, your version %2$s is too old. Please "
+"upgrade."
+msgstr ""
+
+#: inc/installation/Mlp_Requirements_Check.php:138
+#. translators: 1: required WordPress version, 2: current WordPress version
+msgid ""
+"This plugin requires WordPress version %1$s, your version %2$s is too old. "
+"Please upgrade."
+msgstr ""
+
+#: inc/installation/Mlp_Requirements_Check.php:161
+#. translators: %s: link to installation instructions
+msgid ""
+"This plugin needs to run in a multisite. Please <a href=\"%s\">convert this "
+"WordPress installation to multisite</a>."
+msgstr ""
+
+#: inc/installation/Mlp_Requirements_Check.php:187
+#. translators: %s: link to network plugin screen
+msgid ""
+"This plugin must be activated for the network. Please use the <a "
+"href=\"%s\">network plugin administration</a>."
+msgstr ""
+
 #: inc/language-manager/Mlp_Admin_Table_View.php:102
 msgid "No items found. We recommend to reinstall this plugin."
 msgstr ""
@@ -421,35 +449,40 @@ msgstr ""
 msgid "Add to Menu"
 msgstr ""
 
-#: inc/post-translator/Mlp_Translation_Metabox.php:342
+#: inc/post-translator/Mlp_Translation_Metabox.php:249
+#. translators: 1: site name, 2: language
+msgid "Translation for %1$s (%2$s)"
+msgstr ""
+
+#: inc/post-translator/Mlp_Translation_Metabox.php:341
 msgid "Switch to site"
 msgstr ""
 
-#: inc/quicklink/Mlp_Quicklink.php:109
+#: inc/quicklink/Mlp_Quicklink.php:106
 msgid "Show link to translations in post content."
 msgstr ""
 
-#: inc/quicklink/Mlp_Quicklink.php:110
+#: inc/quicklink/Mlp_Quicklink.php:107
 msgid "Quicklink"
 msgstr ""
 
-#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:46
+#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:39
 msgid "Quicklink position"
 msgstr ""
 
-#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:153
+#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:148
 msgid "Top left"
 msgstr ""
 
-#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:154
+#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:149
 msgid "Top right"
 msgstr ""
 
-#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:155
+#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:150
 msgid "Bottom left"
 msgstr ""
 
-#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:156
+#: inc/quicklink/Mlp_Quicklink_Positions_Data.php:151
 msgid "Bottom right"
 msgstr ""
 
@@ -585,45 +618,12 @@ msgid ""
 "interface. Use a customizable widget to link to all sites."
 msgstr ""
 
-#: inc/installation/Mlp_Requirements_Check.php:114
-msgctxt "1 = required PHP version, 2 = current"
-msgid ""
-"This plugin requires PHP version %1$s, your version %2$s is too old. Please "
-"upgrade."
-msgstr ""
-
-#: inc/installation/Mlp_Requirements_Check.php:137
-msgctxt "1 = required WordPress version, 2 = current"
-msgid ""
-"This plugin requires WordPress version %1$s, your version %2$s is too old. "
-"Please upgrade."
-msgstr ""
-
-#: inc/installation/Mlp_Requirements_Check.php:160
-msgctxt "%s = link to installation instructions"
-msgid ""
-"This plugin needs to run in a multisite. Please <a href=\"%s\">convert this "
-"WordPress installation to multisite</a>."
-msgstr ""
-
-#: inc/installation/Mlp_Requirements_Check.php:186
-msgctxt "%s = link to network plugin screen"
-msgid ""
-"This plugin must be activated for the network. Please use the <a "
-"href=\"%s\">network plugin administration</a>."
-msgstr ""
-
 #: inc/language-manager/Mlp_Table_Pagination_View.php:157
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr ""
 
-#: inc/post-translator/Mlp_Translation_Metabox.php:246
-msgctxt "No HTML here. 1 = site name, 2 = language"
-msgid "Translation for %1$s (%2$s)"
-msgstr ""
-
-#: inc/post-translator/Mlp_Translation_Metabox.php:378
+#: inc/post-translator/Mlp_Translation_Metabox.php:377
 msgctxt "No HTML; 1 = post status, 2 = publish time"
 msgid "%1$s (%2$s)"
 msgstr ""
@@ -633,12 +633,12 @@ msgctxt "placeholder for empty translation textarea"
 msgid "No content yet."
 msgstr ""
 
-#: inc/quicklink/Mlp_Quicklink.php:328
+#: inc/quicklink/Mlp_Quicklink.php:327
 msgctxt "Quicklink label"
 msgid "Read in:"
 msgstr ""
 
-#: inc/quicklink/Mlp_Quicklink.php:343
+#: inc/quicklink/Mlp_Quicklink.php:345
 msgctxt "quicklink submit button"
 msgid "Go"
 msgstr ""
