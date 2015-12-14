@@ -245,11 +245,8 @@ class Mlp_Translation_Metabox {
 	 */
 	private function get_metabox_title( $blog_id, WP_Post $post, $language ) {
 
-		$text = esc_html_x(
-			'Translation for %1$s (%2$s)',
-			'No HTML here. 1 = site name, 2 = language',
-			'multilingual-press'
-		);
+		/* translators: 1: site name, 2: language */
+		$text = esc_html__( 'Translation for %1$s (%2$s)', 'multilingual-press' );
 
 		$site_name = get_blog_option( $blog_id, 'blogname' );
 		$title = sprintf( $text, $site_name, $language );
