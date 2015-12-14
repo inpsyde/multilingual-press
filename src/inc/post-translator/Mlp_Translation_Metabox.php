@@ -56,6 +56,8 @@ class Mlp_Translation_Metabox {
 		}
 
 		$this->plugin_data = $plugin_data;
+
+		// TODO: Nonce (or request) improvements...
 		$this->nonce = new Inpsyde_Nonce_Validator( $this->key, get_current_blog_id() );
 		$this->request_validator = new Mlp_Save_Post_Request_Validator( $this->nonce );
 
@@ -246,14 +248,14 @@ class Mlp_Translation_Metabox {
 		$text = esc_html_x(
 			'Translation for %1$s (%2$s)',
 			'No HTML here. 1 = site name, 2 = language',
-			'multilingualpress'
+			'multilingual-press'
 		);
 
 		$site_name = get_blog_option( $blog_id, 'blogname' );
 		$title = sprintf( $text, $site_name, $language );
 
-		if ( ! empty( $post->dummy ) ) // this is a fake post
-		{
+		if ( ! empty( $post->dummy ) ) {
+			// this is a fake post
 			return $title;
 		}
 
@@ -339,7 +341,7 @@ class Mlp_Translation_Metabox {
 		restore_current_blog();
 
 		if ( '' === $text ) {
-			$text = esc_html__( 'Switch to site', 'multilingualpress' );
+			$text = esc_html__( 'Switch to site', 'multilingual-press' );
 		}
 
 		return " <small> - <a href='$url'>$text</a></small>";
@@ -378,7 +380,7 @@ class Mlp_Translation_Metabox {
 			$template = esc_html_x(
 				'%1$s (%2$s)',
 				'No HTML; 1 = post status, 2 = publish time',
-				'multilingualpress'
+				'multilingual-press'
 			);
 			$translated_status = sprintf( $template, $translated_status, $post_time );
 		}

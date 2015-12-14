@@ -114,7 +114,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		$msg = esc_html_x(
 			'This plugin requires PHP version %1$s, your version %2$s is too old. Please upgrade.',
 			'1 = required PHP version, 2 = current',
-			'multilingualpress'
+			'multilingual-press'
 		);
 		$this->errors[ 'php' ] = sprintf( $msg, $required, $current );
 	}
@@ -137,7 +137,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		$msg = esc_html_x(
 			'This plugin requires WordPress version %1$s, your version %2$s is too old. Please upgrade.',
 			'1 = required WordPress version, 2 = current',
-			'multilingualpress'
+			'multilingual-press'
 		);
 		$this->errors[ 'wp' ] = sprintf( $msg, $required, $current );
 	}
@@ -160,7 +160,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		$msg = _x(
 			'This plugin needs to run in a multisite. Please <a href="%s">convert this WordPress installation to multisite</a>.',
 			'%s = link to installation instructions',
-			'multilingualpress'
+			'multilingual-press'
 		);
 		$this->errors[ 'installation' ] = sprintf(
 			$msg,
@@ -186,7 +186,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		$msg = _x(
 			'This plugin must be activated for the network. Please use the <a href="%s">network plugin administration</a>.',
 			'%s = link to network plugin screen',
-			'multilingualpress'
+			'multilingual-press'
 		);
 		$url = network_admin_url( 'plugins.php' );
 		$this->errors[ 'activation' ] = sprintf( $msg, $url );

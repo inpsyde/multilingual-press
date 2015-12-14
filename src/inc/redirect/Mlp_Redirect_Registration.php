@@ -33,11 +33,11 @@ class Mlp_Redirect_Registration {
 
 		$desc = __(
 			'Redirect visitors according to browser language settings.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 
 		$settings = array (
-			'display_name'	=> __( 'HTTP Redirect', 'multilingualpress' ),
+			'display_name'	=> __( 'HTTP Redirect', 'multilingual-press' ),
 			'slug'			=> 'class-' . __CLASS__,
 			'description'   => $desc
 		);

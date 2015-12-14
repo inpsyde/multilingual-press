@@ -11,29 +11,15 @@ module.exports = function( grunt ) {
 				src: 'resources/assets/',
 				dest: 'assets/'
 			},
-			dest: 'src/',
-			glotpress: {
-				url: 'http://translate.marketpress.com',
-				slug: 'plugins/multilingualpress'
-			},
 			images: {
 				src: 'resources/images/',
 				dest: 'src/assets/images/'
-			},
-			languages: {
-				dest: 'src/languages/',
-				dir: 'languages/'
-			},
-			plugin: {
-				file: 'multilingual-press.php',
-				issues: 'https://github.com/inpsyde/multilingual-press/issues',
-				name: 'MultilingualPress',
-				textdomain: 'multilingualpress'
 			},
 			scripts: {
 				src: 'resources/js/',
 				dest: 'src/assets/js/'
 			},
+			src: 'src/',
 			styles: {
 				src: 'resources/scss/',
 				dest: 'src/assets/css/'
@@ -89,22 +75,8 @@ module.exports = function( grunt ) {
 				task: 'imagemin:images',
 				src: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ]
 			},
-			makepot: {
-				src: [ '<%= config.dest %>**/*.php' ]
-			},
 			sass: {
 				src: [ '<%= config.styles.src %>**/*.scss' ]
-			}
-		},
-
-		glotpress_download: {
-			languages: {
-				options: {
-					url: '<%= config.glotpress.url %>',
-					slug: '<%= config.glotpress.slug %>',
-					domainPath: '<%= config.languages.dest %>',
-					textdomain: '<%= config.plugin.textdomain %>'
-				}
 			}
 		},
 
@@ -199,55 +171,9 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		makepot: {
-			pot: {
-				options: {
-					cwd: '<%= config.dest %>',
-					domainPath: '<%= config.languages.dir %>',
-					mainFile: '<%= config.plugin.file %>',
-					potComments: 'Copyright (C) {{year}} <%= config.plugin.name %>\nThis file is distributed under the same license as the <%= config.plugin.name %> package.',
-					potFilename: '<%= config.plugin.textdomain %>.pot',
-					potHeaders: {
-						poedit: true,
-						'report-msgid-bugs-to': '<%= config.plugin.issues %>',
-						'x-poedit-keywordslist': true
-					},
-					processPot: function( pot ) {
-						var exclude = [
-							'Plugin Name of the plugin/theme',
-							'Plugin URI of the plugin/theme',
-							'Author of the plugin/theme',
-							'Author URI of the plugin/theme'
-						];
-
-						var translation;
-						for ( translation in pot.translations[ '' ] ) {
-							if ( ! pot.translations[ '' ].hasOwnProperty( translation ) ) {
-								continue;
-							}
-
-							if ( 'undefined' === typeof pot.translations[ '' ][ translation ].comments.extracted ) {
-								continue;
-							}
-
-							// Skip translations with the above defined meta comments.
-							if ( exclude.indexOf( pot.translations[ '' ][ translation ].comments.extracted ) >= 0 ) {
-								delete pot.translations[ '' ][ translation ];
-							}
-						}
-
-						return pot;
-					}
-				}
-			}
-		},
-
 		phplint: {
-			file: {
-				src: [ '<%= config.plugin.file %>' ]
-			},
 			src: {
-				src: [ '<%= config.dest %>**/*.php' ]
+				src: [ '<%= config.src %>**/*.php' ]
 			},
 			tests: {
 				src: [ '<%= config.tests.phpunit %>**/*.php' ]
@@ -354,22 +280,12 @@ module.exports = function( grunt ) {
 
 			php: {
 				files: [
-					'<%= config.plugin.file %>',
-					'<%= config.dest %>**/*.php',
+					'<%= config.src %>**/*.php',
 					'<%= config.tests.phpunit %>**/*.php'
 				],
 				tasks: [
 					'newer:phplint',
 					'phpunit'
-				]
-			},
-
-			pot: {
-				files: [
-					'<%= config.dest %>**/*.php'
-				],
-				tasks: [
-					'newer:delegate:makepot'
 				]
 			},
 
@@ -469,8 +385,6 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'php', configObject.watch.php.tasks );
 
-	grunt.registerTask( 'pot', configObject.watch.pot.tasks );
-
 	grunt.registerTask( 'scripts', [
 		'newer:jsvalidate:src',
 		'newer:jshint:src',
@@ -494,7 +408,6 @@ module.exports = function( grunt ) {
 		'grunt',
 		'json',
 		'php',
-		'pot',
 		'styles',
 		'travis'
 	] );
@@ -508,7 +421,6 @@ module.exports = function( grunt ) {
 		'newer-clean',
 		'common',
 		'assets',
-		'glotpress_download',
 		'images',
 		'scripts'
 	] );

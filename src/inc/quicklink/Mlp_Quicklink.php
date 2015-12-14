@@ -103,8 +103,8 @@ class Mlp_Quicklink implements Mlp_Updatable {
 
 		return $this->module_manager->register(
 			array(
-				'description'  => __( 'Show link to translations in post content.', 'multilingualpress' ),
-				'display_name' => __( 'Quicklink', 'multilingualpress' ),
+				'description'  => __( 'Show link to translations in post content.', 'multilingual-press' ),
+				'display_name' => __( 'Quicklink', 'multilingual-press' ),
 				'slug'         => 'class-' . __CLASS__,
 				'state'        => 'off',
 			)
@@ -324,7 +324,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 
 		$class_inner = 'mlp_inner';
 
-		$label_text = esc_html_x( 'Read in:', 'Quicklink label', 'multilingualpress' );
+		$label_text = esc_html_x( 'Read in:', 'Quicklink label', 'multilingual-press' );
 
 		if ( 'links' === $type ) {
 			$html = <<<HTML
@@ -342,7 +342,7 @@ HTML;
 			$select_id   = 'mlp-quicklink-select';
 			$select_name = 'mlp_quicklink_select';
 
-			$submit_text = esc_attr_x( 'Go', 'quicklink submit button', 'multilingualpress' );
+			$submit_text = esc_attr_x( 'Go', 'quicklink submit button', 'multilingual-press' );
 
 			$html = <<<HTML
 <form action="$home_url" method="post" class="$position mlp_quicklinks mlp_quicklinks_form" id="mlp-quicklink-form">

@@ -84,11 +84,11 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		/** @var Mlp_Module_Manager_Interface $module_manager */
 		$module_manager = $this->plugin_data->get( 'module_manager' );
 
-		$display_name = __( 'Custom Post Type Translator', 'multilingualpress' );
+		$display_name = __( 'Custom Post Type Translator', 'multilingual-press' );
 
 		$description = __(
 			'Enable translation of custom post types. Creates a second settings box below this. The post types must be activated for the whole network or on the main site.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 
 		return $module_manager->register(
@@ -112,7 +112,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		if ( empty ( $found ) ) {
 			return '<p class="mlp-callback-indent"><em>'
-				. __( 'No custom post type found.', 'multilingualpress' )
+				. __( 'No custom post type found.', 'multilingual-press' )
 				. '</em></p>';
 		}
 
@@ -278,7 +278,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 				$translate = (bool) apply_filters( 'mlp_translate_this_post_checkbox', FALSE );
 				checked( TRUE, $translate );
 				?> />
-				<?php _e( 'Translate this post', 'multilingualpress' ); ?>
+				<?php _e( 'Translate this post', 'multilingual-press' ); ?>
 			</label>
 		</p>
 	<?php

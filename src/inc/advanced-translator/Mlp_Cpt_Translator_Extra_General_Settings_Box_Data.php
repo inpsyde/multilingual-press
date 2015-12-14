@@ -49,7 +49,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	public function get_title() {
 		return __(
 			'Custom Post Type Translator Settings',
-			'multilingualpress'
+			'multilingual-press'
 		);
 	}
 
@@ -61,7 +61,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	public function get_main_description() {
 		return __(
 			'In some cases the correct pretty permalinks are not available across multiple sites. Test it, and activate dynamic permalinks for those post types to avoid 404 errors. This will not change the permalink settings, just the URLs in MultilingualPress.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 	}
 
@@ -116,7 +116,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 
 		$post_types = $this->get_custom_post_types();
 		$options    = (array) get_site_option( 'inpsyde_multilingual_cpt' );
-		$s_label    = esc_html( __( 'Use dynamic permalinks', 'multilingualpress' ) );
+		$s_label    = esc_html( __( 'Use dynamic permalinks', 'multilingual-press' ) );
 
 		if ( empty ( $post_types ) )
 			return '';

@@ -98,7 +98,7 @@ class Mlp_Nav_Menu_Controller {
 	 */
 	public function add_meta_box() {
 
-		$title = esc_html__( 'Languages', 'multilingualpress' );
+		$title = esc_html__( 'Languages', 'multilingual-press' );
 
 		add_meta_box(
 			$this->handle,

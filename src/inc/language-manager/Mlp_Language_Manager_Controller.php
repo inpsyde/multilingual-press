@@ -70,7 +70,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		$this->plugin_data     = $data;
 		$this->wpdb = $wpdb;
-		$this->page_title      = __( 'Language Manager', 'multilingualpress' );
+		$this->page_title      = __( 'Language Manager', 'multilingual-press' );
 		$this->db              = $database;
 		$this->pagination_data = new Mlp_Language_Manager_Pagination_Data( $database );
 		$this->page_data       = new Mlp_Language_Manager_Options_Page_Data( $this->page_title );
@@ -184,7 +184,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		);
 		// there is no general class for delete links. this is not ideal.
 		print "<p><a href='$url' class='delete submitdelete' style='color:red'>"
-			. esc_html__( 'Reset table to default values', 'multilingualpress' )
+			. esc_html__( 'Reset table to default values', 'multilingual-press' )
 			. '</a></p>';
 	}
 
@@ -242,7 +242,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 					'One language changed.',
 					'%s languages changed.',
 					$num,
-					'multilingualpress'
+					'multilingual-press'
 				),
 				$num_f
 			);
@@ -250,7 +250,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		if ( 'resettable' === $type ) {
 			$text = esc_html__(
 				'Table reset to default values.',
-				'multilingualpress'
+				'multilingual-press'
 			);
 		}
 
@@ -269,7 +269,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		<?php
 		esc_html_e(
 			'Languages are sorted descending by priority and ascending by their English name.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 		?>
 		</p>
@@ -277,7 +277,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		<?php
 		esc_html_e(
 			'If you change the priority of a language to a higher value, it will show up on an earlier page.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 		?>
 		</p>
@@ -344,56 +344,56 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	private function get_columns() {
 		return array (
 			'native_name' => array (
-				'header'     => esc_html__( 'Native name', 'multilingualpress' ),
+				'header'     => esc_html__( 'Native name', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array (
 					'size' => 20
 				)
 			),
 			'english_name' => array (
-				'header'     => esc_html__( 'English name', 'multilingualpress' ),
+				'header'     => esc_html__( 'English name', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array (
 					'size' => 20
 				)
 			),
 			'is_rtl' => array (
-				'header'     => esc_html__( 'RTL', 'multilingualpress' ),
+				'header'     => esc_html__( 'RTL', 'multilingual-press' ),
 				'type'       => 'input_checkbox',
 				'attributes' => array (
 					'size' => 20
 				)
 			),
 			'http_name' => array (
-				'header'     => esc_html__( 'HTTP', 'multilingualpress' ),
+				'header'     => esc_html__( 'HTTP', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array (
 					'size' => 5
 				)
 			),
 			'iso_639_1' => array (
-				'header'     => esc_html__( 'ISO&#160;639-1', 'multilingualpress' ),
+				'header'     => esc_html__( 'ISO&#160;639-1', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array (
 					'size' => 5
 				)
 			),
 			'iso_639_2' => array (
-				'header'     => esc_html__( 'ISO&#160;639-2', 'multilingualpress' ),
+				'header'     => esc_html__( 'ISO&#160;639-2', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array (
 					'size' => 5
 				)
 			),
 			'wp_locale' => array (
-				'header'     => esc_html__( 'wp_locale', 'multilingualpress' ),
+				'header'     => esc_html__( 'wp_locale', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array (
 					'size' => 5
 				)
 			),
 			'priority' => array (
-				'header'     => esc_html__( 'Priority', 'multilingualpress' ),
+				'header'     => esc_html__( 'Priority', 'multilingual-press' ),
 				'type'       => 'input_number',
 				'attributes' => array (
 					'min'  => 1,

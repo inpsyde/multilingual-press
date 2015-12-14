@@ -36,7 +36,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	 * @return string
 	 */
 	public function get_title() {
-		return esc_html__( 'Quicklink position', 'multilingualpress' );
+		return esc_html__( 'Quicklink position', 'multilingual-press' );
 	}
 
 	/**
@@ -145,10 +145,10 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	private function get_position_names() {
 
 		return array (
-			'tl' => esc_attr__( 'Top left', 'multilingualpress' ),
-			'tr' => esc_attr__( 'Top right', 'multilingualpress' ),
-			'bl' => esc_attr__( 'Bottom left', 'multilingualpress' ),
-			'br' => esc_attr__( 'Bottom right', 'multilingualpress' ),
+			'tl' => esc_attr__( 'Top left', 'multilingual-press' ),
+			'tr' => esc_attr__( 'Top right', 'multilingual-press' ),
+			'bl' => esc_attr__( 'Bottom left', 'multilingual-press' ),
+			'br' => esc_attr__( 'Bottom right', 'multilingual-press' ),
 		);
 	}
 }

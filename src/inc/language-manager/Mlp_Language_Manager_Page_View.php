@@ -64,7 +64,7 @@ class Mlp_Language_Manager_Page_View {
 				$this->watcher->update( 'after_table' );
 
 				submit_button(
-					esc_attr__( 'Save changes', 'multilingualpress' ),
+					esc_attr__( 'Save changes', 'multilingual-press' ),
 					'primary',
 					'save',
 					FALSE,

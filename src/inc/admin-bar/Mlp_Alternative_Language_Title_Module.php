@@ -30,9 +30,9 @@ class Mlp_Alternative_Language_Title_Module {
 		$module = array(
 			'description'  => __(
 				'Show sites with their alternative language title in the admin bar.',
-				'multilingualpress'
+				'multilingual-press'
 			),
-			'display_name' => __( 'Alternative Language Title', 'multilingualpress' ),
+			'display_name' => __( 'Alternative Language Title', 'multilingual-press' ),
 			'slug'         => 'class-' . __CLASS__,
 			'state'        => 'off',
 		);

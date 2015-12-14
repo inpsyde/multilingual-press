@@ -77,10 +77,6 @@ need at least two sites with an assigned language.
 ### Will MultilingualPress translate my content?
 No, it will not. It manages relationships between sites and translations, but it doesn't change the content.
 
-### Where can I get additional language files?
-You can find all official translation files in the according
-[GlotPress project](http://translate.marketpress.com/projects/plugins/multilingualpress).
-
 ### Can I use MultilingualPress on a single-site installation?
 That would require changes to the way WordPress stores post content. Other plugins do that; we think this is wrong,
 because it creates a lock-in: you would lose access to your content after the plugin deactivation.

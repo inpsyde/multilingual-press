@@ -51,7 +51,7 @@ class Mlp_Relationship_Control_Ajax_Search {
 
 		if ( empty ( $results ) )
 			return '<li>'
-			. esc_html__( 'Nothing found.', 'multilingualpress' )
+			. esc_html__( 'Nothing found.', 'multilingual-press' )
 			. '</li>';
 
 		$out      = '';

@@ -406,7 +406,7 @@ class Mlp_Duplicate_Blogs {
 	public function display_fields() {
 
 		$blogs   = (array) $this->get_all_sites();
-		$options = '<option value="0">' . __( 'Choose site', 'multilingualpress' ) . '</option>';
+		$options = '<option value="0">' . __( 'Choose site', 'multilingual-press' ) . '</option>';
 
 		foreach ( $blogs as $blog ) {
 
@@ -423,7 +423,7 @@ class Mlp_Duplicate_Blogs {
 			<td>
 				<label for="inpsyde_multilingual_based">
 					<?php
-					esc_html_e( 'Based on site', 'multilingualpress' );
+					esc_html_e( 'Based on site', 'multilingual-press' );
 					?>
 				</label>
 			</td>
@@ -436,14 +436,14 @@ class Mlp_Duplicate_Blogs {
 
 		<tr class="form-field hide-if-js">
 			<td>
-				<?php esc_html_e( 'Plugins', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Plugins', 'multilingual-press' ); ?>
 			</td>
 			<td>
 				<label for="blog_activate_plugins">
 					<input type="checkbox" value="1" id="blog_activate_plugins" name="blog[activate_plugins]"
 						checked="checked">
 					<?php
-					esc_html_e( 'Activate all plugins that are active on the source site', 'multilingualpress' );
+					esc_html_e( 'Activate all plugins that are active on the source site', 'multilingual-press' );
 					?>
 				</label>
 			</td>
@@ -462,19 +462,19 @@ class Mlp_Duplicate_Blogs {
 		?>
 		<tr class="form-field">
 			<td>
-				<?php esc_html_e( 'Search Engine Visibility', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Search Engine Visibility', 'multilingual-press' ); ?>
 			</td>
 			<td>
 				<label for="inpsyde_multilingual_visibility">
 					<input type="checkbox" value="0" id="inpsyde_multilingual_visibility" name="blog[visibility]"
 						<?php checked( $visible, FALSE ); ?>>
 					<?php
-					esc_html_e( 'Discourage search engines from indexing this site', 'multilingualpress' );
+					esc_html_e( 'Discourage search engines from indexing this site', 'multilingual-press' );
 					?>
 				</label>
 
 				<p class="description">
-					<?php esc_html_e( 'It is up to search engines to honor this request.', 'multilingualpress' ); ?>
+					<?php esc_html_e( 'It is up to search engines to honor this request.', 'multilingual-press' ); ?>
 				</p>
 			</td>
 		</tr>

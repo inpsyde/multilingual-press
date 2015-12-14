@@ -99,7 +99,7 @@ class Mlp_Admin_Table_View {
 
 		if ( empty ( $rows ) ) {
 			print '<tr><td colspan="' . count( $this->columns ) . '"><p>'
-				. __( 'No items found. We recommend to reinstall this plugin.', 'multilingualpress' )
+				. __( 'No items found. We recommend to reinstall this plugin.', 'multilingual-press' )
 				. '</p></td></tr>';
 			return;
 		}

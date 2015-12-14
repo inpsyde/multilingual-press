@@ -154,7 +154,7 @@ class Mlp_Table_Pagination_View {
 
 		return '<span class="paging-input">'
 			. sprintf(
-				_x( '%1$s of %2$s', 'paging', 'multilingualpress' ),
+				_x( '%1$s of %2$s', 'paging', 'multilingual-press' ),
 				$this->current_page,
 				$total
 			)
@@ -170,7 +170,7 @@ class Mlp_Table_Pagination_View {
 
 		return $this->get_anchor(
 			$this->get_paged_url( $this->total_pages ),
-			esc_attr__( 'Go to the last page', 'multilingualpress' ),
+			esc_attr__( 'Go to the last page', 'multilingual-press' ),
 			'last-page' . $this->disable_last,
 			'&raquo;'
 		);
@@ -187,7 +187,7 @@ class Mlp_Table_Pagination_View {
 
 		return $this->get_anchor(
 			$this->get_paged_url( $page ),
-			esc_attr__( 'Go to the next page', 'multilingualpress' ),
+			esc_attr__( 'Go to the next page', 'multilingual-press' ),
 			'next-page' . $this->disable_last,
 			'&rsaquo;'
 		);
@@ -202,7 +202,7 @@ class Mlp_Table_Pagination_View {
 
 		return $this->get_anchor(
 			$this->get_paged_url( max( 1, $this->current_page -1 ) ),
-			esc_attr__( 'Go to the previous page', 'multilingualpress' ),
+			esc_attr__( 'Go to the previous page', 'multilingual-press' ),
 			'prev-page' . $this->disable_first,
 			'&lsaquo;'
 		);
@@ -217,7 +217,7 @@ class Mlp_Table_Pagination_View {
 
 		return $this->get_anchor(
 			$this->get_paged_url( 1 ),
-			esc_attr__( 'Go to the first page', 'multilingualpress' ),
+			esc_attr__( 'Go to the first page', 'multilingual-press' ),
 			'first-page' . $this->disable_first,
 			'&laquo;'
 		);
@@ -246,7 +246,7 @@ class Mlp_Table_Pagination_View {
 
 		return '<span class="displaying-num">'
 			. sprintf(
-			_n( '1 item', '%s items', $this->total_items, 'multilingualpress' ),
+			_n( '1 item', '%s items', $this->total_items, 'multilingual-press' ),
 			number_format_i18n( $this->total_items )
 		)
 		. '</span>';

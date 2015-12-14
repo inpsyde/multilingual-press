@@ -86,7 +86,7 @@ class Mlp_General_Settings_View {
 			 * Runs after the features table.
 			 */
 			do_action( 'mlp_modules_add_fields' );
-			submit_button( __( 'Save changes', 'multilingualpress' ) );
+			submit_button( __( 'Save changes', 'multilingual-press' ) );
 			?>
 		</form>
 		<?php
@@ -136,11 +136,11 @@ EOD;
 	 */
 	private function get_marketpress_pointer() {
 
-		$marketpress_url = __( 'http://marketpress.com/', 'multilingualpress' );
-		$inpsyde_url     = __( 'http://inpsyde.com/',     'multilingualpress' );
+		$marketpress_url = __( 'http://marketpress.com/', 'multilingual-press' );
+		$inpsyde_url     = __( 'http://inpsyde.com/',     'multilingual-press' );
 		$message         = __(
 			'This plugin has been developed by <a href="%1$s">MarketPress</a>, a project of <a href="%2$s">Inpsyde</a>.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 
 		return '<p>' . sprintf( $message, $marketpress_url, $inpsyde_url ) . '</p>';

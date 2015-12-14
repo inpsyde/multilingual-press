@@ -199,7 +199,7 @@ class Mlp_Language_Nav_Menu_Data
 			'menu-item-type'       => 'language',
 			'menu-item-object'     => 'custom',
 			'menu-item-url'        => get_home_url( $blog_id, '/' ),
-			'menu_item-type-label' => esc_html__( 'Language', 'multilingualpress' ),
+			'menu_item-type-label' => esc_html__( 'Language', 'multilingual-press' ),
 		);
 
 		$item_id   = wp_update_nav_menu_item(
@@ -229,7 +229,7 @@ class Mlp_Language_Nav_Menu_Data
 		$menu_item             = wp_setup_nav_menu_item( $menu_item );
 		$menu_item->label      = $menu_item->title;
 		// Replace the "Custom" in the management screen
-		$menu_item->type_label = esc_html__( 'Language', 'multilingualpress' );
+		$menu_item->type_label = esc_html__( 'Language', 'multilingual-press' );
 		$menu_item->classes[ ] = "blog-id-$blog_id";
 		$menu_item->classes[ ] = "mlp-language-nav-item";
 		$menu_item->url        = get_home_url( $blog_id, '/' );

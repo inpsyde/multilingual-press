@@ -81,7 +81,7 @@ class Mlp_User_Backend_Language {
 
 		return __(
 			'Let each user choose a preferred language for the backend of all connected sites. Does not affect the frontend.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 	}
 
@@ -94,7 +94,7 @@ class Mlp_User_Backend_Language {
 	 */
 	public function get_module_title() {
 
-		return __( 'User Backend Language', 'multilingualpress' );
+		return __( 'User Backend Language', 'multilingual-press' );
 	}
 
 	/**
@@ -122,7 +122,7 @@ class Mlp_User_Backend_Language {
 		<tr>
 			<th>
 				<label for="<?php echo $this->key; ?>">
-					<?php esc_html_e( 'Your preferred backend language', 'multilingualpress' ); ?>
+					<?php esc_html_e( 'Your preferred backend language', 'multilingual-press' ); ?>
 				</label>
 			</th>
 			<td>
@@ -206,7 +206,7 @@ class Mlp_User_Backend_Language {
 
 		// Inherit site specific language
 		$output[ ] = '<option value=""' . selected( $current, '', FALSE ) . '>'
-			. __( 'Site Language', 'multilingualpress' ) . "</option>";
+			. __( 'Site Language', 'multilingual-press' ) . "</option>";
 
 		foreach ( (array) $lang_files as $file_name ) {
 			$code_lang = basename( $file_name, '.mo' );
@@ -214,7 +214,7 @@ class Mlp_User_Backend_Language {
 
 			if ( 'en_US' === $code_lang ) {
 				// American English
-				$lang = __( 'English', 'multilingualpress' );
+				$lang = __( 'English', 'multilingual-press' );
 			} else {
 				$lang = format_code_lang( $code_lang );
 			}

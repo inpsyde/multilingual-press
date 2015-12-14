@@ -78,7 +78,7 @@ class Mlp_Redirect_Column {
 
 		$data = array (
 			'id'               => 'mlp_redirect',
-			'header'           => __( 'Redirect', 'multilingualpress' ),
+			'header'           => __( 'Redirect', 'multilingual-press' ),
 			'content_callback' => array ( $this, 'render_cell' )
 		);
 

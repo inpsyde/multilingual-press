@@ -257,13 +257,13 @@ class Mlp_Helpers {
 	) {
 
 		if ( empty( $element_id ) )
-			return new WP_Error( 'mlp_empty_custom_element', __( 'Empty Element', 'multilingualpress' ) );
+			return new WP_Error( 'mlp_empty_custom_element', __( 'Empty Element', 'multilingual-press' ) );
 
 		if ( empty( $type ) )
-			return new WP_Error( 'mlp_empty_custom_type', __( 'Empty Type', 'multilingualpress' ) );
+			return new WP_Error( 'mlp_empty_custom_type', __( 'Empty Type', 'multilingual-press' ) );
 
 		if ( empty ( $hook ) || ! is_callable( $hook ) )
-			return new WP_Error( 'mlp_empty_custom_hook', __( 'Invalid Hook', 'multilingualpress' ) );
+			return new WP_Error( 'mlp_empty_custom_hook', __( 'Invalid Hook', 'multilingual-press' ) );
 
 		// set the current element in the mlp class
 		$languages    = mlp_get_available_languages();

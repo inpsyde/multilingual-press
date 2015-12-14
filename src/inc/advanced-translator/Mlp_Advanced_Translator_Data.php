@@ -63,6 +63,7 @@ class Mlp_Advanced_Translator_Data
 		Mlp_Site_Relations_Interface $relations
 	) {
 
+		// TODO: Nonce (or request) improvements...
 		$this->request_validator = $request_validator;
 		$this->basic_data = $basic_data;
 		$this->allowed_post_types = $allowed_post_types;

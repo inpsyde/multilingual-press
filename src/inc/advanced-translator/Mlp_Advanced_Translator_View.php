@@ -46,7 +46,7 @@ class Mlp_Advanced_Translator_View {
 		?>
 		<a href="#" class="button mlp_copy_button dashicons-before dashicons-image-rotate-right"
 				data-blog_id="<?php echo $matches[1]; ?>"><?php
-			esc_attr_e( 'Copy source post', 'multilingualpress' );
+			esc_attr_e( 'Copy source post', 'multilingual-press' );
 			?></a>
 		<?php
 	}
@@ -102,14 +102,14 @@ class Mlp_Advanced_Translator_View {
 			$value = sanitize_title( $post->post_title );
 		}
 		$value = esc_attr( $value );
-		$placeholder = esc_attr__( 'Enter name here', 'multilingualpress' );
+		$placeholder = esc_attr__( 'Enter name here', 'multilingual-press' );
 		$name = $this->get_name( $remote_blog_id, 'name' );
 		$id = $this->get_id( $remote_blog_id, 'name' );
 		?>
 		<div class="mlp_namediv">
 			<div>
 				<label for="<?php echo $id; ?>">
-					<?php _e( 'Post Name:', 'multilingualpress' ) ?><br>
+					<?php _e( 'Post Name:', 'multilingual-press' ) ?><br>
 					<input
 						class="mlp_name"
 						type="text"
@@ -139,14 +139,14 @@ class Mlp_Advanced_Translator_View {
 
 		$value = $post->post_excerpt;
 		$value = esc_attr( $value );
-		$placeholder = esc_attr__( 'Enter excerpt here', 'multilingualpress' );
+		$placeholder = esc_attr__( 'Enter excerpt here', 'multilingual-press' );
 		$name = $this->get_name( $remote_blog_id, 'excerpt' );
 		$id = $this->get_id( $remote_blog_id, 'excerpt' );
 		?>
 		<div class="mlp_excerptdiv">
 			<div>
 				<label for="<?php echo $id; ?>">
-					<?php _e( 'Post Excerpt:', 'multilingualpress' ) ?><br>
+					<?php _e( 'Post Excerpt:', 'multilingual-press' ) ?><br>
 					<textarea
 						class="mlp_excerpt"
 						name="<?php echo $name; ?>"
@@ -207,9 +207,9 @@ class Mlp_Advanced_Translator_View {
 			<label for="<?php echo $id; ?>_id">
 				<input type="checkbox" name="<?php echo $name; ?>"
 					id="<?php echo $id; ?>_id" value="1" />
-				<?php _e( 'Copy the featured image of the source post.', 'multilingualpress' ); ?>
+				<?php _e( 'Copy the featured image of the source post.', 'multilingual-press' ); ?>
 				<span class="description"><?php
-					_e( 'Overwrites an existing featured image in the target post.', 'multilingualpress' );
+					_e( 'Overwrites an existing featured image in the target post.', 'multilingual-press' );
 					?></span>
 			</label>
 		</p>
@@ -242,7 +242,7 @@ class Mlp_Advanced_Translator_View {
 		printf(
 			'<button type="button" class="button secondary" name="toggle_%2$d"
 				data-toggle_selector="#%3$s">%1$s</button>',
-			esc_html__( 'Change taxonomies', 'multilingualpress' ),
+			esc_html__( 'Change taxonomies', 'multilingual-press' ),
 			$remote_blog_id,
 			$toggle_id
 		);
@@ -324,7 +324,7 @@ class Mlp_Advanced_Translator_View {
 	 */
 	private function get_placeholder_title( WP_Post $post ) {
 
-		$placeholder = __( 'Enter title here', 'multilingualpress' );
+		$placeholder = __( 'Enter title here', 'multilingual-press' );
 		/** This filter is documented in wp-admin/edit-form-advanced.php */
 		$placeholder = apply_filters( 'enter_title_here', $placeholder, $post );
 
@@ -430,7 +430,7 @@ class Mlp_Advanced_Translator_View {
 		<div class="mlp-warning">
 			<p><?php _e(
 					'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
-					'multilingualpress'
+					'multilingual-press'
 				); ?></p>
 		</div>
 	<?php

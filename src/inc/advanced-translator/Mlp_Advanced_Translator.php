@@ -70,6 +70,7 @@ class Mlp_Advanced_Translator {
 	 */
 	public function setup( array $base_data ) {
 
+		// TODO: Nonce (or request) improvements...
 		$this->translation_data = new Mlp_Advanced_Translator_Data(
 			$base_data[ 'request_validator' ],
 			$base_data[ 'basic_data' ],
@@ -153,11 +154,11 @@ class Mlp_Advanced_Translator {
 		/** @var Mlp_Module_Manager_Interface $module_manager */
 		$module_manager = $this->plugin_data->get( 'module_manager' );
 
-		$display_name = __( 'Advanced Translator', 'multilingualpress' );
+		$display_name = __( 'Advanced Translator', 'multilingual-press' );
 
 		$description = __(
 			'Use the WYSIWYG editor to write all translations on one screen, including thumbnails and taxonomies.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 
 		return $module_manager->register(

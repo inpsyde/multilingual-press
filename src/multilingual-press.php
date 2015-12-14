@@ -6,7 +6,7 @@
  * Author:      Inpsyde GmbH
  * Author URI:  http://inpsyde.com
  * Version:     2.4.0-alpha
- * Text Domain: multilingualpress
+ * Text Domain: multilingual-press
  * Domain Path: /languages
  * License:     GPLv3
  * Network:     true

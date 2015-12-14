@@ -122,13 +122,13 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			<td style="width:10em;">
 				<label for="inpsyde_multilingual_lang">
 				<?php
-				esc_html_e( 'Language', 'multilingualpress' );
+				esc_html_e( 'Language', 'multilingual-press' );
 				?>
 				</label>
 			</td>
 			<td>
 				<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang" autocomplete="off">
-					<option value="-1"><?php esc_html_e( 'choose language', 'multilingualpress' ); ?></option>
+					<option value="-1"><?php esc_html_e( 'choose language', 'multilingual-press' ); ?></option>
 					<?php
 					foreach ( $languages as $language ) {
 
@@ -150,21 +150,21 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			<td>
 				<label for="inpsyde_multilingual_text">
 					<?php
-					esc_html_e( 'Alternative language title', 'multilingualpress' );
+					esc_html_e( 'Alternative language title', 'multilingual-press' );
 					?>
 				</label>
 			</td>
 			<td>
 				<input class="regular-text" type="text" id="inpsyde_multilingual_text" name="inpsyde_multilingual_text" value="<?php echo $lang_title; ?>" />
 				<br />
-				<span class="description"><?php esc_html_e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")', 'multilingualpress' ); ?></span>
+				<span class="description"><?php esc_html_e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")', 'multilingual-press' ); ?></span>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				<label for="inpsyde_multilingual_flag_url">
 				<?php
-				esc_html_e( 'Flag image URL', 'multilingualpress' );
+				esc_html_e( 'Flag image URL', 'multilingual-press' );
 				?>
 				</label>
 			</td>
@@ -217,7 +217,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 		?>
 		<tr>
-			<td><?php esc_html_e( 'Relationships', 'multilingualpress' ); ?></td>
+			<td><?php esc_html_e( 'Relationships', 'multilingual-press' ); ?></td>
 			<td>
 		<?php
 		foreach ( $site_option as $blog_id => $meta ) {
@@ -248,7 +248,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 		<?php
 		esc_html_e(
 			'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 		?>
 		</p>

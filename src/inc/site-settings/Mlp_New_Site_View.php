@@ -42,13 +42,13 @@ class Mlp_New_Site_View {
 				<td>
 					<label for="inpsyde_multilingual_lang">
 						<?php
-						esc_html_e( 'Language', 'multilingualpress' );
+						esc_html_e( 'Language', 'multilingual-press' );
 						?>
 					</label>
 				</td>
 				<td>
 					<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang" autocomplete="off">
-						<option value="-1"><?php esc_html_e( 'Choose language', 'multilingualpress' ); ?></option>
+						<option value="-1"><?php esc_html_e( 'Choose language', 'multilingual-press' ); ?></option>
 						<?php
 						foreach ( $languages as $language ) {
 
@@ -68,7 +68,7 @@ class Mlp_New_Site_View {
 				<td>
 					<label for="inpsyde_multilingual_text">
 						<?php
-						esc_html_e( 'Alternative language title', 'multilingualpress' );
+						esc_html_e( 'Alternative language title', 'multilingual-press' );
 						?>
 					</label>
 				</td>
@@ -77,7 +77,7 @@ class Mlp_New_Site_View {
 					<p class="description"><?php
 						esc_html_e(
 							'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
-							'multilingualpress'
+							'multilingual-press'
 						);
 					?></p>
 				</td>
@@ -86,7 +86,7 @@ class Mlp_New_Site_View {
 				<td>
 					<label for="inpsyde_multilingual_text">
 						<?php
-						esc_html_e( 'Relationships', 'multilingualpress' );
+						esc_html_e( 'Relationships', 'multilingual-press' );
 						?>
 					</label>
 				</td>
@@ -117,7 +117,7 @@ class Mlp_New_Site_View {
 						<?php
 							esc_html_e(
 								'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
-								'multilingualpress'
+								'multilingual-press'
 							);
 						?>
 					</p>

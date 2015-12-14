@@ -88,7 +88,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 			<a href="<?php
 			print $this->get_select_all_url( $list_id );
 			?>" class="select-all"><?php
-				_e( 'Select All', 'multilingualpress' );
+				_e( 'Select All', 'multilingual-press' );
 				?></a>
 		</span>
 		<?php
@@ -103,7 +103,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 		$items = $this->data->get_list();
 
 		if ( empty ( $items ) ) {
-			esc_html_e( 'No languages found', 'multilingualpress' );
+			esc_html_e( 'No languages found', 'multilingual-press' );
 			return;
 		}
 		// class "tabs-panel-active" is needed to make "Select All" work
@@ -153,7 +153,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 		<span class="add-to-menu">
 				<?php
 				submit_button(
-					esc_attr__( 'Add to Menu', 'multilingualpress' ),
+					esc_attr__( 'Add to Menu', 'multilingual-press' ),
 					'button-secondary submit-add-to-menu right',
 					"add-$button_id-item",
 					FALSE,

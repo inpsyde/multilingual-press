@@ -82,7 +82,7 @@ class Mlp_Term_Translation_Selector {
 						<?php else : ?>
 							<select name="<?php echo $key; ?>" id="<?php echo $label_id; ?>" autocomplete="off">
 								<option value="<?php echo $empty_option_value; ?>" class="mlp_empty_option">
-									<?php esc_html_e( 'No translation', 'multilingualpress' ); ?>
+									<?php esc_html_e( 'No translation', 'multilingual-press' ); ?>
 								</option>
 								<?php $this->print_term_options( $terms, $current_term, $site_id ); ?>
 							</select>
@@ -117,7 +117,7 @@ class Mlp_Term_Translation_Selector {
 		$taxonomy_object = get_taxonomy( $taxonomy_name );
 		$text = isset( $taxonomy_object->labels->not_found )
 			? esc_html( $taxonomy_object->labels->not_found )
-			: esc_html__( 'No terms found.', 'multilingualpress' );
+			: esc_html__( 'No terms found.', 'multilingual-press' );
 
 		return sprintf( '<p><a href="%1$s">%2$s</a></p>', $url, $text );
 	}
