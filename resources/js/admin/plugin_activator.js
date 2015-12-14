@@ -25,6 +25,6 @@
 		}
 	};
 
-	$( setTimeout( pluginActivator.initialize, 0 ) );
+	$( setTimeout( pluginActivator.initialize, 300 ) );
 
 } )( jQuery );
