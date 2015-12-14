@@ -1,27 +1,25 @@
 /* global MultilingualPress */
-(function() {
+(function( $ ) {
 	'use strict';
 
-	var Quicklink = {
-		initialize: function() {
-			var form = document.getElementById( 'mlp-quicklink-form' );
-			if ( form ) {
-				form.onsubmit = Quicklink.submitForm;
+	var Quicklink = function( formID ) {
+		this.initialize = function() {
+			var $form = $( '#' + formID );
+			if ( $form.length ) {
+				$form.on( 'submit', Quicklink.submitForm );
 			}
-		},
-		submitForm: function( event ) {
-			var select = document.getElementById( 'mlp-quicklink-select' );
-			if ( select ) {
+		};
+
+		this.submitForm = function( event ) {
+			var $select = $( this ).find( 'select' );
+			if ( $select.length ) {
 				event.preventDefault();
-				document.location.href = Quicklink.getSelectValue( select );
+				document.location.href = $select.val();
 			}
-		},
-		getSelectValue: function( select ) {
-			return select.options[ select.selectedIndex ].value;
-		}
+		};
 	};
 
-	Quicklink.initialize();
+	MultilingualPress.Quicklink = new Quicklink( 'mlp-quicklink-form' );
 
-	MultilingualPress.Quicklink = Quicklink;
-})();
+	$( MultilingualPress.Quicklink.initialize );
+})( jQuery );

@@ -1,5 +1,7 @@
 (function() {
 	'use strict';
 
-	window.MultilingualPress = window.MultilingualPress || {};
+	window.MultilingualPress = function() {
+		return this;
+	};
 })();
