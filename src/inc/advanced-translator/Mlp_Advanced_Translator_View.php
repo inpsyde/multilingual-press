@@ -101,6 +101,7 @@ class Mlp_Advanced_Translator_View {
 		if ( empty( $value ) ) {
 			$value = sanitize_title( $post->post_title );
 		}
+		$value = urldecode( $value );
 		$value = esc_attr( $value );
 		$placeholder = esc_attr__( 'Enter name here', 'multilingualpress' );
 		$name = $this->get_name( $remote_blog_id, 'name' );

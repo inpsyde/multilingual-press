@@ -4,6 +4,8 @@
 - Fix leftover entry from site option included in languages data, see
 [issue #183](https://github.com/inpsyde/multilingual-press/issues/183), props kraftner.
 - Fix potentially invisibe plugin activation row on Add New Site page.
+- Run `post_name` through `urldecode` to account for non-ASCII characters, see
+[issue #186](https://github.com/inpsyde/multilingual-press/issues/186), props luisarn.
 - **Developers:** As we would like to use [the official WordPress.org GlotPress for translating
 MultilingualPress](https://translate.wordpress.org/projects/wp-plugins/multilingual-press), we will (have to) change the
 plugin text domain from `multilingualpress` to `multilingual-press` with the next (major) release. So, in case you are
