@@ -1,13 +1,14 @@
-<?php
+<?php # -*- coding: utf-8 -*-
 
 /**
- * Class Mlp_Advanced_Translator
- *
- * @version 2015.06.29
- * @author  Inpsyde GmbH, toscho
- * @license GPL
+ * Advanced translator.
  */
 class Mlp_Advanced_Translator {
+
+	/**
+	 * @var Mlp_Translatable_Post_Data_Interface
+	 */
+	private $basic_data;
 
 	/**
 	 * Passed by main controller.
@@ -20,11 +21,6 @@ class Mlp_Advanced_Translator {
 	 * @var Mlp_Advanced_Translator_Data
 	 */
 	private $translation_data;
-
-	/**
-	 * @var Mlp_Translatable_Post_Data_Interface
-	 */
-	private $basic_data;
 
 	/**
 	 * The view class.
@@ -51,12 +47,7 @@ class Mlp_Advanced_Translator {
 		add_filter( 'mlp_external_save_method', '__return_true' );
 
 		// Disable default actions
-		add_action(
-			'mlp_translation_meta_box_registered',
-			array( $this, 'register_metabox_view_details' ),
-			10,
-			2
-		);
+		add_action( 'mlp_translation_meta_box_registered', array( $this, 'register_metabox_view_details' ), 10, 2 );
 	}
 
 	/**
@@ -70,17 +61,18 @@ class Mlp_Advanced_Translator {
 	 */
 	public function setup( array $base_data ) {
 
-		// TODO: Nonce (or request) improvements...
+		$this->basic_data = $base_data['basic_data'];
+
 		$this->translation_data = new Mlp_Advanced_Translator_Data(
-			$base_data[ 'request_validator' ],
-			$base_data[ 'basic_data' ],
-			$base_data[ 'allowed_post_types' ],
+			null,
+			$base_data['basic_data'],
+			$base_data['allowed_post_types'],
 			$this->plugin_data->get( 'site_relations' )
 		);
-		$this->basic_data = $base_data[ 'basic_data' ];
+
 		$this->view = new Mlp_Advanced_Translator_View( $this->translation_data );
 
-		if ( 'POST' === $_SERVER[ 'REQUEST_METHOD' ] ) {
+		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			add_action( 'save_post', array( $this->translation_data, 'save' ), 10, 2 );
 		}
 
@@ -102,7 +94,7 @@ class Mlp_Advanced_Translator {
 
 		// get the current remote post status
 		$remote_post = $this->basic_data->get_remote_post( $post, $blog_id );
-		$is_trashed = isset( $remote_post->post_status ) && $remote_post->post_status == 'trash';
+		$is_trashed  = isset( $remote_post->post_status ) && $remote_post->post_status == 'trash';
 
 		// set the base
 		$base = 'mlp_translation_meta_box_';
@@ -161,13 +153,10 @@ class Mlp_Advanced_Translator {
 			'multilingual-press'
 		);
 
-		return $module_manager->register(
-			array(
-				'display_name' => $display_name,
-				'slug'         => 'class-' . __CLASS__,
-				'description'  => $description,
-			)
-		);
+		return $module_manager->register( array(
+			'display_name' => $display_name,
+			'slug'         => 'class-' . __CLASS__,
+			'description'  => $description,
+		) );
 	}
-
 }
