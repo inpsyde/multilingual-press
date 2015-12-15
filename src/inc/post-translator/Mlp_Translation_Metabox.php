@@ -74,7 +74,7 @@ class Mlp_Translation_Metabox {
 
 		// Both the generic nonce and request validator are kept for backwards compatibility reasons only.
 		$nonce_validator   = Inpsyde_Nonce_Validator_Factory::create( 'mlp_post_translator_bc', get_current_blog_id() );
-		$request_validator = new Mlp_Save_Post_Request_Validator( $nonce_validator );
+		$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
 
 		$translator_init_args = array(
 			'nonce'              => $nonce_validator,

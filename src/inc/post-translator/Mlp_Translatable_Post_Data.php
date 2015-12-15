@@ -101,7 +101,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 			get_current_blog_id()
 		);
 
-		$request_validator = new Mlp_Save_Post_Request_Validator( $nonce_validator );
+		$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
 		if ( ! $request_validator->is_valid( $post ) ) {
 			return;
 		}

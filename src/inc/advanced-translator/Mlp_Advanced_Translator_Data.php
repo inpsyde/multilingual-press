@@ -138,7 +138,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 				$source_blog_id
 			);
 
-			$request_validator = new Mlp_Save_Post_Request_Validator( $nonce_validator );
+			$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
 			if ( ! $request_validator->is_valid( $post ) ) {
 				continue;
 			}
