@@ -97,7 +97,7 @@ class Mlp_Relationship_Changer {
 		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_after_post_synchronization', $save_context );
 
-		if ( is_a( $post_id, 'WP_Error' ) )
+		if ( is_wp_error( $post_id ) )
 			return $post_id->get_error_messages();
 
 		$this->new_post_id = $post_id;

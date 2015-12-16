@@ -269,7 +269,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 			$code = __CLASS__;
 
 		if ( class_exists( 'WP_Error' ) )
-			return new WP_Error( $code, $msg );
+			return Mlp_WP_Error_Factory::create( $code, $msg );
 
 		throw new Exception( $msg, $code );
 	}
