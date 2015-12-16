@@ -14,7 +14,7 @@ class Mlp_Redirect_User_Settings {
 
 		$meta_key = 'mlp_redirect';
 
-		$nonce = Inpsyde_Nonce_Validator_Factory::create( 'save_redirect_user_setting' );
+		$nonce = Mlp_Nonce_Validator_Factory::create( 'save_redirect_user_setting' );
 
 		$user_settings_controller = new Mlp_User_Settings_Controller(
 			new Mlp_Redirect_User_Settings_Html( $meta_key, $nonce ),

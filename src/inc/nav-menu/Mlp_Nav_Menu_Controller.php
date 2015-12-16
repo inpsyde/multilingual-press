@@ -119,10 +119,12 @@ class Mlp_Nav_Menu_Controller {
 	 */
 	private function create_instances() {
 
+		$nonce_validator = Mlp_Nonce_Validator_Factory::create( 'add_languages_to_nav_menu' );
+
 		$this->data = new Mlp_Language_Nav_Menu_Data(
 			$this->handle,
 			$this->meta_key,
-			Inpsyde_Nonce_Validator_Factory::create( 'add_languages_to_nav_menu' ),
+			$nonce_validator,
 			$this->assets
 		);
 

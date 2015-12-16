@@ -96,7 +96,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 */
 	public function save( $post_id, WP_Post $post ) {
 
-		$nonce_validator = Inpsyde_Nonce_Validator_Factory::create(
+		$nonce_validator = Mlp_Nonce_Validator_Factory::create(
 			"save_translation_of_post_{$post_id}_for_site_{$this->source_site_id}",
 			get_current_blog_id()
 		);

@@ -133,7 +133,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 				continue;
 			}
 
-			$nonce_validator = Inpsyde_Nonce_Validator_Factory::create(
+			$nonce_validator = Mlp_Nonce_Validator_Factory::create(
 				"save_translation_of_post_{$post->ID}_for_site_$remote_blog_id",
 				$source_blog_id
 			);

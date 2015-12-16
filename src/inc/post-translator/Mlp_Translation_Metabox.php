@@ -73,7 +73,7 @@ class Mlp_Translation_Metabox {
 		}
 
 		// Both the generic nonce and request validator are kept for backwards compatibility reasons only.
-		$nonce_validator   = Inpsyde_Nonce_Validator_Factory::create( 'mlp_post_translator_bc', get_current_blog_id() );
+		$nonce_validator   = Mlp_Nonce_Validator_Factory::create( 'mlp_post_translator_bc', get_current_blog_id() );
 		$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
 
 		$translator_init_args = array(
@@ -216,12 +216,12 @@ class Mlp_Translation_Metabox {
 			'language'       => $lang,
 		);
 
-		$view = new Mlp_Translation_Metabox_View(
-			Inpsyde_Nonce_Validator_Factory::create(
-				"save_translation_of_post_{$post->ID}_for_site_$blog_id",
-				$current_blog_id
-			)
+		$nonce_validator = Mlp_Nonce_Validator_Factory::create(
+			"save_translation_of_post_{$post->ID}_for_site_$blog_id",
+			$current_blog_id
 		);
+
+		$view = new Mlp_Translation_Metabox_View( $nonce_validator );
 
 		add_meta_box(
 			"inpsyde_multilingual_$blog_id",

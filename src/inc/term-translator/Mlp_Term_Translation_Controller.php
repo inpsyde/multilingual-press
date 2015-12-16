@@ -41,7 +41,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		$this->content_relations = $content_relations;
 
-		$this->nonce = Inpsyde_Nonce_Validator_Factory::create( $this->get_nonce_action(), get_current_blog_id() );
+		$this->nonce = Mlp_Nonce_Validator_Factory::create( $this->get_nonce_action(), get_current_blog_id() );
 	}
 
 	/**

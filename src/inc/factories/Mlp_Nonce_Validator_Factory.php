@@ -3,7 +3,7 @@
 /**
  * Static factory for Nonce Validator objects.
  */
-class Inpsyde_Nonce_Validator_Factory {
+class Mlp_Nonce_Validator_Factory {
 
 	/**
 	 * Creates a new Nonce Validator object.
