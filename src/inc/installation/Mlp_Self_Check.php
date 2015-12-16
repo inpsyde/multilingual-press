@@ -84,8 +84,8 @@ class Mlp_Self_Check {
 
 		$check = new Mlp_Requirements_Check(
 			new Mlp_Install_Requirements(),
-			new Mlp_Semantic_Version_Number( $php_version ),
-			new Mlp_Semantic_Version_Number( $wp_version ),
+			Mlp_Semantic_Version_Number_Factory::create( $php_version ),
+			Mlp_Semantic_Version_Number_Factory::create( $wp_version ),
 			$this->plugin_file
 		);
 
