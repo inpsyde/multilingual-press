@@ -291,7 +291,7 @@ class Mlp_Duplicate_Blogs {
 					`ml_elementid`,
 					`ml_type`
 				)
-				SELECT $source_blog_id, `ID`, $blog, ID, `post_type`
+				SELECT $source_blog_id, `ID`, $blog, ID, 'post'
 					FROM {$this->wpdb->posts}
 					WHERE `post_status` IN('publish', 'future', 'draft', 'pending', 'private')"
 			);
