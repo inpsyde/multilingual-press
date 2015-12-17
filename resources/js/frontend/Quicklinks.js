@@ -1,11 +1,3 @@
-(function() {
-	'use strict';
-
-	window.MultilingualPress = function() {
-		return this;
-	};
-})();
-
 /* global MultilingualPress */
 (function( $ ) {
 	'use strict';
