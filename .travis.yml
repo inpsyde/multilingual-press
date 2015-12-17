@@ -1,6 +1,7 @@
 language: php
 
 php:
+  - 5.3.3
   - 5.3
   - 5.4
   - 5.5
@@ -12,13 +13,16 @@ php:
 sudo: false
 
 matrix:
+  fast_finish: true
   allow_failures:
     - php: hhvm
     - php: nightly
 
-before_script:
+before_install:
   - composer self-update
-  - composer install --no-progress --prefer-source
+
+install:
+  - composer dump-autoload --no-dev
 # TODO: Fix JavaScript, then use JSCS and JSHint.
 #  - npm install -g jscs
 #  - npm install -g jshint
@@ -27,8 +31,12 @@ script:
 # TODO: Fix JavaScript, then use JSCS and JSHint.
 #  - jshint src
 #  - jscs src
-  - find src \( -name '*.php' \) -exec php -lf {} \;
+  - find src \( -name '*.php' \) -exec php -l {} \;
   - phpunit
 
 notifications:
-  slack: inpsyde:Qr1HAtG5koIbTu0nnwWYofSj
+  slack:
+    rooms: inpsyde:Qr1HAtG5koIbTu0nnwWYofSj
+    on_start: never
+    on_failure: always
+    on_success: change
