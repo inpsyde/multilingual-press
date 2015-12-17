@@ -34,6 +34,8 @@ class Mlp_New_Site_View {
 
 		$languages = $this->language_api->get_db()->get_items( array( 'page' => -1 ) );
 
+		$default_language = $this->get_default_language();
+
 		ob_start();
 		?>
 		<h3>MultilingualPress</h3>
@@ -56,7 +58,9 @@ class Mlp_New_Site_View {
 							if ( empty ( $language->http_name ) )
 								continue;
 
-							echo '<option value="' . esc_attr( $language->http_name )  . '">'
+							$selected = selected( $default_language, $language->http_name, false );
+
+							echo '<option value="' . esc_attr( $language->http_name ) . '" ' . $selected . '>'
 								. $language->english_name . '/' . $language->native_name
 								. '</option>';
 						}
@@ -155,4 +159,19 @@ class Mlp_New_Site_View {
 		<?php
 	}
 
+	/**
+	 * Returns the default language in the format that MultilingualPress's language select requires (e.g., de_DE).
+	 *
+	 * @return string
+	 */
+	private function get_default_language() {
+
+		$default_language = get_site_option( 'WPLANG' );
+		$available_languages = get_available_languages();
+		if ( in_array( $default_language, $available_languages ) ) {
+			return str_replace( '_', '-', $default_language );
+		} else {
+			return 'en-US';
+		}
+	}
 }
