@@ -1,4 +1,13 @@
-;( function( $ ) {
+(function() {
+	'use strict';
+
+	window.MultilingualPress = function() {
+		return this;
+	};
+})();
+
+// TODO: Refactor the following ... mess.
+( function( $ ) {
 	"use strict";
 
 	var multilingualPress = {
