@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the MultilingualPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: MultilingualPress 2.3.1\n"
+"Project-Id-Version: MultilingualPress 2.3.2\n"
 "Report-Msgid-Bugs-To: https://github.com/inpsyde/multilingual-press/issues\n"
-"POT-Creation-Date: 2015-12-07 17:25:13+00:00\n"
+"POT-Creation-Date: 2015-12-17 10:07:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -64,39 +64,39 @@ msgstr ""
 msgid "Copy source post"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:105
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:106
 msgid "Enter name here"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:112
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:113
 msgid "Post Name:"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:142
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:143
 msgid "Enter excerpt here"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:149
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:150
 msgid "Post Excerpt:"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:210
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:211
 msgid "Copy the featured image of the source post."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:212
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:213
 msgid "Overwrites an existing featured image in the target post."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:245
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:246
 msgid "Change taxonomies"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:327
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:328
 msgid "Enter title here"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:431
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:432
 msgid ""
 "The remote post is trashed. You are not able to edit it here. If you want "
 "to, restore the remote post. Also mind the options below."

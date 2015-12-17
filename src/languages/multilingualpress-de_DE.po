@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the MultilingualPress package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-12-05 15:05:45+0000\n"
+"PO-Revision-Date: 2015-12-14 15:02:44+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,11 +37,11 @@ msgstr "Bitte wähle einen Post aus."
 msgid "Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites."
 msgstr "Erstelle ein schnelles Übersetzungsnetzwerk basierend auf WordPress Multisite. Nutze für jede Sprache eine separate Seite, und verbinde den Inhalt über eine schlanke Benutzeroberfläche. Verwende ein anpassbares Widget und verlinke zu allen Seiten."
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:105
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:106
 msgid "Enter name here"
 msgstr "Postnamen hier eingeben"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:142
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:143
 msgid "Enter excerpt here"
 msgstr "Auszug hier eingeben"
 
@@ -65,11 +65,11 @@ msgstr "Zeige Flagge"
 msgid "No terms found."
 msgstr "Keine Terme gefunden."
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:112
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:113
 msgid "Post Name:"
 msgstr "Postname:"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:149
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:150
 msgid "Post Excerpt:"
 msgstr "Auszug:"
 
@@ -273,7 +273,7 @@ msgstr "Unten rechts"
 msgid "Change relationship"
 msgstr "Beziehung ändern"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:245
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:246
 msgid "Change taxonomies"
 msgstr "Taxonomien ändern"
 
@@ -331,11 +331,11 @@ msgstr "Gehe zur vorherigen Seite"
 msgid "HTTP"
 msgstr "HTTP"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:327
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:328
 msgid "Enter title here"
 msgstr "Titel hier eingeben"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:431
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:432
 msgid "The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below."
 msgstr "Der verwandte Eintrag ist im Papierkorb. Du kannst diesen entweder wiederherstellen oder die Beziehung ändern."
 
@@ -577,10 +577,10 @@ msgstr "Custom-Posttype-Übersetzer"
 msgid "No custom post type found."
 msgstr "Keine eigenen Posttypen gefunden"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:210
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:211
 msgid "Copy the featured image of the source post."
 msgstr "Kopiere das Beitragsbild des Ursprungsbeitrages."
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:212
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:213
 msgid "Overwrites an existing featured image in the target post."
 msgstr "Überschreibt ein bestehendes Beitragsbild in der Übersetzung."

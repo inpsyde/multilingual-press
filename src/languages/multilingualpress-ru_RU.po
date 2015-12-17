@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the MultilingualPress package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-07-02 15:37:15+0000\n"
+"PO-Revision-Date: 2015-12-14 15:28:06+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,11 +37,11 @@ msgstr ""
 msgid "Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:105
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:106
 msgid "Enter name here"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:142
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:143
 msgid "Enter excerpt here"
 msgstr ""
 
@@ -65,11 +65,11 @@ msgstr ""
 msgid "No terms found."
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:112
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:113
 msgid "Post Name:"
 msgstr ""
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:149
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:150
 msgid "Post Excerpt:"
 msgstr ""
 
@@ -273,7 +273,7 @@ msgstr "Низ право"
 msgid "Change relationship"
 msgstr "Изменить связь"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:245
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:246
 msgid "Change taxonomies"
 msgstr "Изменить таксономии"
 
@@ -331,11 +331,11 @@ msgstr "Прейти к предыдущей странице"
 msgid "HTTP"
 msgstr "HTTP"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:327
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:328
 msgid "Enter title here"
 msgstr "Введите заголовок"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:431
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:432
 msgid "The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below."
 msgstr "Подключенная запись удалена. Вы не можете редактировать ее здесь. Если вы хотите восстановить подключенную запись. Также выберите опции ниже."
 
@@ -579,10 +579,10 @@ msgstr "Переводчик произвольных типов записей"
 msgid "No custom post type found."
 msgstr "Произвольные типы записей ненайдены"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:210
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:211
 msgid "Copy the featured image of the source post."
 msgstr "Копировать миниатюру основной записи"
 
-#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:212
+#: inc/advanced-translator/Mlp_Advanced_Translator_View.php:213
 msgid "Overwrites an existing featured image in the target post."
 msgstr "Перезаписать существующие миниатюры в целевую запись"
