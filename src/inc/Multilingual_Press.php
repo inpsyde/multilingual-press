@@ -174,7 +174,10 @@ class Multilingual_Press {
 		/** @type Mlp_Assets $assets */
 		$assets = $this->plugin_data->get( 'assets' );
 
-		$assets->add( 'mlp-admin', 'admin.js', array( 'jquery' ), array(
+		$assets->add( 'mlp-admin', 'admin.js', array( 'backbone' ), array(
+			'mlpSettings' => array(
+				'adminUrl' => esc_url( parse_url( admin_url(), PHP_URL_PATH ) ),
+			),
 			'mlpRelationshipControlL10n' => array(
 				'noPostSelected'           => __( 'Please select a post.', 'multilingual-press' ),
 				'unsavedPostRelationships' => __(

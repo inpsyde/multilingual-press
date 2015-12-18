@@ -1,19 +1,62 @@
-(function() {
+/* global Backbone, mlpSettings */
+(function( $ ) {
 	'use strict';
 
-	window.MultilingualPress = function() {
+	var MultilingualPressRouter = Backbone.Router.extend( {} );
 
-		return this;
+	var MultilingualPress = function() {
+		var Router = new MultilingualPressRouter(),
+			Modules = [],
+			Views = [];
+
+		var initializeModules = function() {
+			$.each( Modules, function( index, Module ) {
+				Router.route( Module.route, Module.name, function() {
+					Views[ Module.name ] = new Module.callback();
+				} );
+			} );
+		};
+
+		var startHistory = function() {
+			Backbone.history.start( {
+				root: mlpSettings.adminUrl,
+				pushState: true,
+				hashChange: false
+			} );
+		};
+
+		return {
+			Views: Views,
+
+			registerModule: function( route, name, Module ) {
+				if ( _.isFunction( Module ) ) {
+					Modules.push( {
+						callback: Module,
+						name: name,
+						route: route
+					} );
+				}
+			},
+
+			initialize: function() {
+				initializeModules();
+				startHistory();
+			}
+		};
 	};
-})();
+
+	window.MultilingualPress = new MultilingualPress();
+
+	$( window.MultilingualPress.initialize );
+})( jQuery );
 
 // TODO: Refactor the following ... mess.
-( function( $ ) {
+(function( $ ) {
 	"use strict";
 
 	var multilingualPress = {
 
-		init     : function() {
+		init: function() {
 			var self = this;
 			self.setToggle();
 			/**
@@ -45,7 +88,7 @@
 
 				if ( $toggler.length ) {
 					$inputs.on( 'change', function() {
-						 $( $toggler.data( 'toggle_selector' ) ).toggle( $toggler.is( ':checked' ) );
+						$( $toggler.data( 'toggle_selector' ) ).toggle( $toggler.is( ':checked' ) );
 
 						return true;
 					} );
@@ -54,7 +97,7 @@
 		},
 
 		// Copy post buttons next to media buttons
-		copyPost : function( blogId ) {
+		copyPost: function( blogId ) {
 			// @formatter:off
 			var prefix = 'mlp_translation_data_' + blogId,
 				translationContent = tinyMCE.get( prefix + '_content' ),
@@ -91,4 +134,4 @@
 		multilingualPress.init();
 	} );
 
-} )( jQuery );
+})( jQuery );

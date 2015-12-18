@@ -2,52 +2,48 @@
 (function( $ ) {
 	'use strict';
 
-	var AddNewSite = {
+	var AddNewSite = Backbone.View.extend( {
 
-		/**
-		 * Initializes the AddNewSite module.
-		 */
-		initialize: function() {
+		// This is suboptimal, yes, but Core gives us no choice here. :(
+		el: '#wpbody-content form',
 
-			AddNewSite.initializeLanguages();
-
-			AddNewSite.initializePlugins();
+		events: {
+			'change #site-language': 'adaptLanguage',
+			'change #inpsyde_multilingual_based': 'togglePluginsRow'
 		},
 
 		/**
-		 * Initializes the Languages part.
+		 * Initializes the TermTranslator module.
 		 */
-		initializeLanguages: function() {
+		initialize: function() {
 
-			AddNewSite.$language = $( '#inpsyde_multilingual_lang' );
+			// TODO: Template stuff...
 
-			AddNewSite.$siteLanguage = $( '#site-language' );
-			if ( AddNewSite.$siteLanguage.length ) {
-				AddNewSite.$siteLanguage.on( 'change', function() {
-
-					AddNewSite.adaptLanguage();
-				} );
-			}
+			// As soon as the additional admin page markup is injected via a template, setTimeout can be removed.
+			setTimeout( function() {
+				this.$language = $( '#inpsyde_multilingual_lang' );
+				this.$pluginsRow = $( '#blog_activate_plugins' ).closest( 'tr' );
+			}.bind( this ), 100 );
 		},
 
 		/**
 		 * Sets MultilingualPress's language select to the currently selected site language.
+		 * @param {Event} event - The change event of the site language select element.
 		 */
-		adaptLanguage: function() {
-
-			var language = AddNewSite.getSiteLanguage();
-			if ( AddNewSite.$language.find( '[value="' + language + '"]' ).length ) {
-				AddNewSite.$language.val( language );
+		adaptLanguage: function( event ) {
+			var language = this.getSiteLanguage( $( event.currentTarget ) );
+			if ( this.$language.find( '[value="' + language + '"]' ).length ) {
+				this.$language.val( language );
 			}
 		},
 
 		/**
 		 * Returns the selected site language.
+		 * @param {Object} $select - The site language select element.
 		 * @returns {string} - The selected site language.
 		 */
-		getSiteLanguage: function() {
-
-			var siteLanguage = AddNewSite.$siteLanguage.val();
+		getSiteLanguage: function( $select ) {
+			var siteLanguage = $select.val();
 			if ( siteLanguage ) {
 				return siteLanguage.replace( '_', '-' );
 			}
@@ -56,37 +52,14 @@
 		},
 
 		/**
-		 * Initializes the Plugins part.
+		 * Toggles the Plugins row according to the source site ID select element's value.
+		 * @param {Event} event - The change event of the source site ID select element.
 		 */
-		initializePlugins: function() {
+		togglePluginsRow: function( event ) {
 
-			AddNewSite.$sourceSiteID = $( '#inpsyde_multilingual_based' );
-
-			AddNewSite.$pluginsRow = $( '#blog_activate_plugins' ).closest( 'tr' );
-
-			if ( AddNewSite.$sourceSiteID.length && AddNewSite.$pluginsRow.length ) {
-				AddNewSite.$sourceSiteID.on( 'change', function() {
-
-					AddNewSite.togglePluginsRow( $( this ) );
-				} );
-			}
-		},
-
-		/**
-		 * Toggles the Plugins row according to the given select element's value.
-		 * @param {Object} $select - The select element.
-		 */
-		togglePluginsRow: function( $select ) {
-
-			AddNewSite.$pluginsRow.toggle( 0 < $select.val() );
+			this.$pluginsRow.toggle( 0 < $( event.currentTarget ).val() );
 		}
-	};
-
-	MultilingualPress.AddNewSite = AddNewSite;
-
-	$( function() {
-
-		// Parts of the Add New Site network admin page HTML are injected via JavaScript, so let's wait a while.
-		setTimeout( MultilingualPress.AddNewSite.initialize, 100 );
 	} );
+
+	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite );
 })( jQuery );

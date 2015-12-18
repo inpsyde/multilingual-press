@@ -1,19 +1,62 @@
-(function() {
+/* global Backbone, mlpSettings */
+(function( $ ) {
 	'use strict';
 
-	window.MultilingualPress = function() {
+	var MultilingualPressRouter = Backbone.Router.extend( {} );
 
-		return this;
+	var MultilingualPress = function() {
+		var Router = new MultilingualPressRouter(),
+			Modules = [],
+			Views = [];
+
+		var initializeModules = function() {
+			$.each( Modules, function( index, Module ) {
+				Router.route( Module.route, Module.name, function() {
+					Views[ Module.name ] = new Module.callback();
+				} );
+			} );
+		};
+
+		var startHistory = function() {
+			Backbone.history.start( {
+				root: mlpSettings.adminUrl,
+				pushState: true,
+				hashChange: false
+			} );
+		};
+
+		return {
+			Views: Views,
+
+			registerModule: function( route, name, Module ) {
+				if ( _.isFunction( Module ) ) {
+					Modules.push( {
+						callback: Module,
+						name: name,
+						route: route
+					} );
+				}
+			},
+
+			initialize: function() {
+				initializeModules();
+				startHistory();
+			}
+		};
 	};
-})();
+
+	window.MultilingualPress = new MultilingualPress();
+
+	$( window.MultilingualPress.initialize );
+})( jQuery );
 
 // TODO: Refactor the following ... mess.
-( function( $ ) {
+(function( $ ) {
 	"use strict";
 
 	var multilingualPress = {
 
-		init     : function() {
+		init: function() {
 			var self = this;
 			self.setToggle();
 			/**
@@ -45,7 +88,7 @@
 
 				if ( $toggler.length ) {
 					$inputs.on( 'change', function() {
-						 $( $toggler.data( 'toggle_selector' ) ).toggle( $toggler.is( ':checked' ) );
+						$( $toggler.data( 'toggle_selector' ) ).toggle( $toggler.is( ':checked' ) );
 
 						return true;
 					} );
@@ -54,7 +97,7 @@
 		},
 
 		// Copy post buttons next to media buttons
-		copyPost : function( blogId ) {
+		copyPost: function( blogId ) {
 			// @formatter:off
 			var prefix = 'mlp_translation_data_' + blogId,
 				translationContent = tinyMCE.get( prefix + '_content' ),
@@ -91,58 +134,54 @@
 		multilingualPress.init();
 	} );
 
-} )( jQuery );
+})( jQuery );
 
 /* global MultilingualPress */
 (function( $ ) {
 	'use strict';
 
-	var AddNewSite = {
+	var AddNewSite = Backbone.View.extend( {
 
-		/**
-		 * Initializes the AddNewSite module.
-		 */
-		initialize: function() {
+		// This is suboptimal, yes, but Core gives us no choice here. :(
+		el: '#wpbody-content form',
 
-			AddNewSite.initializeLanguages();
-
-			AddNewSite.initializePlugins();
+		events: {
+			'change #site-language': 'adaptLanguage',
+			'change #inpsyde_multilingual_based': 'togglePluginsRow'
 		},
 
 		/**
-		 * Initializes the Languages part.
+		 * Initializes the TermTranslator module.
 		 */
-		initializeLanguages: function() {
+		initialize: function() {
 
-			AddNewSite.$language = $( '#inpsyde_multilingual_lang' );
+			// TODO: Template stuff...
 
-			AddNewSite.$siteLanguage = $( '#site-language' );
-			if ( AddNewSite.$siteLanguage.length ) {
-				AddNewSite.$siteLanguage.on( 'change', function() {
-
-					AddNewSite.adaptLanguage();
-				} );
-			}
+			// As soon as the additional admin page markup is injected via a template, setTimeout can be removed.
+			setTimeout( function() {
+				this.$language = $( '#inpsyde_multilingual_lang' );
+				this.$pluginsRow = $( '#blog_activate_plugins' ).closest( 'tr' );
+			}.bind( this ), 100 );
 		},
 
 		/**
 		 * Sets MultilingualPress's language select to the currently selected site language.
+		 * @param {Event} event - The change event of the site language select element.
 		 */
-		adaptLanguage: function() {
-
-			var language = AddNewSite.getSiteLanguage();
-			if ( AddNewSite.$language.find( '[value="' + language + '"]' ).length ) {
-				AddNewSite.$language.val( language );
+		adaptLanguage: function( event ) {
+			var language = this.getSiteLanguage( $( event.currentTarget ) );
+			if ( this.$language.find( '[value="' + language + '"]' ).length ) {
+				this.$language.val( language );
 			}
 		},
 
 		/**
 		 * Returns the selected site language.
+		 * @param {Object} $select - The site language select element.
 		 * @returns {string} - The selected site language.
 		 */
-		getSiteLanguage: function() {
-
-			var siteLanguage = AddNewSite.$siteLanguage.val();
+		getSiteLanguage: function( $select ) {
+			var siteLanguage = $select.val();
 			if ( siteLanguage ) {
 				return siteLanguage.replace( '_', '-' );
 			}
@@ -151,117 +190,89 @@
 		},
 
 		/**
-		 * Initializes the Plugins part.
+		 * Toggles the Plugins row according to the source site ID select element's value.
+		 * @param {Event} event - The change event of the source site ID select element.
 		 */
-		initializePlugins: function() {
+		togglePluginsRow: function( event ) {
 
-			AddNewSite.$sourceSiteID = $( '#inpsyde_multilingual_based' );
-
-			AddNewSite.$pluginsRow = $( '#blog_activate_plugins' ).closest( 'tr' );
-
-			if ( AddNewSite.$sourceSiteID.length && AddNewSite.$pluginsRow.length ) {
-				AddNewSite.$sourceSiteID.on( 'change', function() {
-
-					AddNewSite.togglePluginsRow( $( this ) );
-				} );
-			}
-		},
-
-		/**
-		 * Toggles the Plugins row according to the given select element's value.
-		 * @param {Object} $select - The select element.
-		 */
-		togglePluginsRow: function( $select ) {
-
-			AddNewSite.$pluginsRow.toggle( 0 < $select.val() );
+			this.$pluginsRow.toggle( 0 < $( event.currentTarget ).val() );
 		}
-	};
-
-	MultilingualPress.AddNewSite = AddNewSite;
-
-	$( function() {
-
-		// Parts of the Add New Site network admin page HTML are injected via JavaScript, so let's wait a while.
-		setTimeout( MultilingualPress.AddNewSite.initialize, 100 );
 	} );
+
+	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite );
 })( jQuery );
 
 /* global MultilingualPress */
 (function( $ ) {
 	'use strict';
 
-	var TermTranslator = {
+	var TermTranslator = Backbone.View.extend( {
+		el: '.mlp_term_selections',
+
+		events: {
+			'change select': 'propagateSelectedTerm'
+		},
 
 		/**
 		 * Initializes the TermTranslator module.
 		 */
 		initialize: function() {
-
-			TermTranslator.$table = $( '.mlp_term_selections' );
-			if ( TermTranslator.$table.length ) {
-				TermTranslator.$selects = TermTranslator.$table.find( 'select' );
-
-				TermTranslator.$table.on( 'change', 'select', function() {
-
-					TermTranslator.propagateSelectedTerm( $( this ) );
-				} );
+			if ( this.$el.length ) {
+				this.$selects = this.$el.find( 'select' );
 			}
 		},
 
 		/**
-		 * Propagates the current value of the given select element to all other term select elements.
-		 * @param {Object} $select - The select element.
+		 * Propagates the value of a term select element to all other term select elements.
+		 * @param {Event} event - The change event of a select element.
 		 */
-		propagateSelectedTerm: function( $select ) {
+		propagateSelectedTerm: function( event ) {
+			var $select,
+				relation;
 
-			var relation;
-
-			if ( TermTranslator.isPropagating ) {
+			if ( this.isPropagating ) {
 				return;
 			}
 
-			TermTranslator.isPropagating = true;
+			this.isPropagating = true;
 
-			relation = TermTranslator.getSelectedRelation( $select );
+			$select = $( event.currentTarget );
+
+			relation = this.getSelectedRelation( $select );
 			if ( '' !== relation ) {
-				TermTranslator.$selects.not( $select ).each( function( index, element ) {
-
-					TermTranslator.selectTerm( $( element ), relation );
-				} );
+				this.$selects.not( $select ).each( function( index, element ) {
+					this.selectTerm( $( element ), relation );
+				}.bind( this ) );
 			}
 
-			TermTranslator.isPropagating = false;
+			this.isPropagating = false;
 		},
 
 		/**
 		 * Returns the relation of the given select element (i.e., its currently selected option).
-		 * @param {Object} $select - The select element.
-		 * @returns {string} - The relation.
+		 * @param {Object} $select - A select element.
+		 * @returns {string} - The relation of the selected term.
 		 */
 		getSelectedRelation: function( $select ) {
-
 			return $select.find( 'option:selected' ).data( 'relation' ) || '';
 		},
 
 		/**
-		 * Sets the given select element's value to those of the option with the given relation, or the first option.
-		 * @param {Object} $select - The select element.
-		 * @param {string} relation - The relation.
+		 * Sets the given select element's value to that of the option with the given relation, or the first option.
+		 * @param {Object} $select - A select element.
+		 * @param {string} relation - The relation of a term.
 		 */
 		selectTerm: function( $select, relation ) {
-
 			var $option = $select.find( 'option[data-relation="' + relation + '"]' );
 			if ( $option.length ) {
 				$select.val( $option.val() );
-			} else if ( TermTranslator.getSelectedRelation( $select ) ) {
+			} else if ( this.getSelectedRelation( $select ) ) {
 				$select.val( $select.find( 'option' ).first().val() );
 			}
 		}
-	};
+	} );
 
-	MultilingualPress.TermTranslator = TermTranslator;
-
-	$( MultilingualPress.TermTranslator.initialize );
+	MultilingualPress.registerModule( 'edit-tags.php', 'TermTranslator', TermTranslator );
 })( jQuery );
 
 ;( function( $ ) {
