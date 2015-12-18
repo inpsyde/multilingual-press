@@ -2,6 +2,7 @@
 	'use strict';
 
 	window.MultilingualPress = function() {
+
 		return this;
 	};
 })();
@@ -97,49 +98,82 @@
 	'use strict';
 
 	var AddNewSite = {
+
+		/**
+		 * Initializes the AddNewSite module.
+		 */
 		initialize: function() {
+
 			AddNewSite.initializeLanguages();
 
 			AddNewSite.initializePlugins();
 		},
 
+		/**
+		 * Initializes the Languages part.
+		 */
 		initializeLanguages: function() {
+
 			AddNewSite.$language = $( '#inpsyde_multilingual_lang' );
 
 			AddNewSite.$siteLanguage = $( '#site-language' );
 			if ( AddNewSite.$siteLanguage.length ) {
-				AddNewSite.$siteLanguage.on( 'change', AddNewSite.adaptLanguage );
+				AddNewSite.$siteLanguage.on( 'change', function() {
+
+					AddNewSite.adaptLanguage();
+				} );
 			}
 		},
 
+		/**
+		 * Sets MultilingualPress's language select to the currently selected site language.
+		 */
 		adaptLanguage: function() {
-			var language = AddNewSite.getLanguage();
+
+			var language = AddNewSite.getSiteLanguage();
 			if ( AddNewSite.$language.find( '[value="' + language + '"]' ).length ) {
 				AddNewSite.$language.val( language );
 			}
 		},
 
-		getLanguage: function() {
-			var language = AddNewSite.$siteLanguage.val();
-			if ( ! language ) {
-				return 'en-US';
+		/**
+		 * Returns the selected site language.
+		 * @returns {string} - The selected site language.
+		 */
+		getSiteLanguage: function() {
+
+			var siteLanguage = AddNewSite.$siteLanguage.val();
+			if ( siteLanguage ) {
+				return siteLanguage.replace( '_', '-' );
 			}
 
-			return language.replace( '_', '-' );
+			return 'en-US';
 		},
 
+		/**
+		 * Initializes the Plugins part.
+		 */
 		initializePlugins: function() {
+
 			AddNewSite.$sourceSiteID = $( '#inpsyde_multilingual_based' );
 
 			AddNewSite.$pluginsRow = $( '#blog_activate_plugins' ).closest( 'tr' );
 
 			if ( AddNewSite.$sourceSiteID.length && AddNewSite.$pluginsRow.length ) {
-				AddNewSite.$sourceSiteID.on( 'change', AddNewSite.togglePluginsRow );
+				AddNewSite.$sourceSiteID.on( 'change', function() {
+
+					AddNewSite.togglePluginsRow( $( this ) );
+				} );
 			}
 		},
 
-		togglePluginsRow: function() {
-			AddNewSite.$pluginsRow.toggle( 0 < $( this ).val() );
+		/**
+		 * Toggles the Plugins row according to the given select element's value.
+		 * @param {Object} $select - The select element.
+		 */
+		togglePluginsRow: function( $select ) {
+
+			AddNewSite.$pluginsRow.toggle( 0 < $select.val() );
 		}
 	};
 
@@ -150,6 +184,84 @@
 		// Parts of the Add New Site network admin page HTML are injected via JavaScript, so let's wait a while.
 		setTimeout( MultilingualPress.AddNewSite.initialize, 100 );
 	} );
+})( jQuery );
+
+/* global MultilingualPress */
+(function( $ ) {
+	'use strict';
+
+	var TermTranslator = {
+
+		/**
+		 * Initializes the TermTranslator module.
+		 */
+		initialize: function() {
+
+			TermTranslator.$table = $( '.mlp_term_selections' );
+			if ( TermTranslator.$table.length ) {
+				TermTranslator.$selects = TermTranslator.$table.find( 'select' );
+
+				TermTranslator.$table.on( 'change', 'select', function() {
+
+					TermTranslator.propagateSelectedTerm( $( this ) );
+				} );
+			}
+		},
+
+		/**
+		 * Propagates the current value of the given select element to all other term select elements.
+		 * @param {Object} $select - The select element.
+		 */
+		propagateSelectedTerm: function( $select ) {
+
+			var relation;
+
+			if ( TermTranslator.isPropagating ) {
+				return;
+			}
+
+			TermTranslator.isPropagating = true;
+
+			relation = TermTranslator.getSelectedRelation( $select );
+			if ( '' !== relation ) {
+				TermTranslator.$selects.not( $select ).each( function( index, element ) {
+
+					TermTranslator.selectTerm( $( element ), relation );
+				} );
+			}
+
+			TermTranslator.isPropagating = false;
+		},
+
+		/**
+		 * Returns the relation of the given select element (i.e., its currently selected option).
+		 * @param {Object} $select - The select element.
+		 * @returns {string} - The relation.
+		 */
+		getSelectedRelation: function( $select ) {
+
+			return $select.find( 'option:selected' ).data( 'relation' ) || '';
+		},
+
+		/**
+		 * Sets the given select element's value to those of the option with the given relation, or the first option.
+		 * @param {Object} $select - The select element.
+		 * @param {string} relation - The relation.
+		 */
+		selectTerm: function( $select, relation ) {
+
+			var $option = $select.find( 'option[data-relation="' + relation + '"]' );
+			if ( $option.length ) {
+				$select.val( $option.val() );
+			} else if ( TermTranslator.getSelectedRelation( $select ) ) {
+				$select.val( $select.find( 'option' ).first().val() );
+			}
+		}
+	};
+
+	MultilingualPress.TermTranslator = TermTranslator;
+
+	$( MultilingualPress.TermTranslator.initialize );
 })( jQuery );
 
 ;( function( $ ) {
@@ -188,6 +300,26 @@
 	} );
 
 } )( jQuery );
+
+/* global MultilingualPress */
+(function( $ ) {
+	'use strict';
+
+	var NavMenus = {
+
+		/**
+		 * Initializes the NavMenus module.
+		 */
+		initialize: function() {
+
+			// TODO: Implement.
+		}
+	};
+
+	MultilingualPress.NavMenus = NavMenus;
+
+	$( MultilingualPress.NavMenus.initialize );
+})( jQuery );
 
 ;( function( $ ) {
 	"use strict";
@@ -413,56 +545,3 @@
 	} );
 
 } )( jQuery, mlpRelationshipControlL10n );
-
-;( function( $ ) {
-	"use strict";
-
-	var term_translator = {
-
-		init: function() {
-			this.isPropagating = false;
-
-			this.propagate_term_selection();
-		},
-
-		propagate_term_selection: function() {
-			var $table = $( '.mlp_term_selections' );
-
-			if ( $table.length ) {
-				var $selects = $table.find( 'select' );
-
-				$table.on( 'change', 'select', function() {
-					if ( term_translator.isPropagating ) {
-						return;
-					}
-
-					term_translator.isPropagating = true;
-
-					var $this = $( this ),
-						relation = $this.find( '[value="' + $this.val() + '"]' ).data( 'relation' ) || '';
-
-					$selects.not( $this ).each( function() {
-						var $this = $( this ),
-							$option = $this.find( 'option[data-relation="' + relation + '"]' ),
-							currentRelation = $this.find( '[value="' + $this.val() + '"]' ).data( 'relation' ) || '';
-
-						if ( relation !== '' ) {
-							if ( $option.length ) {
-								$this.val( $option.val() );
-							} else if ( currentRelation !== '' ) {
-								$this.val( $this.find( 'option' ).first().val() );
-							}
-						}
-					} );
-
-					term_translator.isPropagating = false;
-				} );
-			}
-		}
-	};
-
-	$( function() {
-		term_translator.init();
-	} );
-
-} )( jQuery );

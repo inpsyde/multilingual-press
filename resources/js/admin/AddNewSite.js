@@ -3,49 +3,82 @@
 	'use strict';
 
 	var AddNewSite = {
+
+		/**
+		 * Initializes the AddNewSite module.
+		 */
 		initialize: function() {
+
 			AddNewSite.initializeLanguages();
 
 			AddNewSite.initializePlugins();
 		},
 
+		/**
+		 * Initializes the Languages part.
+		 */
 		initializeLanguages: function() {
+
 			AddNewSite.$language = $( '#inpsyde_multilingual_lang' );
 
 			AddNewSite.$siteLanguage = $( '#site-language' );
 			if ( AddNewSite.$siteLanguage.length ) {
-				AddNewSite.$siteLanguage.on( 'change', AddNewSite.adaptLanguage );
+				AddNewSite.$siteLanguage.on( 'change', function() {
+
+					AddNewSite.adaptLanguage();
+				} );
 			}
 		},
 
+		/**
+		 * Sets MultilingualPress's language select to the currently selected site language.
+		 */
 		adaptLanguage: function() {
-			var language = AddNewSite.getLanguage();
+
+			var language = AddNewSite.getSiteLanguage();
 			if ( AddNewSite.$language.find( '[value="' + language + '"]' ).length ) {
 				AddNewSite.$language.val( language );
 			}
 		},
 
-		getLanguage: function() {
-			var language = AddNewSite.$siteLanguage.val();
-			if ( ! language ) {
-				return 'en-US';
+		/**
+		 * Returns the selected site language.
+		 * @returns {string} - The selected site language.
+		 */
+		getSiteLanguage: function() {
+
+			var siteLanguage = AddNewSite.$siteLanguage.val();
+			if ( siteLanguage ) {
+				return siteLanguage.replace( '_', '-' );
 			}
 
-			return language.replace( '_', '-' );
+			return 'en-US';
 		},
 
+		/**
+		 * Initializes the Plugins part.
+		 */
 		initializePlugins: function() {
+
 			AddNewSite.$sourceSiteID = $( '#inpsyde_multilingual_based' );
 
 			AddNewSite.$pluginsRow = $( '#blog_activate_plugins' ).closest( 'tr' );
 
 			if ( AddNewSite.$sourceSiteID.length && AddNewSite.$pluginsRow.length ) {
-				AddNewSite.$sourceSiteID.on( 'change', AddNewSite.togglePluginsRow );
+				AddNewSite.$sourceSiteID.on( 'change', function() {
+
+					AddNewSite.togglePluginsRow( $( this ) );
+				} );
 			}
 		},
 
-		togglePluginsRow: function() {
-			AddNewSite.$pluginsRow.toggle( 0 < $( this ).val() );
+		/**
+		 * Toggles the Plugins row according to the given select element's value.
+		 * @param {Object} $select - The select element.
+		 */
+		togglePluginsRow: function( $select ) {
+
+			AddNewSite.$pluginsRow.toggle( 0 < $select.val() );
 		}
 	};
 

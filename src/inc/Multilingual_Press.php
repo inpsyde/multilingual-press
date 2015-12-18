@@ -174,16 +174,15 @@ class Multilingual_Press {
 		/** @type Mlp_Assets $assets */
 		$assets = $this->plugin_data->get( 'assets' );
 
-		$l10n = array(
+		$assets->add( 'mlp-admin', 'admin.js', array( 'jquery' ), array(
 			'mlpRelationshipControlL10n' => array(
+				'noPostSelected'           => __( 'Please select a post.', 'multilingual-press' ),
 				'unsavedPostRelationships' => __(
 					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
 					'multilingual-press'
 				),
-				'noPostSelected'           => __( 'Please select a post.', 'multilingual-press' ),
 			),
-		);
-		$assets->add( 'mlp_admin_js', 'admin.js', array( 'jquery' ), $l10n );
+		) );
 
 		$assets->add( 'mlp_admin_css', 'admin.css' );
 

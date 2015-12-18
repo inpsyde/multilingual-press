@@ -131,7 +131,7 @@ class Mlp_Translation_Metabox {
 		}
 
 		$assets = $this->plugin_data->get( 'assets' );
-		$assets->provide( array( 'mlp_admin_js', 'mlp_admin_css' ) );
+		$assets->provide( array( 'mlp-admin', 'mlp_admin_css' ) );
 	}
 
 	/**

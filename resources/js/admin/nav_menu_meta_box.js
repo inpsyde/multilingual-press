@@ -1,3 +1,23 @@
+/* global MultilingualPress */
+(function( $ ) {
+	'use strict';
+
+	var NavMenus = {
+
+		/**
+		 * Initializes the NavMenus module.
+		 */
+		initialize: function() {
+
+			// TODO: Implement.
+		}
+	};
+
+	MultilingualPress.NavMenus = NavMenus;
+
+	$( MultilingualPress.NavMenus.initialize );
+})( jQuery );
+
 ;( function( $ ) {
 	"use strict";
 
