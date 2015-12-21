@@ -1,13 +1,12 @@
 # MultilingualPress
-
 [![Latest Stable Version](https://poser.pugx.org/inpsyde/multilingual-press/v/stable)](https://packagist.org/packages/inpsyde/multilingual-press)
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
+[![Build Status](https://travis-ci.org/inpsyde/multilingual-press.svg?branch=master)](http://travis-ci.org/inpsyde/multilingual-press)
 [![License](https://poser.pugx.org/inpsyde/multilingual-press/license)](https://packagist.org/packages/inpsyde/multilingual-press)
 
 Create a fast translation network on WordPress multisite.
 
 ## Description
-
 Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
 to link to all sites.
 
@@ -26,7 +25,6 @@ You can follow our progress and development notices on our
 [developer blog](http://make.marketpress.com/multilingualpress/).
 
 ## Features
-
 - Set up unlimited site relationships in the site manager.
 - Language Manager with 174 editable languages.
 - Edit all translations for a post from the original post editor without the need to switch sites.
@@ -50,25 +48,23 @@ without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
 
 ## Premium Support
-
 We also offer [premium support](http://marketpress.com/product/multilingual-press-pro/) to save your time.
 You get direct help from the developers of the plugin-and support the development.
 
 ## WPML to MultilingualPress
-
 If you would like to switch from the WPML plugin to MultilingualPress, you can use the helping hands of
 [WPML to MultilingualPress](https://wordpress.org/plugins/wpml-to-multilingualpress/). This plugin converts posts from
 an existing WPML multilingual site via XLIFF export/import for MultilingualPress.
 
-## Installation and prerequisites
-
+## Installation
 ### Requirements
-
-* WordPress Multisite 4.0+.
+* WordPress multisite 4.0+.
 * PHP 5.2.4, newer PHP versions will work faster.
 
-### Installation
+If you're new to WordPress multisite, you might find our [WordPress multisite installation
+tutorial](https://marketpress.com/2015/wordpress-multisite-installation/) helpful.
 
+### Installation
 Use the installer via back-end of your install or ...
 
 1. Unpack the download-package.
@@ -78,23 +74,18 @@ Use the installer via back-end of your install or ...
 need at least two sites with an assigned language.
 
 ## Frequently Asked Questions
-
 ### Will MultilingualPress translate my content?
-
 No, it will not. It manages relationships between sites and translations, but it doesn't change the content.
 
-### Where can I get additional language files?
-
-You can find all official translation files in the according
-[GlotPress project](http://translate.marketpress.com/projects/plugins/multilingualpress).
-
 ### Can I use MultilingualPress on a single-site installation?
-
 That would require changes to the way WordPress stores post content. Other plugins do that; we think this is wrong,
 because it creates a lock-in: you would lose access to your content after the plugin deactivation.
 
-## Screenshots
+### I'm new to WordPress multisite. Are there any tutorials to get me started?
+Yes, just have a look at our [WordPress multisite installation
+tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 
+## Screenshots
 ![Screenshot 1](assets/screenshot-1.png)  
 New columns in the site list table for the _Relationships_ (i.e., connections with other sites) and the _Site Language_.
 
@@ -131,6 +122,13 @@ New _Language Switcher_ widget.
 ![Screenshot 12](assets/screenshot-12.png)  
 Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
-## Changelog
+## Crafted by Inpsyde
+The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006. And yes, we also run that
+[marketplace for premium WordPress plugins and themes](https://marketpress.com).
 
+## License
+Good news, this plugin is free for everyone! Since it's released under [GPLv3](LICENSE), you can use it free of charge
+on your personal or commercial website.
+
+## Changelog
 [Changelog](CHANGELOG.md)

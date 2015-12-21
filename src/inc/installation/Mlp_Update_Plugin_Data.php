@@ -100,6 +100,9 @@ class Mlp_Update_Plugin_Data {
 			$installer = new Mlp_Db_Installer( new Mlp_Site_Relations_Schema( $this->wpdb ) );
 			$installer->install();
 			$this->import_site_relations();
+		}
+
+		if ( version_compare( $last_version, '2.3.2', '<' ) ) {
 			$this->update_type_column( new Mlp_Content_Relations_Schema( $this->wpdb ) );
 		}
 
@@ -143,7 +146,7 @@ class Mlp_Update_Plugin_Data {
 
 		$table = $linked->get_table_name();
 		$this->wpdb->query(
-			'UPDATE ' . $table . ' set ml_type = "post" WHERE ml_type != "term"'
+			'UPDATE ' . $table . ' set ml_type = "post" WHERE ml_type NOT IN("post", "term")'
 		);
 	}
 

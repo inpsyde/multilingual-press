@@ -59,11 +59,11 @@ class Mlp_Trasher {
 		/** @var Mlp_Module_Manager_Interface $module_manager */
 		$module_manager = $this->plugin_data->get( 'module_manager' );
 
-		$display_name = __( 'Trasher', 'multilingualpress' );
+		$display_name = __( 'Trasher', 'multilingual-press' );
 
 		$description = __(
 			'This module provides a new post meta and checkbox to trash the posts. If you enable the checkbox and move a post to the trash MultilingualPress also will trash the linked posts.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 
 		return $module_manager->register(
@@ -98,7 +98,7 @@ class Mlp_Trasher {
 		<div class="misc-pub-section curtime misc-pub-section-last">
 			<input type="hidden" name="trasher_box" value="1" />
 			<input type="checkbox" id="trash_the_other_posts" name="_trash_the_other_posts"<?php checked( 1, $trash_the_other_posts ); ?> />
-			<label for="trash_the_other_posts"><?php _e( 'Send all the translations to trash when this post is trashed.', 'multilingualpress' ); ?></label>
+			<label for="trash_the_other_posts"><?php _e( 'Send all the translations to trash when this post is trashed.', 'multilingual-press' ); ?></label>
 
 		</div>
 		<?php

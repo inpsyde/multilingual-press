@@ -28,9 +28,9 @@ class Mlp_Widget extends WP_Widget {
 
 		$widget_ops = array(
 			'classname'   => self::$handle,
-			'description' => __( 'MultilingualPress Translations', 'multilingualpress' ),
+			'description' => __( 'MultilingualPress Translations', 'multilingual-press' ),
 		);
-		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingualpress' ), $widget_ops );
+		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingual-press' ), $widget_ops );
 	}
 
 	/**
@@ -80,23 +80,23 @@ class Mlp_Widget extends WP_Widget {
 		?>
 		<p>
 			<?php $title_id = $this->get_field_id( 'mlp_widget_title' ); ?>
-			<label for="<?php echo $title_id; ?>"><?php esc_html_e( 'Title', 'multilingualpress' ); ?></label><br />
+			<label for="<?php echo $title_id; ?>"><?php esc_html_e( 'Title', 'multilingual-press' ); ?></label><br />
 			<input class="widefat" type="text" id="<?php echo $title_id; ?>"
 				name="<?php echo $this->get_field_name( 'mlp_widget_title' ); ?>" value="<?php echo $title; ?>">
 		</p>
 		<p>
 			<?php $type_id = $this->get_field_id( 'mlp_widget_link_type' ); ?>
-			<label for="<?php echo $type_id; ?>"><?php _e( 'Link text', 'multilingualpress' ); ?></label>
+			<label for="<?php echo $type_id; ?>"><?php _e( 'Link text', 'multilingual-press' ); ?></label>
 			<select class="widefat" id="<?php echo $type_id; ?>"
 				name="<?php echo $this->get_field_name( 'mlp_widget_link_type' ); ?>" autocomplete="off">
 				<?php
 				$options = array(
-					'none'           => __( 'None', 'multilingualpress' ),
-					'native'         => __( 'Native name', 'multilingualpress' ),
-					'text'           => __( 'Custom name', 'multilingualpress' ),
-					'english'        => __( 'English name', 'multilingualpress' ),
-					'http'           => __( 'Language code', 'multilingualpress' ),
-					'language_short' => __( 'Language code (short)', 'multilingualpress' ),
+					'none'           => __( 'None', 'multilingual-press' ),
+					'native'         => __( 'Native name', 'multilingual-press' ),
+					'text'           => __( 'Custom name', 'multilingual-press' ),
+					'english'        => __( 'English name', 'multilingual-press' ),
+					'http'           => __( 'Language code', 'multilingual-press' ),
+					'language_short' => __( 'Language code (short)', 'multilingual-press' ),
 				);
 				foreach ( $options as $value => $text ) {
 					printf(
@@ -114,7 +114,7 @@ class Mlp_Widget extends WP_Widget {
 			<label for="<?php echo $display_flag_id; ?>">
 				<input type="checkbox" name="<?php echo $this->get_field_name( 'mlp_widget_display_flag' ); ?>"
 					id="<?php echo $display_flag_id; ?>" value="1" <?php checked( $display_flag, 1 ); ?> />
-				<?php _e( 'Show flag', 'multilingualpress' ); ?>
+				<?php _e( 'Show flag', 'multilingual-press' ); ?>
 			</label>
 		</p>
 		<p>
@@ -122,7 +122,7 @@ class Mlp_Widget extends WP_Widget {
 			<label for='<?php echo $show_blog_id; ?>'>
 				<input type="checkbox" name="<?php echo $this->get_field_name( 'mlp_widget_show_current_blog' ); ?>"
 					id="<?php echo $show_blog_id; ?>" value="1" <?php checked( $show_current_blog, 1 ); ?> />
-				<?php _e( 'Show current site', 'multilingualpress' ); ?>
+				<?php _e( 'Show current site', 'multilingual-press' ); ?>
 			</label>
 		</p>
 		<p>
@@ -131,18 +131,18 @@ class Mlp_Widget extends WP_Widget {
 				<input type="checkbox"
 					name="<?php echo $this->get_field_name( 'mlp_widget_toggle_view_on_translated_posts' ); ?>"
 					id="<?php echo $show_widget_id; ?>" value="1" <?php checked( $show_widget, 1 ); ?> />
-				<?php _e( 'Show links for translated content only.', 'multilingualpress' ); ?>
+				<?php _e( 'Show links for translated content only.', 'multilingual-press' ); ?>
 			</label>
 		</p>
 		<p>
 			<?php
 			if ( current_user_can( 'manage_network_options' ) ) {
 				echo sprintf(
-					__( 'Languages are sorted by <a href="%s">priority</a>.', 'multilingualpress' ),
+					__( 'Languages are sorted by <a href="%s">priority</a>.', 'multilingual-press' ),
 					network_admin_url( 'settings.php?page=language-manager' )
 				);
 			} else {
-				_e( 'Languages are sorted by priority.', 'multilingualpress' );
+				_e( 'Languages are sorted by priority.', 'multilingual-press' );
 			}
 			?>
 		</p>
@@ -241,7 +241,7 @@ class Mlp_Widget extends WP_Widget {
 	 *
 	 * @see  https://github.com/inpsyde/multilingual-press/issues/112
 	 *
-	 * @todo Eventually remove this, with version 2.6.0 at the earliest
+	 * @todo Eventually remove this, with version 2.6.0 at the earliest.
 	 *
 	 * @param array $instance Widget settings.
 	 *

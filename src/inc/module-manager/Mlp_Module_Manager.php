@@ -64,8 +64,12 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 
 		$slug = $module[ 'slug' ];
 
-		if ( ! isset ( $this->states[ $slug ] ) ) {
-			$this->states[ $slug ] = 'on';
+		if ( ! isset( $this->states[ $slug ] ) ) {
+			$state = 'off';
+			if ( ! isset( $module['state'] ) || 'off' !== $module['state'] ) {
+				$state = 'on';
+			}
+			$this->states[ $slug ] = $state;
 			$this->save();
 		}
 

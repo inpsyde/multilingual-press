@@ -112,6 +112,12 @@ class Mlp_Duplicate_Blogs {
 			);
 		}
 
+		if ( isset( $_POST['blog']['activate_plugins'] ) ) {
+			$this->activate_plugins();
+		} else {
+			$this->deactivate_plugins();
+		}
+
 		$this->update_admin_email( $current_admin_email );
 
 		// if an url was used in the old blog, we set it to this url to change all content elements
@@ -285,7 +291,7 @@ class Mlp_Duplicate_Blogs {
 					`ml_elementid`,
 					`ml_type`
 				)
-				SELECT $source_blog_id, `ID`, $blog, ID, `post_type`
+				SELECT $source_blog_id, `ID`, $blog, ID, 'post'
 					FROM {$this->wpdb->posts}
 					WHERE `post_status` IN('publish', 'future', 'draft', 'pending', 'private')"
 			);
@@ -321,6 +327,36 @@ class Mlp_Duplicate_Blogs {
 
 		if ( $copy_files->copy_attachments() )
 			$this->update_file_urls( $copy_files );
+	}
+
+	/**
+	 * Fires the plugin activation hooks for all active plugins on the duplicated site.
+	 *
+	 * @return void
+	 */
+	private function activate_plugins() {
+
+		$active_plugins = get_option( 'active_plugins' );
+		foreach ( $active_plugins as $plugin ) {
+			/** This action is documented in wp-admin/includes/plugin.php */
+			do_action( 'activate_plugin', $plugin, false );
+
+			/** This action is documented in wp-admin/includes/plugin.php */
+			do_action( 'activate_' . $plugin, false );
+
+			/** This action is documented in wp-admin/includes/plugin.php */
+			do_action( 'activated_plugin', $plugin, false );
+		}
+	}
+
+	/**
+	 * Deactivates all plugins on the duplicated site.
+	 *
+	 * @retuvn void
+	 */
+	private function deactivate_plugins() {
+
+		update_option( 'active_plugins', array() );
 	}
 
 	/**
@@ -370,7 +406,7 @@ class Mlp_Duplicate_Blogs {
 	public function display_fields() {
 
 		$blogs   = (array) $this->get_all_sites();
-		$options = '<option value="0">' . __( 'Choose site', 'multilingualpress' ) . '</option>';
+		$options = '<option value="0">' . __( 'Choose site', 'multilingual-press' ) . '</option>';
 
 		foreach ( $blogs as $blog ) {
 
@@ -385,16 +421,31 @@ class Mlp_Duplicate_Blogs {
 		?>
 		<tr class="form-field">
 			<td>
-				<label for="inpsyde_multilingual_based">
+				<label for="mlp-base-site-id">
 					<?php
-					esc_html_e( 'Based on site', 'multilingualpress' );
+					esc_html_e( 'Based on site', 'multilingual-press' );
 					?>
 				</label>
 			</td>
 			<td>
-				<select id="inpsyde_multilingual_based" name="blog[basedon]" autocomplete="off">
+				<select id="mlp-base-site-id" name="blog[basedon]" autocomplete="off">
 					<?php echo $options; ?>
 				</select>
+			</td>
+		</tr>
+
+		<tr class="form-field hide-if-js">
+			<td>
+				<?php esc_html_e( 'Plugins', 'multilingual-press' ); ?>
+			</td>
+			<td>
+				<label for="mlp-activate-plugins">
+					<input type="checkbox" value="1" id="mlp-activate-plugins" name="blog[activate_plugins]"
+						checked="checked">
+					<?php
+					esc_html_e( 'Activate all plugins that are active on the source site', 'multilingual-press' );
+					?>
+				</label>
 			</td>
 		</tr>
 		<?php
@@ -411,19 +462,19 @@ class Mlp_Duplicate_Blogs {
 		?>
 		<tr class="form-field">
 			<td>
-				<?php esc_html_e( 'Search Engine Visibility', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Search Engine Visibility', 'multilingual-press' ); ?>
 			</td>
 			<td>
 				<label for="inpsyde_multilingual_visibility">
 					<input type="checkbox" value="0" id="inpsyde_multilingual_visibility" name="blog[visibility]"
 						<?php checked( $visible, FALSE ); ?>>
 					<?php
-					esc_html_e( 'Discourage search engines from indexing this site', 'multilingualpress' );
+					esc_html_e( 'Discourage search engines from indexing this site', 'multilingual-press' );
 					?>
 				</label>
 
 				<p class="description">
-					<?php esc_html_e( 'It is up to search engines to honor this request.', 'multilingualpress' ); ?>
+					<?php esc_html_e( 'It is up to search engines to honor this request.', 'multilingual-press' ); ?>
 				</p>
 			</td>
 		</tr>

@@ -1,21 +1,76 @@
-;( function( $ ) {
-	"use strict";
+(function() {
+	'use strict';
 
-	var mlp_quicklink = {
-		init: function() {
-			$( '#mlp_quicklink_container' ).on( 'submit', function() {
-				var $this = $( this );
-
-				$this.attr( 'method', 'get' );
-				document.location.href = $this.find( 'option:selected' ).val();
-
-				return false;
-			} );
-		}
+	/**
+	 * Constructor for MultilingualPress front-end controller.
+	 * @returns {{Modules: Object[]}}
+	 * @constructor
+	 */
+	var MultilingualPress = function() {
+		return {
+			Modules: []
+		};
 	};
 
-	$( function() {
-		mlp_quicklink.init();
-	} );
+	/**
+	 * The MultilingualPress front-end instance.
+	 * @type {MultilingualPress}
+	 */
+	window.MultilingualPress = new MultilingualPress();
+})();
 
-} )( jQuery );
+/* global MultilingualPress */
+(function( $ ) {
+	'use strict';
+
+	/**
+	 * Constructor for the MultilingualPress Quicklinks module.
+	 * @returns {{initialize: initialize}}
+	 * @constructor
+	 */
+	var Quicklinks = function() {
+		var $form = $( '#mlp-quicklink-form' ),
+			$select = $form.find( 'select' );
+
+		/**
+		 * Triggers a redirect on form submission.
+		 * @param {Event} event - The submit event of the form.
+		 */
+		var submitForm = function( event ) {
+			if ( $select.length ) {
+				event.preventDefault();
+
+				setLocation( $select.val() );
+			}
+		};
+
+		/**
+		 * Redirects the user to the given URL.
+		 * @param {string} url - The URL.
+		 */
+		var setLocation = function( url ) {
+			window.location.href = url;
+		};
+
+		return {
+			/**
+			 * Initializes the module.
+			 */
+			initialize: function() {
+				if ( $form.length ) {
+					$form.on( 'submit', function( event ) {
+						submitForm( event.originalEvent );
+					} );
+				}
+			}
+		};
+	};
+
+	/**
+	 * The MultilingualPress Quicklinks instance.
+	 * @type {Quicklinks}
+	 */
+	MultilingualPress.Modules.Quicklinks = new Quicklinks();
+
+	$( MultilingualPress.Modules.Quicklinks.initialize );
+})( jQuery );

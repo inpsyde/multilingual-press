@@ -35,7 +35,7 @@ class Mlp_Redirect_User_Settings_Html implements Mlp_User_Settings_View_Interfac
 	 * @return void
 	 */
 	public function show_header( WP_User $user ) {
-		esc_html_e( 'Language redirect', 'multilingualpress' );
+		esc_html_e( 'Language redirect', 'multilingual-press' );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Mlp_Redirect_User_Settings_Html implements Mlp_User_Settings_View_Interfac
 		$check   = checked( 1, $current, FALSE );
 		$text    = esc_html__(
 			'Do not redirect me automatically to the best matching language version.',
-			'multilingualpress'
+			'multilingual-press'
 		);
 
 		wp_nonce_field( $this->nonce->get_action(), $this->nonce->get_name() );

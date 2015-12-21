@@ -10,7 +10,8 @@
 .mlp_title {
   padding: 3px 8px;
   width: 100%;
-  line-height: 1;
+  height: 1.7em;
+  line-height: 100%;
   background: #fff;
   outline: 0;
   font-size: 1.7em;
@@ -18,7 +19,7 @@
 
 .mlp_name {
   padding: 3px 8px;
-  line-height: 1;
+  line-height: 150%;
   background: #fff;
   outline: 0;
   font-size: 1.2em;
@@ -29,7 +30,7 @@
   width: 100%;
   min-width: 100%;
   max-width: 100%;
-  line-height: 1;
+  line-height: 150%;
   background: #fff;
   outline: 0;
   font-size: 1.2em;
@@ -54,11 +55,11 @@
   z-index: 10;
 }
 .mlp_copy_button:before {
-  content: "\f167";
+  margin-right: 5px;
+  line-height: 20px;
   color: #888;
-  font: 14px dashicons;
-  font-weight: bold;
-  vertical-align: bottom;
+  font-size: 15px;
+  vertical-align: middle;
 }
 
 .mlp-warning {
@@ -67,7 +68,7 @@
   padding: 1px 12px;
   background: #f1f1f1;
   -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 .mlp-warning p {
   margin: .5em 0;
@@ -111,7 +112,7 @@
   margin-bottom: 10px;
   width: 120px;
   height: 78px;
-  background: url("../images/quicklinkpositions.png?20150623") no-repeat top right #fff;
+  background: url("../images/quicklinkpositions.png?20151206") no-repeat top right #fff;
 }
 #mlp_quicklink_position_setting label.quicklink-position-tr:before {
   background-position: top left;
@@ -135,8 +136,8 @@
 .mlp-admin-feature-table,
 .mlp-extra-settings-box {
   -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   margin: 2em 0 0;
   border: 1px solid #ddd;
   border-collapse: collapse;

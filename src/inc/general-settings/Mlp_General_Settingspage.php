@@ -69,14 +69,14 @@ class Mlp_General_Settingspage {
 		// Register options page
 		$this->page_hook = add_submenu_page(
 			'settings.php',
-			__( 'MultilingualPress', 'multilingualpress' ),
-			__( 'MultilingualPress', 'multilingualpress' ),
+			__( 'MultilingualPress', 'multilingual-press' ),
+			__( 'MultilingualPress', 'multilingual-press' ),
 			'manage_network_options',
 			'mlp',
 			array( $view, 'render_page' )
 		);
 
-		$this->assets->provide( array( 'mlp_admin_js', 'mlp_admin_css' ) );
+		$this->assets->provide( array( 'mlp-admin', 'mlp_admin_css' ) );
 	}
 
 	/**
@@ -96,7 +96,7 @@ class Mlp_General_Settingspage {
 			return;
 		}
 
-		$msg = __( 'Settings saved.', 'multilingualpress' );
+		$msg = __( 'Settings saved.', 'multilingual-press' );
 		$notice = new Mlp_Admin_Notice( $msg, array( 'class' => 'updated' ) );
 		$notice->show();
 	}

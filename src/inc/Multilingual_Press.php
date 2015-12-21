@@ -161,7 +161,7 @@ class Multilingual_Press {
 		$rel_path = dirname( plugin_basename( $this->plugin_file_path ) )
 				. $this->plugin_data->get( 'text_domain_path' );
 
-		load_plugin_textdomain( 'multilingualpress', FALSE, $rel_path );
+		load_plugin_textdomain( 'multilingual-press', FALSE, $rel_path );
 	}
 
 	/**
@@ -174,20 +174,22 @@ class Multilingual_Press {
 		/** @type Mlp_Assets $assets */
 		$assets = $this->plugin_data->get( 'assets' );
 
-		$l10n = array(
+		$assets->add( 'mlp-admin', 'admin.js', array( 'backbone' ), array(
+			'mlpSettings' => array(
+				'adminUrl' => esc_url( parse_url( admin_url(), PHP_URL_PATH ) ),
+			),
 			'mlpRelationshipControlL10n' => array(
+				'noPostSelected'           => __( 'Please select a post.', 'multilingual-press' ),
 				'unsavedPostRelationships' => __(
 					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
-					'multilingualpress'
+					'multilingual-press'
 				),
-				'noPostSelected'           => __( 'Please select a post.', 'multilingualpress' ),
 			),
-		);
-		$assets->add( 'mlp_admin_js', 'admin.js', array( 'jquery' ), $l10n );
+		) );
 
 		$assets->add( 'mlp_admin_css', 'admin.css' );
 
-		$assets->add( 'mlp_frontend_js', 'frontend.js', array( 'jquery' ) );
+		$assets->add( 'mlp-frontend', 'frontend.js', array( 'jquery' ) );
 
 		$assets->add( 'mlp_frontend_css', 'frontend.css' );
 
@@ -334,7 +336,7 @@ class Multilingual_Press {
 	public function check_for_user_errors_admin_notice() {
 
 		if ( TRUE == $this->check_for_errors() ) {
-			?><div class="error"><p><?php _e( 'You didn\'t setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships.' , 'multilingualpress' ); ?></p></div><?php
+			?><div class="error"><p><?php _e( 'You didn\'t setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships.' , 'multilingual-press' ); ?></p></div><?php
 		}
 	}
 

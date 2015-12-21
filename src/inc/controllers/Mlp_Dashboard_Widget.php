@@ -70,7 +70,7 @@ class Mlp_Dashboard_Widget {
 			<label for="post_is_translated">
 				<input type="hidden" name="post_is_translated_blogid" value="<?php echo get_current_blog_id(); ?>" />
 				<input type="checkbox" id="post_is_translated" value="1" name="_post_is_translated"<?php checked( TRUE, $is_translated );  ?> />
-				<?php _e( 'Translation completed', 'multilingualpress' ); ?>
+				<?php _e( 'Translation completed', 'multilingual-press' ); ?>
 			</label>
 		</div>
 		<?php
@@ -98,7 +98,7 @@ class Mlp_Dashboard_Widget {
 		if ( current_user_can( $capability ) )
 			wp_add_dashboard_widget(
 				'multilingualpress-dashboard-widget',
-				__( 'Untranslated Posts', 'multilingualpress' ),
+				__( 'Untranslated Posts', 'multilingual-press' ),
 				array( $this, 'dashboard_widget' )
 			);
 	}
@@ -120,7 +120,7 @@ class Mlp_Dashboard_Widget {
 
 		// We have no related blogs so we can stop here
 		if ( ! is_array( $related_blogs ) ) {
-			echo '<p>' . __( 'Sorry, there are no connected sites in the system for this site.', 'multilingualpress' ) . '</p>';
+			echo '<p>' . __( 'Sorry, there are no connected sites in the system for this site.', 'multilingual-press' ) . '</p>';
 			return;
 		}
 
@@ -134,7 +134,7 @@ class Mlp_Dashboard_Widget {
 		foreach ( $related_blogs as $blog_to_translate ) {
 			switch_to_blog( $blog_to_translate );
 
-			?><tr><th colspan="3"><strong><?php _e( 'Pending Translations for', 'multilingualpress' ); ?> <?php bloginfo( 'name' ); ?></strong></th></tr><?php
+			?><tr><th colspan="3"><strong><?php _e( 'Pending Translations for', 'multilingual-press' ); ?> <?php bloginfo( 'name' ); ?></strong></th></tr><?php
 
 			global $wpdb;
 
@@ -151,7 +151,7 @@ class Mlp_Dashboard_Widget {
 				foreach ( $posts_to_translate as $post ) {
 					?>
 					<tr>
-						<td style="width:20%;"><a href="<?php echo admin_url(); ?>post.php?post=<?php echo $post->ID; ?>&action=edit"><?php _e( 'Translate', 'multilingualpress' ); ?></a></td>
+						<td style="width:20%;"><a href="<?php echo admin_url(); ?>post.php?post=<?php echo $post->ID; ?>&action=edit"><?php _e( 'Translate', 'multilingual-press' ); ?></a></td>
 						<td style="width:55%;"><?php echo get_the_title( $post->ID ); ?></td>
 						<td style="width:25%;"><?php echo get_the_time( get_option( 'date_format' ), $post->ID ); ?></td>
 					</tr>

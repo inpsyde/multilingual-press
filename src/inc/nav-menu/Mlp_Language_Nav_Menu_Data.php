@@ -19,7 +19,7 @@ class Mlp_Language_Nav_Menu_Data
 	 *
 	 * @type string
 	 */
-	private $button_id = 'mlp_language';
+	private $button_id = 'mlp-language';
 
 	/**
 	 * @type string
@@ -92,29 +92,27 @@ class Mlp_Language_Nav_Menu_Data
 	 */
 	public function register_script() {
 
-		$this->assets->provide( array ( 'mlp_admin_js', 'mlp_admin_css' ) );
+		$this->assets->provide( array ( 'mlp-admin', 'mlp_admin_css' ) );
 	}
 
 	/**
 	 * @param string $hook
+	 *
 	 * @return void
 	 */
 	public function load_script( $hook ) {
 
-		if ( 'nav-menus.php' !== $hook )
+		if ( 'nav-menus.php' !== $hook ) {
 			return;
+		}
 
-		$data = array (
-			'ajaxurl'         => admin_url( 'admin-ajax.php' ),
-			'metabox_id'      => $this->handle,
-			'metabox_list_id' => $this->get_list_id(),
-			'action'          => $this->handle,
-			'nonce'           => wp_create_nonce( $this->nonce->get_action() )
-		);
-		$data[ $this->nonce->get_name() ] = wp_create_nonce( $this->nonce->get_action() );
-		$data[ 'nonce_name' ] = $this->nonce->get_name();
-
-		wp_localize_script( 'mlp_admin_js', $this->handle, $data );
+		wp_localize_script( 'mlp-admin', 'mlpNavMenusSettings', array(
+			'action'    => $this->handle,
+			'ajaxURL'   => admin_url( 'admin-ajax.php' ),
+			'metaBoxID' => $this->handle,
+			'nonce'     => wp_create_nonce( $this->nonce->get_action() ),
+			'nonceName' => $this->nonce->get_name(),
+		) );
 	}
 
 	/**
@@ -199,7 +197,7 @@ class Mlp_Language_Nav_Menu_Data
 			'menu-item-type'       => 'language',
 			'menu-item-object'     => 'custom',
 			'menu-item-url'        => get_home_url( $blog_id, '/' ),
-			'menu_item-type-label' => esc_html__( 'Language', 'multilingualpress' ),
+			'menu_item-type-label' => esc_html__( 'Language', 'multilingual-press' ),
 		);
 
 		$item_id   = wp_update_nav_menu_item(
@@ -229,7 +227,7 @@ class Mlp_Language_Nav_Menu_Data
 		$menu_item             = wp_setup_nav_menu_item( $menu_item );
 		$menu_item->label      = $menu_item->title;
 		// Replace the "Custom" in the management screen
-		$menu_item->type_label = esc_html__( 'Language', 'multilingualpress' );
+		$menu_item->type_label = esc_html__( 'Language', 'multilingual-press' );
 		$menu_item->classes[ ] = "blog-id-$blog_id";
 		$menu_item->classes[ ] = "mlp-language-nav-item";
 		$menu_item->url        = get_home_url( $blog_id, '/' );

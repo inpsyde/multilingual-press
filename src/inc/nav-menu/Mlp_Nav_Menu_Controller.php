@@ -81,12 +81,12 @@ class Mlp_Nav_Menu_Controller {
 	 * Set up backend management.
 	 *
 	 * @wp-hook inpsyde_mlp_loaded
-	 * @param string $js_url
-	 * @return  void
+	 *
+	 * @return void
 	 */
-	public function backend_setup( $js_url ) {
+	public function backend_setup() {
 
-		$this->create_instances( $js_url );
+		$this->create_instances();
 		$this->add_actions();
 	}
 
@@ -98,7 +98,7 @@ class Mlp_Nav_Menu_Controller {
 	 */
 	public function add_meta_box() {
 
-		$title = esc_html__( 'Languages', 'multilingualpress' );
+		$title = esc_html__( 'Languages', 'multilingual-press' );
 
 		add_meta_box(
 			$this->handle,
@@ -114,22 +114,21 @@ class Mlp_Nav_Menu_Controller {
 	 * Create nonce, view and data objects.
 	 *
 	 * @wp-hook inpsyde_mlp_loaded
-	 * @return  void
+	 *
+	 * @return void
 	 */
 	private function create_instances() {
 
-		$nonce = new Inpsyde_Nonce_Validator(
-			$this->handle
-		);
+		$nonce_validator = Mlp_Nonce_Validator_Factory::create( 'add_languages_to_nav_menu' );
+
 		$this->data = new Mlp_Language_Nav_Menu_Data(
 			$this->handle,
 			$this->meta_key,
-			$nonce,
+			$nonce_validator,
 			$this->assets
 		);
-		$this->view = new Mlp_Simple_Nav_Menu_Selectors(
-			$this->data
-		);
+
+		$this->view = new Mlp_Simple_Nav_Menu_Selectors( $this->data );
 	}
 
 	/**

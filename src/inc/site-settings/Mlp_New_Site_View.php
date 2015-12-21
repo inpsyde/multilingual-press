@@ -34,29 +34,32 @@ class Mlp_New_Site_View {
 
 		$languages = $this->language_api->get_db()->get_items( array( 'page' => -1 ) );
 
+		$default_language = $this->get_default_language();
+
 		ob_start();
 		?>
 		<h3>MultilingualPress</h3>
 		<table class="form-table">
 			<tr class="form-field">
 				<td>
-					<label for="inpsyde_multilingual_lang">
+					<label for="mlp-site-language">
 						<?php
-						esc_html_e( 'Language', 'multilingualpress' );
+						esc_html_e( 'Language', 'multilingual-press' );
 						?>
 					</label>
 				</td>
 				<td>
-					<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang" autocomplete="off">
-						<option value="-1"><?php esc_html_e( 'Choose language', 'multilingualpress' ); ?></option>
+					<select name="inpsyde_multilingual_lang" id="mlp-site-language" autocomplete="off">
+						<option value="-1"><?php esc_html_e( 'Choose language', 'multilingual-press' ); ?></option>
 						<?php
 						foreach ( $languages as $language ) {
-
-							// missing HTTP code
-							if ( empty ( $language->http_name ) )
+							if ( empty( $language->http_name ) ) {
 								continue;
+							}
 
-							echo '<option value="' . esc_attr( $language->http_name )  . '">'
+							$selected = selected( $default_language, $language->http_name, false );
+
+							echo '<option value="' . esc_attr( $language->http_name ) . '" ' . $selected . '>'
 								. $language->english_name . '/' . $language->native_name
 								. '</option>';
 						}
@@ -68,7 +71,7 @@ class Mlp_New_Site_View {
 				<td>
 					<label for="inpsyde_multilingual_text">
 						<?php
-						esc_html_e( 'Alternative language title', 'multilingualpress' );
+						esc_html_e( 'Alternative language title', 'multilingual-press' );
 						?>
 					</label>
 				</td>
@@ -77,7 +80,7 @@ class Mlp_New_Site_View {
 					<p class="description"><?php
 						esc_html_e(
 							'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
-							'multilingualpress'
+							'multilingual-press'
 						);
 					?></p>
 				</td>
@@ -86,7 +89,7 @@ class Mlp_New_Site_View {
 				<td>
 					<label for="inpsyde_multilingual_text">
 						<?php
-						esc_html_e( 'Relationships', 'multilingualpress' );
+						esc_html_e( 'Relationships', 'multilingual-press' );
 						?>
 					</label>
 				</td>
@@ -117,7 +120,7 @@ class Mlp_New_Site_View {
 						<?php
 							esc_html_e(
 								'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
-								'multilingualpress'
+								'multilingual-press'
 							);
 						?>
 					</p>
@@ -155,4 +158,19 @@ class Mlp_New_Site_View {
 		<?php
 	}
 
+	/**
+	 * Returns the default language in the format that MultilingualPress's language select requires (e.g., de_DE).
+	 *
+	 * @return string
+	 */
+	private function get_default_language() {
+
+		$default_language = get_site_option( 'WPLANG' );
+		$available_languages = get_available_languages();
+		if ( in_array( $default_language, $available_languages ) ) {
+			return str_replace( '_', '-', $default_language );
+		} else {
+			return 'en-US';
+		}
+	}
 }

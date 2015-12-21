@@ -1,37 +1,32 @@
-<?php
+<?php # -*- coding: utf-8 -*-
+
 /**
- * Main controller for the redirect feature
- *
- * @version    2014.09.26
- * @author     Inpsyde GmbH, toscho
- * @license    GPL
- * @package    MultilingualPress
- * @subpackage Redirect
+ * Main controller for the Redirect feature.
  */
 class Mlp_Redirect {
 
 	/**
-	 * @type Mlp_Module_Manager_Interface
-	 */
-	private $modules;
-
-	/**
-	 * @type string
+	 * @var string
 	 */
 	private $image_url;
 
 	/**
-	 * @type string
-	 */
-	private $option = 'inpsyde_multilingual_redirect';
-
-	/**
-	 * @type Mlp_Language_Api_Interface
+	 * @var Mlp_Language_Api_Interface
 	 */
 	private $language_api;
 
 	/**
-	 * Constructor
+	 * @var Mlp_Module_Manager_Interface
+	 */
+	private $modules;
+
+	/**
+	 * @var string
+	 */
+	private $option = 'inpsyde_multilingual_redirect';
+
+	/**
+	 * Constructor.
 	 *
 	 * @param Mlp_Module_Manager_Interface $modules
 	 * @param Mlp_Language_Api_Interface   $language_api
@@ -39,29 +34,32 @@ class Mlp_Redirect {
 	 */
 	public function __construct(
 		Mlp_Module_Manager_Interface $modules,
-		Mlp_Language_Api_Interface   $language_api,
-		                             $image_url
+		Mlp_Language_Api_Interface $language_api,
+		$image_url
 	) {
-		$this->modules      = $modules;
-		$this->image_url    = $image_url;
+
+		$this->modules = $modules;
+
+		$this->image_url = $image_url;
+
 		$this->language_api = $language_api;
 	}
 
 	/**
-	 * Determine current state and actions, call subsequent methods.
+	 * Determines the current state and actions, and calls subsequent methods.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public function setup() {
 
 		if ( ! $this->register_setting() ) {
-			return;
+			return false;
 		}
 
 		if ( ! is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 			$this->frontend_redirect();
 
-			return;
+			return true;
 		}
 
 		$this->site_settings();
@@ -69,10 +67,12 @@ class Mlp_Redirect {
 		if ( is_network_admin() ) {
 			$this->activation_column();
 		}
+
+		return true;
 	}
 
 	/**
-	 * Redirect visitors to the best matching language alternative
+	 * Redirects visitors to the best matching language alternative.
 	 *
 	 * @return void
 	 */
@@ -87,7 +87,7 @@ class Mlp_Redirect {
 	}
 
 	/**
-	 * Show the redirect status in the sites list
+	 * Shows the redirect status in the sites list.
 	 *
 	 * @return void
 	 */
@@ -98,7 +98,7 @@ class Mlp_Redirect {
 	}
 
 	/**
-	 * Site specific settings
+	 * Sets up site-specific settings.
 	 *
 	 * @return void
 	 */
@@ -109,13 +109,14 @@ class Mlp_Redirect {
 	}
 
 	/**
-	 * Register the settings.
+	 * Registers the settings.
 	 *
 	 * @return bool
 	 */
 	private function register_setting() {
 
 		$controller = new Mlp_Redirect_Registration( $this->modules );
+
 		return $controller->setup();
 	}
 }

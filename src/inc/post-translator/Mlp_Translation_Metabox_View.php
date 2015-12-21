@@ -132,13 +132,17 @@ class Mlp_Translation_Metabox_View {
 	 * @param WP_Post $source_post
 	 * @param int     $remote_blog_id
 	 * @param WP_Post $post
+	 *
 	 * @return void
 	 */
-	public function show_title( /** @noinspection PhpUnusedParameterInspection */
-		WP_Post $source_post, $remote_blog_id, WP_Post $post ) {
+	public function show_title(
+		/** @noinspection PhpUnusedParameterInspection */
+		WP_Post $source_post, $remote_blog_id, WP_Post $post
+	) {
 
-		if ( ! empty ( $post->post_title ) )
-			print "<h2 class='headline' style='margin:0;'>$post->post_title</h2>";
+		if ( ! empty( $post->post_title ) ) {
+			echo '<h2 class="headline" style="margin: 0;">' . $post->post_title . '</h2>';
+		}
 	}
 
 	/**
@@ -148,8 +152,10 @@ class Mlp_Translation_Metabox_View {
 	 *
 	 * @return void
 	 */
-	public function show_editor( /** @noinspection PhpUnusedParameterInspection */
-		WP_Post $source_post, $remote_blog_id, WP_Post $remote_post ) {
+	public function show_editor(
+		/** @noinspection PhpUnusedParameterInspection */
+		WP_Post $source_post, $remote_blog_id, WP_Post $remote_post
+	) {
 
 		$lines = substr_count( $remote_post->post_content, "\n" ) + 1;
 		$rows = min( $lines, 10 );
@@ -157,7 +163,7 @@ class Mlp_Translation_Metabox_View {
 		printf(
 			'<textarea class="large-text" cols="80" rows="%d$1" placeholder="%2$s" readonly>%3$s</textarea>',
 			$rows,
-			esc_attr_x( 'No content yet.', 'placeholder for empty translation textarea', 'multilingualpress' ),
+			esc_attr_x( 'No content yet.', 'placeholder for empty translation textarea', 'multilingual-press' ),
 			esc_textarea( $remote_post->post_content )
 		);
 	}
@@ -167,8 +173,10 @@ class Mlp_Translation_Metabox_View {
 	 * @param  int     $blog_id
 	 * @return void
 	 */
-	public function show_translation_checkbox( /** @noinspection PhpUnusedParameterInspection */
-		WP_Post $post, $blog_id ) {
+	public function show_translation_checkbox(
+		/** @noinspection PhpUnusedParameterInspection */
+		WP_Post $post, $blog_id
+	) {
 
 		$id = (int) $blog_id;
 		?>
@@ -179,7 +187,7 @@ class Mlp_Translation_Metabox_View {
 					id    = "translate_this_post_<?php print $id; ?>"
 					name  = "mlp_to_translate[]"
 					value = "<?php print $id; ?>" />
-				<?php _e( 'Translate this post', 'multilingualpress' ); ?>
+				<?php _e( 'Translate this post', 'multilingual-press' ); ?>
 			</label>
 		</p>
 	<?php

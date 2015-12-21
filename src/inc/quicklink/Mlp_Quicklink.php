@@ -1,10 +1,7 @@
-<?php
+<?php # -*- coding: utf-8 -*-
+
 /**
- * Module Name:	MultilingualPress Quicklink Module
- * Description:	Display an element link flyout tab in the frontend
- * Author:		Inpsyde GmbH
- * Version:		0.3
- * Author URI:	http://inpsyde.com
+ * Displays an element link flyout tab in the frontend.
  */
 class Mlp_Quicklink implements Mlp_Updatable {
 
@@ -56,7 +53,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 		if ( ! $this->register_setting() )
 			return;
 
-		$this->nonce_validator = new Inpsyde_Nonce_Validator( 'cpt_translator' );
+		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_quicklink_position' );
 
 		$this->redirect_quick_link();
 
@@ -104,16 +101,12 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 */
 	private function register_setting() {
 
-		$desc = __(
-			'Show link to translations in post content.',
-			'multilingualpress'
-		);
-
 		return $this->module_manager->register(
-			array (
-				'display_name'	=> __( 'Quicklink', 'multilingualpress' ),
-				'slug'			=> 'class-' . __CLASS__,
-				'description'   => $desc
+			array(
+				'description'  => __( 'Show link to translations in post content.', 'multilingual-press' ),
+				'display_name' => __( 'Quicklink', 'multilingual-press' ),
+				'slug'         => 'class-' . __CLASS__,
+				'state'        => 'off',
 			)
 		);
 	}
@@ -317,64 +310,70 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	}
 
 	/**
-	 * Put list of translated posts into the fitting HTML container
+	 * Returns the remote post links in form of up to three link elements, or a select element for more than three
+	 * links.
 	 *
-	 * @since  1.0.4
 	 * @param  string $selections 'option' or 'a' elements.
-	 * @param  string $type 'links' or 'form'.
-	 * @param  array $translated Original array of translated posts, passed to the filter.
-	 * @param  string $position
+	 * @param  string $type       'links' or 'form'.
+	 * @param  array  $translated Original array of translated posts, passed to the filter.
+	 * @param  string $position   Quicklink position.
+	 *
 	 * @return string
 	 */
 	protected function get_html_container( $selections, $type, $translated, $position ) {
 
 		$class_inner = 'mlp_inner';
-		$label_text  = esc_html( _x( 'Read in:', 'Quicklink label', 'multilingualpress' ) );
+
+		$label_text = esc_html_x( 'Read in:', 'Quicklink label', 'multilingual-press' );
 
 		if ( 'links' === $type ) {
-
-			$html = "<div class='$position mlp_quicklinks mlp_quicklinks_links'>
-				<div class='$class_inner'>
-					$label_text<br />
-					$selections
-				</div>
-			</div>";
-
+			$html = <<<HTML
+<div class="$position mlp_quicklinks mlp_quicklinks_links">
+	<div class="$class_inner">
+		$label_text<br>
+		$selections
+	</div>
+</div>
+HTML;
 		} else {
+			$home_url = home_url();
+			$home_url = esc_attr( $home_url );
 
-			$action      = esc_attr( home_url() );
+			$select_id   = 'mlp-quicklink-select';
 			$select_name = 'mlp_quicklink_select';
-			$go_text     = esc_attr_x( 'Go', 'quicklink submit button', 'multilingualpress' );
-			$go_button   = '<input type="submit" value="' . $go_text . '">';
-			$html = "<form method='post' class='$position mlp_quicklinks mlp_quicklinks_form' action='$action'>
-				<div class='$class_inner'>
-					<label for='{$select_name}_id'>$label_text<br />
-					<select name='$select_name' id='{$select_name}_id' autocomplete='off'>
-						$selections
-					</select>
-					$go_button
-					</label>
-				</div>
-			</form>";
 
-			add_action(
-				'wp_print_footer_scripts',
-				array ( $this, 'print_form_script' )
-			);
+			$submit_text = esc_attr_x( 'Go', 'quicklink submit button', 'multilingual-press' );
+
+			$html = <<<HTML
+<form action="$home_url" method="post" class="$position mlp_quicklinks mlp_quicklinks_form" id="mlp-quicklink-form">
+	<div class="$class_inner">
+		<label for="$select_id">
+			$label_text<br>
+			<select name="$select_name" id="$select_id" autocomplete="off">
+				$selections
+			</select>
+			<input type="submit" value="$submit_text">
+		</label>
+	</div>
+</form>
+HTML;
+
+			wp_enqueue_script( 'mlp-frontend' );
 		}
 
-		// position at the bottom
-		if ( 'b' === $position[0] )
-			$html .= '<br class="clear" />';
+		// Positioned at the bottom.
+		if ( 'b' === $position[0] ) {
+			$html .= '<br class="clear">';
+		}
 
 		/**
-		 * Filter the quicklinks HTML.
+		 * Filters the quicklink HTML.
 		 *
 		 * @param string $html       HTML output.
-		 * @param string $type       Quicklinks type, 'links' or 'form'.
+		 * @param string $type       Quicklink type, 'links' or 'form'.
 		 * @param array  $translated Array of translated posts.
 		 * @param string $selections Selections, 'option' or 'a' elements.
-		 * @param string $position   Quicklinks position.
+		 * @param string $position   Quicklink position.
 		 *
 		 * @return string
 		 */
@@ -386,23 +385,6 @@ class Mlp_Quicklink implements Mlp_Updatable {
 			$selections,
 			$position
 		);
-	}
-
-	/**
-	 * Enhance form submission to avoid extra WP processing.
-	 *
-	 * @since	1.0.4
-	 */
-	public function print_form_script() {
-		?>
-<script>
-document.getElementById("mlp_quicklink_container").onsubmit = function() {
-	this.method = 'get';
-	var MLPselect = document.getElementById( "mlp_quicklink_select_id" );
-	document.location.href = MLPselect.options[MLPselect.selectedIndex].value;
-	return false;
-};</script>
-		<?php
 	}
 
 	/**
@@ -431,6 +413,10 @@ document.getElementById("mlp_quicklink_container").onsubmit = function() {
 	 * @return	void
 	 */
 	public function save_options_page_form_fields() {
+
+		if ( ! $this->nonce_validator->is_valid() ) {
+			return;
+		}
 
 		// Get current site options
 		$options = get_site_option( 'inpsyde_multilingual_quicklink_options' );

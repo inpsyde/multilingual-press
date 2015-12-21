@@ -1,16 +1,9 @@
-<?php
+<?php # -*- coding: utf-8 -*-
 
 /**
- * Mlp_Quicklink_Positions_Data
- *
- * Provide data for the configuration in wp-admin/network/settings.php?page=mlp
- *
- * @version 2014.04.03
- * @author  Inpsyde GmbH, toscho
- * @license GPL
+ * Provides data for the configuration in wp-admin/network/settings.php?page=mlp.
  */
-class Mlp_Quicklink_Positions_Data
-	implements Mlp_Extra_General_Settings_Box_Data_Interface {
+class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Data_Interface {
 
 	/**
 	 * Prefix for 'name' attribute in form fields.
@@ -43,7 +36,7 @@ class Mlp_Quicklink_Positions_Data
 	 * @return string
 	 */
 	public function get_title() {
-		return esc_html__( 'Quicklink position', 'multilingualpress' );
+		return esc_html__( 'Quicklink position', 'multilingual-press' );
 	}
 
 	/**
@@ -102,7 +95,9 @@ class Mlp_Quicklink_Positions_Data
 
 		$positions = $this->get_position_names();
 		$current   = $this->get_current_position( $positions );
-		$out       = '<p>';
+
+		$out = wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name(), true, false );
+		$out .= '<p>';
 
 		foreach ( $positions as $key => $label ) {
 			$checked = checked( $current, $key, FALSE );
@@ -150,11 +145,10 @@ class Mlp_Quicklink_Positions_Data
 	private function get_position_names() {
 
 		return array (
-			'tl' => esc_attr__( 'Top left', 'multilingualpress' ),
-			'tr' => esc_attr__( 'Top right', 'multilingualpress' ),
-			'bl' => esc_attr__( 'Bottom left', 'multilingualpress' ),
-			'br' => esc_attr__( 'Bottom right', 'multilingualpress' ),
+			'tl' => esc_attr__( 'Top left', 'multilingual-press' ),
+			'tr' => esc_attr__( 'Top right', 'multilingual-press' ),
+			'bl' => esc_attr__( 'Bottom left', 'multilingual-press' ),
+			'br' => esc_attr__( 'Bottom right', 'multilingual-press' ),
 		);
 	}
-
 }

@@ -16,7 +16,7 @@ class Mlp_Install_Requirements implements Mlp_Requirements_Interface {
 	 */
 	public function get_min_php_version() {
 
-		return new Mlp_Semantic_Version_Number( '5.2.4' );
+		return Mlp_Semantic_Version_Number_Factory::create( '5.2.4' );
 	}
 
 	/**
@@ -26,7 +26,7 @@ class Mlp_Install_Requirements implements Mlp_Requirements_Interface {
 	 */
 	public function get_min_wp_version() {
 
-		return new Mlp_Semantic_Version_Number( '4.0.0' );
+		return Mlp_Semantic_Version_Number_Factory::create( '4.0.0' );
 	}
 
 	/**

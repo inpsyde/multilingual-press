@@ -1,27 +1,9 @@
-<?php
+<?php # -*- coding: utf-8 -*-
 
 /**
- * Class Mlp_Advanced_Translator_Data
- *
  * Data model for advanced post translation. Handles inserts and updates.
- *
- * @version 2015.08.21
- * @author  Inpsyde GmbH, toscho, tf
- * @license GPL
  */
-class Mlp_Advanced_Translator_Data
-	implements Mlp_Advanced_Translator_Data_Interface,
-	Mlp_Save_Post_Interface {
-
-	/**
-	 * @var Mlp_Request_Validator_Interface
-	 */
-	private $request_validator;
-
-	/**
-	 * @var Mlp_Translatable_Post_Data_Interface
-	 */
-	private $basic_data;
+class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Interface, Mlp_Save_Post_Interface {
 
 	/**
 	 * @var array
@@ -29,9 +11,24 @@ class Mlp_Advanced_Translator_Data
 	private $allowed_post_types;
 
 	/**
+	 * @var Mlp_Translatable_Post_Data_Interface
+	 */
+	private $basic_data;
+
+	/**
 	 * @var string
 	 */
 	private $name_base = 'mlp_translation_data';
+
+	/**
+	 * @var array
+	 */
+	private $post_request_data = array();
+
+	/**
+	 * @var Mlp_Site_Relations_Interface
+	 */
+	private $relations;
 
 	/**
 	 * Context for hook on save.
@@ -41,34 +38,25 @@ class Mlp_Advanced_Translator_Data
 	private $save_context = array();
 
 	/**
-	 * @var Mlp_Site_Relations_Interface
-	 */
-	private $relations;
-
-	/**
-	 * @var array
-	 */
-	private $post_request_data = array();
-
-	/**
-	 * @param Mlp_Request_Validator_Interface      $request_validator
+	 * @param                                      $deprecated
 	 * @param Mlp_Translatable_Post_Data_Interface $basic_data
 	 * @param array                                $allowed_post_types
 	 * @param Mlp_Site_Relations_Interface         $relations
 	 */
 	public function __construct(
-		Mlp_Request_Validator_Interface $request_validator,
+		$deprecated,
 		Mlp_Translatable_Post_Data_Interface $basic_data,
 		array $allowed_post_types,
 		Mlp_Site_Relations_Interface $relations
 	) {
 
-		$this->request_validator = $request_validator;
 		$this->basic_data = $basic_data;
+
 		$this->allowed_post_types = $allowed_post_types;
+
 		$this->relations = $relations;
 
-		if ( 'POST' === $_SERVER[ 'REQUEST_METHOD' ] ) {
+		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			$this->post_request_data = $_POST;
 		}
 	}
@@ -103,7 +91,7 @@ class Mlp_Advanced_Translator_Data
 		}
 
 		// auto-drafts
-		$post_id = $this->basic_data->get_real_post_id( $post_id );
+		$post_id   = $this->basic_data->get_real_post_id( $post_id );
 		$post_type = $this->basic_data->get_real_post_type( $post );
 
 		$source_blog_id = get_current_blog_id();
@@ -141,23 +129,30 @@ class Mlp_Advanced_Translator_Data
 		do_action( 'mlp_before_post_synchronization', $this->save_context );
 
 		foreach ( $this->post_request_data[ $this->name_base ] as $remote_blog_id => $post_data ) {
-			if (
-				! blog_exists( $remote_blog_id )
-				|| ! in_array( $remote_blog_id, $related_blogs )
-			) {
+			if ( ! blog_exists( $remote_blog_id ) || ! in_array( $remote_blog_id, $related_blogs ) ) {
+				continue;
+			}
+
+			$nonce_validator = Mlp_Nonce_Validator_Factory::create(
+				"save_translation_of_post_{$post->ID}_for_site_$remote_blog_id",
+				$source_blog_id
+			);
+
+			$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
+			if ( ! $request_validator->is_valid( $post ) ) {
 				continue;
 			}
 
 			switch_to_blog( $remote_blog_id );
 
-			$this->save_context[ 'target_blog_id' ] = $remote_blog_id;
+			$this->save_context['target_blog_id'] = $remote_blog_id;
 
 			$new_post = $this->create_post_to_send( $post_data, $post_type, $remote_blog_id );
 
 			if ( array() !== $new_post ) {
-				$sync_thumb = ! empty( $post_data[ 'thumbnail' ] );
-				$update = ! empty( $post_data[ 'remote_post_id' ] ) && 0 < $post_data[ 'remote_post_id' ];
-				$new_id = $this->sync_post( $new_post, $post_id, $remote_blog_id, $update );
+				$sync_thumb = ! empty( $post_data['thumbnail'] );
+				$update     = ! empty( $post_data['remote_post_id'] ) && 0 < $post_data['remote_post_id'];
+				$new_id     = $this->sync_post( $new_post, $post_id, $remote_blog_id, $update );
 
 				$this->basic_data->set_save_context( $this->save_context );
 
@@ -167,7 +162,7 @@ class Mlp_Advanced_Translator_Data
 					$this->copy_thumb( $new_id, $thumb_data );
 				}
 
-				$tax_data = empty( $post_data[ 'tax' ] ) ? array() : (array) $post_data[ 'tax' ];
+				$tax_data = empty( $post_data['tax'] ) ? array() : (array) $post_data['tax'];
 				$this->set_remote_tax_terms( $new_id, $tax_data );
 			}
 
@@ -180,6 +175,25 @@ class Mlp_Advanced_Translator_Data
 		 * @param array $save_context
 		 */
 		do_action( 'mlp_after_post_synchronization', $this->save_context );
+	}
+
+	/**
+	 * Wrapper for get_taxonomies_with_terms( $post ).
+	 *
+	 * Wraps the call into a blog switch.
+	 *
+	 * @param WP_Post $post
+	 * @param int     $blog_id
+	 *
+	 * @return array
+	 */
+	public function get_taxonomies( WP_Post $post, $blog_id ) {
+
+		switch_to_blog( $blog_id );
+		$out = $this->get_taxonomies_with_terms( $post );
+		restore_current_blog();
+
+		return $out;
 	}
 
 	/**
@@ -223,24 +237,24 @@ class Mlp_Advanced_Translator_Data
 		// Prepare and Copy the image
 		$filedir = wp_upload_dir();
 
-		if ( ! is_dir( $filedir[ 'path' ] ) and ! wp_mkdir_p( $filedir[ 'path' ] ) ) {
+		if ( ! is_dir( $filedir['path'] ) and ! wp_mkdir_p( $filedir['path'] ) ) {
 			// failed to make the directory
-			return FALSE;
+			return false;
 		}
 
-		$filename = wp_unique_filename( $filedir[ 'path' ], $thumb_data->meta[ 'file' ] );
-		$copy = copy( $thumb_data->file_path, $filedir[ 'path' ] . '/' . $filename );
+		$filename = wp_unique_filename( $filedir['path'], $thumb_data->meta['file'] );
+		$copy     = copy( $thumb_data->file_path, $filedir['path'] . '/' . $filename );
 
 		// Now insert it into the posts
 		if ( ! $copy ) {
 			// failed to write the file
-			return FALSE;
+			return false;
 		}
 
-		$wp_filetype = wp_check_filetype( $filedir[ 'url' ] . '/' . $filename );
-		$attachment = array(
-			'post_mime_type' => $wp_filetype[ 'type' ],
-			'guid'           => $filedir[ 'url' ] . '/' . $filename,
+		$wp_filetype = wp_check_filetype( $filedir['url'] . '/' . $filename );
+		$attachment  = array(
+			'post_mime_type' => $wp_filetype['type'],
+			'guid'           => $filedir['url'] . '/' . $filename,
 			'post_parent'    => $new_id,
 			'post_title'     => '',
 			'post_excerpt'   => '',
@@ -248,13 +262,13 @@ class Mlp_Advanced_Translator_Data
 			'post_content'   => '',
 		);
 
-		$full_path = $filedir[ 'path' ] . '/' . $filename;
+		$full_path = $filedir['path'] . '/' . $filename;
 		$attach_id = wp_insert_attachment( $attachment, $full_path );
 
 		// Everything went well?
 		if ( is_wp_error( $attach_id ) ) {
 			// failed to insert the image
-			return FALSE;
+			return false;
 		}
 
 		wp_update_attachment_metadata(
@@ -277,23 +291,23 @@ class Mlp_Advanced_Translator_Data
 		$data = new stdClass();
 
 		if ( ! has_post_thumbnail( $post_id ) ) {
-			$data->has_thumb = FALSE;
+			$data->has_thumb = false;
 
 			return $data;
 		}
 
-		$data->has_thumb = TRUE;
+		$data->has_thumb = true;
 
-		include_once( ABSPATH . 'wp-admin/includes/image.php' );
-		include_once( ABSPATH . 'wp-includes/media.php' );
+		include_once ABSPATH . 'wp-admin/includes/image.php';
+		include_once ABSPATH . WPINC . '/media.php';
 
 		// Load Original Image
-		$data->id = get_post_thumbnail_id( $post_id );
+		$data->id   = get_post_thumbnail_id( $post_id );
 		$data->meta = wp_get_attachment_metadata( $data->id );
 
 		// Build path to original Image
-		$data->filedir = wp_upload_dir();
-		$data->file_path = $data->filedir[ 'basedir' ] . '/' . $data->meta[ 'file' ];
+		$data->filedir   = wp_upload_dir();
+		$data->file_path = $data->filedir['basedir'] . '/' . $data->meta['file'];
 
 		return $data;
 	}
@@ -309,8 +323,8 @@ class Mlp_Advanced_Translator_Data
 	 */
 	private function create_post_to_send( array $post_data, $post_type, $blog_id ) {
 
-		$title = $this->get_remote_post_title( $post_data );
-		$name = $this->get_remote_post_name( $post_data );
+		$title   = $this->get_remote_post_title( $post_data );
+		$name    = $this->get_remote_post_name( $post_data );
 		$content = $this->get_remote_post_content( $post_data );
 		$excerpt = $this->get_remote_post_excerpt( $post_data );
 
@@ -327,8 +341,8 @@ class Mlp_Advanced_Translator_Data
 			'post_parent'  => $this->basic_data->get_post_parent( $blog_id ),
 		);
 
-		if ( ! empty( $post_data[ 'remote_post_id' ] ) ) {
-			$new_post_data[ 'ID' ] = $post_data[ 'remote_post_id' ];
+		if ( ! empty( $post_data['remote_post_id'] ) ) {
+			$new_post_data['ID'] = $post_data['remote_post_id'];
 
 			/**
 			 * Filter the post data before saving the post.
@@ -344,11 +358,11 @@ class Mlp_Advanced_Translator_Data
 		}
 
 		// new post
-		$new_post_data[ 'post_status' ] = 'draft';
+		$new_post_data['post_status'] = 'draft';
 
 		// add post_author if override is available
-		if ( isset( $this->post_request_data[ 'post_author_override' ] ) ) {
-			$new_post_data[ 'post_author' ] = $this->post_request_data[ 'post_author_override' ];
+		if ( isset( $this->post_request_data['post_author_override'] ) ) {
+			$new_post_data['post_author'] = $this->post_request_data['post_author_override'];
 		}
 
 		/**
@@ -379,43 +393,24 @@ class Mlp_Advanced_Translator_Data
 			'' !== $title
 			&& '' !== $content
 		) {
-			return FALSE;
+			return false;
 		}
 
 		if (
 			post_type_supports( $post_type, 'title' )
 			&& '' !== $title
 		) {
-			return FALSE;
+			return false;
 		}
 
 		if (
 			post_type_supports( $post_type, 'editor' )
 			&& '' !== $content
 		) {
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;
-	}
-
-	/**
-	 * Wrapper for get_taxonomies_with_terms( $post ).
-	 *
-	 * Wraps the call into a blog switch.
-	 *
-	 * @param WP_Post $post
-	 * @param int     $blog_id
-	 *
-	 * @return array
-	 */
-	public function get_taxonomies( WP_Post $post, $blog_id ) {
-
-		switch_to_blog( $blog_id );
-		$out = $this->get_taxonomies_with_terms( $post );
-		restore_current_blog();
-
-		return $out;
+		return true;
 	}
 
 	/**
@@ -438,7 +433,7 @@ class Mlp_Advanced_Translator_Data
 				continue;
 			}
 
-			$terms = get_terms( $taxonomy, array( 'hide_empty' => FALSE ) );
+			$terms = get_terms( $taxonomy, array( 'hide_empty' => false ) );
 
 			// we do not allow creating new terms
 			if ( empty( $terms ) ) {
@@ -448,12 +443,12 @@ class Mlp_Advanced_Translator_Data
 			$terms = $this->set_active_terms( $terms, $taxonomy, $post );
 
 			if ( $this->taxonomy_is_mutually_exclusive( $taxonomy ) ) {
-				$out[ 'exclusive' ][ $taxonomy ] = array(
+				$out['exclusive'][ $taxonomy ] = array(
 					'properties' => $properties,
 					'terms'      => $terms,
 				);
 			} else {
-				$out[ 'inclusive' ][ $taxonomy ] = array(
+				$out['inclusive'][ $taxonomy ] = array(
 					'properties' => $properties,
 					'terms'      => $terms,
 				);
@@ -513,12 +508,12 @@ class Mlp_Advanced_Translator_Data
 	 */
 	private function get_remote_post_title( array $data ) {
 
-		if ( isset ( $data[ 'title' ] ) ) {
-			return $data[ 'title' ];
+		if ( isset ( $data['title'] ) ) {
+			return $data['title'];
 		}
 
-		if ( isset ( $this->post_request_data[ 'post_title' ] ) ) {
-			return (string) $this->post_request_data[ 'post_title' ];
+		if ( isset ( $this->post_request_data['post_title'] ) ) {
+			return (string) $this->post_request_data['post_title'];
 		}
 
 		return '';
@@ -533,12 +528,12 @@ class Mlp_Advanced_Translator_Data
 	 */
 	private function get_remote_post_name( array $data ) {
 
-		if ( isset ( $data[ 'name' ] ) ) {
-			return $data[ 'name' ];
+		if ( isset ( $data['name'] ) ) {
+			return $data['name'];
 		}
 
-		if ( isset ( $this->post_request_data[ 'post_name' ] ) ) {
-			return (string) $this->post_request_data[ 'post_name' ];
+		if ( isset ( $this->post_request_data['post_name'] ) ) {
+			return (string) $this->post_request_data['post_name'];
 		}
 
 		return '';
@@ -553,12 +548,12 @@ class Mlp_Advanced_Translator_Data
 	 */
 	private function get_remote_post_content( array $data ) {
 
-		if ( isset ( $data[ 'content' ] ) ) {
-			return $data[ 'content' ];
+		if ( isset ( $data['content'] ) ) {
+			return $data['content'];
 		}
 
-		if ( isset ( $this->post_request_data[ 'post_content' ] ) ) {
-			return (string) $this->post_request_data[ 'post_content' ];
+		if ( isset ( $this->post_request_data['post_content'] ) ) {
+			return (string) $this->post_request_data['post_content'];
 		}
 
 		return '';
@@ -573,12 +568,12 @@ class Mlp_Advanced_Translator_Data
 	 */
 	private function get_remote_post_excerpt( array $data ) {
 
-		if ( isset( $data[ 'excerpt' ] ) ) {
-			return $data[ 'excerpt' ];
+		if ( isset( $data['excerpt'] ) ) {
+			return $data['excerpt'];
 		}
 
-		if ( isset( $this->post_request_data[ 'post_excerpt' ] ) ) {
-			return (string) $this->post_request_data[ 'post_excerpt' ];
+		if ( isset( $this->post_request_data['post_excerpt'] ) ) {
+			return (string) $this->post_request_data['post_excerpt'];
 		}
 
 		return '';
@@ -595,39 +590,34 @@ class Mlp_Advanced_Translator_Data
 
 		static $called = 0;
 
-		// for auto-drafts, 'save_post' is called twice, resulting in doubled
-		// drafts for translations.
+		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
 		$called += 1;
 
-		if ( ! empty( $this->post_request_data[ 'original_post_status' ] )
-			&& 'auto-draft' === $this->post_request_data[ 'original_post_status' ]
-			&& 1 < $called
+		if ( ! empty( $this->post_request_data['original_post_status'] )
+		     && 'auto-draft' === $this->post_request_data['original_post_status']
+		     && 1 < $called
 		) {
-			return FALSE;
-		}
-
-		if ( ! $this->request_validator->is_valid( $post ) ) {
-			return FALSE;
+			return false;
 		}
 
 		if ( empty( $this->post_request_data ) ) {
-			return FALSE;
+			return false;
 		}
 
 		if ( empty( $this->post_request_data[ $this->name_base ] ) ) {
-			return FALSE;
+			return false;
 		}
 
 		if ( ! is_array( $this->post_request_data[ $this->name_base ] ) ) {
-			return FALSE;
+			return false;
 		}
 
-		// We only need this when the post is published oder drafted
+		// We only need this when the post is published or drafted.
 		if ( ! $this->is_connectable_status( $post ) ) {
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -642,7 +632,7 @@ class Mlp_Advanced_Translator_Data
 	private function is_connectable_status( WP_Post $post ) {
 
 		if ( in_array( $post->post_status, array( 'publish', 'draft', 'private', 'auto-draft' ) ) ) {
-			return TRUE;
+			return true;
 		}
 
 		return $this->is_auto_draft( $post, $this->post_request_data );
@@ -663,18 +653,18 @@ class Mlp_Advanced_Translator_Data
 	private function is_auto_draft( WP_Post $post, array $request ) {
 
 		if ( 'inherit' !== $post->post_status ) {
-			return FALSE;
+			return false;
 		}
 
 		if ( 'revision' !== $post->post_type ) {
-			return FALSE;
+			return false;
 		}
 
-		if ( empty( $request[ 'original_post_status' ] ) ) {
-			return FALSE;
+		if ( empty( $request['original_post_status'] ) ) {
+			return false;
 		}
 
-		return 'auto-draft' === $request[ 'original_post_status' ];
+		return 'auto-draft' === $request['original_post_status'];
 	}
 
 	/**
@@ -713,10 +703,9 @@ class Mlp_Advanced_Translator_Data
 
 		foreach ( $terms as $term ) {
 			$term->active = has_term( $term->term_id, $taxonomy, $post );
-			$out[] = $term;
+			$out[]        = $term;
 		}
 
 		return $out;
 	}
-
 }

@@ -1,8 +1,42 @@
 # Changelog
 
-## 2.3.0-alpha
+## 2.4.0-alpha
+- Overall improvement of nonce usage.
+- Rename plugin text domain, and adapt gettext calls and translations files.
+- When creating a new site, the language is set to the default site language.
+- When the site language is changed, the MultilingualPress language select adapts to this.
+
+## 2.3.2
+- Fix leftover entry from site option included in languages data, see
+[issue #183](https://github.com/inpsyde/multilingual-press/issues/183), props kraftner.
+- Fix potentially invisibe plugin activation row on Add New Site page.
+- Run `post_name` through `urldecode` to account for non-ASCII characters, see
+[issue #186](https://github.com/inpsyde/multilingual-press/issues/186), props luisarn.
+- Fix incorrect `ml_type` value of duplicated custom post type posts, see
+[issue #185](https://github.com/inpsyde/multilingual-press/issues/185), props kraftner.
+- **Developers:** As we would like to use [the official WordPress.org GlotPress for translating
+MultilingualPress](https://translate.wordpress.org/projects/wp-plugins/multilingual-press), we will (have to) change the
+plugin text domain from `multilingualpress` to `multilingual-press` with the next (major) release. So, in case you are
+doing _crazy_ things with our translations (which you basically should really not), please be informed.
+
+## 2.3.1
+- Fix potentially invalid semi-hard-coded paths.
+
+## 2.3.0 Saint Nicholas
 - Adapt potentially deprecated settings of Language Switcher widget, see
 [issue #170](https://github.com/inpsyde/multilingual-press/issues/170).
+- Delete `state_modules` site option on uninstall, props tiagoschenkel.
+- Adapt Site Settings tab code for WordPress 4.4, props patricia70.
+- Change settings page headings from h2 to h1.
+- Integrate WordPress multisite installation tutorial into readme, see
+[issue #178](https://github.com/inpsyde/multilingual-press/issues/178).
+- Hide Redirect UI if the Redirect feature is disabled, see
+[issue #177](https://github.com/inpsyde/multilingual-press/issues/177).
+- Fix missing noredirect query var for all URLs of linked elements, see
+[issue #174](https://github.com/inpsyde/multilingual-press/issues/174).
+- New setting: Fire plugin activation hooks for active plugins when a site has been duplicated.
+- Feature: Show sites with their alternative language title in the admin bar, see
+[issue #110](https://github.com/inpsyde/multilingual-press/issues/110).
 
 ## 2.2.3
 - Bugfix Translation meta box not visible, see [issue #166](https://github.com/inpsyde/multilingual-press/issues/166),

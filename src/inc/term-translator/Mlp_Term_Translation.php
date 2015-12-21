@@ -79,7 +79,7 @@ class Mlp_Term_Translation {
 		$url = $this->get_public_url( (int) $term[ 'term_id'], $term[ 'taxonomy'] );
 
 		return array (
-			'target_url'   => new Mlp_Url( $url ),
+			'target_url'   => Mlp_Url_Factory::create( $url ),
 			'target_title' => $term[ 'name' ]
 		);
 	}
@@ -100,7 +100,7 @@ class Mlp_Term_Translation {
 		$url = get_edit_term_link( (int) $term[ 'term_id' ], $taxonomy );
 
 		return array (
-			'target_url'   => new Mlp_Url( $url ),
+			'target_url'   => Mlp_Url_Factory::create( $url ),
 			'target_title' => $term[ 'name' ]
 		);
 	}

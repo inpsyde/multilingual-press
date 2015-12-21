@@ -20,7 +20,7 @@ function mlp_feature_language_column() {
 	$columns = new Mlp_Custom_Columns(
 		array(
 			'id'               => 'mlp_site_language',
-			'header'           => esc_attr__( 'Site Language', 'multilingualpress' ),
+			'header'           => esc_attr__( 'Site Language', 'multilingual-press' ),
 			'content_callback' => 'mlp_render_site_language_column',
 		)
 	);
@@ -47,7 +47,7 @@ function mlp_render_site_language_column(
 	restore_current_blog();
 
 	if ( empty( $lang ) ) {
-		return esc_html__( 'none', 'multilingualpress' );
+		return esc_html__( 'none', 'multilingual-press' );
 	}
 
 	$lang = Mlp_Helpers::get_lang_by_iso( $lang );

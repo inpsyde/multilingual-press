@@ -75,7 +75,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 			printf(
 				'<button type="button" class="button secondary mlp-rsc-button" name="mlp_rsc_%2$d"
 					data-toggle_selector="#%3$s" data-search_box_id="%4$s">%1$s</button>',
-				esc_html__( 'Change relationship', 'multilingualpress' ),
+				esc_html__( 'Change relationship', 'multilingual-press' ),
 				$this->remote_blog_id,
 				$action_selector_id,
 				$search_selector_id
@@ -86,12 +86,12 @@ class Mlp_Relationship_Control_Meta_Box_View {
 					<?php
 
 					$actions = array (
-						'stay' => esc_html__( 'Leave as is', 'multilingualpress' ),
-						'new'  => esc_html__( 'Create new post', 'multilingualpress' ),
+						'stay' => esc_html__( 'Leave as is', 'multilingual-press' ),
+						'new'  => esc_html__( 'Create new post', 'multilingual-press' ),
 					);
 
 					if ( $this->remote_post_id )
-						$actions[ 'disconnect' ] = esc_html__( 'Remove relationship', 'multilingualpress' );
+						$actions[ 'disconnect' ] = esc_html__( 'Remove relationship', 'multilingual-press' );
 
 					foreach ( $actions as $key => $label )
 						print '<p>'
@@ -113,7 +113,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 								value="search"
 								id="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search"
 								data-toggle_selector="#<?php print $search_selector_id; ?>">
-							<?php esc_html_e( 'Select existing post &hellip;', 'multilingualpress' ) ?>
+							<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ) ?>
 						</label>
 					</p>
 				</div>
@@ -123,7 +123,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 					<label for="<?php print $this->search_input_id; ?>">
 						<?php
-						esc_html_e( 'Live search', 'multilingualpress' );
+						esc_html_e( 'Live search', 'multilingual-press' );
 						?>
 					</label>
 					<?php
@@ -144,10 +144,10 @@ class Mlp_Relationship_Control_Meta_Box_View {
 					<input type="submit"
 						   class="button button-primary mlp_rsc_save_reload"
 						   value="<?php
-						   esc_attr_e( 'Save and reload this page', 'multilingualpress' );
+						   esc_attr_e( 'Save and reload this page', 'multilingual-press' );
 						   ?>" <?php print $data_attrs; ?>">
 					<span class="description"><?php
-						esc_html_e( 'Please save other changes first separately.', 'multilingualpress' );
+						esc_html_e( 'Please save other changes first separately.', 'multilingual-press' );
 						?></span>
 				</p>
 			</div>

@@ -39,7 +39,7 @@ class Mlp_Network_Site_Settings_Properties
 	 * @return string|void
 	 */
 	public function get_tab_title() {
-		return __( 'MultilingualPress', 'multilingualpress' );
+		return __( 'MultilingualPress', 'multilingual-press' );
 	}
 
 	/**
