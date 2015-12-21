@@ -421,14 +421,14 @@ class Mlp_Duplicate_Blogs {
 		?>
 		<tr class="form-field">
 			<td>
-				<label for="inpsyde_multilingual_based">
+				<label for="mlp-base-site-id">
 					<?php
 					esc_html_e( 'Based on site', 'multilingual-press' );
 					?>
 				</label>
 			</td>
 			<td>
-				<select id="inpsyde_multilingual_based" name="blog[basedon]" autocomplete="off">
+				<select id="mlp-base-site-id" name="blog[basedon]" autocomplete="off">
 					<?php echo $options; ?>
 				</select>
 			</td>
@@ -439,8 +439,8 @@ class Mlp_Duplicate_Blogs {
 				<?php esc_html_e( 'Plugins', 'multilingual-press' ); ?>
 			</td>
 			<td>
-				<label for="blog_activate_plugins">
-					<input type="checkbox" value="1" id="blog_activate_plugins" name="blog[activate_plugins]"
+				<label for="mlp-activate-plugins">
+					<input type="checkbox" value="1" id="mlp-activate-plugins" name="blog[activate_plugins]"
 						checked="checked">
 					<?php
 					esc_html_e( 'Activate all plugins that are active on the source site', 'multilingual-press' );

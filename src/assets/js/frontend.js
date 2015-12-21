@@ -1,53 +1,76 @@
 (function() {
 	'use strict';
 
-	window.MultilingualPress = function() {
-		return this;
+	/**
+	 * Constructor for MultilingualPress front-end controller.
+	 * @returns {{Modules: Object[]}}
+	 * @constructor
+	 */
+	var MultilingualPress = function() {
+		return {
+			Modules: []
+		};
 	};
+
+	/**
+	 * The MultilingualPress front-end instance.
+	 * @type {MultilingualPress}
+	 */
+	window.MultilingualPress = new MultilingualPress();
 })();
 
 /* global MultilingualPress */
 (function( $ ) {
 	'use strict';
 
-	var Quicklinks = {
+	/**
+	 * Constructor for the MultilingualPress Quicklinks module.
+	 * @returns {{initialize: initialize}}
+	 * @constructor
+	 */
+	var Quicklinks = function() {
+		var $form = $( '#mlp-quicklink-form' ),
+			$select = $form.find( 'select' );
 
 		/**
-		 * Initializes the Quicklinks module.
+		 * Triggers a redirect on form submission.
+		 * @param {Event} event - The submit event of the form.
 		 */
-		initialize: function() {
-			Quicklinks.$form = $( '#mlp-quicklink-form' );
-			if ( Quicklinks.$form.length ) {
-				Quicklinks.$select = Quicklinks.$form.find( 'select' );
-
-				Quicklinks.$form.on( 'submit', function( event ) {
-					Quicklinks.submitForm( event.originalEvent );
-				} );
-			}
-		},
-
-		/**
-		 * Triggers a redirect on form submit.
-		 * @param {event} event - The submit event of the form.
-		 */
-		submitForm: function( event ) {
-			if ( Quicklinks.$select.length ) {
+		var submitForm = function( event ) {
+			if ( $select.length ) {
 				event.preventDefault();
 
-				Quicklinks.setLocation( Quicklinks.$select.val() );
+				setLocation( $select.val() );
 			}
-		},
+		};
 
 		/**
 		 * Redirects the user to the given URL.
 		 * @param {string} url - The URL.
 		 */
-		setLocation: function( url ) {
+		var setLocation = function( url ) {
 			window.location.href = url;
-		}
+		};
+
+		return {
+			/**
+			 * Initializes the module.
+			 */
+			initialize: function() {
+				if ( $form.length ) {
+					$form.on( 'submit', function( event ) {
+						submitForm( event.originalEvent );
+					} );
+				}
+			}
+		};
 	};
 
-	MultilingualPress.Quicklinks = Quicklinks;
+	/**
+	 * The MultilingualPress Quicklinks instance.
+	 * @type {Quicklinks}
+	 */
+	MultilingualPress.Modules.Quicklinks = new Quicklinks();
 
-	$( MultilingualPress.Quicklinks.initialize );
+	$( MultilingualPress.Modules.Quicklinks.initialize );
 })( jQuery );

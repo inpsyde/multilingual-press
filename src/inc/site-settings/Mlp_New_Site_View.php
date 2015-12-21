@@ -42,21 +42,20 @@ class Mlp_New_Site_View {
 		<table class="form-table">
 			<tr class="form-field">
 				<td>
-					<label for="inpsyde_multilingual_lang">
+					<label for="mlp-site-language">
 						<?php
 						esc_html_e( 'Language', 'multilingual-press' );
 						?>
 					</label>
 				</td>
 				<td>
-					<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang" autocomplete="off">
+					<select name="inpsyde_multilingual_lang" id="mlp-site-language" autocomplete="off">
 						<option value="-1"><?php esc_html_e( 'Choose language', 'multilingual-press' ); ?></option>
 						<?php
 						foreach ( $languages as $language ) {
-
-							// missing HTTP code
-							if ( empty ( $language->http_name ) )
+							if ( empty( $language->http_name ) ) {
 								continue;
+							}
 
 							$selected = selected( $default_language, $language->http_name, false );
 

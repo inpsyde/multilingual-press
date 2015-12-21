@@ -2,8 +2,12 @@
 (function( $ ) {
 	'use strict';
 
+	/**
+	 * Constructor for the MultilingualPress TermTranslator module.
+	 * @constructor
+	 */
 	var TermTranslator = Backbone.View.extend( {
-		el: '.mlp_term_selections',
+		el: '#mlp-term-translations',
 
 		events: {
 			'change select': 'propagateSelectedTerm'
@@ -13,14 +17,12 @@
 		 * Initializes the TermTranslator module.
 		 */
 		initialize: function() {
-			if ( this.$el.length ) {
-				this.$selects = this.$el.find( 'select' );
-			}
+			this.$selects = this.$el.find( 'select' );
 		},
 
 		/**
-		 * Propagates the value of a term select element to all other term select elements.
-		 * @param {Event} event - The change event of a select element.
+		 * Propagates the new value of one term select element to all other term select elements.
+		 * @param {Event} event - The change event of a term select element.
 		 */
 		propagateSelectedTerm: function( event ) {
 			var $select,
@@ -68,5 +70,6 @@
 		}
 	} );
 
+	// Register the TermTranslator module for the Edit Tags admin page.
 	MultilingualPress.registerModule( 'edit-tags.php', 'TermTranslator', TermTranslator );
 })( jQuery );

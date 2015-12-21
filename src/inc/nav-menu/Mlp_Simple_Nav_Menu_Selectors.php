@@ -43,24 +43,21 @@ class Mlp_Simple_Nav_Menu_Selectors {
 	public function show_selected_languages() {
 
 		$menu_items = $this->data->get_ajax_menu_items();
+		if ( empty( $menu_items ) ) {
+			wp_send_json_error();
+		}
 
-		if ( empty ( $menu_items ) )
-			die( -1 );
-
-		// Needed for the walker
+		// Needed for the walker.
 		require_once ABSPATH . 'wp-admin/includes/nav-menu.php';
 
-		$args = array(
+		$data = walk_nav_menu_tree( $menu_items, 0, (object) array(
 			'after'       => '',
 			'before'      => '',
 			'link_after'  => '',
 			'link_before' => '',
-			'walker'      => new Walker_Nav_Menu_Edit
-		);
-
-		echo walk_nav_menu_tree( $menu_items, 0, (object) $args );
-
-		exit;
+			'walker'      => new Walker_Nav_Menu_Edit(),
+		) );
+		wp_send_json_success( $data );
 	}
 
 	/**

@@ -19,7 +19,7 @@ class Mlp_Language_Nav_Menu_Data
 	 *
 	 * @type string
 	 */
-	private $button_id = 'mlp_language';
+	private $button_id = 'mlp-language';
 
 	/**
 	 * @type string
@@ -106,17 +106,13 @@ class Mlp_Language_Nav_Menu_Data
 			return;
 		}
 
-		$data                             = array(
-			'ajaxurl'         => admin_url( 'admin-ajax.php' ),
-			'metabox_id'      => $this->handle,
-			'metabox_list_id' => $this->get_list_id(),
-			'action'          => $this->handle,
-			'nonce'           => wp_create_nonce( $this->nonce->get_action() ),
-		);
-		$data[ $this->nonce->get_name() ] = wp_create_nonce( $this->nonce->get_action() );
-		$data['nonce_name']               = $this->nonce->get_name();
-
-		wp_localize_script( 'mlp-admin', $this->handle, $data );
+		wp_localize_script( 'mlp-admin', 'mlpNavMenusSettings', array(
+			'action'    => $this->handle,
+			'ajaxURL'   => admin_url( 'admin-ajax.php' ),
+			'metaBoxID' => $this->handle,
+			'nonce'     => wp_create_nonce( $this->nonce->get_action() ),
+			'nonceName' => $this->nonce->get_name(),
+		) );
 	}
 
 	/**

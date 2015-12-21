@@ -2,18 +2,20 @@
 (function( $ ) {
 	'use strict';
 
+	/**
+	 * Constructor for the MultilingualPress AddNewSite module.
+	 * @constructor
+	 */
 	var AddNewSite = Backbone.View.extend( {
-
-		// This is suboptimal, yes, but Core gives us no choice here. :(
 		el: '#wpbody-content form',
 
 		events: {
 			'change #site-language': 'adaptLanguage',
-			'change #inpsyde_multilingual_based': 'togglePluginsRow'
+			'change #mlp-base-site-id': 'togglePluginsRow'
 		},
 
 		/**
-		 * Initializes the TermTranslator module.
+		 * Initializes the AddNewSite module.
 		 */
 		initialize: function() {
 
@@ -21,8 +23,8 @@
 
 			// As soon as the additional admin page markup is injected via a template, setTimeout can be removed.
 			setTimeout( function() {
-				this.$language = $( '#inpsyde_multilingual_lang' );
-				this.$pluginsRow = $( '#blog_activate_plugins' ).closest( 'tr' );
+				this.$language = $( '#mlp-site-language' );
+				this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
 			}.bind( this ), 100 );
 		},
 
@@ -31,21 +33,21 @@
 		 * @param {Event} event - The change event of the site language select element.
 		 */
 		adaptLanguage: function( event ) {
-			var language = this.getSiteLanguage( $( event.currentTarget ) );
+			var language = this.getLanguage( $( event.currentTarget ) );
 			if ( this.$language.find( '[value="' + language + '"]' ).length ) {
 				this.$language.val( language );
 			}
 		},
 
 		/**
-		 * Returns the selected site language.
-		 * @param {Object} $select - The site language select element.
-		 * @returns {string} - The selected site language.
+		 * Returns the selected language of the given select element.
+		 * @param {Object} $select - A select element.
+		 * @returns {string} - The selected language.
 		 */
-		getSiteLanguage: function( $select ) {
-			var siteLanguage = $select.val();
-			if ( siteLanguage ) {
-				return siteLanguage.replace( '_', '-' );
+		getLanguage: function( $select ) {
+			var language = $select.val();
+			if ( language ) {
+				return language.replace( '_', '-' );
 			}
 
 			return 'en-US';
@@ -56,10 +58,10 @@
 		 * @param {Event} event - The change event of the source site ID select element.
 		 */
 		togglePluginsRow: function( event ) {
-
 			this.$pluginsRow.toggle( 0 < $( event.currentTarget ).val() );
 		}
 	} );
 
+	// Register the AddNewSite module for the Add New Site network admin page.
 	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite );
 })( jQuery );

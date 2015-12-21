@@ -63,7 +63,7 @@ class Mlp_Term_Translation_Selector {
 
 		$this->print_style();
 		?>
-		<table class="mlp_term_selections">
+		<table id="mlp-term-translations">
 			<?php foreach ( $this->related_sites as $site_id => $language ) : ?>
 				<?php
 				$key = $this->presenter->get_key_base( $site_id );
@@ -173,16 +173,16 @@ class Mlp_Term_Translation_Selector {
 			#<?php $this->print_fieldset_id(); ?> legend {
 				font-weight: bold;
 			}
-			.mlp_term_selections th {
+			#mlp-term-translations th {
 				text-align: right;
 			}
-			.mlp_term_selections select {
+			#mlp-term-translations select {
 				width: 20em;
 			}
 			.mlp_empty_option {
 				font-style: italic;
 			}
-			.mlp_term_selections th, .mlp_term_selections td {
+			#mlp-term-translations th, #mlp-term-translations td {
 				padding: 0 5px;
 				vertical-align: middle;
 				font-weight: normal;

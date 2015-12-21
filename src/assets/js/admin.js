@@ -2,49 +2,56 @@
 (function( $ ) {
 	'use strict';
 
+	/**
+	 * Constructor for the MultilingualPress router.
+	 * @constructor
+	 */
 	var MultilingualPressRouter = Backbone.Router.extend( {} );
 
+	/**
+	 * Constructor for the MultilingualPress admin controller.
+	 * @returns {{Modules: Array, registerModule: registerModule, initialize: initialize}}
+	 * @constructor
+	 */
 	var MultilingualPress = function() {
-		var Router = new MultilingualPressRouter(),
-			Modules = [],
-			Views = [];
-
-		var initializeModules = function() {
-			$.each( Modules, function( index, Module ) {
-				Router.route( Module.route, Module.name, function() {
-					Views[ Module.name ] = new Module.callback();
-				} );
-			} );
-		};
-
-		var startHistory = function() {
-			Backbone.history.start( {
-				root: mlpSettings.adminUrl,
-				pushState: true,
-				hashChange: false
-			} );
-		};
+		var Modules = [],
+			Router = new MultilingualPressRouter();
 
 		return {
-			Views: Views,
+			Modules: Modules,
 
-			registerModule: function( route, name, Module ) {
+			/**
+			 * Registers a new module with the given Module callback under the given name for the given rout.
+			 * @param {string} route - The route for the module.
+			 * @param {string} name - The name of the module.
+			 * @param {Function} Module - The constructor callback for the module.
+			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
+			 */
+			registerModule: function( route, name, Module, options ) {
 				if ( _.isFunction( Module ) ) {
-					Modules.push( {
-						callback: Module,
-						name: name,
-						route: route
+					Router.route( route, name, function() {
+						Modules[ name ] = new Module( options || {} );
 					} );
 				}
 			},
 
+			/**
+			 * Initializes the instance.
+			 */
 			initialize: function() {
-				initializeModules();
-				startHistory();
+				Backbone.history.start( {
+					root: mlpSettings.adminUrl,
+					pushState: true,
+					hashChange: false
+				} );
 			}
 		};
 	};
 
+	/**
+	 * The MultilingualPress admin instance.
+	 * @type {MultilingualPress}
+	 */
 	window.MultilingualPress = new MultilingualPress();
 
 	$( window.MultilingualPress.initialize );
@@ -140,18 +147,20 @@
 (function( $ ) {
 	'use strict';
 
+	/**
+	 * Constructor for the MultilingualPress AddNewSite module.
+	 * @constructor
+	 */
 	var AddNewSite = Backbone.View.extend( {
-
-		// This is suboptimal, yes, but Core gives us no choice here. :(
 		el: '#wpbody-content form',
 
 		events: {
 			'change #site-language': 'adaptLanguage',
-			'change #inpsyde_multilingual_based': 'togglePluginsRow'
+			'change #mlp-base-site-id': 'togglePluginsRow'
 		},
 
 		/**
-		 * Initializes the TermTranslator module.
+		 * Initializes the AddNewSite module.
 		 */
 		initialize: function() {
 
@@ -159,8 +168,8 @@
 
 			// As soon as the additional admin page markup is injected via a template, setTimeout can be removed.
 			setTimeout( function() {
-				this.$language = $( '#inpsyde_multilingual_lang' );
-				this.$pluginsRow = $( '#blog_activate_plugins' ).closest( 'tr' );
+				this.$language = $( '#mlp-site-language' );
+				this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
 			}.bind( this ), 100 );
 		},
 
@@ -169,21 +178,21 @@
 		 * @param {Event} event - The change event of the site language select element.
 		 */
 		adaptLanguage: function( event ) {
-			var language = this.getSiteLanguage( $( event.currentTarget ) );
+			var language = this.getLanguage( $( event.currentTarget ) );
 			if ( this.$language.find( '[value="' + language + '"]' ).length ) {
 				this.$language.val( language );
 			}
 		},
 
 		/**
-		 * Returns the selected site language.
-		 * @param {Object} $select - The site language select element.
-		 * @returns {string} - The selected site language.
+		 * Returns the selected language of the given select element.
+		 * @param {Object} $select - A select element.
+		 * @returns {string} - The selected language.
 		 */
-		getSiteLanguage: function( $select ) {
-			var siteLanguage = $select.val();
-			if ( siteLanguage ) {
-				return siteLanguage.replace( '_', '-' );
+		getLanguage: function( $select ) {
+			var language = $select.val();
+			if ( language ) {
+				return language.replace( '_', '-' );
 			}
 
 			return 'en-US';
@@ -194,20 +203,122 @@
 		 * @param {Event} event - The change event of the source site ID select element.
 		 */
 		togglePluginsRow: function( event ) {
-
 			this.$pluginsRow.toggle( 0 < $( event.currentTarget ).val() );
 		}
 	} );
 
+	// Register the AddNewSite module for the Add New Site network admin page.
 	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite );
 })( jQuery );
+
+/* global MultilingualPress, mlpNavMenusSettings */
+(function( $, moduleSettings ) {
+	'use strict';
+
+	/**
+	 * Constructor for the MultilingualPress NavMenus module.
+	 * @constructor
+	 */
+	var NavMenus = Backbone.View.extend( {
+		el: '#' + moduleSettings.metaBoxID,
+
+		events: {
+			'click #submit-mlp-language': 'sendRequest'
+		},
+
+		/**
+		 * Initializes the NavMenus module.
+		 */
+		initialize: function() {
+			this.$languages = this.$el.find( 'li [type="checkbox"]' );
+
+			this.$menu = $( '#menu' );
+
+			this.$menuToEdit = $( '#menu-to-edit' );
+
+			this.$spinner = this.$el.find( '.spinner' );
+
+			this.$submit = this.$el.find( '#submit-mlp-language' );
+		},
+
+		/**
+		 * Requests the according markup for the checked languages in the Languages meta box.
+		 * @param {Event} event - The click event of the submit button.
+		 */
+		sendRequest: function( event ) {
+			var data;
+
+			event.preventDefault();
+
+			this.$submit.prop( 'disabled', true );
+
+			/**
+			 * The "is-active" class was introduced in WordPress 4.2. Since MultilingualPress has to stay
+			 * backwards-compatible with the last four major versions of WordPress, we can only rely on this with the
+			 * release of WordPress 4.6.
+			 * TODO: Remove "show()" with the release of WordPress 4.6.
+			 */
+			this.$spinner.addClass( 'is-active' ).show();
+
+			data = {
+				action: moduleSettings.action,
+				menu: this.$menu.val(),
+				mlp_sites: this.getSites()
+			};
+			data[ moduleSettings.nonceName ] = moduleSettings.nonce;
+			$.post( moduleSettings.ajaxURL, data, this.handleResponse.bind( this ) );
+		},
+
+		/**
+		 * Returns the site IDs for the checked languages in the Languages meta box.
+		 * @returns {string[]} - The site IDs.
+		 */
+		getSites: function() {
+			var languages = [];
+			this.$languages.filter( ':checked' ).each( function() {
+				languages.push( $( this ).val() );
+			} );
+
+			return languages;
+		},
+
+		/**
+		 * Adds the nav menu item's markup in the response object to the currently edited menu.
+		 * @param {Object} response - The response data object.
+		 */
+		handleResponse: function( response ) {
+			if ( response.success && response.data ) {
+				this.$menuToEdit.append( response.data );
+			}
+
+			this.$languages.prop( 'checked', false );
+
+			/**
+			 * The "is-active" class was introduced in WordPress 4.2. Since MultilingualPress has to stay
+			 * backwards-compatible with the last four major versions of WordPress, we can only rely on this with the
+			 * release of WordPress 4.6.
+			 * TODO: Remove "hide()" with the release of WordPress 4.6.
+			 */
+			this.$spinner.addClass( 'is-active' ).hide();
+
+			this.$submit.prop( 'disabled', false );
+		}
+	} );
+
+	// Register the NavMenus module for the Menus admin page.
+	MultilingualPress.registerModule( 'nav-menus.php', 'NavMenus', NavMenus );
+})( jQuery, mlpNavMenusSettings );
 
 /* global MultilingualPress */
 (function( $ ) {
 	'use strict';
 
+	/**
+	 * Constructor for the MultilingualPress TermTranslator module.
+	 * @constructor
+	 */
 	var TermTranslator = Backbone.View.extend( {
-		el: '.mlp_term_selections',
+		el: '#mlp-term-translations',
 
 		events: {
 			'change select': 'propagateSelectedTerm'
@@ -217,14 +328,12 @@
 		 * Initializes the TermTranslator module.
 		 */
 		initialize: function() {
-			if ( this.$el.length ) {
-				this.$selects = this.$el.find( 'select' );
-			}
+			this.$selects = this.$el.find( 'select' );
 		},
 
 		/**
-		 * Propagates the value of a term select element to all other term select elements.
-		 * @param {Event} event - The change event of a select element.
+		 * Propagates the new value of one term select element to all other term select elements.
+		 * @param {Event} event - The change event of a term select element.
 		 */
 		propagateSelectedTerm: function( event ) {
 			var $select,
@@ -272,6 +381,7 @@
 		}
 	} );
 
+	// Register the TermTranslator module for the Edit Tags admin page.
 	MultilingualPress.registerModule( 'edit-tags.php', 'TermTranslator', TermTranslator );
 })( jQuery );
 
@@ -308,61 +418,6 @@
 
 	$( function() {
 		advanced_translator.init();
-	} );
-
-} )( jQuery );
-
-/* global MultilingualPress */
-(function( $ ) {
-	'use strict';
-
-	var NavMenus = {
-
-		/**
-		 * Initializes the NavMenus module.
-		 */
-		initialize: function() {
-
-			// TODO: Implement.
-		}
-	};
-
-	MultilingualPress.NavMenus = NavMenus;
-
-	$( MultilingualPress.NavMenus.initialize );
-})( jQuery );
-
-;( function( $ ) {
-	"use strict";
-
-	$( '#submit-mlp_language' ).on( 'click', function( event ) {
-		event.preventDefault();
-
-		var languages = [],
-			$items = $( '#' + mlp_nav_menu.metabox_list_id + ' li :checked' ),
-			$spinner = $( '#' + mlp_nav_menu.metabox_id ).find( '.spinner' ),
-			$submit = $( '#submit-mlp_language' );
-
-		$items.each( function() {
-			languages.push( $( this ).val() );
-		} );
-
-		$submit.prop( 'disabled', true );
-		$spinner.show();
-
-		var data = {
-			action   : mlp_nav_menu.action,
-			mlp_sites: languages,
-			menu     : $( '#menu' ).val()
-		};
-		data[ mlp_nav_menu.nonce_name ] = mlp_nav_menu.nonce;
-
-		$.post( mlp_nav_menu.ajaxurl, data, function( response ) {
-			$( '#menu-to-edit' ).append( response );
-			$spinner.hide();
-			$items.prop( 'checked', false );
-			$submit.prop( 'disabled', false );
-		} );
 	} );
 
 } )( jQuery );
