@@ -19,13 +19,16 @@ matrix:
     - php: nightly
 
 before_install:
-  - composer self-update
+  - travis_retry composer self-update
 
 install:
-  - composer dump-autoload --no-dev
+  - travis_retry composer dump-autoload --no-dev
 # TODO: Fix JavaScript, then use JSCS and JSHint.
 #  - npm install -g jscs
 #  - npm install -g jshint
+
+before_script:
+  - phpenv config-rm xdebug.ini
 
 script:
 # TODO: Fix JavaScript, then use JSCS and JSHint.
