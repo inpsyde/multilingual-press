@@ -255,7 +255,7 @@ class Mlp_Advanced_Translator_View {
 				$this->list_inclusive_terms( $taxonomy, $data, $remote_blog_id );
 			}
 
-			echo '<br class="clear">';
+			echo '<br class="mlp_clear">';
 		}
 
 		if ( ! empty( $taxonomies[ 'exclusive' ] ) ) {
@@ -263,7 +263,7 @@ class Mlp_Advanced_Translator_View {
 				$this->list_exclusive_terms( $taxonomy, $data, $remote_blog_id );
 			}
 
-			echo '<br class="clear">';
+			echo '<br class="mlp_clear">';
 		}
 
 		echo '</div>';
