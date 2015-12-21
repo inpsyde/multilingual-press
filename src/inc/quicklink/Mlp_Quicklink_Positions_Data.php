@@ -112,7 +112,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 			);
 		}
 
-		return $out . '<br class="clear"></p>';
+		return $out . '<br class="mlp_clear"></p>';
 	}
 
 	/**

@@ -137,7 +137,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 						?>
 					</ul>
 				</div>
-				<p class="clear">
+				<p class="mlp_clear">
 					<?php
 					$data_attrs = $this->add_id_values( '' );
 					?>

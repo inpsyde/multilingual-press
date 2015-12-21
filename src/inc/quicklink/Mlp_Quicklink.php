@@ -363,7 +363,7 @@ HTML;
 
 		// Positioned at the bottom.
 		if ( 'b' === $position[0] ) {
-			$html .= '<br class="clear">';
+			$html .= '<br class="mlp_clear">';
 		}
 
 		/**

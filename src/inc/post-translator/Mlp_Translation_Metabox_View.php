@@ -34,7 +34,7 @@ class Mlp_Translation_Metabox_View {
 		wp_nonce_field( $this->nonce->get_action(), $this->nonce->get_name() );
 		?>
 		<!-- MultilingualPress Translation Box -->
-		<div class="holder mlp_advanced_translator_metabox clear">
+		<div class="holder mlp_advanced_translator_metabox mlp_clear">
 		<?php
 
 		$data = (object) $meta_box['args'];
