@@ -43,10 +43,7 @@ class Mlp_Network_New_Site_Controller {
 
 		add_action( 'wpmu_new_blog', array ( $this, 'update' ) );
 
-		add_action(
-			'admin_footer-site-new.php',
-			array ( new Mlp_New_Site_View( $this->language_api ), 'render_content' )
-		);
+		add_action( 'admin_footer', array ( new Mlp_New_Site_View( $this->language_api ), 'print_template' ) );
 	}
 
 	/**

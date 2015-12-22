@@ -176,18 +176,27 @@
 			'change #mlp-base-site-id': 'togglePluginsRow'
 		},
 
+		template: _.template( $( '#mlp-add-new-site-template' ).html() ),
+
 		/**
 		 * Initializes the AddNewSite module.
 		 */
 		initialize: function() {
+			this.$language = $( '#mlp-site-language' );
 
-			// TODO: Template stuff...
+			this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
 
-			// As soon as the additional admin page markup is injected via a template, setTimeout can be removed.
-			setTimeout( function() {
-				this.$language = $( '#mlp-site-language' );
-				this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
-			}.bind( this ), 100 );
+			this.render();
+		},
+
+		/**
+		 * Renders the MultilingualPress table markup.
+		 * @returns {AddNewSite}
+		 */
+		render: function() {
+			this.$el.find( '.submit' ).before( this.template() );
+
+			return this;
 		},
 
 		/**
