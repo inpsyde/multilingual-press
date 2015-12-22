@@ -361,11 +361,6 @@ HTML;
 			wp_enqueue_script( 'mlp-frontend' );
 		}
 
-		// Positioned at the bottom.
-		if ( 'b' === $position[0] ) {
-			$html .= '<br class="clear">';
-		}
-
 		/**
 		 * Filters the quicklink HTML.
 		 *

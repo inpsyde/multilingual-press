@@ -97,7 +97,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 		$current   = $this->get_current_position( $positions );
 
 		$out = wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name(), true, false );
-		$out .= '<p>';
+		$out .= '<p id="mlp-quicklink-positions">';
 
 		foreach ( $positions as $key => $label ) {
 			$checked = checked( $current, $key, FALSE );
@@ -112,7 +112,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 			);
 		}
 
-		return $out . '<br class="clear"></p>';
+		return $out . '</p>';
 	}
 
 	/**

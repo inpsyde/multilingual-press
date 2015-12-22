@@ -251,19 +251,23 @@ class Mlp_Advanced_Translator_View {
 		echo "<div id='$toggle_id' class='hidden'>";
 
 		if ( ! empty( $taxonomies[ 'inclusive' ] ) ) {
+			echo '<div class="mlp-taxonomy-fieldset-container">';
+
 			foreach ( $taxonomies[ 'inclusive' ] as $taxonomy => $data ) {
 				$this->list_inclusive_terms( $taxonomy, $data, $remote_blog_id );
 			}
 
-			echo '<br class="clear">';
+			echo '</div>';
 		}
 
 		if ( ! empty( $taxonomies[ 'exclusive' ] ) ) {
+			echo '<div class="mlp-taxonomy-fieldset-container">';
+
 			foreach ( $taxonomies[ 'exclusive' ] as $taxonomy => $data ) {
 				$this->list_exclusive_terms( $taxonomy, $data, $remote_blog_id );
 			}
 
-			echo '<br class="clear">';
+			echo '</div>';
 		}
 
 		echo '</div>';

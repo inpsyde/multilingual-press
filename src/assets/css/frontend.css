@@ -1,4 +1,6 @@
-.clear {
+#mlp-quicklink-form.bl:after, #mlp-quicklink-form.br:after {
+  content: '';
+  display: table;
   clear: both;
 }
 
@@ -8,18 +10,18 @@
   list-style-type: none;
 }
 
-.mlp_quicklinks {
+#mlp-quicklink-form {
   max-width: 10em;
   padding: 10px;
 }
-.mlp_quicklinks.bl, .mlp_quicklinks.tl {
+#mlp-quicklink-form.bl, #mlp-quicklink-form.tl {
   float: left;
   margin-right: 20px;
 }
-.mlp_quicklinks.br, .mlp_quicklinks.tr {
+#mlp-quicklink-form.br, #mlp-quicklink-form.tr {
   float: right;
   margin-left: 20px;
 }
-.mlp_quicklinks input {
+#mlp-quicklink-form input {
   font-size: .9em;
 }

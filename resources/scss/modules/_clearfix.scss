@@ -18,7 +18,3 @@
 %clearfix {
 	@include clearfix($extend: false);
 }
-
-.clear {
-	clear: both;
-}

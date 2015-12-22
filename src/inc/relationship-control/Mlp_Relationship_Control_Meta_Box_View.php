@@ -82,62 +82,64 @@ class Mlp_Relationship_Control_Meta_Box_View {
 			);
 			?>
 			<div id="<?php print $action_selector_id; ?>" class='hidden'>
-				<div class="mlp_rsc_action_list" style="float:left;width:20em;">
-					<?php
+				<div class="mlp-rsc-settings">
+					<div class="mlp_rsc_action_list" style="float:left;width:20em;">
+						<?php
 
-					$actions = array (
-						'stay' => esc_html__( 'Leave as is', 'multilingual-press' ),
-						'new'  => esc_html__( 'Create new post', 'multilingual-press' ),
-					);
+						$actions = array (
+							'stay' => esc_html__( 'Leave as is', 'multilingual-press' ),
+							'new'  => esc_html__( 'Create new post', 'multilingual-press' ),
+						);
 
-					if ( $this->remote_post_id )
-						$actions[ 'disconnect' ] = esc_html__( 'Remove relationship', 'multilingual-press' );
+						if ( $this->remote_post_id )
+							$actions[ 'disconnect' ] = esc_html__( 'Remove relationship', 'multilingual-press' );
 
-					foreach ( $actions as $key => $label )
-						print '<p>'
-							. $this->get_radio(
-								   $key,
-									   $label,
-									   'stay',
-									   'mlp_rsc_action[' . $this->remote_blog_id . ']',
-									   'mlp_rsc_input_id_' . $this->remote_blog_id
-							)
-							. '</p>';
+						foreach ( $actions as $key => $label )
+							print '<p>'
+								. $this->get_radio(
+									   $key,
+										   $label,
+										   'stay',
+										   'mlp_rsc_action[' . $this->remote_blog_id . ']',
+										   'mlp_rsc_input_id_' . $this->remote_blog_id
+								)
+								. '</p>';
 
-					?>
-					<p>
-						<label for="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search" class="mlp_toggler">
-							<input
-								type="radio"
-								name="mlp_rsc_action[<?php print $this->remote_blog_id; ?>]"
-								value="search"
-								id="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search"
-								data-toggle_selector="#<?php print $search_selector_id; ?>">
-							<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ) ?>
+						?>
+						<p>
+							<label for="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search" class="mlp_toggler">
+								<input
+									type="radio"
+									name="mlp_rsc_action[<?php print $this->remote_blog_id; ?>]"
+									value="search"
+									id="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search"
+									data-toggle_selector="#<?php print $search_selector_id; ?>">
+								<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ) ?>
+							</label>
+						</p>
+					</div>
+
+					<div id="<?php print $search_selector_id; ?>"
+						 style="display:none;float:left;max-width:30em">
+
+						<label for="<?php print $this->search_input_id; ?>">
+							<?php
+							esc_html_e( 'Live search', 'multilingual-press' );
+							?>
 						</label>
-					</p>
-				</div>
-
-				<div id="<?php print $search_selector_id; ?>"
-					 style="display:none;float:left;max-width:30em">
-
-					<label for="<?php print $this->search_input_id; ?>">
 						<?php
-						esc_html_e( 'Live search', 'multilingual-press' );
+						print $this->get_search_input( $this->search_input_id );
 						?>
-					</label>
-					<?php
-					print $this->get_search_input( $this->search_input_id );
-					?>
 
-					<ul class="mlp_search_results"
-						id="mlp_search_results_<?php print $this->remote_blog_id; ?>">
-						<?php
-						$this->updater->update( 'default.remote.posts' );
-						?>
-					</ul>
+						<ul class="mlp_search_results"
+							id="mlp_search_results_<?php print $this->remote_blog_id; ?>">
+							<?php
+							$this->updater->update( 'default.remote.posts' );
+							?>
+						</ul>
+					</div>
 				</div>
-				<p class="clear">
+				<p>
 					<?php
 					$data_attrs = $this->add_id_values( '' );
 					?>
@@ -145,7 +147,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 						   class="button button-primary mlp_rsc_save_reload"
 						   value="<?php
 						   esc_attr_e( 'Save and reload this page', 'multilingual-press' );
-						   ?>" <?php print $data_attrs; ?>">
+						   ?>" <?php print $data_attrs; ?>>
 					<span class="description"><?php
 						esc_html_e( 'Please save other changes first separately.', 'multilingual-press' );
 						?></span>

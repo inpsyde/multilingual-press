@@ -1,3 +1,7 @@
+.mlp_advanced_translator_metabox{
+	@include clearfix();
+}
+
 .mlp_titlediv {
 	position: relative;
 	margin-bottom: 10px;
@@ -30,6 +34,10 @@
 	background: #fff;
 	outline: 0;
 	font-size: 1.2em;
+}
+
+.mlp-taxonomy-fieldset-container{
+	@include clearfix();
 }
 
 .mlp_taxonomy_box {
