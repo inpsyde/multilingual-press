@@ -21,6 +21,23 @@
 			Modules: Modules,
 
 			/**
+			 * Returns the settings object for the given module or settings name.
+			 * @param {string} name - The name of either the MulitilingualPress module or the settings object itself.
+			 * @returns {Object} - The settings object.
+			 */
+			getSettings: function( name ) {
+				if ( 'undefined' !== typeof window[ 'mlp' + name + 'Settings' ] ) {
+					return window[ 'mlp' + name + 'Settings' ];
+				}
+
+				if ( 'undefined' !== typeof window[ name ] ) {
+					return window[ name ];
+				}
+
+				return {};
+			},
+
+			/**
 			 * Registers a new module with the given Module callback under the given name for the given rout.
 			 * @param {string} route - The route for the module.
 			 * @param {string} name - The name of the module.

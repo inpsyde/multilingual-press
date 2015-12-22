@@ -67,7 +67,7 @@ class Mlp_User_Backend_Language {
 		add_filter( 'personal_options', array( $this, 'edit_user_profile' ) );
 		add_filter( 'profile_update', array( $this, 'profile_update' ) );
 
-		add_action( 'admin_footer-options-general.php', array( $this, 'set_selected_language' ) );
+		add_action( 'admin_head-options-general.php', array( $this, 'enqueue_script' ) );
 	}
 
 	/**
@@ -236,50 +236,25 @@ class Mlp_User_Backend_Language {
 	}
 
 	/**
-	 * Set the site language to what it actually is (i.e., not the user backend language).
+	 * Enqueues the script to set the site language to what it actually is (i.e., not the user backend language).
 	 *
-	 * @wp-hook admin_footer-options-general.php
+	 * @wp-hook admin_head-options-general.php
 	 *
 	 * @return void
 	 */
-	public function set_selected_language() {
+	public function enqueue_script() {
 
 		unset ( $GLOBALS['locale'] );
-
-		$filtered_locale = get_locale();
 
 		remove_filter( 'locale', array( $this, 'locale' ) );
 
 		$unfiltered_locale = get_locale();
 
-		if ( $filtered_locale !== $unfiltered_locale ) {
-			$this->print_script( $unfiltered_locale );
-		}
+		wp_localize_script( 'mlp-admin', 'mlpUserBackendLanguageSettings', array(
+			'locale' => 'en_US' === $unfiltered_locale ? '' : esc_js( $unfiltered_locale ),
+		) );
+		wp_enqueue_script( 'mlp-admin' );
 
 		add_filter( 'locale', array( $this, 'locale' ) );
 	}
-
-	/**
-	 * Print the script to fix the visible value for the site language
-	 *
-	 * @link   https://github.com/inpsyde/multilingual-press/issues/89
-	 * @param  string $value
-	 * @return void
-	 */
-	private function print_script( $value ) {
-
-		if ( 'en_US' === $value ) {
-			$value = '';
-		}
-		else {
-			$value = esc_js( $value );
-		}
-
-		?>
-		<script>
-			document.getElementById( 'WPLANG' ).value = '<?php echo $value; ?>';
-		</script>
-		<?php
-	}
-
 }
