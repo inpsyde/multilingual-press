@@ -74,9 +74,6 @@ module.exports = function( grunt ) {
 			'imagemin-images': {
 				task: 'imagemin:images',
 				src: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ]
-			},
-			sass: {
-				src: [ '<%= config.styles.src %>**/*.scss' ]
 			}
 		},
 
@@ -257,10 +254,10 @@ module.exports = function( grunt ) {
 			grunt: {
 				files: [ 'Gruntfile.js' ],
 				tasks: [
-					'jscs:grunt',
-					'jshint:grunt',
-					'lineending:grunt',
-					'jsvalidate:grunt'
+					'newer:jscs:grunt',
+					'newer:jshint:grunt',
+					'newer:lineending:grunt',
+					'newer:jsvalidate:grunt'
 				]
 			},
 
@@ -295,27 +292,27 @@ module.exports = function( grunt ) {
 					'newer:jsvalidate:src',
 					'newer:jshint:force',
 					'newer:jscs:force',
-					'newer:concat',
-					'newer:lineending:scripts',
-					'newer:uglify',
-					'newer:jsvalidate:dest'
+					'concat',
+					'changed:lineending:scripts',
+					'changed:uglify',
+					'changed:jsvalidate:dest'
 				]
 			},
 
 			styles: {
 				files: [ '<%= config.styles.src %>**/*.scss' ],
 				tasks: [
-					'newer:delegate:sass',
-					'newer:postcss',
-					'newer:lineending:styles',
-					'newer:cssmin'
+					'sass',
+					'changed:postcss',
+					'changed:lineending:styles',
+					'changed:cssmin'
 				]
 			},
 
 			travis: {
 				files: [ '.travis.yml' ],
 				tasks: [
-					'travis-lint'
+					'newer:travis-lint'
 				]
 			}
 		}
@@ -389,12 +386,12 @@ module.exports = function( grunt ) {
 		'newer:jsvalidate:src',
 		'newer:jshint:src',
 		'newer:jscs:src',
-		'newer:concat',
-		'newer:lineending:scripts',
-		'newer:uglify',
-		'newer:jsvalidate:dest',
-		'newer:jshint:dest',
-		'newer:jscs:dest'
+		'concat',
+		'changed:lineending:scripts',
+		'changed:uglify',
+		'changed:jsvalidate:dest',
+		'changed:jshint:dest',
+		'changed:jscs:dest'
 	] );
 
 	grunt.registerTask( 'force-scripts', configObject.watch.scripts.tasks );
@@ -418,6 +415,7 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'pre-commit', [
+		'changed-clean',
 		'newer-clean',
 		'common',
 		'assets',
