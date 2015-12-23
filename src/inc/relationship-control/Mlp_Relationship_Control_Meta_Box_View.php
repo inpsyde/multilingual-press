@@ -66,6 +66,8 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 	public function render() {
 
+		$this->localize_script();
+
 		$action_selector_id = "mlp_rsc_action_container_$this->remote_blog_id";
 		$search_selector_id = "mlp_rsc_search_container_$this->remote_blog_id";
 		?>
@@ -154,6 +156,24 @@ class Mlp_Relationship_Control_Meta_Box_View {
 			</div>
 		</div>
 	<?php
+	}
+
+	/**
+	 * Makes the relationships control settings available for JavaScript.
+	 *
+	 * @return void
+	 */
+	private function localize_script() {
+
+		wp_localize_script( 'mlp-admin', 'mlpRelationshipControlSettings', array(
+			'L10n' => array(
+				'noPostSelected'       => __( 'Please select a post.', 'multilingual-press' ),
+				'unsavedRelationships' => __(
+					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
+					'multilingual-press'
+				),
+			),
+		) );
 	}
 
 	public function print_jquery() {

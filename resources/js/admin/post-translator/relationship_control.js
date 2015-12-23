@@ -1,50 +1,6 @@
-/* global ajaxurl, mlpRelationshipControlL10n */
+/* global ajaxurl, mlpRelationshipControlSettings */
 ;( function( $, mlpL10n ) {
 	"use strict";
-
-	var relChanged = [];
-
-	$( '.mlp_rsc_action_list input' ).on( 'change', function() {
-		var $this = $( this ),
-			$metabox = $this.parent( '.mlp_advanced_translator_metabox' ),
-			stay = $this.val() === 'stay',
-			elIndex = containsElement( relChanged, $metabox );
-
-		if ( elIndex === -1 ) {
-			if ( !stay ) {
-				relChanged.push( $metabox );
-			}
-		} else {
-			if ( stay ) {
-				relChanged.splice( elIndex, 1 );
-			}
-		}
-	} );
-
-	if ( $( 'body' ).hasClass( 'post-php' ) ) {
-		$( '#publish' ).on( 'click', function( e ) {
-			if ( relChanged.length && !confirm( mlpL10n.unsavedPostRelationships ) ) {
-				e.preventDefault();
-				e.stopPropagation();
-			}
-		} );
-	}
-
-	/**
-	 * Checks if a jQuery object is already in an array
-	 * @param array
-	 * @param element
-	 * @returns {number}
-	 */
-	function containsElement( array, element ) {
-		for ( var i = 0; i < array.length; i++ ) {
-			if ( array[ i ][ 0 ] !== undefined && element[ 0 ] !== undefined && array[ i ][ 0 ] === element[ 0 ] ) {
-				return i;
-			}
-		}
-
-		return -1;
-	}
 
 	$.fn.mlp_search = function( options ) {
 
@@ -140,7 +96,7 @@
 				new_post_id = $( 'input[name="mlp_add_post[' + remote_blog_id + ']"]:checked' ).val();
 
 				if ( !new_post_id || '0' === new_post_id ) {
-					alert( mlpL10n.noPostSelected );
+					alert( mlpL10n.L10n.noPostSelected );
 				} else {
 					changeRelationship( 'connect_existing' );
 				}
@@ -186,4 +142,4 @@
 		}
 	} );
 
-} )( jQuery, mlpRelationshipControlL10n );
+} )( jQuery, mlpRelationshipControlSettings );
