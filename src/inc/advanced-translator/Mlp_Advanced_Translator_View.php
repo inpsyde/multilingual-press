@@ -241,8 +241,8 @@ class Mlp_Advanced_Translator_View {
 		$toggle_id = 'tax_toggle_' . $remote_blog_id;
 
 		printf(
-			'<button type="button" class="button secondary" name="toggle_%2$d"
-				data-toggle_selector="#%3$s">%1$s</button>',
+			'<button type="button" class="button secondary mlp-click-toggler" name="toggle_%2$d"
+				data-toggle-target="#%3$s">%1$s</button>',
 			esc_html__( 'Change taxonomies', 'multilingual-press' ),
 			$remote_blog_id,
 			$toggle_id

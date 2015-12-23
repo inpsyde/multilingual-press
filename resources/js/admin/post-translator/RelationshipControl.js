@@ -13,7 +13,7 @@
 	 * @constructor
 	 */
 	var RelationshipControl = Backbone.View.extend( {
-		el: '',
+		el: 'body',
 
 		events: {
 		},
@@ -26,5 +26,5 @@
 	} );
 
 	// Register the RelationshipControl module for the Add New Post and the Edit Post admin pages.
-	//MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl );
+	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl );
 })( jQuery );

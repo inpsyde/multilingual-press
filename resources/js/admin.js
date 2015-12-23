@@ -1,4 +1,4 @@
-/* global _, Backbone, mlpSettings */
+/* global mlpSettings */
 (function( $ ) {
 	'use strict';
 
@@ -75,42 +75,4 @@
 	window.MultilingualPress = new MultilingualPress();
 
 	$( window.MultilingualPress.initialize );
-})( jQuery );
-
-// TODO: Refactor the following ... mess.
-(function( $ ) {
-	"use strict";
-
-	var multilingualPress = {
-
-		init: function() {
-			$( document ).on( 'click', '[data-toggle_selector]', function() {
-				if ( 'INPUT' === this.tagName ) {
-					return true;
-				}
-
-				$( $( this ).data( 'toggle_selector' ) ).toggle();
-
-				return false;
-			} );
-
-			$( 'label.mlp_toggler' ).each( function() {
-				var $inputs = $( 'input[name="' + $( '#' + $( this ).attr( 'for' ) ).attr( 'name' ) + '"]' ),
-					$toggler = $inputs.filter( '[data-toggle_selector]' );
-
-				if ( $toggler.length ) {
-					$inputs.on( 'change', function() {
-						$( $toggler.data( 'toggle_selector' ) ).toggle( $toggler.is( ':checked' ) );
-
-						return true;
-					} );
-				}
-			} );
-		}
-	};
-
-	$( function() {
-		multilingualPress.init();
-	} );
-
 })( jQuery );

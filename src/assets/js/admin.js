@@ -1,4 +1,4 @@
-/* global _, Backbone, mlpSettings */
+/* global mlpSettings */
 (function( $ ) {
 	'use strict';
 
@@ -77,42 +77,65 @@
 	$( window.MultilingualPress.initialize );
 })( jQuery );
 
-// TODO: Refactor the following ... mess.
+/* global MultilingualPress */
 (function( $ ) {
-	"use strict";
+	'use strict';
 
-	var multilingualPress = {
+	/**
+	 * Constructor for the MultilingualPress Common module.
+	 * @constructor
+	 */
+	var Common = Backbone.View.extend( {
+		el: 'body',
 
-		init: function() {
-			$( document ).on( 'click', '[data-toggle_selector]', function() {
-				if ( 'INPUT' === this.tagName ) {
-					return true;
-				}
+		events: {
+			'click .mlp-click-toggler': 'toggleElement'
+		},
 
-				$( $( this ).data( 'toggle_selector' ) ).toggle();
+		/**
+		 * Initializes the Common module.
+		 */
+		initialize: function() {
+			this.initializeStateTogglers();
+		},
 
-				return false;
-			} );
+		/**
+		 * Initializes the togglers that work by using their individual state.
+		 */
+		initializeStateTogglers: function() {
+			$( '.mlp-state-toggler' ).each( function( index, element ) {
+				var $toggler = $( element );
+				$( '[name="' + $toggler.attr( 'name' ) + '"]' )
+					.on( 'change', { $toggler: $toggler }, this.toggleElementIfChecked );
+			}.bind( this ) );
+		},
 
-			$( 'label.mlp_toggler' ).each( function() {
-				var $inputs = $( 'input[name="' + $( '#' + $( this ).attr( 'for' ) ).attr( 'name' ) + '"]' ),
-					$toggler = $inputs.filter( '[data-toggle_selector]' );
+		/**
+		 * Toggles the element with the ID given in the according toggler's data attribute if the toggler is checked.
+		 * @param {Event} event - The change event of an input element.
+		 */
+		toggleElementIfChecked: function( event ) {
+			var $toggler = event.data.$toggler,
+				targetID = $toggler.data( 'toggle-target' );
+			if ( targetID ) {
+				$( targetID ).toggle( $toggler.is( ':checked' ) );
+			}
+		},
 
-				if ( $toggler.length ) {
-					$inputs.on( 'change', function() {
-						$( $toggler.data( 'toggle_selector' ) ).toggle( $toggler.is( ':checked' ) );
-
-						return true;
-					} );
-				}
-			} );
+		/**
+		 * Toggles the element with the ID given in the according data attribute.
+		 * @param {Event} event - The click event of a toggler element.
+		 */
+		toggleElement: function( event ) {
+			var targetID = $( event.target ).data( 'toggle-target' ) || '';
+			if ( targetID ) {
+				$( targetID ).toggle();
+			}
 		}
-	};
-
-	$( function() {
-		multilingualPress.init();
 	} );
 
+	// Register the Common module for all admin pages.
+	MultilingualPress.Modules.Common = new Common();
 })( jQuery );
 
 /* global MultilingualPress */
@@ -430,7 +453,7 @@
 	 * @constructor
 	 */
 	var RelationshipControl = Backbone.View.extend( {
-		el: '',
+		el: 'body',
 
 		events: {
 		},
@@ -443,7 +466,7 @@
 	} );
 
 	// Register the RelationshipControl module for the Add New Post and the Edit Post admin pages.
-	//MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl );
+	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl );
 })( jQuery );
 
 /* global ajaxurl, mlpRelationshipControlL10n */
