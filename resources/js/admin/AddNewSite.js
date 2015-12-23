@@ -42,7 +42,7 @@
 		 * @param {Event} event - The change event of the site language select element.
 		 */
 		adaptLanguage: function( event ) {
-			var language = this.getLanguage( $( event.currentTarget ) );
+			var language = this.getLanguage( $( event.target ) );
 			if ( this.$language.find( '[value="' + language + '"]' ).length ) {
 				this.$language.val( language );
 			}
@@ -67,7 +67,7 @@
 		 * @param {Event} event - The change event of the source site ID select element.
 		 */
 		togglePluginsRow: function( event ) {
-			this.$pluginsRow.toggle( 0 < $( event.currentTarget ).val() );
+			this.$pluginsRow.toggle( 0 < $( event.target ).val() );
 		}
 	} );
 
