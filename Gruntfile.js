@@ -39,14 +39,14 @@ module.exports = function( grunt ) {
 			admin: {
 				src: [
 					'<%= config.scripts.src %>admin.js',
-					'<%= config.scripts.src %>admin/*.js'
+					'<%= config.scripts.src %>admin/**/*.js'
 				],
 				dest: '<%= config.scripts.dest %>admin.js'
 			},
 			frontend: {
 				src: [
 					'<%= config.scripts.src %>frontend.js',
-					'<%= config.scripts.src %>frontend/*.js'
+					'<%= config.scripts.src %>frontend/**/*.js'
 				],
 				dest: '<%= config.scripts.dest %>frontend.js'
 			}

@@ -1,4 +1,4 @@
-/* global Backbone, mlpSettings */
+/* global _, Backbone, mlpSettings */
 (function( $ ) {
 	'use strict';
 
@@ -46,9 +46,10 @@
 			 */
 			registerModule: function( routes, name, Module, options ) {
 				if ( _.isFunction( Module ) ) {
-					$.each( Array === routes.constructor ? routes : [ routes ], function( index, route ) {
+					options = options || {};
+					$.each( _.isArray( routes ) ? routes : [ routes ], function( index, route ) {
 						Router.route( route, name, function() {
-							Modules[ name ] = new Module( options || {} );
+							Modules[ name ] = new Module( options );
 						} );
 					} );
 				}
@@ -112,6 +113,110 @@
 		multilingualPress.init();
 	} );
 
+})( jQuery );
+
+/* global MultilingualPress */
+(function( $ ) {
+	'use strict';
+
+	/**
+	 * Settings for the MultilingualPress NavMenus module. Only available on the targeted admin pages.
+	 * @type {Object}
+	 */
+	var moduleSettings = MultilingualPress.getSettings( 'NavMenus' );
+
+	/**
+	 * Constructor for the MultilingualPress NavMenus module.
+	 * @constructor
+	 */
+	var NavMenus = Backbone.View.extend( {
+		el: '#' + moduleSettings.metaBoxID,
+
+		events: {
+			'click #submit-mlp-language': 'sendRequest'
+		},
+
+		/**
+		 * Initializes the NavMenus module.
+		 */
+		initialize: function() {
+			this.$languages = this.$el.find( 'li [type="checkbox"]' );
+
+			this.$menu = $( '#menu' );
+
+			this.$menuToEdit = $( '#menu-to-edit' );
+
+			this.$spinner = this.$el.find( '.spinner' );
+
+			this.$submit = this.$el.find( '#submit-mlp-language' );
+		},
+
+		/**
+		 * Requests the according markup for the checked languages in the Languages meta box.
+		 * @param {Event} event - The click event of the submit button.
+		 */
+		sendRequest: function( event ) {
+			var data;
+
+			event.preventDefault();
+
+			this.$submit.prop( 'disabled', true );
+
+			/**
+			 * The "is-active" class was introduced in WordPress 4.2. Since MultilingualPress has to stay
+			 * backwards-compatible with the last four major versions of WordPress, we can only rely on this with the
+			 * release of WordPress 4.6.
+			 * TODO: Remove "show()" with the release of WordPress 4.6.
+			 */
+			this.$spinner.addClass( 'is-active' ).show();
+
+			data = {
+				action: moduleSettings.action,
+				menu: this.$menu.val(),
+				mlp_sites: this.getSites()
+			};
+			data[ moduleSettings.nonceName ] = moduleSettings.nonce;
+			$.post( moduleSettings.ajaxURL, data, this.handleResponse.bind( this ) );
+		},
+
+		/**
+		 * Returns the site IDs for the checked languages in the Languages meta box.
+		 * @returns {string[]} - The site IDs.
+		 */
+		getSites: function() {
+			var languages = [];
+			this.$languages.filter( ':checked' ).each( function() {
+				languages.push( $( this ).val() );
+			} );
+
+			return languages;
+		},
+
+		/**
+		 * Adds the nav menu item's markup in the response object to the currently edited menu.
+		 * @param {Object} response - The response data object.
+		 */
+		handleResponse: function( response ) {
+			if ( response.success && response.data ) {
+				this.$menuToEdit.append( response.data );
+			}
+
+			this.$languages.prop( 'checked', false );
+
+			/**
+			 * The "is-active" class was introduced in WordPress 4.2. Since MultilingualPress has to stay
+			 * backwards-compatible with the last four major versions of WordPress, we can only rely on this with the
+			 * release of WordPress 4.6.
+			 * TODO: Remove "hide()" with the release of WordPress 4.6.
+			 */
+			this.$spinner.addClass( 'is-active' ).hide();
+
+			this.$submit.prop( 'disabled', false );
+		}
+	} );
+
+	// Register the NavMenus module for the Menus admin page.
+	MultilingualPress.registerModule( 'nav-menus.php', 'NavMenus', NavMenus );
 })( jQuery );
 
 /* global MultilingualPress */
@@ -315,209 +420,31 @@
 	'use strict';
 
 	/**
-	 * Settings for the MultilingualPress NavMenus module. Only available on the targeted admin pages.
+	 * Settings for the MultilingualPress RelationshipControl module. Only available on the targeted admin pages.
 	 * @type {Object}
 	 */
-	var moduleSettings = MultilingualPress.getSettings( 'NavMenus' );
+	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
 
 	/**
-	 * Constructor for the MultilingualPress NavMenus module.
+	 * Constructor for the MultilingualPress RelationshipControl module.
 	 * @constructor
 	 */
-	var NavMenus = Backbone.View.extend( {
-		el: '#' + moduleSettings.metaBoxID,
+	var RelationshipControl = Backbone.View.extend( {
+		el: '',
 
 		events: {
-			'click #submit-mlp-language': 'sendRequest'
 		},
 
 		/**
-		 * Initializes the NavMenus module.
+		 * Initializes the RelationshipControl module.
 		 */
 		initialize: function() {
-			this.$languages = this.$el.find( 'li [type="checkbox"]' );
-
-			this.$menu = $( '#menu' );
-
-			this.$menuToEdit = $( '#menu-to-edit' );
-
-			this.$spinner = this.$el.find( '.spinner' );
-
-			this.$submit = this.$el.find( '#submit-mlp-language' );
-		},
-
-		/**
-		 * Requests the according markup for the checked languages in the Languages meta box.
-		 * @param {Event} event - The click event of the submit button.
-		 */
-		sendRequest: function( event ) {
-			var data;
-
-			event.preventDefault();
-
-			this.$submit.prop( 'disabled', true );
-
-			/**
-			 * The "is-active" class was introduced in WordPress 4.2. Since MultilingualPress has to stay
-			 * backwards-compatible with the last four major versions of WordPress, we can only rely on this with the
-			 * release of WordPress 4.6.
-			 * TODO: Remove "show()" with the release of WordPress 4.6.
-			 */
-			this.$spinner.addClass( 'is-active' ).show();
-
-			data = {
-				action: moduleSettings.action,
-				menu: this.$menu.val(),
-				mlp_sites: this.getSites()
-			};
-			data[ moduleSettings.nonceName ] = moduleSettings.nonce;
-			$.post( moduleSettings.ajaxURL, data, this.handleResponse.bind( this ) );
-		},
-
-		/**
-		 * Returns the site IDs for the checked languages in the Languages meta box.
-		 * @returns {string[]} - The site IDs.
-		 */
-		getSites: function() {
-			var languages = [];
-			this.$languages.filter( ':checked' ).each( function() {
-				languages.push( $( this ).val() );
-			} );
-
-			return languages;
-		},
-
-		/**
-		 * Adds the nav menu item's markup in the response object to the currently edited menu.
-		 * @param {Object} response - The response data object.
-		 */
-		handleResponse: function( response ) {
-			if ( response.success && response.data ) {
-				this.$menuToEdit.append( response.data );
-			}
-
-			this.$languages.prop( 'checked', false );
-
-			/**
-			 * The "is-active" class was introduced in WordPress 4.2. Since MultilingualPress has to stay
-			 * backwards-compatible with the last four major versions of WordPress, we can only rely on this with the
-			 * release of WordPress 4.6.
-			 * TODO: Remove "hide()" with the release of WordPress 4.6.
-			 */
-			this.$spinner.addClass( 'is-active' ).hide();
-
-			this.$submit.prop( 'disabled', false );
 		}
 	} );
 
-	// Register the NavMenus module for the Menus admin page.
-	MultilingualPress.registerModule( 'nav-menus.php', 'NavMenus', NavMenus );
+	// Register the RelationshipControl module for the Add New Post and the Edit Post admin pages.
+	//MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl );
 })( jQuery );
-
-/* global MultilingualPress */
-(function( $ ) {
-	'use strict';
-
-	/**
-	 * Constructor for the MultilingualPress TermTranslator module.
-	 * @constructor
-	 */
-	var TermTranslator = Backbone.View.extend( {
-		el: '#mlp-term-translations',
-
-		events: {
-			'change select': 'propagateSelectedTerm'
-		},
-
-		/**
-		 * Initializes the TermTranslator module.
-		 */
-		initialize: function() {
-			this.$selects = this.$el.find( 'select' );
-		},
-
-		/**
-		 * Propagates the new value of one term select element to all other term select elements.
-		 * @param {Event} event - The change event of a term select element.
-		 */
-		propagateSelectedTerm: function( event ) {
-			var $select,
-				relation;
-
-			if ( this.isPropagating ) {
-				return;
-			}
-
-			this.isPropagating = true;
-
-			$select = $( event.target );
-
-			relation = this.getSelectedRelation( $select );
-			if ( '' !== relation ) {
-				this.$selects.not( $select ).each( function( index, element ) {
-					this.selectTerm( $( element ), relation );
-				}.bind( this ) );
-			}
-
-			this.isPropagating = false;
-		},
-
-		/**
-		 * Returns the relation of the given select element (i.e., its currently selected option).
-		 * @param {Object} $select - A select element.
-		 * @returns {string} - The relation of the selected term.
-		 */
-		getSelectedRelation: function( $select ) {
-			return $select.find( 'option:selected' ).data( 'relation' ) || '';
-		},
-
-		/**
-		 * Sets the given select element's value to that of the option with the given relation, or the first option.
-		 * @param {Object} $select - A select element.
-		 * @param {string} relation - The relation of a term.
-		 */
-		selectTerm: function( $select, relation ) {
-			var $option = $select.find( 'option[data-relation="' + relation + '"]' );
-			if ( $option.length ) {
-				$select.val( $option.val() );
-			} else if ( this.getSelectedRelation( $select ) ) {
-				$select.val( $select.find( 'option' ).first().val() );
-			}
-		}
-	} );
-
-	// Register the TermTranslator module for the Edit Tags admin page.
-	MultilingualPress.registerModule( 'edit-tags.php', 'TermTranslator', TermTranslator );
-})( jQuery );
-
-/* global MultilingualPress */
-(function() {
-	'use strict';
-
-	/**
-	 * Settings for the MultilingualPress UserBackendLanguage module. Only available on the targeted admin pages.
-	 * @type {Object}
-	 */
-	var moduleSettings = MultilingualPress.getSettings( 'UserBackendLanguage' );
-
-	/**
-	 * Constructor for the MultilingualPress UserBackendLanguage module.
-	 * @constructor
-	 */
-	var UserBackendLanguage = Backbone.View.extend( {
-		el: '#WPLANG',
-
-		/**
-		 * Initializes the UserBackendLanguage module.
-		 */
-		initialize: function() {
-			this.$el.val( moduleSettings.locale );
-		}
-	} );
-
-	// Register the UserBackendLanguage module for the General Settings admin page.
-	MultilingualPress.registerModule( 'options-general.php', 'UserBackendLanguage', UserBackendLanguage );
-})();
 
 /* global ajaxurl, mlpRelationshipControlL10n */
 ;( function( $, mlpL10n ) {
@@ -708,3 +635,108 @@
 	} );
 
 } )( jQuery, mlpRelationshipControlL10n );
+
+/* global MultilingualPress */
+(function( $ ) {
+	'use strict';
+
+	/**
+	 * Constructor for the MultilingualPress TermTranslator module.
+	 * @constructor
+	 */
+	var TermTranslator = Backbone.View.extend( {
+		el: '#mlp-term-translations',
+
+		events: {
+			'change select': 'propagateSelectedTerm'
+		},
+
+		/**
+		 * Initializes the TermTranslator module.
+		 */
+		initialize: function() {
+			this.$selects = this.$el.find( 'select' );
+		},
+
+		/**
+		 * Propagates the new value of one term select element to all other term select elements.
+		 * @param {Event} event - The change event of a term select element.
+		 */
+		propagateSelectedTerm: function( event ) {
+			var $select,
+				relation;
+
+			if ( this.isPropagating ) {
+				return;
+			}
+
+			this.isPropagating = true;
+
+			$select = $( event.target );
+
+			relation = this.getSelectedRelation( $select );
+			if ( '' !== relation ) {
+				this.$selects.not( $select ).each( function( index, element ) {
+					this.selectTerm( $( element ), relation );
+				}.bind( this ) );
+			}
+
+			this.isPropagating = false;
+		},
+
+		/**
+		 * Returns the relation of the given select element (i.e., its currently selected option).
+		 * @param {Object} $select - A select element.
+		 * @returns {string} - The relation of the selected term.
+		 */
+		getSelectedRelation: function( $select ) {
+			return $select.find( 'option:selected' ).data( 'relation' ) || '';
+		},
+
+		/**
+		 * Sets the given select element's value to that of the option with the given relation, or the first option.
+		 * @param {Object} $select - A select element.
+		 * @param {string} relation - The relation of a term.
+		 */
+		selectTerm: function( $select, relation ) {
+			var $option = $select.find( 'option[data-relation="' + relation + '"]' );
+			if ( $option.length ) {
+				$select.val( $option.val() );
+			} else if ( this.getSelectedRelation( $select ) ) {
+				$select.val( $select.find( 'option' ).first().val() );
+			}
+		}
+	} );
+
+	// Register the TermTranslator module for the Edit Tags admin page.
+	MultilingualPress.registerModule( 'edit-tags.php', 'TermTranslator', TermTranslator );
+})( jQuery );
+
+/* global MultilingualPress */
+(function() {
+	'use strict';
+
+	/**
+	 * Settings for the MultilingualPress UserBackendLanguage module. Only available on the targeted admin pages.
+	 * @type {Object}
+	 */
+	var moduleSettings = MultilingualPress.getSettings( 'UserBackendLanguage' );
+
+	/**
+	 * Constructor for the MultilingualPress UserBackendLanguage module.
+	 * @constructor
+	 */
+	var UserBackendLanguage = Backbone.View.extend( {
+		el: '#WPLANG',
+
+		/**
+		 * Initializes the UserBackendLanguage module.
+		 */
+		initialize: function() {
+			this.$el.val( moduleSettings.locale );
+		}
+	} );
+
+	// Register the UserBackendLanguage module for the General Settings admin page.
+	MultilingualPress.registerModule( 'options-general.php', 'UserBackendLanguage', UserBackendLanguage );
+})();

@@ -1,4 +1,4 @@
-/* global Backbone, mlpSettings */
+/* global _, Backbone, mlpSettings */
 (function( $ ) {
 	'use strict';
 
@@ -46,9 +46,10 @@
 			 */
 			registerModule: function( routes, name, Module, options ) {
 				if ( _.isFunction( Module ) ) {
-					$.each( Array === routes.constructor ? routes : [ routes ], function( index, route ) {
+					options = options || {};
+					$.each( _.isArray( routes ) ? routes : [ routes ], function( index, route ) {
 						Router.route( route, name, function() {
-							Modules[ name ] = new Module( options || {} );
+							Modules[ name ] = new Module( options );
 						} );
 					} );
 				}
