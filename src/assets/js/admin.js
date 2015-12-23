@@ -176,17 +176,17 @@
 			'change #mlp-base-site-id': 'togglePluginsRow'
 		},
 
-		template: _.template( $( '#mlp-add-new-site-template' ).html() ),
+		template: _.template( $( '#mlp-add-new-site-template' ).html() || '' ),
 
 		/**
 		 * Initializes the AddNewSite module.
 		 */
 		initialize: function() {
+			this.render();
+
 			this.$language = $( '#mlp-site-language' );
 
 			this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
-
-			this.render();
 		},
 
 		/**

@@ -30,6 +30,8 @@ class Mlp_New_Site_View {
 	/**
 	 * Prints the template for the MultilingualPress table, and fires an action to inject markup.
 	 *
+	 * @wp-hook admin_footer
+	 *
 	 * @return void
 	 */
 	public function print_template() {
