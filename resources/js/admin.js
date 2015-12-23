@@ -38,16 +38,18 @@
 			},
 
 			/**
-			 * Registers a new module with the given Module callback under the given name for the given rout.
-			 * @param {string} route - The route for the module.
+			 * Registers a new module with the given Module callback under the given name for the given route.
+			 * @param {string|string[]} routes - The routes for the module.
 			 * @param {string} name - The name of the module.
 			 * @param {Function} Module - The constructor callback for the module.
 			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
 			 */
-			registerModule: function( route, name, Module, options ) {
+			registerModule: function( routes, name, Module, options ) {
 				if ( _.isFunction( Module ) ) {
-					Router.route( route, name, function() {
-						Modules[ name ] = new Module( options || {} );
+					$.each( Array === routes.constructor ? routes : [ routes ], function( index, route ) {
+						Router.route( route, name, function() {
+							Modules[ name ] = new Module( options || {} );
+						} );
 					} );
 				}
 			},
