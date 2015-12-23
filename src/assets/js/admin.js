@@ -38,16 +38,18 @@
 			},
 
 			/**
-			 * Registers a new module with the given Module callback under the given name for the given rout.
-			 * @param {string} route - The route for the module.
+			 * Registers a new module with the given Module callback under the given name for the given route.
+			 * @param {string|string[]} routes - The routes for the module.
 			 * @param {string} name - The name of the module.
 			 * @param {Function} Module - The constructor callback for the module.
 			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
 			 */
-			registerModule: function( route, name, Module, options ) {
+			registerModule: function( routes, name, Module, options ) {
 				if ( _.isFunction( Module ) ) {
-					Router.route( route, name, function() {
-						Modules[ name ] = new Module( options || {} );
+					$.each( Array === routes.constructor ? routes : [ routes ], function( index, route ) {
+						Router.route( route, name, function() {
+							Modules[ name ] = new Module( options || {} );
+						} );
 					} );
 				}
 			},
@@ -81,21 +83,6 @@
 	var multilingualPress = {
 
 		init: function() {
-			var self = this;
-			self.setToggle();
-			/**
-			 * Add event handler for copy post buttons
-			 */
-			$( document ).on( 'click', '.mlp_copy_button', function( event ) {
-				event.preventDefault();
-				var blogId = $( event.target ).data( 'blog_id' );
-				self.copyPost( blogId );
-
-			} );
-		},
-
-		// Toggle handler
-		setToggle: function() {
 			$( document ).on( 'click', '[data-toggle_selector]', function() {
 				if ( 'INPUT' === this.tagName ) {
 					return true;
@@ -118,39 +105,6 @@
 					} );
 				}
 			} );
-		},
-
-		// Copy post buttons next to media buttons
-		copyPost: function( blogId ) {
-			// @formatter:off
-			var prefix = 'mlp_translation_data_' + blogId,
-				translationContent = tinyMCE.get( prefix + '_content' ),
-				content = $( '#content' ).val(), // plain content for "text"-view,
-				excerpt = $( '#excerpt' ).val(), // plain content for "text"-view,
-				tinyMCEContent = tinyMCE.get( 'content' ),
-				title = $( '#title' ).val(),
-				postSlug = $( '#editable-post-name' ).html();
-
-			if ( title ) {
-				$( '#' + prefix + '_title' ).val( title );
-			}
-
-			if ( content ) {
-				$( '#' + prefix + '_content' ).val( content );
-			}
-
-			if ( postSlug ) {
-				$( '#' + prefix + '_name' ).val( postSlug );
-			}
-
-			if ( excerpt ) {
-				$( '#' + prefix + '_excerpt' ).val( excerpt );
-			}
-
-			if ( tinyMCEContent ) {
-				translationContent.setContent( tinyMCEContent.getContent() );
-			}
-			// @formatter:on
 		}
 	};
 
@@ -204,7 +158,7 @@
 		 * @param {Event} event - The change event of the site language select element.
 		 */
 		adaptLanguage: function( event ) {
-			var language = this.getLanguage( $( event.currentTarget ) );
+			var language = this.getLanguage( $( event.target ) );
 			if ( this.$language.find( '[value="' + language + '"]' ).length ) {
 				this.$language.val( language );
 			}
@@ -229,12 +183,131 @@
 		 * @param {Event} event - The change event of the source site ID select element.
 		 */
 		togglePluginsRow: function( event ) {
-			this.$pluginsRow.toggle( 0 < $( event.currentTarget ).val() );
+			this.$pluginsRow.toggle( 0 < $( event.target ).val() );
 		}
 	} );
 
 	// Register the AddNewSite module for the Add New Site network admin page.
 	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite );
+})( jQuery );
+
+/* global MultilingualPress */
+(function( $ ) {
+	'use strict';
+
+	/**
+	 * Constructor for the MultilingualPress CopyPost module.
+	 * @constructor
+	 */
+	var CopyPost = Backbone.View.extend( {
+		el: '#post-body',
+
+		events: {
+			'click .mlp_copy_button': 'copyPostData'
+		},
+
+		/**
+		 * Initializes the CopyPost module.
+		 */
+		initialize: function() {
+			this.$content = $( '#content' );
+
+			this.$excerpt = $( '#excerpt' );
+
+			this.$slug = $( '#editable-post-name' );
+
+			this.$title = $( '#title' );
+		},
+
+		/**
+		 * Copies the post data of the source post to a translation post.
+		 * @param {Event} event - The click event of a "Copy source post" button.
+		 */
+		copyPostData: function( event ) {
+			var prefix = 'mlp_translation_data_' + this.getSiteID( $( event.target ) );
+
+			event.preventDefault();
+
+			$( '#' + prefix + '_title' ).val( this.getTitle() );
+
+			$( '#' + prefix + '_name' ).val( this.getSlug() );
+
+			this.copyTinyMCEContent( prefix + '_content' );
+
+			$( '#' + prefix + '_content' ).val( this.getContent() );
+
+			$( '#' + prefix + '_excerpt' ).val( this.getExcerpt() );
+		},
+
+		/**
+		 * Returns the site ID data attribute value of the given "Copy source post" button.
+		 * @param {Object} $button - A "Copy source post" button.
+		 * @returns {number} -  The site ID.
+		 */
+		getSiteID: function( $button ) {
+			return $button.data( 'blog_id' ) || 0;
+		},
+
+		/**
+		 * Returns the title of the original post.
+		 * @returns {string}
+		 */
+		getTitle: function() {
+			return this.$title.val() || '';
+		},
+
+		/**
+		 * Returns the slug of the original post.
+		 * @returns {string}
+		 */
+		getSlug: function() {
+			return this.$slug.text() || '';
+		},
+
+		/**
+		 * Copies the content of the main TinyMCE editor to the TinyMCE editor with the given ID.
+		 * @param {string} targetEditorID - The target TinyMCE editor's ID.
+		 */
+		copyTinyMCEContent: function( targetEditorID ) {
+			var sourceEditor,
+				targetEditor;
+
+			if ( 'undefined' === typeof window.tinyMCE ) {
+				return;
+			}
+
+			sourceEditor = window.tinyMCE.get( 'content' );
+			if ( ! sourceEditor ) {
+				return;
+			}
+
+			targetEditor = window.tinyMCE.get( targetEditorID );
+			if ( ! targetEditor ) {
+				return;
+			}
+
+			targetEditor.setContent( sourceEditor.getContent() );
+		},
+
+		/**
+		 * Returns the content of the original post.
+		 * @returns {string}
+		 */
+		getContent: function() {
+			return this.$content.val() || '';
+		},
+
+		/**
+		 * Returns the excerpt of the original post.
+		 * @returns {string}
+		 */
+		getExcerpt: function() {
+			return this.$excerpt.val() || '';
+		}
+	} );
+
+	// Register the CopyPost module for the Edit Post and Add New Post admin pages.
+	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'CopyPost', CopyPost );
 })( jQuery );
 
 /* global MultilingualPress */
@@ -377,7 +450,7 @@
 
 			this.isPropagating = true;
 
-			$select = $( event.currentTarget );
+			$select = $( event.target );
 
 			relation = this.getSelectedRelation( $select );
 			if ( '' !== relation ) {
