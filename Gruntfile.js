@@ -312,7 +312,7 @@ module.exports = function( grunt ) {
 			travis: {
 				files: [ '.travis.yml' ],
 				tasks: [
-					'newer:travis-lint'
+					'travis-lint'
 				]
 			}
 		}
