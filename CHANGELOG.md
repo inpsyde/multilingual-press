@@ -5,6 +5,7 @@
 - Rename plugin text domain, and adapt gettext calls and translations files.
 - When creating a new site, the language is set to the default site language.
 - When the site language is changed, the MultilingualPress language select adapts to this.
+- Improve _clearfix_ usage, props tiagoschenkel.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
