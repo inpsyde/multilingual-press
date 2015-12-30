@@ -34,7 +34,7 @@
 
 			this.isPropagating = true;
 
-			$select = $( event.currentTarget );
+			$select = $( event.target );
 
 			relation = this.getSelectedRelation( $select );
 			if ( '' !== relation ) {

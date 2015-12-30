@@ -66,6 +66,8 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 	public function render() {
 
+		$this->localize_script();
+
 		$action_selector_id = "mlp_rsc_action_container_$this->remote_blog_id";
 		$search_selector_id = "mlp_rsc_search_container_$this->remote_blog_id";
 		?>
@@ -73,8 +75,8 @@ class Mlp_Relationship_Control_Meta_Box_View {
 			 style="margin: .5em 0 .5em auto ">
 			<?php
 			printf(
-				'<button type="button" class="button secondary mlp-rsc-button" name="mlp_rsc_%2$d"
-					data-toggle_selector="#%3$s" data-search_box_id="%4$s">%1$s</button>',
+				'<button type="button" class="button secondary mlp-rsc-button mlp-click-toggler" name="mlp_rsc_%2$d"
+					data-toggle-target="#%3$s" data-search_box_id="%4$s">%1$s</button>',
 				esc_html__( 'Change relationship', 'multilingual-press' ),
 				$this->remote_blog_id,
 				$action_selector_id,
@@ -105,19 +107,20 @@ class Mlp_Relationship_Control_Meta_Box_View {
 								)
 								. '</p>';
 
-						?>
-						<p>
-							<label for="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search" class="mlp_toggler">
-								<input
-									type="radio"
-									name="mlp_rsc_action[<?php print $this->remote_blog_id; ?>]"
-									value="search"
-									id="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search"
-									data-toggle_selector="#<?php print $search_selector_id; ?>">
-								<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ) ?>
-							</label>
-						</p>
-					</div>
+					?>
+					<p>
+						<label for="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search">
+							<input
+								type="radio"
+								name="mlp_rsc_action[<?php print $this->remote_blog_id; ?>]"
+								value="search"
+								class="mlp-state-toggler"
+								id="mlp_rsc_input_id_<?php print $this->remote_blog_id; ?>_search"
+								data-toggle-target="#<?php print $search_selector_id; ?>">
+							<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ) ?>
+						</label>
+					</p>
+				</div>
 
 					<div id="<?php print $search_selector_id; ?>"
 						 style="display:none;float:left;max-width:30em">
@@ -155,6 +158,24 @@ class Mlp_Relationship_Control_Meta_Box_View {
 			</div>
 		</div>
 	<?php
+	}
+
+	/**
+	 * Makes the relationships control settings available for JavaScript.
+	 *
+	 * @return void
+	 */
+	private function localize_script() {
+
+		wp_localize_script( 'mlp-admin', 'mlpRelationshipControlSettings', array(
+			'L10n' => array(
+				'noPostSelected'       => __( 'Please select a post.', 'multilingual-press' ),
+				'unsavedRelationships' => __(
+					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
+					'multilingual-press'
+				),
+			),
+		) );
 	}
 
 	public function print_jquery() {

@@ -1,6 +1,12 @@
-/* global MultilingualPress, mlpNavMenusSettings */
-(function( $, moduleSettings ) {
+/* global MultilingualPress */
+(function( $ ) {
 	'use strict';
+
+	/**
+	 * Settings for the MultilingualPress NavMenus module. Only available on the targeted admin pages.
+	 * @type {Object}
+	 */
+	var moduleSettings = MultilingualPress.getSettings( 'NavMenus' );
 
 	/**
 	 * Constructor for the MultilingualPress NavMenus module.
@@ -94,4 +100,4 @@
 
 	// Register the NavMenus module for the Menus admin page.
 	MultilingualPress.registerModule( 'nav-menus.php', 'NavMenus', NavMenus );
-})( jQuery, mlpNavMenusSettings );
+})( jQuery );

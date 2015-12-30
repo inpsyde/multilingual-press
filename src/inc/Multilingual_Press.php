@@ -178,13 +178,6 @@ class Multilingual_Press {
 			'mlpSettings' => array(
 				'adminUrl' => esc_url( parse_url( admin_url(), PHP_URL_PATH ) ),
 			),
-			'mlpRelationshipControlL10n' => array(
-				'noPostSelected'           => __( 'Please select a post.', 'multilingual-press' ),
-				'unsavedPostRelationships' => __(
-					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
-					'multilingual-press'
-				),
-			),
 		) );
 
 		$assets->add( 'mlp_admin_css', 'admin.css' );

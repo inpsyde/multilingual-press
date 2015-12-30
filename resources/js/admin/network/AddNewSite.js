@@ -14,18 +14,27 @@
 			'change #mlp-base-site-id': 'togglePluginsRow'
 		},
 
+		template: _.template( $( '#mlp-add-new-site-template' ).html() || '' ),
+
 		/**
 		 * Initializes the AddNewSite module.
 		 */
 		initialize: function() {
+			this.render();
 
-			// TODO: Template stuff...
+			this.$language = $( '#mlp-site-language' );
 
-			// As soon as the additional admin page markup is injected via a template, setTimeout can be removed.
-			setTimeout( function() {
-				this.$language = $( '#mlp-site-language' );
-				this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
-			}.bind( this ), 100 );
+			this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
+		},
+
+		/**
+		 * Renders the MultilingualPress table markup.
+		 * @returns {AddNewSite}
+		 */
+		render: function() {
+			this.$el.find( '.submit' ).before( this.template() );
+
+			return this;
 		},
 
 		/**
@@ -33,7 +42,7 @@
 		 * @param {Event} event - The change event of the site language select element.
 		 */
 		adaptLanguage: function( event ) {
-			var language = this.getLanguage( $( event.currentTarget ) );
+			var language = this.getLanguage( $( event.target ) );
 			if ( this.$language.find( '[value="' + language + '"]' ).length ) {
 				this.$language.val( language );
 			}
@@ -58,7 +67,7 @@
 		 * @param {Event} event - The change event of the source site ID select element.
 		 */
 		togglePluginsRow: function( event ) {
-			this.$pluginsRow.toggle( 0 < $( event.currentTarget ).val() );
+			this.$pluginsRow.toggle( 0 < $( event.target ).val() );
 		}
 	} );
 
