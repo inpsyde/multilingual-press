@@ -149,6 +149,14 @@
 	var moduleSettings = MultilingualPress.getSettings( 'NavMenus' );
 
 	/**
+	 * Constructor for the MultilingualPress NavMenuItem model.
+	 * @constructor
+	 */
+	var NavMenuItem = Backbone.Model.extend( {
+		urlRoot: moduleSettings.ajaxURL
+	} );
+
+	/**
 	 * Constructor for the MultilingualPress NavMenus module.
 	 * @constructor
 	 */
@@ -172,6 +180,9 @@
 			this.$spinner = this.$el.find( '.spinner' );
 
 			this.$submit = this.$el.find( '#submit-mlp-language' );
+
+			this.model = new NavMenuItem();
+			this.listenTo( this.model, 'change', this.render );
 		},
 
 		/**
@@ -199,7 +210,10 @@
 				mlp_sites: this.getSites()
 			};
 			data[ moduleSettings.nonceName ] = moduleSettings.nonce;
-			$.post( moduleSettings.ajaxURL, data, this.handleResponse.bind( this ) );
+			this.model.fetch( {
+				data: data,
+				processData: true
+			} );
 		},
 
 		/**
@@ -216,12 +230,11 @@
 		},
 
 		/**
-		 * Adds the nav menu item's markup in the response object to the currently edited menu.
-		 * @param {Object} response - The response data object.
+		 * Renders the nav menu item to the currently edited menu.
 		 */
-		handleResponse: function( response ) {
-			if ( response.success && response.data ) {
-				this.$menuToEdit.append( response.data );
+		render: function() {
+			if ( this.model.get( 'success' ) ) {
+				this.$menuToEdit.append( this.model.get( 'data' ) );
 			}
 
 			this.$languages.prop( 'checked', false );
