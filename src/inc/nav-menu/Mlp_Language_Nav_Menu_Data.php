@@ -106,7 +106,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 
 		wp_localize_script( 'mlp-admin', 'mlpNavMenusSettings', array(
 			'action'    => $this->handle,
-			'ajaxURL'   => admin_url( 'admin-ajax.php' ),
+			'ajaxURL'   => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			'metaBoxID' => $this->handle,
 			'nonce'     => wp_create_nonce( $this->nonce->get_action() ),
 			'nonceName' => $this->nonce->get_name(),

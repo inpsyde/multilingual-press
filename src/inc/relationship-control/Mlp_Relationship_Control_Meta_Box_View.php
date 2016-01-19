@@ -57,11 +57,6 @@ class Mlp_Relationship_Control_Meta_Box_View {
 		$this->data            = $data;
 		$this->updater         = $updater;
 		$this->search_input_id = "mlp_post_search_$this->remote_blog_id";
-
-		add_action(
-			"admin_footer-" . $GLOBALS[ 'hook_suffix' ],
-			array ( $this, 'print_jquery' )
-		);
 	}
 
 	public function render() {
@@ -169,7 +164,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 		wp_localize_script( 'mlp-admin', 'mlpRelationshipControlSettings', array(
 			'ajaxURL' => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
-			'L10n' => array(
+			'L10n'    => array(
 				'noPostSelected'       => __( 'Please select a post.', 'multilingual-press' ),
 				'unsavedRelationships' => __(
 					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
@@ -177,21 +172,6 @@ class Mlp_Relationship_Control_Meta_Box_View {
 				),
 			),
 		) );
-	}
-
-	public function print_jquery() {
-
-		return;
-		?>
-		<script>
-			jQuery('.mlp_search_field').mlp_search({
-				action:           'mlp_rsc_search',
-				remote_blog_id:    <?php print $this->remote_blog_id; ?>,
-				result_container: '#mlp_search_results_<?php print $this->remote_blog_id; ?>',
-				search_field:     '#<?php print $this->search_input_id; ?>'
-			});
-		</script>
-	<?php
 	}
 
 	/**
