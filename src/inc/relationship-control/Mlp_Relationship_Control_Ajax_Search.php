@@ -26,10 +26,16 @@ class Mlp_Relationship_Control_Ajax_Search {
 
 		$results = $this->data->get_search_results();
 
-		print $this->format_results( $results );
+		$results = $this->format_results( $results );
 
-		if ( defined( 'DOING_AJAX') && DOING_AJAX )
-			die;
+		if ( defined( 'DOING_AJAX') && DOING_AJAX ) {
+			wp_send_json_success( array(
+				'html'         => $results,
+				'remoteSiteID' => $this->data->get_remote_blog_id(),
+			) );
+		}
+
+		echo $results;
 	}
 
 	public function show_search_results()

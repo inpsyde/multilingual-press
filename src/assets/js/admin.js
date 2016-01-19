@@ -15,7 +15,36 @@
 	 */
 	var MultilingualPress = function() {
 		var Modules = [],
+			Registry = {},
 			Router = new MultilingualPressRouter();
+
+		/**
+		 * Registers the module with the given data for the given route.
+		 * @param {Object} moduleData - The module data.
+		 * @param {string} route - The route.
+		 */
+		var registerModuleForRoute = function( moduleData, route ) {
+			if ( Registry[ route ] ) {
+				Registry[ route ].modules.push( moduleData );
+			} else {
+				Registry[ route ] = {
+					modules: [ moduleData ]
+				};
+			}
+		};
+
+		/**
+		 * Sets up all routes with the according registered modules.
+		 */
+		var setUpRoutes = function() {
+			$.each( Registry, function( route, routeData ) {
+				Router.route( route, route, function() {
+					$.each( routeData.modules, function( index, module ) {
+						Modules[ module.name ] = new module.Callback( module.options );
+					} );
+				} );
+			} );
+		};
 
 		return {
 			Modules: Modules,
@@ -45,20 +74,23 @@
 			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
 			 */
 			registerModule: function( routes, name, Module, options ) {
-				if ( _.isFunction( Module ) ) {
-					options = options || {};
-					$.each( _.isArray( routes ) ? routes : [ routes ], function( index, route ) {
-						Router.route( route, name, function() {
-							Modules[ name ] = new Module( options );
-						} );
-					} );
-				}
+				var moduleData = {
+					name: name,
+					Callback: Module,
+					options: options || {}
+				};
+
+				$.each( _.isArray( routes ) ? routes : [ routes ], function( index, route ) {
+					registerModuleForRoute( moduleData, route );
+				} );
 			},
 
 			/**
 			 * Initializes the instance.
 			 */
 			initialize: function() {
+				setUpRoutes();
+
 				Backbone.history.start( {
 					root: mlpSettings.adminUrl,
 					pushState: true,
@@ -456,6 +488,117 @@
 	'use strict';
 
 	/**
+	 * Settings for the MultilingualPress RCPostSearch module. Only available on the targeted admin pages.
+	 * @type {Object}
+	 */
+	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
+
+	/**
+	 * Constructor for the MultilingualPress RCPostSearchResult model.
+	 * @constructor
+	 */
+	var RCPostSearchResult = Backbone.Model.extend( {
+		urlRoot: moduleSettings.ajaxURL
+	} );
+
+	/**
+	 * Constructor for the MultilingualPress RCPostSearch module.
+	 * @constructor
+	 */
+	var RCPostSearch = Backbone.View.extend( {
+		el: 'body',
+
+		events: {
+			'keydown input.mlp_search_field': 'preventFormSubmission',
+			'keyup input.mlp_search_field': 'reactToInput'
+		},
+
+		/**
+		 * Initializes the RCPostSearch module.
+		 */
+		initialize: function() {
+			this.defaultResults = [];
+			this.resultsContainers = [];
+
+			this.model = new RCPostSearchResult();
+			this.listenTo( this.model, 'change', this.render );
+
+			$( '.mlp_search_field' ).each( function( index, element ) {
+				var $element = $( element ),
+					siteID = $element.data( 'remote-site-id' ),
+					$resultsContainer = $( '#' + $element.data( 'results-container-id' ) );
+
+				this.defaultResults[ siteID ] = $resultsContainer.html();
+				this.resultsContainers[ siteID ] = $resultsContainer;
+			}.bind( this ) );
+		},
+
+		/**
+		 * Prevents form submission due to the enter key being pressed.
+		 * @param {Event} event - The keydown event of a post search element.
+		 */
+		preventFormSubmission: function( event ) {
+			if ( 13 === event.which ) {
+				event.preventDefault();
+			}
+		},
+
+		/**
+		 * According to the user input, either search for posts, or display the initial post selection.
+		 * @param {Event} event - The keyup event of a post search element.
+		 */
+		reactToInput: function( event ) {
+			var $input = $( event.target ),
+				remoteSiteID = $input.data( 'remote-site-id' ),
+				value = $.trim( $input.val() || '' );
+
+			if ( value === $input.data( 'value' ) ) {
+				return;
+			}
+
+			clearTimeout( this.reactToInputTimer );
+
+			$input.data( 'value', value );
+
+			if ( '' === value ) {
+				this.resultsContainers[ remoteSiteID ].html( this.defaultResults[ remoteSiteID ] );
+			} else if ( 2 < value.length ) {
+				this.reactToInputTimer = setTimeout( function() {
+					this.model.fetch( {
+						data: {
+							action: 'mlp_rsc_search',
+							remote_blog_id: remoteSiteID,
+							remote_post_id: $input.data( 'remote-post-id' ),
+							source_blog_id: $input.data( 'source-site-id' ),
+							source_post_id: $input.data( 'source-post-id' ),
+							s: value
+						},
+						processData: true
+					} );
+				}.bind( this ), 400 );
+			}
+		},
+
+		/**
+		 * Renders the found posts to the according results container.
+		 */
+		render: function() {
+			var data = this.model.get( 'data' );
+			if ( this.model.get( 'success' ) ) {
+				this.resultsContainers[ data.remoteSiteID ].html( data.html );
+			}
+		}
+	} );
+
+	// Register the RCPostSearch module for the Add New Post and the Edit Post admin pages.
+	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RCPostSearch', RCPostSearch );
+})( jQuery );
+
+/* global MultilingualPress */
+(function( $ ) {
+	'use strict';
+
+	/**
 	 * Settings for the MultilingualPress RelationshipControl module. Only available on the targeted admin pages.
 	 * @type {Object}
 	 */
@@ -533,74 +676,6 @@
 /* global ajaxurl, mlpRelationshipControlSettings */
 ;( function( $, mlpL10n ) {
 	"use strict";
-
-	$.fn.mlp_search = function( options ) {
-
-		var settings = $.extend( {
-				remote_blog_id  : this.data( 'remote_blog_id' ),
-				remote_post_id  : this.data( 'remote_post_id' ),
-				source_blog_id  : this.data( 'source_blog_id' ),
-				source_post_id  : this.data( 'source_post_id' ),
-				search_field    : 'input.mlp_search_field',
-				result_container: 'ul.mlp_search_results',
-				action          : 'mlp_search',
-				nonce           : '',
-				spinner         : '<span class="spinner no-float" style="display:block"></span>'
-			}, options ),
-
-			original_content = $( settings.result_container ).html(),
-			$search_field = $( settings.search_field ),
-			stored = [],
-
-			insert = function( content ) {
-				$( settings.result_container ).html( content );
-			},
-
-			fetch = function( keywords ) {
-				if ( stored[ keywords ] ) {
-					insert( stored[ keywords ] );
-
-					return;
-				}
-
-				insert( settings.spinner );
-
-				var ajax = $.post(
-					ajaxurl,
-					{
-						action        : settings.action,
-						source_post_id: settings.source_post_id,
-						source_blog_id: settings.source_blog_id,
-						remote_post_id: settings.remote_post_id,
-						remote_blog_id: settings.remote_blog_id,
-						s             : keywords
-					}
-				);
-
-				ajax.done( function( data ) {
-					stored[ keywords ] = data;
-					insert( data );
-				} );
-			};
-
-		// Prevent submission via Enter key
-		$search_field.on( 'keypress', function( event ) {
-			if ( 13 == event.which ) {
-				return false;
-			}
-		} ).on( 'keyup', function( event ) {
-			event.preventDefault();
-			event.stopPropagation();
-
-			var str = $.trim( $( this ).val() );
-
-			if ( !str || 0 === str.length ) {
-				insert( original_content );
-			} else if ( 2 < str.length ) {
-				fetch( str );
-			}
-		} );
-	};
 
 	$( '.mlp_rsc_save_reload' ).on( 'click.mlp', function( event ) {
 		event.preventDefault();

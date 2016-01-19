@@ -15,7 +15,36 @@
 	 */
 	var MultilingualPress = function() {
 		var Modules = [],
+			Registry = {},
 			Router = new MultilingualPressRouter();
+
+		/**
+		 * Registers the module with the given data for the given route.
+		 * @param {Object} moduleData - The module data.
+		 * @param {string} route - The route.
+		 */
+		var registerModuleForRoute = function( moduleData, route ) {
+			if ( Registry[ route ] ) {
+				Registry[ route ].modules.push( moduleData );
+			} else {
+				Registry[ route ] = {
+					modules: [ moduleData ]
+				};
+			}
+		};
+
+		/**
+		 * Sets up all routes with the according registered modules.
+		 */
+		var setUpRoutes = function() {
+			$.each( Registry, function( route, routeData ) {
+				Router.route( route, route, function() {
+					$.each( routeData.modules, function( index, module ) {
+						Modules[ module.name ] = new module.Callback( module.options );
+					} );
+				} );
+			} );
+		};
 
 		return {
 			Modules: Modules,
@@ -45,20 +74,23 @@
 			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
 			 */
 			registerModule: function( routes, name, Module, options ) {
-				if ( _.isFunction( Module ) ) {
-					options = options || {};
-					$.each( _.isArray( routes ) ? routes : [ routes ], function( index, route ) {
-						Router.route( route, name, function() {
-							Modules[ name ] = new Module( options );
-						} );
-					} );
-				}
+				var moduleData = {
+					name: name,
+					Callback: Module,
+					options: options || {}
+				};
+
+				$.each( _.isArray( routes ) ? routes : [ routes ], function( index, route ) {
+					registerModuleForRoute( moduleData, route );
+				} );
 			},
 
 			/**
 			 * Initializes the instance.
 			 */
 			initialize: function() {
+				setUpRoutes();
+
 				Backbone.history.start( {
 					root: mlpSettings.adminUrl,
 					pushState: true,

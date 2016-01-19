@@ -168,6 +168,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	private function localize_script() {
 
 		wp_localize_script( 'mlp-admin', 'mlpRelationshipControlSettings', array(
+			'ajaxURL' => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			'L10n' => array(
 				'noPostSelected'       => __( 'Please select a post.', 'multilingual-press' ),
 				'unsavedRelationships' => __(
@@ -179,6 +180,8 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	}
 
 	public function print_jquery() {
+
+		return;
 		?>
 		<script>
 			jQuery('.mlp_search_field').mlp_search({
@@ -212,10 +215,11 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	private function add_id_values( $str ) {
 
 		$data = array (
-			'source_post_id' => $this->post->ID,
-			'source_blog_id' => $this->blog_id,
-			'remote_blog_id' => $this->remote_blog_id,
-			'remote_post_id' => $this->remote_post_id,
+			'results-container-id' => "mlp_search_results_{$this->remote_blog_id}",
+			'source-site-id'       => $this->blog_id,
+			'source-post-id'       => $this->post->ID,
+			'remote-site-id'       => $this->remote_blog_id,
+			'remote-post-id'       => $this->remote_post_id,
 		);
 
 		foreach ( $data as $key => $value )
