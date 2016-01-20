@@ -33,7 +33,7 @@
 		 */
 		updateUnsavedRelationships: function( event ) {
 			var $input = $( event.target ),
-				$metaBox = $input.closest( '.mlp_advanced_translator_metabox' ),
+				$metaBox = $input.closest( '.mlp-translation-meta-box' ),
 				index = this.findMetaBox( $metaBox ),
 				stay = 'stay' === $input.val();
 

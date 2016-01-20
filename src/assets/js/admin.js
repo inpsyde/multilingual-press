@@ -137,8 +137,9 @@
 		initializeStateTogglers: function() {
 			$( '.mlp-state-toggler' ).each( function( index, element ) {
 				var $toggler = $( element );
-				$( '[name="' + $toggler.attr( 'name' ) + '"]' )
-					.on( 'change', { $toggler: $toggler }, this.toggleElementIfChecked );
+				$( '[name="' + $toggler.attr( 'name' ) + '"]' ).on( 'change', {
+					$toggler: $toggler
+				}, this.toggleElementIfChecked );
 			}.bind( this ) );
 		},
 
@@ -222,7 +223,12 @@
 		 * @param {Event} event - The click event of the submit button.
 		 */
 		sendRequest: function( event ) {
-			var data;
+			var data = {
+				action: moduleSettings.action,
+				menu: this.$menu.val(),
+				mlp_sites: this.getSites()
+			};
+			data[ moduleSettings.nonceName ] = moduleSettings.nonce;
 
 			event.preventDefault();
 
@@ -236,12 +242,6 @@
 			 */
 			this.$spinner.addClass( 'is-active' ).show();
 
-			data = {
-				action: moduleSettings.action,
-				menu: this.$menu.val(),
-				mlp_sites: this.getSites()
-			};
-			data[ moduleSettings.nonceName ] = moduleSettings.nonce;
 			this.model.fetch( {
 				data: data,
 				processData: true
@@ -254,6 +254,7 @@
 		 */
 		getSites: function() {
 			var languages = [];
+
 			this.$languages.filter( ':checked' ).each( function() {
 				languages.push( $( this ).val() );
 			} );
@@ -309,6 +310,7 @@
 		 * Initializes the AddNewSite module.
 		 */
 		initialize: function() {
+			// Note: First render, then set up the properties, because the targeted elements are not yet in the DOM.
 			this.render();
 
 			this.$language = $( '#mlp-site-language' );
@@ -623,7 +625,7 @@
 		 */
 		updateUnsavedRelationships: function( event ) {
 			var $input = $( event.target ),
-				$metaBox = $input.closest( '.mlp_advanced_translator_metabox' ),
+				$metaBox = $input.closest( '.mlp-translation-meta-box' ),
 				index = this.findMetaBox( $metaBox ),
 				stay = 'stay' === $input.val();
 

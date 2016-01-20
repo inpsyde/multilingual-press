@@ -26,8 +26,9 @@
 		initializeStateTogglers: function() {
 			$( '.mlp-state-toggler' ).each( function( index, element ) {
 				var $toggler = $( element );
-				$( '[name="' + $toggler.attr( 'name' ) + '"]' )
-					.on( 'change', { $toggler: $toggler }, this.toggleElementIfChecked );
+				$( '[name="' + $toggler.attr( 'name' ) + '"]' ).on( 'change', {
+					$toggler: $toggler
+				}, this.toggleElementIfChecked );
 			}.bind( this ) );
 		},
 

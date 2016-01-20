@@ -1,4 +1,4 @@
-.mlp_advanced_translator_metabox:after, .mlp-taxonomy-fieldset-container:after, #mlp-quicklink-positions:after, .mlp-rsc-settings:after {
+.mlp-translation-meta-box:after, .mlp-taxonomy-fieldset-container:after, #mlp-quicklink-positions:after, .mlp-rsc-settings:after {
   content: '';
   display: table;
   clear: both;

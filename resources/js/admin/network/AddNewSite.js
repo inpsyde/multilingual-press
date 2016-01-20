@@ -20,6 +20,7 @@
 		 * Initializes the AddNewSite module.
 		 */
 		initialize: function() {
+			// Note: First render, then set up the properties, because the targeted elements are not yet in the DOM.
 			this.render();
 
 			this.$language = $( '#mlp-site-language' );

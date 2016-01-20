@@ -50,7 +50,12 @@
 		 * @param {Event} event - The click event of the submit button.
 		 */
 		sendRequest: function( event ) {
-			var data;
+			var data = {
+				action: moduleSettings.action,
+				menu: this.$menu.val(),
+				mlp_sites: this.getSites()
+			};
+			data[ moduleSettings.nonceName ] = moduleSettings.nonce;
 
 			event.preventDefault();
 
@@ -64,12 +69,6 @@
 			 */
 			this.$spinner.addClass( 'is-active' ).show();
 
-			data = {
-				action: moduleSettings.action,
-				menu: this.$menu.val(),
-				mlp_sites: this.getSites()
-			};
-			data[ moduleSettings.nonceName ] = moduleSettings.nonce;
 			this.model.fetch( {
 				data: data,
 				processData: true
@@ -82,6 +81,7 @@
 		 */
 		getSites: function() {
 			var languages = [];
+
 			this.$languages.filter( ':checked' ).each( function() {
 				languages.push( $( this ).val() );
 			} );
