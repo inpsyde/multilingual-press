@@ -29,14 +29,12 @@
 	 * @constructor
 	 */
 	var Quicklinks = function() {
-		var $form = $( '#mlp-quicklink-form' ),
-			$select = $form.find( 'select' );
-
 		/**
 		 * Triggers a redirect on form submission.
 		 * @param {Event} event - The submit event of the form.
 		 */
 		var submitForm = function( event ) {
+			var $select = $( event.target ).find( 'select' );
 			if ( $select.length ) {
 				event.preventDefault();
 
@@ -57,10 +55,9 @@
 			 * Initializes the module.
 			 */
 			initialize: function() {
+				var $form = $( '#mlp-quicklink-form' );
 				if ( $form.length ) {
-					$form.on( 'submit', function( event ) {
-						submitForm( event.originalEvent );
-					} );
+					$form.on( 'submit', submitForm );
 				}
 			}
 		};
