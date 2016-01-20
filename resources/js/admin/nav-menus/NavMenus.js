@@ -1,4 +1,4 @@
-/* global MultilingualPress */
+/* global ajaxurl, MultilingualPress */
 (function( $ ) {
 	'use strict';
 
@@ -13,7 +13,7 @@
 	 * @constructor
 	 */
 	var NavMenuItem = Backbone.Model.extend( {
-		urlRoot: moduleSettings.ajaxURL
+		urlRoot: ajaxurl
 	} );
 
 	/**

@@ -92,7 +92,7 @@
 				setUpRoutes();
 
 				Backbone.history.start( {
-					root: mlpSettings.adminUrl,
+					root: mlpSettings.urlRoot,
 					pushState: true,
 					hashChange: false
 				} );
@@ -170,7 +170,7 @@
 	MultilingualPress.Modules.Common = new Common();
 })( jQuery );
 
-/* global MultilingualPress */
+/* global ajaxurl, MultilingualPress */
 (function( $ ) {
 	'use strict';
 
@@ -185,7 +185,7 @@
 	 * @constructor
 	 */
 	var NavMenuItem = Backbone.Model.extend( {
-		urlRoot: moduleSettings.ajaxURL
+		urlRoot: ajaxurl
 	} );
 
 	/**
@@ -483,22 +483,16 @@
 	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'CopyPost', CopyPost );
 })( jQuery );
 
-/* global MultilingualPress */
+/* global ajaxurl, MultilingualPress */
 (function( $ ) {
 	'use strict';
-
-	/**
-	 * Settings for the MultilingualPress RCPostSearch module. Only available on the targeted admin pages.
-	 * @type {Object}
-	 */
-	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
 
 	/**
 	 * Constructor for the MultilingualPress RCPostSearchResult model.
 	 * @constructor
 	 */
 	var RCPostSearchResult = Backbone.Model.extend( {
-		urlRoot: moduleSettings.ajaxURL
+		urlRoot: ajaxurl
 	} );
 
 	/**

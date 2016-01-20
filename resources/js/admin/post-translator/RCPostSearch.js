@@ -1,19 +1,13 @@
-/* global MultilingualPress */
+/* global ajaxurl, MultilingualPress */
 (function( $ ) {
 	'use strict';
-
-	/**
-	 * Settings for the MultilingualPress RCPostSearch module. Only available on the targeted admin pages.
-	 * @type {Object}
-	 */
-	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
 
 	/**
 	 * Constructor for the MultilingualPress RCPostSearchResult model.
 	 * @constructor
 	 */
 	var RCPostSearchResult = Backbone.Model.extend( {
-		urlRoot: moduleSettings.ajaxURL
+		urlRoot: ajaxurl
 	} );
 
 	/**

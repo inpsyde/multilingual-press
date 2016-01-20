@@ -174,9 +174,13 @@ class Multilingual_Press {
 		/** @type Mlp_Assets $assets */
 		$assets = $this->plugin_data->get( 'assets' );
 
+		$admin_url = admin_url();
+		$admin_url = parse_url( $admin_url, PHP_URL_PATH );
+		$admin_url = esc_url( $admin_url );
+
 		$assets->add( 'mlp-admin', 'admin.js', array( 'backbone' ), array(
 			'mlpSettings' => array(
-				'adminUrl' => esc_url( parse_url( admin_url(), PHP_URL_PATH ) ),
+				'urlRoot' => $admin_url,
 			),
 		) );
 

@@ -92,7 +92,7 @@
 				setUpRoutes();
 
 				Backbone.history.start( {
-					root: mlpSettings.adminUrl,
+					root: mlpSettings.urlRoot,
 					pushState: true,
 					hashChange: false
 				} );

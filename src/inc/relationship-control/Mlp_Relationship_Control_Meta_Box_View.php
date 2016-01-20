@@ -163,8 +163,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	private function localize_script() {
 
 		wp_localize_script( 'mlp-admin', 'mlpRelationshipControlSettings', array(
-			'ajaxURL' => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
-			'L10n'    => array(
+			'L10n' => array(
 				'noPostSelected'       => __( 'Please select a post.', 'multilingual-press' ),
 				'unsavedRelationships' => __(
 					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
