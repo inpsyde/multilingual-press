@@ -22,17 +22,15 @@ before_install:
 
 install:
   - travis_retry composer dump-autoload --no-dev
-# TODO: Fix JavaScript, then use JSCS and JSHint.
-#  - npm install -g jscs
-#  - npm install -g jshint
+  - npm install -g jscs
+  - npm install -g jshint
 
 before_script:
   - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-# TODO: Fix JavaScript, then use JSCS and JSHint.
-#  - jshint src
-#  - jscs src
+  - jshint src
+  - jscs src
   - find src \( -name '*.php' \) -exec php -l {} \;
   - phpunit
 
