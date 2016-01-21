@@ -47,6 +47,8 @@
 		};
 
 		return {
+			Events: _.extend( {}, Backbone.Events ),
+
 			Modules: Modules,
 
 			/**

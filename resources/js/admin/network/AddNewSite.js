@@ -20,9 +20,11 @@
 		 * Initializes the AddNewSite module.
 		 */
 		initialize: function() {
-			// Note: First render, then set up the properties, because the targeted elements are not yet in the DOM.
+
+			// First render the template, ...
 			this.render();
 
+			// ...then set up the properties using elements that just have been injected into the DOM.
 			this.$language = $( '#mlp-site-language' );
 
 			this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
@@ -30,12 +32,9 @@
 
 		/**
 		 * Renders the MultilingualPress table markup.
-		 * @returns {AddNewSite}
 		 */
 		render: function() {
 			this.$el.find( '.submit' ).before( this.template() );
-
-			return this;
 		},
 
 		/**

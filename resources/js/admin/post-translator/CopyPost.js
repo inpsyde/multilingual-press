@@ -10,7 +10,7 @@
 		el: '#post-body',
 
 		events: {
-			'click .mlp_copy_button': 'copyPostData'
+			'click .mlp-copy-post-button': 'copyPostData'
 		},
 
 		/**
@@ -31,19 +31,19 @@
 		 * @param {Event} event - The click event of a "Copy source post" button.
 		 */
 		copyPostData: function( event ) {
-			var prefix = 'mlp_translation_data_' + this.getSiteID( $( event.target ) );
+			var prefix = 'mlp-translation-data-' + this.getSiteID( $( event.target ) );
 
 			event.preventDefault();
 
-			$( '#' + prefix + '_title' ).val( this.getTitle() );
+			$( '#' + prefix + '-title' ).val( this.getTitle() );
 
-			$( '#' + prefix + '_name' ).val( this.getSlug() );
+			$( '#' + prefix + '-name' ).val( this.getSlug() );
 
-			this.copyTinyMCEContent( prefix + '_content' );
+			this.copyTinyMCEContent( prefix + '-content' );
 
-			$( '#' + prefix + '_content' ).val( this.getContent() );
+			$( '#' + prefix + '-content' ).val( this.getContent() );
 
-			$( '#' + prefix + '_excerpt' ).val( this.getExcerpt() );
+			$( '#' + prefix + '-excerpt' ).val( this.getExcerpt() );
 		},
 
 		/**
@@ -52,7 +52,7 @@
 		 * @returns {number} -  The site ID.
 		 */
 		getSiteID: function( $button ) {
-			return $button.data( 'blog_id' ) || 0;
+			return $button.data( 'site-id' ) || 0;
 		},
 
 		/**

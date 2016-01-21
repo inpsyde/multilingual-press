@@ -3,10 +3,10 @@
 	'use strict';
 
 	/**
-	 * Constructor for the MultilingualPress RCPostSearchResult model.
+	 * Constructor for the MultilingualPress RemotePostSearchResult model.
 	 * @constructor
 	 */
-	var RCPostSearchResult = Backbone.Model.extend( {
+	var RemotePostSearchResult = Backbone.Model.extend( {
 		urlRoot: ajaxurl
 	} );
 
@@ -18,8 +18,8 @@
 		el: 'body',
 
 		events: {
-			'keydown input.mlp_search_field': 'preventFormSubmission',
-			'keyup input.mlp_search_field': 'reactToInput'
+			'keydown .mlp-search-field': 'preventFormSubmission',
+			'keyup .mlp-search-field': 'reactToInput'
 		},
 
 		/**
@@ -29,13 +29,13 @@
 			this.defaultResults = [];
 			this.resultsContainers = [];
 
-			this.model = new RCPostSearchResult();
+			this.model = new RemotePostSearchResult();
 			this.listenTo( this.model, 'change', this.render );
 
-			$( '.mlp_search_field' ).each( function( index, element ) {
+			$( '.mlp-search-field' ).each( function( index, element ) {
 				var $element = $( element ),
-					siteID = $element.data( 'remote-site-id' ),
-					$resultsContainer = $( '#' + $element.data( 'results-container-id' ) );
+					$resultsContainer = $( '#' + $element.data( 'results-container-id' ) ),
+					siteID = $element.data( 'remote-site-id' );
 
 				this.defaultResults[ siteID ] = $resultsContainer.html();
 				this.resultsContainers[ siteID ] = $resultsContainer;
@@ -58,7 +58,7 @@
 		 */
 		reactToInput: function( event ) {
 			var $input = $( event.target ),
-				remoteSiteID = $input.data( 'remote-site-id' ),
+				remoteSiteID,
 				value = $.trim( $input.val() || '' );
 
 			if ( value === $input.data( 'value' ) ) {
@@ -69,16 +69,18 @@
 
 			$input.data( 'value', value );
 
+			remoteSiteID = $input.data( 'remote-site-id' );
+
 			if ( '' === value ) {
 				this.resultsContainers[ remoteSiteID ].html( this.defaultResults[ remoteSiteID ] );
 			} else if ( 2 < value.length ) {
 				this.reactToInputTimer = setTimeout( function() {
 					this.model.fetch( {
 						data: {
-							action: 'mlp_rsc_search',
-							remote_blog_id: remoteSiteID,
+							action: 'mlp_rc_remote_post_search',
+							remote_site_id: remoteSiteID,
 							remote_post_id: $input.data( 'remote-post-id' ),
-							source_blog_id: $input.data( 'source-site-id' ),
+							source_site_id: $input.data( 'source-site-id' ),
 							source_post_id: $input.data( 'source-post-id' ),
 							s: value
 						},
@@ -92,8 +94,10 @@
 		 * Renders the found posts to the according results container.
 		 */
 		render: function() {
-			var data = this.model.get( 'data' );
+			var data;
 			if ( this.model.get( 'success' ) ) {
+				data = this.model.get( 'data' );
+
 				this.resultsContainers[ data.remoteSiteID ].html( data.html );
 			}
 		}

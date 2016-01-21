@@ -47,6 +47,8 @@
 		};
 
 		return {
+			Events: _.extend( {}, Backbone.Events ),
+
 			Modules: Modules,
 
 			/**
@@ -310,9 +312,11 @@
 		 * Initializes the AddNewSite module.
 		 */
 		initialize: function() {
-			// Note: First render, then set up the properties, because the targeted elements are not yet in the DOM.
+
+			// First render the template, ...
 			this.render();
 
+			// ...then set up the properties using elements that just have been injected into the DOM.
 			this.$language = $( '#mlp-site-language' );
 
 			this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
@@ -320,12 +324,9 @@
 
 		/**
 		 * Renders the MultilingualPress table markup.
-		 * @returns {AddNewSite}
 		 */
 		render: function() {
 			this.$el.find( '.submit' ).before( this.template() );
-
-			return this;
 		},
 
 		/**
@@ -378,7 +379,7 @@
 		el: '#post-body',
 
 		events: {
-			'click .mlp_copy_button': 'copyPostData'
+			'click .mlp-copy-post-button': 'copyPostData'
 		},
 
 		/**
@@ -399,19 +400,19 @@
 		 * @param {Event} event - The click event of a "Copy source post" button.
 		 */
 		copyPostData: function( event ) {
-			var prefix = 'mlp_translation_data_' + this.getSiteID( $( event.target ) );
+			var prefix = 'mlp-translation-data-' + this.getSiteID( $( event.target ) );
 
 			event.preventDefault();
 
-			$( '#' + prefix + '_title' ).val( this.getTitle() );
+			$( '#' + prefix + '-title' ).val( this.getTitle() );
 
-			$( '#' + prefix + '_name' ).val( this.getSlug() );
+			$( '#' + prefix + '-name' ).val( this.getSlug() );
 
-			this.copyTinyMCEContent( prefix + '_content' );
+			this.copyTinyMCEContent( prefix + '-content' );
 
-			$( '#' + prefix + '_content' ).val( this.getContent() );
+			$( '#' + prefix + '-content' ).val( this.getContent() );
 
-			$( '#' + prefix + '_excerpt' ).val( this.getExcerpt() );
+			$( '#' + prefix + '-excerpt' ).val( this.getExcerpt() );
 		},
 
 		/**
@@ -420,7 +421,7 @@
 		 * @returns {number} -  The site ID.
 		 */
 		getSiteID: function( $button ) {
-			return $button.data( 'blog_id' ) || 0;
+			return $button.data( 'site-id' ) || 0;
 		},
 
 		/**
@@ -490,10 +491,209 @@
 	'use strict';
 
 	/**
-	 * Constructor for the MultilingualPress RCPostSearchResult model.
+	 * Settings for the MultilingualPress RelationshipControl module. Only available on the targeted admin pages.
+	 * @type {Object}
+	 */
+	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
+
+	/**
+	 * Constructor for the MultilingualPress RelationshipControl module.
 	 * @constructor
 	 */
-	var RCPostSearchResult = Backbone.Model.extend( {
+	var RelationshipControl = Backbone.View.extend( {
+		el: 'body',
+
+		events: {
+			'change .mlp-rc-actions input': 'updateUnsavedRelationships',
+			'click #publish': 'confirmUnsavedRelationships',
+			'click .mlp-save-relationship-button': 'saveRelationship'
+		},
+
+		/**
+		 * Initializes the RelationshipControl module.
+		 */
+		initialize: function() {
+			this.unsavedRelationships = [];
+
+			this.initializeEventHandlers();
+		},
+
+		/**
+		 * Initializes the event handlers for all custom relationship control events.
+		 */
+		initializeEventHandlers: function() {
+			MultilingualPress.Events.on( {
+				'RelationshipControl:connectExistingPost': this.connectExistingPost,
+				'RelationshipControl:connectNewPost': this.connectNewPost,
+				'RelationshipControl:disconnectPost': this.disconnectPost
+			}, this );
+		},
+
+		/**
+		 * Updates the unsaved relationships array for the meta box containing the changed radio input element.
+		 * @param {Event} event - The change event of a radio input element.
+		 */
+		updateUnsavedRelationships: function( event ) {
+			var $input = $( event.target ),
+				$metaBox = $input.closest( '.mlp-translation-meta-box' ),
+				$button = $metaBox.find( '.mlp-save-relationship-button' ),
+				index = this.findMetaBox( $metaBox );
+
+			if ( 'stay' === $input.val() ) {
+				$button.prop( 'disabled', 'disabled' );
+
+				if ( -1 !== index ) {
+					this.unsavedRelationships.splice( index, 1 );
+				}
+			} else if ( -1 === index ) {
+				this.unsavedRelationships.push( $metaBox );
+
+				$button.removeAttr( 'disabled' );
+			}
+		},
+
+		/**
+		 * Returns the index of the given meta box in the unsaved relationships array, and -1 if not found.
+		 * @param {Object} $metaBox - The meta box element.
+		 * @returns {number} - The index of the meta box.
+		 */
+		findMetaBox: function( $metaBox ) {
+			$.each( this.unsavedRelationships, function( index, element ) {
+				if ( element === $metaBox ) {
+					return index;
+				}
+			} );
+
+			return -1;
+		},
+
+		/**
+		 * Displays a confirm dialog informing the user about unsaved relationships, if any.
+		 * @param {Event} event - The click event of the publish button.
+		 */
+		confirmUnsavedRelationships: function( event ) {
+			if ( this.unsavedRelationships.length && ! window.confirm( moduleSettings.L10n.unsavedRelationships ) ) {
+				event.preventDefault();
+			}
+		},
+
+		/**
+		 * Triggers the according event in case of changed relationships.
+		 * @param {Event} event - The click event of a save relationship button.
+		 */
+		saveRelationship: function( event ) {
+			var $button = $( event.target ),
+				remoteSiteID = $button.data( 'remote-site-id' ),
+				action = $( 'input[name="mlp-rc-action[' + remoteSiteID + ']"]:checked' ).val(),
+				eventName = this.getEventName( action );
+
+			if ( 'stay' === action ) {
+				return;
+			}
+
+			$button.prop( 'disabled', 'disabled' );
+
+			/**
+			 * Triggers the according event for the current relationship action, and passes data and the event's name.
+			 */
+			MultilingualPress.Events.trigger( 'RelationshipControl:' + eventName, {
+				action: 'mlp_rc_' + action,
+				remote_site_id: remoteSiteID,
+				remote_post_id: $button.data( 'remote-post-id' ),
+				source_site_id: $button.data( 'source-site-id' ),
+				source_post_id: $button.data( 'source-post-id' )
+			}, eventName );
+		},
+
+		/**
+		 * Returns the according event name for the given relationship action.
+		 * @param {string} action - A relationship action.
+		 * @returns {string} - The event name.
+		 */
+		getEventName: function( action ) {
+			switch ( action ) {
+				case 'search':
+					return 'connectExistingPost';
+
+				case 'new':
+					return 'connectNewPost';
+
+				case 'disconnect':
+					return 'disconnectPost';
+
+				default:
+					return '';
+			}
+		},
+
+		/**
+		 * Handles changing a post's relationship by connecting a new post.
+		 * @param {Object} data - The common data for all relationship requests.
+		 */
+		connectNewPost: function( data ) {
+			data.new_post_title = $( 'input[name="post_title"]' ).val();
+
+			this.sendRequest( data );
+		},
+
+		/**
+		 * Handles changing a post's relationship by disconnecting the currently connected post.
+		 * @param {Object} data - The common data for all relationship requests.
+		 */
+		disconnectPost: function( data ) {
+			this.sendRequest( data );
+		},
+
+		/**
+		 * Handles changing a post's relationship by connecting an existing post.
+		 * @param {Object} data - The common data for all relationship requests.
+		 */
+		connectExistingPost: function( data ) {
+			var newPostID = $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() || 0;
+			if ( newPostID ) {
+				data.new_post_id = Number( newPostID );
+
+				this.sendRequest( data );
+			} else {
+				window.alert( moduleSettings.L10n.noPostSelected );
+			}
+		},
+
+		/**
+		 * Changes a post's relationhip by sending a synchronous AJAX request with the according new relationship data.
+		 * @param {Object} data - The relationship data.
+		 */
+		sendRequest: function( data ) {
+			$.ajax( {
+				type: 'POST',
+				url: ajaxurl,
+				data: data,
+				success: this.reloadLocation,
+				async: false
+			} );
+		},
+
+		/**
+		 * Reloads the current page.
+		 */
+		reloadLocation: function() {
+			window.location.reload( true );
+		}
+	} );
+
+	// Register the RelationshipControl module for the Add New Post and the Edit Post admin pages.
+	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl );
+})( jQuery );
+
+/* global ajaxurl, MultilingualPress */
+(function( $ ) {
+	'use strict';
+
+	/**
+	 * Constructor for the MultilingualPress RemotePostSearchResult model.
+	 * @constructor
+	 */
+	var RemotePostSearchResult = Backbone.Model.extend( {
 		urlRoot: ajaxurl
 	} );
 
@@ -505,8 +705,8 @@
 		el: 'body',
 
 		events: {
-			'keydown input.mlp_search_field': 'preventFormSubmission',
-			'keyup input.mlp_search_field': 'reactToInput'
+			'keydown .mlp-search-field': 'preventFormSubmission',
+			'keyup .mlp-search-field': 'reactToInput'
 		},
 
 		/**
@@ -516,13 +716,13 @@
 			this.defaultResults = [];
 			this.resultsContainers = [];
 
-			this.model = new RCPostSearchResult();
+			this.model = new RemotePostSearchResult();
 			this.listenTo( this.model, 'change', this.render );
 
-			$( '.mlp_search_field' ).each( function( index, element ) {
+			$( '.mlp-search-field' ).each( function( index, element ) {
 				var $element = $( element ),
-					siteID = $element.data( 'remote-site-id' ),
-					$resultsContainer = $( '#' + $element.data( 'results-container-id' ) );
+					$resultsContainer = $( '#' + $element.data( 'results-container-id' ) ),
+					siteID = $element.data( 'remote-site-id' );
 
 				this.defaultResults[ siteID ] = $resultsContainer.html();
 				this.resultsContainers[ siteID ] = $resultsContainer;
@@ -545,7 +745,7 @@
 		 */
 		reactToInput: function( event ) {
 			var $input = $( event.target ),
-				remoteSiteID = $input.data( 'remote-site-id' ),
+				remoteSiteID,
 				value = $.trim( $input.val() || '' );
 
 			if ( value === $input.data( 'value' ) ) {
@@ -556,16 +756,18 @@
 
 			$input.data( 'value', value );
 
+			remoteSiteID = $input.data( 'remote-site-id' );
+
 			if ( '' === value ) {
 				this.resultsContainers[ remoteSiteID ].html( this.defaultResults[ remoteSiteID ] );
 			} else if ( 2 < value.length ) {
 				this.reactToInputTimer = setTimeout( function() {
 					this.model.fetch( {
 						data: {
-							action: 'mlp_rsc_search',
-							remote_blog_id: remoteSiteID,
+							action: 'mlp_rc_remote_post_search',
+							remote_site_id: remoteSiteID,
 							remote_post_id: $input.data( 'remote-post-id' ),
-							source_blog_id: $input.data( 'source-site-id' ),
+							source_site_id: $input.data( 'source-site-id' ),
 							source_post_id: $input.data( 'source-post-id' ),
 							s: value
 						},
@@ -579,8 +781,10 @@
 		 * Renders the found posts to the according results container.
 		 */
 		render: function() {
-			var data = this.model.get( 'data' );
+			var data;
 			if ( this.model.get( 'success' ) ) {
+				data = this.model.get( 'data' );
+
 				this.resultsContainers[ data.remoteSiteID ].html( data.html );
 			}
 		}
@@ -589,163 +793,6 @@
 	// Register the RCPostSearch module for the Add New Post and the Edit Post admin pages.
 	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RCPostSearch', RCPostSearch );
 })( jQuery );
-
-/* global MultilingualPress */
-(function( $ ) {
-	'use strict';
-
-	/**
-	 * Settings for the MultilingualPress RelationshipControl module. Only available on the targeted admin pages.
-	 * @type {Object}
-	 */
-	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
-
-	/**
-	 * Constructor for the MultilingualPress RelationshipControl module.
-	 * @constructor
-	 */
-	var RelationshipControl = Backbone.View.extend( {
-		el: 'body',
-
-		events: {
-			'change .mlp_rsc_action_list input': 'updateUnsavedRelationships',
-			'click #publish': 'confirmUnsavedRelationships'
-		},
-
-		/**
-		 * Initializes the RelationshipControl module.
-		 */
-		initialize: function() {
-			this.unsavedRelationships = [];
-		},
-
-		/**
-		 * Updates the unsaved relationships array for the meta box containing the changed radio input element.
-		 * @param {Event} event - The change event of a radio input element.
-		 */
-		updateUnsavedRelationships: function( event ) {
-			var $input = $( event.target ),
-				$metaBox = $input.closest( '.mlp-translation-meta-box' ),
-				index = this.findMetaBox( $metaBox ),
-				stay = 'stay' === $input.val();
-
-			if ( -1 === index ) {
-				if ( ! stay ) {
-					this.unsavedRelationships.push( $metaBox );
-				}
-			} else if ( stay ) {
-				this.unsavedRelationships.splice( index, 1 );
-			}
-		},
-
-		/**
-		 * Returns the index of the given meta box in the unsaved relationships array, if included, and -1 on failure.
-		 * @param {Object} $metaBox - The meta box element.
-		 * @returns {number} - The index of the meta box.
-		 */
-		findMetaBox: function( $metaBox ) {
-			$.each( this.unsavedRelationships, function( index, element ) {
-				if ( element === $metaBox) {
-					return index;
-				}
-			} );
-
-			return -1;
-		},
-
-		/**
-		 * Displays a confirm dialog informing the user about unsaved relationships.
-		 * @param {Event} event - The click event of the publish button.
-		 */
-		confirmUnsavedRelationships: function( event ) {
-			if ( this.unsavedRelationships.length && ! confirm( moduleSettings.L10n.unsavedRelationships ) ) {
-				event.preventDefault();
-				event.stopPropagation();
-			}
-		}
-	} );
-
-	// Register the RelationshipControl module for the Add New Post and the Edit Post admin pages.
-	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl );
-})( jQuery );
-
-/* global ajaxurl, mlpRelationshipControlSettings */
-;( function( $, mlpL10n ) {
-	"use strict";
-
-	$( '.mlp_rsc_save_reload' ).on( 'click.mlp', function( event ) {
-		event.preventDefault();
-		event.stopPropagation();
-
-		var $this = $( this ),
-			source_post_id = $this.data( 'source_post_id' ),
-			source_blog_id = $this.data( 'source_blog_id' ),
-			remote_post_id = $this.data( 'remote_post_id' ),
-			remote_blog_id = $this.data( 'remote_blog_id' ),
-			current_value = $( 'input[name="mlp_rsc_action[' + remote_blog_id + ']"]:checked' ).val(),
-			new_post_id = 0,
-			new_post_title = '',
-
-			disconnect = function() {
-				changeRelationship( 'disconnect' );
-			},
-
-			newRelation = function() {
-				new_post_title = $( 'input[name="post_title"]' ).val();
-				changeRelationship( 'new_relation' );
-			},
-
-			connectExisting = function() {
-				new_post_id = $( 'input[name="mlp_add_post[' + remote_blog_id + ']"]:checked' ).val();
-
-				if ( !new_post_id || '0' === new_post_id ) {
-					alert( mlpL10n.L10n.noPostSelected );
-				} else {
-					changeRelationship( 'connect_existing' );
-				}
-			},
-
-			changeRelationship = function( action ) {
-				// We use jQuery's ajax function (and not $.post) due to synchrony
-				$.ajax( {
-					type   : 'POST',
-					url    : ajaxurl,
-					data   : {
-						action        : 'mlp_rsc_' + action,
-						source_post_id: source_post_id,
-						source_blog_id: source_blog_id,
-						remote_post_id: remote_post_id,
-						remote_blog_id: remote_blog_id,
-						new_post_id   : new_post_id,
-						new_post_title: new_post_title
-					},
-					success: function() {
-						window.location.reload( true );
-					},
-					async  : false
-				} );
-			};
-
-		if ( !current_value || 'stay' == current_value ) {
-			return;
-		}
-
-		switch ( current_value ) {
-			case 'disconnect':
-				disconnect();
-				break;
-
-			case 'new':
-				newRelation();
-				break;
-
-			case 'search':
-				connectExisting();
-				break;
-		}
-	} );
-
-} )( jQuery, mlpRelationshipControlSettings );
 
 /* global MultilingualPress */
 (function( $ ) {
