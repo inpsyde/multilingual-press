@@ -30,6 +30,14 @@
 	 */
 	var Quicklinks = function() {
 		/**
+		 * Redirects the user to the given URL.
+		 * @param {string} url - The URL.
+		 */
+		var setLocation = function( url ) {
+			window.location.href = url;
+		};
+
+		/**
 		 * Triggers a redirect on form submission.
 		 * @param {Event} event - The submit event of the form.
 		 */
@@ -40,14 +48,6 @@
 
 				setLocation( $select.val() );
 			}
-		};
-
-		/**
-		 * Redirects the user to the given URL.
-		 * @param {string} url - The URL.
-		 */
-		var setLocation = function( url ) {
-			window.location.href = url;
 		};
 
 		return {
