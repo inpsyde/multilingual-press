@@ -46,7 +46,7 @@ class Mlp_New_Site_View {
 
 		$languages = $db->get_items( array( 'page' => - 1 ) );
 		?>
-		<script type="text/template" id="mlp-add-new-site-template">
+		<script type="text/html" id="mlp-add-new-site-template">
 			<h3>
 				<?php esc_html_e( 'MultilingualPress', 'multilingual-press' ); ?>
 			</h3>

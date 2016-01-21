@@ -19,7 +19,7 @@ class Mlp_Relationship_Changer {
 	/**
 	 * @var int
 	 */
-	private $source_blog_id = 0;
+	private $source_site_id = 0;
 
 	/**
 	 * @var int
@@ -29,7 +29,7 @@ class Mlp_Relationship_Changer {
 	/**
 	 * @var int
 	 */
-	private $remote_blog_id = 0;
+	private $remote_site_id = 0;
 
 	/**
 	 * @var int
@@ -60,7 +60,7 @@ class Mlp_Relationship_Changer {
 	 */
 	public function new_relation() {
 
-		switch_to_blog( $this->source_blog_id );
+		switch_to_blog( $this->source_site_id );
 
 		$source_post = get_post( $this->source_post_id );
 
@@ -70,7 +70,7 @@ class Mlp_Relationship_Changer {
 			return 'source not found';
 
 		$save_context = array(
-			'source_blog'    => $this->source_blog_id,
+			'source_blog'    => $this->source_site_id,
 			'source_post'    => $source_post,
 			'real_post_type' => $this->get_real_post_type( $source_post ),
 			'real_post_id'   => $this->get_real_post_id( $this->source_post_id ),
@@ -79,7 +79,7 @@ class Mlp_Relationship_Changer {
 		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_before_post_synchronization', $save_context );
 
-		switch_to_blog( $this->remote_blog_id );
+		switch_to_blog( $this->remote_site_id );
 
 		$post_id = wp_insert_post(
 			array (
@@ -92,7 +92,7 @@ class Mlp_Relationship_Changer {
 
 		restore_current_blog();
 
-		$save_context[ 'target_blog_id' ] = $this->remote_blog_id;
+		$save_context[ 'target_blog_id' ] = $this->remote_site_id;
 
 		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_after_post_synchronization', $save_context );
@@ -105,6 +105,16 @@ class Mlp_Relationship_Changer {
 		$this->connect_existing();
 
 		return $this->new_post_id;
+	}
+
+	/**
+	 * Target callback for the AJAX request for connecting a new post.
+	 *
+	 * @return int|string
+	 */
+	public function new_post() {
+
+		return $this->new_relation();
 	}
 
 	/**
@@ -161,13 +171,23 @@ class Mlp_Relationship_Changer {
 	}
 
 	/**
+	 * Target callback for the AJAX request for connecting an existing post.
+	 *
+	 * @return false|int
+	 */
+	public function search_post() {
+
+		return $this->connect_existing();
+	}
+
+	/**
 	 * @return bool
 	 */
 	private function create_new_relation() {
 
 		return $this->content_relations->set_relation(
-			$this->source_blog_id,
-			$this->remote_blog_id,
+			$this->source_site_id,
+			$this->remote_site_id,
 			$this->source_post_id,
 			$this->new_post_id,
 			'post'
@@ -180,19 +200,19 @@ class Mlp_Relationship_Changer {
 	public function disconnect() {
 
 		$translation_ids = $this->content_relations->get_translation_ids(
-			$this->source_blog_id,
-			$this->remote_blog_id,
+			$this->source_site_id,
+			$this->remote_site_id,
 			$this->source_post_id,
 			$this->remote_post_id,
 			'post'
 		);
 
-		$remote_blog_id = $this->remote_blog_id;
+		$remote_site_id = $this->remote_site_id;
 
 		$remote_post_id = $this->remote_post_id;
 
-		if ( $translation_ids[ 'ml_source_blogid' ] !== $this->source_blog_id ) {
-			$remote_blog_id = $this->source_blog_id;
+		if ( $translation_ids[ 'ml_source_blogid' ] !== $this->source_site_id ) {
+			$remote_site_id = $this->source_site_id;
 			if ( 0 !== $this->remote_post_id ) {
 				$remote_post_id = $this->source_post_id;
 			}
@@ -200,11 +220,21 @@ class Mlp_Relationship_Changer {
 
 		return $this->content_relations->delete_relation(
 			$translation_ids[ 'ml_source_blogid' ],
-			$remote_blog_id,
+			$remote_site_id,
 			$translation_ids[ 'ml_source_elementid' ],
 			$remote_post_id,
 			'post'
 		);
+	}
+
+	/**
+	 * Target callback for the AJAX request for disconnecting the currently connected post.
+	 *
+	 * @return int
+	 */
+	public function disconnect_post() {
+
+		return $this->disconnect();
 	}
 
 	/**
@@ -216,9 +246,9 @@ class Mlp_Relationship_Changer {
 
 		$find = array (
 			'source_post_id',
-			'source_blog_id',
+			'source_site_id',
 			'remote_post_id',
-			'remote_blog_id',
+			'remote_site_id',
 			'new_post_id',
 			'new_post_title',
 		);

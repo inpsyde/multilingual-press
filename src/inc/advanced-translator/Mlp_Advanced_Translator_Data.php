@@ -21,6 +21,11 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	private $name_base = 'mlp_translation_data';
 
 	/**
+	 * @var string
+	 */
+	private $id_base = 'mlp-translation-data';
+
+	/**
 	 * @var array
 	 */
 	private $post_request_data = array();
@@ -69,6 +74,16 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	public function get_name_base() {
 
 		return $this->name_base;
+	}
+
+	/**
+	 * Base string for ID attribute in translation view.
+	 *
+	 * @return string
+	 */
+	public function get_id_base() {
+
+		return $this->id_base;
 	}
 
 	/**

@@ -14,8 +14,8 @@ class Mlp_Relationship_Control_Data {
 	 */
 	private $ids = array (
 		'source_post_id' => 0,
-		'source_blog_id' => 0,
-		'remote_blog_id' => 0,
+		'source_site_id' => 0,
+		'remote_site_id' => 0,
 		'remote_post_id' => 0
 	);
 
@@ -61,7 +61,7 @@ class Mlp_Relationship_Control_Data {
 	 */
 	public function get_source_post() {
 
-		switch_to_blog( $this->ids[ 'source_blog_id' ] );
+		switch_to_blog( $this->ids[ 'source_site_id' ] );
 
 		$post = get_post( $this->ids[ 'source_post_id' ] );
 
@@ -73,9 +73,9 @@ class Mlp_Relationship_Control_Data {
 	/**
 	 * @return int
 	 */
-	public function get_remote_blog_id() {
+	public function get_remote_site_id() {
 
-		return $this->ids[ 'remote_blog_id' ];
+		return $this->ids[ 'remote_site_id' ];
 	}
 
 	public function get_remote_post_id() {
@@ -88,8 +88,8 @@ class Mlp_Relationship_Control_Data {
 	 */
 	public function get_search_results() {
 
-		if ( 0 === $this->ids[ 'remote_blog_id' ]
-			or 0 === $this->ids[ 'source_blog_id' ]
+		if ( 0 === $this->ids[ 'remote_site_id' ]
+			or 0 === $this->ids[ 'source_site_id' ]
 		)
 			return array ();
 
@@ -110,7 +110,7 @@ class Mlp_Relationship_Control_Data {
 		if ( ! empty ( $this->search ) )
 			$args[ 's' ] = $this->search;
 
-		switch_to_blog( $this->ids[ 'remote_blog_id' ] );
+		switch_to_blog( $this->ids[ 'remote_site_id' ] );
 		$posts = get_posts( $args );
 		restore_current_blog();
 

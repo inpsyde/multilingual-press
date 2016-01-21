@@ -10,7 +10,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	 *
 	 * @type string
 	 */
-	private $form_name = 'mlp_quicklink_position';
+	private $form_name = 'mlp-quicklink-position';
 
 	/**
 	 * @var Inpsyde_Nonce_Validator_Interface
@@ -69,7 +69,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	 * @return string
 	 */
 	public function get_box_id() {
-		return $this->form_name . '_setting';
+		return $this->form_name . '-setting';
 	}
 
 	/**
@@ -102,8 +102,8 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 		foreach ( $positions as $key => $label ) {
 			$checked = checked( $current, $key, FALSE );
 			$out .= sprintf(
-				' <label for="mlp_%1$s_id" class="quicklink-position-label quicklink-position-%1$s">
-					<input type="radio" name="quicklink-position" value="%1$s" id="mlp_%1$s_id" %2$s>
+				' <label for="mlp-%1$s-id" class="quicklink-position-label quicklink-position-%1$s">
+					<input type="radio" name="quicklink-position" value="%1$s" id="mlp-%1$s-id" %2$s>
 					%3$s
 				</label>',
 				$key,

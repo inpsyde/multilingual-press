@@ -38,15 +38,14 @@ class Mlp_Advanced_Translator_View {
 	public function show_copy_button( $editor_id ) {
 
 		$matches = array();
-		preg_match( '~mlp_translation_data_(\d+)_content~', $editor_id, $matches );
-
-		if ( empty( $matches[ 1 ] ) ) {
+		preg_match( '~mlp-translation-data-(\d+)-content~', $editor_id, $matches );
+		if ( empty( $matches[1] ) ) {
 			return;
 		}
 		?>
-		<a href="#" class="button mlp_copy_button dashicons-before dashicons-image-rotate-right"
-				data-blog_id="<?php echo $matches[1]; ?>"><?php
-			esc_attr_e( 'Copy source post', 'multilingual-press' );
+		<a href="#" class="button mlp-copy-post-button dashicons-before dashicons-image-rotate-right"
+			data-site-id="<?php echo $matches[1]; ?>"><?php
+			esc_html_e( 'Copy source post', 'multilingual-press' );
 			?></a>
 		<?php
 	}
@@ -67,12 +66,11 @@ class Mlp_Advanced_Translator_View {
 		$placeholder = $this->get_placeholder_title( $post );
 		$name = $this->get_name( $remote_blog_id, 'title' );
 		$id = $this->get_id( $remote_blog_id, 'title' );
-
 		?>
-		<div class="mlp_titlediv">
+		<div class="mlp-titlediv">
 			<div>
 				<input
-					class="mlp_title"
+					class="mlp-title"
 					type="text"
 					name="<?php echo $name; ?>"
 					size="30"
@@ -107,12 +105,12 @@ class Mlp_Advanced_Translator_View {
 		$name = $this->get_name( $remote_blog_id, 'name' );
 		$id = $this->get_id( $remote_blog_id, 'name' );
 		?>
-		<div class="mlp_namediv">
+		<div class="mlp-namediv">
 			<div>
 				<label for="<?php echo $id; ?>">
 					<?php _e( 'Post Name:', 'multilingual-press' ) ?><br>
 					<input
-						class="mlp_name"
+						class="mlp-name"
 						type="text"
 						name="<?php echo $name; ?>"
 						size="30"
@@ -144,12 +142,12 @@ class Mlp_Advanced_Translator_View {
 		$name = $this->get_name( $remote_blog_id, 'excerpt' );
 		$id = $this->get_id( $remote_blog_id, 'excerpt' );
 		?>
-		<div class="mlp_excerptdiv">
+		<div class="mlp-excerptdiv">
 			<div>
 				<label for="<?php echo $id; ?>">
 					<?php _e( 'Post Excerpt:', 'multilingual-press' ) ?><br>
 					<textarea
-						class="mlp_excerpt"
+						class="mlp-excerpt"
 						name="<?php echo $name; ?>"
 						placeholder="<?php echo $placeholder ?>"
 						id="<?php echo $id; ?>"
@@ -317,7 +315,7 @@ class Mlp_Advanced_Translator_View {
 	 */
 	private function get_id( $blog_id, $name ) {
 
-		return $this->data->get_name_base() . '_' . (int) $blog_id . '_' . $name;
+		return $this->data->get_id_base() . '-' . (int) $blog_id . '-' . $name;
 	}
 
 	/**
@@ -355,15 +353,12 @@ class Mlp_Advanced_Translator_View {
 				</label>';
 
 		foreach ( $data[ 'terms' ] as $term ) {
-
-			$checked = checked( $term->active, TRUE, FALSE );
-
-			$fields[ ] = sprintf(
+			$fields[] = sprintf(
 				$html,
 				$name,
 				$term->slug,
 				$term->term_id,
-				$checked,
+				checked( $term->active, true, false ),
 				esc_html( $term->name )
 			);
 		}
@@ -386,9 +381,6 @@ class Mlp_Advanced_Translator_View {
 		$name = $this->get_name( $remote_blog_id, 'tax' ) . '[' . $taxonomy . ']';
 
 		foreach ( $data[ 'terms' ] as $term ) {
-
-			$checked = checked( $term->active, TRUE, FALSE );
-
 			$fields[ ] = sprintf(
 				'<label for="%2$s_id">
 					<input type="checkbox" name="%1$s[]" id="%2$s_id" value="%3$s"%4$s>
@@ -397,7 +389,7 @@ class Mlp_Advanced_Translator_View {
 				$name,
 				$term->slug,
 				$term->term_id,
-				$checked,
+				checked( $term->active, true, false ),
 				esc_html( $term->name )
 			);
 		}
@@ -416,7 +408,7 @@ class Mlp_Advanced_Translator_View {
 	private function term_box( $title, $html ) {
 
 		?>
-		<fieldset class="mlp_taxonomy_box">
+		<fieldset class="mlp-taxonomy-box">
 			<legend><?php echo $title; ?></legend>
 			<?php echo $html; ?>
 		</fieldset>
@@ -440,5 +432,4 @@ class Mlp_Advanced_Translator_View {
 		</div>
 	<?php
 	}
-
 }

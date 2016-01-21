@@ -11,19 +11,19 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	/**
 	 * Passed by main controller.
 	 *
-	 * @type Inpsyde_Property_List_Interface
+	 * @var Inpsyde_Property_List_Interface
 	 */
 	private $plugin;
 
 	/**
 	 * Unique prefix to detect our registered actions and form names.
 	 *
-	 * @type string
+	 * @var string
 	 */
-	private $prefix = 'mlp_rsc';
+	private $prefix = 'mlp_rc';
 
 	/**
-	 * @type Mlp_Relationship_Control_Data
+	 * @var Mlp_Relationship_Control_Data
 	 */
 	private $data;
 
@@ -36,18 +36,13 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	public function __construct( Inpsyde_Property_List_Interface $plugin ) {
 
 		$this->plugin = $plugin;
-		$this->data   = new Mlp_Relationship_Control_Data;
+
+		$this->data = new Mlp_Relationship_Control_Data();
 
 		if ( $this->is_ajax() ) {
 			$this->set_up_ajax();
-		}
-		else {
-			add_action(
-				'mlp_translation_meta_box_bottom',
-				array ( $this, 'set_up_meta_box_handlers' ),
-				200,
-				3
-			);
+		} else {
+			add_action( 'mlp_translation_meta_box_bottom', array ( $this, 'set_up_meta_box_handlers' ), 200, 3 );
 		}
 	}
 
@@ -58,20 +53,9 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	 */
 	public function set_up_ajax() {
 
-		$this->data = new Mlp_Relationship_Control_Data;
+		$callback_type = "{$this->prefix}_remote_post_search" === $_REQUEST['action'] ? 'search' : 'reconnect';
 
-		if ( $this->prefix . '_search' === $_REQUEST['action'] ) {
-			add_action(
-				"wp_ajax_" . $_REQUEST['action'],
-				array ( $this, 'ajax_search_callback' )
-			);
-			return;
-		}
-
-		add_action(
-			"wp_ajax_" . $_REQUEST['action'],
-			array ( $this, 'ajax_reconnect_callback' )
-		);
+		add_action( "wp_ajax_{$_REQUEST['action']}", array( $this, "ajax_{$callback_type}_callback" ) );
 	}
 
 	/**
@@ -82,8 +66,8 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	 */
 	public function ajax_search_callback() {
 
-		$view = new Mlp_Relationship_Control_Ajax_Search( $this->data );
-		$view->render();
+		$search = new Mlp_Relationship_Control_Ajax_Search( $this->data );
+		$search->send_response();
 	}
 
 	/**
@@ -95,7 +79,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	public function ajax_reconnect_callback() {
 
 		$start = strlen( $this->prefix ) + 1;
-		$func = substr( $_REQUEST['action'], $start );
+		$func = substr( $_REQUEST['action'], $start ) . '_post';
 
 		$reconnect = new Mlp_Relationship_Changer( $this->plugin );
 		$result = $reconnect->$func();
@@ -117,13 +101,13 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	 * @wp-hook mlp_translation_meta_box_bottom
 	 * @uses    Mlp_Relationship_Control_Meta_Box_View
 	 * @param   WP_Post $post
-	 * @param   int     $remote_blog_id
+	 * @param   int     $remote_site_id
 	 * @param   WP_Post $remote_post
 	 * @return void
 	 */
 	public function set_up_meta_box_handlers(
 		WP_Post $post,
-		        $remote_blog_id,
+		        $remote_site_id,
 		WP_Post $remote_post
 	) {
 
@@ -132,13 +116,11 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 		if ( 'post-new.php' === $pagenow )
 			return; // maybe later, for now, we work on existing posts only
 
-		$this->data = new Mlp_Relationship_Control_Data;
-
 		$this->data->set_ids(
 		   array (
 			   'source_post_id' => $post->ID,
-			   'source_blog_id' => get_current_blog_id(),
-			   'remote_blog_id' => $remote_blog_id,
+			   'source_site_id' => get_current_blog_id(),
+			   'remote_site_id' => $remote_site_id,
 			   'remote_post_id' => $remote_post->ID
 		   )
 		);
@@ -154,8 +136,8 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	public function update( $name ) {
 
 		if ( 'default.remote.posts' === $name ) {
-			$view = new Mlp_Relationship_Control_Ajax_Search( $this->data );
-			$view->render();
+			$search = new Mlp_Relationship_Control_Ajax_Search( $this->data );
+			$search->render();
 		}
 	}
 
@@ -166,14 +148,14 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	 */
 	private function is_ajax() {
 
-		if ( ! defined( 'DOING_AJAX' ) or ! DOING_AJAX )
-			return FALSE; // no request to an AJAX file
+		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+			return false;
+		}
 
-		if ( empty ( $_REQUEST['action'] ) )
-			return FALSE; // broken AJAX request
+		if ( empty( $_REQUEST['action'] ) ) {
+			return false;
+		}
 
-		// Our AJAX actions start with $this->prefix
 		return 0 === strpos( $_REQUEST['action'], $this->prefix );
 	}
-
 }
