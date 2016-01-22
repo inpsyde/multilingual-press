@@ -6,6 +6,9 @@
 - When creating a new site, the language is set to the default site language.
 - When the site language is changed, the MultilingualPress language select adapts to this.
 - Improve _clearfix_ usage, props tiagoschenkel.
+- Complete JavaScript refactor, see [issue #168](https://github.com/inpsyde/multilingual-press/issues/168).
+- Refactor and improve the post translator's "Copy source post" functionality, see
+[issue #140](https://github.com/inpsyde/multilingual-press/issues/140).
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
