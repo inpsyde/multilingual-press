@@ -31,8 +31,6 @@
 		 * Initializes the CopyPost module.
 		 */
 		initialize: function() {
-			this.currentPostID = $( '#post_ID' ).val();
-
 			this.$content = $( '#content' );
 
 			this.$excerpt = $( '#excerpt' );
@@ -43,6 +41,8 @@
 
 			this.model = new PostData();
 			this.listenTo( this.model, 'change', this.updatePostData );
+
+			this.postID = $( '#post_ID' ).val();
 		},
 
 		/**
@@ -50,18 +50,35 @@
 		 * @param {Event} event - The click event of a "Copy source post" button.
 		 */
 		copyPostData: function( event ) {
+			var data = {},
+				remoteSiteID = this.getRemoteSiteID( $( event.target ) );
+
 			event.preventDefault();
 
+			/**
+			 * Triggers the event before copying post data, and passes an object for adding custom data, and the current
+			 * site and post IDs and the remote site ID.
+			 */
+			MultilingualPress.Events.trigger(
+				'CopyPost:copyPostData',
+				data,
+				moduleSettings.siteID,
+				this.postID,
+				remoteSiteID
+			);
+
+			data = _.extend( data, {
+				action: moduleSettings.action,
+				current_post_id: this.postID,
+				remote_site_id: remoteSiteID,
+				title: this.getTitle(),
+				slug: this.getSlug(),
+				content: this.getContent(),
+				excerpt: this.getExcerpt()
+			} );
+
 			this.model.fetch( {
-				data: {
-					action: moduleSettings.action,
-					current_post_id: this.currentPostID,
-					remote_site_id: this.getSiteID( $( event.target ) ),
-					title: this.getTitle(),
-					slug: this.getSlug(),
-					content: this.getContent(),
-					excerpt: this.getExcerpt()
-				},
+				data: data,
 				processData: true
 			} );
 		},
@@ -71,7 +88,7 @@
 		 * @param {Object} $button - A "Copy source post" button.
 		 * @returns {number} -  The site ID.
 		 */
-		getSiteID: function( $button ) {
+		getRemoteSiteID: function( $button ) {
 			return $button.data( 'site-id' ) || 0;
 		},
 
@@ -131,6 +148,11 @@
 			$( '#' + prefix + 'content' ).val( data.content );
 
 			$( '#' + prefix + 'excerpt' ).val( data.excerpt );
+
+			/**
+			 * Triggers the event for updating the post, and passes the according data.
+			 */
+			MultilingualPress.Events.trigger( 'CopyPost:updatePostData', data );
 		},
 
 		/**
