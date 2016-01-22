@@ -9,6 +9,8 @@
 - Complete JavaScript refactor, see [issue #168](https://github.com/inpsyde/multilingual-press/issues/168).
 - Refactor and improve the post translator's "Copy source post" functionality, see
 [issue #140](https://github.com/inpsyde/multilingual-press/issues/140).
+- Indicate if "Copy source post" button was used, see
+[issue #169](https://github.com/inpsyde/multilingual-press/issues/169).
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see

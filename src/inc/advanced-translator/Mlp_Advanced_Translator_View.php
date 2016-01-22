@@ -31,22 +31,26 @@ class Mlp_Advanced_Translator_View {
 	 *
 	 * @wp-hook media_buttons
 	 *
-	 * @param string $editor_id
+	 * @param string $editor_id      tinyMCE editor ID.
+	 * @param int    $remote_site_id Remote site ID.
 	 *
 	 * @return  void
 	 */
-	public function show_copy_button( $editor_id ) {
+	public function show_copy_button( $editor_id, $remote_site_id ) {
 
 		$matches = array();
 		preg_match( '~mlp-translation-data-(\d+)-content~', $editor_id, $matches );
 		if ( empty( $matches[1] ) ) {
 			return;
 		}
+		$name = $this->get_name( $remote_site_id, 'copied_post' );
+		$id = $this->get_id( $remote_site_id, 'copied-post' );
 		?>
 		<a href="#" class="button mlp-copy-post-button dashicons-before dashicons-image-rotate-right"
 			data-site-id="<?php echo $matches[1]; ?>"><?php
 			esc_html_e( 'Copy source post', 'multilingual-press' );
 			?></a>
+		<input type="hidden" name="<?php echo $name; ?>" value="" id="<?php echo $id; ?>">
 		<?php
 	}
 
@@ -182,7 +186,7 @@ class Mlp_Advanced_Translator_View {
 			)
 		);
 
-		$this->show_copy_button( $editor_id );
+		$this->show_copy_button( $editor_id, $remote_blog_id );
 		wp_editor( $remote_post->post_content, $editor_id, $settings );
 	}
 

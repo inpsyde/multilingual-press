@@ -424,6 +424,8 @@
 
 			event.preventDefault();
 
+			$( '#mlp-translation-data-' + remoteSiteID + '-copied-post' ).val( 1 );
+
 			/**
 			 * Triggers the event before copying post data, and passes an object for adding custom data, and the current
 			 * site and post IDs and the remote site ID.
