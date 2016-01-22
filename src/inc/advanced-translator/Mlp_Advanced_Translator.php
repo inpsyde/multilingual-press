@@ -255,7 +255,7 @@ class Mlp_Advanced_Translator {
 		 *
 		 * @return string
 		 */
-		$content = apply_filters(
+		$content = (string) apply_filters(
 			'mlp_process_post_content_for_remote_site',
 			$content,
 			$current_site_id,
@@ -263,7 +263,7 @@ class Mlp_Advanced_Translator {
 			$remote_site_id
 		);
 
-		$excerpt = filter_input( INPUT_GET, 'excerpt' );
+		$excerpt = (string) filter_input( INPUT_GET, 'excerpt' );
 		/**
 		 * Filters a post's excerpt for a remote site.
 		 *
@@ -282,12 +282,29 @@ class Mlp_Advanced_Translator {
 			$remote_site_id
 		);
 
-		wp_send_json_success( array(
-			'siteID'  => $remote_site_id,
-			'title'   => $title,
-			'slug'    => $slug,
-			'content' => $content,
-			'excerpt' => $excerpt,
-		) );
+		/**
+		 * Filters a post's data for a remote site.
+		 *
+		 * @param array $data            Post data.
+		 * @param int   $current_site_id Source site ID.
+		 * @param int   $current_post_id Source post ID.
+		 * @param int   $remote_site_id  Remote site ID.
+		 *
+		 * @return array
+		 */
+		$data = (array) apply_filters(
+			'mlp_process_post_data_for_remote_site',
+			array(
+				'siteID'  => $remote_site_id,
+				'title'   => $title,
+				'slug'    => $slug,
+				'content' => $content,
+				'excerpt' => $excerpt,
+			),
+			$current_site_id,
+			$current_post_id,
+			$remote_site_id
+		);
+		wp_send_json_success( $data );
 	}
 }
