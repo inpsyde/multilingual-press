@@ -77,13 +77,13 @@
 
 		/**
 		 * Returns the site IDs for the checked languages in the Languages meta box.
-		 * @returns {string[]} - The site IDs.
+		 * @returns {number[]} - The site IDs.
 		 */
 		getSites: function() {
 			var languages = [];
 
 			this.$languages.filter( ':checked' ).each( function() {
-				languages.push( $( this ).val() );
+				languages.push( Number( $( this ).val() || 0 ) );
 			} );
 
 			return languages;

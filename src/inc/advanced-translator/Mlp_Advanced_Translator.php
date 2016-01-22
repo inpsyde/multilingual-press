@@ -6,6 +6,11 @@
 class Mlp_Advanced_Translator {
 
 	/**
+	 * @var string
+	 */
+	private $ajax_action = 'mlp_process_post_data';
+
+	/**
 	 * @var Mlp_Translatable_Post_Data_Interface
 	 */
 	private $basic_data;
@@ -41,6 +46,12 @@ class Mlp_Advanced_Translator {
 		// Quit here if module is turned off
 		if ( ! $this->register_setting() ) {
 			return;
+		}
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'localize_script' ) );
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			add_action( "wp_ajax_{$this->ajax_action}", array( $this, 'process_post_data' ) );
 		}
 
 		add_action( 'mlp_post_translator_init', array( $this, 'setup' ) );
@@ -157,6 +168,126 @@ class Mlp_Advanced_Translator {
 			'display_name' => $display_name,
 			'slug'         => 'class-' . __CLASS__,
 			'description'  => $description,
+		) );
+	}
+
+	/**
+	 * Provides necessary data for the CopyPost JavaScript module.
+	 *
+	 * @wp-hook admin_enqueue_scripts
+	 *
+	 * @return void
+	 */
+	public function localize_script() {
+
+		wp_localize_script( 'mlp-admin', 'mlpCopyPostSettings', array(
+			'action' => $this->ajax_action,
+		) );
+	}
+
+	/**
+	 * Processes (and filters) a post's data before it is copied to a remote post.
+	 *
+	 * @wp-hook wp_ajax_{$this->ajax_action}
+	 *
+	 * @return void
+	 */
+	public function process_post_data() {
+
+		$current_site_id = get_current_blog_id();
+
+		$current_post_id = (int) filter_input( INPUT_GET, 'current_post_id' );
+
+		$remote_site_id = (int) filter_input( INPUT_GET, 'remote_site_id' );
+
+		if ( ! ( $current_post_id && $remote_site_id ) ) {
+			wp_send_json_error();
+		}
+
+		$title = filter_input( INPUT_GET, 'title' );
+		/**
+		 * Filters a post's title for a remote site.
+		 *
+		 * @param string $title Post title.
+		 * @param int    $current_site_id Source site ID.
+		 * @param int    $current_post_id Source post ID.
+		 * @param int    $remote_site_id  Remote site ID.
+		 *
+		 * @return string
+		 */
+		$title = apply_filters(
+			'mlp_process_post_title_for_remote_site',
+			$title,
+			$current_site_id,
+			$current_post_id,
+			$remote_site_id
+		);
+		$title = esc_attr( $title );
+
+		$slug = filter_input( INPUT_GET, 'slug' );
+		/**
+		 * Filters a post's slug for a remote site.
+		 *
+		 * @param string $slug            Post slug.
+		 * @param int    $current_site_id Source site ID.
+		 * @param int    $current_post_id Source post ID.
+		 * @param int    $remote_site_id  Remote site ID.
+		 *
+		 * @return string
+		 */
+		$slug = apply_filters(
+			'mlp_process_post_slug_for_remote_site',
+			$slug,
+			$current_site_id,
+			$current_post_id,
+			$remote_site_id
+		);
+		$slug = esc_attr( $slug );
+
+		$content = filter_input( INPUT_GET, 'content' );
+		/**
+		 * Filters a post's content for a remote site.
+		 *
+		 * @param string $content         Post content.
+		 * @param int    $current_site_id Source site ID.
+		 * @param int    $current_post_id Source post ID.
+		 * @param int    $remote_site_id  Remote site ID.
+		 *
+		 * @return string
+		 */
+		$content = apply_filters(
+			'mlp_process_post_content_for_remote_site',
+			$content,
+			$current_site_id,
+			$current_post_id,
+			$remote_site_id
+		);
+
+		$excerpt = filter_input( INPUT_GET, 'excerpt' );
+		/**
+		 * Filters a post's excerpt for a remote site.
+		 *
+		 * @param string $excerpt         Post excerpt.
+		 * @param int    $current_site_id Source site ID.
+		 * @param int    $current_post_id Source post ID.
+		 * @param int    $remote_site_id  Remote site ID.
+		 *
+		 * @return string
+		 */
+		$excerpt = apply_filters(
+			'mlp_process_post_excerpt_for_remote_site',
+			$excerpt,
+			$current_site_id,
+			$current_post_id,
+			$remote_site_id
+		);
+
+		wp_send_json_success( array(
+			'siteID'  => $remote_site_id,
+			'title'   => $title,
+			'slug'    => $slug,
+			'content' => $content,
+			'excerpt' => $excerpt,
 		) );
 	}
 }

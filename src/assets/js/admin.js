@@ -252,13 +252,13 @@
 
 		/**
 		 * Returns the site IDs for the checked languages in the Languages meta box.
-		 * @returns {string[]} - The site IDs.
+		 * @returns {number[]} - The site IDs.
 		 */
 		getSites: function() {
 			var languages = [];
 
 			this.$languages.filter( ':checked' ).each( function() {
-				languages.push( $( this ).val() );
+				languages.push( Number( $( this ).val() || 0 ) );
 			} );
 
 			return languages;
@@ -367,9 +367,23 @@
 	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite );
 })( jQuery );
 
-/* global MultilingualPress */
+/* global ajaxurl, MultilingualPress */
 (function( $ ) {
 	'use strict';
+
+	/**
+	 * Settings for the MultilingualPress CopyPost module. Only available on the targeted admin pages.
+	 * @type {Object}
+	 */
+	var moduleSettings = MultilingualPress.getSettings( 'CopyPost' );
+
+	/**
+	 * Constructor for the MultilingualPress PostData model.
+	 * @constructor
+	 */
+	var PostData = Backbone.Model.extend( {
+		urlRoot: ajaxurl
+	} );
 
 	/**
 	 * Constructor for the MultilingualPress CopyPost module.
@@ -386,6 +400,8 @@
 		 * Initializes the CopyPost module.
 		 */
 		initialize: function() {
+			this.currentPostID = $( '#post_ID' ).val();
+
 			this.$content = $( '#content' );
 
 			this.$excerpt = $( '#excerpt' );
@@ -393,6 +409,9 @@
 			this.$slug = $( '#editable-post-name' );
 
 			this.$title = $( '#title' );
+
+			this.model = new PostData();
+			this.listenTo( this.model, 'change', this.updatePostData );
 		},
 
 		/**
@@ -400,19 +419,20 @@
 		 * @param {Event} event - The click event of a "Copy source post" button.
 		 */
 		copyPostData: function( event ) {
-			var prefix = 'mlp-translation-data-' + this.getSiteID( $( event.target ) );
-
 			event.preventDefault();
 
-			$( '#' + prefix + '-title' ).val( this.getTitle() );
-
-			$( '#' + prefix + '-name' ).val( this.getSlug() );
-
-			this.copyTinyMCEContent( prefix + '-content' );
-
-			$( '#' + prefix + '-content' ).val( this.getContent() );
-
-			$( '#' + prefix + '-excerpt' ).val( this.getExcerpt() );
+			this.model.fetch( {
+				data: {
+					action: moduleSettings.action,
+					current_post_id: this.currentPostID,
+					remote_site_id: this.getSiteID( $( event.target ) ),
+					title: this.getTitle(),
+					slug: this.getSlug(),
+					content: this.getContent(),
+					excerpt: this.getExcerpt()
+				},
+				processData: true
+			} );
 		},
 
 		/**
@@ -426,7 +446,7 @@
 
 		/**
 		 * Returns the title of the original post.
-		 * @returns {string}
+		 * @returns {string} - The post title.
 		 */
 		getTitle: function() {
 			return this.$title.val() || '';
@@ -434,40 +454,15 @@
 
 		/**
 		 * Returns the slug of the original post.
-		 * @returns {string}
+		 * @returns {string} - The post slug.
 		 */
 		getSlug: function() {
 			return this.$slug.text() || '';
 		},
 
 		/**
-		 * Copies the content of the main TinyMCE editor to the TinyMCE editor with the given ID.
-		 * @param {string} targetEditorID - The target TinyMCE editor's ID.
-		 */
-		copyTinyMCEContent: function( targetEditorID ) {
-			var sourceEditor,
-				targetEditor;
-
-			if ( 'undefined' === typeof window.tinyMCE ) {
-				return;
-			}
-
-			sourceEditor = window.tinyMCE.get( 'content' );
-			if ( ! sourceEditor ) {
-				return;
-			}
-
-			targetEditor = window.tinyMCE.get( targetEditorID );
-			if ( ! targetEditor ) {
-				return;
-			}
-
-			targetEditor.setContent( sourceEditor.getContent() );
-		},
-
-		/**
 		 * Returns the content of the original post.
-		 * @returns {string}
+		 * @returns {string} - The post content.
 		 */
 		getContent: function() {
 			return this.$content.val() || '';
@@ -475,10 +470,56 @@
 
 		/**
 		 * Returns the excerpt of the original post.
-		 * @returns {string}
+		 * @returns {string} - The post excerpt.
 		 */
 		getExcerpt: function() {
 			return this.$excerpt.val() || '';
+		},
+
+		/**
+		 * Updates the post data in the according meta box for the given site ID.
+		 */
+		updatePostData: function() {
+			var data,
+				prefix;
+
+			if ( ! this.model.get( 'success' ) ) {
+				return;
+			}
+
+			data = this.model.get( 'data' );
+
+			prefix = 'mlp-translation-data-' + data.siteID + '-';
+
+			$( '#' + prefix + 'title' ).val( data.title );
+
+			$( '#' + prefix + 'name' ).val( data.slug );
+
+			this.setTinyMCEContent( prefix + 'content', data.content );
+
+			$( '#' + prefix + 'content' ).val( data.content );
+
+			$( '#' + prefix + 'excerpt' ).val( data.excerpt );
+		},
+
+		/**
+		 * Sets the given content for the tinyMCE editor with the given ID.
+		 * @param {string} editorID - The tinyMCE editor's ID.
+		 * @param {string} content - The content.
+		 */
+		setTinyMCEContent: function( editorID, content ) {
+			var editor;
+
+			if ( 'undefined' === typeof window.tinyMCE ) {
+				return;
+			}
+
+			editor = window.tinyMCE.get( editorID );
+			if ( ! editor ) {
+				return;
+			}
+
+			editor.setContent( content );
 		}
 	} );
 
