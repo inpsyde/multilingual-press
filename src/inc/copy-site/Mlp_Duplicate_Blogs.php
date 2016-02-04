@@ -145,6 +145,10 @@ class Mlp_Duplicate_Blogs {
 			update_option( 'blog_public', (bool) $_POST[ 'blog' ][ 'visibility' ] );
 		}
 
+		$theme = wp_get_theme();
+		/** This action is documented in wp-includes/theme.php */
+		do_action( 'switch_theme', $theme->get( 'Name' ), $theme );
+
 		restore_current_blog();
 
 		/**
