@@ -41,11 +41,5 @@
 	"require-dev": {
 		"php": ">=5.3.3",
 		"phpunit/phpunit": "~4.8|~5.1"
-	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/inpsyde/multilingual-press"
-		}
-	]
+	}
 }
