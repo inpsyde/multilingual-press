@@ -12,6 +12,7 @@
 - Indicate if "Copy source post" button was used, see
 [issue #169](https://github.com/inpsyde/multilingual-press/issues/169).
 - Fire the `switch_theme` action when a site has been duplicated.
+- Fix term relation not being deleted when term is deleted.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
