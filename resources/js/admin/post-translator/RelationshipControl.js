@@ -10,9 +10,10 @@
 
 	/**
 	 * Constructor for the MultilingualPress RelationshipControl module.
-	 * @constructor
+	 * @class
 	 */
 	var RelationshipControl = Backbone.View.extend( {
+		/** @lends RelationshipControl.prototype */
 		el: 'body',
 
 		events: {
@@ -23,6 +24,10 @@
 
 		/**
 		 * Initializes the RelationshipControl module.
+		 *
+		 * @constructs
+		 * @name RelationshipControl
+		 * @augments Backbone.View
 		 */
 		initialize: function() {
 			this.unsavedRelationships = [];

@@ -10,13 +10,19 @@
 
 	/**
 	 * Constructor for the MultilingualPress UserBackendLanguage module.
-	 * @constructor
+	 * @class
 	 */
 	var UserBackendLanguage = Backbone.View.extend( {
+		/** @lends UserBackendLanguage.prototype */
+
 		el: '#WPLANG',
 
 		/**
 		 * Initializes the UserBackendLanguage module.
+		 *
+		 * @augments Backbone.View
+		 * @constructs
+		 * @name UserBackendLanguage
 		 */
 		initialize: function() {
 			this.$el.val( moduleSettings.locale );

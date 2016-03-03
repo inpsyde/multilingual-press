@@ -10,17 +10,31 @@
 
 	/**
 	 * Constructor for the MultilingualPress NavMenuItem model.
-	 * @constructor
+	 * @class
 	 */
 	var NavMenuItem = Backbone.Model.extend( {
+		/** @lends NavMenuItem.prototype */
+
+		/**
+		 * Model containing Nav Menu data
+		 * @augments Backbone.Model
+		 * @constructs
+		 * @name NavMenuItem
+		 */
+
+		/**
+		 * @type {string}
+		 */
 		urlRoot: ajaxurl
 	} );
 
 	/**
 	 * Constructor for the MultilingualPress NavMenus module.
-	 * @constructor
+	 * @class
 	 */
 	var NavMenus = Backbone.View.extend( {
+		/** @lends NavMenus.prototype */
+
 		el: '#' + moduleSettings.metaBoxID,
 
 		events: {
@@ -29,8 +43,13 @@
 
 		/**
 		 * Initializes the NavMenus module.
+		 *
+		 * @augments Backbone.View
+		 * @constructs
+		 * @name NavMenus
 		 */
 		initialize: function() {
+
 			this.$languages = this.$el.find( 'li [type="checkbox"]' );
 
 			this.$menu = $( '#menu' );

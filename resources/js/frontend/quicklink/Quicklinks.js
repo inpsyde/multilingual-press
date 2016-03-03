@@ -32,6 +32,8 @@
 		return {
 			/**
 			 * Initializes the module.
+			 *
+			 * @memberof Quicklinks
 			 */
 			initialize: function() {
 				var $form = $( '#mlp-quicklink-form' );
@@ -44,6 +46,7 @@
 
 	/**
 	 * The MultilingualPress Quicklinks instance.
+	 * @memberof MultilingualPress.Modules
 	 * @type {Quicklinks}
 	 */
 	MultilingualPress.Modules.Quicklinks = new Quicklinks();

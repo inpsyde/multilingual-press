@@ -18,9 +18,10 @@
 
 	/**
 	 * Constructor for the MultilingualPress CopyPost module.
-	 * @constructor
 	 */
 	var CopyPost = Backbone.View.extend( {
+		/** @lends CopyPost.prototype */
+
 		el: '#post-body',
 
 		events: {
@@ -29,6 +30,10 @@
 
 		/**
 		 * Initializes the CopyPost module.
+		 *
+		 * @augments Backbone.View
+		 * @constructor
+		 * @name CopyPost
 		 */
 		initialize: function() {
 			this.$content = $( '#content' );

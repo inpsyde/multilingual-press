@@ -4,9 +4,11 @@
 
 	/**
 	 * Constructor for the MultilingualPress AddNewSite module.
-	 * @constructor
+	 * @class
 	 */
 	var AddNewSite = Backbone.View.extend( {
+		/** @lends AddNewSite.prototype */
+
 		el: '#wpbody-content form',
 
 		events: {
@@ -18,6 +20,10 @@
 
 		/**
 		 * Initializes the AddNewSite module.
+		 *
+		 * @augments Backbone.View
+		 * @constructs
+		 * @name AddNewSite
 		 */
 		initialize: function() {
 

@@ -4,9 +4,11 @@
 
 	/**
 	 * Constructor for the MultilingualPress TermTranslator module.
-	 * @constructor
+	 * @class
 	 */
 	var TermTranslator = Backbone.View.extend( {
+		/** @lends TermTranslator.prototype */
+
 		el: '#mlp-term-translations',
 
 		events: {
@@ -15,6 +17,9 @@
 
 		/**
 		 * Initializes the TermTranslator module.
+		 * @augments Backbone.View
+		 * @constructs
+		 * @name TermTranslator
 		 */
 		initialize: function() {
 			this.$selects = this.$el.find( 'select' );

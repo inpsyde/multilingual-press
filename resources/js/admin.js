@@ -6,7 +6,17 @@
 	 * Constructor for the MultilingualPress router.
 	 * @constructor
 	 */
-	var MultilingualPressRouter = Backbone.Router.extend( {} );
+	var MultilingualPressRouter = Backbone.Router.extend( {
+		/** @lends MultilingualPressRouter.prototype */
+
+		/**
+		 * MLP-specific routing
+		 *
+		 * @augments Backbone.Router
+		 * @constructor
+		 * @name MultilingualPressRouter
+		 */
+	} );
 
 	/**
 	 * Constructor for the MultilingualPress admin controller.
@@ -47,12 +57,19 @@
 		};
 
 		return {
+			/**
+			 * @memberof MultilingualPress
+			 * @augments Backbone.Events
+			 */
 			Events: _.extend( {}, Backbone.Events ),
-
+			/**
+			 * @memberof MultilingualPress
+			 */
 			Modules: Modules,
 
 			/**
 			 * Returns the settings object for the given module or settings name.
+			 * @memberof MultilingualPress
 			 * @param {string} name - The name of either the MulitilingualPress module or the settings object itself.
 			 * @returns {Object} - The settings object.
 			 */
@@ -70,6 +87,7 @@
 
 			/**
 			 * Registers a new module with the given Module callback under the given name for the given route.
+			 * @memberof MultilingualPress
 			 * @param {string|string[]} routes - The routes for the module.
 			 * @param {string} name - The name of the module.
 			 * @param {Function} Module - The constructor callback for the module.
@@ -89,6 +107,7 @@
 
 			/**
 			 * Initializes the instance.
+			 * @memberof MultilingualPress
 			 */
 			initialize: function() {
 				setUpRoutes();

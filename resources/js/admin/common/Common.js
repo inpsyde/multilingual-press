@@ -4,9 +4,11 @@
 
 	/**
 	 * Constructor for the MultilingualPress Common module.
-	 * @constructor
+	 * @class
 	 */
 	var Common = Backbone.View.extend( {
+		/** @lends Common.prototype */
+
 		el: 'body',
 
 		events: {
@@ -15,6 +17,10 @@
 
 		/**
 		 * Initializes the Common module.
+		 *
+		 * @augments Backbone.View
+		 * @constructs
+		 * @name Common
 		 */
 		initialize: function() {
 			this.initializeStateTogglers();
@@ -56,6 +62,10 @@
 		}
 	} );
 
-	// Register the Common module for all admin pages.
+	/**
+	 * Register the Common module for all admin pages.
+	 *
+	 * @memberof MultilingualPress.Modules
+ 	 */
 	MultilingualPress.Modules.Common = new Common();
 })( jQuery );

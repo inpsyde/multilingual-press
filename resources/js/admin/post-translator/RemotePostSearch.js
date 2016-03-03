@@ -7,14 +7,18 @@
 	 * @constructor
 	 */
 	var RemotePostSearchResult = Backbone.Model.extend( {
+		/** @lends RemotePostSearchResult.prototype */
+
 		urlRoot: ajaxurl
 	} );
 
 	/**
 	 * Constructor for the MultilingualPress RCPostSearch module.
-	 * @constructor
+	 * @class
 	 */
 	var RCPostSearch = Backbone.View.extend( {
+		/** @lends RCPostSearch.prototype */
+
 		el: 'body',
 
 		events: {
@@ -24,6 +28,10 @@
 
 		/**
 		 * Initializes the RCPostSearch module.
+		 *
+		 * @augments Backbone.View
+		 * @constructs
+		 * @name RCPostSearch
 		 */
 		initialize: function() {
 			this.defaultResults = [];
