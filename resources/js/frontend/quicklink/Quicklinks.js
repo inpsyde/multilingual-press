@@ -4,8 +4,7 @@
 
 	/**
 	 * Constructor for the MultilingualPress Quicklinks module.
-	 * @returns {{initialize: initialize}}
-	 * @constructor
+	 * @class Quicklinks
 	 */
 	var Quicklinks = function() {
 		/**
@@ -29,11 +28,9 @@
 			}
 		};
 
-		return {
+		return /**@lends Quicklinks# */{
 			/**
 			 * Initializes the module.
-			 *
-			 * @memberof Quicklinks
 			 */
 			initialize: function() {
 				var $form = $( '#mlp-quicklink-form' );

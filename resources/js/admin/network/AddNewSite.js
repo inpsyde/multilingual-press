@@ -3,9 +3,13 @@
 	'use strict';
 
 	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {
-
+		/**
+		 * @type {string}
+		 */
 		el: '#wpbody-content form',
-
+		/**
+		 * @type {Object}
+		 */
 		events: {
 			'change #site-language': 'adaptLanguage',
 			'change #mlp-base-site-id': 'togglePluginsRow'

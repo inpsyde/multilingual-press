@@ -6,10 +6,12 @@
 	 * Settings for the MultilingualPress UserBackendLanguage module. Only available on the targeted admin pages.
 	 * @type {Object}
 	 */
-	var moduleSettings = window.MultilingualPress.getSettings( 'UserBackendLanguage' );
+	var moduleSettings = MultilingualPress.getSettings( 'UserBackendLanguage' );
 
 	var UserBackendLanguage = Backbone.View.extend( /** @lends UserBackendLanguage.prototype */ {
-
+		/**
+		 * @type {string}
+		 */
 		el: '#WPLANG',
 
 		/**

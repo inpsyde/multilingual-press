@@ -9,7 +9,7 @@
 	var moduleSettings = MultilingualPress.getSettings( 'NavMenus' );
 
 	/**
-	 * Constructor for the MultilingualPress NavMenuItem model.
+	 * @classdesc Constructor for the MultilingualPress NavMenuItem model.
 	 * @class NavMenuItem
 	 * @extends Backbone.Model
 	 */
@@ -20,11 +20,7 @@
 			urlRoot: ajaxurl
 		} );
 
-	/**
-	 * Constructor for the MultilingualPress NavMenus module.
-	 * @class
-	 */
-	var NavMenus = window.Backbone.View.extend(	/** @lends NavMenus.prototype */{
+	var NavMenus = window.Backbone.View.extend(	/** @lends NavMenus# */{
 
 		/** @type {string} */
 		el: '#' + moduleSettings.metaBoxID,
@@ -35,9 +31,9 @@
 
 		/**
 		 * Initializes the NavMenus module.
-		 *
+		 * @classdesc Constructor for the MultilingualPress NavMenus module.
 		 * @extends Backbone.View
-		 * @constructs
+		 * @constructs NavMenus
 		 * @name NavMenus
 		 */
 		initialize: function() {

@@ -9,8 +9,9 @@
 	var moduleSettings = MultilingualPress.getSettings( 'CopyPost' );
 
 	/**
-	 * Constructor for the MultilingualPress PostData model.
-	 * @constructor
+	 * @classdesc Constructor for the MultilingualPress PostData model.
+	 * @class PostData
+	 *  @extends Backbone.Model
 	 */
 	var PostData = Backbone.Model.extend( /** @lends PostData# */  {
 		/**
@@ -19,20 +20,21 @@
 		urlRoot: ajaxurl
 	} );
 
-	/**
-	 * Constructor for the MultilingualPress CopyPost module.
-	 */
 	var CopyPost = Backbone.View.extend( /** @lends CopyPost# */ {
-
+		/**
+		 * @type {string}
+		 */
 		el: '#post-body',
-
+		/**
+		 * @type {Object}
+		 */
 		events: {
 			'click .mlp-copy-post-button': 'copyPostData'
 		},
 
 		/**
 		 * Initializes the CopyPost module.
-		 *
+		 *@classdesc Constructor for the MultilingualPress CopyPost module.
 		 * @extends Backbone.View
 		 * @constructor
 		 * @name CopyPost

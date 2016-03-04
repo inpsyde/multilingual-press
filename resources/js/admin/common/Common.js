@@ -2,14 +2,16 @@
 (function( $ ) {
 	'use strict';
 
-	/**
-	 * Constructor for the MultilingualPress Common module.
-	 */
 	var Common = Backbone.View.extend( /** @lends Common# */ {
 
-
+		/**
+		 * @type {string}
+		 */
 		el: 'body',
 
+		/**
+		 * @type {Object}
+		 */
 		events: {
 			'click .mlp-click-toggler': 'toggleElement'
 		},
@@ -17,6 +19,7 @@
 		/**
 		 * Initializes the Common module.
 		 *
+		 * @classdesc Constructor for the MultilingualPress Common module.
 		 * @extends Backbone.View
 		 * @constructs Common
 		 */

@@ -1,9 +1,4 @@
 /* global mlpSettings */
-/**
- * The complete Triforce, or one or more components of the Triforce.
- * @property {MultilingualPress} MultilingualPress - Indicates whether the Courage component is present.
- */
-
 (function( $ ) {
 	'use strict';
 
@@ -13,8 +8,6 @@
 	 * @extends Backbone.Router
 	 */
 	var MultilingualPressRouter = Backbone.Router.extend( /** @lends MultilingualPressRouter# */ {} );
-
-
 
 	/**
 	 * Constructor for the MultilingualPress admin controller.

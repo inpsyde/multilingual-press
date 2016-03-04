@@ -7,9 +7,7 @@
 	 * @type {Object}
 	 */
 	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
-	/**
-	 * @extends Backbone.View
-	 */
+
 	var RelationshipControl = Backbone.View.extend( /** @lends RelationshipControl# */ {
 		/**
 		 * @type {string}
@@ -17,7 +15,7 @@
 		el: 'body',
 
 		/**
-		 *
+		 * @type {Object}
 		 */
 		events: {
 			'change .mlp-rc-actions input': 'updateUnsavedRelationships',
@@ -29,7 +27,7 @@
 		 * Initializes the RelationshipControl module.
 		 *
 		 * @classdesc Constructor for the MultilingualPress RelationshipControl module.
-		 *
+		 * @extends Backbone.View
 		 * @constructs
 		 * @name RelationshipControl
 		 */

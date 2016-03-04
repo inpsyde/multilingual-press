@@ -10,11 +10,13 @@
 
 	/**
 	 * Constructor for the MultilingualPress RemotePostSearchResult model.
-	 * @constructor
+	 * @class RemotePostSearchResult
+	 * @extends Backbone.Model
 	 */
-	var RemotePostSearchResult = Backbone.Model.extend( {
-		/** @lends RemotePostSearchResult# */
-
+	var RemotePostSearchResult = Backbone.Model.extend( /** @lends RemotePostSearchResult# */ {
+		/**
+		 * @type {string}
+		 */
 		urlRoot: ajaxurl
 	} );
 

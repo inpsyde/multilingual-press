@@ -2,20 +2,21 @@
 (function( $ ) {
 	'use strict';
 
-	/**
-	 * Constructor for the MultilingualPress TermTranslator module.
-	 * @class
-	 */
-	var TermTranslator = Backbone.View.extend( /** @lends TermTranslator.prototype */ {
-
+	var TermTranslator = Backbone.View.extend( /** @lends TermTranslator# */ {
+		/**
+		 * @type {string}
+		 */
 		el: '#mlp-term-translations',
-
+		/**
+		 * @type {Object}
+		 */
 		events: {
 			'change select': 'propagateSelectedTerm'
 		},
 
 		/**
 		 * Initializes the TermTranslator module.
+		 * @classdesc Constructor for the MultilingualPress TermTranslator module.
 		 * @extends Backbone.View
 		 * @constructs
 		 * @name TermTranslator
