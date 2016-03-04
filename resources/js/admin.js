@@ -3,7 +3,7 @@
 	'use strict';
 
 	/**
-	 * Constructor for the MultilingualPress router.
+	 * @classdesc Constructor for the MultilingualPress router.
 	 * @class MultilingualPressRouter
 	 * @extends Backbone.Router
 	 */
@@ -12,7 +12,6 @@
 	/**
 	 * Constructor for the MultilingualPress admin controller.
 	 * @class MultilingualPress
-	 * @returns MultilingualPress
 	 */
 	var MultilingualPress = function() {
 		var Modules = [],
@@ -50,13 +49,13 @@
 		return 	/** @lends MultilingualPress# */ {
 			/**
 			 * @extends Backbone.Events
-			 * @type {object}
+			 * @type {Object}
 			 */
 			Events: _.extend( {}, Backbone.Events ),
 			/**
 			 * All modules that are currently registered
 			 *
-			 * @link MultilingualPress.registerModule
+			 * @see {@link MultilingualPress#registerModule}
 			 *
 			 * @type {Array}
 			 */

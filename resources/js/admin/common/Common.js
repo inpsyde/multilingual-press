@@ -64,8 +64,6 @@
 
 	/**
 	 * Register the Common module for all admin pages.
-	 *
-	 * @memberof MultilingualPress.Modules
  	 */
 	MultilingualPress.Modules.Common = new Common();
 })( jQuery, window.MultilingualPress );
