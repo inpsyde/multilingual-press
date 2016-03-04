@@ -1,31 +1,17 @@
 (function( $, MultilingualPress ) {
 	'use strict';
 
+	/**
+	 * @class AddNewSite
+	 * @classdesc Constructor for the MultilingualPress AddNewSite module.
+	 * @extends Backbone.View
+	 */
 	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {
 		/**
-		 * @type {string}
-		 */
-		el: '#wpbody-content form',
-		/**
-		 * @type {Object}
-		 */
-		events: {
-			'change #site-language': 'adaptLanguage',
-			'change #mlp-base-site-id': 'togglePluginsRow'
-		},
-
-		template: _.template( $( '#mlp-add-new-site-template' ).html() || '' ),
-
-		/**
 		 * Initializes the AddNewSite module.
-		 *
-		 * @classdesc Constructor for the MultilingualPress AddNewSite module.
-		 *
-		 * @extends Backbone.View
-		 * @constructs
-		 * @name AddNewSite
 		 */
 		initialize: function() {
+			this.template = _.template( $( '#mlp-add-new-site-template' ).html() || '' );
 
 			// First render the template, ...
 			this.render();
@@ -57,7 +43,7 @@
 		/**
 		 * Returns the selected language of the given select element.
 		 * @param {Object} $select - A select element.
-		 * @returns {string} - The selected language.
+		 * @returns {String} The selected language.
 		 */
 		getLanguage: function( $select ) {
 			var language = $select.val();
@@ -78,5 +64,11 @@
 	} );
 
 	// Register the AddNewSite module for the Add New Site network admin page.
-	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite );
+	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite, {
+		el: '#wpbody-content form',
+		events: {
+			'change #site-language': 'adaptLanguage',
+			'change #mlp-base-site-id': 'togglePluginsRow'
+		}
+	} );
 })( jQuery, window.MultilingualPress );

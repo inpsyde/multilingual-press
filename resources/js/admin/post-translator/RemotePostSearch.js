@@ -9,41 +9,22 @@
 	var moduleSettings = MultilingualPress.getSettings( 'RemotePostSearch' );
 
 	/**
-	 * Constructor for the MultilingualPress RemotePostSearchResult model.
 	 * @class RemotePostSearchResult
+	 * @classdesc MultilingualPress RemotePostSearchResult model.
 	 * @extends Backbone.Model
 	 */
 	var RemotePostSearchResult = Backbone.Model.extend( /** @lends RemotePostSearchResult# */ {
-		/**
-		 * @type {string}
-		 */
 		urlRoot: ajaxurl
 	} );
 
-
-	var RemotePostSearch = Backbone.View.extend(
-		/** @lends RemotePostSearch# */
-		{
-		/**
-		 * DOM selector of this View
-		 * @type {string}
-		 */
-		el: 'body',
-		/**
-		 * Events used by this View
-		 * @type {Object}
-		 */
-		events: {
-			'keydown .mlp-search-field': 'preventFormSubmission',
-			'keyup .mlp-search-field': 'reactToInput'
-		},
-
+	/**
+	 * @class RemotePostSearch
+	 * @classdesc MultilingualPress RemotePostSearch module.
+	 * @augments Backbone.View
+	 */
+	var RemotePostSearch = Backbone.View.extend( /** @lends RemotePostSearch# */ {
 		/**
 		 * Initializes the RemotePostSearch module.
-		 * @classdesc Constructor for the MultilingualPress RemotePostSearch module.
-		 * @augments Backbone.View
-		 * @constructs
-		 * @name RemotePostSearch
 		 */
 		initialize: function() {
 			this.defaultResults = [];
@@ -126,5 +107,11 @@
 	} );
 
 	// Register the RemotePostSearch module for the Add New Post and the Edit Post admin pages.
-	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RemotePostSearch', RemotePostSearch );
+	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RemotePostSearch', RemotePostSearch, {
+		el: 'body',
+		events: {
+			'keydown .mlp-search-field': 'preventFormSubmission',
+			'keyup .mlp-search-field': 'reactToInput'
+		}
+	} );
 })( jQuery, window.MultilingualPress );

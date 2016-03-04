@@ -8,28 +8,14 @@
 	 */
 	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
 
+	/**
+	 * @class RelationshipControl
+	 * @classdesc MultilingualPress RelationshipControl module.
+	 * @extends Backbone.View
+	 */
 	var RelationshipControl = Backbone.View.extend( /** @lends RelationshipControl# */ {
 		/**
-		 * @type {string}
-		 */
-		el: 'body',
-
-		/**
-		 * @type {Object}
-		 */
-		events: {
-			'change .mlp-rc-actions input': 'updateUnsavedRelationships',
-			'click #publish': 'confirmUnsavedRelationships',
-			'click .mlp-save-relationship-button': 'saveRelationship'
-		},
-
-		/**
 		 * Initializes the RelationshipControl module.
-		 *
-		 * @classdesc Constructor for the MultilingualPress RelationshipControl module.
-		 * @extends Backbone.View
-		 * @constructs
-		 * @name RelationshipControl
 		 */
 		initialize: function() {
 			this.unsavedRelationships = [];
@@ -74,7 +60,7 @@
 		/**
 		 * Returns the index of the given meta box in the unsaved relationships array, and -1 if not found.
 		 * @param {Object} $metaBox - The meta box element.
-		 * @returns {number} - The index of the meta box.
+		 * @returns {Number} The index of the meta box.
 		 */
 		findMetaBox: function( $metaBox ) {
 			$.each( this.unsavedRelationships, function( index, element ) {
@@ -126,8 +112,8 @@
 
 		/**
 		 * Returns the according event name for the given relationship action.
-		 * @param {string} action - A relationship action.
-		 * @returns {string} - The event name.
+		 * @param {String} action - A relationship action.
+		 * @returns {String} The event name.
 		 */
 		getEventName: function( action ) {
 			switch ( action ) {
@@ -201,5 +187,12 @@
 	} );
 
 	// Register the RelationshipControl module for the Add New Post and the Edit Post admin pages.
-	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl );
+	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl, {
+		el: 'body',
+		events: {
+			'change .mlp-rc-actions input': 'updateUnsavedRelationships',
+			'click #publish': 'confirmUnsavedRelationships',
+			'click .mlp-save-relationship-button': 'saveRelationship'
+		}
+	} );
 })( jQuery, window.MultilingualPress );

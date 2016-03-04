@@ -1,24 +1,14 @@
 (function( $, MultilingualPress ) {
 	'use strict';
 
+	/**
+	 * @class TermTranslator
+	 * @classdesc MultilingualPress TermTranslator module.
+	 * @extends Backbone.View
+	 */
 	var TermTranslator = Backbone.View.extend( /** @lends TermTranslator# */ {
 		/**
-		 * @type {string}
-		 */
-		el: '#mlp-term-translations',
-		/**
-		 * @type {Object}
-		 */
-		events: {
-			'change select': 'propagateSelectedTerm'
-		},
-
-		/**
 		 * Initializes the TermTranslator module.
-		 * @classdesc Constructor for the MultilingualPress TermTranslator module.
-		 * @extends Backbone.View
-		 * @constructs
-		 * @name TermTranslator
 		 */
 		initialize: function() {
 			this.$selects = this.$el.find( 'select' );
@@ -53,7 +43,7 @@
 		/**
 		 * Returns the relation of the given select element (i.e., its currently selected option).
 		 * @param {Object} $select - A select element.
-		 * @returns {string} - The relation of the selected term.
+		 * @returns {String} The relation of the selected term.
 		 */
 		getSelectedRelation: function( $select ) {
 			return $select.find( 'option:selected' ).data( 'relation' ) || '';
@@ -62,7 +52,7 @@
 		/**
 		 * Sets the given select element's value to that of the option with the given relation, or the first option.
 		 * @param {Object} $select - A select element.
-		 * @param {string} relation - The relation of a term.
+		 * @param {String} relation - The relation of a term.
 		 */
 		selectTerm: function( $select, relation ) {
 			var $option = $select.find( 'option[data-relation="' + relation + '"]' );
@@ -75,5 +65,10 @@
 	} );
 
 	// Register the TermTranslator module for the Edit Tags admin page.
-	MultilingualPress.registerModule( 'edit-tags.php', 'TermTranslator', TermTranslator );
+	MultilingualPress.registerModule( 'edit-tags.php', 'TermTranslator', TermTranslator, {
+		el: '#mlp-term-translations',
+		events: {
+			'change select': 'propagateSelectedTerm'
+		}
+	} );
 })( jQuery, window.MultilingualPress );

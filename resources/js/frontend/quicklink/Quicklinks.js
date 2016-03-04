@@ -2,13 +2,13 @@
 	'use strict';
 
 	/**
-	 * Constructor for the MultilingualPress Quicklinks module.
 	 * @class Quicklinks
+	 * @classdesc MultilingualPress Quicklinks module.
 	 */
 	var Quicklinks = function() {
 		/**
 		 * Redirects the user to the given URL.
-		 * @param {string} url - The URL.
+		 * @param {String} url - The URL.
 		 */
 		var setLocation = function( url ) {
 			window.location.href = url;
@@ -27,7 +27,7 @@
 			}
 		};
 
-		return /**@lends Quicklinks# */{
+		return /** @lends Quicklinks# */ {
 			/**
 			 * Initializes the module.
 			 */

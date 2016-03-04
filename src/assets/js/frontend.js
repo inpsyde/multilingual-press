@@ -2,9 +2,8 @@
 	'use strict';
 
 	/**
-	 * Constructor for MultilingualPress front-end controller.
-	 * @returns {{Modules: Object[]}}
-	 * @constructor
+	 * @class MultilingualPress
+	 * @classdesc MultilingualPress front-end controller.
 	 */
 	var MultilingualPress = function() {
 		return {
@@ -19,19 +18,17 @@
 	window.MultilingualPress = new MultilingualPress();
 })();
 
-/* global MultilingualPress */
-(function( $ ) {
+(function( $, MultilingualPress ) {
 	'use strict';
 
 	/**
-	 * Constructor for the MultilingualPress Quicklinks module.
-	 * @returns {{initialize: initialize}}
-	 * @constructor
+	 * @class Quicklinks
+	 * @classdesc MultilingualPress Quicklinks module.
 	 */
 	var Quicklinks = function() {
 		/**
 		 * Redirects the user to the given URL.
-		 * @param {string} url - The URL.
+		 * @param {String} url - The URL.
 		 */
 		var setLocation = function( url ) {
 			window.location.href = url;
@@ -50,7 +47,7 @@
 			}
 		};
 
-		return {
+		return /** @lends Quicklinks# */ {
 			/**
 			 * Initializes the module.
 			 */
@@ -70,4 +67,4 @@
 	MultilingualPress.Modules.Quicklinks = new Quicklinks();
 
 	$( MultilingualPress.Modules.Quicklinks.initialize );
-})( jQuery );
+})( jQuery, window.MultilingualPress );

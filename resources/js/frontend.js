@@ -2,9 +2,8 @@
 	'use strict';
 
 	/**
-	 * Constructor for MultilingualPress front-end controller.
-	 * @returns {{Modules: Object[]}}
-	 * @constructor
+	 * @class MultilingualPress
+	 * @classdesc MultilingualPress front-end controller.
 	 */
 	var MultilingualPress = function() {
 		return {

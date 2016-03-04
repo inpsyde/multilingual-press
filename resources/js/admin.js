@@ -3,17 +3,17 @@
 	'use strict';
 
 	/**
-	 * @classdesc Constructor for the MultilingualPress router.
 	 * @class MultilingualPressRouter
+	 * @classdesc Constructor for the MultilingualPress router.
 	 * @extends Backbone.Router
 	 */
 	var MultilingualPressRouter = Backbone.Router.extend( /** @lends MultilingualPressRouter# */ {} );
 
 	/**
-	 * Constructor for the MultilingualPress admin controller.
-	 * @class MultilingualPress
+	 * @class MultilingualPressAdmin
+	 * @classdesc MultilingualPress admin controller.
 	 */
-	var MultilingualPress = function() {
+	var MultilingualPressAdmin = function() {
 		var Modules = [],
 			Registry = {},
 			Router = new MultilingualPressRouter();
@@ -21,7 +21,7 @@
 		/**
 		 * Registers the module with the given data for the given route.
 		 * @param {Object} moduleData - The module data.
-		 * @param {string} route - The route.
+		 * @param {String} route - The route.
 		 */
 		var registerModuleForRoute = function( moduleData, route ) {
 			if ( Registry[ route ] ) {
@@ -46,25 +46,22 @@
 			} );
 		};
 
-		return 	/** @lends MultilingualPress# */ {
+		return /** @lends MultilingualPressAdmin# */ {
 			/**
-			 * @extends Backbone.Events
 			 * @type {Object}
+			 * @extends Backbone.Events
 			 */
 			Events: _.extend( {}, Backbone.Events ),
+
 			/**
-			 * All modules that are currently registered
-			 *
-			 * @see {@link MultilingualPress#registerModule}
-			 *
 			 * @type {Array}
 			 */
 			Modules: Modules,
 
 			/**
 			 * Returns the settings object for the given module or settings name.
-			 * @param {string} name - The name of either the MulitilingualPress module or the settings object itself.
-			 * @returns {Object} - The settings object.
+			 * @param {String} name - The name of either the MulitilingualPress module or the settings object itself.
+			 * @returns {Object} The settings object.
 			 */
 			getSettings: function( name ) {
 				if ( 'undefined' !== typeof window[ 'mlp' + name + 'Settings' ] ) {
@@ -80,8 +77,8 @@
 
 			/**
 			 * Registers a new module with the given Module callback under the given name for the given route.
-			 * @param {string|string[]} routes - The routes for the module.
-			 * @param {string} name - The name of the module.
+			 * @param {String|Array} routes - The routes for the module.
+			 * @param {String} name - The name of the module.
 			 * @param {Function} Module - The constructor callback for the module.
 			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
 			 */
@@ -112,12 +109,11 @@
 		};
 	};
 
-
 	/**
 	 * The MultilingualPress admin instance.
-	 * @type {MultilingualPress}
+	 * @type {MultilingualPressAdmin}
 	 */
-	window.MultilingualPress = new MultilingualPress();
+	window.MultilingualPress = new MultilingualPressAdmin();
 
 	$( window.MultilingualPress.initialize );
 })( jQuery );

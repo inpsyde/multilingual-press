@@ -9,35 +9,22 @@
 	var moduleSettings = MultilingualPress.getSettings( 'CopyPost' );
 
 	/**
-	 * @classdesc Constructor for the MultilingualPress PostData model.
 	 * @class PostData
-	 *  @extends Backbone.Model
+	 * @classdesc MultilingualPress PostData model.
+	 * @extends Backbone.Model
 	 */
 	var PostData = Backbone.Model.extend( /** @lends PostData# */  {
-		/**
-		 * @type {string}
-		 */
 		urlRoot: ajaxurl
 	} );
 
+	/**
+	 * @class CopyPost
+	 * @classdesc MultilingualPress CopyPost module.
+	 * @extends Backbone.View
+	 */
 	var CopyPost = Backbone.View.extend( /** @lends CopyPost# */ {
 		/**
-		 * @type {string}
-		 */
-		el: '#post-body',
-		/**
-		 * @type {Object}
-		 */
-		events: {
-			'click .mlp-copy-post-button': 'copyPostData'
-		},
-
-		/**
 		 * Initializes the CopyPost module.
-		 *@classdesc Constructor for the MultilingualPress CopyPost module.
-		 * @extends Backbone.View
-		 * @constructor
-		 * @name CopyPost
 		 */
 		initialize: function() {
 			this.$content = $( '#content' );
@@ -97,7 +84,7 @@
 		/**
 		 * Returns the site ID data attribute value of the given "Copy source post" button.
 		 * @param {Object} $button - A "Copy source post" button.
-		 * @returns {number} -  The site ID.
+		 * @returns {Number} The site ID.
 		 */
 		getRemoteSiteID: function( $button ) {
 			return $button.data( 'site-id' ) || 0;
@@ -105,7 +92,7 @@
 
 		/**
 		 * Returns the title of the original post.
-		 * @returns {string} - The post title.
+		 * @returns {String} The post title.
 		 */
 		getTitle: function() {
 			return this.$title.val() || '';
@@ -113,7 +100,7 @@
 
 		/**
 		 * Returns the slug of the original post.
-		 * @returns {string} - The post slug.
+		 * @returns {String} The post slug.
 		 */
 		getSlug: function() {
 			return this.$slug.text() || '';
@@ -121,7 +108,7 @@
 
 		/**
 		 * Returns the content of the original post.
-		 * @returns {string} - The post content.
+		 * @returns {String} The post content.
 		 */
 		getContent: function() {
 			return this.$content.val() || '';
@@ -129,7 +116,7 @@
 
 		/**
 		 * Returns the excerpt of the original post.
-		 * @returns {string} - The post excerpt.
+		 * @returns {String} The post excerpt.
 		 */
 		getExcerpt: function() {
 			return this.$excerpt.val() || '';
@@ -168,8 +155,8 @@
 
 		/**
 		 * Sets the given content for the tinyMCE editor with the given ID.
-		 * @param {string} editorID - The tinyMCE editor's ID.
-		 * @param {string} content - The content.
+		 * @param {String} editorID - The tinyMCE editor's ID.
+		 * @param {String} content - The content.
 		 */
 		setTinyMCEContent: function( editorID, content ) {
 			var editor;
@@ -188,5 +175,10 @@
 	} );
 
 	// Register the CopyPost module for the Edit Post and Add New Post admin pages.
-	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'CopyPost', CopyPost );
+	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'CopyPost', CopyPost, {
+		el: '#post-body',
+		events: {
+			'click .mlp-copy-post-button': 'copyPostData'
+		}
+	} );
 })( jQuery, window.MultilingualPress );

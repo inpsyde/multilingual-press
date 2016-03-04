@@ -1,26 +1,14 @@
 (function( $, MultilingualPress ) {
 	'use strict';
 
+	/**
+	 * @class Common
+	 * @classdesc MultilingualPress Common module.
+	 * @extends Backbone.View
+	 */
 	var Common = Backbone.View.extend( /** @lends Common# */ {
-
-		/**
-		 * @type {string}
-		 */
-		el: 'body',
-
-		/**
-		 * @type {Object}
-		 */
-		events: {
-			'click .mlp-click-toggler': 'toggleElement'
-		},
-
 		/**
 		 * Initializes the Common module.
-		 *
-		 * @classdesc Constructor for the MultilingualPress Common module.
-		 * @extends Backbone.View
-		 * @constructs Common
 		 */
 		initialize: function() {
 			this.initializeStateTogglers();
@@ -62,8 +50,11 @@
 		}
 	} );
 
-	/**
-	 * Register the Common module for all admin pages.
- 	 */
-	MultilingualPress.Modules.Common = new Common();
+	// Register the Common module for all admin pages.
+	MultilingualPress.Modules.Common = new Common( {
+		el: 'body',
+		events: {
+			'click .mlp-click-toggler': 'toggleElement'
+		}
+	} );
 })( jQuery, window.MultilingualPress );

@@ -9,35 +9,24 @@
 	var moduleSettings = MultilingualPress.getSettings( 'NavMenus' );
 
 	/**
-	 * @classdesc Constructor for the MultilingualPress NavMenuItem model.
 	 * @class NavMenuItem
+	 * @classdesc MultilingualPress nav menu item model.
 	 * @extends Backbone.Model
 	 */
-	var NavMenuItem = Backbone.Model.extend(
-		/** @lends NavMenuItem# */
-		{
-			/** @type {string} */
-			urlRoot: ajaxurl
-		} );
+	var NavMenuItem = Backbone.Model.extend( /** @lends NavMenuItem# */ {
+		urlRoot: ajaxurl
+	} );
 
-	var NavMenus = Backbone.View.extend(	/** @lends NavMenus# */{
-
-		/** @type {string} */
-		el: '#' + moduleSettings.metaBoxID,
-		/** @type {Object} */
-		events: {
-			'click #submit-mlp-language': 'sendRequest'
-		},
-
+	/**
+	 * @class NavMenus
+	 * @classdesc MultilingualPress NavMenus module.
+	 * @extends Backbone.View
+	 */
+	var NavMenus = Backbone.View.extend( /** @lends NavMenus# */ {
 		/**
 		 * Initializes the NavMenus module.
-		 * @classdesc Constructor for the MultilingualPress NavMenus module.
-		 * @extends Backbone.View
-		 * @constructs NavMenus
-		 * @name NavMenus
 		 */
 		initialize: function() {
-
 			this.$languages = this.$el.find( 'li [type="checkbox"]' );
 
 			this.$menu = $( '#menu' );
@@ -84,7 +73,7 @@
 
 		/**
 		 * Returns the site IDs for the checked languages in the Languages meta box.
-		 * @returns {number[]} - The site IDs.
+		 * @returns {Array} The site IDs.
 		 */
 		getSites: function() {
 			var languages = [];
@@ -119,5 +108,10 @@
 	} );
 
 	// Register the NavMenus module for the Menus admin page.
-	MultilingualPress.registerModule( 'nav-menus.php', 'NavMenus', NavMenus );
+	MultilingualPress.registerModule( 'nav-menus.php', 'NavMenus', NavMenus, {
+		el: '#' + moduleSettings.metaBoxID,
+		events: {
+			'click #submit-mlp-language': 'sendRequest'
+		}
+	} );
 })( jQuery, window.MultilingualPress );
