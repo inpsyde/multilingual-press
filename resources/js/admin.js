@@ -1,5 +1,5 @@
 /* global mlpSettings */
-(function( $, MultilingualPress ) {
+(function( $ ) {
 	'use strict';
 
 	/**
@@ -121,4 +121,4 @@
 	window.MultilingualPress = new MultilingualPress();
 
 	$( window.MultilingualPress.initialize );
-})( jQuery, window.MultilingualPress );
+})( jQuery );
