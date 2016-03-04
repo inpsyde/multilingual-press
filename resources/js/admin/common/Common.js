@@ -1,5 +1,5 @@
 /* global MultilingualPress */
-(function( $ ) {
+(function( $, MultilingualPress ) {
 	'use strict';
 
 	var Common = Backbone.View.extend( /** @lends Common# */ {
@@ -69,4 +69,4 @@
 	 * @memberof MultilingualPress.Modules
  	 */
 	MultilingualPress.Modules.Common = new Common();
-})( jQuery );
+})( jQuery, window.MultilingualPress );

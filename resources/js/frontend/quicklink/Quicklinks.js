@@ -1,5 +1,5 @@
 /* global MultilingualPress */
-(function( $ ) {
+(function( $, MultilingualPress ) {
 	'use strict';
 
 	/**
@@ -48,4 +48,4 @@
 	MultilingualPress.Modules.Quicklinks = new Quicklinks();
 
 	$( MultilingualPress.Modules.Quicklinks.initialize );
-})( jQuery );
+})( jQuery, window.MultilingualPress );

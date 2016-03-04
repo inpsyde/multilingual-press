@@ -1,5 +1,5 @@
 /* global MultilingualPress */
-(function( $ ) {
+(function( $, MultilingualPress ) {
 	'use strict';
 
 	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {
@@ -80,4 +80,4 @@
 
 	// Register the AddNewSite module for the Add New Site network admin page.
 	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite );
-})( jQuery );
+})( jQuery, window.MultilingualPress );

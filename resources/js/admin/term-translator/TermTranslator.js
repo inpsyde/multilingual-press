@@ -1,5 +1,5 @@
 /* global MultilingualPress */
-(function( $ ) {
+(function( $, MultilingualPress ) {
 	'use strict';
 
 	var TermTranslator = Backbone.View.extend( /** @lends TermTranslator# */ {
@@ -77,4 +77,4 @@
 
 	// Register the TermTranslator module for the Edit Tags admin page.
 	MultilingualPress.registerModule( 'edit-tags.php', 'TermTranslator', TermTranslator );
-})( jQuery );
+})( jQuery, window.MultilingualPress );

@@ -1,5 +1,5 @@
-/* global ajaxurl, MultilingualPress */
-(function( $ ) {
+/* global ajaxurl */
+(function( $, MultilingualPress ) {
 	'use strict';
 
 	/**
@@ -189,4 +189,4 @@
 
 	// Register the CopyPost module for the Edit Post and Add New Post admin pages.
 	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'CopyPost', CopyPost );
-})( jQuery );
+})( jQuery, window.MultilingualPress );

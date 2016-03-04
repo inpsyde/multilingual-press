@@ -1,5 +1,5 @@
 /* global ajaxurl, MultilingualPress */
-(function( $ ) {
+(function( $, MultilingualPress ) {
 	'use strict';
 
 	/**
@@ -127,4 +127,4 @@
 
 	// Register the RemotePostSearch module for the Add New Post and the Edit Post admin pages.
 	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RemotePostSearch', RemotePostSearch );
-})( jQuery );
+})( jQuery, window.MultilingualPress );

@@ -1,5 +1,5 @@
 /* global ajaxurl, MultilingualPress */
-(function( $ ) {
+(function( $, MultilingualPress ) {
 	'use strict';
 
 	/**
@@ -202,4 +202,4 @@
 
 	// Register the RelationshipControl module for the Add New Post and the Edit Post admin pages.
 	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl );
-})( jQuery );
+})( jQuery, window.MultilingualPress );

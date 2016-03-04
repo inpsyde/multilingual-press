@@ -1,5 +1,5 @@
 /* global ajaxurl, MultilingualPress */
-(function( $ ) {
+(function( $, MultilingualPress ) {
 	'use strict';
 
 	/**
@@ -13,14 +13,14 @@
 	 * @class NavMenuItem
 	 * @extends Backbone.Model
 	 */
-	var NavMenuItem = window.Backbone.Model.extend(
+	var NavMenuItem = Backbone.Model.extend(
 		/** @lends NavMenuItem# */
 		{
 			/** @type {string} */
 			urlRoot: ajaxurl
 		} );
 
-	var NavMenus = window.Backbone.View.extend(	/** @lends NavMenus# */{
+	var NavMenus = Backbone.View.extend(	/** @lends NavMenus# */{
 
 		/** @type {string} */
 		el: '#' + moduleSettings.metaBoxID,
@@ -120,4 +120,4 @@
 
 	// Register the NavMenus module for the Menus admin page.
 	MultilingualPress.registerModule( 'nav-menus.php', 'NavMenus', NavMenus );
-})( jQuery );
+})( jQuery, window.MultilingualPress );
