@@ -10,33 +10,25 @@
 
 	/**
 	 * Constructor for the MultilingualPress NavMenuItem model.
-	 * @class
+	 * @class NavMenuItem
+	 * @extends Backbone.Model
 	 */
-	var NavMenuItem = Backbone.Model.extend( {
-		/** @lends NavMenuItem.prototype */
-
-		/**
-		 * Model containing Nav Menu data
-		 * @augments Backbone.Model
-		 * @constructs
-		 * @name NavMenuItem
-		 */
-
-		/**
-		 * @type {string}
-		 */
-		urlRoot: ajaxurl
-	} );
+	var NavMenuItem = window.Backbone.Model.extend(
+		/** @lends NavMenuItem# */
+		{
+			/** @type {string} */
+			urlRoot: ajaxurl
+		} );
 
 	/**
 	 * Constructor for the MultilingualPress NavMenus module.
 	 * @class
 	 */
-	var NavMenus = Backbone.View.extend( {
-		/** @lends NavMenus.prototype */
+	var NavMenus = window.Backbone.View.extend(	/** @lends NavMenus.prototype */{
 
+		/** @type {string} */
 		el: '#' + moduleSettings.metaBoxID,
-
+		/** @type {Object} */
 		events: {
 			'click #submit-mlp-language': 'sendRequest'
 		},
@@ -44,7 +36,7 @@
 		/**
 		 * Initializes the NavMenus module.
 		 *
-		 * @augments Backbone.View
+		 * @extends Backbone.View
 		 * @constructs
 		 * @name NavMenus
 		 */

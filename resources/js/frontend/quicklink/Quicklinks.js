@@ -46,7 +46,6 @@
 
 	/**
 	 * The MultilingualPress Quicklinks instance.
-	 * @memberof MultilingualPress.Modules
 	 * @type {Quicklinks}
 	 */
 	MultilingualPress.Modules.Quicklinks = new Quicklinks();

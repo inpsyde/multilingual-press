@@ -6,8 +6,7 @@
 	 * Constructor for the MultilingualPress TermTranslator module.
 	 * @class
 	 */
-	var TermTranslator = Backbone.View.extend( {
-		/** @lends TermTranslator.prototype */
+	var TermTranslator = Backbone.View.extend( /** @lends TermTranslator.prototype */ {
 
 		el: '#mlp-term-translations',
 
@@ -17,7 +16,7 @@
 
 		/**
 		 * Initializes the TermTranslator module.
-		 * @augments Backbone.View
+		 * @extends Backbone.View
 		 * @constructs
 		 * @name TermTranslator
 		 */

@@ -2,12 +2,7 @@
 (function( $ ) {
 	'use strict';
 
-	/**
-	 * Constructor for the MultilingualPress AddNewSite module.
-	 * @class
-	 */
-	var AddNewSite = Backbone.View.extend( {
-		/** @lends AddNewSite.prototype */
+	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {
 
 		el: '#wpbody-content form',
 
@@ -21,7 +16,9 @@
 		/**
 		 * Initializes the AddNewSite module.
 		 *
-		 * @augments Backbone.View
+		 * @classdesc Constructor for the MultilingualPress AddNewSite module.
+		 *
+		 * @extends Backbone.View
 		 * @constructs
 		 * @name AddNewSite
 		 */

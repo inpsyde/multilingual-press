@@ -12,15 +12,17 @@
 	 * Constructor for the MultilingualPress PostData model.
 	 * @constructor
 	 */
-	var PostData = Backbone.Model.extend( {
+	var PostData = Backbone.Model.extend( /** @lends PostData# */  {
+		/**
+		 * @type {string}
+		 */
 		urlRoot: ajaxurl
 	} );
 
 	/**
 	 * Constructor for the MultilingualPress CopyPost module.
 	 */
-	var CopyPost = Backbone.View.extend( {
-		/** @lends CopyPost.prototype */
+	var CopyPost = Backbone.View.extend( /** @lends CopyPost# */ {
 
 		el: '#post-body',
 
@@ -31,7 +33,7 @@
 		/**
 		 * Initializes the CopyPost module.
 		 *
-		 * @augments Backbone.View
+		 * @extends Backbone.View
 		 * @constructor
 		 * @name CopyPost
 		 */

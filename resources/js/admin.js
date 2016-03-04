@@ -1,27 +1,25 @@
 /* global mlpSettings */
+/**
+ * The complete Triforce, or one or more components of the Triforce.
+ * @property {MultilingualPress} MultilingualPress - Indicates whether the Courage component is present.
+ */
+
 (function( $ ) {
 	'use strict';
 
 	/**
 	 * Constructor for the MultilingualPress router.
-	 * @constructor
+	 * @class MultilingualPressRouter
+	 * @extends Backbone.Router
 	 */
-	var MultilingualPressRouter = Backbone.Router.extend( {
-		/** @lends MultilingualPressRouter.prototype */
+	var MultilingualPressRouter = Backbone.Router.extend( /** @lends MultilingualPressRouter# */ {} );
 
-		/**
-		 * MLP-specific routing
-		 *
-		 * @augments Backbone.Router
-		 * @constructor
-		 * @name MultilingualPressRouter
-		 */
-	} );
+
 
 	/**
 	 * Constructor for the MultilingualPress admin controller.
-	 * @returns {{Modules: Array, registerModule: registerModule, initialize: initialize}}
-	 * @constructor
+	 * @class MultilingualPress
+	 * @returns MultilingualPress
 	 */
 	var MultilingualPress = function() {
 		var Modules = [],
@@ -56,20 +54,23 @@
 			} );
 		};
 
-		return {
+		return 	/** @lends MultilingualPress# */ {
 			/**
-			 * @memberof MultilingualPress
-			 * @augments Backbone.Events
+			 * @extends Backbone.Events
+			 * @type {object}
 			 */
 			Events: _.extend( {}, Backbone.Events ),
 			/**
-			 * @memberof MultilingualPress
+			 * All modules that are currently registered
+			 *
+			 * @link MultilingualPress.registerModule
+			 *
+			 * @type {Array}
 			 */
 			Modules: Modules,
 
 			/**
 			 * Returns the settings object for the given module or settings name.
-			 * @memberof MultilingualPress
 			 * @param {string} name - The name of either the MulitilingualPress module or the settings object itself.
 			 * @returns {Object} - The settings object.
 			 */
@@ -87,7 +88,6 @@
 
 			/**
 			 * Registers a new module with the given Module callback under the given name for the given route.
-			 * @memberof MultilingualPress
 			 * @param {string|string[]} routes - The routes for the module.
 			 * @param {string} name - The name of the module.
 			 * @param {Function} Module - The constructor callback for the module.
@@ -107,7 +107,6 @@
 
 			/**
 			 * Initializes the instance.
-			 * @memberof MultilingualPress
 			 */
 			initialize: function() {
 				setUpRoutes();
@@ -120,6 +119,7 @@
 			}
 		};
 	};
+
 
 	/**
 	 * The MultilingualPress admin instance.

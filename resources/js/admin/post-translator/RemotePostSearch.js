@@ -13,18 +13,24 @@
 	 * @constructor
 	 */
 	var RemotePostSearchResult = Backbone.Model.extend( {
-		/** @lends RemotePostSearchResult.prototype */
+		/** @lends RemotePostSearchResult# */
 
 		urlRoot: ajaxurl
 	} );
 
-	/**
-	 * Constructor for the MultilingualPress RemotePostSearch module.
-	 * @constructor
-	 */
-	var RemotePostSearch = Backbone.View.extend( {
-		el: 'body',
 
+	var RemotePostSearch = Backbone.View.extend(
+		/** @lends RemotePostSearch# */
+		{
+		/**
+		 * DOM selector of this View
+		 * @type {string}
+		 */
+		el: 'body',
+		/**
+		 * Events used by this View
+		 * @type {Object}
+		 */
 		events: {
 			'keydown .mlp-search-field': 'preventFormSubmission',
 			'keyup .mlp-search-field': 'reactToInput'
@@ -32,11 +38,10 @@
 
 		/**
 		 * Initializes the RemotePostSearch module.
-		 * Initializes the RCPostSearch module.
-		 *
+		 * @classdesc Constructor for the MultilingualPress RemotePostSearch module.
 		 * @augments Backbone.View
 		 * @constructs
-		 * @name RCPostSearch
+		 * @name RemotePostSearch
 		 */
 		initialize: function() {
 			this.defaultResults = [];

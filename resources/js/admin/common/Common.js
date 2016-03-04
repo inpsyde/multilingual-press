@@ -4,10 +4,9 @@
 
 	/**
 	 * Constructor for the MultilingualPress Common module.
-	 * @class
 	 */
-	var Common = Backbone.View.extend( {
-		/** @lends Common.prototype */
+	var Common = Backbone.View.extend( /** @lends Common# */ {
+
 
 		el: 'body',
 
@@ -18,9 +17,8 @@
 		/**
 		 * Initializes the Common module.
 		 *
-		 * @augments Backbone.View
-		 * @constructs
-		 * @name Common
+		 * @extends Backbone.View
+		 * @constructs Common
 		 */
 		initialize: function() {
 			this.initializeStateTogglers();
