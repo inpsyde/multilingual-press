@@ -170,6 +170,20 @@ class Mlp_Relationship_Control_Meta_Box_View {
 				),
 			),
 		) );
+
+		/**
+		 * Filters the minimum number of characters required to fire the remote post search.
+		 *
+		 * @param int $threshold Minimum number of characters required to fire the remote post search.
+		 *
+		 * @return int
+		 */
+		$threshold = (int) apply_filters( 'mlp_remote_post_search_threshold', 3 );
+		$threshold = max( 1, $threshold );
+
+		wp_localize_script( 'mlp-admin', 'mlpRemotePostSearchSettings', array(
+			'searchThreshold' => $threshold,
+		) );
 	}
 
 	/**
