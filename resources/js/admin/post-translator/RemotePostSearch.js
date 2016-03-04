@@ -1,4 +1,4 @@
-/* global ajaxurl, MultilingualPress */
+/* global ajaxurl */
 (function( $, MultilingualPress ) {
 	'use strict';
 

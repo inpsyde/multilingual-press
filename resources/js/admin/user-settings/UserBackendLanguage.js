@@ -1,4 +1,3 @@
-/* global MultilingualPress */
 (function() {
 	'use strict';
 
