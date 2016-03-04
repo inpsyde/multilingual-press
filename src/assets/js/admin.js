@@ -4,7 +4,7 @@
 
 	/**
 	 * @class MultilingualPressRouter
-	 * @classdesc Constructor for the MultilingualPress router.
+	 * @classdesc MultilingualPress router.
 	 * @extends Backbone.Router
 	 */
 	var MultilingualPressRouter = Backbone.Router.extend( /** @lends MultilingualPressRouter# */ {} );
@@ -302,7 +302,7 @@
 
 	/**
 	 * @class AddNewSite
-	 * @classdesc Constructor for the MultilingualPress AddNewSite module.
+	 * @classdesc MultilingualPress AddNewSite module.
 	 * @extends Backbone.View
 	 */
 	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {

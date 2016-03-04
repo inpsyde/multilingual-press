@@ -3,7 +3,7 @@
 
 	/**
 	 * @class AddNewSite
-	 * @classdesc Constructor for the MultilingualPress AddNewSite module.
+	 * @classdesc MultilingualPress AddNewSite module.
 	 * @extends Backbone.View
 	 */
 	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {
