@@ -14,6 +14,8 @@
 - Fire the `switch_theme` action when a site has been duplicated.
 - Fix term relation not being deleted when term is deleted.
 - Fix dynamic CPT permalinks (due to regression during merge).
+- Add filter for remote post search minimum input length, see
+[issue #193](https://github.com/inpsyde/multilingual-press/issues/193).
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
