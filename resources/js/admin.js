@@ -7,7 +7,7 @@
 	 * @classdesc MultilingualPress router.
 	 * @extends Backbone.Router
 	 */
-	var MultilingualPressRouter = Backbone.Router.extend( /** @lends MultilingualPressRouter# */ {} );
+	var MultilingualPressRouter = Backbone.Router.extend( {} );
 
 	/**
 	 * @class MultilingualPressAdmin
