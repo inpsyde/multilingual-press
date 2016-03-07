@@ -21,7 +21,7 @@
 		/**
 		 * Registers the module with the given data for the given route.
 		 * @param {Object} moduleData - The module data.
-		 * @param {String} route - The route.
+		 * @param {string} route - The route.
 		 */
 		var registerModuleForRoute = function( moduleData, route ) {
 			if ( Registry[ route ] ) {
@@ -48,19 +48,21 @@
 
 		return /** @lends MultilingualPressAdmin# */ {
 			/**
+			 * Events module.
 			 * @type {Object}
 			 * @extends Backbone.Events
 			 */
 			Events: _.extend( {}, Backbone.Events ),
 
 			/**
-			 * @type {Array}
+			 * MultilingualPress module instances.
+			 * @type {Object[]}
 			 */
 			Modules: Modules,
 
 			/**
 			 * Returns the settings object for the given module or settings name.
-			 * @param {String} name - The name of either the MulitilingualPress module or the settings object itself.
+			 * @param {string} name - The name of either the MulitilingualPress module or the settings object itself.
 			 * @returns {Object} The settings object.
 			 */
 			getSettings: function( name ) {
@@ -77,8 +79,8 @@
 
 			/**
 			 * Registers a new module with the given Module callback under the given name for the given route.
-			 * @param {String|Array} routes - The routes for the module.
-			 * @param {String} name - The name of the module.
+			 * @param {string|string[]} routes - The routes for the module.
+			 * @param {string} name - The name of the module.
 			 * @param {Function} Module - The constructor callback for the module.
 			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
 			 */
@@ -121,14 +123,11 @@
 (function( $, MultilingualPress ) {
 	'use strict';
 
-	/**
-	 * @class Common
-	 * @classdesc MultilingualPress Common module.
-	 * @extends Backbone.View
-	 */
 	var Common = Backbone.View.extend( /** @lends Common# */ {
 		/**
-		 * Initializes the Common module.
+		 * @constructs Common
+		 * @classdesc MultilingualPress Common module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
 			this.initializeStateTogglers();
@@ -198,24 +197,41 @@
 		urlRoot: ajaxurl
 	} );
 
-	/**
-	 * @class NavMenus
-	 * @classdesc MultilingualPress NavMenus module.
-	 * @extends Backbone.View
-	 */
 	var NavMenus = Backbone.View.extend( /** @lends NavMenus# */ {
 		/**
-		 * Initializes the NavMenus module.
+		 * @constructs NavMenus
+		 * @classdesc MultilingualPress NavMenus module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
+			/**
+			 * The jQuery object representing the MultilingualPress language checkboxes.
+			 * @type {jQuery}
+			 */
 			this.$languages = this.$el.find( 'li [type="checkbox"]' );
 
+			/**
+			 * The jQuery object representing the input element that contains the currently edited menu's ID.
+			 * @type {jQuery}
+			 */
 			this.$menu = $( '#menu' );
 
+			/**
+			 * The jQuery object representing the currently edited menu.
+			 * @type {jQuery}
+			 */
 			this.$menuToEdit = $( '#menu-to-edit' );
 
+			/**
+			 * The jQuery object representing the Languages meta box spinner.
+			 * @type {jQuery}
+			 */
 			this.$spinner = this.$el.find( '.spinner' );
 
+			/**
+			 * The jQuery object representing the Languages meta box submit button.
+			 * @type {jQuery}
+			 */
 			this.$submit = this.$el.find( '#submit-mlp-language' );
 
 			this.model = new NavMenuItem();
@@ -254,7 +270,7 @@
 
 		/**
 		 * Returns the site IDs for the checked languages in the Languages meta box.
-		 * @returns {Array} The site IDs.
+		 * @returns {int[]} The site IDs.
 		 */
 		getSites: function() {
 			var languages = [];
@@ -300,14 +316,11 @@
 (function( $, MultilingualPress ) {
 	'use strict';
 
-	/**
-	 * @class AddNewSite
-	 * @classdesc MultilingualPress AddNewSite module.
-	 * @extends Backbone.View
-	 */
 	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {
 		/**
-		 * Initializes the AddNewSite module.
+		 * @constructs AddNewSite
+		 * @classdesc MultilingualPress AddNewSite module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
 			this.template = _.template( $( '#mlp-add-new-site-template' ).html() || '' );
@@ -316,8 +329,16 @@
 			this.render();
 
 			// ...then set up the properties using elements that just have been injected into the DOM.
+			/**
+			 * The jQuery object representing the MultilingualPress language select.
+			 * @type {jQuery}
+			 */
 			this.$language = $( '#mlp-site-language' );
 
+			/**
+			 * The jQuery object representing the table row that contains the plugin activation checkbox.
+			 * @type {jQuery}
+			 */
 			this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
 		},
 
@@ -341,8 +362,8 @@
 
 		/**
 		 * Returns the selected language of the given select element.
-		 * @param {Object} $select - A select element.
-		 * @returns {String} The selected language.
+		 * @param {HTMLElement} $select - A select element.
+		 * @returns {string} The selected language.
 		 */
 		getLanguage: function( $select ) {
 			var language = $select.val();
@@ -387,32 +408,49 @@
 	 * @classdesc MultilingualPress PostData model.
 	 * @extends Backbone.Model
 	 */
-	var PostData = Backbone.Model.extend( /** @lends PostData# */  {
+	var PostData = Backbone.Model.extend( /** @lends PostData# */ {
 		urlRoot: ajaxurl
 	} );
 
-	/**
-	 * @class CopyPost
-	 * @classdesc MultilingualPress CopyPost module.
-	 * @extends Backbone.View
-	 */
 	var CopyPost = Backbone.View.extend( /** @lends CopyPost# */ {
 		/**
-		 * Initializes the CopyPost module.
+		 * @constructs CopyPost
+		 * @classdesc MultilingualPress CopyPost module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
-			this.$content = $( '#content' );
+			/**
+			 * The jQuery object representing the input element that contains the currently edited post's content.
+			 * @type {jQuery}
+			 */
+			this.$content = $( '.content' );
 
+			/**
+			 * The jQuery object representing the input element that contains the currently edited post's excerpt.
+			 * @type {jQuery}
+			 */
 			this.$excerpt = $( '#excerpt' );
 
+			/**
+			 * The jQuery object representing the input element that contains the currently edited post's slug.
+			 * @type {jQuery}
+			 */
 			this.$slug = $( '#editable-post-name' );
 
+			/**
+			 * The jQuery object representing the input element that contains the currently edited post's title.
+			 * @type {jQuery}
+			 */
 			this.$title = $( '#title' );
 
 			this.model = new PostData();
 			this.listenTo( this.model, 'change', this.updatePostData );
 
-			this.postID = $( '#post_ID' ).val();
+			/**
+			 * The currently edited post's ID.
+			 * @type {number}
+			 */
+			this.postID = Number( $( '#post_ID' ).val() );
 		},
 
 		/**
@@ -457,8 +495,8 @@
 
 		/**
 		 * Returns the site ID data attribute value of the given "Copy source post" button.
-		 * @param {Object} $button - A "Copy source post" button.
-		 * @returns {Number} The site ID.
+		 * @param {jQuery} $button - A "Copy source post" button.
+		 * @returns {number} The site ID.
 		 */
 		getRemoteSiteID: function( $button ) {
 			return $button.data( 'site-id' ) || 0;
@@ -466,7 +504,7 @@
 
 		/**
 		 * Returns the title of the original post.
-		 * @returns {String} The post title.
+		 * @returns {string} The post title.
 		 */
 		getTitle: function() {
 			return this.$title.val() || '';
@@ -474,7 +512,7 @@
 
 		/**
 		 * Returns the slug of the original post.
-		 * @returns {String} The post slug.
+		 * @returns {string} The post slug.
 		 */
 		getSlug: function() {
 			return this.$slug.text() || '';
@@ -482,7 +520,7 @@
 
 		/**
 		 * Returns the content of the original post.
-		 * @returns {String} The post content.
+		 * @returns {string} The post content.
 		 */
 		getContent: function() {
 			return this.$content.val() || '';
@@ -490,7 +528,7 @@
 
 		/**
 		 * Returns the excerpt of the original post.
-		 * @returns {String} The post excerpt.
+		 * @returns {string} The post excerpt.
 		 */
 		getExcerpt: function() {
 			return this.$excerpt.val() || '';
@@ -529,8 +567,8 @@
 
 		/**
 		 * Sets the given content for the tinyMCE editor with the given ID.
-		 * @param {String} editorID - The tinyMCE editor's ID.
-		 * @param {String} content - The content.
+		 * @param {string} editorID - The tinyMCE editor's ID.
+		 * @param {string} content - The content.
 		 */
 		setTinyMCEContent: function( editorID, content ) {
 			var editor;
@@ -567,16 +605,17 @@
 	 */
 	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
 
-	/**
-	 * @class RelationshipControl
-	 * @classdesc MultilingualPress RelationshipControl module.
-	 * @extends Backbone.View
-	 */
 	var RelationshipControl = Backbone.View.extend( /** @lends RelationshipControl# */ {
 		/**
-		 * Initializes the RelationshipControl module.
+		 * @constructs RelationshipControl
+		 * @classdesc MultilingualPress RelationshipControl module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
+			/**
+			 * Array of jQuery objects representing meta boxes with unsaved relationships.
+			 * @type {jQuery[]}
+			 */
 			this.unsavedRelationships = [];
 
 			this.initializeEventHandlers();
@@ -618,8 +657,8 @@
 
 		/**
 		 * Returns the index of the given meta box in the unsaved relationships array, and -1 if not found.
-		 * @param {Object} $metaBox - The meta box element.
-		 * @returns {Number} The index of the meta box.
+		 * @param {jQuery} $metaBox - The meta box element.
+		 * @returns {number} The index of the meta box.
 		 */
 		findMetaBox: function( $metaBox ) {
 			$.each( this.unsavedRelationships, function( index, element ) {
@@ -671,8 +710,8 @@
 
 		/**
 		 * Returns the according event name for the given relationship action.
-		 * @param {String} action - A relationship action.
-		 * @returns {String} The event name.
+		 * @param {string} action - A relationship action.
+		 * @returns {string} The event name.
 		 */
 		getEventName: function( action ) {
 			switch ( action ) {
@@ -775,24 +814,41 @@
 		urlRoot: ajaxurl
 	} );
 
-	/**
-	 * @class RemotePostSearch
-	 * @classdesc MultilingualPress RemotePostSearch module.
-	 * @augments Backbone.View
-	 */
 	var RemotePostSearch = Backbone.View.extend( /** @lends RemotePostSearch# */ {
 		/**
-		 * Initializes the RemotePostSearch module.
+		 * @constructs RemotePostSearch
+		 * @classdesc MultilingualPress RemotePostSearch module.
+		 * @augments Backbone.View
 		 */
 		initialize: function() {
+			/**
+			 * Array holding the default search result HTML strings.
+			 * @type {string[]}
+			 */
 			this.defaultResults = [];
+
+			/**
+			 * Array holding jQuery objects representing the search result containers.
+			 * @type {jQuery[]}
+			 */
 			this.resultsContainers = [];
 
+			/**
+			 * Minimum number of characters required to fire the remote post search.
+			 * @type {number}
+			 */
 			this.searchThreshold = parseInt( moduleSettings.searchThreshold, 10 );
 
 			this.model = new RemotePostSearchResult();
 			this.listenTo( this.model, 'change', this.render );
 
+			this.initializeResults();
+		},
+
+		/**
+		 * Initializes both the default search result views as well as the result containers.
+		 */
+		initializeResults: function() {
 			$( '.mlp-search-field' ).each( function( index, element ) {
 				var $element = $( element ),
 					$resultsContainer = $( '#' + $element.data( 'results-container-id' ) ),
@@ -877,17 +933,24 @@
 (function( $, MultilingualPress ) {
 	'use strict';
 
-	/**
-	 * @class TermTranslator
-	 * @classdesc MultilingualPress TermTranslator module.
-	 * @extends Backbone.View
-	 */
 	var TermTranslator = Backbone.View.extend( /** @lends TermTranslator# */ {
 		/**
-		 * Initializes the TermTranslator module.
+		 * @constructs TermTranslator
+		 * @classdesc MultilingualPress TermTranslator module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
+			/**
+			 * The jQuery object representing the MultilingualPress term selects.
+			 * @type {jQuery}
+			 */
 			this.$selects = this.$el.find( 'select' );
+
+			/**
+			 * Flag to indicate an ongoing term propagation.
+			 * @type {boolean}
+			 */
+			this.isPropagating = false;
 		},
 
 		/**
@@ -918,8 +981,8 @@
 
 		/**
 		 * Returns the relation of the given select element (i.e., its currently selected option).
-		 * @param {Object} $select - A select element.
-		 * @returns {String} The relation of the selected term.
+		 * @param {jQuery} $select - A select element.
+		 * @returns {string} The relation of the selected term.
 		 */
 		getSelectedRelation: function( $select ) {
 			return $select.find( 'option:selected' ).data( 'relation' ) || '';
@@ -927,8 +990,8 @@
 
 		/**
 		 * Sets the given select element's value to that of the option with the given relation, or the first option.
-		 * @param {Object} $select - A select element.
-		 * @param {String} relation - The relation of a term.
+		 * @param {jQuery} $select - A select element.
+		 * @param {string} relation - The relation of a term.
 		 */
 		selectTerm: function( $select, relation ) {
 			var $option = $select.find( 'option[data-relation="' + relation + '"]' );
@@ -958,14 +1021,11 @@
 	 */
 	var moduleSettings = MultilingualPress.getSettings( 'UserBackendLanguage' );
 
-	/**
-	 * @class UserBackendLanguage
-	 * @classdesc MultilingualPress UserBackendLanguage module.
-	 * @extends Backbone.View
-	 */
 	var UserBackendLanguage = Backbone.View.extend( /** @lends UserBackendLanguage# */ {
 		/**
-		 * Initializes the UserBackendLanguage module.
+		 * @constructs UserBackendLanguage
+		 * @classdesc MultilingualPress UserBackendLanguage module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
 			this.$el.val( moduleSettings.locale );

@@ -8,7 +8,7 @@
 	var Quicklinks = function() {
 		/**
 		 * Redirects the user to the given URL.
-		 * @param {String} url - The URL.
+		 * @param {string} url - The URL.
 		 */
 		var setLocation = function( url ) {
 			window.location.href = url;

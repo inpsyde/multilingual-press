@@ -13,32 +13,49 @@
 	 * @classdesc MultilingualPress PostData model.
 	 * @extends Backbone.Model
 	 */
-	var PostData = Backbone.Model.extend( /** @lends PostData# */  {
+	var PostData = Backbone.Model.extend( /** @lends PostData# */ {
 		urlRoot: ajaxurl
 	} );
 
-	/**
-	 * @class CopyPost
-	 * @classdesc MultilingualPress CopyPost module.
-	 * @extends Backbone.View
-	 */
 	var CopyPost = Backbone.View.extend( /** @lends CopyPost# */ {
 		/**
-		 * Initializes the CopyPost module.
+		 * @constructs CopyPost
+		 * @classdesc MultilingualPress CopyPost module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
-			this.$content = $( '#content' );
+			/**
+			 * The jQuery object representing the input element that contains the currently edited post's content.
+			 * @type {jQuery}
+			 */
+			this.$content = $( '.content' );
 
+			/**
+			 * The jQuery object representing the input element that contains the currently edited post's excerpt.
+			 * @type {jQuery}
+			 */
 			this.$excerpt = $( '#excerpt' );
 
+			/**
+			 * The jQuery object representing the input element that contains the currently edited post's slug.
+			 * @type {jQuery}
+			 */
 			this.$slug = $( '#editable-post-name' );
 
+			/**
+			 * The jQuery object representing the input element that contains the currently edited post's title.
+			 * @type {jQuery}
+			 */
 			this.$title = $( '#title' );
 
 			this.model = new PostData();
 			this.listenTo( this.model, 'change', this.updatePostData );
 
-			this.postID = $( '#post_ID' ).val();
+			/**
+			 * The currently edited post's ID.
+			 * @type {number}
+			 */
+			this.postID = Number( $( '#post_ID' ).val() );
 		},
 
 		/**
@@ -83,8 +100,8 @@
 
 		/**
 		 * Returns the site ID data attribute value of the given "Copy source post" button.
-		 * @param {Object} $button - A "Copy source post" button.
-		 * @returns {Number} The site ID.
+		 * @param {jQuery} $button - A "Copy source post" button.
+		 * @returns {number} The site ID.
 		 */
 		getRemoteSiteID: function( $button ) {
 			return $button.data( 'site-id' ) || 0;
@@ -92,7 +109,7 @@
 
 		/**
 		 * Returns the title of the original post.
-		 * @returns {String} The post title.
+		 * @returns {string} The post title.
 		 */
 		getTitle: function() {
 			return this.$title.val() || '';
@@ -100,7 +117,7 @@
 
 		/**
 		 * Returns the slug of the original post.
-		 * @returns {String} The post slug.
+		 * @returns {string} The post slug.
 		 */
 		getSlug: function() {
 			return this.$slug.text() || '';
@@ -108,7 +125,7 @@
 
 		/**
 		 * Returns the content of the original post.
-		 * @returns {String} The post content.
+		 * @returns {string} The post content.
 		 */
 		getContent: function() {
 			return this.$content.val() || '';
@@ -116,7 +133,7 @@
 
 		/**
 		 * Returns the excerpt of the original post.
-		 * @returns {String} The post excerpt.
+		 * @returns {string} The post excerpt.
 		 */
 		getExcerpt: function() {
 			return this.$excerpt.val() || '';
@@ -155,8 +172,8 @@
 
 		/**
 		 * Sets the given content for the tinyMCE editor with the given ID.
-		 * @param {String} editorID - The tinyMCE editor's ID.
-		 * @param {String} content - The content.
+		 * @param {string} editorID - The tinyMCE editor's ID.
+		 * @param {string} content - The content.
 		 */
 		setTinyMCEContent: function( editorID, content ) {
 			var editor;

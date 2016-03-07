@@ -17,24 +17,41 @@
 		urlRoot: ajaxurl
 	} );
 
-	/**
-	 * @class NavMenus
-	 * @classdesc MultilingualPress NavMenus module.
-	 * @extends Backbone.View
-	 */
 	var NavMenus = Backbone.View.extend( /** @lends NavMenus# */ {
 		/**
-		 * Initializes the NavMenus module.
+		 * @constructs NavMenus
+		 * @classdesc MultilingualPress NavMenus module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
+			/**
+			 * The jQuery object representing the MultilingualPress language checkboxes.
+			 * @type {jQuery}
+			 */
 			this.$languages = this.$el.find( 'li [type="checkbox"]' );
 
+			/**
+			 * The jQuery object representing the input element that contains the currently edited menu's ID.
+			 * @type {jQuery}
+			 */
 			this.$menu = $( '#menu' );
 
+			/**
+			 * The jQuery object representing the currently edited menu.
+			 * @type {jQuery}
+			 */
 			this.$menuToEdit = $( '#menu-to-edit' );
 
+			/**
+			 * The jQuery object representing the Languages meta box spinner.
+			 * @type {jQuery}
+			 */
 			this.$spinner = this.$el.find( '.spinner' );
 
+			/**
+			 * The jQuery object representing the Languages meta box submit button.
+			 * @type {jQuery}
+			 */
 			this.$submit = this.$el.find( '#submit-mlp-language' );
 
 			this.model = new NavMenuItem();
@@ -73,7 +90,7 @@
 
 		/**
 		 * Returns the site IDs for the checked languages in the Languages meta box.
-		 * @returns {Array} The site IDs.
+		 * @returns {int[]} The site IDs.
 		 */
 		getSites: function() {
 			var languages = [];

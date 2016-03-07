@@ -1,14 +1,11 @@
 (function( $, MultilingualPress ) {
 	'use strict';
 
-	/**
-	 * @class AddNewSite
-	 * @classdesc MultilingualPress AddNewSite module.
-	 * @extends Backbone.View
-	 */
 	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {
 		/**
-		 * Initializes the AddNewSite module.
+		 * @constructs AddNewSite
+		 * @classdesc MultilingualPress AddNewSite module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
 			this.template = _.template( $( '#mlp-add-new-site-template' ).html() || '' );
@@ -17,8 +14,16 @@
 			this.render();
 
 			// ...then set up the properties using elements that just have been injected into the DOM.
+			/**
+			 * The jQuery object representing the MultilingualPress language select.
+			 * @type {jQuery}
+			 */
 			this.$language = $( '#mlp-site-language' );
 
+			/**
+			 * The jQuery object representing the table row that contains the plugin activation checkbox.
+			 * @type {jQuery}
+			 */
 			this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
 		},
 
@@ -42,8 +47,8 @@
 
 		/**
 		 * Returns the selected language of the given select element.
-		 * @param {Object} $select - A select element.
-		 * @returns {String} The selected language.
+		 * @param {HTMLElement} $select - A select element.
+		 * @returns {string} The selected language.
 		 */
 		getLanguage: function( $select ) {
 			var language = $select.val();

@@ -6,7 +6,11 @@
 	 * @classdesc MultilingualPress front-end controller.
 	 */
 	var MultilingualPress = function() {
-		return {
+		return /** @lends MultilingualPress# */ {
+			/**
+			 * MultilingualPress module instances.
+			 * @type {Object[]}
+			 */
 			Modules: []
 		};
 	};
@@ -28,7 +32,7 @@
 	var Quicklinks = function() {
 		/**
 		 * Redirects the user to the given URL.
-		 * @param {String} url - The URL.
+		 * @param {string} url - The URL.
 		 */
 		var setLocation = function( url ) {
 			window.location.href = url;

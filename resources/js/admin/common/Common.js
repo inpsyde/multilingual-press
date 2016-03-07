@@ -1,14 +1,11 @@
 (function( $, MultilingualPress ) {
 	'use strict';
 
-	/**
-	 * @class Common
-	 * @classdesc MultilingualPress Common module.
-	 * @extends Backbone.View
-	 */
 	var Common = Backbone.View.extend( /** @lends Common# */ {
 		/**
-		 * Initializes the Common module.
+		 * @constructs Common
+		 * @classdesc MultilingualPress Common module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
 			this.initializeStateTogglers();

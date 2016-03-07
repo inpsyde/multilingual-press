@@ -6,7 +6,11 @@
 	 * @classdesc MultilingualPress front-end controller.
 	 */
 	var MultilingualPress = function() {
-		return {
+		return /** @lends MultilingualPress# */ {
+			/**
+			 * MultilingualPress module instances.
+			 * @type {Object[]}
+			 */
 			Modules: []
 		};
 	};

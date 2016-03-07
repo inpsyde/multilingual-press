@@ -8,16 +8,17 @@
 	 */
 	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
 
-	/**
-	 * @class RelationshipControl
-	 * @classdesc MultilingualPress RelationshipControl module.
-	 * @extends Backbone.View
-	 */
 	var RelationshipControl = Backbone.View.extend( /** @lends RelationshipControl# */ {
 		/**
-		 * Initializes the RelationshipControl module.
+		 * @constructs RelationshipControl
+		 * @classdesc MultilingualPress RelationshipControl module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
+			/**
+			 * Array of jQuery objects representing meta boxes with unsaved relationships.
+			 * @type {jQuery[]}
+			 */
 			this.unsavedRelationships = [];
 
 			this.initializeEventHandlers();
@@ -59,8 +60,8 @@
 
 		/**
 		 * Returns the index of the given meta box in the unsaved relationships array, and -1 if not found.
-		 * @param {Object} $metaBox - The meta box element.
-		 * @returns {Number} The index of the meta box.
+		 * @param {jQuery} $metaBox - The meta box element.
+		 * @returns {number} The index of the meta box.
 		 */
 		findMetaBox: function( $metaBox ) {
 			$.each( this.unsavedRelationships, function( index, element ) {
@@ -112,8 +113,8 @@
 
 		/**
 		 * Returns the according event name for the given relationship action.
-		 * @param {String} action - A relationship action.
-		 * @returns {String} The event name.
+		 * @param {string} action - A relationship action.
+		 * @returns {string} The event name.
 		 */
 		getEventName: function( action ) {
 			switch ( action ) {

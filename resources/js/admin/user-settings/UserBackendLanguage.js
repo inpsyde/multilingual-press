@@ -7,14 +7,11 @@
 	 */
 	var moduleSettings = MultilingualPress.getSettings( 'UserBackendLanguage' );
 
-	/**
-	 * @class UserBackendLanguage
-	 * @classdesc MultilingualPress UserBackendLanguage module.
-	 * @extends Backbone.View
-	 */
 	var UserBackendLanguage = Backbone.View.extend( /** @lends UserBackendLanguage# */ {
 		/**
-		 * Initializes the UserBackendLanguage module.
+		 * @constructs UserBackendLanguage
+		 * @classdesc MultilingualPress UserBackendLanguage module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
 			this.$el.val( moduleSettings.locale );

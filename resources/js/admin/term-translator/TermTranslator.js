@@ -1,17 +1,24 @@
 (function( $, MultilingualPress ) {
 	'use strict';
 
-	/**
-	 * @class TermTranslator
-	 * @classdesc MultilingualPress TermTranslator module.
-	 * @extends Backbone.View
-	 */
 	var TermTranslator = Backbone.View.extend( /** @lends TermTranslator# */ {
 		/**
-		 * Initializes the TermTranslator module.
+		 * @constructs TermTranslator
+		 * @classdesc MultilingualPress TermTranslator module.
+		 * @extends Backbone.View
 		 */
 		initialize: function() {
+			/**
+			 * The jQuery object representing the MultilingualPress term selects.
+			 * @type {jQuery}
+			 */
 			this.$selects = this.$el.find( 'select' );
+
+			/**
+			 * Flag to indicate an ongoing term propagation.
+			 * @type {boolean}
+			 */
+			this.isPropagating = false;
 		},
 
 		/**
@@ -42,8 +49,8 @@
 
 		/**
 		 * Returns the relation of the given select element (i.e., its currently selected option).
-		 * @param {Object} $select - A select element.
-		 * @returns {String} The relation of the selected term.
+		 * @param {jQuery} $select - A select element.
+		 * @returns {string} The relation of the selected term.
 		 */
 		getSelectedRelation: function( $select ) {
 			return $select.find( 'option:selected' ).data( 'relation' ) || '';
@@ -51,8 +58,8 @@
 
 		/**
 		 * Sets the given select element's value to that of the option with the given relation, or the first option.
-		 * @param {Object} $select - A select element.
-		 * @param {String} relation - The relation of a term.
+		 * @param {jQuery} $select - A select element.
+		 * @param {string} relation - The relation of a term.
 		 */
 		selectTerm: function( $select, relation ) {
 			var $option = $select.find( 'option[data-relation="' + relation + '"]' );

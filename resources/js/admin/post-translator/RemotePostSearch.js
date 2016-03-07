@@ -17,24 +17,41 @@
 		urlRoot: ajaxurl
 	} );
 
-	/**
-	 * @class RemotePostSearch
-	 * @classdesc MultilingualPress RemotePostSearch module.
-	 * @augments Backbone.View
-	 */
 	var RemotePostSearch = Backbone.View.extend( /** @lends RemotePostSearch# */ {
 		/**
-		 * Initializes the RemotePostSearch module.
+		 * @constructs RemotePostSearch
+		 * @classdesc MultilingualPress RemotePostSearch module.
+		 * @augments Backbone.View
 		 */
 		initialize: function() {
+			/**
+			 * Array holding the default search result HTML strings.
+			 * @type {string[]}
+			 */
 			this.defaultResults = [];
+
+			/**
+			 * Array holding jQuery objects representing the search result containers.
+			 * @type {jQuery[]}
+			 */
 			this.resultsContainers = [];
 
+			/**
+			 * Minimum number of characters required to fire the remote post search.
+			 * @type {number}
+			 */
 			this.searchThreshold = parseInt( moduleSettings.searchThreshold, 10 );
 
 			this.model = new RemotePostSearchResult();
 			this.listenTo( this.model, 'change', this.render );
 
+			this.initializeResults();
+		},
+
+		/**
+		 * Initializes both the default search result views as well as the result containers.
+		 */
+		initializeResults: function() {
 			$( '.mlp-search-field' ).each( function( index, element ) {
 				var $element = $( element ),
 					$resultsContainer = $( '#' + $element.data( 'results-container-id' ) ),

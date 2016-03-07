@@ -21,7 +21,7 @@
 		/**
 		 * Registers the module with the given data for the given route.
 		 * @param {Object} moduleData - The module data.
-		 * @param {String} route - The route.
+		 * @param {string} route - The route.
 		 */
 		var registerModuleForRoute = function( moduleData, route ) {
 			if ( Registry[ route ] ) {
@@ -48,19 +48,21 @@
 
 		return /** @lends MultilingualPressAdmin# */ {
 			/**
+			 * Events module.
 			 * @type {Object}
 			 * @extends Backbone.Events
 			 */
 			Events: _.extend( {}, Backbone.Events ),
 
 			/**
-			 * @type {Array}
+			 * MultilingualPress module instances.
+			 * @type {Object[]}
 			 */
 			Modules: Modules,
 
 			/**
 			 * Returns the settings object for the given module or settings name.
-			 * @param {String} name - The name of either the MulitilingualPress module or the settings object itself.
+			 * @param {string} name - The name of either the MulitilingualPress module or the settings object itself.
 			 * @returns {Object} The settings object.
 			 */
 			getSettings: function( name ) {
@@ -77,8 +79,8 @@
 
 			/**
 			 * Registers a new module with the given Module callback under the given name for the given route.
-			 * @param {String|Array} routes - The routes for the module.
-			 * @param {String} name - The name of the module.
+			 * @param {string|string[]} routes - The routes for the module.
+			 * @param {string} name - The name of the module.
 			 * @param {Function} Module - The constructor callback for the module.
 			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
 			 */
