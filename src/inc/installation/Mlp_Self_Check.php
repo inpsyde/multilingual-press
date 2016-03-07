@@ -76,6 +76,9 @@ class Mlp_Self_Check {
 	 */
 	public function pre_install_check( $name, $base_name, $wp_version ) {
 
+		// TODO: Remove with MultilingualPress 3.0.0.
+		$this->check_php_version();
+
 		if ( ! $this->is_plugin_page() ) {
 			return self::WRONG_PAGE_FOR_CHECK;
 		}
@@ -100,6 +103,57 @@ class Mlp_Self_Check {
 		add_action( 'network_admin_notices', array( $deactivate, 'deactivate' ), 0 );
 
 		return self::PLUGIN_DEACTIVATED;
+	}
+
+	/**
+	 * Checks the current PHP version and displays an admin notice in case it is lower than 5.4.0.
+	 *
+	 * @return void
+	 */
+	private function check_php_version() {
+
+		if ( version_compare( PHP_VERSION, '5.4.0', '>=' ) ) {
+			return;
+		}
+
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		global $pagenow;
+		if ( ! in_array( $pagenow, array( 'index.php', 'plugins.php' ) ) ) {
+			return;
+		}
+
+		$callback = array( $this, 'render_php_version_admin_notice' );
+		add_action( 'admin_notices', $callback );
+		add_action( 'network_admin_notices', $callback );
+	}
+
+	/**
+	 * Displays an admin notice informing about the current and the required PHP version.
+	 *
+	 * @wp-hook admin_notices
+	 * @wp-hook network_admin_notices
+	 *
+	 * @return void
+	 */
+	public function render_php_version_admin_notice() {
+
+		?>
+		<div class="notice notice-warning">
+			<p>
+				<?php
+				/* translators: %s: current PHP version */
+				$message = __(
+					'<strong>MultilingualPress Information</strong><br>With the upcoming major release, MultilingualPress will be requiring <strong>PHP version 5.4.0</strong> or higher. Currently, you are running <strong>PHP version %s</strong>. Please contact your hoster and update PHP to version 5.4.0 or higher.',
+					'multilingual-press'
+				);
+				printf( $message, PHP_VERSION );
+				?>
+			</p>
+		</div>
+		<?php
 	}
 
 	/**
