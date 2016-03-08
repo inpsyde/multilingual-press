@@ -107,8 +107,10 @@ class Mlp_Relationship_Control_Data {
 		if ( ! empty ( $this->ids[ 'remote_post_id' ] ) )
 			$args[ 'exclude' ] = $this->ids[ 'remote_post_id' ];
 
-		if ( ! empty ( $this->search ) )
-			$args[ 's' ] = $this->search;
+		if ( ! empty( $this->search ) ) {
+			$args['s'] = $this->search;
+			$args['orderby'] = 'relevance';
+		}
 
 		switch_to_blog( $this->ids[ 'remote_site_id' ] );
 		$posts = get_posts( $args );
