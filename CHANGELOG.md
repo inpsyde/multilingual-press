@@ -16,6 +16,7 @@
 - Fix dynamic CPT permalinks (due to regression during merge).
 - Add filter for remote post search minimum input length, see
 [issue #193](https://github.com/inpsyde/multilingual-press/issues/193).
+- Sort remote post search results by relevance.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
