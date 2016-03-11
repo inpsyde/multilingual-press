@@ -423,7 +423,7 @@
 			 * The jQuery object representing the input element that contains the currently edited post's content.
 			 * @type {jQuery}
 			 */
-			this.$content = $( '.content' );
+			this.$content = $( '#content' );
 
 			/**
 			 * The jQuery object representing the input element that contains the currently edited post's excerpt.
