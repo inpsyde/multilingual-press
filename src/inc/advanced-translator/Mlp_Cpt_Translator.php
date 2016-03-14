@@ -16,7 +16,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 * @since	0.1
 	 * @var		array $post_types
 	 */
-	private $post_types = NULL;
+	private $post_types;
 
 	/**
 	 * Prefix for 'name' attribute in form fields.
@@ -188,36 +188,23 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	}
 
 	/**
-	 * Get all custom post types
+	 * Returns all custom post types.
 	 *
-	 * @return	array
+	 * @return array
 	 */
 	public function get_custom_post_types() {
 
-		if ( NULL !== $this->post_types )
+		if ( is_array( $this->post_types ) ) {
 			return $this->post_types;
-
-		// Change type to indicate we have processed this already.
-		$this->post_types = array ();
-
-		$post_types = get_post_types( array ( '_builtin' => FALSE ), 'objects' );
-
-		if ( empty ( $post_types ) )
-			return array ();
-
-		/* We need an extra check, because get_post_types() cannot filter
-		 * by support.
-		 * @see http://core.trac.wordpress.org/ticket/17620
-		 */
-		foreach ( $post_types as $post_type => $properties ) {
-			if ( post_type_supports( $post_type, 'editor' ) )
-				$this->post_types[ $post_type ] = $properties;
 		}
 
-		if ( empty ( $this->post_types ) )
-			return array ();
-
-		uasort( $this->post_types, array ( $this, 'sort_cpts_by_label' ) );
+		$this->post_types = get_post_types( array(
+			'_builtin' => false,
+			'show_ui'  => true,
+		), 'objects' );
+		if ( $this->post_types ) {
+			uasort( $this->post_types, array( $this, 'sort_cpts_by_label' ) );
+		}
 
 		return $this->post_types;
 	}
