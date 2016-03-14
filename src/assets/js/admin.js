@@ -254,13 +254,7 @@
 
 			this.$submit.prop( 'disabled', true );
 
-			/**
-			 * The "is-active" class was introduced in WordPress 4.2. Since MultilingualPress has to stay
-			 * backwards-compatible with the last four major versions of WordPress, we can only rely on this with the
-			 * release of WordPress 4.6.
-			 * TODO: Remove "show()" with the release of WordPress 4.6.
-			 */
-			this.$spinner.addClass( 'is-active' ).show();
+			this.$spinner.addClass( 'is-active' );
 
 			this.model.fetch( {
 				data: data,
@@ -292,13 +286,7 @@
 
 			this.$languages.prop( 'checked', false );
 
-			/**
-			 * The "is-active" class was introduced in WordPress 4.2. Since MultilingualPress has to stay
-			 * backwards-compatible with the last four major versions of WordPress, we can only rely on this with the
-			 * release of WordPress 4.6.
-			 * TODO: Remove "hide()" with the release of WordPress 4.6.
-			 */
-			this.$spinner.addClass( 'is-active' ).hide();
+			this.$spinner.addClass( 'is-active' );
 
 			this.$submit.prop( 'disabled', false );
 		}
