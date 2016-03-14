@@ -32,4 +32,4 @@ Thanks for contributing to MultilingualPress (MLP)&mdash;you rock!
 * Wait for feedback. The MLP team looks at pull requests on a regular basis.
 
 # License
-By contributing code to MultilingualPress, you grant its use under the [GNU General Public License v3](LICENSE).
+By contributing code to MultilingualPress, you grant its use under the [GNU General Public License v3](https://github.com/inpsyde/multilingual-press/blob/master/LICENSE).

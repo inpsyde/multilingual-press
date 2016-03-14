@@ -126,8 +126,8 @@ Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher
 If you want to translate MultilingualPress, you best do so by means of the official
 [WordPress.org GlotPress](https://translate.wordpress.org/projects/wp-plugins/multilingual-press). You can, of course,
 just [create a pull request](https://github.com/inpsyde/multilingual-press/compare) to our repository if you already
-have the translation files ready. In that case, please review the [guidelines for contributing](CONTRIBUTING.md) to this
-repository.
+have the translation files ready. In that case, please review the [guidelines for contributing](.github/CONTRIBUTING.md)
+to this repository.
 
 ## Crafted by Inpsyde
 The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006. And yes, we also run that
