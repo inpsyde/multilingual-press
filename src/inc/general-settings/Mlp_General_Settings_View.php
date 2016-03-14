@@ -29,10 +29,7 @@ class Mlp_General_Settings_View {
 		?>
 		<div class="wrap">
 			<h1><?php print $GLOBALS[ 'title' ]; ?></h1>
-			<?php
-			$this->modules_form();
-			print $this->get_marketpress_pointer();
-			?>
+			<?php $this->modules_form(); ?>
 		</div>
 		<?php
 	}
@@ -127,23 +124,6 @@ class Mlp_General_Settings_View {
 	</td>
 </tr>
 EOD;
-	}
-
-	/**
-	 * Tell our users who built this. :)
-	 *
-	 * @return string
-	 */
-	private function get_marketpress_pointer() {
-
-		$marketpress_url = __( 'http://marketpress.com/', 'multilingual-press' );
-		$inpsyde_url     = __( 'http://inpsyde.com/',     'multilingual-press' );
-		$message         = __(
-			'This plugin has been developed by <a href="%1$s">MarketPress</a>, a project of <a href="%2$s">Inpsyde</a>.',
-			'multilingual-press'
-		);
-
-		return '<p>' . sprintf( $message, $marketpress_url, $inpsyde_url ) . '</p>';
 	}
 
 	/**
