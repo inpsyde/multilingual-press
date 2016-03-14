@@ -17,6 +17,8 @@
 - Add filter for remote post search minimum input length, see
 [issue #193](https://github.com/inpsyde/multilingual-press/issues/193).
 - Sort remote post search results by relevance.
+- Improve CPT translator: allow translation for all editable post types, see
+[issue #184](https://github.com/inpsyde/multilingual-press/issues/184), props kraftner.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
