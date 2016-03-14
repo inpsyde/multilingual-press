@@ -24,13 +24,6 @@ class Mlp_User_Backend_Language {
 	private $key = 'mlp_user_language';
 
 	/**
-	 * Feature activation status.
-	 *
-	 * @var bool
-	 */
-	private $active = FALSE;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param Mlp_Module_Manager_Interface $module_manager
@@ -47,21 +40,17 @@ class Mlp_User_Backend_Language {
 	 */
 	public function setup() {
 
-		// Load user specific language in the backend
-		add_filter( 'locale', array( $this, 'locale' ) );
-
-		$this->active = $this->module_manager->register(
-			array(
-				'display_name_callback' => array( $this, 'get_module_title' ),
-				'slug'                  => 'class-' . __CLASS__,
-				'description_callback'  => array( $this, 'get_module_description' ),
-			)
-		);
-
-		// Quit here if module is turned off
-		if ( ! $this->active ) {
+		$is_active = $this->module_manager->register( array(
+			'display_name_callback' => array( $this, 'get_module_title' ),
+			'slug'                  => 'class-' . __CLASS__,
+			'description_callback'  => array( $this, 'get_module_description' ),
+		) );
+		if ( ! $is_active ) {
 			return;
 		}
+
+		// Load user specific language in the backend
+		add_filter( 'locale', array( $this, 'locale' ) );
 
 		// Add User Field for own blog language
 		add_filter( 'personal_options', array( $this, 'edit_user_profile' ) );
@@ -109,13 +98,12 @@ class Mlp_User_Backend_Language {
 	public function edit_user_profile( WP_User $user ) {
 
 		$languages = get_available_languages();
-
 		if ( ! $languages ) {
 			return;
 		}
 
 		// Add English manually, because it won't get added by WordPress itself.
-		$languages[ ] = 'en_US';
+		$languages[] = 'en_US';
 
 		$user_language = $this->get_user_language( $user->ID );
 		?>
@@ -146,7 +134,7 @@ class Mlp_User_Backend_Language {
 	public function profile_update( $user_id ) {
 
 		// Empty means, that the site language is used
-		if ( empty( $_POST[ $this->key ] ) or '' === trim( $_POST[ $this->key ] ) ) {
+		if ( empty( $_POST[ $this->key ] ) || '' === trim( $_POST[ $this->key ] ) ) {
 			return delete_user_meta( $user_id, $this->key );
 		}
 
@@ -159,7 +147,7 @@ class Mlp_User_Backend_Language {
 	 * @param int    $user_id The user ID.
 	 * @param string $default Optional. Default language. Defaults to ''.
 	 *
-	 * @return string $user_language The user's preferred language.
+	 * @return string
 	 */
 	public function get_user_language( $user_id, $default = '' ) {
 
@@ -182,10 +170,6 @@ class Mlp_User_Backend_Language {
 	 * @return string
 	 */
 	public function locale( $locale ) {
-
-		if ( ! $this->active ) {
-			return $locale;
-		}
 
 		$current_user_id = get_current_user_id();
 
@@ -244,7 +228,7 @@ class Mlp_User_Backend_Language {
 	 */
 	public function enqueue_script() {
 
-		unset ( $GLOBALS['locale'] );
+		unset( $GLOBALS['locale'] );
 
 		remove_filter( 'locale', array( $this, 'locale' ) );
 
