@@ -19,6 +19,8 @@
 - Sort remote post search results by relevance.
 - Improve CPT translator: allow translation for all editable post types, see
 [issue #184](https://github.com/inpsyde/multilingual-press/issues/184), props kraftner.
+- Use the full slug when copying post data, see [issue #195](https://github.com/inpsyde/multilingual-press/issues/195),
+props luisarn.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
