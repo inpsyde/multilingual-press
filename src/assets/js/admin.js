@@ -420,12 +420,6 @@
 			this.$excerpt = $( '#excerpt' );
 
 			/**
-			 * The jQuery object representing the input element that contains the currently edited post's slug.
-			 * @type {jQuery}
-			 */
-			this.$slug = $( '#editable-post-name' );
-
-			/**
 			 * The jQuery object representing the input element that contains the currently edited post's title.
 			 * @type {jQuery}
 			 */
@@ -503,7 +497,9 @@
 		 * @returns {string} The post slug.
 		 */
 		getSlug: function() {
-			return this.$slug.text() || '';
+
+			// Since editing the permalink replaces the "edit slug box" markup, one cannot cache the slug DOM element.
+			return $( '#editable-post-name-full' ).text() || '';
 		},
 
 		/**
