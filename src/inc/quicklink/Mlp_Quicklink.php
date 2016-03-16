@@ -70,7 +70,9 @@ class Mlp_Quicklink implements Mlp_Updatable {
 			// Use this hook to handle the user input of your modules' options page form fields
 			add_filter( 'mlp_modules_save_fields', array( $this, 'save_options_page_form_fields' ) );
 		} else {
-			$this->redirect_quick_link();
+			if ( ! empty( $_POST['mlp_quicklink_select'] ) ) {
+				$this->redirect_quick_link( (string) $_POST['mlp_quicklink_select'] );
+			}
 
 			add_action( 'wp_head', array( $this, 'load_style' ), 0 );
 
@@ -128,18 +130,16 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 *
 	 * @since 1.0.4
 	 *
+	 * @param string $url The URL that is to be redirected to.
+	 *
 	 * @return void
 	 */
-	protected function redirect_quick_link() {
-
-		if ( ! isset( $_POST['mlp_quicklink_select'] ) ) {
-			return;
-		}
+	private function redirect_quick_link( $url ) {
 
 		$callback = array( $this, 'extend_allowed_hosts' );
 		add_filter( 'allowed_redirect_hosts', $callback, 10, 2 );
 
-		$url = wp_validate_redirect( $_POST['mlp_quicklink_select'], false );
+		$url = wp_validate_redirect( $url, false );
 
 		remove_filter( 'allowed_redirect_hosts', $callback );
 
