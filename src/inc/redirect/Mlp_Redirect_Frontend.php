@@ -103,8 +103,6 @@ class Mlp_Redirect_Frontend {
 		 * Filters if the current request should be redirected.
 		 *
 		 * @param bool $redirect Redirect the current request?
-		 *
-		 * @return bool
 		 */
 		return (bool) apply_filters( 'mlp_do_redirect', true );
 	}

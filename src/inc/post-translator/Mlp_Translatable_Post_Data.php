@@ -316,8 +316,6 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		 *
 		 * @param array $post_meta    Post meta data.
 		 * @param array $save_context Context of the to-be-saved post.
-		 *
-		 * @return array
 		 */
 		$new_post_meta = apply_filters( 'mlp_pre_insert_post_meta', $post_meta, $this->save_context );
 

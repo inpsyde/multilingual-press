@@ -259,8 +259,6 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 				 * Filter the default value of the 'Translate this post' checkbox.
 				 *
 				 * @param bool $translate Should 'Translate this post' be checked by default?
-				 *
-				 * @return bool
 				 */
 				$translate = (bool) apply_filters( 'mlp_translate_this_post_checkbox', FALSE );
 				checked( TRUE, $translate );

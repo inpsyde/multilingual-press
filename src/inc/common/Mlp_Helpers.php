@@ -393,8 +393,6 @@ class Mlp_Helpers {
 		 * Get the Language API object.
 		 *
 		 * @param Mlp_Language_Api_Interface $language_api Language API object.
-		 *
-		 * @return Mlp_Language_Api_Interface
 		 */
 		$api = apply_filters( 'mlp_language_api', NULL );
 		/** @var Mlp_Language_Api_Interface $api */

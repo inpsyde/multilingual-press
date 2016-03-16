@@ -52,8 +52,6 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 		 *                                    'site_id'  => int
 		 *                                }
 		 * @param int    $current_site_id Current site ID.
-		 *
-		 * @return string
 		 */
 		$url = (string) apply_filters( 'mlp_redirect_url', $redirect_match['url'], $redirect_match, $current_site_id );
 		if ( ! $url ) {

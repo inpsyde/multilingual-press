@@ -41,8 +41,6 @@ class Mlp_Translation_Metabox {
 		 *
 		 * @param string[]                $allowed_post_types Allowed post type names.
 		 * @param Mlp_Translation_Metabox $meta_box           Translation meta box object.
-		 *
-		 * @return string[]
 		 */
 		$this->allowed_post_types = (array) apply_filters(
 			'mlp_allowed_post_types',
@@ -63,8 +61,6 @@ class Mlp_Translation_Metabox {
 		 * Filter whether to use an external save method instead of the built-in method.
 		 *
 		 * @param bool $external_save_method Use an external save method?
-		 *
-		 * @return bool
 		 */
 		$mlp_external_save_method = (bool) apply_filters( 'mlp_external_save_method', false );
 
@@ -241,8 +237,6 @@ class Mlp_Translation_Metabox {
 			 * Filter the post translator activation checkbox callback.
 			 *
 			 * @param array|string $callback Callback name or class-method array.
-			 *
-			 * @return array|string
 			 */
 			$checkbox_callback = apply_filters( 'mlp_post_translator_activation_checkbox', $callback );
 
@@ -310,8 +304,6 @@ class Mlp_Translation_Metabox {
 		 * @param array   $callbacks Array of callback names or class-method arrays.
 		 * @param WP_Post $post      Post object.
 		 * @param int     $blog_id   Blog ID.
-		 *
-		 * @return array
 		 */
 		$callbacks = apply_filters( 'mlp_translation_meta_box_view_callbacks', $callbacks, $post, $blog_id );
 		if ( empty( $callbacks ) ) {

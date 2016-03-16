@@ -364,8 +364,6 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 			 *
 			 * @param array $post_data    Post data.
 			 * @param array $save_context Context of the to-be-saved post.
-			 *
-			 * @return array
 			 */
 			$new_post_data = apply_filters( 'mlp_pre_save_post', $new_post_data, $this->save_context );
 
@@ -385,8 +383,6 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		 *
 		 * @param array $post_data    Post data.
 		 * @param array $save_context Context of the to-be-saved post.
-		 *
-		 * @return array
 		 */
 		$new_post_data = apply_filters( 'mlp_pre_insert_post', $new_post_data, $this->save_context );
 
@@ -695,8 +691,6 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		 * Filter mutually exclusive taxonomies.
 		 *
 		 * @param string[] $taxonomies Mutually exclusive taxonomy names.
-		 *
-		 * @return string[]
 		 */
 		$exclusive = apply_filters( 'mlp_mutually_exclusive_taxonomies', array( 'post_format' ) );
 

@@ -220,8 +220,6 @@ class Mlp_Duplicate_Blogs {
 		 *                          'source_blog_id' => int
 		 *                          'new_blog_id'    => int
 		 *                          }
-		 *
-		 * @return string[]
 		 */
 		$tables = apply_filters( 'mlp_tables_to_duplicate', $tables, $context );
 
@@ -458,8 +456,6 @@ class Mlp_Duplicate_Blogs {
 		 * Filter the default value for the search engine visibility when adding a new site.
 		 *
 		 * @param bool $visible Should the new site be visible by default?
-		 *
-		 * @return bool
 		 */
 		$visible = (bool) apply_filters( 'mlp_default_search_engine_visibility', FALSE );
 

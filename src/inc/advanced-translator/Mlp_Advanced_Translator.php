@@ -213,8 +213,6 @@ class Mlp_Advanced_Translator {
 		 * @param int    $current_site_id Source site ID.
 		 * @param int    $current_post_id Source post ID.
 		 * @param int    $remote_site_id  Remote site ID.
-		 *
-		 * @return string
 		 */
 		$title = apply_filters(
 			'mlp_process_post_title_for_remote_site',
@@ -233,8 +231,6 @@ class Mlp_Advanced_Translator {
 		 * @param int    $current_site_id Source site ID.
 		 * @param int    $current_post_id Source post ID.
 		 * @param int    $remote_site_id  Remote site ID.
-		 *
-		 * @return string
 		 */
 		$slug = apply_filters(
 			'mlp_process_post_slug_for_remote_site',
@@ -253,8 +249,6 @@ class Mlp_Advanced_Translator {
 		 * @param int    $current_site_id Source site ID.
 		 * @param int    $current_post_id Source post ID.
 		 * @param int    $remote_site_id  Remote site ID.
-		 *
-		 * @return string
 		 */
 		$content = (string) apply_filters(
 			'mlp_process_post_content_for_remote_site',
@@ -272,8 +266,6 @@ class Mlp_Advanced_Translator {
 		 * @param int    $current_site_id Source site ID.
 		 * @param int    $current_post_id Source post ID.
 		 * @param int    $remote_site_id  Remote site ID.
-		 *
-		 * @return string
 		 */
 		$excerpt = apply_filters(
 			'mlp_process_post_excerpt_for_remote_site',
@@ -290,8 +282,6 @@ class Mlp_Advanced_Translator {
 		 * @param int   $current_site_id Source site ID.
 		 * @param int   $current_post_id Source post ID.
 		 * @param int   $remote_site_id  Remote site ID.
-		 *
-		 * @return array
 		 */
 		$data = (array) apply_filters(
 			'mlp_process_post_data_for_remote_site',

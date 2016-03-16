@@ -58,8 +58,6 @@ class Mlp_Dashboard_Widget {
 		 *                             'post_id'       => int
 		 *                             'is_translated' => bool
 		 *                             }
-		 *
-		 * @return bool
 		 */
 		$show_checkbox = (bool) apply_filters( 'mlp_show_translation_completed_checkbox', TRUE, $context );
 		if ( ! $show_checkbox ) {
@@ -90,8 +88,6 @@ class Mlp_Dashboard_Widget {
 		 * Filter the capability required to view the dashboard widget.
 		 *
 		 * @param string $capability Capability required to view the dashboard widget.
-		 *
-		 * @return string
 		 */
 		$capability = apply_filters( 'mlp_dashboard_widget_access', 'edit_others_posts' );
 

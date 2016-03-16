@@ -349,8 +349,6 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		 *
 		 * @param array $translations Translations.
 		 * @param array $arguments    Translation arguments.
-		 *
-		 * @return array
 		 */
 		$translations = apply_filters( 'mlp_translations', $translations, $arguments );
 		wp_cache_set( $key, $translations, 'mlp' );
@@ -680,8 +678,6 @@ WHERE `http_name` IN( $values )";
 		 * Filter the translation arguments.
 		 *
 		 * @param array $arguments Translation arguments.
-		 *
-		 * @return array
 		 */
 		$arguments = apply_filters( 'mlp_get_translations_arguments', $arguments );
 
