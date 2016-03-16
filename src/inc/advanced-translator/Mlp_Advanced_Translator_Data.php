@@ -119,7 +119,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		}
 
 		// Check Post Type
-		if ( ! in_array( $post_type, $this->allowed_post_types ) ) {
+		if ( ! in_array( $post_type, $this->allowed_post_types, true ) ) {
 			return;
 		}
 
@@ -646,7 +646,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function is_connectable_status( WP_Post $post ) {
 
-		if ( in_array( $post->post_status, array( 'publish', 'draft', 'private', 'auto-draft' ) ) ) {
+		if ( in_array( $post->post_status, array( 'publish', 'draft', 'private', 'auto-draft' ), true ) ) {
 			return true;
 		}
 
@@ -700,7 +700,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		 */
 		$exclusive = apply_filters( 'mlp_mutually_exclusive_taxonomies', array( 'post_format' ) );
 
-		return in_array( $taxonomy, $exclusive );
+		return in_array( $taxonomy, $exclusive, true );
 	}
 
 	/**

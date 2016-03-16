@@ -59,7 +59,7 @@ class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 	 */
 	public function exists() {
 
-		return in_array( $this->table_name, $this->all_table_names );
+		return in_array( $this->table_name, $this->all_table_names, true );
 	}
 
 	/**

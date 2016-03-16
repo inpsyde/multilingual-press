@@ -121,7 +121,7 @@ class Mlp_Self_Check {
 		}
 
 		global $pagenow;
-		if ( ! in_array( $pagenow, array( 'index.php', 'plugins.php' ) ) ) {
+		if ( ! in_array( $pagenow, array( 'index.php', 'plugins.php' ), true ) ) {
 			return;
 		}
 

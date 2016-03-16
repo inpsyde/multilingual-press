@@ -127,7 +127,7 @@ class Mlp_New_Site_View {
 
 		$available_languages = get_available_languages();
 
-		if ( ! in_array( $default_language, $available_languages ) ) {
+		if ( ! in_array( $default_language, $available_languages, true ) ) {
 			return 'en-US';
 		}
 

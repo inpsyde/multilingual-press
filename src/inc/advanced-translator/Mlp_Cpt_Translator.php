@@ -357,9 +357,6 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		if ( empty ( $post->post_status ) )
 			return FALSE;
 
-		return in_array(
-			$post->post_status,
-			array ( 'draft', 'pending', 'auto-draft' )
-		);
+		return in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ), true );
 	}
 }

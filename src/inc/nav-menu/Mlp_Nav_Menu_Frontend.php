@@ -114,8 +114,9 @@ class Mlp_Nav_Menu_Frontend {
 	 */
 	private function get_site_id( WP_Post $item ) {
 
-		if ( ! in_array( $item->type, array( 'language', 'custom' ) ) )
+		if ( ! in_array( $item->type, array( 'language', 'custom' ), true ) ) {
 			return 0;
+		}
 
 		return (int) get_post_meta( $item->ID, $this->meta_key, TRUE );
 	}

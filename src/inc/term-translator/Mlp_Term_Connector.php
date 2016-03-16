@@ -74,8 +74,8 @@ class Mlp_Term_Connector {
 		$term_id, $term_taxonomy_id, $taxonomy
 	) {
 
-		if ( ! in_array( $taxonomy, $this->taxonomies ) ) {
-			return FALSE;
+		if ( ! in_array( $taxonomy, $this->taxonomies, true ) ) {
+			return false;
 		}
 
 		/**

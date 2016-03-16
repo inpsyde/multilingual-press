@@ -109,7 +109,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		$post_type = $this->get_real_post_type( $post );
 		$post_id   = $this->get_real_post_id( $post_id );
 
-		if ( ! in_array( $post_type, $this->allowed_post_types ) ) {
+		if ( ! in_array( $post_type, $this->allowed_post_types, true ) ) {
 			return;
 		}
 

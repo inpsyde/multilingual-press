@@ -504,7 +504,7 @@ WHERE `http_name` IN( $values )";
 		foreach ( $tags as $site => $lang ) {
 
 			foreach ( $results as $arr ) {
-				if ( in_array( $lang, $arr ) ) {
+				if ( in_array( $lang, $arr, true ) ) {
 					$languages[ $site ] += $arr;
 				}
 				elseif ( isset ( $add_like[ $site ] )
@@ -736,7 +736,7 @@ WHERE `http_name` IN( $values )";
 		if ( empty ( $arguments[ 'content_id' ] ) )
 			return FALSE;
 
-		return in_array( $arguments[ 'type' ], array ( 'term', 'post' ) );
+		return in_array( $arguments['type'], array( 'post', 'term' ), true );
 	}
 
 	/**

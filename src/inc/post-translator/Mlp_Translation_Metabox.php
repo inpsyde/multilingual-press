@@ -105,7 +105,7 @@ class Mlp_Translation_Metabox {
 	 */
 	public function register_meta_boxes( $post_type, WP_Post $post ) {
 
-		if ( ! in_array( $post_type, $this->allowed_post_types ) ) {
+		if ( ! in_array( $post_type, $this->allowed_post_types, true ) ) {
 			return;
 		}
 
@@ -156,7 +156,7 @@ class Mlp_Translation_Metabox {
 			$translated_status = ucfirst( $status );
 		}
 
-		if ( in_array( $status, array( 'publish', 'private' ) ) ) {
+		if ( in_array( $status, array( 'publish', 'private' ), true ) ) {
 			$template = esc_html_x(
 				'%1$s (%2$s)',
 				'No HTML; 1 = post status, 2 = publish time',
@@ -341,7 +341,7 @@ class Mlp_Translation_Metabox {
 			return false;
 		}
 
-		return in_array( $pagenow, array( 'post-new.php', 'post.php' ) );
+		return in_array( $pagenow, array( 'post-new.php', 'post.php' ), true );
 	}
 
 	/**

@@ -94,7 +94,7 @@ class Mlp_Redirect_Frontend {
 		if ( isset( $_SESSION['noredirect'] ) ) {
 			$current_site_language = mlp_get_current_blog_language();
 
-			if ( in_array( $current_site_language, (array) $_SESSION['noredirect'] ) ) {
+			if ( in_array( $current_site_language, (array) $_SESSION['noredirect'], true ) ) {
 				return false;
 			}
 		}

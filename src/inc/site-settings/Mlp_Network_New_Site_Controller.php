@@ -137,8 +137,9 @@ class Mlp_Network_New_Site_Controller {
 
 		$available_lang_files = get_available_languages();
 
-		if ( ! in_array( $wp_locale, $available_lang_files ) )
+		if ( ! in_array( $wp_locale, $available_lang_files, true ) ) {
 			return;
+		}
 
 		update_blog_option( $blog_id, 'WPLANG', $wp_locale );
 	}

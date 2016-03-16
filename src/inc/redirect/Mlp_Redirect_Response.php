@@ -96,7 +96,7 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 		} else {
 			$_SESSION['noredirect'] = (array) $_SESSION['noredirect'];
 
-			if ( in_array( $language, $_SESSION['noredirect'] ) ) {
+			if ( in_array( $language, $_SESSION['noredirect'], true ) ) {
 				return;
 			}
 		}

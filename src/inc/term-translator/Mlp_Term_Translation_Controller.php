@@ -123,7 +123,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			Mlp_Term_Field_View::ADD_TERM_FIELDS,
 			Mlp_Term_Field_View::EDIT_TERM_FIELDS,
 		);
-		if ( in_array( $name, $table_positions ) ) {
+		if ( in_array( $name, $table_positions, true ) ) {
 			return $view->print_table();
 		}
 
@@ -131,7 +131,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			Mlp_Term_Field_View::ADD_TERM_TITLE,
 			Mlp_Term_Field_View::EDIT_TERM_TITLE,
 		);
-		if ( in_array( $name, $title_positions ) ) {
+		if ( in_array( $name, $title_positions, true ) ) {
 			return $view->print_title();
 		}
 

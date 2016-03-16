@@ -122,8 +122,9 @@ class Multilingual_Press {
 
 		global $pagenow;
 
-		if ( in_array( $pagenow, array ( 'admin-post.php', 'admin-ajax.php' ) ) )
-			return TRUE;
+		if ( in_array( $pagenow, array( 'admin-post.php', 'admin-ajax.php' ), true ) ) {
+			return true;
+		}
 
 		if ( is_network_admin() )
 			return TRUE;

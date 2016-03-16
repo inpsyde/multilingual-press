@@ -57,7 +57,7 @@ class Mlp_Network_Site_Settings {
 
 		$this->set_pagenow();
 
-		if ( ! empty( $pagenow ) && in_array( $pagenow, $this->targets ) ) {
+		if ( ! empty( $pagenow ) && in_array( $pagenow, $this->targets, true ) ) {
 			add_action( 'network_admin_notices', array( $this, 'start_buffer' ) );
 		}
 	}

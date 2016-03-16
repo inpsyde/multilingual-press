@@ -120,21 +120,24 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	 *
 	 * Default is bottom right.
 	 *
-	 * @param  array $positions
+	 * @param string[] $positions
+	 *
 	 * @return string
 	 */
-	private function get_current_position( Array $positions ) {
+	private function get_current_position( array $positions ) {
+
+		$positions = array_keys( $positions );
 
 		$options = get_site_option( 'inpsyde_multilingual_quicklink_options' );
 
-		if ( ! empty ( $options[ 'mlp_quicklink_position' ] )
-			and in_array( $options[ 'mlp_quicklink_position' ], array_keys( $positions ) )
-		)
-			return $options[ 'mlp_quicklink_position' ];
+		if (
+			! empty( $options['mlp_quicklink_position'] )
+			&& in_array( $options['mlp_quicklink_position'], $positions, true )
+		) {
+			return $options['mlp_quicklink_position'];
+		}
 
-		end( $positions );
-
-		return key( $positions );
+		return array_pop( $positions );
 	}
 
 	/**

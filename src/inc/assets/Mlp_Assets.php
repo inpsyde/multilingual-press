@@ -88,7 +88,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	public function register() {
 
 		foreach ( $this->assets as $handle => $properties ) {
-			if ( ! in_array( $properties[ 'ext' ], array( 'js', 'css' ) ) ) {
+			if ( ! in_array( $properties['ext'], array( 'js', 'css' ), true ) ) {
 				continue;
 			}
 

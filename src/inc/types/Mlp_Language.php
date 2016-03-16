@@ -79,8 +79,8 @@ class Mlp_Language implements Mlp_Language_Interface {
 			return $this->names[ $name . '_name' ];
 		}
 
-		if ( in_array( $name, array( 'language_short', 'lang' ) ) ) {
-			return strtok( $this->names[ 'http_name' ], '-' );
+		if ( in_array( $name, array( 'language_short', 'lang' ), true ) ) {
+			return strtok( $this->names['http_name'], '-' );
 		}
 
 		if ( $name === 'language_long' ) {

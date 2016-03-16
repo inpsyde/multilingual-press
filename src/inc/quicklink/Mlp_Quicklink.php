@@ -156,8 +156,9 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	public function extend_allowed_hosts( Array $home_hosts, $remote_host ) {
 
 		// network with sub directories
-		if ( in_array( $remote_host, $home_hosts ) )
+		if ( in_array( $remote_host, $home_hosts, true ) ) {
 			return $home_hosts;
+		}
 
 		/** @var wpdb $wpdb */
 		global $wpdb;
