@@ -9,9 +9,10 @@ add_action( 'inpsyde_mlp_loaded', 'mlp_feature_quicklink' );
  */
 function mlp_feature_quicklink( Inpsyde_Property_List_Interface $data ) {
 
-	new Mlp_Quicklink(
+	$controller = new Mlp_Quicklink(
 		$data->get( 'module_manager' ),
 		$data->get( 'language_api' ),
 		$data->get( 'assets' )
 	);
+	$controller->initialize();
 }
