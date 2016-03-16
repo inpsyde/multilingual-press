@@ -15,7 +15,7 @@ Please note:
 
 This pull request fixes issue #.
 
-#### What's Included in this Pull Request
+#### What's Included in This Pull Request
 * 
 * 
 * 
