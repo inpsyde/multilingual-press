@@ -43,8 +43,8 @@ class Mlp_Redirect_Site_Settings_Form {
 		$name    = $this->data->get_checkbox_name();
 		$id      = "{$name}_id";
 		?>
-		<tr>
-			<td><?php esc_html_e( 'Redirection', 'multilingual-press' ); ?></td>
+		<tr class="form-field">
+			<th scope="row"><?php esc_html_e( 'Redirection', 'multilingual-press' ); ?></th>
 			<td>
 				<label for="<?php print $id; ?>">
 					<input type="checkbox" <?php

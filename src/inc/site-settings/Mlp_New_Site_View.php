@@ -47,16 +47,16 @@ class Mlp_New_Site_View {
 		$languages = $db->get_items( array( 'page' => - 1 ) );
 		?>
 		<script type="text/html" id="mlp-add-new-site-template">
-			<h3>
+			<h2>
 				<?php esc_html_e( 'MultilingualPress', 'multilingual-press' ); ?>
-			</h3>
+			</h2>
 			<table class="form-table">
 				<tr class="form-field">
-					<td>
+					<th scope="row">
 						<label for="mlp-site-language">
 							<?php esc_html_e( 'Language', 'multilingual-press' ); ?>
 						</label>
-					</td>
+					</th>
 					<td>
 						<select name="inpsyde_multilingual_lang" id="mlp-site-language" autocomplete="off">
 							<option value="-1">
@@ -69,11 +69,11 @@ class Mlp_New_Site_View {
 					</td>
 				</tr>
 				<tr class="form-field">
-					<td>
+					<th scope="row">
 						<label for="inpsyde_multilingual_text">
 							<?php esc_html_e( 'Alternative language title', 'multilingual-press' ); ?>
 						</label>
-					</td>
+					</th>
 					<td>
 						<input type="text" name="inpsyde_multilingual_text" class="regular-text"
 							id="inpsyde_multilingual_text">
@@ -88,11 +88,11 @@ class Mlp_New_Site_View {
 					</td>
 				</tr>
 				<tr class="form-field">
-					<td>
+					<th scope="row">
 						<label for="inpsyde_multilingual_text">
 							<?php esc_html_e( 'Relationships', 'multilingual-press' ); ?>
 						</label>
-					</td>
+					</th>
 					<td>
 						<?php $this->render_relationships(); ?>
 						<p class="description">

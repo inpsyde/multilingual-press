@@ -73,7 +73,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 			print '<table class="form-table mlp-admin-settings-table">';
 			$this->show_language_options( $siteoption, $languages );
-			$this->show_blog_relationships( $siteoption, $languages );
+			$this->show_blog_relationships( $siteoption );
 
 			/**
 			 * Runs at the end of but still inside the site settings table.
@@ -118,14 +118,14 @@ class Mlp_Network_Site_Settings_Tab_Content {
 		// Sanitize lang title
 		$lang_title = isset( $site_option[ $this->blog_id ][ 'text' ] ) ? stripslashes( $site_option[ $this->blog_id ][ 'text' ] ) : '';
 		?>
-		<tr>
-			<td style="width:10em;">
+		<tr class="form-field">
+			<th scope="row">
 				<label for="inpsyde_multilingual_lang">
 				<?php
 				esc_html_e( 'Language', 'multilingual-press' );
 				?>
 				</label>
-			</td>
+			</th>
 			<td>
 				<select name="inpsyde_multilingual_lang" id="inpsyde_multilingual_lang" autocomplete="off">
 					<option value="-1"><?php esc_html_e( 'choose language', 'multilingual-press' ); ?></option>
@@ -146,28 +146,29 @@ class Mlp_Network_Site_Settings_Tab_Content {
 				</select>
 			</td>
 		</tr>
-		<tr>
-			<td>
+		<tr class="form-field">
+			<th scope="row">
 				<label for="inpsyde_multilingual_text">
 					<?php
 					esc_html_e( 'Alternative language title', 'multilingual-press' );
 					?>
 				</label>
-			</td>
+			</th>
 			<td>
 				<input class="regular-text" type="text" id="inpsyde_multilingual_text" name="inpsyde_multilingual_text" value="<?php echo $lang_title; ?>" />
-				<br />
-				<span class="description"><?php esc_html_e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")', 'multilingual-press' ); ?></span>
+				<p class="description">
+					<?php esc_html_e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")', 'multilingual-press' ); ?>
+				</p>
 			</td>
 		</tr>
-		<tr>
-			<td>
+		<tr class="form-field">
+			<th scope="row">
 				<label for="inpsyde_multilingual_flag_url">
 				<?php
 				esc_html_e( 'Flag image URL', 'multilingual-press' );
 				?>
 				</label>
-			</td>
+			</th>
 			<td>
 				<input
 					class="regular-text"
@@ -216,8 +217,8 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			return;
 
 		?>
-		<tr>
-			<td><?php esc_html_e( 'Relationships', 'multilingual-press' ); ?></td>
+		<tr class="form-field">
+			<th scope="row"><?php esc_html_e( 'Relationships', 'multilingual-press' ); ?></th>
 			<td>
 		<?php
 		foreach ( $site_option as $blog_id => $meta ) {
@@ -229,7 +230,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			restore_current_blog();
 
 			// Get current settings
-			$related_blogs = $this->relations->get_related_sites( $this->blog_id, FALSE );
+			$related_blogs = $this->relations->get_related_sites( $this->blog_id );
 			$checked       = checked( TRUE, in_array( $blog_id, $related_blogs ), FALSE );
 			$id            = "related_blog_$blog_id";
 			?>

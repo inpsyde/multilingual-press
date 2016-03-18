@@ -422,13 +422,13 @@ class Mlp_Duplicate_Blogs {
 
 		?>
 		<tr class="form-field">
-			<td>
+			<th scope="row">
 				<label for="mlp-base-site-id">
 					<?php
 					esc_html_e( 'Based on site', 'multilingual-press' );
 					?>
 				</label>
-			</td>
+			</th>
 			<td>
 				<select id="mlp-base-site-id" name="blog[basedon]" autocomplete="off">
 					<?php echo $options; ?>
@@ -437,9 +437,9 @@ class Mlp_Duplicate_Blogs {
 		</tr>
 
 		<tr class="form-field hide-if-js">
-			<td>
+			<th scope="row">
 				<?php esc_html_e( 'Plugins', 'multilingual-press' ); ?>
-			</td>
+			</th>
 			<td>
 				<label for="mlp-activate-plugins">
 					<input type="checkbox" value="1" id="mlp-activate-plugins" name="blog[activate_plugins]"
@@ -461,9 +461,9 @@ class Mlp_Duplicate_Blogs {
 
 		?>
 		<tr class="form-field">
-			<td>
+			<th scope="row">
 				<?php esc_html_e( 'Search Engine Visibility', 'multilingual-press' ); ?>
-			</td>
+			</th>
 			<td>
 				<label for="inpsyde_multilingual_visibility">
 					<input type="checkbox" value="0" id="inpsyde_multilingual_visibility" name="blog[visibility]"

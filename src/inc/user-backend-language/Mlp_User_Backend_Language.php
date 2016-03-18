@@ -108,7 +108,7 @@ class Mlp_User_Backend_Language {
 		$user_language = $this->get_user_language( $user->ID );
 		?>
 		<tr>
-			<th>
+			<th scope="row">
 				<label for="<?php echo $this->key; ?>">
 					<?php esc_html_e( 'Your preferred backend language', 'multilingual-press' ); ?>
 				</label>
