@@ -286,7 +286,7 @@
 
 			this.$languages.prop( 'checked', false );
 
-			this.$spinner.addClass( 'is-active' );
+			this.$spinner.removeClass( 'is-active' );
 
 			this.$submit.prop( 'disabled', false );
 		}
