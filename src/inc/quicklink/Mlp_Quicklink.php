@@ -149,7 +149,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 
 		// Force GET request.
 		wp_redirect( $url, 303 );
-		exit();
+		mlp_exit();
 	}
 
 	/**

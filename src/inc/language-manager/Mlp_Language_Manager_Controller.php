@@ -212,7 +212,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		$url = add_query_arg( 'msg', 'resettable', $_REQUEST[ '_wp_http_referer' ] );
 		wp_safe_redirect( $url );
-		exit;
+		mlp_exit();
 	}
 
 	/**

@@ -1,6 +1,20 @@
 <?php # -*- coding: utf-8 -*-
 
 /**
+ * Wrapper for the exit language construct.
+ *
+ * Introduced to allow for easy unit testing.
+ *
+ * @param int|string $status Exit status.
+ *
+ * @return void
+ */
+function mlp_exit( $status = '' ) {
+
+	exit( $status );
+}
+
+/**
  * Wrapper for Mlp_Helpers:is_redirect, which returns
  * a blog's redirect setting
  *

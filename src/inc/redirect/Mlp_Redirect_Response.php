@@ -61,19 +61,9 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 		$this->save_session( $redirect_match['language'] );
 
 		wp_redirect( $url );
-		$this->call_exit();
+		mlp_exit();
 
 		return true;
-	}
-
-	/**
-	 * Wrapper for exit(). Allows to easily test this class.
-	 *
-	 * @return void
-	 */
-	public function call_exit() {
-
-		exit();
 	}
 
 	/**
