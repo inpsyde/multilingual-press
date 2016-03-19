@@ -19,21 +19,3 @@ function mlp_feature_relationship_control( Inpsyde_Property_List_Interface $data
 	add_action( 'mlp_before_post_synchronization', array ( $switcher, 'strip' ) );
 	add_action( 'mlp_after_post_synchronization',  array ( $switcher, 'fill' ) );
 }
-
-/**
- * RC-Klassen
- *
- * Post
- * - Control
- * - Data
- * - Search
- * - Changer
- * - View
- *
- * Term
- * - UI\Controller
- * - UI\Presenter
- * - UI\View
- * - Controller
- * - RelationshipControl
- */
