@@ -34,7 +34,7 @@ module.exports = function( grunt ) {
 
 		concat: {
 			options: {
-				separator: '\n'
+				separator: ''
 			},
 			admin: {
 				src: [
@@ -104,9 +104,6 @@ module.exports = function( grunt ) {
 			},
 			src: {
 				src: [ '<%= config.scripts.src %>**/*.js' ]
-			},
-			dest: {
-				src: [ '<%= config.scripts.dest %>*.js' ]
 			}
 		},
 
@@ -390,8 +387,7 @@ module.exports = function( grunt ) {
 		'changed:lineending:scripts',
 		'changed:uglify',
 		'changed:jsvalidate:dest',
-		'changed:jshint:dest',
-		'changed:jscs:dest'
+		'changed:jshint:dest'
 	] );
 
 	grunt.registerTask( 'force-scripts', configObject.watch.scripts.tasks );
