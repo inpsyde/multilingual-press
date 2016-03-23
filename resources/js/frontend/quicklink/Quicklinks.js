@@ -1,50 +1,64 @@
-(function( $, MultilingualPress ) {
+var MultilingualPress = window.MultilingualPress || {};
+
+var Quicklinks = (function( $, MultilingualPress ) {
 	'use strict';
 
 	/**
-	 * @class Quicklinks
-	 * @classdesc MultilingualPress Quicklinks module.
+	 * @classdesc The MultilingualPress Quicklinks module.
+	 * @class
+	 * @alias Quicklinks
+	 * @param {string} [selector] - The form element selector.
 	 */
-	var Quicklinks = function() {
+	function Module( selector ) {
 		/**
-		 * Redirects the user to the given URL.
-		 * @param {string} url - The URL.
+		 * The form element selector.
+		 * @type {string}
 		 */
-		var setLocation = function( url ) {
-			window.location.href = url;
-		};
+		this.selector = selector || '';
+	}
 
-		/**
-		 * Triggers a redirect on form submission.
-		 * @param {Event} event - The submit event of the form.
-		 */
-		var submitForm = function( event ) {
-			var $select = $( event.target ).find( 'select' );
-			if ( $select.length ) {
-				event.preventDefault();
+	/**
+	 * Attaches the given handler to the form submit event.
+	 * @param {string} selector - The form element selector.
+	 * @param {function} handler - The event handler.
+	 */
+	function attachSubmitHandler( selector, handler ) {
+		var $form = $( selector );
+		if ( ! $form.length ) {
+			return;
+		}
 
-				setLocation( $select.val() );
-			}
-		};
+		$form.on( 'submit', handler );
+	}
 
-		return /** @lends Quicklinks# */ {
-			/**
-			 * Initializes the module.
-			 */
-			initialize: function() {
-				var $form = $( '#mlp-quicklink-form' );
-				if ( $form.length ) {
-					$form.on( 'submit', submitForm );
-				}
-			}
-		};
+	/**
+	 * Initializes the module (as soon as jQuery is ready).
+	 */
+	Module.prototype.initialize = function initialize() {
+		$( attachSubmitHandler.call( this, this.selector, this.submitForm ) );
 	};
 
 	/**
-	 * The MultilingualPress Quicklinks instance.
-	 * @type {Quicklinks}
+	 * Triggers a redirect on form submission.
+	 * @param {Event} event - The submit event of the form.
 	 */
-	MultilingualPress.Modules.Quicklinks = new Quicklinks();
+	Module.prototype.submitForm = function submitForm( event ) {
+		var $select = $( event.target ).find( 'select' );
+		if ( ! $select.length ) {
+			return;
+		}
 
-	$( MultilingualPress.Modules.Quicklinks.initialize );
-})( jQuery, window.MultilingualPress );
+		event.preventDefault();
+
+		MultilingualPress.setLocation( $select.val() );
+	};
+
+	return Module;
+})( jQuery, MultilingualPress );
+
+/**
+ * The MultilingualPress Quicklinks instance.
+ * @type {Quicklinks}
+ */
+MultilingualPress.quicklinks = new Quicklinks( '#mlp-quicklink-form' );
+MultilingualPress.quicklinks.initialize();

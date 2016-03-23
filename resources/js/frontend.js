@@ -1,23 +1,15 @@
-(function() {
+/**
+ * The MultilingualPress front end namespace object.
+ * @namespace
+ */
+var MultilingualPress = {};
+
+/**
+ * Redirects the user to the given URL.
+ * @param {string} url - The URL.
+ */
+MultilingualPress.setLocation = function( url ) {
 	'use strict';
 
-	/**
-	 * @class MultilingualPress
-	 * @classdesc MultilingualPress front-end controller.
-	 */
-	var MultilingualPress = function() {
-		return /** @lends MultilingualPress# */ {
-			/**
-			 * MultilingualPress module instances.
-			 * @type {Object[]}
-			 */
-			Modules: []
-		};
-	};
-
-	/**
-	 * The MultilingualPress front-end instance.
-	 * @type {MultilingualPress}
-	 */
-	window.MultilingualPress = new MultilingualPress();
-})();
+	window.location.href = url;
+};
