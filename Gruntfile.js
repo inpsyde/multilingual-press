@@ -205,7 +205,13 @@ module.exports = function( grunt ) {
 				style: 'expanded',
 				noCache: true
 			},
-			styles: {
+			check: {
+				options: {
+					check: true
+				},
+				src: '<%= config.styles.src %>/*.scss'
+			},
+			convert: {
 				expand: true,
 				cwd: '<%= config.styles.src %>',
 				src: [ '*.scss' ],
@@ -299,7 +305,7 @@ module.exports = function( grunt ) {
 			styles: {
 				files: [ '<%= config.styles.src %>**/*.scss' ],
 				tasks: [
-					'sass',
+					'sass:convert',
 					'changed:postcss',
 					'changed:lineending:styles',
 					'changed:cssmin'
@@ -400,14 +406,23 @@ module.exports = function( grunt ) {
 		'configs',
 		'grunt',
 		'json',
-		'php',
-		'styles',
-		'travis'
+		'php'
+	] );
+
+	grunt.registerTask( 'ci', [
+		'common',
+		'sass:check',
+		'jsvalidate:src',
+		'jshint:src',
+		'jscs:src',
+		'jsvalidate:dest',
+		'jshint:dest'
 	] );
 
 	grunt.registerTask( 'develop', [
 		'common',
-		'force-scripts'
+		'force-scripts',
+		'styles'
 	] );
 
 	grunt.registerTask( 'pre-commit', [
@@ -416,7 +431,9 @@ module.exports = function( grunt ) {
 		'common',
 		'assets',
 		'images',
-		'scripts'
+		'scripts',
+		'styles',
+		'travis'
 	] );
 
 	grunt.registerTask( 'default', 'develop' );

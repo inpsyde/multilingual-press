@@ -1,5 +1,9 @@
 language: php
 
+cache:
+  directories:
+    - node_modules
+
 php:
   - 5.3
   - 5.4
@@ -18,32 +22,18 @@ matrix:
     - php: nightly
 
 before_install:
+  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]]; then phpenv config-rm xdebug.ini; fi
   - travis_retry composer self-update
+  - travis_retry composer dump-autoload --no-dev
 
 install:
-  - travis_retry composer dump-autoload --no-dev
-  - npm install -g jscs
-  - npm install -g jshint
-  - npm install -g jsonlint
-  - npm install -g jsvalidate
-  - npm install -g sass
-
-before_script:
-  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]]; then phpenv config-rm xdebug.ini; fi
+  - gem install sass
+  - npm install -g npm
+  - npm install -g grunt-cli
+  - npm install
 
 script:
-  - find . \( -name '.*rc' \) -maxdepth 1 -exec jsonlint {} \;
-  - jscs Gruntfile.js
-  - jshint Gruntfile.js
-  - jsvalidate Gruntfile.js
-  - find . \( -name '*.json' \) -maxdepth 1 -exec jsonlint {} \;
-  - find src \( -name '*.php' \) -exec php -l {} \;
-  - phpunit
-  - find resources/scss \( -name '*.scss' \) -maxdepth 1 -exec sass --check {} \;
-  - jsvalidate resources/js
-  - jshint resources/js
-  - jscs resources/js
-  - jsvalidate src/js
+  - grunt ci
 
 notifications:
   slack:
