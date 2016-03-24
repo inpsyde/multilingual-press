@@ -13,6 +13,7 @@ MultilingualPress.setLocation = function( url ) {
 
 	window.location.href = url;
 };
+
 var MultilingualPress = window.MultilingualPress || {};
 
 var Quicklinks = (function( $, MultilingualPress ) {

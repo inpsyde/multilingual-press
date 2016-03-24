@@ -119,6 +119,7 @@
 
 	$( window.MultilingualPress.initialize );
 })( jQuery );
+
 (function( $, MultilingualPress ) {
 	'use strict';
 
@@ -176,6 +177,7 @@
 		}
 	} );
 })( jQuery, window.MultilingualPress );
+
 /* global ajaxurl */
 (function( $, MultilingualPress ) {
 	'use strict';
@@ -298,6 +300,7 @@
 		}
 	} );
 })( jQuery, window.MultilingualPress );
+
 (function( $, MultilingualPress ) {
 	'use strict';
 
@@ -377,6 +380,7 @@
 		}
 	} );
 })( jQuery, window.MultilingualPress );
+
 /* global ajaxurl */
 (function( $, MultilingualPress ) {
 	'use strict';
@@ -574,6 +578,7 @@
 		}
 	} );
 })( jQuery, window.MultilingualPress );
+
 /* global ajaxurl */
 (function( $, MultilingualPress ) {
 	'use strict';
@@ -773,6 +778,7 @@
 		}
 	} );
 })( jQuery, window.MultilingualPress );
+
 /* global ajaxurl */
 (function( $, MultilingualPress ) {
 	'use strict';
@@ -907,6 +913,7 @@
 		}
 	} );
 })( jQuery, window.MultilingualPress );
+
 (function( $, MultilingualPress ) {
 	'use strict';
 
@@ -988,6 +995,7 @@
 		}
 	} );
 })( jQuery, window.MultilingualPress );
+
 (function( MultilingualPress ) {
 	'use strict';
 

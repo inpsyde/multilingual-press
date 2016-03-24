@@ -29,12 +29,9 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// Will soon be used for QUnit.
-		clean: {},
-
 		concat: {
 			options: {
-				separator: ''
+				separator: '\n'
 			},
 			admin: {
 				src: [
