@@ -120,6 +120,10 @@ class Mlp_Self_Check {
 			return;
 		}
 
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			return;
+		}
+
 		global $pagenow;
 		if ( ! in_array( $pagenow, array( 'index.php', 'plugins.php' ), true ) ) {
 			return;
