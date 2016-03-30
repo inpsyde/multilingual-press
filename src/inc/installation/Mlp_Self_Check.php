@@ -134,12 +134,6 @@ class Mlp_Self_Check {
 		$callback = array( $this, 'render_php_version_admin_notice' );
 		add_action( 'admin_notices', $callback );
 		add_action( 'network_admin_notices', $callback );
-
-		if ( 'plugins.php' === $pagenow ) {
-			$file = defined( 'MLP_PLUGIN_FILE' ) ? MLP_PLUGIN_FILE : $this->plugin_file;
-			$file = plugin_basename( $file );
-			add_action( "in_plugin_update_message-$file", array( $this, 'render_php_version_update_message' ) );
-		}
 	}
 
 	/**
@@ -153,15 +147,22 @@ class Mlp_Self_Check {
 
 		$file = defined( 'MLP_PLUGIN_FILE' ) ? MLP_PLUGIN_FILE : $this->plugin_file;
 		$file = plugin_basename( $file );
-		if ( isset( $plugins->response[ $file ] ) ) {
-			remove_action( 'network_admin_notices', array( $this, 'render_php_version_admin_notice' ) );
-
-			add_action( 'network_admin_notices', array( $this, 'render_mlp_3_admin_notice' ) );
-
-			add_action( "after_plugin_row_$file", array( $this, 'render_mlp_3_update_message' ) );
-
-			unset( $plugins->response[ $file ] );
+		if ( empty( $plugins->response[ $file ]->new_version ) ) {
+			return $plugins;
 		}
+
+		$new_version = Mlp_Semantic_Version_Number_Factory::create( $plugins->response[ $file ]->new_version );
+		if ( version_compare( $new_version, '3.0.0-alpha', '<' ) ) {
+			return $plugins;
+		}
+
+		remove_action( 'network_admin_notices', array( $this, 'render_php_version_admin_notice' ) );
+
+		add_action( 'network_admin_notices', array( $this, 'render_mlp_3_admin_notice' ) );
+
+		add_action( "after_plugin_row_$file", array( $this, 'render_mlp_3_update_message' ) );
+
+		unset( $plugins->response[ $file ] );
 
 		return $plugins;
 	}
