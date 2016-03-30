@@ -124,6 +124,8 @@ class Mlp_Self_Check {
 			return;
 		}
 
+		add_filter( 'site_transient_update_plugins', array( $this, 'remove_mlp_from_update_plugins_transient' ) );
+
 		global $pagenow;
 		if ( ! in_array( $pagenow, array( 'index.php', 'plugins.php' ), true ) ) {
 			return;
@@ -132,6 +134,36 @@ class Mlp_Self_Check {
 		$callback = array( $this, 'render_php_version_admin_notice' );
 		add_action( 'admin_notices', $callback );
 		add_action( 'network_admin_notices', $callback );
+
+		if ( 'plugins.php' === $pagenow ) {
+			$file = defined( 'MLP_PLUGIN_FILE' ) ? MLP_PLUGIN_FILE : $this->plugin_file;
+			$file = plugin_basename( $file );
+			add_action( "in_plugin_update_message-$file", array( $this, 'render_php_version_update_message' ) );
+		}
+	}
+
+	/**
+	 * Removes MultilingualPress from updatable plugins.
+	 *
+	 * @param stdClass $plugins Plugins data.
+	 *
+	 * @return stdClass
+	 */
+	public function remove_mlp_from_update_plugins_transient( stdClass $plugins ) {
+
+		$file = defined( 'MLP_PLUGIN_FILE' ) ? MLP_PLUGIN_FILE : $this->plugin_file;
+		$file = plugin_basename( $file );
+		if ( isset( $plugins->response[ $file ] ) ) {
+			remove_action( 'network_admin_notices', array( $this, 'render_php_version_admin_notice' ) );
+
+			add_action( 'network_admin_notices', array( $this, 'render_mlp_3_admin_notice' ) );
+
+			add_action( "after_plugin_row_$file", array( $this, 'render_mlp_3_update_message' ) );
+
+			unset( $plugins->response[ $file ] );
+		}
+
+		return $plugins;
 	}
 
 	/**
@@ -147,10 +179,11 @@ class Mlp_Self_Check {
 		?>
 		<div class="notice notice-warning">
 			<p>
+				<strong><?php _e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
 				<?php
 				/* translators: %s: current PHP version */
 				$message = __(
-					'<strong>MultilingualPress Information</strong><br>With the upcoming major release, MultilingualPress will be requiring <strong>PHP version 5.4.0</strong> or higher. Currently, you are running <strong>PHP version %s</strong>. Please contact your hoster and update PHP to version 5.4.0 or higher.',
+					'With the upcoming major release, MultilingualPress will be requiring <strong>PHP version 5.4.0</strong> or higher. Currently, you are running <strong>PHP version %s</strong>. Please contact your hoster and update PHP to version 5.4.0 or higher.',
 					'multilingual-press'
 				);
 				printf( $message, PHP_VERSION );
@@ -158,6 +191,72 @@ class Mlp_Self_Check {
 			</p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Displays an admin notice informing about the new version of MultilingualPress, and that it cannot be installed
+	 * due to unmet requirements.
+	 *
+	 * @wp-hook network_admin_notices
+	 *
+	 * @return void
+	 */
+	public function render_mlp_3_admin_notice() {
+
+		?>
+		<div class="notice notice-warning">
+			<p>
+				<strong><?php _e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
+				<?php $this->render_mlp_3_message(); ?>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Displays a notice informing about the new version of MultilingualPress, and that it cannot be installed due to
+	 * unmet requirements.
+	 *
+	 * @wp-hook in_plugin_update_message-{$file}
+	 *
+	 * @param string $file Main plugin file.
+	 *
+	 * @return void
+	 */
+	public function render_mlp_3_update_message( $file ) {
+
+		$active_class = is_plugin_active_for_network( $file ) ? ' active' : '';
+
+		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
+		$colspan = (int) $wp_list_table->get_column_count();
+		?>
+		<tr id="multilingualpress-update" class="plugin-update-tr<?php echo $active_class; ?>"
+			data-plugin="<?php echo esc_attr( $file ); ?>" data-slug="multilingualpress">
+			<td colspan="<?php echo $colspan; ?>" class="plugin-update colspanchange">
+				<div class="update-message">
+					<?php $this->render_mlp_3_message(); ?>
+				</div>
+			</td>
+		</tr>
+		<?php
+	}
+
+	/**
+	 * Displays a notice informing about the new version of MultilingualPress, and that it cannot be installed due to
+	 * unmet requirements.
+	 *
+	 * @see render_mlp_3_update_message
+	 *
+	 * @return void
+	 */
+	private function render_mlp_3_message() {
+
+		/* translators: %s: current PHP version */
+		$message = __(
+			'There is a new version of MultilingualPress available. This version, however, requires <strong>PHP version 5.4.0</strong> or higher. Currently, you are running <strong>PHP version %s</strong>. Please contact your hoster and update PHP to version 5.4.0 or higher.',
+			'multilingual-press'
+		);
+		printf( $message, PHP_VERSION );
 	}
 
 	/**
