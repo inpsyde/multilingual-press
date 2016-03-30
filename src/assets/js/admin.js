@@ -46,6 +46,24 @@
 			} );
 		};
 
+		/**
+		 * Starts Backbone's history, unless it has been started already.
+		 * @returns {boolean}
+		 */
+		var maybeStartHistory = function() {
+			if ( Backbone.History.started ) {
+				return false;
+			}
+
+			Backbone.history.start( {
+				root: mlpSettings.urlRoot,
+				pushState: true,
+				hashChange: false
+			} );
+
+			return true;
+		};
+
 		return /** @lends MultilingualPressAdmin# */ {
 			/**
 			 * Events module.
@@ -101,12 +119,7 @@
 			 */
 			initialize: function() {
 				setUpRoutes();
-
-				Backbone.history.start( {
-					root: mlpSettings.urlRoot,
-					pushState: true,
-					hashChange: false
-				} );
+				maybeStartHistory();
 			}
 		};
 	};
@@ -117,7 +130,9 @@
 	 */
 	window.MultilingualPress = new MultilingualPressAdmin();
 
-	$( window.MultilingualPress.initialize );
+	$( document ).ready( function() {
+		setTimeout( window.MultilingualPress.initialize, 1000 );
+	} );
 })( jQuery );
 
 (function( $, MultilingualPress ) {
