@@ -243,76 +243,79 @@ class Mlp_Duplicate_Blogs {
 
 
 	/**
-	 * Copy post relationships from source blog to target blog.
+	 * Copies post relationships from source site to target site.
 	 *
-	 * @param int $source_blog_id
-	 * @param int $target_blog_id
-	 * @return int|FALSE Number of rows affected or FALSE on error
+	 * @param int $source_site_id Source site ID.
+	 * @param int $target_site_id Target site ID.
+	 *
+	 * @return int
 	 */
-	private function copy_post_relationships( $source_blog_id, $target_blog_id ) {
+	private function copy_post_relationships( $source_site_id, $target_site_id ) {
 
-		$query = "INSERT INTO `{$this->link_table}`
-		(
-			`ml_source_blogid`,
-			`ml_source_elementid`,
-			`ml_blogid`,
-			`ml_elementid`,
-			`ml_type`
-		)
-		SELECT
-			`ml_source_blogid`,
-			`ml_source_elementid`,
-			$target_blog_id,
-			`ml_elementid`,
-			`ml_type`
-		FROM `{$this->link_table}`
-		WHERE  `ml_blogid` = $source_blog_id";
+		$query = "
+INSERT INTO {$this->link_table} (
+	ml_source_blogid,
+	ml_source_elementid,
+	ml_blogid,
+	ml_elementid,
+	ml_type
+)
+SELECT ml_source_blogid, ml_source_elementid, %d, ml_elementid, ml_type
+FROM {$this->link_table}
+WHERE ml_blogid = %d";
+		$query = $this->wpdb->prepare( $query, $target_site_id, $source_site_id );
 
-		return $this->wpdb->query( $query );
+		return (int) $this->wpdb->query( $query );
 	}
 
 	/**
-	 * Create post relationships between all posts from source blog and target blog.
+	 * Creates post relationships between all posts from source site and target site.
 	 *
-	 * @param int $source_blog_id
-	 * @param int $target_blog_id
-	 * @return int|FALSE Number of rows affected or FALSE on error
+	 * @param int $source_site_id Source site ID.
+	 * @param int $target_site_id Target site ID.
+	 *
+	 * @return int
 	 */
-	private function create_post_relationships( $source_blog_id, $target_blog_id ) {
+	private function create_post_relationships( $source_site_id, $target_site_id ) {
 
-		$blogs  = array ( $source_blog_id, $target_blog_id );
-		$result = FALSE;
+		$result = 0;
 
-		foreach( $blogs as $blog ) {
-			$result = $this->wpdb->query(
-				"INSERT INTO {$this->link_table}
-				(
-					`ml_source_blogid`,
-					`ml_source_elementid`,
-					`ml_blogid`,
-					`ml_elementid`,
-					`ml_type`
-				)
-				SELECT $source_blog_id, `ID`, $blog, ID, 'post'
-					FROM {$this->wpdb->posts}
-					WHERE `post_status` IN('publish', 'future', 'draft', 'pending', 'private')"
-			);
+		$query = "
+INSERT INTO {$this->link_table} (
+	ml_source_blogid,
+	ml_source_elementid,
+	ml_blogid,
+	ml_elementid,
+	ml_type
+)
+SELECT %d, ID, %d, ID, 'post'
+FROM {$this->wpdb->posts}
+WHERE post_status IN ( 'publish', 'future', 'draft', 'pending', 'private' )";
+
+		foreach( array( $source_site_id, $target_site_id ) as $site_id ) {
+			$result += (int) $this->wpdb->query( $this->wpdb->prepare( $query, $source_site_id, $site_id ) );
 		}
 
 		return $result;
 	}
 
 	/**
-	 * Check if there are any registered relations for the source blog.
+	 * Checks if there are any registered relations for the source site.
 	 *
-	 * @param  int $source_blog_id
-	 * @return boolean
+	 * @param int $source_site_id Source site ID.
+	 *
+	 * @return bool
 	 */
-	private function has_related_blogs( $source_blog_id ) {
+	private function has_related_blogs( $source_site_id ) {
 
-		$sql = "SELECT `ml_id` FROM {$this->link_table} WHERE `ml_blogid` = $source_blog_id LIMIT 2";
+		$query = "
+SELECT ml_id
+FROM {$this->link_table}
+WHERE ml_blogid = %d
+LIMIT 2";
+		$query = $this->wpdb->prepare( $query, $source_site_id );
 
-		return 2 == $this->wpdb->query( $sql );
+		return 2 === (int) $this->wpdb->query( $query );
 	}
 
 	/**
