@@ -43,7 +43,8 @@ module.exports = function( grunt ) {
 			frontend: {
 				src: [
 					'<%= config.scripts.src %>frontend.js',
-					'<%= config.scripts.src %>frontend/**/*.js'
+					'<%= config.scripts.src %>frontend/*/*.js',
+					'<%= config.scripts.src %>frontend/index.js'
 				],
 				dest: '<%= config.scripts.dest %>frontend.js'
 			}

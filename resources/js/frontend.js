@@ -13,3 +13,7 @@ MultilingualPress.setLocation = function( url ) {
 
 	window.location.href = url;
 };
+
+window.$ = window.jQuery;
+
+window.module = window.module || {};

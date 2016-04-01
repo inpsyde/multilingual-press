@@ -1,23 +1,3 @@
-/**
- * The MultilingualPress front end namespace object.
- * @namespace
- */
-var MultilingualPress = {};
-
-/**
- * Redirects the user to the given URL.
- * @param {string} url - The URL.
- */
-MultilingualPress.setLocation = function( url ) {
-	'use strict';
-
-	window.location.href = url;
-};
-
-window.$ = window.jQuery;
-
-window.module = window.module || {};
-
 var Quicklinks = (function() {
 	'use strict';
 
@@ -80,13 +60,3 @@ var Quicklinks = (function() {
 })();
 
 module.exports = Quicklinks;
-
-/* global Quicklinks */
-var mlp = window.MultilingualPress;
-
-/**
- * The MultilingualPress Quicklinks instance.
- * @type {Quicklinks}
- */
-mlp.quicklinks = new Quicklinks( '#mlp-quicklink-form' );
-mlp.quicklinks.initialize();
