@@ -207,17 +207,39 @@ class Mlp_Term_Translation {
 	 */
 	private function get_term_by_term_taxonomy_id( $term_taxonomy_id ) {
 
-		$sql = "
+		$cache_key = $this->get_term_by_term_taxonomy_id_cache_key( $term_taxonomy_id );
+
+		$term = wp_cache_get( $cache_key, 'mlp' );
+		if ( is_array( $term ) ) {
+			return $term;
+		}
+
+		$query = "
 SELECT t.term_id, t.name, tt.taxonomy
 FROM {$this->wpdb->terms} t, {$this->wpdb->term_taxonomy} tt
 WHERE tt.term_id = t.term_id AND tt.term_taxonomy_id = %d
 LIMIT 1";
+		$query = $this->wpdb->prepare( $query, $term_taxonomy_id );
 
-		$query = $this->wpdb->prepare( $sql, $term_taxonomy_id );
-		$result = $this->wpdb->get_row( $query, ARRAY_A );
+		$term = $this->wpdb->get_row( $query, ARRAY_A );
+		if ( ! $term ) {
+			$term = array();
+		}
 
-		// $result might be NULL, but we need a predictable return type.
-		return empty( $result ) ? array() : $result;
+		wp_cache_set( $cache_key, $term, 'mlp' );
+
+		return $term;
 	}
 
+	/**
+	 * Returns the get_term_by_term_taxonomy_id cache key for the given term taxonomy ID.
+	 *
+	 * @param int $term_taxonomy_id Term taxonomy ID.
+	 *
+	 * @return string
+	 */
+	private function get_term_by_term_taxonomy_id_cache_key( $term_taxonomy_id ) {
+
+		return "term_with_ttid_$term_taxonomy_id";
+	}
 }
