@@ -21,6 +21,9 @@
 [issue #184](https://github.com/inpsyde/multilingual-press/issues/184), props kraftner.
 - Use the full slug when copying post data, see [issue #195](https://github.com/inpsyde/multilingual-press/issues/195),
 props luisarn.
+- Improve (i.e., prepare/escape) several MySQL queries, props vaurdan.
+- Introduce `get_term_by_term_taxonomy_id` cache for term translator, props vaurdan.
+- Replace an uncached, direct MySQL query with a `get_posts()` call, props vaurdan.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
