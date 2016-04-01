@@ -51,6 +51,8 @@
     "grunt-travis-lint": "~0.0.3",
     "jshint-stylish": "~2.1.0",
     "load-grunt-tasks": "~3.3.0",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "sinon": "^1.17.3",
+    "tape": "^4.5.1"
   }
 }
