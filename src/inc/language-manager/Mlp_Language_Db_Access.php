@@ -35,6 +35,25 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	);
 
 	/**
+	 * @var array
+	 */
+	private $compare_operators = array(
+		'=',
+		'<=>',
+		'>',
+		'>=',
+		'<',
+		'<=',
+		'LIKE',
+		'!=',
+		'<>',
+		'NOT LIKE',
+		'NOT REGEXP',
+		'REGEXP',
+		'RLIKE',
+	);
+
+	/**
 	 * @param     $table_name
 	 * @param int $page_size
 	 */
@@ -58,114 +77,120 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	}
 
 	/**
-	 * @param   Array $params
-	 * @param   String $type
-	 * @return  Array $results
+	 * @param array  $params
+	 * @param string $type
+	 *
+	 * @return array
 	 */
 	public function get_items( array $params = array(), $type = OBJECT_K ) {
+
 		global $wpdb;
 
 		$default_params = array(
-			'page'      => 1,
-		    'fields'    => array(),
-			'where'     => array(),
-		    'order_by'  => array(
-			    array(
-				    'field' => 'priority',
-					'order' => 'DESC'
-			    ),
-			    array(
-				    'field' => 'english_name',
-			        'order' => 'ASC'
-			    )
-		    )
+			'page'     => 1,
+			'fields'   => array(),
+			'where'    => array(),
+			'order_by' => array(
+				array(
+					'field' => 'priority',
+					'order' => 'DESC',
+				),
+				array(
+					'field' => 'english_name',
+					'order' => 'ASC',
+				),
+			),
 		);
-		// merge defaults with the given values
 		$params = wp_parse_args( $params, $default_params );
 
-		// the SELECT-part of the statement
 		$select_fields = '';
-		if( !empty( $params[ 'fields' ] ) ){
-			$i = 0;
-			foreach( $params[ 'fields' ] as $field ){
-				if( $i > 0 ){
-					$select_fields .= ', ';
-				}
-				// check for not allowed fields
-				if( !array_key_exists( $field, $this->fields ) ){
-					$i = $i - 1;
+		if ( ! empty( $params['fields'] ) ) {
+			$params['fields'] = esc_sql( $params['fields'] );
+			foreach ( $params['fields'] as $field ) {
+				// Check for not allowed fields.
+				if ( ! isset( $this->fields[ $field ] ) ) {
 					continue;
 				}
-				$select_fields .= $field;
-				$i = $i + 1;
+
+				$select_fields .= ',' . $field;
+			}
+
+			// Remove the leading comma.
+			if ( isset( $select_fields[0] ) ) {
+				$select_fields = substr( $select_fields, 1 );
 			}
 		}
-		// adding SELECT ALL to query if no specific value is given
-		if( $select_fields === '' ){
+		if ( '' === $select_fields ) {
 			$select_fields = '*';
 		}
 
-		$select = ' SELECT ' . $select_fields;
+		$select = "SELECT $select_fields";
 
-		// the "FROM {table}"
-		$from = 'FROM ' . $this->table_name;
+		$from = "FROM {$this->table_name}";
 
-		// the WHERE-Clause
 		$where = '';
-		if( !empty( $params[ 'where' ] ) ){
-			$where .= 'WHERE 1=1 ';
-			foreach( $params[ 'where' ] as $search ){
-				if( !isset( $search[ 'compare' ] ) ){
-					$search[ 'compare' ] = '=';
-				}
-				$field = $search[ 'field' ];
-				// check for not allowed fields
-				if( !array_key_exists( $field, $this->fields ) ){
+		if ( ! empty( $params['where'] ) ) {
+			$where = 'WHERE 1=1 ';
+			foreach ( $params['where'] as $search ) {
+				if ( empty( $search['field'] ) ) {
 					continue;
 				}
+
+				$field = $search['field'];
+
+				// Check for not allowed fields.
+				if ( ! isset( $this->fields[ $field ] ) ) {
+					continue;
+				}
+
+				if ( ! isset( $search['compare'] ) ) {
+					$search['compare'] = '=';
+				} elseif ( ! in_array( $search['compare'], $this->compare_operators, true ) ) {
+					continue;
+				}
+
 				$where .= $wpdb->prepare(
-					' AND ' . $field . ' ' . $search[ 'compare' ] . ' ' . $this->fields[ $field ],
-					$search[ 'search' ]
+					" AND $field {$search['compare']} {$this->fields[ $field ]}",
+					$search['search']
 				);
 			}
 		}
 
-		// the ORDER BY statement
 		$order = '';
-		if( !empty( $params[ 'order_by' ] ) ){
-			$order .= 'ORDER BY ';
-			$i = 0;
-			foreach( $params[ 'order_by' ] as $order_by ){
-				if( $i > 0 ){
-					$order .= ', ';
-				}
-
-				// check for not allowed fields
-				if( !array_key_exists( $order_by[ 'field' ], $this->fields ) ){
-					$i = $i - 1;
+		if ( ! empty( $params['order_by'] ) ) {
+			foreach ( $params['order_by'] as $order_by ) {
+				if ( empty( $order_by['field'] ) ) {
 					continue;
 				}
-				$order .= $order_by[ 'field' ];
-				if( isset( $order_by[ 'order' ] ) ){
-					$order .= ' ' . $order_by[ 'order' ];
+
+				$field = $order_by['field'];
+
+				// Check for not allowed fields.
+				if ( ! isset( $this->fields[ $field ] ) ) {
+					continue;
 				}
-				$i = $i + 1;
+
+				$order .= ',' . $field;
+				if ( ! empty( $order_by['order'] ) ) {
+					$_order_by = strtoupper( $order_by['order'] );
+					if ( in_array( $_order_by, array( 'ASC', 'DESC' ), true ) ) {
+						$order .= ' ' . $_order_by;
+					}
+				}
+			}
+
+			if ( isset( $order[0] ) ) {
+				$order = 'ORDER BY ' . substr( $order, 1 );
 			}
 		}
 
-		// the limit
-		$limit  = $this->get_limit( $params[ 'page' ] );
+		$limit = $this->get_limit( $params['page'] );
 
-		$query  = '';
-		$query .= $select . " ";
-		$query .= $from . " ";
-		$query .= $where . " ";
-		$query .= $order . " ";
-		$query .= $limit;
+		$query = "$select $from $where $order $limit";
 
 		$result = $wpdb->get_results( $query, $type );
 
-		return NULL === $result ? array() : $result;
+		return null === $result ? array() : $result;
 	}
 
 	/**
