@@ -59,7 +59,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	 */
 	public function __construct( $table_name, $page_size = 20 ) {
 		$this->table_name = $GLOBALS['wpdb']->base_prefix . $table_name;
-		$this->page_size  = $page_size;
+		$this->page_size  = (int) $page_size;
 	}
 
 	/**
@@ -184,7 +184,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 			}
 		}
 
-		$limit = $this->get_limit( $params['page'] );
+		$limit = $this->get_limit( (int) $params['page'] );
 
 		$query = "$select $from $where $order $limit";
 
@@ -242,16 +242,18 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	}
 
 	/**
-	 * @param $page
+	 * @param int $page
+	 *
 	 * @return string
 	 */
 	private function get_limit( $page ) {
 
-		if ( -1 === $page )
+		if ( -1 === $page ) {
 			return '';
+		}
 
-		$start    = $this->page_size * ( $page - 1 );
+		$start = $this->page_size * ( $page - 1 );
 
-		return "\nLIMIT $start, $this->page_size";
+		return "LIMIT $start, $this->page_size";
 	}
 }
