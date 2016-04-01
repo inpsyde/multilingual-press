@@ -123,8 +123,6 @@ class Mlp_Dashboard_Widget {
 			<?php
 			return;
 		}
-
-		global $wpdb;
 		?>
 		<table class="widefat">
 			<?php foreach ( array_unique( $related_blogs ) as $blog_to_translate ) : ?>
@@ -141,16 +139,21 @@ class Mlp_Dashboard_Widget {
 					</th>
 				</tr>
 				<?php
-				$query = "
-SELECT *
-FROM {$wpdb->posts} p
-INNER JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID
-WHERE pm.meta_key IN ( '_post_is_translated', 'post_is_translated' )
-	AND pm.meta_value = '0'
-	AND p.post_status != 'trash'
-ORDER BY p.post_date";
-
-				$posts_to_translate = $wpdb->get_results( $query );
+				// Post status 'any' automatically excludes both 'auto-draft' and 'trash'.
+				$posts_to_translate = get_posts( array(
+					'post_status' => 'any',
+					'meta_query'  => array(
+						'relation' => 'OR',
+						array(
+							'key'   => '_post_is_translated',
+							'value' => '0',
+						),
+						array(
+							'key'   => 'post_is_translated',
+							'value' => '0',
+						),
+					),
+				) );
 				?>
 				<?php if ( $posts_to_translate ) : ?>
 					<?php foreach ( $posts_to_translate as $post ) : ?>
