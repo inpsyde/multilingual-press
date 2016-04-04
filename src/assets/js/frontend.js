@@ -28,9 +28,7 @@ window.MultilingualPress = _MultilingualPress2.default;
 },{"./frontend/MultilingualPress":2,"./frontend/quicklinks/Quicklinks":3}],2:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
+exports.__esModule = true;
 /**
  * The MultilingualPress front end namespace object.
  * @namespace
@@ -50,11 +48,7 @@ exports.default = MultilingualPress;
 },{}],3:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+exports.__esModule = true;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -83,52 +77,47 @@ var Quicklinks = function () {
   */
 
 
-	_createClass(Quicklinks, [{
-		key: 'initialize',
-		value: function initialize() {
-			this.attachSubmitHandler();
+	Quicklinks.prototype.initialize = function initialize() {
+		this.attachSubmitHandler();
+	};
+
+	/**
+  * Attaches the according handler to the form submit event.
+  * @returns {boolean} - Whether or not the event handler has been attached.
+  */
+
+
+	Quicklinks.prototype.attachSubmitHandler = function attachSubmitHandler() {
+		var $form = $(this.selector);
+		if (!$form.length) {
+			return false;
 		}
 
-		/**
-   * Attaches the according handler to the form submit event.
-   * @returns {boolean} - Whether or not the event handler has been attached.
-   */
+		$form.on('submit', this.submitForm);
 
-	}, {
-		key: 'attachSubmitHandler',
-		value: function attachSubmitHandler() {
-			var $form = $(this.selector);
-			if (!$form.length) {
-				return false;
-			}
+		return true;
+	};
 
-			$form.on('submit', this.submitForm);
+	/**
+  * Triggers a redirect on form submission.
+  * @param {Event} event - The submit event of the form.
+  * @returns {boolean} - Whether or not redirect has been triggered.
+  */
 
-			return true;
+
+	Quicklinks.prototype.submitForm = function submitForm(event) {
+		var $select = $(event.target).find('select');
+		if (!$select.length) {
+			return false;
 		}
 
-		/**
-   * Triggers a redirect on form submission.
-   * @param {Event} event - The submit event of the form.
-   * @returns {boolean} - Whether or not redirect has been triggered.
-   */
+		event.preventDefault();
 
-	}, {
-		key: 'submitForm',
-		value: function submitForm(event) {
-			var $select = $(event.target).find('select');
-			if (!$select.length) {
-				return false;
-			}
+		window.MultilingualPress.setLocation($select.val());
 
-			event.preventDefault();
-
-			window.MultilingualPress.setLocation($select.val());
-
-			// For testing only.
-			return true;
-		}
-	}]);
+		// For testing only.
+		return true;
+	};
 
 	return Quicklinks;
 }();
