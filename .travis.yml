@@ -35,7 +35,7 @@ install:
 
 script:
   - grunt ci
-  - babel-node tests/js/**/*.js
+  - babel-node 'tests/js/**/*.js'
 
 notifications:
   slack:
