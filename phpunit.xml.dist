@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-	bootstrap="tests/phpunit/bootstrap.php"
+	bootstrap="tests/php/bootstrap.php"
 	backupGlobals="false"
 	colors="true"
 	convertErrorsToExceptions="true"
@@ -8,14 +8,11 @@
 	convertWarningsToExceptions="true"
 >
 	<testsuites>
-		<testsuite name="unit">
-			<directory suffix="Test.php">tests/phpunit/unit</directory>
+		<testsuite name="Unit">
+			<directory suffix="Test.php">tests/php/Unit</directory>
 		</testsuite>
-		<testsuite name="integration">
-			<directory suffix="Test.php">tests/phpunit/integration</directory>
-		</testsuite>
-		<testsuite name="system">
-			<directory suffix="Test.php">tests/phpunit/system</directory>
+		<testsuite name="Integration">
+			<directory suffix="Test.php">tests/php/Integration</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
