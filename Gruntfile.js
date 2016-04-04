@@ -1,10 +1,4 @@
-/* jshint node:true */
 module.exports = function( grunt ) {
-	'use strict';
-
-	var _ = require( 'lodash' ),
-		autoprefixer = require( 'autoprefixer' );
-
 	var configObject = {
 		config: {
 			assets: {
@@ -25,7 +19,20 @@ module.exports = function( grunt ) {
 				dest: 'src/assets/css/'
 			},
 			tests: {
-				phpunit: 'tests/phpunit/'
+				php: 'tests/php/'
+			}
+		},
+
+		browserify: {
+			options: {
+				transform: [
+					[ "babelify" ]
+				]
+			},
+			frontend: {
+				files: {
+					'<%= config.scripts.dest %>frontend.js': '<%= config.scripts.src %>frontend.js'
+				}
 			}
 		},
 
@@ -39,14 +46,6 @@ module.exports = function( grunt ) {
 					'<%= config.scripts.src %>admin/**/*.js'
 				],
 				dest: '<%= config.scripts.dest %>admin.js'
-			},
-			frontend: {
-				src: [
-					'<%= config.scripts.src %>frontend.js',
-					'<%= config.scripts.src %>frontend/*/*.js',
-					'<%= config.scripts.src %>frontend/index.js'
-				],
-				dest: '<%= config.scripts.dest %>frontend.js'
 			}
 		},
 
@@ -75,6 +74,17 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		eslint: {
+			grunt: {
+				src: [ 'Gruntfile.js' ]
+			},
+			src: {
+				expand: true,
+				cwd: '<%= config.scripts.src %>',
+				src: [ '**/*.js' ]
+			}
+		},
+
 		imagemin: {
 			options: {
 				optimizationLevel: 7
@@ -93,37 +103,9 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		jscs: {
-			options: {
-				config: true
-			},
-			grunt: {
-				src: [ 'Gruntfile.js' ]
-			},
-			src: {
-				src: [ '<%= config.scripts.src %>**/*.js' ]
-			}
-		},
-
-		jshint: {
-			options: {
-				jshintrc: true,
-				reporter: require( 'jshint-stylish' )
-			},
-			grunt: {
-				src: [ 'Gruntfile.js' ]
-			},
-			src: {
-				src: [ '<%= config.scripts.src %>**/*.js' ]
-			},
-			dest: {
-				src: [ '<%= config.scripts.dest %>*.js' ]
-			}
-		},
-
 		jsonlint: {
 			configs: {
-				src: [ '.{jscs,jshint}rc' ]
+				src: [ '.{babel,jshint}rc' ]
 			},
 			json: {
 				src: [ '*.json' ]
@@ -168,14 +150,14 @@ module.exports = function( grunt ) {
 				src: [ '<%= config.src %>**/*.php' ]
 			},
 			tests: {
-				src: [ '<%= config.tests.phpunit %>**/*.php' ]
+				src: [ '<%= config.tests.php %>**/*.php' ]
 			}
 		},
 
 		postcss: {
 			options: {
 				processors: [
-					autoprefixer( {
+					require( 'autoprefixer' )( {
 						browsers: [
 							'Android >= 2.1',
 							'Chrome >= 21',
@@ -246,7 +228,7 @@ module.exports = function( grunt ) {
 			},
 
 			configs: {
-				files: [ '.{jscs,jshint}rc' ],
+				files: [ '.{babel,eslint}rc' ],
 				tasks: [
 					'newer:jsonlint:configs'
 				]
@@ -255,8 +237,7 @@ module.exports = function( grunt ) {
 			grunt: {
 				files: [ 'Gruntfile.js' ],
 				tasks: [
-					'newer:jscs:grunt',
-					'newer:jshint:grunt',
+					'newer:eslint:grunt',
 					'newer:lineending:grunt',
 					'newer:jsvalidate:grunt'
 				]
@@ -279,7 +260,7 @@ module.exports = function( grunt ) {
 			php: {
 				files: [
 					'<%= config.src %>**/*.php',
-					'<%= config.tests.phpunit %>**/*.php'
+					'<%= config.tests.php %>**/*.php'
 				],
 				tasks: [
 					'newer:phplint',
@@ -290,9 +271,8 @@ module.exports = function( grunt ) {
 			scripts: {
 				files: [ '<%= config.scripts.src %>**/*.js' ],
 				tasks: [
-					'newer:jsvalidate:src',
-					'newer:jshint:force',
-					'newer:jscs:force',
+					'newer:eslint:src',
+					'browserify',
 					'concat',
 					'changed:lineending:scripts',
 					'changed:uglify',
@@ -318,29 +298,6 @@ module.exports = function( grunt ) {
 			}
 		}
 	};
-
-	// Add "force" target to JSCS for development.
-	configObject.jscs.force = _.merge(
-		{},
-		configObject.jscs.src,
-		{
-			options: {
-				force: true
-			}
-		}
-	);
-
-	// Add "force" target to JSHint for development.
-	configObject.jshint.force = _.merge(
-		{},
-		configObject.jshint.src,
-		{
-			options: {
-				devel: true,
-				force: true
-			}
-		}
-	);
 
 	require( 'load-grunt-tasks' )( grunt );
 
@@ -383,18 +340,7 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'php', configObject.watch.php.tasks );
 
-	grunt.registerTask( 'scripts', [
-		'newer:jsvalidate:src',
-		'newer:jshint:src',
-		'newer:jscs:src',
-		'concat',
-		'changed:lineending:scripts',
-		'changed:uglify',
-		'changed:jsvalidate:dest',
-		'changed:jshint:dest'
-	] );
-
-	grunt.registerTask( 'force-scripts', configObject.watch.scripts.tasks );
+	grunt.registerTask( 'scripts', configObject.watch.scripts.tasks );
 
 	grunt.registerTask( 'styles', configObject.watch.styles.tasks );
 
@@ -408,18 +354,17 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'ci', [
+		'changed-clean',
+		'newer-clean',
 		'common',
-		'sass:check',
-		'jsvalidate:src',
-		'jshint:src',
-		'jscs:src',
+		'eslint:src',
 		'jsvalidate:dest',
-		'jshint:dest'
+		'sass:check'
 	] );
 
 	grunt.registerTask( 'develop', [
 		'common',
-		'force-scripts',
+		'scripts',
 		'styles'
 	] );
 

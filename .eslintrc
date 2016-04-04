@@ -1,0 +1,33 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "impliedStrict": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jquery": true,
+    "node": true
+  },
+  "globals": {
+    "_": false,
+    "Backbone": false
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "curly": [ 2, "all" ],
+    "eqeqeq": 2,
+    "guard-for-in": 2,
+    "no-caller": 2,
+    "no-extend-native": 2,
+    "no-extra-parens": 0,
+    "no-irregular-whitespace": 2,
+    "no-new": 2,
+    "no-undef": 2,
+    "no-use-before-define": [ 2, "nofunc" ],
+    "strict": 0
+  }
+}

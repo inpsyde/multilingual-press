@@ -29,11 +29,13 @@ before_install:
 install:
   - gem install sass
   - npm install -g npm
+  - npm install -g babel-cli
   - npm install -g grunt-cli
   - npm install
 
 script:
   - grunt ci
+  - babel-node tests/js/**/*.js
 
 notifications:
   slack:
