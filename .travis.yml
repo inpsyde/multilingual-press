@@ -35,7 +35,7 @@ install:
 
 script:
   - grunt ci
-  - babel-node 'tests/js/**/*.js'
+  - find tests/js -name '*.js' -exec babel-node {} \;
 
 notifications:
   slack:
