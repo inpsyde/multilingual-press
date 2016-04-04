@@ -1,13 +1,19 @@
-const test = require( 'tape' );
-
-const sinon = require( 'sinon' );
+import test from "tape";
+import sinon from "sinon";
+import Quicklinks from "../../../../resources/js/frontend/quicklinks/Quicklinks";
 
 global.$ = sinon.spy();
 
-const Quicklinks = require( '../../../../resources/js/frontend/quicklinks/Quicklinks' );
+global.window = {
+	MultilingualPress: {
+		setLocation: sinon.spy()
+	}
+};
 
 function createTestee( $, selector ) {
 	global.$ = $ || sinon.spy();
+
+	global.window.MultilingualPress.setLocation.reset();
 
 	return new Quicklinks( selector );
 }
@@ -43,12 +49,6 @@ test( 'initialize behaves as expected', function( assert ) {
 	testee.attachSubmitHandler = sinon.spy();
 
 	testee.initialize();
-
-	assert.equal(
-		$.callCount,
-		1,
-		'initialize should call jQuery once.'
-	);
 
 	assert.equal(
 		testee.attachSubmitHandler.callCount,
@@ -144,13 +144,6 @@ test( 'submitForm behaves as expected for the correct target', function( assert 
 		preventDefault: preventDefault
 	};
 
-	const setLocation = sinon.spy();
-	global.window = {
-		MultilingualPress: {
-			setLocation: setLocation
-		}
-	};
-
 	assert.equal(
 		testee.submitForm( event ),
 		true,
@@ -164,13 +157,13 @@ test( 'submitForm behaves as expected for the correct target', function( assert 
 	);
 
 	assert.equal(
-		setLocation.callCount,
+		global.window.MultilingualPress.setLocation.callCount,
 		1,
 		'submitForm should call window.MultilingualPress.setLocation once for the correct target.'
 	);
 
 	assert.equal(
-		setLocation.calledWith( selectValue ),
+		global.window.MultilingualPress.setLocation.calledWith( selectValue ),
 		true,
 		'submitForm should call window.MultilingualPress.setLocation with the select value for the correct target.'
 	);

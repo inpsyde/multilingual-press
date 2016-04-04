@@ -1,19 +1,18 @@
-/**
- * The MultilingualPress front end namespace object.
- * @namespace
- */
-var MultilingualPress = {};
+'use strict';
 
-/**
- * Redirects the user to the given URL.
- * @param {string} url - The URL.
- */
-MultilingualPress.setLocation = function( url ) {
-	'use strict';
-
-	window.location.href = url;
-};
-
+// Externalize the jQuery alias.
 window.$ = window.jQuery;
 
-window.module = window.module || {};
+import MultilingualPress from './frontend/MultilingualPress';
+
+import Quicklinks from './frontend/quicklinks/Quicklinks';
+
+/**
+ * The MultilingualPress Quicklinks instance.
+ * @type {Quicklinks}
+ */
+MultilingualPress.quicklinks = new Quicklinks( '#mlp-quicklink-form' );
+MultilingualPress.quicklinks.initialize();
+
+// Externalize the MultilingualPress namespace object.
+window.MultilingualPress = MultilingualPress;

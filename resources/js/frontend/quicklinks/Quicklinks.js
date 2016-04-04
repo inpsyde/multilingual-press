@@ -1,13 +1,12 @@
-var Quicklinks = (function() {
-	'use strict';
-
+/**
+ * The MultilingualPress Quicklinks module.
+ */
+class Quicklinks {
 	/**
-	 * @classdesc The MultilingualPress Quicklinks module.
-	 * @class
-	 * @alias Quicklinks
+	 * Constructor. Sets up the properties.
 	 * @param {string} [selector] - The form element selector.
 	 */
-	function Module( selector ) {
+	constructor( selector ) {
 		/**
 		 * The form element selector.
 		 * @type {string}
@@ -16,17 +15,17 @@ var Quicklinks = (function() {
 	}
 
 	/**
-	 * Initializes the module (as soon as jQuery is ready).
+	 * Initializes the module.
 	 */
-	Module.prototype.initialize = function initialize() {
-		$( this.attachSubmitHandler.bind( this ) );
-	};
+	initialize() {
+		this.attachSubmitHandler();
+	}
 
 	/**
 	 * Attaches the according handler to the form submit event.
-	 * @returns {boolean}
+	 * @returns {boolean} - Whether or not the event handler has been attached.
 	 */
-	Module.prototype.attachSubmitHandler = function attachSubmitHandler() {
+	attachSubmitHandler() {
 		var $form = $( this.selector );
 		if ( ! $form.length ) {
 			return false;
@@ -35,14 +34,14 @@ var Quicklinks = (function() {
 		$form.on( 'submit', this.submitForm );
 
 		return true;
-	};
+	}
 
 	/**
 	 * Triggers a redirect on form submission.
 	 * @param {Event} event - The submit event of the form.
-	 * @returns {boolean}
+	 * @returns {boolean} - Whether or not redirect has been triggered.
 	 */
-	Module.prototype.submitForm = function submitForm( event ) {
+	submitForm( event ) {
 		var $select = $( event.target ).find( 'select' );
 		if ( ! $select.length ) {
 			return false;
@@ -54,9 +53,7 @@ var Quicklinks = (function() {
 
 		// For testing only.
 		return true;
-	};
+	}
+}
 
-	return Module;
-})();
-
-module.exports = Quicklinks;
+export default Quicklinks;
