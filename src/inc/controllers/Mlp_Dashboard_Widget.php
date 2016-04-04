@@ -140,9 +140,11 @@ class Mlp_Dashboard_Widget {
 				</tr>
 				<?php
 				// Post status 'any' automatically excludes both 'auto-draft' and 'trash'.
+				// Not suppressing filters (which is done by default when using get_posts()) makes caching possible.
 				$posts_to_translate = get_posts( array(
-					'post_status' => 'any',
-					'meta_query'  => array(
+					'suppress_filters' => false,
+					'post_status'      => 'any',
+					'meta_query'       => array(
 						'relation' => 'OR',
 						array(
 							'key'   => '_post_is_translated',
