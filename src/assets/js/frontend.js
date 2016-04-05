@@ -3,36 +3,29 @@
 
 exports.__esModule = true;
 /**
- * The MultilingualPress Util namespace object.
- * @namespace
+ * Attaches the given listener to the given DOM element for the event with the given type.
+ * @param {Element} $element - The DOM element.
+ * @param {string} type - The type of the event.
+ * @param {Function} listener - The event listener callback.
  */
-var Util = {
-	/**
-  * Attaches the given listener to the given DOM element for the event with the given type.
-  * @param {Element} $element - The DOM element.
-  * @param {string} type - The type of the event.
-  * @param {Function} listener - The event listener callback.
-  */
-	addEventListener: function addEventListener($element, type, listener) {
-		if ($element.addEventListener) {
-			$element.addEventListener(type, listener);
-		} else {
-			$element.attachEvent('on' + type, function () {
-				listener.call($element);
-			});
-		}
-	},
-
-	/**
-  * Redirects the user to the given URL.
-  * @param {string} url - The URL.
-  */
-	setLocation: function setLocation(url) {
-		window.location.href = url;
+var addEventListener = exports.addEventListener = function addEventListener($element, type, listener) {
+	if ($element.addEventListener) {
+		$element.addEventListener(type, listener);
+	} else {
+		$element.attachEvent('on' + type, function () {
+			listener.call($element);
+		});
 	}
 };
 
-exports.default = Util;
+/**
+ * Redirects the user to the given URL.
+ * @param {string} url - The URL.
+ */
+var setLocation = exports.setLocation = function setLocation(url) {
+	alert(url);
+	// window.location.href = url;
+};
 
 },{}],2:[function(require,module,exports){
 'use strict';
@@ -65,11 +58,11 @@ window.MultilingualPress = MLP;
 
 exports.__esModule = true;
 
-var _Util = require('../../common/Util');
+var _utils = require('../../common/utils');
 
-var _Util2 = _interopRequireDefault(_Util);
+var Util = _interopRequireWildcard(_utils);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -81,7 +74,7 @@ var Quicklinks = function () {
 	/**
   * Constructor. Sets up the properties.
   * @param {string} selector - The form element selector.
-  * @param {Object} [util=null] - Optional. The set of utility methods. Defaults to the MultilingualPress Util object.
+  * @param {Object} [util=null] - Optional. The set of utility methods. Defaults to MultilingualPress's Util object.
   */
 
 	function Quicklinks(selector) {
@@ -99,7 +92,7 @@ var Quicklinks = function () {
    * The set of utility methods.
    * @type {Object}
    */
-		this.Util = util || _Util2.default;
+		this.Util = util || Util;
 	}
 
 	/**
@@ -154,4 +147,4 @@ var Quicklinks = function () {
 
 exports.default = Quicklinks;
 
-},{"../../common/Util":1}]},{},[2]);
+},{"../../common/utils":1}]},{},[2]);

@@ -1,6 +1,6 @@
 import test from "tape";
 import sinon from "sinon";
-import Util from "../../../resources/js/common/Util";
+import * as Util from "../../../resources/js/common/utils";
 
 test( 'addEventListener attaches the given listener to the given element for the given event', ( assert ) => {
 	assert.equal(
