@@ -1,48 +1,49 @@
 import test from "tape";
 import sinon from "sinon";
+import * as F from "../../Functions";
 import Quicklinks from "../../../../resources/js/frontend/quicklinks/Quicklinks";
 
-global.$ = sinon.spy();
-
-global.window = {
-	MultilingualPress: {
-		setLocation: sinon.spy()
-	}
+global.Util = {
+	addEventListener: sinon.spy(),
+	setLocation: sinon.spy()
 };
 
-function createTestee( $, selector ) {
-	global.$ = $ || sinon.spy();
+const resetUtil = () => {
+	Util.addEventListener.reset();
+	Util.setLocation.reset();
+};
 
-	global.window.MultilingualPress.setLocation.reset();
+const createTestee = ( selector ) => {
+	selector = selector || 'selector';
 
-	return new Quicklinks( selector );
-}
+	resetUtil();
 
-test( 'Quicklinks is a constructor function', function( assert ) {
+	return new Quicklinks( selector, Util )
+};
+
+test( 'Quicklinks is a constructor function', ( assert ) => {
 	assert.equal(
 		typeof Quicklinks,
 		'function',
-		'Quicklinks should be a function.'
+		'Quicklinks SHOULD be a function.'
 	);
 
 	assert.equal(
-		typeof new Quicklinks(),
+		typeof createTestee(),
 		'object',
-		'Quicklinks should construct an object.'
+		'Quicklinks SHOULD construct an object.'
 	);
 
 	assert.end();
 } );
 
-test( 'initialize behaves as expected', function( assert ) {
-	const testee = createTestee( sinon.spy( function( callback ) {
-		callback();
-	} ) );
+test( 'initialize behaves as expected', ( assert ) => {
+	const testee = createTestee();
 
 	assert.equal(
 		typeof testee.initialize,
 		'function',
-		'initialize should be a function.'
+		'initialize SHOULD be a function.'
 	);
 
 	// Turn method into spy.
@@ -53,120 +54,126 @@ test( 'initialize behaves as expected', function( assert ) {
 	assert.equal(
 		testee.attachSubmitHandler.callCount,
 		1,
-		'initialize should pass the expected callback to jQuery.'
+		'initialize SHOULD pass the expected callback to jQuery.'
 	);
 
 	assert.end();
 } );
 
-test( 'attachSubmitHandler behaves as expected for an incorrect selector', function( assert ) {
-	const testee = createTestee( sinon.spy( function() {
-		return [];
-	} ), 'incorrect-selector' );
+test( 'attachSubmitHandler behaves as expected for an incorrect selector', ( assert ) => {
+	const testee = createTestee( 'incorrect-selector' );
+
+	global.document = {
+		querySelector: F.returnNull
+	};
 
 	assert.equal(
 		testee.attachSubmitHandler(),
 		false,
-		'attachSubmitHandler should return false for an incorrect selector.'
+		'attachSubmitHandler SHOULD return false for an incorrect selector.'
 	);
 
 	assert.end();
 } );
 
-test( 'attachSubmitHandler behaves as expected for the correct selector', function( assert ) {
-	const on = sinon.spy();
+test( 'attachSubmitHandler behaves as expected for the correct selector', ( assert ) => {
+	// Reset Util spies.
+	resetUtil();
 
-	const testee = createTestee( sinon.spy( function() {
-		return {
-			length: 1,
-			on: on
-		};
-	} ), 'correct-selector' );
+	const testee = createTestee( 'correct-selector' );
+
+	const $element = 'element';
+
+	global.document = {
+		querySelector: () => {
+			return $element;
+		}
+	};
 
 	assert.equal(
 		testee.attachSubmitHandler(),
 		true,
-		'attachSubmitHandler should return true for the correct selector.'
+		'attachSubmitHandler SHOULD return true for the correct selector.'
 	);
 
 	assert.equal(
-		on.callCount,
+		Util.addEventListener.callCount,
 		1,
-		'attachSubmitHandler should attach one event handler for the correct selector.'
+		'attachSubmitHandler SHOULD attach one event handler for the correct selector.'
 	);
 
 	assert.equal(
-		on.calledWith( 'submit', testee.submitForm ),
+		// The third argument (i.e., the listener) is missing because it is a bound function, which sinon cannot handle.
+		Util.addEventListener.calledWith( $element, 'submit' ),
 		true,
-		'attachSubmitHandler should attach the expected event handler for the correct selector.'
+		'attachSubmitHandler SHOULD attach the expected event handler for the correct selector.'
 	);
 
 	assert.end();
 } );
 
-test( 'submitForm behaves as expected for an incorrect target', function( assert ) {
-	const testee = createTestee( sinon.spy( function() {
-		return {
-			find: function() {
-				return [];
+test( 'submitForm behaves as expected', ( assert ) => {
+	const testee = createTestee();
+
+	const event = {
+		preventDefault: sinon.spy(),
+		target: {
+			querySelector: () => {
 			}
-		};
-	} ) );
+		}
+	};
+
+	// Configure event.
+	event.preventDefault.reset();
+	event.target.querySelector = F.returnNull;
 
 	assert.equal(
-		testee.submitForm( { target: 'incorrect' } ),
+		testee.submitForm( event ),
 		false,
-		'submitForm should return false for an incorrect target.'
+		'submitForm SHOULD return false for a missing select element.'
 	);
 
-	assert.end();
-} );
+	assert.equal(
+		event.preventDefault.callCount,
+		0,
+		'submitForm SHOULD NOT call event.prevenDefault for a missing select element.'
+	);
 
-test( 'submitForm behaves as expected for the correct target', function( assert ) {
-	const selectValue = 'value';
+	// Reset Util spies.
+	resetUtil();
 
-	const testee = createTestee( sinon.spy( function() {
-		return {
-			find: function() {
-				return {
-					length: 1,
-					val: function() {
-						return selectValue;
-					}
-				};
-			}
-		};
-	} ) );
+	const $select = {
+		value: 'value'
+	};
 
-	const preventDefault = sinon.spy();
-	const event = {
-		target: 'correct',
-		preventDefault: preventDefault
+	// Configure event.
+	event.preventDefault.reset();
+	event.target.querySelector = () => {
+		return $select
 	};
 
 	assert.equal(
 		testee.submitForm( event ),
 		true,
-		'submitForm should return true for the correct target.'
+		'submitForm SHOULD return true for a present select element.'
 	);
 
 	assert.equal(
-		preventDefault.callCount,
+		event.preventDefault.callCount,
 		1,
-		'submitForm should call event.prevenDefault for the correct target.'
+		'submitForm SHOULD call event.prevenDefault for a present select element.'
 	);
 
 	assert.equal(
-		global.window.MultilingualPress.setLocation.callCount,
+		Util.setLocation.callCount,
 		1,
-		'submitForm should call window.MultilingualPress.setLocation once for the correct target.'
+		'submitForm should call Util.setLocation once for a present select element.'
 	);
 
 	assert.equal(
-		global.window.MultilingualPress.setLocation.calledWith( selectValue ),
+		Util.setLocation.calledWith( $select.value ),
 		true,
-		'submitForm should call window.MultilingualPress.setLocation with the select value for the correct target.'
+		'submitForm SHOULD call Util.setLocation with the select value for a present select element.'
 	);
-
 	assert.end();
 } );
