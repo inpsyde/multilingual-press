@@ -366,12 +366,12 @@ HTML;
 <form action="$home_url" method="post" class="$position mlp_quicklinks mlp_quicklinks_form" id="mlp-quicklink-form">
 	<div class="$class_inner">
 		<label for="$select_id">
-			$label_text<br>
+			$label_text
 			<select name="$select_name" id="$select_id" autocomplete="off">
 				$selections
 			</select>
-			<input type="submit" value="$submit_text">
 		</label>
+		<input type="submit" value="$submit_text">
 	</div>
 </form>
 HTML;
