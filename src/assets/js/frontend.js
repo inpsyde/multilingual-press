@@ -1,35 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var _Quicklinks = require('./frontend/quicklinks/Quicklinks');
-
-var _Quicklinks2 = _interopRequireDefault(_Quicklinks);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * The MultilingualPress front end namespace object.
- * @namespace
- * @alias MultilingualPress
- */
-var MLP = {};
-
-/**
- * The MultilingualPress Quicklinks instance.
- * @type {Quicklinks}
- */
-MLP.quicklinks = new _Quicklinks2.default('#mlp-quicklink-form');
-MLP.quicklinks.initialize();
-
-// Externalize the MultilingualPress namespace object.
-window.MultilingualPress = MLP;
-
-},{"./frontend/quicklinks/Quicklinks":3}],2:[function(require,module,exports){
-'use strict';
-
 exports.__esModule = true;
 /**
  * The MultilingualPress Util namespace object.
+ * @namespace
  */
 var Util = {
 	/**
@@ -59,12 +34,38 @@ var Util = {
 
 exports.default = Util;
 
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
+'use strict';
+
+var _Quicklinks = require('./frontend/quicklinks/Quicklinks');
+
+var _Quicklinks2 = _interopRequireDefault(_Quicklinks);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The MultilingualPress front end namespace object.
+ * @namespace
+ * @alias MultilingualPress
+ */
+var MLP = {};
+
+/**
+ * The MultilingualPress Quicklinks instance.
+ * @type {Quicklinks}
+ */
+MLP.quicklinks = new _Quicklinks2.default('#mlp-quicklink-form');
+MLP.quicklinks.initialize();
+
+// Externalize the MultilingualPress namespace object.
+window.MultilingualPress = MLP;
+
+},{"./frontend/quicklinks/Quicklinks":3}],3:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 
-var _Util = require('../Util');
+var _Util = require('../../common/Util');
 
 var _Util2 = _interopRequireDefault(_Util);
 
@@ -153,4 +154,4 @@ var Quicklinks = function () {
 
 exports.default = Quicklinks;
 
-},{"../Util":2}]},{},[1]);
+},{"../../common/Util":1}]},{},[2]);

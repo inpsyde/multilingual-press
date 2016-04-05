@@ -1,6 +1,6 @@
 import test from "tape";
 import sinon from "sinon";
-import * as F from "../../Functions";
+import * as F from "../../functions";
 import Quicklinks from "../../../../resources/js/frontend/quicklinks/Quicklinks";
 
 global.Util = {
