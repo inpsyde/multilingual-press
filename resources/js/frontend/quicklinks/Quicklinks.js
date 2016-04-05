@@ -32,7 +32,7 @@ class Quicklinks {
 
 	/**
 	 * Attaches the according handler to the form submit event.
-	 * @returns {boolean} - Whether or not the event handler has been attached.
+	 * @returns {boolean} Whether or not the event handler has been attached.
 	 */
 	attachSubmitHandler() {
 		var $form = document.querySelector( this.selector );
@@ -48,7 +48,7 @@ class Quicklinks {
 	/**
 	 * Triggers a redirect on form submission.
 	 * @param {Event} event - The submit event of the form.
-	 * @returns {boolean} - Whether or not redirect has been triggered.
+	 * @returns {boolean} Whether or not redirect has been triggered.
 	 */
 	submitForm( event ) {
 		var $select = event.target.querySelector( 'select' );

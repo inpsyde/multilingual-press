@@ -3,18 +3,18 @@
 import Quicklinks from './frontend/quicklinks/Quicklinks';
 
 /**
- * The MultilingualPress front end namespace object.
+ * The MultilingualPress front end namespace.
  * @namespace
  * @alias MultilingualPress
  */
-const MLP = {};
+const MLP = window.MultilingualPress = {};
 
+const quicklinks = new Quicklinks( '#mlp-quicklink-form' );
 /**
  * The MultilingualPress Quicklinks instance.
  * @type {Quicklinks}
  */
-MLP.quicklinks = new Quicklinks( '#mlp-quicklink-form' );
-MLP.quicklinks.initialize();
+MLP.quicklinks = quicklinks;
 
-// Externalize the MultilingualPress namespace object.
-window.MultilingualPress = MLP;
+// Initialize the Quicklinks module.
+quicklinks.initialize();

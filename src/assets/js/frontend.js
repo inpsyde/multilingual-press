@@ -9,13 +9,13 @@ exports.__esModule = true;
  * @param {Function} listener - The event listener callback.
  */
 var addEventListener = exports.addEventListener = function addEventListener($element, type, listener) {
-	if ($element.addEventListener) {
-		$element.addEventListener(type, listener);
-	} else {
-		$element.attachEvent('on' + type, function () {
-			listener.call($element);
-		});
-	}
+  if ($element.addEventListener) {
+    $element.addEventListener(type, listener);
+  } else {
+    $element.attachEvent('on' + type, function () {
+      listener.call($element);
+    });
+  }
 };
 
 /**
@@ -23,8 +23,7 @@ var addEventListener = exports.addEventListener = function addEventListener($ele
  * @param {string} url - The URL.
  */
 var setLocation = exports.setLocation = function setLocation(url) {
-	alert(url);
-	// window.location.href = url;
+  window.location.href = url;
 };
 
 },{}],2:[function(require,module,exports){
@@ -37,21 +36,21 @@ var _Quicklinks2 = _interopRequireDefault(_Quicklinks);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * The MultilingualPress front end namespace object.
+ * The MultilingualPress front end namespace.
  * @namespace
  * @alias MultilingualPress
  */
-var MLP = {};
+var MLP = window.MultilingualPress = {};
 
+var quicklinks = new _Quicklinks2.default('#mlp-quicklink-form');
 /**
  * The MultilingualPress Quicklinks instance.
  * @type {Quicklinks}
  */
-MLP.quicklinks = new _Quicklinks2.default('#mlp-quicklink-form');
-MLP.quicklinks.initialize();
+MLP.quicklinks = quicklinks;
 
-// Externalize the MultilingualPress namespace object.
-window.MultilingualPress = MLP;
+// Initialize the Quicklinks module.
+quicklinks.initialize();
 
 },{"./frontend/quicklinks/Quicklinks":3}],3:[function(require,module,exports){
 'use strict';
@@ -106,7 +105,7 @@ var Quicklinks = function () {
 
 	/**
   * Attaches the according handler to the form submit event.
-  * @returns {boolean} - Whether or not the event handler has been attached.
+  * @returns {boolean} Whether or not the event handler has been attached.
   */
 
 
@@ -124,7 +123,7 @@ var Quicklinks = function () {
 	/**
   * Triggers a redirect on form submission.
   * @param {Event} event - The submit event of the form.
-  * @returns {boolean} - Whether or not redirect has been triggered.
+  * @returns {boolean} Whether or not redirect has been triggered.
   */
 
 
