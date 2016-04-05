@@ -1,18 +1,20 @@
 'use strict';
 
-// Externalize the jQuery alias.
-window.$ = window.jQuery;
-
-import MultilingualPress from './frontend/MultilingualPress';
-
 import Quicklinks from './frontend/quicklinks/Quicklinks';
+
+/**
+ * The MultilingualPress front end namespace object.
+ * @namespace
+ * @alias MultilingualPress
+ */
+const MLP = {};
 
 /**
  * The MultilingualPress Quicklinks instance.
  * @type {Quicklinks}
  */
-MultilingualPress.quicklinks = new Quicklinks( '#mlp-quicklink-form' );
-MultilingualPress.quicklinks.initialize();
+MLP.quicklinks = new Quicklinks( '#mlp-quicklink-form' );
+MLP.quicklinks.initialize();
 
 // Externalize the MultilingualPress namespace object.
-window.MultilingualPress = MultilingualPress;
+window.MultilingualPress = MLP;

@@ -1,17 +1,26 @@
+import Util from '../Util';
+
 /**
  * The MultilingualPress Quicklinks module.
  */
 class Quicklinks {
 	/**
 	 * Constructor. Sets up the properties.
-	 * @param {string} [selector] - The form element selector.
+	 * @param {string} selector - The form element selector.
+	 * @param {Object} [util=null] - Optional. The set of utility methods. Defaults to the MultilingualPress Util object.
 	 */
-	constructor( selector ) {
+	constructor( selector, util = null ) {
 		/**
 		 * The form element selector.
 		 * @type {string}
 		 */
-		this.selector = selector || '';
+		this.selector = selector;
+
+		/**
+		 * The set of utility methods.
+		 * @type {Object}
+		 */
+		this.Util = util ||  Util;
 	}
 
 	/**
@@ -26,12 +35,12 @@ class Quicklinks {
 	 * @returns {boolean} - Whether or not the event handler has been attached.
 	 */
 	attachSubmitHandler() {
-		var $form = $( this.selector );
-		if ( ! $form.length ) {
+		var $form = document.querySelector( this.selector );
+		if ( null === $form ) {
 			return false;
 		}
 
-		$form.on( 'submit', this.submitForm );
+		this.Util.addEventListener( $form, 'submit', this.submitForm.bind( this ) );
 
 		return true;
 	}
@@ -42,14 +51,14 @@ class Quicklinks {
 	 * @returns {boolean} - Whether or not redirect has been triggered.
 	 */
 	submitForm( event ) {
-		var $select = $( event.target ).find( 'select' );
-		if ( ! $select.length ) {
+		var $select = event.target.querySelector( 'select' );
+		if ( null === $select ) {
 			return false;
 		}
 
 		event.preventDefault();
 
-		window.MultilingualPress.setLocation( $select.val() );
+		this.Util.setLocation( $select.value );
 
 		// For testing only.
 		return true;
