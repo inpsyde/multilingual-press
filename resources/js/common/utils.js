@@ -18,6 +18,6 @@ export const addEventListener = ( $element, type, listener ) => {
  * Redirects the user to the given URL.
  * @param {string} url - The URL.
  */
-export const setLocation = ( url ) => {
+export const setLocation = url => {
 	window.location.href = url;
 };

@@ -1,79 +1,76 @@
-(function( $, MultilingualPress ) {
-	'use strict';
+const $ = window.jQuery;
 
-	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {
-		/**
-		 * @constructs AddNewSite
-		 * @classdesc MultilingualPress AddNewSite module.
-		 * @extends Backbone.View
-		 */
-		initialize: function() {
-			this.template = _.template( $( '#mlp-add-new-site-template' ).html() || '' );
+/**
+ * MultilingualPress AddNewSite module.
+ */
+class AddNewSite extends Backbone.View {
+	/**
+	 * Constructor. Sets up the properties.
+	 * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+	 */
+	constructor( options = {} ) {
+		super( options );
 
-			// First render the template, ...
-			this.render();
-
-			// ...then set up the properties using elements that just have been injected into the DOM.
-			/**
-			 * The jQuery object representing the MultilingualPress language select.
-			 * @type {jQuery}
-			 */
-			this.$language = $( '#mlp-site-language' );
-
-			/**
-			 * The jQuery object representing the table row that contains the plugin activation checkbox.
-			 * @type {jQuery}
-			 */
-			this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
-		},
+		this.template = _.template( $( '#mlp-add-new-site-template' ).html() || '' );
 
 		/**
-		 * Renders the MultilingualPress table markup.
+		 * As of WordPress 4.5.0, there are now several action hooks on the Add New Site network admin page.
+		 * Due to our BC policy, we have to wait for WordPress 4.7.0 in order to make use of these, though.
+		 * TODO: Refactor this (and the according PHP parts) with the release of WordPress 4.7.0.
 		 */
-		render: function() {
-			this.$el.find( '.submit' ).before( this.template() );
-		},
+		// FIRST render the template, THEN set up the properties using elements that just got injected into the DOM.
+		this.$el.find( '.submit' ).before( this.template() );
 
 		/**
-		 * Sets MultilingualPress's language select to the currently selected site language.
-		 * @param {Event} event - The change event of the site language select element.
+		 * The jQuery object representing the MultilingualPress language select.
+		 * @type {jQuery}
 		 */
-		adaptLanguage: function( event ) {
-			var language = this.getLanguage( $( event.target ) );
-			if ( this.$language.find( '[value="' + language + '"]' ).length ) {
-				this.$language.val( language );
-			}
-		},
+		this.$language = $( '#mlp-site-language' );
 
 		/**
-		 * Returns the selected language of the given select element.
-		 * @param {HTMLElement} $select - A select element.
-		 * @returns {string} The selected language.
+		 * The jQuery object representing the table row that contains the plugin activation checkbox.
+		 * @type {jQuery}
 		 */
-		getLanguage: function( $select ) {
-			var language = $select.val();
-			if ( language ) {
-				return language.replace( '_', '-' );
-			}
+		this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
+	}
 
-			return 'en-US';
-		},
+	/**
+	 * Sets MultilingualPress's language select to the currently selected site language.
+	 * @param {Event} event - The change event of the site language select element.
+	 * @returns {boolean} Whether or not the languages has been adapted.
+	 */
+	adaptLanguage( event ) {
+		const language = this.getLanguage( $( event.target ) );
+		if ( this.$language.find( '[value="' + language + '"]' ).length ) {
+			this.$language.val( language );
 
-		/**
-		 * Toggles the Plugins row according to the source site ID select element's value.
-		 * @param {Event} event - The change event of the source site ID select element.
-		 */
-		togglePluginsRow: function( event ) {
-			this.$pluginsRow.toggle( 0 < $( event.target ).val() );
+			return true;
 		}
-	} );
 
-	// Register the AddNewSite module for the Add New Site network admin page.
-	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite, {
-		el: '#wpbody-content form',
-		events: {
-			'change #site-language': 'adaptLanguage',
-			'change #mlp-base-site-id': 'togglePluginsRow'
+		return false;
+	}
+
+	/**
+	 * Returns the selected language of the given select element.
+	 * @param {HTMLElement} $select - A select element.
+	 * @returns {string} The selected language.
+	 */
+	getLanguage( $select ) {
+		const language = $select.val();
+		if ( language ) {
+			return language.replace( '_', '-' );
 		}
-	} );
-})( jQuery, window.MultilingualPress );
+
+		return 'en-US';
+	}
+
+	/**
+	 * Toggles the Plugins row according to the source site ID select element's value.
+	 * @param {Event} event - The change event of the source site ID select element.
+	 */
+	togglePluginsRow( event ) {
+		this.$pluginsRow.toggle( 0 < $( event.target ).val() );
+	}
+}
+
+export default AddNewSite;

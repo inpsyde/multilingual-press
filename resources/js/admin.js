@@ -1,136 +1,61 @@
-/* global mlpSettings */
-(function( $ ) {
-	'use strict';
+'use strict';
 
-	/**
-	 * @class MultilingualPressRouter
-	 * @classdesc MultilingualPress router.
-	 * @extends Backbone.Router
-	 */
-	var MultilingualPressRouter = Backbone.Router.extend( {} );
+import { Toggler } from "./admin/core/common";
+import Controller from "./admin/core/Controller";
+import AddNewSite from "./admin/network/AddNewSite";
+import TermTranslator from "./admin/term-translation/TermTranslator";
+import UserBackEndLanguage from "./admin/user-settings/UserBackEndLanguage";
 
-	/**
-	 * @class MultilingualPressAdmin
-	 * @classdesc MultilingualPress admin controller.
-	 */
-	var MultilingualPressAdmin = function() {
-		var Modules = [],
-			Registry = {},
-			Router = new MultilingualPressRouter();
+/**
+ * The MultilingualPress admin namespace.
+ * @namespace
+ * @alias MultilingualPressAdmin
+ */
+const MLP = window.MultilingualPressAdmin = {};
 
-		/**
-		 * Registers the module with the given data for the given route.
-		 * @param {Object} moduleData - The module data.
-		 * @param {string} route - The route.
-		 */
-		var registerModuleForRoute = function( moduleData, route ) {
-			if ( Registry[ route ] ) {
-				Registry[ route ].modules.push( moduleData );
-			} else {
-				Registry[ route ] = {
-					modules: [ moduleData ]
-				};
-			}
-		};
+const toggler = new Toggler( {
+	el: 'body',
+	events: {
+		'click .mlp-click-toggler': 'toggleElement'
+	}
+} );
+/**
+ * The MultilingualPress toggler instance.
+ * @type {Toggler}
+ */
+MLP.toggler = toggler;
 
-		/**
-		 * Sets up all routes with the according registered modules.
-		 */
-		var setUpRoutes = function() {
-			$.each( Registry, function( route, routeData ) {
-				Router.route( route, route, function() {
-					$.each( routeData.modules, function( index, module ) {
-						Modules[ module.name ] = new module.Callback( module.options );
-					} );
-				} );
-			} );
-		};
+// Initialize the state togglers.
+toggler.initializeStateTogglers();
 
-		/**
-		 * Starts Backbone's history, unless it has been started already.
-		 * @returns {boolean}
-		 */
-		var maybeStartHistory = function() {
-			if ( Backbone.History.started ) {
-				return false;
-			}
+const controller = new Controller();
+/**
+ * The MultilingualPress admin controller instance.
+ * @type {Controller}
+ */
+MLP.controller = controller;
 
-			Backbone.history.start( {
-				root: mlpSettings.urlRoot,
-				pushState: true,
-				hashChange: false
-			} );
+// Register the AddNewSite module for the Add New Site network admin page.
+controller.registerModule( 'network/site-new.php', AddNewSite, {
+	el: '#wpbody-content form',
+	events: {
+		'change #site-language': 'adaptLanguage',
+		'change #mlp-base-site-id': 'togglePluginsRow'
+	}
+} );
 
-			return true;
-		};
+// Register the TermTranslator module for the Edit Tags admin page.
+controller.registerModule( 'edit-tags.php', TermTranslator, {
+	el: '#mlp-term-translations',
+	events: {
+		'change select': 'propagateSelectedTerm'
+	}
+} );
 
-		return /** @lends MultilingualPressAdmin# */ {
-			/**
-			 * Events module.
-			 * @type {Object}
-			 * @extends Backbone.Events
-			 */
-			Events: _.extend( {}, Backbone.Events ),
+// Register the UserBackEndLanguage module for the General Settings admin page.
+controller.registerModule( 'options-general.php', UserBackEndLanguage, {
+	el: '#WPLANG'
+}, module => module.updateSiteLanguage() );
 
-			/**
-			 * MultilingualPress module instances.
-			 * @type {Object[]}
-			 */
-			Modules: Modules,
-
-			/**
-			 * Returns the settings object for the given module or settings name.
-			 * @param {string} name - The name of either the MulitilingualPress module or the settings object itself.
-			 * @returns {Object} The settings object.
-			 */
-			getSettings: function( name ) {
-				if ( 'undefined' !== typeof window[ 'mlp' + name + 'Settings' ] ) {
-					return window[ 'mlp' + name + 'Settings' ];
-				}
-
-				if ( 'undefined' !== typeof window[ name ] ) {
-					return window[ name ];
-				}
-
-				return {};
-			},
-
-			/**
-			 * Registers a new module with the given Module callback under the given name for the given route.
-			 * @param {string|string[]} routes - The routes for the module.
-			 * @param {string} name - The name of the module.
-			 * @param {Function} Module - The constructor callback for the module.
-			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
-			 */
-			registerModule: function( routes, name, Module, options ) {
-				var moduleData = {
-					name: name,
-					Callback: Module,
-					options: options || {}
-				};
-
-				$.each( _.isArray( routes ) ? routes : [ routes ], function( index, route ) {
-					registerModuleForRoute( moduleData, route );
-				} );
-			},
-
-			/**
-			 * Initializes the instance.
-			 */
-			initialize: function() {
-				setUpRoutes();
-				maybeStartHistory();
-			}
-		};
-	};
-
-	/**
-	 * The MultilingualPress admin instance.
-	 * @type {MultilingualPressAdmin}
-	 */
-	window.MultilingualPress = new MultilingualPressAdmin();
-
-	$( document ).ready( function() {
-		setTimeout( window.MultilingualPress.initialize, 1000 );
-	} );
-})( jQuery );
+// Initialize the admin controller, and thus all modules registered for the current admin page.
+jQuery( controller.initialize );

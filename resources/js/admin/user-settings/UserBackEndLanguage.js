@@ -1,4 +1,4 @@
-import Settings from '../core/Settings';
+import * as F from "../core/functions";
 
 /**
  * MultilingualPress UserBackEndLanguage module.
@@ -6,19 +6,18 @@ import Settings from '../core/Settings';
 class UserBackEndLanguage extends Backbone.View {
 	/**
 	 * Constructor. Sets up the properties.
-	 * @param {Object} [options={}]  - Optional. The module settings. Defaults to what the Settings module returns.
-	 * @param {Object} [moduleSettings=null] - Optional. The module settings. Defaults to what the Settings returns.
+	 * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
 	 */
-	constructor( options = {}, moduleSettings = null ) {
+	constructor( options = {} ) {
 		super( options );
 
-		this.moduleSettings = moduleSettings || Settings.get( this );
+		this.moduleSettings = options.moduleSettings || F.getSettings( this );
 	}
 
 	/**
-	 * Initializes the module.
+	 * Sets the Site Language value to what it should be.
 	 */
-	initialize() {
+	updateSiteLanguage() {
 		this.$el.val( this.moduleSettings.locale );
 	}
 }

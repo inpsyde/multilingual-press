@@ -70,7 +70,6 @@
   border-left: 4px solid #dd3d36;
   padding: 1px 12px;
   background: #f1f1f1;
-  -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 .mlp-warning p {
@@ -129,8 +128,6 @@
 
 .mlp-admin-feature-table,
 .mlp-extra-settings-box {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   margin: 2em 0 0;
   border: 1px solid #ddd;

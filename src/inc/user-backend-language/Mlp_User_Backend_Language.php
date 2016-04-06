@@ -234,7 +234,7 @@ class Mlp_User_Backend_Language {
 
 		$unfiltered_locale = get_locale();
 
-		wp_localize_script( 'mlp-admin', 'mlpUserBackendLanguageSettings', array(
+		wp_localize_script( 'mlp-admin', 'mlpUserBackEndLanguageSettings', array(
 			'locale' => 'en_US' === $unfiltered_locale ? '' : esc_js( $unfiltered_locale ),
 		) );
 		wp_enqueue_script( 'mlp-admin' );

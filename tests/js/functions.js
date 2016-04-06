@@ -1,31 +1,15 @@
-export const returnArg = ( arg ) => {
-	return arg;
-};
+export const returnArg = arg => arg;
 
-export const returnEmptyArray = () => {
-	return [];
-};
+export const returnEmptyArray = () => [];
 
-export const returnEmptyObject = () => {
-	return {};
-};
+export const returnEmptyObject = () => {};
 
-export const returnEmptyString = () => {
-	return '';
-};
+export const returnEmptyString = () => '';
 
-export const returnFalse = () => {
-	return false;
-};
+export const returnFalse = () => false;
 
-export const returnNull = () => {
-	return null;
-};
+export const returnNull = () => null;
 
-export const returnTrue = () => {
-	return true;
-};
+export const returnTrue = () => true;
 
-export const returnUndefined = () => {
-	return undefined;
-};
+export const returnUndefined = () => undefined;

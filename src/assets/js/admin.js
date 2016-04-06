@@ -1,1038 +1,632 @@
-/* global mlpSettings */
-(function( $ ) {
-	'use strict';
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+var _common = require("./admin/core/common");
+
+var _Controller = require("./admin/core/Controller");
+
+var _Controller2 = _interopRequireDefault(_Controller);
+
+var _AddNewSite = require("./admin/network/AddNewSite");
+
+var _AddNewSite2 = _interopRequireDefault(_AddNewSite);
+
+var _TermTranslator = require("./admin/term-translation/TermTranslator");
+
+var _TermTranslator2 = _interopRequireDefault(_TermTranslator);
+
+var _UserBackEndLanguage = require("./admin/user-settings/UserBackEndLanguage");
+
+var _UserBackEndLanguage2 = _interopRequireDefault(_UserBackEndLanguage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The MultilingualPress admin namespace.
+ * @namespace
+ * @alias MultilingualPressAdmin
+ */
+var MLP = window.MultilingualPressAdmin = {};
+
+var toggler = new _common.Toggler({
+	el: 'body',
+	events: {
+		'click .mlp-click-toggler': 'toggleElement'
+	}
+});
+/**
+ * The MultilingualPress toggler instance.
+ * @type {Toggler}
+ */
+MLP.toggler = toggler;
+
+// Initialize the state togglers.
+toggler.initializeStateTogglers();
+
+var controller = new _Controller2.default();
+/**
+ * The MultilingualPress admin controller instance.
+ * @type {Controller}
+ */
+MLP.controller = controller;
+
+// Register the AddNewSite module for the Add New Site network admin page.
+controller.registerModule('network/site-new.php', _AddNewSite2.default, {
+	el: '#wpbody-content form',
+	events: {
+		'change #site-language': 'adaptLanguage',
+		'change #mlp-base-site-id': 'togglePluginsRow'
+	}
+});
+
+// Register the TermTranslator module for the Edit Tags admin page.
+controller.registerModule('edit-tags.php', _TermTranslator2.default, {
+	el: '#mlp-term-translations',
+	events: {
+		'change select': 'propagateSelectedTerm'
+	}
+});
+
+// Register the UserBackEndLanguage module for the General Settings admin page.
+controller.registerModule('options-general.php', _UserBackEndLanguage2.default, {
+	el: '#WPLANG'
+}, function (module) {
+	return module.updateSiteLanguage();
+});
+
+// Initialize the admin controller, and thus all modules registered for the current admin page.
+jQuery(controller.initialize);
+
+},{"./admin/core/Controller":2,"./admin/core/common":4,"./admin/network/AddNewSite":6,"./admin/term-translation/TermTranslator":7,"./admin/user-settings/UserBackEndLanguage":8}],2:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _functions = require("./functions");
+
+var F = _interopRequireWildcard(_functions);
+
+var _Router = require("./Router");
+
+var _Router2 = _interopRequireDefault(_Router);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } //
+// TODO: Complete refactoring of the Controller class as well as its dependencies.
+//
+
+var $ = window.jQuery;
+var _ = window._;
+
+var mlpSettings = F.getSettings('mlpSettings');
+
+var modules = {};
+
+var registry = {};
+
+var router = new _Router2.default();
+
+/**
+ * Registers the module with the given data for the given route.
+ * @param {Object} moduleData - The module data.
+ * @param {string} route - The route.
+ */
+var registerModuleForRoute = function registerModuleForRoute(moduleData, route) {
+	registry[route] || (registry[route] = []);
+	registry[route].push(moduleData);
+};
+
+/**
+ * Sets up all routes with the according registered modules.
+ */
+var setUpRoutes = function setUpRoutes() {
+	$.each(registry, function (route, routeModules) {
+		router.route(route, route, function () {
+			$.each(routeModules, function (index, moduleData) {
+				var Constructor = moduleData.Constructor;
+				var module = new Constructor(moduleData.options);
+				modules[Constructor.name] = module;
+				moduleData.callback && moduleData.callback(module);
+			});
+		});
+	});
+};
+
+/**
+ * Starts Backbone's history, unless it has been started already.
+ * @returns {boolean}
+ */
+var maybeStartHistory = function maybeStartHistory() {
+	if (Backbone.History.started) {
+		return false;
+	}
+
+	Backbone.history.start({
+		root: mlpSettings.urlRoot,
+		pushState: true,
+		hashChange: false
+	});
+
+	return true;
+};
+
+var Controller = function () {
+	/**
+  * Constructor. Sets up the properties.
+  */
+
+	function Controller() {
+		_classCallCheck(this, Controller);
+
+		/**
+   * The MultilingualPress admin module instances.
+   * @type {Object}
+   */
+		this.modules = modules;
+	}
 
 	/**
-	 * @class MultilingualPressRouter
-	 * @classdesc MultilingualPress router.
-	 * @extends Backbone.Router
-	 */
-	var MultilingualPressRouter = Backbone.Router.extend( {} );
+  * Registers a new module with the given Module callback under the given name for the given route.
+  * @param {string|string[]} routes - The routes for the module.
+  * @param {Function} Constructor - The constructor callback for the module.
+  * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
+  * @param {Function} [callback=null] - Optional. The callback to execute after construction. Defaults to null.
+  */
 
-	/**
-	 * @class MultilingualPressAdmin
-	 * @classdesc MultilingualPress admin controller.
-	 */
-	var MultilingualPressAdmin = function() {
-		var Modules = [],
-			Registry = {},
-			Router = new MultilingualPressRouter();
 
-		/**
-		 * Registers the module with the given data for the given route.
-		 * @param {Object} moduleData - The module data.
-		 * @param {string} route - The route.
-		 */
-		var registerModuleForRoute = function( moduleData, route ) {
-			if ( Registry[ route ] ) {
-				Registry[ route ].modules.push( moduleData );
-			} else {
-				Registry[ route ] = {
-					modules: [ moduleData ]
-				};
-			}
+	Controller.prototype.registerModule = function registerModule(routes, Constructor) {
+		var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+		var callback = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+
+		var moduleData = {
+			Constructor: Constructor,
+			options: options,
+			callback: callback
 		};
 
-		/**
-		 * Sets up all routes with the according registered modules.
-		 */
-		var setUpRoutes = function() {
-			$.each( Registry, function( route, routeData ) {
-				Router.route( route, route, function() {
-					$.each( routeData.modules, function( index, module ) {
-						Modules[ module.name ] = new module.Callback( module.options );
-					} );
-				} );
-			} );
-		};
-
-		/**
-		 * Starts Backbone's history, unless it has been started already.
-		 * @returns {boolean}
-		 */
-		var maybeStartHistory = function() {
-			if ( Backbone.History.started ) {
-				return false;
-			}
-
-			Backbone.history.start( {
-				root: mlpSettings.urlRoot,
-				pushState: true,
-				hashChange: false
-			} );
-
-			return true;
-		};
-
-		return /** @lends MultilingualPressAdmin# */ {
-			/**
-			 * Events module.
-			 * @type {Object}
-			 * @extends Backbone.Events
-			 */
-			Events: _.extend( {}, Backbone.Events ),
-
-			/**
-			 * MultilingualPress module instances.
-			 * @type {Object[]}
-			 */
-			Modules: Modules,
-
-			/**
-			 * Returns the settings object for the given module or settings name.
-			 * @param {string} name - The name of either the MulitilingualPress module or the settings object itself.
-			 * @returns {Object} The settings object.
-			 */
-			getSettings: function( name ) {
-				if ( 'undefined' !== typeof window[ 'mlp' + name + 'Settings' ] ) {
-					return window[ 'mlp' + name + 'Settings' ];
-				}
-
-				if ( 'undefined' !== typeof window[ name ] ) {
-					return window[ name ];
-				}
-
-				return {};
-			},
-
-			/**
-			 * Registers a new module with the given Module callback under the given name for the given route.
-			 * @param {string|string[]} routes - The routes for the module.
-			 * @param {string} name - The name of the module.
-			 * @param {Function} Module - The constructor callback for the module.
-			 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
-			 */
-			registerModule: function( routes, name, Module, options ) {
-				var moduleData = {
-					name: name,
-					Callback: Module,
-					options: options || {}
-				};
-
-				$.each( _.isArray( routes ) ? routes : [ routes ], function( index, route ) {
-					registerModuleForRoute( moduleData, route );
-				} );
-			},
-
-			/**
-			 * Initializes the instance.
-			 */
-			initialize: function() {
-				setUpRoutes();
-				maybeStartHistory();
-			}
-		};
+		$.each(_.isArray(routes) ? routes : [routes], function (index, route) {
+			registerModuleForRoute(moduleData, route);
+		});
 	};
 
 	/**
-	 * The MultilingualPress admin instance.
-	 * @type {MultilingualPressAdmin}
-	 */
-	window.MultilingualPress = new MultilingualPressAdmin();
+  * Initializes the instance.
+  */
 
-	$( document ).ready( function() {
-		setTimeout( window.MultilingualPress.initialize, 1000 );
-	} );
-})( jQuery );
 
-(function( $, MultilingualPress ) {
-	'use strict';
+	Controller.prototype.initialize = function initialize() {
+		setUpRoutes();
+		maybeStartHistory();
+	};
 
-	var Common = Backbone.View.extend( /** @lends Common# */ {
-		/**
-		 * @constructs Common
-		 * @classdesc MultilingualPress Common module.
-		 * @extends Backbone.View
-		 */
-		initialize: function() {
-			this.initializeStateTogglers();
-		},
+	return Controller;
+}();
 
-		/**
-		 * Initializes the togglers that work by using their individual state.
-		 */
-		initializeStateTogglers: function() {
-			$( '.mlp-state-toggler' ).each( function( index, element ) {
-				var $toggler = $( element );
-				$( '[name="' + $toggler.attr( 'name' ) + '"]' ).on( 'change', {
-					$toggler: $toggler
-				}, this.toggleElementIfChecked );
-			}.bind( this ) );
-		},
+exports.default = Controller;
 
-		/**
-		 * Toggles the element with the ID given in the according toggler's data attribute if the toggler is checked.
-		 * @param {Event} event - The change event of an input element.
-		 */
-		toggleElementIfChecked: function( event ) {
-			var $toggler = event.data.$toggler,
-				targetID = $toggler.data( 'toggle-target' );
-			if ( targetID ) {
-				$( targetID ).toggle( $toggler.is( ':checked' ) );
-			}
-		},
+},{"./Router":3,"./functions":5}],3:[function(require,module,exports){
+"use strict";
 
-		/**
-		 * Toggles the element with the ID given in the according data attribute.
-		 * @param {Event} event - The click event of a toggler element.
-		 */
-		toggleElement: function( event ) {
-			var targetID = $( event.target ).data( 'toggle-target' ) || '';
-			if ( targetID ) {
-				$( targetID ).toggle();
-			}
-		}
-	} );
+exports.__esModule = true;
 
-	// Register the Common module for all admin pages.
-	MultilingualPress.Modules.Common = new Common( {
-		el: 'body',
-		events: {
-			'click .mlp-click-toggler': 'toggleElement'
-		}
-	} );
-})( jQuery, window.MultilingualPress );
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/* global ajaxurl */
-(function( $, MultilingualPress ) {
-	'use strict';
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The MultilingualPress Router module.
+ */
+
+var Router = function (_Backbone$Router) {
+	_inherits(Router, _Backbone$Router);
 
 	/**
-	 * Settings for the MultilingualPress NavMenus module. Only available on the targeted admin pages.
-	 * @type {Object}
-	 */
-	var moduleSettings = MultilingualPress.getSettings( 'NavMenus' );
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function Router() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, Router);
+
+		return _possibleConstructorReturn(this, _Backbone$Router.call(this, options));
+	}
+
+	return Router;
+}(Backbone.Router);
+
+exports.default = Router;
+
+},{}],4:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var $ = window.jQuery;
+
+/**
+ * MultilingualPress Toggler module.
+ */
+
+var Toggler = exports.Toggler = function (_Backbone$View) {
+	_inherits(Toggler, _Backbone$View);
 
 	/**
-	 * @class NavMenuItem
-	 * @classdesc MultilingualPress nav menu item model.
-	 * @extends Backbone.Model
-	 */
-	var NavMenuItem = Backbone.Model.extend( /** @lends NavMenuItem# */ {
-		urlRoot: ajaxurl
-	} );
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
 
-	var NavMenus = Backbone.View.extend( /** @lends NavMenus# */ {
-		/**
-		 * @constructs NavMenus
-		 * @classdesc MultilingualPress NavMenus module.
-		 * @extends Backbone.View
-		 */
-		initialize: function() {
-			/**
-			 * The jQuery object representing the MultilingualPress language checkboxes.
-			 * @type {jQuery}
-			 */
-			this.$languages = this.$el.find( 'li [type="checkbox"]' );
+	function Toggler() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-			/**
-			 * The jQuery object representing the input element that contains the currently edited menu's ID.
-			 * @type {jQuery}
-			 */
-			this.$menu = $( '#menu' );
+		_classCallCheck(this, Toggler);
 
-			/**
-			 * The jQuery object representing the currently edited menu.
-			 * @type {jQuery}
-			 */
-			this.$menuToEdit = $( '#menu-to-edit' );
-
-			/**
-			 * The jQuery object representing the Languages meta box spinner.
-			 * @type {jQuery}
-			 */
-			this.$spinner = this.$el.find( '.spinner' );
-
-			/**
-			 * The jQuery object representing the Languages meta box submit button.
-			 * @type {jQuery}
-			 */
-			this.$submit = this.$el.find( '#submit-mlp-language' );
-
-			this.model = new NavMenuItem();
-			this.listenTo( this.model, 'change', this.render );
-		},
-
-		/**
-		 * Requests the according markup for the checked languages in the Languages meta box.
-		 * @param {Event} event - The click event of the submit button.
-		 */
-		sendRequest: function( event ) {
-			var data = {
-				action: moduleSettings.action,
-				menu: this.$menu.val(),
-				mlp_sites: this.getSites()
-			};
-			data[ moduleSettings.nonceName ] = moduleSettings.nonce;
-
-			event.preventDefault();
-
-			this.$submit.prop( 'disabled', true );
-
-			this.$spinner.addClass( 'is-active' );
-
-			this.model.fetch( {
-				data: data,
-				processData: true
-			} );
-		},
-
-		/**
-		 * Returns the site IDs for the checked languages in the Languages meta box.
-		 * @returns {int[]} The site IDs.
-		 */
-		getSites: function() {
-			var languages = [];
-
-			this.$languages.filter( ':checked' ).each( function() {
-				languages.push( Number( $( this ).val() || 0 ) );
-			} );
-
-			return languages;
-		},
-
-		/**
-		 * Renders the nav menu item to the currently edited menu.
-		 */
-		render: function() {
-			if ( this.model.get( 'success' ) ) {
-				this.$menuToEdit.append( this.model.get( 'data' ) );
-			}
-
-			this.$languages.prop( 'checked', false );
-
-			this.$spinner.removeClass( 'is-active' );
-
-			this.$submit.prop( 'disabled', false );
-		}
-	} );
-
-	// Register the NavMenus module for the Menus admin page.
-	MultilingualPress.registerModule( 'nav-menus.php', 'NavMenus', NavMenus, {
-		el: '#' + moduleSettings.metaBoxID,
-		events: {
-			'click #submit-mlp-language': 'sendRequest'
-		}
-	} );
-})( jQuery, window.MultilingualPress );
-
-(function( $, MultilingualPress ) {
-	'use strict';
-
-	var AddNewSite = Backbone.View.extend( /** @lends AddNewSite# */ {
-		/**
-		 * @constructs AddNewSite
-		 * @classdesc MultilingualPress AddNewSite module.
-		 * @extends Backbone.View
-		 */
-		initialize: function() {
-			this.template = _.template( $( '#mlp-add-new-site-template' ).html() || '' );
-
-			// First render the template, ...
-			this.render();
-
-			// ...then set up the properties using elements that just have been injected into the DOM.
-			/**
-			 * The jQuery object representing the MultilingualPress language select.
-			 * @type {jQuery}
-			 */
-			this.$language = $( '#mlp-site-language' );
-
-			/**
-			 * The jQuery object representing the table row that contains the plugin activation checkbox.
-			 * @type {jQuery}
-			 */
-			this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
-		},
-
-		/**
-		 * Renders the MultilingualPress table markup.
-		 */
-		render: function() {
-			this.$el.find( '.submit' ).before( this.template() );
-		},
-
-		/**
-		 * Sets MultilingualPress's language select to the currently selected site language.
-		 * @param {Event} event - The change event of the site language select element.
-		 */
-		adaptLanguage: function( event ) {
-			var language = this.getLanguage( $( event.target ) );
-			if ( this.$language.find( '[value="' + language + '"]' ).length ) {
-				this.$language.val( language );
-			}
-		},
-
-		/**
-		 * Returns the selected language of the given select element.
-		 * @param {HTMLElement} $select - A select element.
-		 * @returns {string} The selected language.
-		 */
-		getLanguage: function( $select ) {
-			var language = $select.val();
-			if ( language ) {
-				return language.replace( '_', '-' );
-			}
-
-			return 'en-US';
-		},
-
-		/**
-		 * Toggles the Plugins row according to the source site ID select element's value.
-		 * @param {Event} event - The change event of the source site ID select element.
-		 */
-		togglePluginsRow: function( event ) {
-			this.$pluginsRow.toggle( 0 < $( event.target ).val() );
-		}
-	} );
-
-	// Register the AddNewSite module for the Add New Site network admin page.
-	MultilingualPress.registerModule( 'network/site-new.php', 'AddNewSite', AddNewSite, {
-		el: '#wpbody-content form',
-		events: {
-			'change #site-language': 'adaptLanguage',
-			'change #mlp-base-site-id': 'togglePluginsRow'
-		}
-	} );
-})( jQuery, window.MultilingualPress );
-
-/* global ajaxurl */
-(function( $, MultilingualPress ) {
-	'use strict';
+		return _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+	}
 
 	/**
-	 * Settings for the MultilingualPress CopyPost module. Only available on the targeted admin pages.
-	 * @type {Object}
-	 */
-	var moduleSettings = MultilingualPress.getSettings( 'CopyPost' );
+  * Initializes the togglers that work by using their individual state.
+  */
+
+
+	Toggler.prototype.initializeStateTogglers = function initializeStateTogglers() {
+		var _this2 = this;
+
+		$('.mlp-state-toggler').each(function (index, element) {
+			var $toggler = $(element);
+			$('[name="' + $toggler.attr('name') + '"]').on('change', {
+				$toggler: $toggler
+			}, _this2.toggleElementIfChecked);
+		});
+	};
 
 	/**
-	 * @class PostData
-	 * @classdesc MultilingualPress PostData model.
-	 * @extends Backbone.Model
-	 */
-	var PostData = Backbone.Model.extend( /** @lends PostData# */ {
-		urlRoot: ajaxurl
-	} );
+  * Toggles the element with the ID given in the according data attribute.
+  * @param {Event} event - The click event of a toggler element.
+  * @returns {boolean} Whether or not the element has been toggled.
+  */
 
-	var CopyPost = Backbone.View.extend( /** @lends CopyPost# */ {
-		/**
-		 * @constructs CopyPost
-		 * @classdesc MultilingualPress CopyPost module.
-		 * @extends Backbone.View
-		 */
-		initialize: function() {
-			/**
-			 * The jQuery object representing the input element that contains the currently edited post's content.
-			 * @type {jQuery}
-			 */
-			this.$content = $( '#content' );
 
-			/**
-			 * The jQuery object representing the input element that contains the currently edited post's excerpt.
-			 * @type {jQuery}
-			 */
-			this.$excerpt = $( '#excerpt' );
+	Toggler.prototype.toggleElement = function toggleElement(event) {
+		var targetID = $(event.target).data('toggle-target');
+		if (targetID) {
+			$(targetID).toggle();
 
-			/**
-			 * The jQuery object representing the input element that contains the currently edited post's title.
-			 * @type {jQuery}
-			 */
-			this.$title = $( '#title' );
-
-			this.model = new PostData();
-			this.listenTo( this.model, 'change', this.updatePostData );
-
-			/**
-			 * The currently edited post's ID.
-			 * @type {number}
-			 */
-			this.postID = Number( $( '#post_ID' ).val() );
-		},
-
-		/**
-		 * Copies the post data of the source post to a translation post.
-		 * @param {Event} event - The click event of a "Copy source post" button.
-		 */
-		copyPostData: function( event ) {
-			var data = {},
-				remoteSiteID = this.getRemoteSiteID( $( event.target ) );
-
-			event.preventDefault();
-
-			$( '#mlp-translation-data-' + remoteSiteID + '-copied-post' ).val( 1 );
-
-			/**
-			 * Triggers the event before copying post data, and passes an object for adding custom data, and the current
-			 * site and post IDs and the remote site ID.
-			 */
-			MultilingualPress.Events.trigger(
-				'CopyPost:copyPostData',
-				data,
-				moduleSettings.siteID,
-				this.postID,
-				remoteSiteID
-			);
-
-			data = _.extend( data, {
-				action: moduleSettings.action,
-				current_post_id: this.postID,
-				remote_site_id: remoteSiteID,
-				title: this.getTitle(),
-				slug: this.getSlug(),
-				content: this.getContent(),
-				excerpt: this.getExcerpt()
-			} );
-
-			this.model.fetch( {
-				data: data,
-				processData: true
-			} );
-		},
-
-		/**
-		 * Returns the site ID data attribute value of the given "Copy source post" button.
-		 * @param {jQuery} $button - A "Copy source post" button.
-		 * @returns {number} The site ID.
-		 */
-		getRemoteSiteID: function( $button ) {
-			return $button.data( 'site-id' ) || 0;
-		},
-
-		/**
-		 * Returns the title of the original post.
-		 * @returns {string} The post title.
-		 */
-		getTitle: function() {
-			return this.$title.val() || '';
-		},
-
-		/**
-		 * Returns the slug of the original post.
-		 * @returns {string} The post slug.
-		 */
-		getSlug: function() {
-
-			// Since editing the permalink replaces the "edit slug box" markup, one cannot cache the slug DOM element.
-			return $( '#editable-post-name-full' ).text() || '';
-		},
-
-		/**
-		 * Returns the content of the original post.
-		 * @returns {string} The post content.
-		 */
-		getContent: function() {
-			return this.$content.val() || '';
-		},
-
-		/**
-		 * Returns the excerpt of the original post.
-		 * @returns {string} The post excerpt.
-		 */
-		getExcerpt: function() {
-			return this.$excerpt.val() || '';
-		},
-
-		/**
-		 * Updates the post data in the according meta box for the given site ID.
-		 */
-		updatePostData: function() {
-			var data,
-				prefix;
-
-			if ( ! this.model.get( 'success' ) ) {
-				return;
-			}
-
-			data = this.model.get( 'data' );
-
-			prefix = 'mlp-translation-data-' + data.siteID + '-';
-
-			$( '#' + prefix + 'title' ).val( data.title );
-
-			$( '#' + prefix + 'name' ).val( data.slug );
-
-			this.setTinyMCEContent( prefix + 'content', data.content );
-
-			$( '#' + prefix + 'content' ).val( data.content );
-
-			$( '#' + prefix + 'excerpt' ).val( data.excerpt );
-
-			/**
-			 * Triggers the event for updating the post, and passes the according data.
-			 */
-			MultilingualPress.Events.trigger( 'CopyPost:updatePostData', data );
-		},
-
-		/**
-		 * Sets the given content for the tinyMCE editor with the given ID.
-		 * @param {string} editorID - The tinyMCE editor's ID.
-		 * @param {string} content - The content.
-		 */
-		setTinyMCEContent: function( editorID, content ) {
-			var editor;
-
-			if ( 'undefined' === typeof window.tinyMCE ) {
-				return;
-			}
-
-			editor = window.tinyMCE.get( editorID );
-			if ( ! editor ) {
-				return;
-			}
-
-			editor.setContent( content );
+			return true;
 		}
-	} );
 
-	// Register the CopyPost module for the Edit Post and Add New Post admin pages.
-	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'CopyPost', CopyPost, {
-		el: '#post-body',
-		events: {
-			'click .mlp-copy-post-button': 'copyPostData'
-		}
-	} );
-})( jQuery, window.MultilingualPress );
-
-/* global ajaxurl */
-(function( $, MultilingualPress ) {
-	'use strict';
+		return false;
+	};
 
 	/**
-	 * Settings for the MultilingualPress RelationshipControl module. Only available on the targeted admin pages.
-	 * @type {Object}
-	 */
-	var moduleSettings = MultilingualPress.getSettings( 'RelationshipControl' );
+  * Toggles the element with the ID given in the according toggler's data attribute if the toggler is checked.
+  * @param {Event} event - The change event of an input element.
+  * @returns {boolean} Whether or not the element has been toggled.
+  */
 
-	var RelationshipControl = Backbone.View.extend( /** @lends RelationshipControl# */ {
-		/**
-		 * @constructs RelationshipControl
-		 * @classdesc MultilingualPress RelationshipControl module.
-		 * @extends Backbone.View
-		 */
-		initialize: function() {
-			/**
-			 * Array of jQuery objects representing meta boxes with unsaved relationships.
-			 * @type {jQuery[]}
-			 */
-			this.unsavedRelationships = [];
 
-			this.initializeEventHandlers();
-		},
+	Toggler.prototype.toggleElementIfChecked = function toggleElementIfChecked(event) {
+		var $toggler = event.data.$toggler;
 
-		/**
-		 * Initializes the event handlers for all custom relationship control events.
-		 */
-		initializeEventHandlers: function() {
-			MultilingualPress.Events.on( {
-				'RelationshipControl:connectExistingPost': this.connectExistingPost,
-				'RelationshipControl:connectNewPost': this.connectNewPost,
-				'RelationshipControl:disconnectPost': this.disconnectPost
-			}, this );
-		},
+		var targetID = $toggler.data('toggle-target');
+		if (targetID) {
+			$(targetID).toggle($toggler.is(':checked'));
 
-		/**
-		 * Updates the unsaved relationships array for the meta box containing the changed radio input element.
-		 * @param {Event} event - The change event of a radio input element.
-		 */
-		updateUnsavedRelationships: function( event ) {
-			var $input = $( event.target ),
-				$metaBox = $input.closest( '.mlp-translation-meta-box' ),
-				$button = $metaBox.find( '.mlp-save-relationship-button' ),
-				index = this.findMetaBox( $metaBox );
-
-			if ( 'stay' === $input.val() ) {
-				$button.prop( 'disabled', 'disabled' );
-
-				if ( -1 !== index ) {
-					this.unsavedRelationships.splice( index, 1 );
-				}
-			} else if ( -1 === index ) {
-				this.unsavedRelationships.push( $metaBox );
-
-				$button.removeAttr( 'disabled' );
-			}
-		},
-
-		/**
-		 * Returns the index of the given meta box in the unsaved relationships array, and -1 if not found.
-		 * @param {jQuery} $metaBox - The meta box element.
-		 * @returns {number} The index of the meta box.
-		 */
-		findMetaBox: function( $metaBox ) {
-			$.each( this.unsavedRelationships, function( index, element ) {
-				if ( element === $metaBox ) {
-					return index;
-				}
-			} );
-
-			return -1;
-		},
-
-		/**
-		 * Displays a confirm dialog informing the user about unsaved relationships, if any.
-		 * @param {Event} event - The click event of the publish button.
-		 */
-		confirmUnsavedRelationships: function( event ) {
-			if ( this.unsavedRelationships.length && ! window.confirm( moduleSettings.L10n.unsavedRelationships ) ) {
-				event.preventDefault();
-			}
-		},
-
-		/**
-		 * Triggers the according event in case of changed relationships.
-		 * @param {Event} event - The click event of a save relationship button.
-		 */
-		saveRelationship: function( event ) {
-			var $button = $( event.target ),
-				remoteSiteID = $button.data( 'remote-site-id' ),
-				action = $( 'input[name="mlp-rc-action[' + remoteSiteID + ']"]:checked' ).val(),
-				eventName = this.getEventName( action );
-
-			if ( 'stay' === action ) {
-				return;
-			}
-
-			$button.prop( 'disabled', 'disabled' );
-
-			/**
-			 * Triggers the according event for the current relationship action, and passes data and the event's name.
-			 */
-			MultilingualPress.Events.trigger( 'RelationshipControl:' + eventName, {
-				action: 'mlp_rc_' + action,
-				remote_site_id: remoteSiteID,
-				remote_post_id: $button.data( 'remote-post-id' ),
-				source_site_id: $button.data( 'source-site-id' ),
-				source_post_id: $button.data( 'source-post-id' )
-			}, eventName );
-		},
-
-		/**
-		 * Returns the according event name for the given relationship action.
-		 * @param {string} action - A relationship action.
-		 * @returns {string} The event name.
-		 */
-		getEventName: function( action ) {
-			switch ( action ) {
-				case 'search':
-					return 'connectExistingPost';
-
-				case 'new':
-					return 'connectNewPost';
-
-				case 'disconnect':
-					return 'disconnectPost';
-
-				default:
-					return '';
-			}
-		},
-
-		/**
-		 * Handles changing a post's relationship by connecting a new post.
-		 * @param {Object} data - The common data for all relationship requests.
-		 */
-		connectNewPost: function( data ) {
-			data.new_post_title = $( 'input[name="post_title"]' ).val();
-
-			this.sendRequest( data );
-		},
-
-		/**
-		 * Handles changing a post's relationship by disconnecting the currently connected post.
-		 * @param {Object} data - The common data for all relationship requests.
-		 */
-		disconnectPost: function( data ) {
-			this.sendRequest( data );
-		},
-
-		/**
-		 * Handles changing a post's relationship by connecting an existing post.
-		 * @param {Object} data - The common data for all relationship requests.
-		 */
-		connectExistingPost: function( data ) {
-			var newPostID = $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() || 0;
-			if ( newPostID ) {
-				data.new_post_id = Number( newPostID );
-
-				this.sendRequest( data );
-			} else {
-				window.alert( moduleSettings.L10n.noPostSelected );
-			}
-		},
-
-		/**
-		 * Changes a post's relationhip by sending a synchronous AJAX request with the according new relationship data.
-		 * @param {Object} data - The relationship data.
-		 */
-		sendRequest: function( data ) {
-			$.ajax( {
-				type: 'POST',
-				url: ajaxurl,
-				data: data,
-				success: this.reloadLocation,
-				async: false
-			} );
-		},
-
-		/**
-		 * Reloads the current page.
-		 */
-		reloadLocation: function() {
-			window.location.reload( true );
+			return true;
 		}
-	} );
 
-	// Register the RelationshipControl module for the Add New Post and the Edit Post admin pages.
-	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RelationshipControl', RelationshipControl, {
-		el: 'body',
-		events: {
-			'change .mlp-rc-actions input': 'updateUnsavedRelationships',
-			'click #publish': 'confirmUnsavedRelationships',
-			'click .mlp-save-relationship-button': 'saveRelationship'
-		}
-	} );
-})( jQuery, window.MultilingualPress );
+		return false;
+	};
 
-/* global ajaxurl */
-(function( $, MultilingualPress ) {
-	'use strict';
+	return Toggler;
+}(Backbone.View);
+
+},{}],5:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+/**
+ * Returns the settings object for the given module or settings name.
+ * @param {Object|string} module - The instance of a MulitilingualPress module or the name of the settings object.
+ * @returns {Object} The settings object.
+ */
+var getSettings = exports.getSettings = function getSettings(module) {
+	if ('object' === (typeof module === 'undefined' ? 'undefined' : _typeof(module))) {
+		module = module.constructor.name;
+	}
+
+	if ('undefined' !== typeof window['mlp' + module + 'Settings']) {
+		return window['mlp' + module + 'Settings'];
+	}
+
+	if ('undefined' !== typeof window[module]) {
+		return window[module];
+	}
+
+	return {};
+};
+
+},{}],6:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var $ = window.jQuery;
+
+/**
+ * MultilingualPress AddNewSite module.
+ */
+
+var AddNewSite = function (_Backbone$View) {
+	_inherits(AddNewSite, _Backbone$View);
 
 	/**
-	 * Settings for the MultilingualPress RemotePostSearch module. Only available on the targeted admin pages.
-	 * @type {Object}
-	 */
-	var moduleSettings = MultilingualPress.getSettings( 'RemotePostSearch' );
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function AddNewSite() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, AddNewSite);
+
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
+		_this.template = _.template($('#mlp-add-new-site-template').html() || '');
+
+		/**
+   * As of WordPress 4.5.0, there are now several action hooks on the Add New Site network admin page.
+   * Due to our BC policy, we have to wait for WordPress 4.7.0 in order to make use of these, though.
+   * TODO: Refactor this (and the according PHP parts) with the release of WordPress 4.7.0.
+   */
+		// FIRST render the template, THEN set up the properties using elements that just got injected into the DOM.
+		_this.$el.find('.submit').before(_this.template());
+
+		/**
+   * The jQuery object representing the MultilingualPress language select.
+   * @type {jQuery}
+   */
+		_this.$language = $('#mlp-site-language');
+
+		/**
+   * The jQuery object representing the table row that contains the plugin activation checkbox.
+   * @type {jQuery}
+   */
+		_this.$pluginsRow = $('#mlp-activate-plugins').closest('tr');
+		return _this;
+	}
 
 	/**
-	 * @class RemotePostSearchResult
-	 * @classdesc MultilingualPress RemotePostSearchResult model.
-	 * @extends Backbone.Model
-	 */
-	var RemotePostSearchResult = Backbone.Model.extend( /** @lends RemotePostSearchResult# */ {
-		urlRoot: ajaxurl
-	} );
+  * Sets MultilingualPress's language select to the currently selected site language.
+  * @param {Event} event - The change event of the site language select element.
+  * @returns {boolean} Whether or not the languages has been adapted.
+  */
 
-	var RemotePostSearch = Backbone.View.extend( /** @lends RemotePostSearch# */ {
-		/**
-		 * @constructs RemotePostSearch
-		 * @classdesc MultilingualPress RemotePostSearch module.
-		 * @augments Backbone.View
-		 */
-		initialize: function() {
-			/**
-			 * Array holding the default search result HTML strings.
-			 * @type {string[]}
-			 */
-			this.defaultResults = [];
 
-			/**
-			 * Array holding jQuery objects representing the search result containers.
-			 * @type {jQuery[]}
-			 */
-			this.resultsContainers = [];
+	AddNewSite.prototype.adaptLanguage = function adaptLanguage(event) {
+		var language = this.getLanguage($(event.target));
+		if (this.$language.find('[value="' + language + '"]').length) {
+			this.$language.val(language);
 
-			/**
-			 * Minimum number of characters required to fire the remote post search.
-			 * @type {number}
-			 */
-			this.searchThreshold = parseInt( moduleSettings.searchThreshold, 10 );
-
-			this.model = new RemotePostSearchResult();
-			this.listenTo( this.model, 'change', this.render );
-
-			this.initializeResults();
-		},
-
-		/**
-		 * Initializes both the default search result views as well as the result containers.
-		 */
-		initializeResults: function() {
-			$( '.mlp-search-field' ).each( function( index, element ) {
-				var $element = $( element ),
-					$resultsContainer = $( '#' + $element.data( 'results-container-id' ) ),
-					siteID = $element.data( 'remote-site-id' );
-
-				this.defaultResults[ siteID ] = $resultsContainer.html();
-				this.resultsContainers[ siteID ] = $resultsContainer;
-			}.bind( this ) );
-		},
-
-		/**
-		 * Prevents form submission due to the enter key being pressed.
-		 * @param {Event} event - The keydown event of a post search element.
-		 */
-		preventFormSubmission: function( event ) {
-			if ( 13 === event.which ) {
-				event.preventDefault();
-			}
-		},
-
-		/**
-		 * According to the user input, either search for posts, or display the initial post selection.
-		 * @param {Event} event - The keyup event of a post search element.
-		 */
-		reactToInput: function( event ) {
-			var $input = $( event.target ),
-				remoteSiteID,
-				value = $.trim( $input.val() || '' );
-
-			if ( value === $input.data( 'value' ) ) {
-				return;
-			}
-
-			clearTimeout( this.reactToInputTimer );
-
-			$input.data( 'value', value );
-
-			remoteSiteID = $input.data( 'remote-site-id' );
-
-			if ( '' === value ) {
-				this.resultsContainers[ remoteSiteID ].html( this.defaultResults[ remoteSiteID ] );
-			} else if ( value.length >= this.searchThreshold ) {
-				this.reactToInputTimer = setTimeout( function() {
-					this.model.fetch( {
-						data: {
-							action: 'mlp_rc_remote_post_search',
-							remote_site_id: remoteSiteID,
-							remote_post_id: $input.data( 'remote-post-id' ),
-							source_site_id: $input.data( 'source-site-id' ),
-							source_post_id: $input.data( 'source-post-id' ),
-							s: value
-						},
-						processData: true
-					} );
-				}.bind( this ), 400 );
-			}
-		},
-
-		/**
-		 * Renders the found posts to the according results container.
-		 */
-		render: function() {
-			var data;
-			if ( this.model.get( 'success' ) ) {
-				data = this.model.get( 'data' );
-
-				this.resultsContainers[ data.remoteSiteID ].html( data.html );
-			}
+			return true;
 		}
-	} );
 
-	// Register the RemotePostSearch module for the Add New Post and the Edit Post admin pages.
-	MultilingualPress.registerModule( [ 'post.php', 'post-new.php' ], 'RemotePostSearch', RemotePostSearch, {
-		el: 'body',
-		events: {
-			'keydown .mlp-search-field': 'preventFormSubmission',
-			'keyup .mlp-search-field': 'reactToInput'
-		}
-	} );
-})( jQuery, window.MultilingualPress );
-
-(function( $, MultilingualPress ) {
-	'use strict';
-
-	var TermTranslator = Backbone.View.extend( /** @lends TermTranslator# */ {
-		/**
-		 * @constructs TermTranslator
-		 * @classdesc MultilingualPress TermTranslator module.
-		 * @extends Backbone.View
-		 */
-		initialize: function() {
-			/**
-			 * The jQuery object representing the MultilingualPress term selects.
-			 * @type {jQuery}
-			 */
-			this.$selects = this.$el.find( 'select' );
-
-			/**
-			 * Flag to indicate an ongoing term propagation.
-			 * @type {boolean}
-			 */
-			this.isPropagating = false;
-		},
-
-		/**
-		 * Propagates the new value of one term select element to all other term select elements.
-		 * @param {Event} event - The change event of a term select element.
-		 */
-		propagateSelectedTerm: function( event ) {
-			var $select,
-				relation;
-
-			if ( this.isPropagating ) {
-				return;
-			}
-
-			this.isPropagating = true;
-
-			$select = $( event.target );
-
-			relation = this.getSelectedRelation( $select );
-			if ( '' !== relation ) {
-				this.$selects.not( $select ).each( function( index, element ) {
-					this.selectTerm( $( element ), relation );
-				}.bind( this ) );
-			}
-
-			this.isPropagating = false;
-		},
-
-		/**
-		 * Returns the relation of the given select element (i.e., its currently selected option).
-		 * @param {jQuery} $select - A select element.
-		 * @returns {string} The relation of the selected term.
-		 */
-		getSelectedRelation: function( $select ) {
-			return $select.find( 'option:selected' ).data( 'relation' ) || '';
-		},
-
-		/**
-		 * Sets the given select element's value to that of the option with the given relation, or the first option.
-		 * @param {jQuery} $select - A select element.
-		 * @param {string} relation - The relation of a term.
-		 */
-		selectTerm: function( $select, relation ) {
-			var $option = $select.find( 'option[data-relation="' + relation + '"]' );
-			if ( $option.length ) {
-				$select.val( $option.val() );
-			} else if ( this.getSelectedRelation( $select ) ) {
-				$select.val( $select.find( 'option' ).first().val() );
-			}
-		}
-	} );
-
-	// Register the TermTranslator module for the Edit Tags admin page.
-	MultilingualPress.registerModule( 'edit-tags.php', 'TermTranslator', TermTranslator, {
-		el: '#mlp-term-translations',
-		events: {
-			'change select': 'propagateSelectedTerm'
-		}
-	} );
-})( jQuery, window.MultilingualPress );
-
-(function( MultilingualPress ) {
-	'use strict';
+		return false;
+	};
 
 	/**
-	 * Settings for the MultilingualPress UserBackendLanguage module. Only available on the targeted admin pages.
-	 * @type {Object}
-	 */
-	var moduleSettings = MultilingualPress.getSettings( 'UserBackendLanguage' );
+  * Returns the selected language of the given select element.
+  * @param {HTMLElement} $select - A select element.
+  * @returns {string} The selected language.
+  */
 
-	var UserBackendLanguage = Backbone.View.extend( /** @lends UserBackendLanguage# */ {
-		/**
-		 * @constructs UserBackendLanguage
-		 * @classdesc MultilingualPress UserBackendLanguage module.
-		 * @extends Backbone.View
-		 */
-		initialize: function() {
-			this.$el.val( moduleSettings.locale );
+
+	AddNewSite.prototype.getLanguage = function getLanguage($select) {
+		var language = $select.val();
+		if (language) {
+			return language.replace('_', '-');
 		}
-	} );
 
-	// Register the UserBackendLanguage module for the General Settings admin page.
-	MultilingualPress.registerModule( 'options-general.php', 'UserBackendLanguage', UserBackendLanguage, {
-		el: '#WPLANG'
-	} );
-})( window.MultilingualPress );
+		return 'en-US';
+	};
+
+	/**
+  * Toggles the Plugins row according to the source site ID select element's value.
+  * @param {Event} event - The change event of the source site ID select element.
+  */
+
+
+	AddNewSite.prototype.togglePluginsRow = function togglePluginsRow(event) {
+		this.$pluginsRow.toggle(0 < $(event.target).val());
+	};
+
+	return AddNewSite;
+}(Backbone.View);
+
+exports.default = AddNewSite;
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var $ = window.jQuery;
+
+/**
+ * MultilingualPress TermTranslator module.
+ */
+
+var TermTranslator = function (_Backbone$View) {
+	_inherits(TermTranslator, _Backbone$View);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function TermTranslator() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, TermTranslator);
+
+		/**
+   * The jQuery object representing the MultilingualPress term selects.
+   * @type {jQuery}
+   */
+
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
+		_this.$selects = _this.$el.find('select');
+
+		/**
+   * Flag to indicate an ongoing term propagation.
+   * @type {boolean}
+   */
+		_this.isPropagating = false;
+		return _this;
+	}
+
+	/**
+  * Propagates the new value of one term select element to all other term select elements.
+  * @param {Event} event - The change event of a term select element.
+  */
+
+
+	TermTranslator.prototype.propagateSelectedTerm = function propagateSelectedTerm(event) {
+		var _this2 = this;
+
+		var $select = void 0,
+		    relation = void 0;
+
+		if (this.isPropagating) {
+			return;
+		}
+
+		this.isPropagating = true;
+
+		$select = $(event.target);
+
+		relation = this.getSelectedRelation($select);
+		if ('' !== relation) {
+			this.$selects.not($select).each(function (index, element) {
+				_this2.selectTerm($(element), relation);
+			});
+		}
+
+		this.isPropagating = false;
+	};
+
+	/**
+  * Returns the relation of the given select element (i.e., its currently selected option).
+  * @param {jQuery} $select - A select element.
+  * @returns {string} The relation of the selected term.
+  */
+
+
+	TermTranslator.prototype.getSelectedRelation = function getSelectedRelation($select) {
+		return $select.find('option:selected').data('relation') || '';
+	};
+
+	/**
+  * Sets the given select element's value to that of the option with the given relation, or the first option.
+  * @param {jQuery} $select - A select element.
+  * @param {string} relation - The relation of a term.
+  */
+
+
+	TermTranslator.prototype.selectTerm = function selectTerm($select, relation) {
+		var $option = $select.find('option[data-relation="' + relation + '"]');
+		if ($option.length) {
+			$select.val($option.val());
+		} else if (this.getSelectedRelation($select)) {
+			$select.val($select.find('option').first().val());
+		}
+	};
+
+	return TermTranslator;
+}(Backbone.View);
+
+exports.default = TermTranslator;
+
+},{}],8:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _functions = require("../core/functions");
+
+var F = _interopRequireWildcard(_functions);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * MultilingualPress UserBackEndLanguage module.
+ */
+
+var UserBackEndLanguage = function (_Backbone$View) {
+	_inherits(UserBackEndLanguage, _Backbone$View);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function UserBackEndLanguage() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, UserBackEndLanguage);
+
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
+		_this.moduleSettings = options.moduleSettings || F.getSettings(_this);
+		return _this;
+	}
+
+	/**
+  * Sets the Site Language value to what it should be.
+  */
+
+
+	UserBackEndLanguage.prototype.updateSiteLanguage = function updateSiteLanguage() {
+		this.$el.val(this.moduleSettings.locale);
+	};
+
+	return UserBackEndLanguage;
+}(Backbone.View);
+
+exports.default = UserBackEndLanguage;
+
+},{"../core/functions":5}]},{},[1]);

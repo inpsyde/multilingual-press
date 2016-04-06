@@ -8,9 +8,9 @@
   },
   "env": {
     "browser": true,
+    "commonjs": true,
     "es6": true,
-    "jquery": true,
-    "node": true
+    "jquery": true
   },
   "globals": {
     "_": false,

@@ -29,29 +29,17 @@ module.exports = function( grunt ) {
 					[ "babelify" ]
 				]
 			},
-			frontend: {
-				files: {
-					'<%= config.scripts.dest %>frontend.js': '<%= config.scripts.src %>frontend.js'
-				}
-			}
-		},
-
-		concat: {
-			options: {
-				separator: '\n'
-			},
-			admin: {
-				src: [
-					'<%= config.scripts.src %>admin.js',
-					'<%= config.scripts.src %>admin/**/*.js'
-				],
-				dest: '<%= config.scripts.dest %>admin.js'
+			scripts: {
+				expand: true,
+				cwd: '<%= config.scripts.src %>',
+				src: [ '*.js' ],
+				dest: '<%= config.scripts.dest %>'
 			}
 		},
 
 		cssmin: {
 			options: {
-				compatibility: 'ie7'
+				compatibility: 'ie8'
 			},
 			styles: {
 				expand: true,
@@ -64,6 +52,10 @@ module.exports = function( grunt ) {
 
 		// Allow grunt-newer to run tasks if files other than the individual src files have changed since the last run.
 		delegate: {
+			'browserify': {
+				task: 'browserify',
+				src: [ '<%= config.scripts.src %>**/*.js' ]
+			},
 			'imagemin-assets': {
 				task: 'imagemin:assets',
 				src: [ '<%= config.assets.src %>*.{gif,jpeg,jpg,png}' ]
@@ -105,7 +97,7 @@ module.exports = function( grunt ) {
 
 		jsonlint: {
 			configs: {
-				src: [ '.{babel,jshint}rc' ]
+				src: [ '.*rc' ]
 			},
 			json: {
 				src: [ '*.json' ]
@@ -120,9 +112,6 @@ module.exports = function( grunt ) {
 			},
 			grunt: {
 				src: [ 'Gruntfile.js' ]
-			},
-			src: {
-				src: [ '<%= config.scripts.src %>**/*.js' ]
 			},
 			dest: {
 				src: [ '<%= config.scripts.dest %>*.js' ]
@@ -158,16 +147,7 @@ module.exports = function( grunt ) {
 			options: {
 				processors: [
 					require( 'autoprefixer' )( {
-						browsers: [
-							'Android >= 2.1',
-							'Chrome >= 21',
-							'Edge >= 12',
-							'Explorer >= 7',
-							'Firefox >= 17',
-							'iOS >= 3',
-							'Opera >= 12.1',
-							'Safari >= 6.0'
-						],
+						browsers: '> 1%, last 2 versions, IE 8',
 						cascade: false
 					} )
 				]
@@ -189,7 +169,7 @@ module.exports = function( grunt ) {
 				options: {
 					check: true
 				},
-				src: '<%= config.styles.src %>/*.scss'
+				src: '<%= config.styles.src %>*.scss'
 			},
 			convert: {
 				expand: true,
@@ -228,7 +208,7 @@ module.exports = function( grunt ) {
 			},
 
 			configs: {
-				files: [ '.{babel,eslint}rc' ],
+				files: [ '.*rc' ],
 				tasks: [
 					'newer:jsonlint:configs'
 				]
@@ -239,7 +219,7 @@ module.exports = function( grunt ) {
 				tasks: [
 					'newer:eslint:grunt',
 					'newer:lineending:grunt',
-					'newer:jsvalidate:grunt'
+					'changed:jsvalidate:grunt'
 				]
 			},
 
@@ -272,8 +252,7 @@ module.exports = function( grunt ) {
 				files: [ '<%= config.scripts.src %>**/*.js' ],
 				tasks: [
 					'newer:eslint:src',
-					'browserify',
-					'concat',
+					'newer:delegate:browserify',
 					'changed:lineending:scripts',
 					'changed:uglify',
 					'changed:jsvalidate:dest'
@@ -380,4 +359,10 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'default', 'develop' );
+
+	grunt.registerTask( 'temp', [
+		'eslint:src',
+		'browserify',
+		'uglify'
+	] );
 };

@@ -48,8 +48,6 @@ class Mlp_Advanced_Translator {
 			return;
 		}
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'localize_script' ) );
-
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			add_action( "wp_ajax_{$this->ajax_action}", array( $this, 'process_post_data' ) );
 		}
@@ -119,6 +117,8 @@ class Mlp_Advanced_Translator {
 		}
 
 		// add the actions if the remote is not trashed
+		add_action( $base . 'top_' . $blog_id, array( $this, 'localize_script' ) );
+
 		add_action( $base . 'top_' . $blog_id, array( $this->view, 'blog_id_input' ), 10, 3 );
 
 		if ( post_type_supports( $post->post_type, 'title' ) ) {
