@@ -1,7 +1,7 @@
 /**
- * The MultilingualPress nav menu item model.
+ * The MultilingualPress model module.
  */
-class NavMenuItem extends Backbone.Model {
+class Model extends Backbone.Model {
 	/**
 	 * Constructor. Sets up the properties.
 	 * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
@@ -13,4 +13,4 @@ class NavMenuItem extends Backbone.Model {
 	}
 }
 
-export default NavMenuItem;
+export default Model;

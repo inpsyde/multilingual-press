@@ -3,9 +3,10 @@
 import * as F from "./admin/core/functions";
 import { Toggler } from "./admin/core/common";
 import Controller from "./admin/core/Controller";
-import NavMenuItem from "./admin/nav-menus/NavMenuItem";
+import Model from "./admin/core/Model";
 import NavMenus from "./admin/nav-menus/NavMenus";
 import AddNewSite from "./admin/network/AddNewSite";
+import RemotePostSearch from "./admin/post-translator/RemotePostSearch";
 import TermTranslator from "./admin/term-translation/TermTranslator";
 import UserBackEndLanguage from "./admin/user-settings/UserBackEndLanguage";
 
@@ -49,7 +50,7 @@ controller.registerModule( 'nav-menus.php', NavMenus, {
 	events: {
 		'click #submit-mlp-language': 'sendRequest'
 	},
-	model: new NavMenuItem( { urlRoot: ajaxUrl } ),
+	model: new Model( { urlRoot: ajaxUrl } ),
 	moduleSettings: settings
 } );
 
@@ -61,6 +62,18 @@ controller.registerModule( 'network/site-new.php', AddNewSite, {
 		'change #mlp-base-site-id': 'togglePluginsRow'
 	}
 } );
+
+// Register the RemotePostSearch module for the Add New Post and the Edit Post admin pages.
+settings = F.getSettings( RemotePostSearch );
+controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
+	el: 'body',
+	events: {
+		'keydown .mlp-search-field': 'preventFormSubmission',
+		'keyup .mlp-search-field': 'reactToInput'
+	},
+	model: new Model( { urlRoot: ajaxUrl } ),
+	moduleSettings: settings
+}, module => module.initializeResults() );
 
 // Register the TermTranslator module for the Edit Tags admin page.
 controller.registerModule( 'edit-tags.php', TermTranslator, {

@@ -122,11 +122,7 @@ test( 'submitForm behaves as expected', assert => {
 	event.preventDefault.reset();
 	event.target.querySelector = F.returnNull;
 
-	assert.equal(
-		testee.submitForm( event ),
-		false,
-		'submitForm SHOULD return false for a missing select element.'
-	);
+	testee.submitForm( event );
 
 	assert.equal(
 		event.preventDefault.callCount,
@@ -145,11 +141,7 @@ test( 'submitForm behaves as expected', assert => {
 	event.preventDefault.reset();
 	event.target.querySelector = () => $select;
 
-	assert.equal(
-		testee.submitForm( event ),
-		true,
-		'submitForm SHOULD return true for a present select element.'
-	);
+	testee.submitForm( event );
 
 	assert.equal(
 		event.preventDefault.callCount,

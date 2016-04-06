@@ -11,9 +11,9 @@ var _Controller = require("./admin/core/Controller");
 
 var _Controller2 = _interopRequireDefault(_Controller);
 
-var _NavMenuItem = require("./admin/nav-menus/NavMenuItem");
+var _Model = require("./admin/core/Model");
 
-var _NavMenuItem2 = _interopRequireDefault(_NavMenuItem);
+var _Model2 = _interopRequireDefault(_Model);
 
 var _NavMenus = require("./admin/nav-menus/NavMenus");
 
@@ -22,6 +22,10 @@ var _NavMenus2 = _interopRequireDefault(_NavMenus);
 var _AddNewSite = require("./admin/network/AddNewSite");
 
 var _AddNewSite2 = _interopRequireDefault(_AddNewSite);
+
+var _RemotePostSearch = require("./admin/post-translator/RemotePostSearch");
+
+var _RemotePostSearch2 = _interopRequireDefault(_RemotePostSearch);
 
 var _TermTranslator = require("./admin/term-translation/TermTranslator");
 
@@ -75,7 +79,7 @@ controller.registerModule('nav-menus.php', _NavMenus2.default, {
 	events: {
 		'click #submit-mlp-language': 'sendRequest'
 	},
-	model: new _NavMenuItem2.default({ urlRoot: ajaxUrl }),
+	model: new _Model2.default({ urlRoot: ajaxUrl }),
 	moduleSettings: settings
 });
 
@@ -86,6 +90,20 @@ controller.registerModule('network/site-new.php', _AddNewSite2.default, {
 		'change #site-language': 'adaptLanguage',
 		'change #mlp-base-site-id': 'togglePluginsRow'
 	}
+});
+
+// Register the RemotePostSearch module for the Add New Post and the Edit Post admin pages.
+settings = F.getSettings(_RemotePostSearch2.default);
+controller.registerModule(['post.php', 'post-new.php'], _RemotePostSearch2.default, {
+	el: 'body',
+	events: {
+		'keydown .mlp-search-field': 'preventFormSubmission',
+		'keyup .mlp-search-field': 'reactToInput'
+	},
+	model: new _Model2.default({ urlRoot: ajaxUrl }),
+	moduleSettings: settings
+}, function (module) {
+	return module.initializeResults();
 });
 
 // Register the TermTranslator module for the Edit Tags admin page.
@@ -107,7 +125,7 @@ controller.registerModule('options-general.php', _UserBackEndLanguage2.default, 
 // Initialize the admin controller, and thus all modules registered for the current admin page.
 jQuery(controller.initialize);
 
-},{"./admin/core/Controller":2,"./admin/core/common":4,"./admin/core/functions":5,"./admin/nav-menus/NavMenuItem":6,"./admin/nav-menus/NavMenus":7,"./admin/network/AddNewSite":8,"./admin/term-translation/TermTranslator":9,"./admin/user-settings/UserBackEndLanguage":10}],2:[function(require,module,exports){
+},{"./admin/core/Controller":2,"./admin/core/Model":3,"./admin/core/common":5,"./admin/core/functions":6,"./admin/nav-menus/NavMenus":7,"./admin/network/AddNewSite":8,"./admin/post-translator/RemotePostSearch":9,"./admin/term-translation/TermTranslator":10,"./admin/user-settings/UserBackEndLanguage":11}],2:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -237,7 +255,46 @@ var Controller = function () {
 
 exports.default = Controller;
 
-},{"./Router":3,"./functions":5}],3:[function(require,module,exports){
+},{"./Router":4,"./functions":6}],3:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The MultilingualPress model module.
+ */
+
+var Model = function (_Backbone$Model) {
+	_inherits(Model, _Backbone$Model);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function Model() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, Model);
+
+		var _this = _possibleConstructorReturn(this, _Backbone$Model.call(this, options));
+
+		_this.urlRoot = options.urlRoot;
+		return _this;
+	}
+
+	return Model;
+}(Backbone.Model);
+
+exports.default = Model;
+
+},{}],4:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -273,7 +330,7 @@ var Router = function (_Backbone$Router) {
 
 exports.default = Router;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -325,7 +382,6 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 	/**
   * Toggles the element with the ID given in the according data attribute.
   * @param {Event} event - The click event of a toggler element.
-  * @returns {boolean} Whether or not the element has been toggled.
   */
 
 
@@ -333,17 +389,12 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 		var targetID = $(event.target).data('toggle-target');
 		if (targetID) {
 			$(targetID).toggle();
-
-			return true;
 		}
-
-		return false;
 	};
 
 	/**
   * Toggles the element with the ID given in the according toggler's data attribute if the toggler is checked.
   * @param {Event} event - The change event of an input element.
-  * @returns {boolean} Whether or not the element has been toggled.
   */
 
 
@@ -353,17 +404,13 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 		var targetID = $toggler.data('toggle-target');
 		if (targetID) {
 			$(targetID).toggle($toggler.is(':checked'));
-
-			return true;
 		}
-
-		return false;
 	};
 
 	return Toggler;
 }(Backbone.View);
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -408,45 +455,6 @@ var getSettings = exports.getSettings = function getSettings(module) {
 
 	return {};
 };
-
-},{}],6:[function(require,module,exports){
-"use strict";
-
-exports.__esModule = true;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * The MultilingualPress nav menu item model.
- */
-
-var NavMenuItem = function (_Backbone$Model) {
-	_inherits(NavMenuItem, _Backbone$Model);
-
-	/**
-  * Constructor. Sets up the properties.
-  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
-  */
-
-	function NavMenuItem() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-		_classCallCheck(this, NavMenuItem);
-
-		var _this = _possibleConstructorReturn(this, _Backbone$Model.call(this, options));
-
-		_this.urlRoot = options.urlRoot;
-		return _this;
-	}
-
-	return NavMenuItem;
-}(Backbone.Model);
-
-exports.default = NavMenuItem;
 
 },{}],7:[function(require,module,exports){
 'use strict';
@@ -649,11 +657,7 @@ var AddNewSite = function (_Backbone$View) {
 		var language = this.getLanguage($(event.target));
 		if (this.$language.find('[value="' + language + '"]').length) {
 			this.$language.val(language);
-
-			return true;
 		}
-
-		return false;
 	};
 
 	/**
@@ -688,6 +692,160 @@ var AddNewSite = function (_Backbone$View) {
 exports.default = AddNewSite;
 
 },{}],9:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var $ = window.jQuery;
+
+/**
+ * The MultilingualPress RemotePostSearch module.
+ */
+
+var RemotePostSearch = function (_Backbone$View) {
+	_inherits(RemotePostSearch, _Backbone$View);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function RemotePostSearch() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, RemotePostSearch);
+
+		/**
+   * Array holding the default search result HTML strings.
+   * @type {string[]}
+   */
+
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
+		_this.defaultResults = [];
+
+		/**
+   * Array holding jQuery objects representing the search result containers.
+   * @type {jQuery[]}
+   */
+		_this.resultsContainers = [];
+
+		_this.moduleSettings = options.moduleSettings;
+
+		/**
+   * Minimum number of characters required to fire the remote post search.
+   * @type {number}
+   */
+		_this.searchThreshold = parseInt(_this.moduleSettings.searchThreshold, 10);
+
+		_this.model = options.model;
+		_this.listenTo(_this.model, 'change', _this.render);
+		return _this;
+	}
+
+	/**
+  * Initializes both the default search result views as well as the result containers.
+  */
+
+
+	RemotePostSearch.prototype.initializeResults = function initializeResults() {
+		var _this2 = this;
+
+		$('.mlp-search-field').each(function (index, element) {
+			var $element = $(element),
+			    $resultsContainer = $('#' + $element.data('results-container-id')),
+			    siteID = $element.data('remote-site-id');
+
+			_this2.defaultResults[siteID] = $resultsContainer.html();
+			_this2.resultsContainers[siteID] = $resultsContainer;
+		});
+	};
+
+	/**
+  * Prevents form submission due to the enter key being pressed.
+  * @param {Event} event - The keydown event of a post search element.
+  */
+
+
+	RemotePostSearch.prototype.preventFormSubmission = function preventFormSubmission(event) {
+		if (13 === event.which) {
+			event.preventDefault();
+		}
+	};
+
+	/**
+  * According to the user input, either search for posts, or display the initial post selection.
+  * @param {Event} event - The keyup event of a post search element.
+  */
+
+
+	RemotePostSearch.prototype.reactToInput = function reactToInput(event) {
+		var _this3 = this;
+
+		var $input = $(event.target),
+		    value = $.trim($input.val() || '');
+
+		var remoteSiteID = void 0;
+
+		if (value === $input.data('value')) {
+			return;
+		}
+
+		clearTimeout(this.reactToInputTimer);
+
+		$input.data('value', value);
+
+		remoteSiteID = $input.data('remote-site-id');
+
+		if ('' === value) {
+			this.resultsContainers[remoteSiteID].html(this.defaultResults[remoteSiteID]);
+		} else if (value.length >= this.searchThreshold) {
+			this.reactToInputTimer = setTimeout(function () {
+				_this3.model.fetch({
+					data: {
+						action: 'mlp_rc_remote_post_search',
+						remote_site_id: remoteSiteID,
+						remote_post_id: $input.data('remote-post-id'),
+						source_site_id: $input.data('source-site-id'),
+						source_post_id: $input.data('source-post-id'),
+						s: value
+					},
+					processData: true
+				});
+			}, 400);
+		}
+	};
+
+	/**
+  * Renders the found posts to the according results container.
+  * @returns {boolean} Whether or not new data has been rendered.
+  */
+
+
+	RemotePostSearch.prototype.render = function render() {
+		var data = void 0;
+		if (this.model.get('success')) {
+			data = this.model.get('data');
+			this.resultsContainers[data.remoteSiteID].html(data.html);
+
+			return true;
+		}
+
+		return false;
+	};
+
+	return RemotePostSearch;
+}(Backbone.View);
+
+exports.default = RemotePostSearch;
+
+},{}],10:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -796,7 +954,7 @@ var TermTranslator = function (_Backbone$View) {
 
 exports.default = TermTranslator;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;

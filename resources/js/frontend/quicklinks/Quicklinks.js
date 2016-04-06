@@ -48,20 +48,16 @@ class Quicklinks {
 	/**
 	 * Triggers a redirect on form submission.
 	 * @param {Event} event - The submit event of the form.
-	 * @returns {boolean} Whether or not redirect has been triggered.
 	 */
 	submitForm( event ) {
 		var $select = event.target.querySelector( 'select' );
 		if ( null === $select ) {
-			return false;
+			return;
 		}
 
 		event.preventDefault();
 
 		this.Util.setLocation( $select.value );
-
-		// For testing only.
-		return true;
 	}
 }
 

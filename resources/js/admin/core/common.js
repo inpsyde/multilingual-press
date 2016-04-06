@@ -27,23 +27,17 @@ export class Toggler extends Backbone.View {
 	/**
 	 * Toggles the element with the ID given in the according data attribute.
 	 * @param {Event} event - The click event of a toggler element.
-	 * @returns {boolean} Whether or not the element has been toggled.
 	 */
 	toggleElement( event ) {
-		var targetID = $( event.target ).data( 'toggle-target' );
+		const targetID = $( event.target ).data( 'toggle-target' );
 		if ( targetID ) {
 			$( targetID ).toggle();
-
-			return true;
 		}
-
-		return false;
 	}
 
 	/**
 	 * Toggles the element with the ID given in the according toggler's data attribute if the toggler is checked.
 	 * @param {Event} event - The change event of an input element.
-	 * @returns {boolean} Whether or not the element has been toggled.
 	 */
 	toggleElementIfChecked( event ) {
 		const $toggler = event.data.$toggler;
@@ -51,10 +45,6 @@ export class Toggler extends Backbone.View {
 		const targetID = $toggler.data( 'toggle-target' );
 		if ( targetID ) {
 			$( targetID ).toggle( $toggler.is( ':checked' ) );
-
-			return true;
 		}
-
-		return false;
 	}
 }
