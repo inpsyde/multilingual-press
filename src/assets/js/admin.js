@@ -1,11 +1,23 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+var _functions = require("./admin/core/functions");
+
+var F = _interopRequireWildcard(_functions);
+
 var _common = require("./admin/core/common");
 
 var _Controller = require("./admin/core/Controller");
 
 var _Controller2 = _interopRequireDefault(_Controller);
+
+var _NavMenuItem = require("./admin/nav-menus/NavMenuItem");
+
+var _NavMenuItem2 = _interopRequireDefault(_NavMenuItem);
+
+var _NavMenus = require("./admin/nav-menus/NavMenus");
+
+var _NavMenus2 = _interopRequireDefault(_NavMenus);
 
 var _AddNewSite = require("./admin/network/AddNewSite");
 
@@ -20,6 +32,10 @@ var _UserBackEndLanguage = require("./admin/user-settings/UserBackEndLanguage");
 var _UserBackEndLanguage2 = _interopRequireDefault(_UserBackEndLanguage);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var ajaxUrl = window.ajaxurl;
 
 /**
  * The MultilingualPress admin namespace.
@@ -50,6 +66,19 @@ var controller = new _Controller2.default();
  */
 MLP.controller = controller;
 
+var settings = void 0;
+
+// Register the NavMenus module for the Menus admin page.
+settings = F.getSettings(_NavMenus2.default);
+controller.registerModule('nav-menus.php', _NavMenus2.default, {
+	el: '#' + settings.metaBoxID,
+	events: {
+		'click #submit-mlp-language': 'sendRequest'
+	},
+	model: new _NavMenuItem2.default({ urlRoot: ajaxUrl }),
+	moduleSettings: settings
+});
+
 // Register the AddNewSite module for the Add New Site network admin page.
 controller.registerModule('network/site-new.php', _AddNewSite2.default, {
 	el: '#wpbody-content form',
@@ -69,7 +98,8 @@ controller.registerModule('edit-tags.php', _TermTranslator2.default, {
 
 // Register the UserBackEndLanguage module for the General Settings admin page.
 controller.registerModule('options-general.php', _UserBackEndLanguage2.default, {
-	el: '#WPLANG'
+	el: '#WPLANG',
+	moduleSettings: F.getSettings(_UserBackEndLanguage2.default)
 }, function (module) {
 	return module.updateSiteLanguage();
 });
@@ -77,7 +107,7 @@ controller.registerModule('options-general.php', _UserBackEndLanguage2.default, 
 // Initialize the admin controller, and thus all modules registered for the current admin page.
 jQuery(controller.initialize);
 
-},{"./admin/core/Controller":2,"./admin/core/common":4,"./admin/network/AddNewSite":6,"./admin/term-translation/TermTranslator":7,"./admin/user-settings/UserBackEndLanguage":8}],2:[function(require,module,exports){
+},{"./admin/core/Controller":2,"./admin/core/common":4,"./admin/core/functions":5,"./admin/nav-menus/NavMenuItem":6,"./admin/nav-menus/NavMenus":7,"./admin/network/AddNewSite":8,"./admin/term-translation/TermTranslator":9,"./admin/user-settings/UserBackEndLanguage":10}],2:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -341,14 +371,32 @@ exports.__esModule = true;
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 /**
+ * Returns the name of the given thing.
+ * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
+ * @returns {string} The name of the module.
+ */
+var getModuleName = function getModuleName(module) {
+	switch (typeof module === 'undefined' ? 'undefined' : _typeof(module)) {
+		case 'function':
+			return module.name;
+
+		case 'string':
+			return module;
+
+		case 'object':
+			return module.constructor.name;
+	}
+
+	return '';
+};
+
+/**
  * Returns the settings object for the given module or settings name.
- * @param {Object|string} module - The instance of a MulitilingualPress module or the name of the settings object.
+ * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
  * @returns {Object} The settings object.
  */
 var getSettings = exports.getSettings = function getSettings(module) {
-	if ('object' === (typeof module === 'undefined' ? 'undefined' : _typeof(module))) {
-		module = module.constructor.name;
-	}
+	module = getModuleName(module);
 
 	if ('undefined' !== typeof window['mlp' + module + 'Settings']) {
 		return window['mlp' + module + 'Settings'];
@@ -362,6 +410,179 @@ var getSettings = exports.getSettings = function getSettings(module) {
 };
 
 },{}],6:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The MultilingualPress nav menu item model.
+ */
+
+var NavMenuItem = function (_Backbone$Model) {
+	_inherits(NavMenuItem, _Backbone$Model);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function NavMenuItem() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, NavMenuItem);
+
+		var _this = _possibleConstructorReturn(this, _Backbone$Model.call(this, options));
+
+		_this.urlRoot = options.urlRoot;
+		return _this;
+	}
+
+	return NavMenuItem;
+}(Backbone.Model);
+
+exports.default = NavMenuItem;
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var $ = window.jQuery;
+
+/**
+ * The MultilingualPress NavMenus module.
+ */
+
+var NavMenus = function (_Backbone$View) {
+	_inherits(NavMenus, _Backbone$View);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function NavMenus() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, NavMenus);
+
+		/**
+   * The jQuery object representing the MultilingualPress language checkboxes.
+   * @type {jQuery}
+   */
+
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
+		_this.$languages = _this.$el.find('li [type="checkbox"]');
+
+		/**
+   * The jQuery object representing the input element that contains the currently edited menu's ID.
+   * @type {jQuery}
+   */
+		_this.$menu = $('#menu');
+
+		/**
+   * The jQuery object representing the currently edited menu.
+   * @type {jQuery}
+   */
+		_this.$menuToEdit = $('#menu-to-edit');
+
+		/**
+   * The jQuery object representing the Languages meta box spinner.
+   * @type {jQuery}
+   */
+		_this.$spinner = _this.$el.find('.spinner');
+
+		/**
+   * The jQuery object representing the Languages meta box submit button.
+   * @type {jQuery}
+   */
+		_this.$submit = _this.$el.find('#submit-mlp-language');
+
+		_this.model = options.model;
+		_this.listenTo(_this.model, 'change', _this.render);
+
+		_this.moduleSettings = options.moduleSettings;
+		return _this;
+	}
+
+	/**
+  * Requests the according markup for the checked languages in the Languages meta box.
+  * @param {Event} event - The click event of the submit button.
+  */
+
+
+	NavMenus.prototype.sendRequest = function sendRequest(event) {
+		var data = {
+			action: this.moduleSettings.action,
+			menu: this.$menu.val(),
+			mlp_sites: this.getSites()
+		};
+		data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
+
+		event.preventDefault();
+
+		this.$submit.prop('disabled', true);
+
+		this.$spinner.addClass('is-active');
+
+		this.model.fetch({
+			data: data,
+			processData: true
+		});
+	};
+
+	/**
+  * Returns the site IDs for the checked languages in the Languages meta box.
+  * @returns {number[]} The site IDs.
+  */
+
+
+	NavMenus.prototype.getSites = function getSites() {
+		var ids = [];
+
+		this.$languages.filter(':checked').each(function (index, element) {
+			ids.push(Number($(element).val() || 0));
+		});
+
+		return ids;
+	};
+
+	/**
+  * Renders the nav menu item to the currently edited menu.
+  */
+
+
+	NavMenus.prototype.render = function render() {
+		if (this.model.get('success')) {
+			this.$menuToEdit.append(this.model.get('data'));
+		}
+
+		this.$languages.prop('checked', false);
+
+		this.$spinner.removeClass('is-active');
+
+		this.$submit.prop('disabled', false);
+	};
+
+	return NavMenus;
+}(Backbone.View);
+
+exports.default = NavMenus;
+
+},{}],8:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -466,7 +687,7 @@ var AddNewSite = function (_Backbone$View) {
 
 exports.default = AddNewSite;
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -575,16 +796,10 @@ var TermTranslator = function (_Backbone$View) {
 
 exports.default = TermTranslator;
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
-
-var _functions = require("../core/functions");
-
-var F = _interopRequireWildcard(_functions);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -611,7 +826,7 @@ var UserBackEndLanguage = function (_Backbone$View) {
 
 		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		_this.moduleSettings = options.moduleSettings || F.getSettings(_this);
+		_this.moduleSettings = options.moduleSettings;
 		return _this;
 	}
 
@@ -629,4 +844,4 @@ var UserBackEndLanguage = function (_Backbone$View) {
 
 exports.default = UserBackEndLanguage;
 
-},{"../core/functions":5}]},{},[1]);
+},{}]},{},[1]);

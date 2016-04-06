@@ -1,5 +1,3 @@
-import * as F from "../core/functions";
-
 /**
  * MultilingualPress UserBackEndLanguage module.
  */
@@ -11,7 +9,7 @@ class UserBackEndLanguage extends Backbone.View {
 	constructor( options = {} ) {
 		super( options );
 
-		this.moduleSettings = options.moduleSettings || F.getSettings( this );
+		this.moduleSettings = options.moduleSettings;
 	}
 
 	/**
