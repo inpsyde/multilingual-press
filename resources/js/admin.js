@@ -29,6 +29,12 @@ const MLP = {
 	controller: new Controller(),
 
 	/**
+	 * The set of core-specific methods.
+	 * @type {Object}
+	 */
+	Functions: F,
+
+	/**
 	 * The MultilingualPress toggler instance.
 	 * @type {Toggler}
 	 */
@@ -37,7 +43,13 @@ const MLP = {
 		events: {
 			'click .mlp-click-toggler': 'toggleElement'
 		}
-	} )
+	} ),
+
+	/**
+	 * The set of utility methods.
+	 * @type {Object}
+	 */
+	Util
 };
 
 const { controller, toggler } = MLP;
@@ -89,7 +101,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, 
 	},
 	moduleSettings: F.getSettings( RelationshipControl ),
 	Util
-}, module => module.initializeEventHandlers() );
+}, ( module ) => module.initializeEventHandlers() );
 
 // Register the RemotePostSearch module for the Edit Post and Add New Post admin pages.
 controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
@@ -100,7 +112,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
 	},
 	model: new Model( { urlRoot: ajaxURL } ),
 	moduleSettings: F.getSettings( RemotePostSearch )
-}, module => module.initializeResults() );
+}, ( module ) => module.initializeResults() );
 
 // Register the TermTranslator module for the Edit Tags admin page.
 controller.registerModule( 'edit-tags.php', TermTranslator, {
@@ -114,7 +126,7 @@ controller.registerModule( 'edit-tags.php', TermTranslator, {
 controller.registerModule( 'options-general.php', UserBackEndLanguage, {
 	el: '#WPLANG',
 	moduleSettings: F.getSettings( UserBackEndLanguage )
-}, module => module.updateSiteLanguage() );
+}, ( module ) => module.updateSiteLanguage() );
 
 // Initialize the admin controller, and thus all modules registered for the current admin page.
 jQuery( controller.initialize );

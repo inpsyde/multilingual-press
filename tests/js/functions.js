@@ -1,4 +1,4 @@
-export const returnArg = arg => arg;
+export const returnArg = ( arg ) => arg;
 
 export const returnEmptyArray = () => [];
 

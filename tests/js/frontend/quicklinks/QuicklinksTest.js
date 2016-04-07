@@ -13,7 +13,7 @@ const resetUtil = () => {
 	Util.setLocation.reset();
 };
 
-const createTestee = selector => {
+const createTestee = ( selector ) => {
 	selector = selector || 'selector';
 
 	resetUtil();
@@ -21,7 +21,7 @@ const createTestee = selector => {
 	return new Quicklinks( selector, Util )
 };
 
-test( 'Quicklinks is a constructor function', assert => {
+test( 'Quicklinks is a constructor function', ( assert ) => {
 	assert.equal(
 		typeof Quicklinks,
 		'function',
@@ -37,7 +37,7 @@ test( 'Quicklinks is a constructor function', assert => {
 	assert.end();
 } );
 
-test( 'initialize behaves as expected', assert => {
+test( 'initialize behaves as expected', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
@@ -60,7 +60,7 @@ test( 'initialize behaves as expected', assert => {
 	assert.end();
 } );
 
-test( 'attachSubmitHandler behaves as expected for an incorrect selector', assert => {
+test( 'attachSubmitHandler behaves as expected for an incorrect selector', ( assert ) => {
 	const testee = createTestee( 'incorrect-selector' );
 
 	global.document = {
@@ -76,7 +76,7 @@ test( 'attachSubmitHandler behaves as expected for an incorrect selector', asser
 	assert.end();
 } );
 
-test( 'attachSubmitHandler behaves as expected for the correct selector', assert => {
+test( 'attachSubmitHandler behaves as expected for the correct selector', ( assert ) => {
 	// Reset Util spies.
 	resetUtil();
 
@@ -110,7 +110,7 @@ test( 'attachSubmitHandler behaves as expected for the correct selector', assert
 	assert.end();
 } );
 
-test( 'submitForm behaves as expected', assert => {
+test( 'submitForm behaves as expected', ( assert ) => {
 	const testee = createTestee();
 
 	const event = {

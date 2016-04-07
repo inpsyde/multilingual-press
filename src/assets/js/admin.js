@@ -68,6 +68,12 @@ var MLP = {
 	controller: new _Controller2.default(),
 
 	/**
+  * The set of core-specific methods.
+  * @type {Object}
+  */
+	Functions: F,
+
+	/**
   * The MultilingualPress toggler instance.
   * @type {Toggler}
   */
@@ -76,7 +82,13 @@ var MLP = {
 		events: {
 			'click .mlp-click-toggler': 'toggleElement'
 		}
-	})
+	}),
+
+	/**
+  * The set of utility methods.
+  * @type {Object}
+  */
+	Util: Util
 };
 
 var controller = MLP.controller;

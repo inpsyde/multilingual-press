@@ -33,7 +33,7 @@ class Quicklinks {
 	 * @returns {boolean} Whether or not the event handler has been attached.
 	 */
 	attachSubmitHandler() {
-		var $form = document.querySelector( this.selector );
+		const $form = document.querySelector( this.selector );
 		if ( null === $form ) {
 			return false;
 		}
@@ -48,7 +48,7 @@ class Quicklinks {
 	 * @param {Event} event - The submit event of the form.
 	 */
 	submitForm( event ) {
-		var $select = event.target.querySelector( 'select' );
+		const $select = event.target.querySelector( 'select' );
 		if ( null === $select ) {
 			return;
 		}

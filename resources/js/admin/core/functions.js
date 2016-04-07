@@ -3,7 +3,7 @@
  * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
  * @returns {string} The name of the module.
  */
-const getModuleName = module => {
+const getModuleName = ( module ) => {
 	switch ( typeof module ) {
 		case 'function':
 			return module.name;
@@ -23,7 +23,7 @@ const getModuleName = module => {
  * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
  * @returns {Object} The settings object.
  */
-export const getSettings = module => {
+export const getSettings = ( module ) => {
 	module = getModuleName( module );
 
 	if ( 'undefined' !== typeof window[ 'mlp' + module + 'Settings' ] ) {

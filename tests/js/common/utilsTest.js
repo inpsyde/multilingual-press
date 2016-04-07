@@ -2,7 +2,7 @@ import test from "tape";
 import sinon from "sinon";
 import * as Util from "../../../resources/js/common/utils";
 
-test( 'addEventListener attaches the given listener to the given element for the given event', assert => {
+test( 'addEventListener attaches the given listener to the given element for the given event', ( assert ) => {
 	assert.equal(
 		typeof Util.addEventListener,
 		'function',
@@ -60,7 +60,7 @@ test( 'addEventListener attaches the given listener to the given element for the
 	assert.end();
 } );
 
-test( 'setLocation redirects the user to the given URL', assert => {
+test( 'setLocation redirects the user to the given URL', ( assert ) => {
 	assert.equal(
 		typeof Util.setLocation,
 		'function',
