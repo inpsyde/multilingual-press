@@ -11,8 +11,16 @@ class RelationshipControl extends Backbone.View {
 	constructor( options = {} ) {
 		super( options );
 
+		/**
+		 * The event manager object.
+		 * @type {EventManager}
+		 */
 		this.EventManager = options.EventManager;
 
+		/**
+		 * The module settings.
+		 * @type {Object}
+		 */
 		this.moduleSettings = options.moduleSettings;
 
 		/**
@@ -160,7 +168,7 @@ class RelationshipControl extends Backbone.View {
 	 * @returns {boolean} Whether or not the request has been sent.
 	 */
 	connectExistingPost( data ) {
-		const newPostID = $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() || 0;
+		const newPostID = Number( $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() );
 
 		if ( ! newPostID ) {
 			window.alert( this.moduleSettings.L10n.noPostSelected );

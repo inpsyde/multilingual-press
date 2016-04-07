@@ -21,6 +21,14 @@ var _Model = require("./admin/core/Model");
 
 var _Model2 = _interopRequireDefault(_Model);
 
+var _Registry = require("./admin/core/Registry");
+
+var _Registry2 = _interopRequireDefault(_Registry);
+
+var _Router = require("./admin/core/Router");
+
+var _Router2 = _interopRequireDefault(_Router);
+
 var _NavMenus = require("./admin/nav-menus/NavMenus");
 
 var _NavMenus2 = _interopRequireDefault(_NavMenus);
@@ -65,24 +73,13 @@ var MLP = {
   * The MultilingualPress admin controller instance.
   * @type {Controller}
   */
-	controller: new _Controller2.default(),
+	controller: new _Controller2.default(new _Registry2.default(new _Router2.default()), F.getSettings('mlpSettings')),
 
 	/**
   * The set of core-specific methods.
   * @type {Object}
   */
 	Functions: F,
-
-	/**
-  * The MultilingualPress toggler instance.
-  * @type {Toggler}
-  */
-	toggler: new _common.Toggler({
-		el: 'body',
-		events: {
-			'click .mlp-click-toggler': 'toggleElement'
-		}
-	}),
 
 	/**
   * The set of utility methods.
@@ -92,13 +89,23 @@ var MLP = {
 };
 
 var controller = MLP.controller;
-var toggler = MLP.toggler;
 
+/**
+ * The MultilingualPress toggler instance.
+ * @type {Toggler}
+ */
 
-var settings = void 0;
+var toggler = new _common.Toggler({
+	el: 'body',
+	events: {
+		'click .mlp-click-toggler': 'toggleElement'
+	}
+});
 
 // Initialize the state togglers.
 toggler.initializeStateTogglers();
+
+var settings = void 0;
 
 // Register the NavMenus module for the Menus admin page.
 settings = F.getSettings(_NavMenus2.default);
@@ -176,112 +183,101 @@ controller.registerModule('options-general.php', _UserBackEndLanguage2.default, 
 });
 
 // Initialize the admin controller, and thus all modules registered for the current admin page.
-jQuery(controller.initialize);
+jQuery(function () {
+	/**
+  * The module instances registered for the current admin page.
+  * @type {Object}
+  */
+	MLP.modules = controller.initialize();
+});
 
 // Externalize the MultilingualPress admin namespace.
 window.MultilingualPressAdmin = MLP;
 
-},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/common":6,"./admin/core/functions":7,"./admin/nav-menus/NavMenus":8,"./admin/network/AddNewSite":9,"./admin/post-translation/CopyPost":10,"./admin/post-translation/RelationshipControl":11,"./admin/post-translation/RemotePostSearch":12,"./admin/term-translation/TermTranslator":13,"./admin/user-settings/UserBackEndLanguage":14,"./common/utils":15}],2:[function(require,module,exports){
+},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/RelationshipControl":12,"./admin/post-translation/RemotePostSearch":13,"./admin/term-translation/TermTranslator":14,"./admin/user-settings/UserBackEndLanguage":15,"./common/utils":16}],2:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
 
-var _functions = require("./functions");
-
-var F = _interopRequireWildcard(_functions);
-
-var _Router = require("./Router");
-
-var _Router2 = _interopRequireDefault(_Router);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } //
-// TODO: Complete refactoring of the Controller class as well as its dependencies.
-//
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var $ = window.jQuery;
-var _ = window._;
-
-var mlpSettings = F.getSettings('mlpSettings');
-
-var modules = {};
-
-var registry = {};
-
-var router = new _Router2.default();
+var _window = window;
+var _ = _window._;
 
 /**
- * Registers the module with the given data for the given route.
- * @param {Object} moduleData - The module data.
- * @param {string} route - The route.
+ * The MultilingualPress admin controller.
  */
-var registerModuleForRoute = function registerModuleForRoute(moduleData, route) {
-	registry[route] || (registry[route] = []);
-	registry[route].push(moduleData);
-};
-
-/**
- * Sets up all routes with the according registered modules.
- */
-var setUpRoutes = function setUpRoutes() {
-	$.each(registry, function (route, routeModules) {
-		router.route(route, route, function () {
-			$.each(routeModules, function (index, moduleData) {
-				var Constructor = moduleData.Constructor;
-				var module = new Constructor(moduleData.options);
-				modules[Constructor.name] = module;
-				moduleData.callback && moduleData.callback(module);
-			});
-		});
-	});
-};
-
-/**
- * Starts Backbone's history, unless it has been started already.
- * @returns {boolean}
- */
-var maybeStartHistory = function maybeStartHistory() {
-	if (Backbone.History.started) {
-		return false;
-	}
-
-	Backbone.history.start({
-		root: mlpSettings.urlRoot,
-		pushState: true,
-		hashChange: false
-	});
-
-	return true;
-};
 
 var Controller = function () {
 	/**
   * Constructor. Sets up the properties.
+  * @param {Registry} registry - The registry object.
+  * @param {Object} settings - The controller settings.
   */
 
-	function Controller() {
+	function Controller(registry, settings) {
 		_classCallCheck(this, Controller);
 
 		/**
-   * The MultilingualPress admin module instances.
+   * The registry object.
+   * @type {Registry}
+   */
+		this.registry = registry;
+
+		/**
+   * The controller settings.
    * @type {Object}
    */
-		this.modules = modules;
+		this.settings = settings;
 	}
 
 	/**
-  * Registers a new module with the given Module callback under the given name for the given route.
-  * @param {string|string[]} routes - The routes for the module.
+  * Initializes the instance.
+  * @returns {Object} The module instances registered for the current admin page.
+  */
+
+
+	Controller.prototype.initialize = function initialize() {
+		var modules = this.registry.initializeRoutes();
+
+		this.maybeStartHistory();
+
+		return modules;
+	};
+
+	/**
+  * Starts Backbone's history, unless it has been started already.
+  * @returns {boolean} Whether or not the history has been started right now.
+  */
+
+
+	Controller.prototype.maybeStartHistory = function maybeStartHistory() {
+		if (Backbone.History.started) {
+			return false;
+		}
+
+		Backbone.history.start({
+			root: this.settings.urlRoot,
+			pushState: true,
+			hashChange: false
+		});
+
+		return true;
+	};
+
+	/**
+  * Registers a new module with the given Module callback under the given name for the given routes.
+  * @param {string|string[]} routes - One or more routes.
   * @param {Function} Constructor - The constructor callback for the module.
-  * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
+  * @param {Object} [options={}] - Optional. The options for the module. Default to an empty object.
   * @param {Function} [callback=null] - Optional. The callback to execute after construction. Defaults to null.
   */
 
 
 	Controller.prototype.registerModule = function registerModule(routes, Constructor) {
+		var _this = this;
+
 		var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 		var callback = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
 
@@ -291,19 +287,11 @@ var Controller = function () {
 			callback: callback
 		};
 
-		$.each(_.isArray(routes) ? routes : [routes], function (index, route) {
-			registerModuleForRoute(moduleData, route);
+		_.isArray(routes) || (routes = [routes]);
+
+		$.each(routes, function (index, route) {
+			return _this.registry.registerModuleForRoute(moduleData, route);
 		});
-	};
-
-	/**
-  * Initializes the instance.
-  */
-
-
-	Controller.prototype.initialize = function initialize() {
-		setUpRoutes();
-		maybeStartHistory();
 	};
 
 	return Controller;
@@ -311,7 +299,7 @@ var Controller = function () {
 
 exports.default = Controller;
 
-},{"./Router":5,"./functions":7}],3:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -332,7 +320,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
- * The MultilingualPress model module.
+ * The MultilingualPress Model module.
  */
 
 var Model = function (_Backbone$Model) {
@@ -348,6 +336,11 @@ var Model = function (_Backbone$Model) {
 
 		_classCallCheck(this, Model);
 
+		/**
+   * The URL root.
+   * @type {string}
+   */
+
 		var _this = _possibleConstructorReturn(this, _Backbone$Model.call(this, options));
 
 		_this.urlRoot = options.urlRoot;
@@ -360,6 +353,124 @@ var Model = function (_Backbone$Model) {
 exports.default = Model;
 
 },{}],5:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var $ = window.jQuery;
+
+/**
+ * The MultilingualPress Registry module.
+ */
+
+var Registry = function () {
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Router} router - The router object.
+  */
+
+	function Registry(router) {
+		_classCallCheck(this, Registry);
+
+		/**
+   * The registry data (i.e., module-per-route).
+   * @type {Object}
+   */
+		this.data = {};
+
+		/**
+   * The module instances registered for the current admin page.
+   * @type {Object}
+   */
+		this.modules = {};
+
+		/**
+   * The router object.
+   * @type {Router}
+   */
+		this.router = router;
+	}
+
+	/**
+  * Creates and stores the module instance for the given module data.
+  * @param {Object} data - The module data.
+  */
+
+
+	Registry.prototype.createModule = function createModule(data) {
+		var Constructor = data.Constructor,
+		    module = new Constructor(data.options);
+
+		this.modules[Constructor.name] = module;
+
+		data.callback && data.callback(module);
+	};
+
+	/**
+  * Creates and stores the module instances for the given modules data.
+  * @param {Object[]} modules - The modules data.
+  */
+
+
+	Registry.prototype.createModules = function createModules(modules) {
+		var _this = this;
+
+		$.each(modules, function (index, data) {
+			return _this.createModule(data);
+		});
+	};
+
+	/**
+  * Initializes the given route.
+  * @param {string} route - The route.
+  * @param {Object[]} modules - The modules data.
+  */
+
+
+	Registry.prototype.initializeRoute = function initializeRoute(route, modules) {
+		var _this2 = this;
+
+		this.router.route(route, route, function () {
+			return _this2.createModules(modules);
+		});
+	};
+
+	/**
+  * Sets up all routes with the according registered modules.
+  * @returns {Object} The module instances registered for the current admin page.
+  */
+
+
+	Registry.prototype.initializeRoutes = function initializeRoutes() {
+		var _this3 = this;
+
+		$.each(this.data, function (route, modules) {
+			return _this3.initializeRoute(route, modules);
+		});
+
+		return this.modules;
+	};
+
+	/**
+  * Registers the module with the given data for the given route.
+  * @param {Object} module - The module data.
+  * @param {string} route - The route.
+  */
+
+
+	Registry.prototype.registerModuleForRoute = function registerModuleForRoute(module, route) {
+		this.data[route] || (this.data[route] = []);
+		this.data[route].push(module);
+	};
+
+	return Registry;
+}();
+
+exports.default = Registry;
+
+},{}],6:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -395,7 +506,7 @@ var Router = function (_Backbone$Router) {
 
 exports.default = Router;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -409,7 +520,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var $ = window.jQuery;
 
 /**
- * MultilingualPress Toggler module.
+ * The MultilingualPress Toggler module.
  */
 
 var Toggler = exports.Toggler = function (_Backbone$View) {
@@ -429,6 +540,20 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 	}
 
 	/**
+  * Initializes the given toggler that works by using its individual state.
+  * @param {Element} element - The toggler element.
+  */
+
+
+	Toggler.prototype.initializeStateToggler = function initializeStateToggler(element) {
+		var $toggler = $(element);
+
+		$('[name="' + $toggler.attr('name') + '"]').on('change', {
+			$toggler: $toggler
+		}, this.toggleElementIfChecked);
+	};
+
+	/**
   * Initializes the togglers that work by using their individual state.
   */
 
@@ -437,11 +562,7 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 		var _this2 = this;
 
 		$('.mlp-state-toggler').each(function (index, element) {
-			var $toggler = $(element);
-
-			$('[name="' + $toggler.attr('name') + '"]').on('change', {
-				$toggler: $toggler
-			}, _this2.toggleElementIfChecked);
+			return _this2.initializeStateToggler(element);
 		});
 	};
 
@@ -477,7 +598,7 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 	return Toggler;
 }(Backbone.View);
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -505,9 +626,9 @@ var getModuleName = function getModuleName(module) {
 };
 
 /**
- * Returns the settings object for the given module or settings name.
+ * Returns the settings for the given module or settings name.
  * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
- * @returns {Object} The settings object.
+ * @returns {Object} The settings.
  */
 var getSettings = exports.getSettings = function getSettings(module) {
 	module = getModuleName(module);
@@ -523,7 +644,7 @@ var getSettings = exports.getSettings = function getSettings(module) {
 	return {};
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -586,9 +707,17 @@ var NavMenus = function (_Backbone$View) {
    */
 		_this.$submit = _this.$el.find('#submit-mlp-language');
 
+		/**
+   * The model object.
+   * @type {Model}
+   */
 		_this.model = options.model;
 		_this.listenTo(_this.model, 'change', _this.render);
 
+		/**
+   * The module settings.
+   * @type {Object}
+   */
 		_this.moduleSettings = options.moduleSettings;
 		return _this;
 	}
@@ -629,7 +758,7 @@ var NavMenus = function (_Backbone$View) {
 		var ids = [];
 
 		this.$languages.filter(':checked').each(function (index, element) {
-			ids.push(Number($(element).val() || 0));
+			return ids.push(Number($(element).val()));
 		});
 
 		return ids;
@@ -657,7 +786,7 @@ var NavMenus = function (_Backbone$View) {
 
 exports.default = NavMenus;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -686,6 +815,11 @@ var AddNewSite = function (_Backbone$View) {
 		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
 		_classCallCheck(this, AddNewSite);
+
+		/**
+   * The templating function.
+   * @type {Function}
+   */
 
 		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
@@ -760,7 +894,7 @@ var AddNewSite = function (_Backbone$View) {
 
 exports.default = AddNewSite;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -813,11 +947,23 @@ var CopyPost = function (_Backbone$View) {
    */
 		_this.$title = $('#title');
 
+		/**
+   * The event manager object.
+   * @type {EventManager}
+   */
 		_this.EventManager = options.EventManager;
 
+		/**
+   * The model object.
+   * @type {Model}
+   */
 		_this.model = options.model;
 		_this.listenTo(_this.model, 'change', _this.updatePostData);
 
+		/**
+   * The module settings.
+   * @type {Object}
+   */
 		_this.moduleSettings = options.moduleSettings;
 
 		/**
@@ -873,7 +1019,7 @@ var CopyPost = function (_Backbone$View) {
 
 
 	CopyPost.prototype.getRemoteSiteID = function getRemoteSiteID($button) {
-		return $button.data('site-id') || 0;
+		return Number($button.data('site-id'));
 	};
 
 	/**
@@ -983,7 +1129,7 @@ var CopyPost = function (_Backbone$View) {
 
 exports.default = CopyPost;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1013,10 +1159,19 @@ var RelationshipControl = function (_Backbone$View) {
 
 		_classCallCheck(this, RelationshipControl);
 
+		/**
+   * The event manager object.
+   * @type {EventManager}
+   */
+
 		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.EventManager = options.EventManager;
 
+		/**
+   * The module settings.
+   * @type {Object}
+   */
 		_this.moduleSettings = options.moduleSettings;
 
 		/**
@@ -1183,7 +1338,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 
 	RelationshipControl.prototype.connectExistingPost = function connectExistingPost(data) {
-		var newPostID = $('input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked').val() || 0;
+		var newPostID = Number($('input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked').val());
 
 		if (!newPostID) {
 			window.alert(this.moduleSettings.L10n.noPostSelected);
@@ -1219,7 +1374,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 exports.default = RelationshipControl;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1264,6 +1419,10 @@ var RemotePostSearch = function (_Backbone$View) {
    */
 		_this.resultsContainers = [];
 
+		/**
+   * The module settings.
+   * @type {Object}
+   */
 		_this.moduleSettings = options.moduleSettings;
 
 		/**
@@ -1272,10 +1431,29 @@ var RemotePostSearch = function (_Backbone$View) {
    */
 		_this.searchThreshold = parseInt(_this.moduleSettings.searchThreshold, 10);
 
+		/**
+   * The model object.
+   * @type {Model}
+   */
 		_this.model = options.model;
 		_this.listenTo(_this.model, 'change', _this.render);
 		return _this;
 	}
+
+	/**
+  * Initializes both the default search result view as well as the result container for the given element.
+  * @param {Element} element - The HTML element.
+  */
+
+
+	RemotePostSearch.prototype.initializeResult = function initializeResult(element) {
+		var $element = $(element),
+		    $resultsContainer = $('#' + $element.data('results-container-id')),
+		    siteID = $element.data('remote-site-id');
+
+		this.defaultResults[siteID] = $resultsContainer.html();
+		this.resultsContainers[siteID] = $resultsContainer;
+	};
 
 	/**
   * Initializes both the default search result views as well as the result containers.
@@ -1286,12 +1464,7 @@ var RemotePostSearch = function (_Backbone$View) {
 		var _this2 = this;
 
 		$('.mlp-search-field').each(function (index, element) {
-			var $element = $(element),
-			    $resultsContainer = $('#' + $element.data('results-container-id')),
-			    siteID = $element.data('remote-site-id');
-
-			_this2.defaultResults[siteID] = $resultsContainer.html();
-			_this2.resultsContainers[siteID] = $resultsContainer;
+			return _this2.initializeResult(element);
 		});
 	};
 
@@ -1374,7 +1547,7 @@ var RemotePostSearch = function (_Backbone$View) {
 
 exports.default = RemotePostSearch;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1444,7 +1617,7 @@ var TermTranslator = function (_Backbone$View) {
 		relation = this.getSelectedRelation($select);
 		if ('' !== relation) {
 			this.$selects.not($select).each(function (index, element) {
-				_this2.selectTerm($(element), relation);
+				return _this2.selectTerm($(element), relation);
 			});
 		}
 
@@ -1484,7 +1657,7 @@ var TermTranslator = function (_Backbone$View) {
 
 exports.default = TermTranslator;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1512,6 +1685,11 @@ var UserBackEndLanguage = function (_Backbone$View) {
 
 		_classCallCheck(this, UserBackEndLanguage);
 
+		/**
+   * The module settings.
+   * @type {Object}
+   */
+
 		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.moduleSettings = options.moduleSettings;
@@ -1532,7 +1710,7 @@ var UserBackEndLanguage = function (_Backbone$View) {
 
 exports.default = UserBackEndLanguage;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;

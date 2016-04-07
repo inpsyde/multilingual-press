@@ -19,9 +19,9 @@ const getModuleName = ( module ) => {
 };
 
 /**
- * Returns the settings object for the given module or settings name.
+ * Returns the settings for the given module or settings name.
  * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
- * @returns {Object} The settings object.
+ * @returns {Object} The settings.
  */
 export const getSettings = ( module ) => {
 	module = getModuleName( module );

@@ -1,5 +1,5 @@
 /**
- * The MultilingualPress model module.
+ * The MultilingualPress Model module.
  */
 class Model extends Backbone.Model {
 	/**
@@ -9,6 +9,10 @@ class Model extends Backbone.Model {
 	constructor( options = {} ) {
 		super( options );
 
+		/**
+		 * The URL root.
+		 * @type {string}
+		 */
 		this.urlRoot = options.urlRoot;
 	}
 }

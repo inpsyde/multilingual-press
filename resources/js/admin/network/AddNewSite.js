@@ -11,6 +11,10 @@ class AddNewSite extends Backbone.View {
 	constructor( options = {} ) {
 		super( options );
 
+		/**
+		 * The templating function.
+		 * @type {Function}
+		 */
 		this.template = _.template( $( '#mlp-add-new-site-template' ).html() || '' );
 
 		/**

@@ -41,9 +41,17 @@ class NavMenus extends Backbone.View {
 		 */
 		this.$submit = this.$el.find( '#submit-mlp-language' );
 
+		/**
+		 * The model object.
+		 * @type {Model}
+		 */
 		this.model = options.model;
 		this.listenTo( this.model, 'change', this.render );
 
+		/**
+		 * The module settings.
+		 * @type {Object}
+		 */
 		this.moduleSettings = options.moduleSettings;
 	}
 
@@ -78,9 +86,7 @@ class NavMenus extends Backbone.View {
 	getSites() {
 		const ids = [];
 
-		this.$languages.filter( ':checked' ).each( ( index, element ) => {
-			ids.push( Number( $( element ).val() || 0 ) );
-		} );
+		this.$languages.filter( ':checked' ).each( ( index, element ) => ids.push( Number( $( element ).val() ) ) );
 
 		return ids;
 	}

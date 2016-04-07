@@ -23,6 +23,10 @@ class RemotePostSearch extends Backbone.View {
 		 */
 		this.resultsContainers = [];
 
+		/**
+		 * The module settings.
+		 * @type {Object}
+		 */
 		this.moduleSettings = options.moduleSettings;
 
 		/**
@@ -31,22 +35,32 @@ class RemotePostSearch extends Backbone.View {
 		 */
 		this.searchThreshold = parseInt( this.moduleSettings.searchThreshold, 10 );
 
+		/**
+		 * The model object.
+		 * @type {Model}
+		 */
 		this.model = options.model;
 		this.listenTo( this.model, 'change', this.render );
+	}
+
+	/**
+	 * Initializes both the default search result view as well as the result container for the given element.
+	 * @param {Element} element - The HTML element.
+	 */
+	initializeResult( element ) {
+		const $element = $( element ),
+			$resultsContainer = $( '#' + $element.data( 'results-container-id' ) ),
+			siteID = $element.data( 'remote-site-id' );
+
+		this.defaultResults[ siteID ] = $resultsContainer.html();
+		this.resultsContainers[ siteID ] = $resultsContainer;
 	}
 
 	/**
 	 * Initializes both the default search result views as well as the result containers.
 	 */
 	initializeResults() {
-		$( '.mlp-search-field' ).each( ( index, element ) => {
-			const $element = $( element ),
-				$resultsContainer = $( '#' + $element.data( 'results-container-id' ) ),
-				siteID = $element.data( 'remote-site-id' );
-
-			this.defaultResults[ siteID ] = $resultsContainer.html();
-			this.resultsContainers[ siteID ] = $resultsContainer;
-		} );
+		$( '.mlp-search-field' ).each( ( index, element ) => this.initializeResult( element ) );
 	}
 
 	/**

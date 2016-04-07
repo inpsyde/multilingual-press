@@ -1,82 +1,64 @@
-//
-// TODO: Complete refactoring of the Controller class as well as its dependencies.
-//
-
-import * as F from "./functions";
-import Router from "./Router";
-
 const $ = window.jQuery;
-const _ = window._;
-
-const mlpSettings = F.getSettings( 'mlpSettings' );
-
-const modules = {};
-
-const registry = {};
-
-const router = new Router();
+const { _ } = window;
 
 /**
- * Registers the module with the given data for the given route.
- * @param {Object} moduleData - The module data.
- * @param {string} route - The route.
+ * The MultilingualPress admin controller.
  */
-const registerModuleForRoute = ( moduleData, route ) => {
-	registry[ route ] || ( registry[ route ] = [] );
-	registry[ route ].push( moduleData );
-};
-
-/**
- * Sets up all routes with the according registered modules.
- */
-const setUpRoutes = () => {
-	$.each( registry, ( route, routeModules ) => {
-		router.route( route, route, () => {
-			$.each( routeModules, ( index, moduleData ) => {
-				let Constructor = moduleData.Constructor;
-				let module = new Constructor( moduleData.options );
-				modules[ Constructor.name ] = module;
-				moduleData.callback && moduleData.callback( module );
-			} );
-		} );
-	} );
-};
-
-/**
- * Starts Backbone's history, unless it has been started already.
- * @returns {boolean}
- */
-const maybeStartHistory = () => {
-	if ( Backbone.History.started ) {
-		return false;
-	}
-
-	Backbone.history.start( {
-		root: mlpSettings.urlRoot,
-		pushState: true,
-		hashChange: false
-	} );
-
-	return true;
-};
-
 class Controller {
 	/**
 	 * Constructor. Sets up the properties.
+	 * @param {Registry} registry - The registry object.
+	 * @param {Object} settings - The controller settings.
 	 */
-	constructor() {
+	constructor( registry, settings ) {
 		/**
-		 * The MultilingualPress admin module instances.
+		 * The registry object.
+		 * @type {Registry}
+		 */
+		this.registry = registry;
+
+		/**
+		 * The controller settings.
 		 * @type {Object}
 		 */
-		this.modules = modules;
+		this.settings = settings;
 	}
 
 	/**
-	 * Registers a new module with the given Module callback under the given name for the given route.
-	 * @param {string|string[]} routes - The routes for the module.
+	 * Initializes the instance.
+	 * @returns {Object} The module instances registered for the current admin page.
+	 */
+	initialize() {
+		const modules = this.registry.initializeRoutes();
+
+		this.maybeStartHistory();
+
+		return modules;
+	}
+
+	/**
+	 * Starts Backbone's history, unless it has been started already.
+	 * @returns {boolean} Whether or not the history has been started right now.
+	 */
+	maybeStartHistory() {
+		if ( Backbone.History.started ) {
+			return false;
+		}
+
+		Backbone.history.start( {
+			root: this.settings.urlRoot,
+			pushState: true,
+			hashChange: false
+		} );
+
+		return true;
+	}
+
+	/**
+	 * Registers a new module with the given Module callback under the given name for the given routes.
+	 * @param {string|string[]} routes - One or more routes.
 	 * @param {Function} Constructor - The constructor callback for the module.
-	 * @param {Object} [options={}] - Optional. The options for the module. Default to {}.
+	 * @param {Object} [options={}] - Optional. The options for the module. Default to an empty object.
 	 * @param {Function} [callback=null] - Optional. The callback to execute after construction. Defaults to null.
 	 */
 	registerModule( routes, Constructor, options = {}, callback = null ) {
@@ -86,17 +68,9 @@ class Controller {
 			callback
 		};
 
-		$.each( _.isArray( routes ) ? routes : [ routes ], ( index, route ) => {
-			registerModuleForRoute( moduleData, route );
-		} );
-	}
+		_.isArray( routes ) || ( routes = [ routes ] );
 
-	/**
-	 * Initializes the instance.
-	 */
-	initialize() {
-		setUpRoutes();
-		maybeStartHistory();
+		$.each( routes, ( index, route ) => this.registry.registerModuleForRoute( moduleData, route ) );
 	}
 }
 

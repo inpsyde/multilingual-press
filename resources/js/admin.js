@@ -6,6 +6,8 @@ import { Toggler } from "./admin/core/common";
 import Controller from "./admin/core/Controller";
 import { EventManager } from "./admin/core/EventManager";
 import Model from "./admin/core/Model";
+import Registry from "./admin/core/Registry";
+import Router from "./admin/core/Router";
 import NavMenus from "./admin/nav-menus/NavMenus";
 import AddNewSite from "./admin/network/AddNewSite";
 import CopyPost from "./admin/post-translation/CopyPost";
@@ -26,7 +28,12 @@ const MLP = {
 	 * The MultilingualPress admin controller instance.
 	 * @type {Controller}
 	 */
-	controller: new Controller(),
+	controller: new Controller(
+		new Registry(
+			new Router()
+		),
+		F.getSettings( 'mlpSettings' )
+	),
 
 	/**
 	 * The set of core-specific methods.
@@ -35,29 +42,29 @@ const MLP = {
 	Functions: F,
 
 	/**
-	 * The MultilingualPress toggler instance.
-	 * @type {Toggler}
-	 */
-	toggler: new Toggler( {
-		el: 'body',
-		events: {
-			'click .mlp-click-toggler': 'toggleElement'
-		}
-	} ),
-
-	/**
 	 * The set of utility methods.
 	 * @type {Object}
 	 */
 	Util
 };
 
-const { controller, toggler } = MLP;
+const { controller } = MLP;
 
-let settings;
+/**
+ * The MultilingualPress toggler instance.
+ * @type {Toggler}
+ */
+const toggler = new Toggler( {
+	el: 'body',
+	events: {
+		'click .mlp-click-toggler': 'toggleElement'
+	}
+} );
 
 // Initialize the state togglers.
 toggler.initializeStateTogglers();
+
+let settings;
 
 // Register the NavMenus module for the Menus admin page.
 settings = F.getSettings( NavMenus );
@@ -129,7 +136,13 @@ controller.registerModule( 'options-general.php', UserBackEndLanguage, {
 }, ( module ) => module.updateSiteLanguage() );
 
 // Initialize the admin controller, and thus all modules registered for the current admin page.
-jQuery( controller.initialize );
+jQuery( () => {
+	/**
+	 * The module instances registered for the current admin page.
+	 * @type {Object}
+	 */
+	MLP.modules = controller.initialize();
+} );
 
 // Externalize the MultilingualPress admin namespace.
 window.MultilingualPressAdmin = MLP;

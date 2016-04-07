@@ -42,9 +42,7 @@ class TermTranslator extends Backbone.View {
 
 		relation = this.getSelectedRelation( $select );
 		if ( '' !== relation ) {
-			this.$selects.not( $select ).each( ( index, element ) => {
-				this.selectTerm( $( element ), relation );
-			} );
+			this.$selects.not( $select ).each( ( index, element ) => this.selectTerm( $( element ), relation ) );
 		}
 
 		this.isPropagating = false;

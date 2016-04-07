@@ -1,7 +1,7 @@
 const $ = window.jQuery;
 
 /**
- * MultilingualPress Toggler module.
+ * The MultilingualPress Toggler module.
  */
 export class Toggler extends Backbone.View {
 	/**
@@ -13,16 +13,22 @@ export class Toggler extends Backbone.View {
 	}
 
 	/**
+	 * Initializes the given toggler that works by using its individual state.
+	 * @param {Element} element - The toggler element.
+	 */
+	initializeStateToggler( element ) {
+		const $toggler = $( element );
+
+		$( '[name="' + $toggler.attr( 'name' ) + '"]' ).on( 'change', {
+			$toggler
+		}, this.toggleElementIfChecked );
+	}
+
+	/**
 	 * Initializes the togglers that work by using their individual state.
 	 */
 	initializeStateTogglers() {
-		$( '.mlp-state-toggler' ).each( ( index, element ) => {
-			const $toggler = $( element );
-
-			$( '[name="' + $toggler.attr( 'name' ) + '"]' ).on( 'change', {
-				$toggler
-			}, this.toggleElementIfChecked );
-		} );
+		$( '.mlp-state-toggler' ).each( ( index, element ) => this.initializeStateToggler( element ) );
 	}
 
 	/**

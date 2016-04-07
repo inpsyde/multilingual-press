@@ -9,6 +9,10 @@ class UserBackEndLanguage extends Backbone.View {
 	constructor( options = {} ) {
 		super( options );
 
+		/**
+		 * The module settings.
+		 * @type {Object}
+		 */
 		this.moduleSettings = options.moduleSettings;
 	}
 

@@ -30,11 +30,23 @@ class CopyPost extends Backbone.View {
 		 */
 		this.$title = $( '#title' );
 
+		/**
+		 * The event manager object.
+		 * @type {EventManager}
+		 */
 		this.EventManager = options.EventManager;
 
+		/**
+		 * The model object.
+		 * @type {Model}
+		 */
 		this.model = options.model;
 		this.listenTo( this.model, 'change', this.updatePostData );
 
+		/**
+		 * The module settings.
+		 * @type {Object}
+		 */
 		this.moduleSettings = options.moduleSettings;
 
 		/**
@@ -91,7 +103,7 @@ class CopyPost extends Backbone.View {
 	 * @returns {number} The site ID.
 	 */
 	getRemoteSiteID( $button ) {
-		return $button.data( 'site-id' ) || 0;
+		return Number( $button.data( 'site-id' ) );
 	}
 
 	/**
