@@ -1,4 +1,3 @@
-/*global process*/
 module.exports = function( grunt ) {
 	var configObject = {
 		config: {
@@ -65,6 +64,13 @@ module.exports = function( grunt ) {
 			'imagemin-images': {
 				task: 'imagemin:images',
 				src: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ]
+			},
+			'tests': {
+				task: 'tests',
+				src: [
+					'<%= config.scripts.src %>**/*.js',
+					'<%= config.tests.js %>**/*.js'
+				]
 			}
 		},
 
@@ -78,11 +84,12 @@ module.exports = function( grunt ) {
 				src: [ '**/*.js' ]
 			}
 		},
+
 		exec: {
-			testjs: {
-				cmd: function( cwd ) {
-					var path = process.cwd() + '/node_modules/.bin/babel-node';
-					return path + ' ' + cwd;
+			// Don't run this directly. Use "$ grunt tests" instead.
+			tests: {
+				cmd: function( file ) {
+					return '"./node_modules/.bin/babel-node" ' + file + ' | "./node_modules/.bin/faucet"';
 				}
 			}
 		},
@@ -189,16 +196,7 @@ module.exports = function( grunt ) {
 				ext: '.css'
 			}
 		},
-		testjs: {
-			all     : {
-				files: [
-					{
-						expand: true,
-						src   : '<%= config.tests.js %>**/*Test.js'
-					}
-				]
-			}
-		},
+
 		uglify: {
 			options: {
 				ASCIIOnly: true
@@ -271,6 +269,7 @@ module.exports = function( grunt ) {
 				files: [ '<%= config.scripts.src %>**/*.js' ],
 				tasks: [
 					'newer:eslint:src',
+					'newer:delegate:tests',
 					'newer:delegate:browserify',
 					'newer:jsvalidate:dest',
 					'changed:lineending:scripts',
@@ -326,6 +325,16 @@ module.exports = function( grunt ) {
 		}, this.async() );
 	} );
 
+	// JavaScript tests (babel-node -> tape) task.
+	grunt.registerTask( 'tests', function() {
+		var files = grunt.file.expand( grunt.template.process( '<%= config.tests.js %>**/*Test.js' ) ),
+			numFiles = files.length;
+
+		for ( var i = 0; i < numFiles; ++i ) {
+			grunt.task.run( 'exec:tests:' + files[ i ] );
+		}
+	} );
+
 	grunt.registerTask( 'assets', configObject.watch.assets.tasks );
 
 	grunt.registerTask( 'configs', configObject.watch.configs.tasks );
@@ -356,6 +365,7 @@ module.exports = function( grunt ) {
 		'newer-clean',
 		'common',
 		'eslint:src',
+		'tests',
 		'jsvalidate:dest',
 		'sass:check'
 	] );
@@ -378,13 +388,4 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'default', 'develop' );
-
-	grunt.registerMultiTask( 'testjs', function() {
-		for ( var file in this.files ) {
-			if ( !this.files.hasOwnProperty( file ) ) {
-				continue;
-			}
-			grunt.task.run( 'exec:testjs:' + this.files[ file ].src );
-		}
-	} );
 };
