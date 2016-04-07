@@ -196,7 +196,7 @@ module.exports = function( grunt ) {
 		watch: {
 			options: {
 				dot: true,
-				spawn: true,
+				spawn: false,
 				interval: 2000
 			},
 
@@ -218,8 +218,8 @@ module.exports = function( grunt ) {
 				files: [ 'Gruntfile.js' ],
 				tasks: [
 					'newer:eslint:grunt',
-					'newer:lineending:grunt',
-					'changed:jsvalidate:grunt'
+					'newer:jsvalidate:grunt',
+					'newer:lineending:grunt'
 				]
 			},
 
@@ -253,9 +253,9 @@ module.exports = function( grunt ) {
 				tasks: [
 					'newer:eslint:src',
 					'newer:delegate:browserify',
+					'newer:jsvalidate:dest',
 					'changed:lineending:scripts',
-					'changed:uglify',
-					'changed:jsvalidate:dest'
+					'changed:uglify'
 				]
 			},
 
@@ -359,10 +359,4 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'default', 'develop' );
-
-	grunt.registerTask( 'temp', [
-		'eslint:src',
-		'browserify',
-		'uglify'
-	] );
 };
