@@ -19,7 +19,8 @@ module.exports = function( grunt ) {
 				dest: 'src/assets/css/'
 			},
 			tests: {
-				php: 'tests/php/'
+				php: 'tests/php/',
+				js: 'tests/js/'
 			}
 		},
 
@@ -74,6 +75,13 @@ module.exports = function( grunt ) {
 				expand: true,
 				cwd: '<%= config.scripts.src %>',
 				src: [ '**/*.js' ]
+			}
+		},
+		exec: {
+			testjs: {
+				cmd: function( cwd ) {
+					return 'babel-node ' + cwd;
+				}
 			}
 		},
 
@@ -179,7 +187,16 @@ module.exports = function( grunt ) {
 				ext: '.css'
 			}
 		},
-
+		testjs: {
+			all     : {
+				files: [
+					{
+						expand: true,
+						src   : '<%= config.tests.js %>**/*Test.js'
+					}
+				],
+			}
+		},
 		uglify: {
 			options: {
 				ASCIIOnly: true
@@ -359,4 +376,10 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'default', 'develop' );
+	
+	grunt.registerMultiTask( 'testjs', function() {
+		for ( var file in this.files ) {
+			grunt.task.run( 'exec:testjs:' + this.files[ file ].src );
+		}
+	} );
 };
