@@ -194,7 +194,7 @@ module.exports = function( grunt ) {
 						expand: true,
 						src   : '<%= config.tests.js %>**/*Test.js'
 					}
-				],
+				]
 			}
 		},
 		uglify: {
@@ -376,9 +376,12 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'default', 'develop' );
-	
+
 	grunt.registerMultiTask( 'testjs', function() {
 		for ( var file in this.files ) {
+			if ( !this.files.hasOwnProperty( file ) ) {
+				continue;
+			}
 			grunt.task.run( 'exec:testjs:' + this.files[ file ].src );
 		}
 	} );
