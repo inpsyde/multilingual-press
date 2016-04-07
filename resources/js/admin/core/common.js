@@ -18,6 +18,7 @@ export class Toggler extends Backbone.View {
 	initializeStateTogglers() {
 		$( '.mlp-state-toggler' ).each( ( index, element ) => {
 			const $toggler = $( element );
+
 			$( '[name="' + $toggler.attr( 'name' ) + '"]' ).on( 'change', {
 				$toggler
 			}, this.toggleElementIfChecked );
@@ -30,6 +31,7 @@ export class Toggler extends Backbone.View {
 	 */
 	toggleElement( event ) {
 		const targetID = $( event.target ).data( 'toggle-target' );
+
 		if ( targetID ) {
 			$( targetID ).toggle();
 		}
@@ -40,9 +42,9 @@ export class Toggler extends Backbone.View {
 	 * @param {Event} event - The change event of an input element.
 	 */
 	toggleElementIfChecked( event ) {
-		const $toggler = event.data.$toggler;
+		const $toggler = event.data.$toggler,
+			targetID = $toggler.data( 'toggle-target' );
 
-		const targetID = $toggler.data( 'toggle-target' );
 		if ( targetID ) {
 			$( targetID ).toggle( $toggler.is( ':checked' ) );
 		}

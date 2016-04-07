@@ -66,6 +66,7 @@ class TermTranslator extends Backbone.View {
 	 */
 	selectTerm( $select, relation ) {
 		const $option = $select.find( 'option[data-relation="' + relation + '"]' );
+
 		if ( $option.length ) {
 			$select.val( $option.val() );
 		} else if ( this.getSelectedRelation( $select ) ) {

@@ -127,6 +127,7 @@ var Quicklinks = function () {
 
 	Quicklinks.prototype.attachSubmitHandler = function attachSubmitHandler() {
 		var $form = document.querySelector(this.selector);
+
 		if (null === $form) {
 			return false;
 		}
@@ -144,6 +145,7 @@ var Quicklinks = function () {
 
 	Quicklinks.prototype.submitForm = function submitForm(event) {
 		var $select = event.target.querySelector('select');
+
 		if (null === $select) {
 			return;
 		}

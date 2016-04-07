@@ -161,6 +161,7 @@ class RelationshipControl extends Backbone.View {
 	 */
 	connectExistingPost( data ) {
 		const newPostID = $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() || 0;
+
 		if ( ! newPostID ) {
 			window.alert( this.moduleSettings.L10n.noPostSelected );
 

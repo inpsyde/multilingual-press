@@ -438,6 +438,7 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 
 		$('.mlp-state-toggler').each(function (index, element) {
 			var $toggler = $(element);
+
 			$('[name="' + $toggler.attr('name') + '"]').on('change', {
 				$toggler: $toggler
 			}, _this2.toggleElementIfChecked);
@@ -452,6 +453,7 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 
 	Toggler.prototype.toggleElement = function toggleElement(event) {
 		var targetID = $(event.target).data('toggle-target');
+
 		if (targetID) {
 			$(targetID).toggle();
 		}
@@ -464,9 +466,9 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 
 
 	Toggler.prototype.toggleElementIfChecked = function toggleElementIfChecked(event) {
-		var $toggler = event.data.$toggler;
+		var $toggler = event.data.$toggler,
+		    targetID = $toggler.data('toggle-target');
 
-		var targetID = $toggler.data('toggle-target');
 		if (targetID) {
 			$(targetID).toggle($toggler.is(':checked'));
 		}
@@ -720,6 +722,7 @@ var AddNewSite = function (_Backbone$View) {
 
 	AddNewSite.prototype.adaptLanguage = function adaptLanguage(event) {
 		var language = this.getLanguage($(event.target));
+
 		if (this.$language.find('[value="' + language + '"]').length) {
 			this.$language.val(language);
 		}
@@ -734,6 +737,7 @@ var AddNewSite = function (_Backbone$View) {
 
 	AddNewSite.prototype.getLanguage = function getLanguage($select) {
 		var language = $select.val();
+
 		if (language) {
 			return language.replace('_', '-');
 		}
@@ -768,7 +772,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var $ = window.jQuery;
-var _ = window._;
+var _window = window;
+var _ = _window._;
 
 /**
  * The MultilingualPress CopyPost module.
@@ -1179,6 +1184,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 	RelationshipControl.prototype.connectExistingPost = function connectExistingPost(data) {
 		var newPostID = $('input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked').val() || 0;
+
 		if (!newPostID) {
 			window.alert(this.moduleSettings.L10n.noPostSelected);
 
@@ -1352,6 +1358,7 @@ var RemotePostSearch = function (_Backbone$View) {
 
 	RemotePostSearch.prototype.render = function render() {
 		var data = void 0;
+
 		if (this.model.get('success')) {
 			data = this.model.get('data');
 			this.resultsContainers[data.remoteSiteID].html(data.html);
@@ -1464,6 +1471,7 @@ var TermTranslator = function (_Backbone$View) {
 
 	TermTranslator.prototype.selectTerm = function selectTerm($select, relation) {
 		var $option = $select.find('option[data-relation="' + relation + '"]');
+
 		if ($option.length) {
 			$select.val($option.val());
 		} else if (this.getSelectedRelation($select)) {

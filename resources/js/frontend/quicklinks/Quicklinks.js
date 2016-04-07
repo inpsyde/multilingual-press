@@ -34,6 +34,7 @@ class Quicklinks {
 	 */
 	attachSubmitHandler() {
 		const $form = document.querySelector( this.selector );
+
 		if ( null === $form ) {
 			return false;
 		}
@@ -49,6 +50,7 @@ class Quicklinks {
 	 */
 	submitForm( event ) {
 		const $select = event.target.querySelector( 'select' );
+
 		if ( null === $select ) {
 			return;
 		}

@@ -41,6 +41,7 @@ class AddNewSite extends Backbone.View {
 	 */
 	adaptLanguage( event ) {
 		const language = this.getLanguage( $( event.target ) );
+
 		if ( this.$language.find( '[value="' + language + '"]' ).length ) {
 			this.$language.val( language );
 		}
@@ -53,6 +54,7 @@ class AddNewSite extends Backbone.View {
 	 */
 	getLanguage( $select ) {
 		const language = $select.val();
+
 		if ( language ) {
 			return language.replace( '_', '-' );
 		}
