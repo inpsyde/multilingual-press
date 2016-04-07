@@ -1,47 +1,51 @@
 'use strict';
 
+import * as Util from "./common/utils";
 import * as F from "./admin/core/functions";
 import { Toggler } from "./admin/core/common";
 import Controller from "./admin/core/Controller";
+import { EventManager } from "./admin/core/EventManager";
 import Model from "./admin/core/Model";
 import NavMenus from "./admin/nav-menus/NavMenus";
 import AddNewSite from "./admin/network/AddNewSite";
-import RemotePostSearch from "./admin/post-translator/RemotePostSearch";
+import CopyPost from "./admin/post-translation/CopyPost";
+import RelationshipControl from "./admin/post-translation/RelationshipControl";
+import RemotePostSearch from "./admin/post-translation/RemotePostSearch";
 import TermTranslator from "./admin/term-translation/TermTranslator";
 import UserBackEndLanguage from "./admin/user-settings/UserBackEndLanguage";
 
-const ajaxUrl = window.ajaxurl;
+const ajaxURL = window.ajaxurl;
 
 /**
  * The MultilingualPress admin namespace.
  * @namespace
  * @alias MultilingualPressAdmin
  */
-const MLP = window.MultilingualPressAdmin = {};
+const MLP = {
+	/**
+	 * The MultilingualPress admin controller instance.
+	 * @type {Controller}
+	 */
+	controller: new Controller(),
 
-const toggler = new Toggler( {
-	el: 'body',
-	events: {
-		'click .mlp-click-toggler': 'toggleElement'
-	}
-} );
-/**
- * The MultilingualPress toggler instance.
- * @type {Toggler}
- */
-MLP.toggler = toggler;
+	/**
+	 * The MultilingualPress toggler instance.
+	 * @type {Toggler}
+	 */
+	toggler: new Toggler( {
+		el: 'body',
+		events: {
+			'click .mlp-click-toggler': 'toggleElement'
+		}
+	} )
+};
+
+const { controller, toggler } = MLP;
+
+let settings;
 
 // Initialize the state togglers.
 toggler.initializeStateTogglers();
-
-const controller = new Controller();
-/**
- * The MultilingualPress admin controller instance.
- * @type {Controller}
- */
-MLP.controller = controller;
-
-let settings;
 
 // Register the NavMenus module for the Menus admin page.
 settings = F.getSettings( NavMenus );
@@ -50,7 +54,7 @@ controller.registerModule( 'nav-menus.php', NavMenus, {
 	events: {
 		'click #submit-mlp-language': 'sendRequest'
 	},
-	model: new Model( { urlRoot: ajaxUrl } ),
+	model: new Model( { urlRoot: ajaxURL } ),
 	moduleSettings: settings
 } );
 
@@ -63,16 +67,39 @@ controller.registerModule( 'network/site-new.php', AddNewSite, {
 	}
 } );
 
-// Register the RemotePostSearch module for the Add New Post and the Edit Post admin pages.
-settings = F.getSettings( RemotePostSearch );
+// Register the CopyPost module for the Edit Post and Add New Post admin pages.
+controller.registerModule( [ 'post.php', 'post-new.php' ], CopyPost, {
+	el: '#post-body',
+	EventManager,
+	events: {
+		'click .mlp-copy-post-button': 'copyPostData'
+	},
+	model: new Model( { urlRoot: ajaxURL } ),
+	moduleSettings: F.getSettings( CopyPost )
+} );
+
+// Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
+controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, {
+	el: 'body',
+	EventManager,
+	events: {
+		'change .mlp-rc-actions input': 'updateUnsavedRelationships',
+		'click #publish': 'confirmUnsavedRelationships',
+		'click .mlp-save-relationship-button': 'saveRelationship'
+	},
+	moduleSettings: F.getSettings( RelationshipControl ),
+	Util
+}, module => module.initializeEventHandlers() );
+
+// Register the RemotePostSearch module for the Edit Post and Add New Post admin pages.
 controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
 	el: 'body',
 	events: {
 		'keydown .mlp-search-field': 'preventFormSubmission',
 		'keyup .mlp-search-field': 'reactToInput'
 	},
-	model: new Model( { urlRoot: ajaxUrl } ),
-	moduleSettings: settings
+	model: new Model( { urlRoot: ajaxURL } ),
+	moduleSettings: F.getSettings( RemotePostSearch )
 }, module => module.initializeResults() );
 
 // Register the TermTranslator module for the Edit Tags admin page.
@@ -91,3 +118,6 @@ controller.registerModule( 'options-general.php', UserBackEndLanguage, {
 
 // Initialize the admin controller, and thus all modules registered for the current admin page.
 jQuery( controller.initialize );
+
+// Externalize the MultilingualPress admin namespace.
+window.MultilingualPressAdmin = MLP;

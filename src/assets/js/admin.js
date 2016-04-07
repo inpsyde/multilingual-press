@@ -1,6 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+var _utils = require("./common/utils");
+
+var Util = _interopRequireWildcard(_utils);
+
 var _functions = require("./admin/core/functions");
 
 var F = _interopRequireWildcard(_functions);
@@ -10,6 +14,8 @@ var _common = require("./admin/core/common");
 var _Controller = require("./admin/core/Controller");
 
 var _Controller2 = _interopRequireDefault(_Controller);
+
+var _EventManager = require("./admin/core/EventManager");
 
 var _Model = require("./admin/core/Model");
 
@@ -23,7 +29,15 @@ var _AddNewSite = require("./admin/network/AddNewSite");
 
 var _AddNewSite2 = _interopRequireDefault(_AddNewSite);
 
-var _RemotePostSearch = require("./admin/post-translator/RemotePostSearch");
+var _CopyPost = require("./admin/post-translation/CopyPost");
+
+var _CopyPost2 = _interopRequireDefault(_CopyPost);
+
+var _RelationshipControl = require("./admin/post-translation/RelationshipControl");
+
+var _RelationshipControl2 = _interopRequireDefault(_RelationshipControl);
+
+var _RemotePostSearch = require("./admin/post-translation/RemotePostSearch");
 
 var _RemotePostSearch2 = _interopRequireDefault(_RemotePostSearch);
 
@@ -39,38 +53,40 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var ajaxUrl = window.ajaxurl;
+var ajaxURL = window.ajaxurl;
 
 /**
  * The MultilingualPress admin namespace.
  * @namespace
  * @alias MultilingualPressAdmin
  */
-var MLP = window.MultilingualPressAdmin = {};
+var MLP = {
+	/**
+  * The MultilingualPress admin controller instance.
+  * @type {Controller}
+  */
+	controller: new _Controller2.default(),
 
-var toggler = new _common.Toggler({
-	el: 'body',
-	events: {
-		'click .mlp-click-toggler': 'toggleElement'
-	}
-});
-/**
- * The MultilingualPress toggler instance.
- * @type {Toggler}
- */
-MLP.toggler = toggler;
+	/**
+  * The MultilingualPress toggler instance.
+  * @type {Toggler}
+  */
+	toggler: new _common.Toggler({
+		el: 'body',
+		events: {
+			'click .mlp-click-toggler': 'toggleElement'
+		}
+	})
+};
+
+var controller = MLP.controller;
+var toggler = MLP.toggler;
+
+
+var settings = void 0;
 
 // Initialize the state togglers.
 toggler.initializeStateTogglers();
-
-var controller = new _Controller2.default();
-/**
- * The MultilingualPress admin controller instance.
- * @type {Controller}
- */
-MLP.controller = controller;
-
-var settings = void 0;
 
 // Register the NavMenus module for the Menus admin page.
 settings = F.getSettings(_NavMenus2.default);
@@ -79,7 +95,7 @@ controller.registerModule('nav-menus.php', _NavMenus2.default, {
 	events: {
 		'click #submit-mlp-language': 'sendRequest'
 	},
-	model: new _Model2.default({ urlRoot: ajaxUrl }),
+	model: new _Model2.default({ urlRoot: ajaxURL }),
 	moduleSettings: settings
 });
 
@@ -92,16 +108,41 @@ controller.registerModule('network/site-new.php', _AddNewSite2.default, {
 	}
 });
 
-// Register the RemotePostSearch module for the Add New Post and the Edit Post admin pages.
-settings = F.getSettings(_RemotePostSearch2.default);
+// Register the CopyPost module for the Edit Post and Add New Post admin pages.
+controller.registerModule(['post.php', 'post-new.php'], _CopyPost2.default, {
+	el: '#post-body',
+	EventManager: _EventManager.EventManager,
+	events: {
+		'click .mlp-copy-post-button': 'copyPostData'
+	},
+	model: new _Model2.default({ urlRoot: ajaxURL }),
+	moduleSettings: F.getSettings(_CopyPost2.default)
+});
+
+// Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
+controller.registerModule(['post.php', 'post-new.php'], _RelationshipControl2.default, {
+	el: 'body',
+	EventManager: _EventManager.EventManager,
+	events: {
+		'change .mlp-rc-actions input': 'updateUnsavedRelationships',
+		'click #publish': 'confirmUnsavedRelationships',
+		'click .mlp-save-relationship-button': 'saveRelationship'
+	},
+	moduleSettings: F.getSettings(_RelationshipControl2.default),
+	Util: Util
+}, function (module) {
+	return module.initializeEventHandlers();
+});
+
+// Register the RemotePostSearch module for the Edit Post and Add New Post admin pages.
 controller.registerModule(['post.php', 'post-new.php'], _RemotePostSearch2.default, {
 	el: 'body',
 	events: {
 		'keydown .mlp-search-field': 'preventFormSubmission',
 		'keyup .mlp-search-field': 'reactToInput'
 	},
-	model: new _Model2.default({ urlRoot: ajaxUrl }),
-	moduleSettings: settings
+	model: new _Model2.default({ urlRoot: ajaxURL }),
+	moduleSettings: F.getSettings(_RemotePostSearch2.default)
 }, function (module) {
 	return module.initializeResults();
 });
@@ -125,7 +166,10 @@ controller.registerModule('options-general.php', _UserBackEndLanguage2.default, 
 // Initialize the admin controller, and thus all modules registered for the current admin page.
 jQuery(controller.initialize);
 
-},{"./admin/core/Controller":2,"./admin/core/Model":3,"./admin/core/common":5,"./admin/core/functions":6,"./admin/nav-menus/NavMenus":7,"./admin/network/AddNewSite":8,"./admin/post-translator/RemotePostSearch":9,"./admin/term-translation/TermTranslator":10,"./admin/user-settings/UserBackEndLanguage":11}],2:[function(require,module,exports){
+// Externalize the MultilingualPress admin namespace.
+window.MultilingualPressAdmin = MLP;
+
+},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/common":6,"./admin/core/functions":7,"./admin/nav-menus/NavMenus":8,"./admin/network/AddNewSite":9,"./admin/post-translation/CopyPost":10,"./admin/post-translation/RelationshipControl":11,"./admin/post-translation/RemotePostSearch":12,"./admin/term-translation/TermTranslator":13,"./admin/user-settings/UserBackEndLanguage":14,"./common/utils":15}],2:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -255,7 +299,16 @@ var Controller = function () {
 
 exports.default = Controller;
 
-},{"./Router":4,"./functions":6}],3:[function(require,module,exports){
+},{"./Router":5,"./functions":7}],3:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+/**
+ * The MultilingualPress EventManager module.
+ */
+var EventManager = exports.EventManager = window._.extend({}, Backbone.Events);
+
+},{}],4:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -294,7 +347,7 @@ var Model = function (_Backbone$Model) {
 
 exports.default = Model;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -330,7 +383,7 @@ var Router = function (_Backbone$Router) {
 
 exports.default = Router;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -410,7 +463,7 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 	return Toggler;
 }(Backbone.View);
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -456,7 +509,7 @@ var getSettings = exports.getSettings = function getSettings(module) {
 	return {};
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -590,7 +643,7 @@ var NavMenus = function (_Backbone$View) {
 
 exports.default = NavMenus;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -691,7 +744,464 @@ var AddNewSite = function (_Backbone$View) {
 
 exports.default = AddNewSite;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var $ = window.jQuery;
+var _ = window._;
+
+/**
+ * The MultilingualPress CopyPost module.
+ */
+
+var CopyPost = function (_Backbone$View) {
+	_inherits(CopyPost, _Backbone$View);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function CopyPost() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, CopyPost);
+
+		/**
+   * The jQuery object representing the input element that contains the currently edited post's content.
+   * @type {jQuery}
+   */
+
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
+		_this.$content = $('#content');
+
+		/**
+   * The jQuery object representing the input element that contains the currently edited post's excerpt.
+   * @type {jQuery}
+   */
+		_this.$excerpt = $('#excerpt');
+
+		/**
+   * The jQuery object representing the input element that contains the currently edited post's title.
+   * @type {jQuery}
+   */
+		_this.$title = $('#title');
+
+		_this.EventManager = options.EventManager;
+
+		_this.model = options.model;
+		_this.listenTo(_this.model, 'change', _this.updatePostData);
+
+		_this.moduleSettings = options.moduleSettings;
+
+		/**
+   * The currently edited post's ID.
+   * @type {number}
+   */
+		_this.postID = Number($('#post_ID').val());
+		return _this;
+	}
+
+	/**
+  * Copies the post data of the source post to a translation post.
+  * @param {Event} event - The click event of a "Copy source post" button.
+  */
+
+
+	CopyPost.prototype.copyPostData = function copyPostData(event) {
+		var remoteSiteID = this.getRemoteSiteID($(event.target));
+
+		var data = {};
+
+		event.preventDefault();
+
+		$('#mlp-translation-data-' + remoteSiteID + '-copied-post').val(1);
+
+		/**
+   * Triggers the event before copying post data, and passes an object for adding custom data, and the current
+   * site and post IDs and the remote site ID.
+   */
+		this.EventManager.trigger('CopyPost:copyPostData', data, this.moduleSettings.siteID, this.postID, remoteSiteID);
+
+		data = _.extend(data, {
+			action: this.moduleSettings.action,
+			current_post_id: this.postID,
+			remote_site_id: remoteSiteID,
+			title: this.getTitle(),
+			slug: this.getSlug(),
+			content: this.getContent(),
+			excerpt: this.getExcerpt()
+		});
+
+		this.model.fetch({
+			data: data,
+			processData: true
+		});
+	};
+
+	/**
+  * Returns the site ID data attribute value of the given "Copy source post" button.
+  * @param {jQuery} $button - A "Copy source post" button.
+  * @returns {number} The site ID.
+  */
+
+
+	CopyPost.prototype.getRemoteSiteID = function getRemoteSiteID($button) {
+		return $button.data('site-id') || 0;
+	};
+
+	/**
+  * Returns the title of the original post.
+  * @returns {string} The post title.
+  */
+
+
+	CopyPost.prototype.getTitle = function getTitle() {
+		return this.$title.val() || '';
+	};
+
+	/**
+  * Returns the slug of the original post.
+  * @returns {string} The post slug.
+  */
+
+
+	CopyPost.prototype.getSlug = function getSlug() {
+		// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
+		return $('#editable-post-name-full').text() || '';
+	};
+
+	/**
+  * Returns the content of the original post.
+  * @returns {string} The post content.
+  */
+
+
+	CopyPost.prototype.getContent = function getContent() {
+		return this.$content.val() || '';
+	};
+
+	/**
+  * Returns the excerpt of the original post.
+  * @returns {string} The post excerpt.
+  */
+
+
+	CopyPost.prototype.getExcerpt = function getExcerpt() {
+		return this.$excerpt.val() || '';
+	};
+
+	/**
+  * Updates the post data in the according meta box for the given site ID.
+  * @returns {boolean} Whether or not the post data have been updated.
+  */
+
+
+	CopyPost.prototype.updatePostData = function updatePostData() {
+		var data = void 0,
+		    prefix = void 0;
+
+		if (!this.model.get('success')) {
+			return false;
+		}
+
+		data = this.model.get('data');
+
+		prefix = 'mlp-translation-data-' + data.siteID + '-';
+
+		$('#' + prefix + 'title').val(data.title);
+
+		$('#' + prefix + 'name').val(data.slug);
+
+		this.setTinyMCEContent(prefix + 'content', data.content);
+
+		$('#' + prefix + 'content').val(data.content);
+
+		$('#' + prefix + 'excerpt').val(data.excerpt);
+
+		/**
+   * Triggers the event for updating the post, and passes the according data.
+   */
+		this.EventManager.trigger('CopyPost:updatePostData', data);
+
+		return true;
+	};
+
+	/**
+  * Sets the given content for the tinyMCE editor with the given ID.
+  * @param {string} editorID - The tinyMCE editor's ID.
+  * @param {string} content - The content.
+  * @returns {boolean} Whether or not the post content has been updated.
+  */
+
+
+	CopyPost.prototype.setTinyMCEContent = function setTinyMCEContent(editorID, content) {
+		var editor = void 0;
+
+		if ('undefined' === typeof window.tinyMCE) {
+			return false;
+		}
+
+		editor = window.tinyMCE.get(editorID);
+		if (!editor) {
+			return false;
+		}
+
+		editor.setContent(content);
+
+		return true;
+	};
+
+	return CopyPost;
+}(Backbone.View);
+
+exports.default = CopyPost;
+
+},{}],11:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var $ = window.jQuery;
+
+/**
+ * The MultilingualPress RelationshipControl module.
+ */
+
+var RelationshipControl = function (_Backbone$View) {
+	_inherits(RelationshipControl, _Backbone$View);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function RelationshipControl() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, RelationshipControl);
+
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
+		_this.EventManager = options.EventManager;
+
+		_this.moduleSettings = options.moduleSettings;
+
+		/**
+   * Array of jQuery objects representing meta boxes with unsaved relationships.
+   * @type {jQuery[]}
+   */
+		_this.unsavedRelationships = [];
+
+		/**
+   * The set of utility methods.
+   * @type {Object}
+   */
+		_this.Util = options.util;
+		return _this;
+	}
+
+	/**
+  * Initializes the event handlers for all custom relationship control events.
+  */
+
+
+	RelationshipControl.prototype.initializeEventHandlers = function initializeEventHandlers() {
+		this.EventManager.on({
+			'RelationshipControl:connectExistingPost': this.connectExistingPost,
+			'RelationshipControl:connectNewPost': this.connectNewPost,
+			'RelationshipControl:disconnectPost': this.disconnectPost
+		}, this);
+	};
+
+	/**
+  * Updates the unsaved relationships array for the meta box containing the changed radio input element.
+  * @param {Event} event - The change event of a radio input element.
+  */
+
+
+	RelationshipControl.prototype.updateUnsavedRelationships = function updateUnsavedRelationships(event) {
+		var $input = $(event.target),
+		    $metaBox = $input.closest('.mlp-translation-meta-box'),
+		    $button = $metaBox.find('.mlp-save-relationship-button'),
+		    index = this.findMetaBox($metaBox);
+
+		if ('stay' === $input.val()) {
+			$button.prop('disabled', 'disabled');
+
+			if (-1 !== index) {
+				this.unsavedRelationships.splice(index, 1);
+			}
+		} else if (-1 === index) {
+			this.unsavedRelationships.push($metaBox);
+
+			$button.removeAttr('disabled');
+		}
+	};
+
+	/**
+  * Returns the index of the given meta box in the unsaved relationships array, and -1 if not found.
+  * @param {jQuery} $metaBox - The meta box element.
+  * @returns {number} The index of the meta box.
+  */
+
+
+	RelationshipControl.prototype.findMetaBox = function findMetaBox($metaBox) {
+		$.each(this.unsavedRelationships, function (index, element) {
+			if (element === $metaBox) {
+				return index;
+			}
+		});
+
+		return -1;
+	};
+
+	/**
+  * Displays a confirm dialog informing the user about unsaved relationships, if any.
+  * @param {Event} event - The click event of the publish button.
+  */
+
+
+	RelationshipControl.prototype.confirmUnsavedRelationships = function confirmUnsavedRelationships(event) {
+		if (this.unsavedRelationships.length && !window.confirm(this.moduleSettings.L10n.unsavedRelationships)) {
+			event.preventDefault();
+		}
+	};
+
+	/**
+  * Triggers the according event in case of changed relationships.
+  * @param {Event} event - The click event of a save relationship button.
+  */
+
+
+	RelationshipControl.prototype.saveRelationship = function saveRelationship(event) {
+		var $button = $(event.target),
+		    remoteSiteID = $button.data('remote-site-id'),
+		    action = $('input[name="mlp-rc-action[' + remoteSiteID + ']"]:checked').val(),
+		    eventName = this.getEventName(action);
+
+		if ('stay' === action) {
+			return;
+		}
+
+		$button.prop('disabled', 'disabled');
+
+		/**
+   * Triggers the according event for the current relationship action, and passes data and the event's name.
+   */
+		this.EventManager.trigger('RelationshipControl:' + eventName, {
+			action: 'mlp_rc_' + action,
+			remote_site_id: remoteSiteID,
+			remote_post_id: $button.data('remote-post-id'),
+			source_site_id: $button.data('source-site-id'),
+			source_post_id: $button.data('source-post-id')
+		}, eventName);
+	};
+
+	/**
+  * Returns the according event name for the given relationship action.
+  * @param {string} action - The relationship action.
+  * @returns {string} The event name.
+  */
+
+
+	RelationshipControl.prototype.getEventName = function getEventName(action) {
+		switch (action) {
+			case 'search':
+				return 'connectExistingPost';
+
+			case 'new':
+				return 'connectNewPost';
+
+			case 'disconnect':
+				return 'disconnectPost';
+
+			default:
+				return '';
+		}
+	};
+
+	/**
+  * Handles changing a post's relationship by connecting a new post.
+  * @param {Object} data - The common data for all relationship requests.
+  */
+
+
+	RelationshipControl.prototype.connectNewPost = function connectNewPost(data) {
+		data.new_post_title = $('input[name="post_title"]').val();
+
+		this.sendRequest(data);
+	};
+
+	/**
+  * Handles changing a post's relationship by disconnecting the currently connected post.
+  * @param {Object} data - The common data for all relationship requests.
+  */
+
+
+	RelationshipControl.prototype.disconnectPost = function disconnectPost(data) {
+		this.sendRequest(data);
+	};
+
+	/**
+  * Handles changing a post's relationship by connecting an existing post.
+  * @param {Object} data - The common data for all relationship requests.
+  * @returns {boolean} Whether or not the request has been sent.
+  */
+
+
+	RelationshipControl.prototype.connectExistingPost = function connectExistingPost(data) {
+		var newPostID = $('input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked').val() || 0;
+		if (!newPostID) {
+			window.alert(this.moduleSettings.L10n.noPostSelected);
+
+			return false;
+		}
+
+		data.new_post_id = Number(newPostID);
+
+		this.sendRequest(data);
+
+		return true;
+	};
+
+	/**
+  * Changes a post's relationhip by sending a synchronous AJAX request with the according new relationship data.
+  * @param {Object} data - The relationship data.
+  */
+
+
+	RelationshipControl.prototype.sendRequest = function sendRequest(data) {
+		$.ajax({
+			type: 'POST',
+			url: window.ajaxurl,
+			data: data,
+			success: this.Util.reloadLocation,
+			async: false
+		});
+	};
+
+	return RelationshipControl;
+}(Backbone.View);
+
+exports.default = RelationshipControl;
+
+},{}],12:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -845,7 +1355,7 @@ var RemotePostSearch = function (_Backbone$View) {
 
 exports.default = RemotePostSearch;
 
-},{}],10:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -954,7 +1464,7 @@ var TermTranslator = function (_Backbone$View) {
 
 exports.default = TermTranslator;
 
-},{}],11:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1001,5 +1511,40 @@ var UserBackEndLanguage = function (_Backbone$View) {
 }(Backbone.View);
 
 exports.default = UserBackEndLanguage;
+
+},{}],15:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+/**
+ * Attaches the given listener to the given DOM element for the event with the given type.
+ * @param {Element} $element - The DOM element.
+ * @param {string} type - The type of the event.
+ * @param {Function} listener - The event listener callback.
+ */
+var addEventListener = exports.addEventListener = function addEventListener($element, type, listener) {
+  if ($element.addEventListener) {
+    $element.addEventListener(type, listener);
+  } else {
+    $element.attachEvent('on' + type, function () {
+      listener.call($element);
+    });
+  }
+};
+
+/**
+ * Reloads the current page.
+ */
+var reloadLocation = exports.reloadLocation = function reloadLocation() {
+  window.location.reload(true);
+};
+
+/**
+ * Redirects the user to the given URL.
+ * @param {string} url - The URL.
+ */
+var setLocation = exports.setLocation = function setLocation(url) {
+  window.location.href = url;
+};
 
 },{}]},{},[1]);

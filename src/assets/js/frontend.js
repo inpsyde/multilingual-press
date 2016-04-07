@@ -19,6 +19,13 @@ var addEventListener = exports.addEventListener = function addEventListener($ele
 };
 
 /**
+ * Reloads the current page.
+ */
+var reloadLocation = exports.reloadLocation = function reloadLocation() {
+  window.location.reload(true);
+};
+
+/**
  * Redirects the user to the given URL.
  * @param {string} url - The URL.
  */
@@ -29,39 +36,44 @@ var setLocation = exports.setLocation = function setLocation(url) {
 },{}],2:[function(require,module,exports){
 'use strict';
 
+var _utils = require('./common/utils');
+
+var Util = _interopRequireWildcard(_utils);
+
 var _Quicklinks = require('./frontend/quicklinks/Quicklinks');
 
 var _Quicklinks2 = _interopRequireDefault(_Quicklinks);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 /**
  * The MultilingualPress front end namespace.
  * @namespace
  * @alias MultilingualPress
  */
-var MLP = window.MultilingualPress = {};
+var MLP = {
+	/**
+  * The MultilingualPress Quicklinks instance.
+  * @type {Quicklinks}
+  */
+	quicklinks: new _Quicklinks2.default('#mlp-quicklink-form', Util)
+};
 
-var quicklinks = new _Quicklinks2.default('#mlp-quicklink-form');
-/**
- * The MultilingualPress Quicklinks instance.
- * @type {Quicklinks}
- */
-MLP.quicklinks = quicklinks;
+var quicklinks = MLP.quicklinks;
 
 // Initialize the Quicklinks module.
+
 quicklinks.initialize();
 
-},{"./frontend/quicklinks/Quicklinks":3}],3:[function(require,module,exports){
+// Externalize the MultilingualPress front end namespace.
+window.MultilingualPress = MLP;
+
+},{"./common/utils":1,"./frontend/quicklinks/Quicklinks":3}],3:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
-
-var _utils = require('../../common/utils');
-
-var Util = _interopRequireWildcard(_utils);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -73,12 +85,10 @@ var Quicklinks = function () {
 	/**
   * Constructor. Sets up the properties.
   * @param {string} selector - The form element selector.
-  * @param {Object} [util=null] - Optional. The set of utility methods. Defaults to MultilingualPress's Util object.
+  * @param {Object} Util - The set of utility methods.
   */
 
-	function Quicklinks(selector) {
-		var util = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-
+	function Quicklinks(selector, Util) {
 		_classCallCheck(this, Quicklinks);
 
 		/**
@@ -91,7 +101,7 @@ var Quicklinks = function () {
    * The set of utility methods.
    * @type {Object}
    */
-		this.Util = util || Util;
+		this.Util = Util;
 	}
 
 	/**
@@ -142,4 +152,4 @@ var Quicklinks = function () {
 
 exports.default = Quicklinks;
 
-},{"../../common/utils":1}]},{},[2]);
+},{}]},{},[2]);

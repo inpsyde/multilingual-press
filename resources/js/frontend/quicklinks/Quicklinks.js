@@ -1,5 +1,3 @@
-import * as Util from "../../common/utils";
-
 /**
  * The MultilingualPress Quicklinks module.
  */
@@ -7,9 +5,9 @@ class Quicklinks {
 	/**
 	 * Constructor. Sets up the properties.
 	 * @param {string} selector - The form element selector.
-	 * @param {Object} [util=null] - Optional. The set of utility methods. Defaults to MultilingualPress's Util object.
+	 * @param {Object} Util - The set of utility methods.
 	 */
-	constructor( selector, util = null ) {
+	constructor( selector, Util ) {
 		/**
 		 * The form element selector.
 		 * @type {string}
@@ -20,7 +18,7 @@ class Quicklinks {
 		 * The set of utility methods.
 		 * @type {Object}
 		 */
-		this.Util = util || Util;
+		this.Util = Util;
 	}
 
 	/**

@@ -1,5 +1,6 @@
 'use strict';
 
+import * as Util from "./common/utils";
 import Quicklinks from './frontend/quicklinks/Quicklinks';
 
 /**
@@ -7,14 +8,18 @@ import Quicklinks from './frontend/quicklinks/Quicklinks';
  * @namespace
  * @alias MultilingualPress
  */
-const MLP = window.MultilingualPress = {};
+const MLP = {
+	/**
+	 * The MultilingualPress Quicklinks instance.
+	 * @type {Quicklinks}
+	 */
+	quicklinks: new Quicklinks( '#mlp-quicklink-form', Util )
+};
 
-const quicklinks = new Quicklinks( '#mlp-quicklink-form' );
-/**
- * The MultilingualPress Quicklinks instance.
- * @type {Quicklinks}
- */
-MLP.quicklinks = quicklinks;
+const { quicklinks } = MLP;
 
 // Initialize the Quicklinks module.
 quicklinks.initialize();
+
+// Externalize the MultilingualPress front end namespace.
+window.MultilingualPress = MLP;

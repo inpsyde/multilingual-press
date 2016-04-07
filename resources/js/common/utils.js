@@ -15,6 +15,13 @@ export const addEventListener = ( $element, type, listener ) => {
 };
 
 /**
+ * Reloads the current page.
+ */
+export const reloadLocation = () => {
+	window.location.reload( true );
+};
+
+/**
  * Redirects the user to the given URL.
  * @param {string} url - The URL.
  */
