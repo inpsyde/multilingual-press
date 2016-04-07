@@ -1,3 +1,4 @@
+/*global process*/
 module.exports = function( grunt ) {
 	var configObject = {
 		config: {
@@ -80,7 +81,8 @@ module.exports = function( grunt ) {
 		exec: {
 			testjs: {
 				cmd: function( cwd ) {
-					return 'babel-node ' + cwd;
+					var path = process.cwd() + '/node_modules/.bin/babel-node';
+					return path + ' ' + cwd;
 				}
 			}
 		},
