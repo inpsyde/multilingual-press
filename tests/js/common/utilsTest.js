@@ -60,6 +60,36 @@ test( 'addEventListener attaches the given listener to the given element for the
 	assert.end();
 } );
 
+test( 'reloadLocation reloads the current page', ( assert ) => {
+	assert.equal(
+		typeof Util.reloadLocation,
+		'function',
+		'reloadLocation SHOULD be a function.'
+	);
+
+	global.window = {
+		location: {
+			reload: sinon.spy()
+		}
+	};
+
+	Util.reloadLocation();
+
+	assert.equal(
+		global.window.location.reload.callCount,
+		1,
+		'reloadLocation SHOULD reload the current page.'
+	);
+
+	assert.equal(
+		global.window.location.reload.calledWith( true ),
+		true,
+		'reloadLocation SHOULD reload the current page via a GET request.'
+	);
+
+	assert.end();
+} );
+
 test( 'setLocation redirects the user to the given URL', ( assert ) => {
 	assert.equal(
 		typeof Util.setLocation,
