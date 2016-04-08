@@ -42,18 +42,18 @@ class Mlp_Widget extends WP_Widget {
 	 */
 	public function require_style() {
 
-		if ( ! is_active_widget( FALSE, FALSE, self::$handle ) ) {
-			return FALSE;
+		if ( ! is_active_widget( false, false, self::$handle ) ) {
+			return false;
 		}
 
 		$theme_support = get_theme_support( 'multilingualpress' );
-		if ( ! empty( $theme_support[ 0 ][ 'language_switcher_widget_style' ] ) ) {
-			return FALSE;
+		if ( ! empty( $theme_support[0]['language_switcher_widget_style'] ) ) {
+			return false;
 		}
 
 		self::$assets->provide( 'mlp_frontend_css' );
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -67,28 +67,34 @@ class Mlp_Widget extends WP_Widget {
 
 		$instance = $this->adapt_settings( $instance );
 
-		$title = isset( $instance[ 'widget_title' ] )
-			? esc_attr( $instance[ 'widget_title' ] ) : '';
-		$link_type = isset( $instance[ 'widget_title' ] )
-			? esc_attr( $instance[ 'widget_link_type' ] ) : '';
-		$show_current_blog = isset( $instance[ 'widget_show_current_blog' ] )
-			? strip_tags( $instance[ 'widget_show_current_blog' ] ) : '';
-		$display_flag = isset( $instance[ 'widget_display_flag' ] )
-			? strip_tags( $instance[ 'widget_display_flag' ] ) : '';
-		$show_widget = isset( $instance[ 'widget_toggle_view_on_translated_posts' ] )
-			? strip_tags( $instance[ 'widget_toggle_view_on_translated_posts' ] ) : '';
+		$title             = isset( $instance['widget_title'] )
+			? esc_attr( $instance['widget_title'] ) : '';
+		$link_type         = isset( $instance['widget_title'] )
+			? esc_attr( $instance['widget_link_type'] ) : '';
+		$show_current_blog = isset( $instance['widget_show_current_blog'] )
+			? strip_tags( $instance['widget_show_current_blog'] ) : '';
+		$display_flag      = isset( $instance['widget_display_flag'] )
+			? strip_tags( $instance['widget_display_flag'] ) : '';
+		$show_widget       = isset( $instance['widget_toggle_view_on_translated_posts'] )
+			? strip_tags( $instance['widget_toggle_view_on_translated_posts'] ) : '';
 		?>
 		<p>
-			<?php $title_id = $this->get_field_id( 'mlp_widget_title' ); ?>
-			<label for="<?php echo $title_id; ?>"><?php esc_html_e( 'Title', 'multilingual-press' ); ?></label><br />
-			<input class="widefat" type="text" id="<?php echo $title_id; ?>"
-				name="<?php echo $this->get_field_name( 'mlp_widget_title' ); ?>" value="<?php echo $title; ?>">
+			<?php
+			$id   = $this->get_field_id( 'mlp_widget_title' );
+			$name = $this->get_field_name( 'mlp_widget_title' );
+			?>
+			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Title', 'multilingual-press' ); ?></label><br>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $title ); ?>"
+				class="widefat" id="<?php echo esc_attr( $id ); ?>">
 		</p>
 		<p>
-			<?php $type_id = $this->get_field_id( 'mlp_widget_link_type' ); ?>
-			<label for="<?php echo $type_id; ?>"><?php _e( 'Link text', 'multilingual-press' ); ?></label>
-			<select class="widefat" id="<?php echo $type_id; ?>"
-				name="<?php echo $this->get_field_name( 'mlp_widget_link_type' ); ?>" autocomplete="off">
+			<?php
+			$id   = $this->get_field_id( 'mlp_widget_link_type' );
+			$name = $this->get_field_name( 'mlp_widget_link_type' );
+			?>
+			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Link text', 'multilingual-press' ); ?></label>
+			<select name="<?php echo esc_attr( $name ); ?>" class="widefat" id="<?php echo esc_attr( $id ); ?>"
+				autocomplete="off">
 				<?php
 				$options = array(
 					'none'           => __( 'None', 'multilingual-press' ),
@@ -100,37 +106,47 @@ class Mlp_Widget extends WP_Widget {
 				);
 				foreach ( $options as $value => $text ) {
 					printf(
-						'<option value="%1$s" %2$s>%3$s</option>',
-						$value,
-						selected( $link_type, $value, FALSE ),
-						$text
+						'<option value="%1$s"%2$s>%3$s</option>',
+						esc_attr( $value ),
+						selected( $link_type, $value, false ),
+						esc_html( $text )
 					);
 				}
 				?>
 			</select>
 		</p>
 		<p>
-			<?php $display_flag_id = $this->get_field_id( 'mlp_widget_display_flag' ); ?>
-			<label for="<?php echo $display_flag_id; ?>">
-				<input type="checkbox" name="<?php echo $this->get_field_name( 'mlp_widget_display_flag' ); ?>"
-					id="<?php echo $display_flag_id; ?>" value="1" <?php checked( $display_flag, 1 ); ?> />
+			<?php
+			$id   = $this->get_field_id( 'mlp_widget_display_flag' );
+			$name = $this->get_field_name( 'mlp_widget_display_flag' );
+			?>
+			<label for="<?php echo esc_attr( $id ); ?>">
+				<input type="checkbox"
+					name="<?php echo esc_attr( $name ); ?>" value="1" id="<?php echo esc_attr( $id ); ?>"
+					<?php checked( $display_flag, 1 ); ?>>
 				<?php _e( 'Show flag', 'multilingual-press' ); ?>
 			</label>
 		</p>
 		<p>
-			<?php $show_blog_id = $this->get_field_id( 'mlp_widget_show_current_blog' ); ?>
-			<label for='<?php echo $show_blog_id; ?>'>
-				<input type="checkbox" name="<?php echo $this->get_field_name( 'mlp_widget_show_current_blog' ); ?>"
-					id="<?php echo $show_blog_id; ?>" value="1" <?php checked( $show_current_blog, 1 ); ?> />
+			<?php
+			$id   = $this->get_field_id( 'mlp_widget_show_current_blog' );
+			$name = $this->get_field_name( 'mlp_widget_show_current_blog' );
+			?>
+			<label for="<?php echo esc_attr( $id ); ?>">
+				<input type="checkbox"
+					name="<?php echo esc_attr( $name ); ?>" value="1" id="<?php echo esc_attr( $id ); ?>"
+					<?php checked( $show_current_blog, 1 ); ?>>
 				<?php _e( 'Show current site', 'multilingual-press' ); ?>
 			</label>
 		</p>
 		<p>
-			<?php $show_widget_id = $this->get_field_id( 'mlp_widget_toggle_view_on_translated_posts' ); ?>
-			<label for='<?php echo $show_widget_id; ?>'>
-				<input type="checkbox"
-					name="<?php echo $this->get_field_name( 'mlp_widget_toggle_view_on_translated_posts' ); ?>"
-					id="<?php echo $show_widget_id; ?>" value="1" <?php checked( $show_widget, 1 ); ?> />
+			<?php
+			$id   = $this->get_field_id( 'mlp_widget_toggle_view_on_translated_posts' );
+			$name = $this->get_field_name( 'mlp_widget_toggle_view_on_translated_posts' );
+			?>
+			<label for="<?php echo esc_attr( $id ); ?>">
+				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>"
+					value="1"<?php checked( $show_widget, 1 ); ?>>
 				<?php _e( 'Show links for translated content only.', 'multilingual-press' ); ?>
 			</label>
 		</p>
@@ -161,19 +177,19 @@ class Mlp_Widget extends WP_Widget {
 
 		$instance = $old_instance;
 
-		$instance[ 'widget_title' ] = esc_html( $new_instance[ 'mlp_widget_title' ] );
-		$instance[ 'widget_link_type' ] = esc_attr( $new_instance[ 'mlp_widget_link_type' ] );
-		$instance[ 'widget_show_current_blog' ] = (int) (
-			isset( $new_instance[ 'mlp_widget_show_current_blog' ] )
-			&& $new_instance[ 'mlp_widget_show_current_blog' ] === '1'
+		$instance['widget_title']                           = esc_html( $new_instance['mlp_widget_title'] );
+		$instance['widget_link_type']                       = esc_attr( $new_instance['mlp_widget_link_type'] );
+		$instance['widget_show_current_blog']               = (int) (
+			isset( $new_instance['mlp_widget_show_current_blog'] )
+			&& $new_instance['mlp_widget_show_current_blog'] === '1'
 		);
-		$instance[ 'widget_display_flag' ] = (int) (
-			isset( $new_instance[ 'mlp_widget_display_flag' ] )
-			&& $new_instance[ 'mlp_widget_display_flag' ] === '1'
+		$instance['widget_display_flag']                    = (int) (
+			isset( $new_instance['mlp_widget_display_flag'] )
+			&& $new_instance['mlp_widget_display_flag'] === '1'
 		);
-		$instance[ 'widget_toggle_view_on_translated_posts' ] = (int) (
-			isset( $new_instance[ 'mlp_widget_toggle_view_on_translated_posts' ] )
-			&& $new_instance[ 'mlp_widget_toggle_view_on_translated_posts' ] === '1'
+		$instance['widget_toggle_view_on_translated_posts'] = (int) (
+			isset( $new_instance['mlp_widget_toggle_view_on_translated_posts'] )
+			&& $new_instance['mlp_widget_toggle_view_on_translated_posts'] === '1'
 		);
 
 		return $instance;
@@ -194,18 +210,18 @@ class Mlp_Widget extends WP_Widget {
 		$instance = $this->adapt_settings( $instance );
 
 		$link_type = 'text';
-		if ( ! empty( $instance[ 'widget_link_type' ] ) ) {
-			$link_type = $instance[ 'widget_link_type' ];
+		if ( ! empty( $instance['widget_link_type'] ) ) {
+			$link_type = $instance['widget_link_type'];
 		}
 
-		$display_flag = FALSE;
-		if ( ! empty( $instance[ 'widget_display_flag' ] ) ) {
-			$display_flag = $instance[ 'widget_display_flag' ];
+		$display_flag = false;
+		if ( ! empty( $instance['widget_display_flag'] ) ) {
+			$display_flag = $instance['widget_display_flag'];
 		}
 
-		$show_current = TRUE;
-		if ( isset ( $instance[ 'widget_show_current_blog' ] ) ) {
-			$show_current = (int) $instance[ 'widget_show_current_blog' ] === 1;
+		$show_current = true;
+		if ( isset ( $instance['widget_show_current_blog'] ) ) {
+			$show_current = (int) $instance['widget_show_current_blog'] === 1;
 		}
 
 		$output_args = array(
@@ -213,27 +229,27 @@ class Mlp_Widget extends WP_Widget {
 			'show_current_blog' => $show_current,
 			'display_flag'      => $display_flag,
 		);
-		$output = Mlp_Helpers::show_linked_elements( $output_args );
+		$output      = Mlp_Helpers::show_linked_elements( $output_args );
 		if ( ! $output ) {
 			return;
 		}
 
 		$title = '';
-		if ( isset( $instance[ 'widget_title' ] ) ) {
-			$title = $instance[ 'widget_title' ];
+		if ( isset( $instance['widget_title'] ) ) {
+			$title = $instance['widget_title'];
 		}
 		/** This filter is documented in wp-includes/default-widgets.php */
 		$title = apply_filters( 'widget_title', $title );
 
-		echo $args[ 'before_widget' ];
+		echo $args['before_widget'];
 
-		if ( ! empty( $instance[ 'widget_title' ] ) ) {
-			echo $args[ 'before_title' ] . $title . $args[ 'after_title' ];
+		if ( ! empty( $instance['widget_title'] ) ) {
+			echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
 		}
 
 		echo $output;
 
-		echo $args[ 'after_widget' ];
+		echo $args['after_widget'];
 	}
 
 	/**
@@ -258,20 +274,20 @@ class Mlp_Widget extends WP_Widget {
 
 		$instance = $settings[ $this->number ];
 
-		if ( empty( $instance[ 'widget_link_type' ] ) ) {
+		if ( empty( $instance['widget_link_type'] ) ) {
 			// No need to adapt anything
 			return $instance;
 		}
 
-		switch ( $instance[ 'widget_link_type' ] ) {
+		switch ( $instance['widget_link_type'] ) {
 			case 'text_flag':
-				$instance[ 'widget_link_type' ] = 'native';
-				$instance[ 'widget_display_flag' ] = TRUE;
+				$instance['widget_link_type']    = 'native';
+				$instance['widget_display_flag'] = true;
 				break;
 
 			case 'flag':
-				$instance[ 'widget_link_type' ] = 'none';
-				$instance[ 'widget_display_flag' ] = TRUE;
+				$instance['widget_link_type']    = 'none';
+				$instance['widget_display_flag'] = true;
 				break;
 
 			default:
@@ -307,5 +323,4 @@ class Mlp_Widget extends WP_Widget {
 
 		self::$assets = $assets;
 	}
-
 }

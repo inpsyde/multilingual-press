@@ -43,7 +43,7 @@ class Mlp_Custom_Columns {
 	public function render_column( $name, $id ) {
 
 		if ( $this->settings[ 'id' ] === $name )
-			print call_user_func( $this->settings[ 'content_callback' ], $name, $id );
+			echo call_user_func( $this->settings[ 'content_callback' ], $name, $id );
 	}
 
 	/**

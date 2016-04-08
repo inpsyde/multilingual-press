@@ -448,22 +448,19 @@ class Mlp_Helpers {
 		foreach ( $items as $site_id => $item ) {
 			$text = $item[ 'name' ];
 
-			if ( ! empty ( $item[ 'icon' ] ) ) {
-				$img = '<img src="' . $item[ 'icon' ] . '" alt="' . esc_attr( $item[ 'name' ] ) . '" />';
+			$img = ( ! empty( $item['icon'] ) && $params['display_flag'] )
+				? '<img src="' . esc_url( $item['icon'] ) . '" alt="' . esc_attr( $item['name'] ) . '"> '
+				: '';
 
-				if ( $params[ 'display_flag' ] ) {
-					$text = "$img $text";
-				}
-			}
-
-			if ( $site_id === get_current_blog_id() ) {
+			if ( get_current_blog_id() === $site_id ) {
 				$output .= '<li><a class="current-language-item" href="">' . $text . '</a></li>';
 			} else {
 				$output .= sprintf(
-					'<li><a rel="alternate" hreflang="%1$s"  href="%2$s">%3$s</a></li>',
-					$item[ 'http' ],
-					$item[ 'url' ],
-					$text
+					'<li><a rel="alternate" hreflang="%1$s" href="%2$s">%3$s%4$s</a></li>',
+					esc_attr( $item['http'] ),
+					esc_url( $item[ 'url' ] ),
+					$img,
+					esc_html( $text )
 				);
 			}
 		}

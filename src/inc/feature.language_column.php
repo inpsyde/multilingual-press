@@ -52,5 +52,5 @@ function mlp_render_site_language_column(
 
 	$lang = Mlp_Helpers::get_lang_by_iso( $lang );
 
-	return '<div class="mlp_site_language">' . $lang . '</div>';
+	return '<div class="mlp_site_language">' . esc_html( $lang ) . '</div>';
 }

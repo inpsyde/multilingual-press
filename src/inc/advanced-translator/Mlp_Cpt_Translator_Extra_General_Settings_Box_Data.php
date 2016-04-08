@@ -192,10 +192,10 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	private function get_checkbox( $name, $id, $checked ) {
 
 		return sprintf(
-			'<input type="checkbox" value="1" name="%1$s" id="%2$s" %3$s> ',
-			$name,
-			$id,
-			$checked ? ' checked="checked"' : ''
+			'<input type="checkbox" value="1" name="%1$s" id="%2$s"%3$s> ',
+			esc_attr( $name ),
+			esc_attr( $id ),
+			checked( (bool) $checked, true, false )
 		);
 	}
 
