@@ -99,7 +99,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], CopyPost, {
 
 // Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
 controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, {
-	el: 'body',
+	el: '#post-body',
 	EventManager,
 	events: {
 		'change .mlp-rc-actions input': 'updateUnsavedRelationships',
@@ -112,7 +112,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, 
 
 // Register the RemotePostSearch module for the Edit Post and Add New Post admin pages.
 controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
-	el: 'body',
+	el: '#post-body',
 	events: {
 		'keydown .mlp-search-field': 'preventFormSubmission',
 		'keyup .mlp-search-field': 'reactToInput'
