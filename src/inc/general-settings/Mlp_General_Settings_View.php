@@ -26,9 +26,10 @@ class Mlp_General_Settings_View {
 	}
 
 	public function render_page() {
+
 		?>
 		<div class="wrap">
-			<h1><?php print $GLOBALS[ 'title' ]; ?></h1>
+			<h1><?php echo esc_html( $GLOBALS['title'] ); ?></h1>
 			<?php $this->modules_form(); ?>
 		</div>
 		<?php
@@ -48,33 +49,29 @@ class Mlp_General_Settings_View {
 
 		// Draw the form
 		?>
-		<form action="<?php echo admin_url( 'admin-post.php?action=mlp_update_modules' ); ?>" method="post" id="mlp_modules">
+		<form action="<?php echo admin_url( 'admin-post.php?action=mlp_update_modules' ); ?>" method="post"
+			id="mlp_modules">
 			<?php wp_nonce_field( $this->module_mapper->get_nonce_action() ); ?>
-
 			<table class="mlp-admin-feature-table">
-			<?php
+				<?php
+				foreach ( $modules as $slug => $module ) {
+					/**
+					 * Filter the visibility of the module in the features table.
+					 *
+					 * @param bool $invisible Should the module be hidden?
+					 */
+					if ( apply_filters( "mlp_dont_show_module_$slug", false ) ) {
+						continue;
+					}
 
-			foreach ( $modules as $slug => $module ) {
-
-				/**
-				 * Filter the visibility of the module in the features table.
-				 *
-				 * @param bool $invisible Should the module be hidden?
-				 */
-				if ( apply_filters( "mlp_dont_show_module_$slug", FALSE ) ) {
-					continue;
+					echo $this->module_row( $slug, $module );
 				}
 
-				print $this->module_row( $slug, $module );
-
-			}
-
-			/**
-			 * Runs at the end of but still inside the features table.
-			 */
-			do_action( 'mlp_modules_add_fields_to_table' );
-
-			?>
+				/**
+				 * Runs at the end of but still inside the features table.
+				 */
+				do_action( 'mlp_modules_add_fields_to_table' );
+				?>
 			</table>
 			<?php
 			/**
@@ -97,31 +94,37 @@ class Mlp_General_Settings_View {
 	protected function module_row( $slug, $module ) {
 
 		// backwards compatibility check
-		if ( is_array( $module[ 'state' ] ) && isset ( $module[ 'state' ][ 'state' ] ) )
-			$module[ 'state' ] = $module[ 'state' ][ 'state' ];
+		if ( is_array( $module['state'] ) && isset( $module['state']['state'] ) ) {
+			$module['state'] = $module['state']['state'];
+		}
 
-		$class   = 'on' === $module[ 'state' ] ? 'active' : 'inactive';
-		$name    = "mlp_state_$slug";
-		$title   = $this->get_module_title( $module );
-		$desc    = $this->get_module_description( $module );
-		$extra   = empty ( $module[ 'callback' ] ) ? '' : call_user_func( $module[ 'callback' ] );
-		$checked = checked( 'on', $module[ 'state' ], FALSE );
+		$class = 'on' === $module['state'] ? 'active' : 'inactive';
+		$name  = "mlp_state_$slug";
+		$title = $this->get_module_title( $module );
+		$desc  = $this->get_module_description( $module );
 
-		return
-<<<EOD
-<tr class='$class'>
-	<td class="check-column">
-		<input type='checkbox' id='id_$name' value='1' name='$name' $checked />
-	</td>
-	<td>
-		<label for='id_$name' class='mlp-block-label'>
-			<strong>$title</strong><br />
-			$desc
-		</label>
-		$extra
-	</td>
-</tr>
-EOD;
+		ob_start();
+		?>
+		<tr class="<?php echo esc_attr( $class ); ?>">
+			<td class="check-column">
+				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
+					id="id_<?php echo esc_attr( $name ); ?>"<?php checked( 'on', $module['state'] ); ?>>
+			</td>
+			<td>
+				<label for="id_<?php echo esc_attr( $name ); ?>" class="mlp-block-label">
+					<strong><?php echo esc_html( $title ); ?></strong><br>
+					<?php echo esc_html( $desc ); ?>
+				</label>
+				<?php
+				if ( isset( $module['callback'] ) ) {
+					call_user_func( $module['callback'] );
+				}
+				?>
+			</td>
+		</tr>
+
+		<?php
+		return ob_get_clean();
 	}
 
 	/**
@@ -151,5 +154,4 @@ EOD;
 
 		return $module[ 'description' ];
 	}
-
 }

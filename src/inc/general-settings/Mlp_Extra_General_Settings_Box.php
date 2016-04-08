@@ -33,18 +33,15 @@ class Mlp_Extra_General_Settings_Box {
 	 * @return void
 	 */
 	public function print_box() {
+
+		$title = $this->data->get_title();
 		?>
-		<div class="mlp-extra-settings-box" id="<?php print $this->data->get_box_id(); ?>">
-			<?php
-
-			$title = $this->data->get_title();
-
-			if ( ! empty ( $title ) )
-				print "<h4>$title</h4>";
-
-			print $this->get_main_description();
-			print $this->data->update( 'general.settings.extra.box' );
-			?>
+		<div class="mlp-extra-settings-box" id="<?php echo esc_attr( $this->data->get_box_id() ); ?>">
+			<?php if ( $title ) : ?>
+				<h4><?php echo esc_html( $title ); ?></h4>
+			<?php endif; ?>
+			<?php echo $this->get_main_description(); ?>
+			<?php echo $this->data->update( 'general.settings.extra.box' ); ?>
 		</div>
 		<?php
 	}

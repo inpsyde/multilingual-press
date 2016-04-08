@@ -44,8 +44,8 @@ class Mlp_Hreflang_Header_Output {
 		foreach ( $translations as $lang => $url ) {
 			$html = sprintf(
 				'<link rel="alternate" hreflang="%1$s" href="%2$s">',
-				$lang,
-				$url
+				esc_attr( $lang ),
+				esc_url( $url )
 			);
 
 			/**
@@ -76,8 +76,8 @@ class Mlp_Hreflang_Header_Output {
 		foreach ( $translations as $lang => $url ) {
 			$header = sprintf(
 				'Link: <%1$s>; rel="alternate"; hreflang="%2$s"',
-				$url,
-				$lang
+				esc_url( $url ),
+				esc_attr( $lang )
 			);
 
 			/**
