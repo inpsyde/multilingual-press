@@ -311,18 +311,19 @@ class Mlp_Advanced_Translator_View {
 
 		$name = $this->get_name( $remote_blog_id, 'tax' ) . '[' . $taxonomy . ']';
 
-		ob_start();
+		$html = '';
 
-		foreach ( $data['terms'] as $term ) : ?>
-			<label for="<?php echo esc_attr( $term->slug ); ?>_id">
-				<input type="<?php echo esc_attr( $input_type ); ?>" name="<?php echo esc_attr( $name ); ?>[]"
-					id="<?php echo esc_attr( $term->slug ); ?>_id"
-					value="<?php echo esc_attr( $term->term_id ); ?>"<?php checked( $term->active ); ?>>
-				<?php echo esc_html( $term->name ); ?>
-			</label><br>
-		<?php endforeach;
-
-		$html = ob_get_clean();
+		foreach ( $data['terms'] as $term ) {
+			$html .= sprintf(
+				'<label for="%2$s"><input type="%3$s" name="%4$s[]" id="%2$s" value="%5$s"%6$s>%1$s</label><br>',
+				esc_html( $term->name ),
+				esc_attr( $term->slug ) . '_id',
+				esc_attr( $input_type ),
+				esc_attr( $name ),
+				esc_attr( $term->term_id ),
+				checked( $term->active, true, false )
+			);
+		}
 
 		$this->term_box( $data['properties']->labels->name, $html );
 	}
