@@ -109,17 +109,18 @@ class Mlp_User_Backend_Language {
 		?>
 		<tr>
 			<th scope="row">
-				<label for="<?php echo $this->key; ?>">
+				<label for="<?php echo esc_attr( $this->key ); ?>">
 					<?php esc_html_e( 'Your preferred backend language', 'multilingual-press' ); ?>
 				</label>
 			</th>
 			<td>
-				<select name="<?php echo $this->key; ?>" id="<?php echo $this->key; ?>" autocomplete="off">
+				<select name="<?php echo esc_attr( $this->key ); ?>" id="<?php echo esc_attr( $this->key ); ?>"
+					autocomplete="off">
 					<?php $this->dropdown_languages( $languages, $user_language ); ?>
 				</select>
 			</td>
 		</tr>
-	<?php
+		<?php
 	}
 
 	/**

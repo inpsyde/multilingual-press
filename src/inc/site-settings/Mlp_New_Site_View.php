@@ -173,10 +173,10 @@ class Mlp_New_Site_View {
 			restore_current_blog();
 			?>
 			<p>
-				<label for="<?php echo $id; ?>">
-					<input type="checkbox" name="related_blogs[]" value="<?php echo $site_id ?>"
-						id="<?php echo $id; ?>">
-					<?php echo esc_html( $blog_name ) . '-' . Mlp_Helpers::get_blog_language( $site_id ); ?>
+				<label for="<?php echo esc_attr( $id ); ?>">
+					<input type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $site_id ) ?>"
+						id="<?php echo esc_attr( $id ); ?>">
+					<?php echo esc_html( $blog_name ) . '-' . esc_html( Mlp_Helpers::get_blog_language( $site_id ) ); ?>
 				</label>
 			</p>
 			<?php

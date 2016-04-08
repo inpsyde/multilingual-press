@@ -66,22 +66,25 @@ class Mlp_Term_Translation_Selector {
 		<table id="mlp-term-translations">
 			<?php foreach ( $this->related_sites as $site_id => $language ) : ?>
 				<?php
-				$key = $this->presenter->get_key_base( $site_id );
-				$label_id = $this->get_label_id( $key );
-				$terms = $this->presenter->get_terms_for_site( $site_id );
-				$current_term = $this->get_current_term( $site_id );
-				$empty_option_value = $current_term > 0 ? 0 : -1;
+				$key                = $this->presenter->get_key_base( $site_id );
+				$label_id           = $this->get_label_id( $key );
+				$terms              = $this->presenter->get_terms_for_site( $site_id );
+				$current_term       = $this->get_current_term( $site_id );
+				$empty_option_value = $current_term > 0 ? 0 : - 1;
 				?>
 				<tr>
 					<th>
-						<label for="<?php print $label_id; ?>"><?php echo $language; ?></label>
+						<label for="<?php echo esc_attr( $label_id ); ?>"><?php echo esc_html( $language ); ?></label>
 					</th>
 					<td>
 						<?php if ( empty( $terms ) ) : ?>
 							<?php echo $this->get_no_terms_found_message( $site_id ); ?>
 						<?php else : ?>
-							<select name="<?php echo $key; ?>" id="<?php echo $label_id; ?>" autocomplete="off">
-								<option value="<?php echo $empty_option_value; ?>" class="mlp_empty_option">
+							<select
+								name="<?php echo esc_attr( $key ); ?>"
+								id="<?php echo esc_attr( $label_id ); ?>"
+								autocomplete="off">
+								<option value="<?php echo esc_attr( $empty_option_value ); ?>" class="mlp_empty_option">
 									<?php esc_html_e( 'No translation', 'multilingual-press' ); ?>
 								</option>
 								<?php $this->print_term_options( $terms, $current_term, $site_id ); ?>
