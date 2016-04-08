@@ -7,31 +7,44 @@ module.exports = function( grunt ) {
 				src: 'resources/assets/',
 				dest: 'assets/'
 			},
+
 			images: {
 				src: 'resources/images/',
 				dest: 'src/assets/images/'
 			},
+
 			scripts: {
 				src: 'resources/js/',
 				dest: 'src/assets/js/'
 			},
+
 			src: 'src/',
+
 			styles: {
 				src: 'resources/scss/',
 				dest: 'src/assets/css/'
 			},
+
 			tests: {
 				php: 'tests/php/',
 				js: 'tests/js/'
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/jmreidy/grunt-browserify grunt-browserify}
+		 * @see {@link https://github.com/substack/node-browserify browserify}
+		 */
 		browserify: {
 			options: {
 				transform: [
+					/**
+					 * @see {@link https://github.com/babel/babelify babelify}
+					 */
 					[ "babelify" ]
 				]
 			},
+
 			scripts: {
 				expand: true,
 				cwd: '<%= config.scripts.src %>',
@@ -40,10 +53,15 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-cssmin grunt-contrib-cssmin}
+		 * @see {@link https://github.com/jakubpawlowicz/clean-css clean-css}
+		 */
 		cssmin: {
 			options: {
 				compatibility: 'ie8'
 			},
+
 			styles: {
 				expand: true,
 				cwd: '<%= config.styles.dest %>',
@@ -55,19 +73,22 @@ module.exports = function( grunt ) {
 
 		// Allow grunt-newer to run tasks if files other than the individual src files have changed since the last run.
 		delegate: {
-			'browserify': {
+			browserify: {
 				task: 'browserify',
 				src: [ '<%= config.scripts.src %>**/*.js' ]
 			},
+
 			'imagemin-assets': {
 				task: 'imagemin:assets',
 				src: [ '<%= config.assets.src %>*.{gif,jpeg,jpg,png}' ]
 			},
+
 			'imagemin-images': {
 				task: 'imagemin:images',
 				src: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ]
 			},
-			'tests': {
+
+			tests: {
 				task: 'tests',
 				src: [
 					'<%= config.scripts.src %>**/*.js',
@@ -76,10 +97,15 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/sindresorhus/grunt-eslint grunt-eslint}
+		 * @see {@link https://github.com/eslint/eslint ESLint}
+		 */
 		eslint: {
 			grunt: {
 				src: [ 'Gruntfile.js' ]
 			},
+
 			src: {
 				expand: true,
 				cwd: '<%= config.scripts.src %>',
@@ -87,8 +113,11 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/jharding/grunt-exec grunt-exec}
+		 */
 		exec: {
-			// Don't run this directly. Use "$ grunt tests" instead.
+			// Don't run this directly. Run "$ grunt tests" instead.
 			tests: {
 				cmd: function( file ) {
 					return '"./node_modules/.bin/babel-node" ' + file + ' | "./node_modules/.bin/faucet"';
@@ -96,16 +125,22 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-imagemin grunt-contrib-imagemin}
+		 * @see {@link https://github.com/imagemin/imagemin imagemin}
+		 */
 		imagemin: {
 			options: {
 				optimizationLevel: 7
 			},
+
 			assets: {
 				expand: true,
 				cwd: '<%= config.assets.src %>',
 				src: [ '*.{gif,jpeg,jpg,png}' ],
 				dest: '<%= config.assets.dest %>'
 			},
+
 			images: {
 				expand: true,
 				cwd: '<%= config.images.src %>',
@@ -114,63 +149,104 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/brandonramirez/grunt-jsonlint grunt-jsonlint}
+		 * @see {@link https://github.com/zaach/jsonlint JSON Lint}
+		 */
 		jsonlint: {
+			options: {
+				format: true,
+				indent: 2
+			},
+
 			configs: {
 				src: [ '.*rc' ]
 			},
+
 			json: {
 				src: [ '*.json' ]
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/ariya/grunt-jsvalidate grunt-jsvalidate}
+		 * @see {@link https://github.com/jquery/esprima Esprima}
+		 */
 		jsvalidate: {
 			options: {
-				globals: {},
-				esprimaOptions: {},
 				verbose: false
 			},
+
 			grunt: {
 				src: [ 'Gruntfile.js' ]
 			},
+
 			dest: {
 				src: [ '<%= config.scripts.dest %>*.js' ]
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/suisho/grunt-lineending grunt-lineending}
+		 */
 		lineending: {
 			options: {
 				eol: 'lf',
 				overwrite: true
 			},
+
+			configs: {
+				src: [ '.*rc' ]
+			},
+
 			grunt: {
 				src: [ 'Gruntfile.js' ]
 			},
+
+			json: {
+				src: [ '*.json' ]
+			},
+
 			scripts: {
 				src: [ '<%= config.scripts.dest %>*.js' ]
 			},
+
 			styles: {
 				src: [ '<%= config.styles.dest %>*.css' ]
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/jgable/grunt-phplint grunt-phplint}
+		 */
 		phplint: {
 			src: {
 				src: [ '<%= config.src %>**/*.php' ]
 			},
+
 			tests: {
 				src: [ '<%= config.tests.php %>**/*.php' ]
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/nDmitry/grunt-postcss grunt-postcss}
+		 * @see {@link https://github.com/postcss/postcss PostCSS}
+		 */
 		postcss: {
 			options: {
 				processors: [
+					/**
+					 * @see {@link https://github.com/postcss/autoprefixer Autoprefixer}
+					 */
 					require( 'autoprefixer' )( {
 						browsers: '> 1%, last 2 versions, IE 8',
 						cascade: false
 					} )
-				]
+				],
+				failOnError: true
 			},
+
 			styles: {
 				expand: true,
 				cwd: '<%= config.styles.dest %>',
@@ -179,17 +255,24 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-sass grunt-contrib-sass}
+		 */
 		sass: {
 			options: {
+				sourcemap: 'none',
+				unixNewlines: true,
 				style: 'expanded',
 				noCache: true
 			},
+
 			check: {
 				options: {
 					check: true
 				},
 				src: '<%= config.styles.src %>*.scss'
 			},
+
 			convert: {
 				expand: true,
 				cwd: '<%= config.styles.src %>',
@@ -199,10 +282,16 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-uglify grunt-contrib-uglify}
+		 * @see {@link https://github.com/mishoo/UglifyJS UglifyJS}
+		 */
 		uglify: {
 			options: {
-				ASCIIOnly: true
+				ASCIIOnly: true,
+				preserveComments: false
 			},
+
 			scripts: {
 				expand: true,
 				cwd: '<%= config.scripts.dest %>',
@@ -212,11 +301,12 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		/**
+		 * @see {@link https://github.com/gruntjs/grunt-contrib-watch grunt-contrib-watch}
+		 */
 		watch: {
 			options: {
-				dot: true,
-				spawn: false,
-				interval: 2000
+				spawn: false
 			},
 
 			assets: {
@@ -229,7 +319,8 @@ module.exports = function( grunt ) {
 			configs: {
 				files: [ '.*rc' ],
 				tasks: [
-					'newer:jsonlint:configs'
+					'newer:jsonlint:configs',
+					'changed:lineending:configs'
 				]
 			},
 
@@ -252,7 +343,8 @@ module.exports = function( grunt ) {
 			json: {
 				files: [ '*.json' ],
 				tasks: [
-					'newer:jsonlint:json'
+					'newer:jsonlint:json',
+					'changed:lineending:json'
 				]
 			},
 
@@ -273,7 +365,7 @@ module.exports = function( grunt ) {
 					'newer:eslint:src',
 					'newer:delegate:tests',
 					'newer:delegate:browserify',
-					'newer:jsvalidate:dest',
+					'changed:jsvalidate:dest',
 					'changed:lineending:scripts',
 					'changed:uglify'
 				]
@@ -298,6 +390,9 @@ module.exports = function( grunt ) {
 		}
 	};
 
+	/**
+	 * @see {@link https://github.com/sindresorhus/load-grunt-tasks load-grunt-tasks}
+	 */
 	require( 'load-grunt-tasks' )( grunt );
 
 	grunt.initConfig( configObject );
