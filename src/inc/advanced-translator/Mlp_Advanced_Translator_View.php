@@ -252,7 +252,7 @@ class Mlp_Advanced_Translator_View {
 		<input type="hidden" name="<?php echo esc_attr( $this->get_name( $remote_blog_id, 'source_post_id' ) ); ?>"
 			value="<?php echo esc_attr( $source_post->ID ); ?>">
 		<input type="hidden" name="<?php echo esc_attr( $this->get_name( $remote_blog_id, 'remote_post_id' ) ); ?>"
-			value="<?php echo esc_attr( (int) $post->ID ); ?>">
+			value="<?php echo absint( $post->ID ); ?>">
 		<?php
 	}
 

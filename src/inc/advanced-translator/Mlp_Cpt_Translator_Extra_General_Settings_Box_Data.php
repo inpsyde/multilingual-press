@@ -116,7 +116,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 
 		$post_types = $this->get_custom_post_types();
 		$options    = (array) get_site_option( 'inpsyde_multilingual_cpt' );
-		$s_label    = esc_html( __( 'Use dynamic permalinks', 'multilingual-press' ) );
+		$s_label    = esc_html__( 'Use dynamic permalinks', 'multilingual-press' );
 
 		if ( empty ( $post_types ) )
 			return '';
