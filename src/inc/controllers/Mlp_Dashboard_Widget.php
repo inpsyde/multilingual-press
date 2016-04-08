@@ -77,7 +77,8 @@ class Mlp_Dashboard_Widget {
 		}
 		?>
 		<div class="misc-pub-section">
-			<input type="hidden" name="post_is_translated_blogid" value="<?php echo get_current_blog_id(); ?>">
+			<input type="hidden" name="post_is_translated_blogid"
+				value="<?php echo esc_attr( get_current_blog_id() ); ?>">
 			<label for="post_is_translated">
 				<input type="checkbox" name="_post_is_translated" value="1" id="post_is_translated"
 					<?php checked( $is_translated ); ?>>

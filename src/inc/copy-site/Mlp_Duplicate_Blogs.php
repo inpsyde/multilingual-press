@@ -410,35 +410,29 @@ LIMIT 2";
 	 */
 	public function display_fields() {
 
-		$blogs   = (array) $this->get_all_sites();
-		$options = '<option value="0">' . __( 'Choose site', 'multilingual-press' ) . '</option>';
-
-		foreach ( $blogs as $blog ) {
-
-			if ( '/' === $blog[ 'path' ] )
-				$blog[ 'path' ] = '';
-
-			$options .= '<option value="' . $blog[ 'blog_id' ] . '">'
-				. $blog[ 'domain' ] . $blog[ 'path' ]
-				. '</option>';
-		}
-
 		?>
 		<tr class="form-field">
 			<th scope="row">
 				<label for="mlp-base-site-id">
-					<?php
-					esc_html_e( 'Based on site', 'multilingual-press' );
-					?>
+					<?php esc_html_e( 'Based on site', 'multilingual-press' ); ?>
 				</label>
 			</th>
 			<td>
 				<select id="mlp-base-site-id" name="blog[basedon]" autocomplete="off">
-					<?php echo $options; ?>
+					<option value="0"><?php _e( 'Choose site', 'multilingual-press' ); ?></option>
+					<?php foreach ( (array) $this->get_all_sites() as $blog ) : ?>
+						<?php
+						if ( '/' === $blog['path'] ) {
+							$blog['path'] = '';
+						}
+						?>
+						<option value="<?php echo esc_attr( $blog['blog_id'] ); ?>">
+							<?php echo esc_url( $blog['domain'] . $blog['path'] ); ?>
+						</option>
+					<?php endforeach; ?>
 				</select>
 			</td>
 		</tr>
-
 		<tr class="form-field hide-if-js">
 			<th scope="row">
 				<?php esc_html_e( 'Plugins', 'multilingual-press' ); ?>
@@ -454,14 +448,12 @@ LIMIT 2";
 			</td>
 		</tr>
 		<?php
-
 		/**
 		 * Filter the default value for the search engine visibility when adding a new site.
 		 *
 		 * @param bool $visible Should the new site be visible by default?
 		 */
-		$visible = (bool) apply_filters( 'mlp_default_search_engine_visibility', FALSE );
-
+		$visible = (bool) apply_filters( 'mlp_default_search_engine_visibility', false );
 		?>
 		<tr class="form-field">
 			<th scope="row">
@@ -470,10 +462,8 @@ LIMIT 2";
 			<td>
 				<label for="inpsyde_multilingual_visibility">
 					<input type="checkbox" value="0" id="inpsyde_multilingual_visibility" name="blog[visibility]"
-						<?php checked( $visible, FALSE ); ?>>
-					<?php
-					esc_html_e( 'Discourage search engines from indexing this site', 'multilingual-press' );
-					?>
+						<?php checked( ! $visible ); ?>>
+					<?php esc_html_e( 'Discourage search engines from indexing this site', 'multilingual-press' ); ?>
 				</label>
 
 				<p class="description">
@@ -481,7 +471,7 @@ LIMIT 2";
 				</p>
 			</td>
 		</tr>
-	<?php
+		<?php
 	}
 
 	/**
@@ -491,11 +481,12 @@ LIMIT 2";
 	 */
 	private function get_all_sites() {
 
-		$sql = "SELECT `blog_id`, `domain`, `path`
-			FROM {$this->wpdb->blogs}
-			WHERE deleted = 0 AND site_id = '{$this->wpdb->siteid}' ";
+		$query = "
+SELECT blog_id, domain, path
+FROM {$this->wpdb->blogs}
+WHERE deleted = 0
+	AND site_id = '{$this->wpdb->siteid}'";
 
-		return $this->wpdb->get_results( $sql, ARRAY_A );
+		return $this->wpdb->get_results( $query, ARRAY_A );
 	}
-
 }
