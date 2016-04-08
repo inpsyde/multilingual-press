@@ -120,6 +120,10 @@ module.exports = function( grunt ) {
 			// Don't run this directly. Run "$ grunt tests" instead.
 			tests: {
 				cmd: function( file ) {
+					/**
+					 * @see {@link https://github.com/babel/babel/tree/master/packages/babel-cli babel-cli}
+					 * @see {@link https://github.com/substack/faucet faucet}
+					 */
 					return '"./node_modules/.bin/babel-node" ' + file + ' | "./node_modules/.bin/faucet"';
 				}
 			}
@@ -379,13 +383,6 @@ module.exports = function( grunt ) {
 					'changed:lineending:styles',
 					'changed:cssmin'
 				]
-			},
-
-			travis: {
-				files: [ '.travis.yml' ],
-				tasks: [
-					'travis-lint'
-				]
 			}
 		}
 	};
@@ -448,8 +445,6 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'styles', configObject.watch.styles.tasks );
 
-	grunt.registerTask( 'travis', configObject.watch.travis.tasks );
-
 	grunt.registerTask( 'common', [
 		'configs',
 		'grunt',
@@ -480,8 +475,7 @@ module.exports = function( grunt ) {
 		'assets',
 		'images',
 		'scripts',
-		'styles',
-		'travis'
+		'styles'
 	] );
 
 	grunt.registerTask( 'default', 'develop' );

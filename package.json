@@ -53,7 +53,6 @@
     "grunt-newer": "~1.1.1",
     "grunt-phplint": "~0.0.5",
     "grunt-postcss": "~0.7.1",
-    "grunt-travis-lint": "~0.0.3",
     "load-grunt-tasks": "~3.3.0",
     "sinon": "^1.17.3",
     "tape": "^4.5.1"
