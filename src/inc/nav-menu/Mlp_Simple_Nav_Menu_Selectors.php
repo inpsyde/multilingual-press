@@ -28,7 +28,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 
 		$list_id = $this->data->get_list_id();
 		?>
-		<div id="mlp-<?php print $list_id; ?>">
+		<div id="mlp-<?php echo esc_attr( $list_id ); ?>">
 			<?php
 			$this->print_item_list( $list_id );
 			$this->print_button_controls( $list_id );
@@ -80,10 +80,12 @@ class Mlp_Simple_Nav_Menu_Selectors {
 	 * @return void
 	 */
 	private function print_select_all( $list_id ) {
+
+		$url = $this->get_select_all_url( $list_id );
 		?>
 		<span class="list-controls">
 			<a href="<?php
-			print $this->get_select_all_url( $list_id );
+			echo esc_url( $url );
 			?>" class="select-all"><?php
 				_e( 'Select All', 'multilingual-press' );
 				?></a>
@@ -105,7 +107,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 		}
 		// class "tabs-panel-active" is needed to make "Select All" work
 		?>
-		<ul id="<?php print $list_id; ?>" class="tabs-panel-active">
+		<ul id="<?php echo esc_attr( $list_id ); ?>" class="tabs-panel-active">
 			<?php
 			foreach ( $items as $value => $text )
 				$this->print_item( $value, $text );
@@ -120,13 +122,11 @@ class Mlp_Simple_Nav_Menu_Selectors {
 	 * @return void
 	 */
 	private function print_item( $value, $text ) {
-		$v = esc_attr( $value );
-		$t = esc_attr( $text );
 		?>
 		<li>
 			<label class="menu-item-title">
-				<input type="checkbox" value ="<?php print $v; ?>">
-				&nbsp;<?php print $t; ?>
+				<input type="checkbox" value ="<?php echo esc_attr( $value ); ?>">
+				&nbsp;<?php echo esc_attr( $text ); ?>
 			</label>
 		</li>
 	<?php

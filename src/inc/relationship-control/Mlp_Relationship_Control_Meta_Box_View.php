@@ -78,7 +78,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 				$search_selector_id
 			);
 			?>
-			<div id="<?php print $action_selector_id; ?>" class='hidden'>
+			<div id="<?php echo esc_attr( $action_selector_id ); ?>" class='hidden'>
 				<div class="mlp-rc-settings">
 					<div class="mlp-rc-actions" style="float: left; width: 20em;">
 						<?php
@@ -103,23 +103,23 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 					?>
 					<p>
-						<label for="mlp-rc-input-id-<?php print $this->remote_site_id; ?>-search">
+						<label for="mlp-rc-input-id-<?php echo esc_attr( $this->remote_site_id ); ?>-search">
 							<input
 								type="radio"
-								name="mlp-rc-action[<?php print $this->remote_site_id; ?>]"
+								name="mlp-rc-action[<?php echo esc_attr( $this->remote_site_id ); ?>]"
 								value="search"
 								class="mlp-state-toggler"
-								id="mlp-rc-input-id-<?php print $this->remote_site_id; ?>-search"
-								data-toggle-target="#<?php print $search_selector_id; ?>">
+								id="mlp-rc-input-id-<?php echo esc_attr( $this->remote_site_id ); ?>-search"
+								data-toggle-target="#<?php echo esc_attr( $search_selector_id ); ?>">
 							<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ) ?>
 						</label>
 					</p>
 				</div>
 
-					<div id="<?php print $search_selector_id; ?>"
+					<div id="<?php echo esc_attr( $search_selector_id ); ?>"
 						 style="display:none;float:left;max-width:30em">
 
-						<label for="<?php print $this->search_input_id; ?>">
+						<label for="<?php echo ecs_attr( $this->search_input_id ); ?>">
 							<?php
 							esc_html_e( 'Live search', 'multilingual-press' );
 							?>
@@ -129,7 +129,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 						?>
 
 						<ul class="mlp-search-results"
-							id="mlp-search-results-<?php print $this->remote_site_id; ?>">
+							id="mlp-search-results-<?php echo esc_attr( $this->remote_site_id ); ?>">
 							<?php
 							$this->updater->update( 'default.remote.posts' );
 							?>

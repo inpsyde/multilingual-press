@@ -352,9 +352,9 @@ class Mlp_Translation_Metabox {
 		restore_current_blog();
 
 		if ( '' === $text ) {
-			$text = esc_html__( 'Switch to site', 'multilingual-press' );
+			$text = __( 'Switch to site', 'multilingual-press' );
 		}
 
-		return " <small> - <a href='$url'>$text</a></small>";
+		return ' <small> - <a href="' . esc_url( $url ) . '">' . esc_html( $text ) . '</a></small>';
 	}
 }
