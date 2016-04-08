@@ -218,7 +218,7 @@ class Mlp_Self_Check {
 	 * Displays a notice informing about the new version of MultilingualPress, and that it cannot be installed due to
 	 * unmet requirements.
 	 *
-	 * @wp-hook in_plugin_update_message-{$file}
+	 * @wp-hook after_plugin_row_{$file}
 	 *
 	 * @param string $file Main plugin file.
 	 *
@@ -229,11 +229,11 @@ class Mlp_Self_Check {
 		$active_class = is_plugin_active_for_network( $file ) ? ' active' : '';
 
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-		$colspan = (int) $wp_list_table->get_column_count();
+		$colspan = $wp_list_table->get_column_count();
 		?>
-		<tr id="multilingualpress-update" class="plugin-update-tr<?php echo $active_class; ?>"
+		<tr id="multilingualpress-update" class="plugin-update-tr<?php echo esc_attr( $active_class ); ?>"
 			data-plugin="<?php echo esc_attr( $file ); ?>" data-slug="multilingualpress">
-			<td colspan="<?php echo $colspan; ?>" class="plugin-update colspanchange">
+			<td colspan="<?php echo absint( $colspan ); ?>" class="plugin-update colspanchange">
 				<div class="update-message">
 					<?php $this->render_mlp_3_message(); ?>
 				</div>
@@ -300,5 +300,4 @@ class Mlp_Self_Check {
 
 		return 'plugins.php' === $this->pagenow;
 	}
-
 }

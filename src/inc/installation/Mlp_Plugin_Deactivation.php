@@ -63,15 +63,23 @@ class Mlp_Plugin_Deactivation {
 	 */
 	private function print_errors() {
 
-		$list   = '<p>' . join( '</p><p>', $this->errors ) . '</p>';
-		$title  = __(  'The plugin %s has been deactivated.', 'multilingual-press' );
-
 		?>
 		<div class="error">
-			<p><strong><?php printf( $title, $this->plugin_name ); ?></strong></p>
-			<?php
-			print $list;
-			?>
+			<p>
+				<strong>
+					<?php
+					printf(
+						__( 'The plugin %s has been deactivated.', 'multilingual-press' ),
+						esc_html( $this->plugin_name )
+					);
+					?>
+				</strong>
+			</p>
+			<?php foreach ( $this->errors as $error ) : ?>
+				<p>
+					<?php echo $error; ?>
+				</p>
+			<?php endforeach; ?>
 		</div>
 		<?php
 	}
