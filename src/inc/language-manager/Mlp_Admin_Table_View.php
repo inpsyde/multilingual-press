@@ -184,9 +184,14 @@ class Mlp_Admin_Table_View {
 	 */
 	private function get_number_input( $id, $col, $value, Array $attributes = array() ) {
 
-		list ( $name, $attrs, $value ) = $this->prepare_input_data( $id, $col, $value, $attributes );
+		list( $name, $attrs, $value ) = $this->prepare_input_data( $id, $col, $value, $attributes );
 
-		return "<input type='number' name='$name' value='$value' $attrs>";
+		return sprintf(
+			'<input type="number" name="%s" value="%d"%s>',
+			esc_attr( $name ),
+			$value,
+			$attrs
+		);
 	}
 
 	/**
@@ -198,9 +203,14 @@ class Mlp_Admin_Table_View {
 	 */
 	private function get_text_input( $id, $col, $value, Array $attributes = array() ) {
 
-		list ( $name, $attrs, $value ) = $this->prepare_input_data( $id, $col, $value, $attributes );
+		list( $name, $attrs, $value ) = $this->prepare_input_data( $id, $col, $value, $attributes );
 
-		return "<input type='text' name='$name' value='$value' $attrs>";
+		return sprintf(
+			'<input type="text" name="%s" value="%s"%s>',
+			esc_attr( $name ),
+			esc_attr( $value ),
+			$attrs
+		);
 	}
 
 	/**
@@ -211,10 +221,11 @@ class Mlp_Admin_Table_View {
 	 * @return array
 	 */
 	private function prepare_input_data( $id, $col, $value, $attributes ) {
+
 		return array (
 			$this->get_input_name( $id, $col ),
 			$this->html->array_to_attrs( $attributes ),
-			esc_attr( $value )
+			$value
 		);
 	}
 
@@ -224,6 +235,7 @@ class Mlp_Admin_Table_View {
 	 * @return string
 	 */
 	private function get_input_name( $id, $col ) {
+
 		return $this->name . '[' . $id . '][' . $col . ']';
 	}
 
@@ -231,6 +243,7 @@ class Mlp_Admin_Table_View {
 	 * @return void
 	 */
 	private  function print_headers() {
+
 		printf(
 			'<thead><tr>%1$s</tr></thead><tfoot><tr>%1$s</tr></tfoot>',
 			$this->get_header()
@@ -245,11 +258,11 @@ class Mlp_Admin_Table_View {
 		$row = '';
 
 		foreach ( $this->columns as $params ) {
-
 			$row .= '<th scope="col">';
 
-			if ( ! empty ( $params[ 'header' ] ) )
-				$row .= $params[ 'header' ];
+			if ( ! empty( $params['header'] ) ) {
+				$row .= esc_html( $params['header'] );
+			}
 
 			$row .= '</th>';
 		}

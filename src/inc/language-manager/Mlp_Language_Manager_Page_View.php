@@ -44,38 +44,37 @@ class Mlp_Language_Manager_Page_View {
 	 */
 	public function render() {
 
+		$action = $this->page_data->get_form_action();
+		$action_name = $this->page_data->get_action_name();
+		$paged = $this->pagination_data->get_current_page();
 		?>
 		<div class="wrap">
-			<?php
-			print '<h1>' . $this->page_data->get_title() . '</h1>';
+			<h1><?php echo esc_html( $this->page_data->get_title() ); ?></h1>
+			<?php $this->watcher->update( 'before_form' ); ?>
+			<form action="<?php echo esc_attr( $action ) ?>" method="post">
+				<input type="hidden" name="action" value="<?php echo esc_attr( $action_name ); ?>">
+				<input type="hidden" name="paged" value="<?php echo esc_attr( $paged ); ?>">
+				<?php
+					wp_nonce_field( $this->page_data->get_nonce_action(), $this->page_data->get_nonce_name() );
 
-			$this->watcher->update( 'before_form' );
-			?>
-			<form action="<?php echo $this->page_data->get_form_action(); ?>" method="post">
-				<input type="hidden" name="action" value="<?php echo $this->page_data->get_action_name(); ?>" />
-				<input type="hidden" name="paged" value="<?php echo $this->pagination_data->get_current_page(); ?>" />
-			<?php
-				wp_nonce_field(
-					$this->page_data->get_nonce_action(),
-					$this->page_data->get_nonce_name()
-				);
-				$this->watcher->update( 'before_table' );
-				$this->watcher->update( 'show_table' );
-				$this->watcher->update( 'after_table' );
+					$this->watcher->update( 'before_table' );
 
-				submit_button(
-					esc_attr__( 'Save changes', 'multilingual-press' ),
-					'primary',
-					'save',
-					FALSE,
-					array( 'style' => 'float:left')
-				);
-				$this->watcher->update( 'after_form_submit_button' );
-			?>
+					$this->watcher->update( 'show_table' );
+
+					$this->watcher->update( 'after_table' );
+
+					submit_button(
+						esc_attr__( 'Save changes', 'multilingual-press' ),
+						'primary',
+						'save',
+						false,
+						array( 'style' => 'float:left')
+					);
+
+					$this->watcher->update( 'after_form_submit_button' );
+				?>
 			</form>
-			<?php
-			$this->watcher->update( 'after_form' );
-			?>
+			<?php $this->watcher->update( 'after_form' ); ?>
 		</div>
 		<?php
 	}

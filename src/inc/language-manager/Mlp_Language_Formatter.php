@@ -91,10 +91,11 @@ class Mlp_Language_Formatter {
 	 * @return string
 	 */
 	private function get_rtl_checkbox( $value, $id ) {
+
 		return sprintf(
-			'<input type="checkbox" name="languages[%1$d][is_rtl]" value="1" %2$s />',
+			'<input type="checkbox" name="languages[%d][is_rtl]" value="1"%s>',
 			$id,
-			checked( $value, 1, FALSE )
+			checked( $value, 1, false )
 		);
 	}
 
