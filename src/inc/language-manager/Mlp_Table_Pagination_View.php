@@ -99,7 +99,7 @@ class Mlp_Table_Pagination_View {
 		$page_class = 1 === $this->total_pages ? ' one-page' : '';
 		?>
 		<div class="tablenav-pages<?php echo esc_attr( $page_class ); ?>">
-			<?php echo esc_html( $this->get_item_count() ); ?>
+			<?php echo $this->get_item_count() ?>
 			<?php if ( 1 < $this->total_pages ) { ?>
 				<?php echo $this->get_pagination_links(); ?>
 			<?php } ?>
@@ -259,7 +259,7 @@ class Mlp_Table_Pagination_View {
 			number_format_i18n( $this->total_items )
 		);
 
-		return '<span class="displaying-num">' . $num . '</span>';
+		return '<span class="displaying-num">' . esc_html( $num ) . '</span>';
 	}
 
 	/**
