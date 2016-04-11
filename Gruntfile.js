@@ -1,7 +1,8 @@
 'use strict';
 
 module.exports = function( grunt ) {
-	var configObject = {
+
+	grunt.initConfig( {
 		config: {
 			assets: {
 				src: 'resources/assets/',
@@ -26,8 +27,8 @@ module.exports = function( grunt ) {
 			},
 
 			tests: {
-				php: 'tests/php/',
-				js: 'tests/js/'
+				js: 'tests/js/',
+				php: 'tests/php/'
 			}
 		},
 
@@ -36,16 +37,15 @@ module.exports = function( grunt ) {
 		 * @see {@link https://github.com/substack/node-browserify browserify}
 		 */
 		browserify: {
-			options: {
-				transform: [
-					/**
-					 * @see {@link https://github.com/babel/babelify babelify}
-					 */
-					[ "babelify" ]
-				]
-			},
-
-			scripts: {
+			babelify: {
+				options: {
+					transform: [
+						/**
+						 * @see {@link https://github.com/babel/babelify babelify}
+						 */
+						[ 'babelify' ]
+					]
+				},
 				expand: true,
 				cwd: '<%= config.scripts.src %>',
 				src: [ '*.js' ],
@@ -58,11 +58,10 @@ module.exports = function( grunt ) {
 		 * @see {@link https://github.com/jakubpawlowicz/clean-css clean-css}
 		 */
 		cssmin: {
-			options: {
-				compatibility: 'ie8'
-			},
-
 			styles: {
+				options: {
+					compatibility: 'ie8'
+				},
 				expand: true,
 				cwd: '<%= config.styles.dest %>',
 				src: [ '*.css', '!*.min.css' ],
@@ -71,29 +70,23 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// Allow grunt-newer to run tasks if files other than the individual src files have changed since the last run.
+		/**
+		 * @see {@link https://github.com/tfrommen/grunt-delegate grunt-delegate}
+		 */
 		delegate: {
-			browserify: {
-				task: 'browserify',
-				src: [ '<%= config.scripts.src %>**/*.js' ]
-			},
-
-			'imagemin-assets': {
-				task: 'imagemin:assets',
-				src: [ '<%= config.assets.src %>*.{gif,jpeg,jpg,png}' ]
+			babelify: {
+				src: [ '<%= config.scripts.src %>**/*.js' ],
+				task: 'browserify:babelify'
 			},
 
 			'imagemin-images': {
-				task: 'imagemin:images',
-				src: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ]
+				src: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ],
+				task: 'imagemin:images'
 			},
 
-			tests: {
-				task: 'tests',
-				src: [
-					'<%= config.scripts.src %>**/*.js',
-					'<%= config.tests.js %>**/*.js'
-				]
+			'sass-convert': {
+				src: [ '<%= config.styles.src %>**/*.scss' ],
+				task: 'sass:convert'
 			}
 		},
 
@@ -102,30 +95,16 @@ module.exports = function( grunt ) {
 		 * @see {@link https://github.com/eslint/eslint ESLint}
 		 */
 		eslint: {
-			grunt: {
+			gruntfile: {
 				src: [ 'Gruntfile.js' ]
 			},
 
 			src: {
-				expand: true,
-				cwd: '<%= config.scripts.src %>',
-				src: [ '**/*.js' ]
-			}
-		},
+				src: [ '<%= config.scripts.src %>**/*.js' ]
+			},
 
-		/**
-		 * @see {@link https://github.com/jharding/grunt-exec grunt-exec}
-		 */
-		exec: {
-			// Don't run this directly. Run "$ grunt tests" instead.
 			tests: {
-				cmd: function( file ) {
-					/**
-					 * @see {@link https://github.com/babel/babel/tree/master/packages/babel-cli babel-cli}
-					 * @see {@link https://github.com/substack/faucet faucet}
-					 */
-					return '"./node_modules/.bin/babel-node" ' + file + ' | "./node_modules/.bin/faucet"';
-				}
+				src: [ '<%= config.tests.js %>**/*.js' ]
 			}
 		},
 
@@ -181,12 +160,12 @@ module.exports = function( grunt ) {
 				verbose: false
 			},
 
-			grunt: {
-				src: [ 'Gruntfile.js' ]
-			},
-
 			dest: {
 				src: [ '<%= config.scripts.dest %>*.js' ]
+			},
+
+			gruntfile: {
+				src: [ 'Gruntfile.js' ]
 			}
 		},
 
@@ -199,24 +178,40 @@ module.exports = function( grunt ) {
 				overwrite: true
 			},
 
-			configs: {
-				src: [ '.*rc' ]
+			github: {
+				src: [ '.github/*' ]
 			},
 
-			grunt: {
-				src: [ 'Gruntfile.js' ]
-			},
-
-			json: {
-				src: [ '*.json' ]
+			root: {
+				src: [ '*' ]
 			},
 
 			scripts: {
-				src: [ '<%= config.scripts.dest %>*.js' ]
+				src: [
+					'<%= config.scripts.src %>**/*.js',
+					'<%= config.scripts.dest %>*.js'
+				]
+			},
+
+			src: {
+				src: [
+					'<%= config.src %>*',
+					'<%= config.src %>inc/**/*'
+				]
 			},
 
 			styles: {
-				src: [ '<%= config.styles.dest %>*.css' ]
+				src: [
+					'<%= config.styles.src %>**/*.scss',
+					'<%= config.styles.dest %>*.css'
+				]
+			},
+
+			tests: {
+				src: [
+					'<%= config.tests.js %>**/*.js',
+					'<%= config.tests.php %>**/*.php'
+				]
 			}
 		},
 
@@ -224,6 +219,10 @@ module.exports = function( grunt ) {
 		 * @see {@link https://github.com/jgable/grunt-phplint grunt-phplint}
 		 */
 		phplint: {
+			root: {
+				src: [ '*.php' ]
+			},
+
 			src: {
 				src: [ '<%= config.src %>**/*.php' ]
 			},
@@ -238,20 +237,19 @@ module.exports = function( grunt ) {
 		 * @see {@link https://github.com/postcss/postcss PostCSS}
 		 */
 		postcss: {
-			options: {
-				processors: [
-					/**
-					 * @see {@link https://github.com/postcss/autoprefixer Autoprefixer}
-					 */
-					require( 'autoprefixer' )( {
-						browsers: '> 1%, last 2 versions, IE 8',
-						cascade: false
-					} )
-				],
-				failOnError: true
-			},
-
 			styles: {
+				options: {
+					processors: [
+						/**
+						 * @see {@link https://github.com/postcss/autoprefixer Autoprefixer}
+						 */
+						require( 'autoprefixer' )( {
+							browsers: '> 1%, last 2 versions, IE 8',
+							cascade: false
+						} )
+					],
+					failOnError: true
+				},
 				expand: true,
 				cwd: '<%= config.styles.dest %>',
 				src: [ '*.css', '!*.min.css' ],
@@ -264,9 +262,7 @@ module.exports = function( grunt ) {
 		 */
 		sass: {
 			options: {
-				sourcemap: 'none',
 				unixNewlines: true,
-				style: 'expanded',
 				noCache: true
 			},
 
@@ -278,6 +274,10 @@ module.exports = function( grunt ) {
 			},
 
 			convert: {
+				options: {
+					sourcemap: 'none',
+					style: 'expanded'
+				},
 				expand: true,
 				cwd: '<%= config.styles.src %>',
 				src: [ '*.scss' ],
@@ -287,16 +287,35 @@ module.exports = function( grunt ) {
 		},
 
 		/**
+		 * @see {@link https://github.com/sindresorhus/grunt-shell grunt-shell}
+		 */
+		shell: {
+			phpunit: {
+				command: 'phpunit'
+			},
+
+			// DO NOT run this directly. Run "$ grunt tape" instead.
+			tape: {
+				command: function( file ) {
+					/**
+					 * @see {@link https://github.com/babel/babel/tree/master/packages/babel-cli babel-cli}
+					 * @see {@link https://github.com/substack/faucet faucet}
+					 */
+					return '"./node_modules/.bin/babel-node" ' + file + ' | "./node_modules/.bin/faucet"';
+				}
+			}
+		},
+
+		/**
 		 * @see {@link https://github.com/gruntjs/grunt-contrib-uglify grunt-contrib-uglify}
 		 * @see {@link https://github.com/mishoo/UglifyJS UglifyJS}
 		 */
 		uglify: {
-			options: {
-				ASCIIOnly: true,
-				preserveComments: false
-			},
-
 			scripts: {
+				options: {
+					ASCIIOnly: true,
+					preserveComments: false
+				},
 				expand: true,
 				cwd: '<%= config.scripts.dest %>',
 				src: [ '*.js', '!*.min.js' ],
@@ -313,53 +332,36 @@ module.exports = function( grunt ) {
 				spawn: false
 			},
 
-			assets: {
-				files: [ '<%= config.assets.src %>*.{gif,jpeg,jpg,png}' ],
-				tasks: [
-					'newer:delegate:imagemin-assets'
-				]
-			},
-
 			configs: {
 				files: [ '.*rc' ],
 				tasks: [
-					'newer:jsonlint:configs',
-					'changed:lineending:configs'
+					'newer:jsonlint:configs'
 				]
 			},
 
-			grunt: {
+			gruntfile: {
 				files: [ 'Gruntfile.js' ],
 				tasks: [
-					'newer:eslint:grunt',
-					'newer:jsvalidate:grunt',
-					'newer:lineending:grunt'
-				]
-			},
-
-			images: {
-				files: [ '<%= config.images.src %>**/*.{gif,jpeg,jpg,png}' ],
-				tasks: [
-					'newer:delegate:imagemin-images'
+					'eslint:gruntfile',
+					'jsvalidate:gruntfile'
 				]
 			},
 
 			json: {
 				files: [ '*.json' ],
 				tasks: [
-					'newer:jsonlint:json',
-					'changed:lineending:json'
+					'newer:jsonlint:json'
 				]
 			},
 
 			php: {
 				files: [
+					'*.php',
 					'<%= config.src %>**/*.php',
 					'<%= config.tests.php %>**/*.php'
 				],
 				tasks: [
-					'newer:phplint',
-					'phpunit'
+					'newer:phplint'
 				]
 			},
 
@@ -367,10 +369,9 @@ module.exports = function( grunt ) {
 				files: [ '<%= config.scripts.src %>**/*.js' ],
 				tasks: [
 					'newer:eslint:src',
-					'newer:delegate:tests',
+					'newer:delegate:tape',
 					'newer:delegate:browserify',
 					'changed:jsvalidate:dest',
-					'changed:lineending:scripts',
 					'changed:uglify'
 				]
 			},
@@ -378,105 +379,73 @@ module.exports = function( grunt ) {
 			styles: {
 				files: [ '<%= config.styles.src %>**/*.scss' ],
 				tasks: [
-					'sass:convert',
+					'newer:delegate:sass-convert',
 					'changed:postcss',
-					'changed:lineending:styles',
 					'changed:cssmin'
+				]
+			},
+
+			tape: {
+				files: [ '<%= config.tests.js %>**/*.js' ],
+				tasks: [
+					'newer:eslint:tests'
 				]
 			}
 		}
-	};
+	} );
 
 	/**
 	 * @see {@link https://github.com/sindresorhus/load-grunt-tasks load-grunt-tasks}
 	 */
 	require( 'load-grunt-tasks' )( grunt );
 
-	grunt.initConfig( configObject );
-
-	// Delegation task for grunt-newer to check files different from the individual task's files.
-	grunt.registerMultiTask( 'delegate', function() {
-		var data = this.data,
-			task = this.target,
-			target = Array.prototype.join.call( arguments, ':' );
-
-		if ( data.task ) {
-			task = data.task;
-		} else if ( target ) {
-			task = task + ':' + target;
-		}
-
-		grunt.task.run( task );
-	} );
-
-	// PHPUnit task.
-	grunt.registerTask( 'phpunit', function() {
-		grunt.util.spawn( {
-			cmd: 'phpunit',
-			opts: {
-				stdio: 'inherit'
-			}
-		}, this.async() );
-	} );
-
 	// JavaScript tests (babel-node -> tape) task.
-	grunt.registerTask( 'tests', function() {
-		var files = grunt.file.expand( grunt.template.process( '<%= config.tests.js %>**/*Test.js' ) ),
-			numFiles = files.length;
-
-		for ( var i = 0; i < numFiles; ++i ) {
-			grunt.task.run( 'exec:tests:' + files[ i ] );
-		}
+	grunt.registerTask( 'tape', function() {
+		grunt.file.expand( grunt.template.process( '<%= config.tests.js %>**/*Test.js' ) ).forEach( function( file ) {
+			grunt.task.run( 'shell:tape:' + file );
+		} );
 	} );
-
-	grunt.registerTask( 'assets', configObject.watch.assets.tasks );
-
-	grunt.registerTask( 'configs', configObject.watch.configs.tasks );
-
-	grunt.registerTask( 'grunt', configObject.watch.grunt.tasks );
-
-	grunt.registerTask( 'images', configObject.watch.images.tasks );
-
-	grunt.registerTask( 'json', configObject.watch.json.tasks );
-
-	grunt.registerTask( 'php', configObject.watch.php.tasks );
-
-	grunt.registerTask( 'scripts', configObject.watch.scripts.tasks );
-
-	grunt.registerTask( 'styles', configObject.watch.styles.tasks );
 
 	grunt.registerTask( 'common', [
-		'configs',
-		'grunt',
-		'json',
-		'php'
+		'jsonlint',
+		'phplint',
+		'shell:phpunit',
+		'eslint',
+		'tape'
 	] );
 
 	grunt.registerTask( 'ci', [
-		'changed-clean',
-		'newer-clean',
 		'common',
-		'eslint:src',
-		'tests',
-		'jsvalidate:dest',
+		'jsvalidate',
 		'sass:check'
 	] );
 
 	grunt.registerTask( 'develop', [
-		'common',
-		'scripts',
-		'styles'
+		'newer:delegate:imagemin-images',
+		'newer:jsonlint',
+		'newer:phplint:src',
+		'newer:eslint',
+		'newer:delegate:babelify',
+		'newer:jsvalidate',
+		'newer:delegate:sass-convert',
+		'newer:postcss',
+		'newer:lineending',
+		'changed:uglify',
+		'changed:cssmin'
 	] );
 
 	grunt.registerTask( 'pre-commit', [
-		'changed-clean',
-		'newer-clean',
+		'imagemin',
 		'common',
-		'assets',
-		'images',
-		'scripts',
-		'styles'
+		'browserify:babelify',
+		'jsvalidate',
+		'sass:convert',
+		'postcss',
+		'lineending',
+		'uglify',
+		'cssmin'
 	] );
 
 	grunt.registerTask( 'default', 'develop' );
+
 };
