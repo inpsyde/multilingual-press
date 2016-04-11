@@ -3,7 +3,7 @@ import sinon from "sinon";
 import * as F from "../../functions";
 import Quicklinks from "../../../../resources/js/frontend/quicklinks/Quicklinks";
 
-global.Util = {
+const Util = {
 	addEventListener: sinon.spy(),
 	setLocation: sinon.spy()
 };
