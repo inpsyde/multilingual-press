@@ -24,6 +24,9 @@ props luisarn.
 - Improve (i.e., prepare/escape) several MySQL queries, props vaurdan.
 - Introduce `get_term_by_term_taxonomy_id` cache for term translator, props vaurdan.
 - Replace an uncached, direct MySQL query with a `get_posts()` call, props vaurdan.
+- Lots of
+[late](https://vip.wordpress.com/documentation/best-practices/security/validating-sanitizing-escaping/#always-escape-late)
+[escaping](https://vip.wordpress.com/2014/06/20/the-importance-of-escaping-all-the-things/).
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
