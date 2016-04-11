@@ -1234,13 +1234,15 @@ var RelationshipControl = function (_Backbone$View) {
 
 
 	RelationshipControl.prototype.findMetaBox = function findMetaBox($metaBox) {
+		var metaBoxIndex = -1;
+
 		$.each(this.unsavedRelationships, function (index, element) {
 			if (element === $metaBox) {
-				return index;
+				metaBoxIndex = index;
 			}
 		});
 
-		return -1;
+		return metaBoxIndex;
 	};
 
 	/**
