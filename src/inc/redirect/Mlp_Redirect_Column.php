@@ -67,7 +67,7 @@ class Mlp_Redirect_Column {
 			return '';
 		}
 
-		return '<img src="' . $this->image_url . '" alt="x">';
+		return '<img src="' . esc_url( $this->image_url ) . '" alt="x">';
 	}
 
 	/**
