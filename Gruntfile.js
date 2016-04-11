@@ -75,7 +75,10 @@ module.exports = function( grunt ) {
 		 */
 		delegate: {
 			babelify: {
-				src: [ '<%= config.scripts.src %>**/*.js' ],
+				src: [
+					'.babelrc',
+					'<%= config.scripts.src %>**/*.js'
+				],
 				task: 'browserify:babelify'
 			},
 
@@ -366,7 +369,10 @@ module.exports = function( grunt ) {
 			},
 
 			scripts: {
-				files: [ '<%= config.scripts.src %>**/*.js' ],
+				files: [
+					'.eslintrc',
+					'<%= config.scripts.src %>**/*.js'
+				],
 				tasks: [
 					'newer:eslint:src',
 					'newer:delegate:tape',
