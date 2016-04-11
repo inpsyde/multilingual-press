@@ -389,13 +389,6 @@ module.exports = function( grunt ) {
 					'changed:postcss',
 					'changed:cssmin'
 				]
-			},
-
-			tape: {
-				files: [ '<%= config.tests.js %>**/*.js' ],
-				tasks: [
-					'newer:eslint:tests'
-				]
 			}
 		}
 	} );
