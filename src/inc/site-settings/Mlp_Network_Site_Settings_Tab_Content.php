@@ -211,51 +211,54 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	 */
 	private function show_blog_relationships( $site_option ) {
 
-		if ( ! is_array( $site_option ) )
+		if ( ! is_array( $site_option ) ) {
 			return;
+		}
 
 		unset ( $site_option[ $this->blog_id ] );
 
-		if ( empty ( $site_option ) )
+		if ( empty ( $site_option ) ) {
 			return;
+		}
 
 		?>
 		<tr class="form-field">
 			<th scope="row"><?php esc_html_e( 'Relationships', 'multilingual-press' ); ?></th>
 			<td>
-		<?php
-		foreach ( $site_option as $blog_id => $meta ) {
+				<?php
+				foreach ( $site_option as $blog_id => $meta ) {
 
-			$blog_id = (int) $blog_id;
-			// Get blog display name
-			switch_to_blog( $blog_id );
-			$blog_name = get_bloginfo( 'Name' );
-			restore_current_blog();
+					$blog_id = (int) $blog_id;
+					// Get blog display name
+					switch_to_blog( $blog_id );
+					$blog_name = get_bloginfo( 'Name' );
+					restore_current_blog();
 
-			// Get current settings
-			$related_blogs = $this->relations->get_related_sites( $this->blog_id );
-			$checked       = checked( TRUE, in_array( $blog_id, $related_blogs ), FALSE );
-			$id            = "related_blog_$blog_id";
-			?>
-			<p>
-				<label for="<?php echo esc_attr( $id ); ?>">
-					<input id="<?php echo esc_attr( $id ); ?>" <?php echo $checked; ?> type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $blog_id ) ?>" />
-					<?php echo esc_html( $blog_name ); ?> - <?php
-					echo esc_html( Mlp_Helpers::get_blog_language( $blog_id ) );
+					// Get current settings
+					$related_blogs = $this->relations->get_related_sites( $this->blog_id );
+					$checked       = checked( TRUE, in_array( $blog_id, $related_blogs ), FALSE );
+					$id            = 'related_blog_' . $blog_id;
 					?>
-				</label>
-			</p>
-			<?php
-		}
-		?>
-		<p class="description">
-		<?php
-		esc_html_e(
-			'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
-			'multilingual-press'
-		);
-		?>
-		</p>
+					<p>
+						<label for="<?php echo esc_attr( $id ); ?>">
+							<input id="<?php echo esc_attr( $id ); ?>" <?php echo esc_attr( $checked ); ?>
+								type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $blog_id ) ?>" />
+							<?php echo esc_html( $blog_name ); ?> - <?php
+							echo esc_html( Mlp_Helpers::get_blog_language( $blog_id ) );
+							?>
+						</label>
+					</p>
+					<?php
+				}
+				?>
+				<p class="description">
+					<?php
+					esc_html_e(
+						'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
+						'multilingual-press'
+					);
+					?>
+				</p>
 			</td>
 		</tr>
 		<?php

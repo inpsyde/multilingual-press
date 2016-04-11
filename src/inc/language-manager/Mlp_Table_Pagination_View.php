@@ -99,10 +99,10 @@ class Mlp_Table_Pagination_View {
 		$page_class = 1 === $this->total_pages ? ' one-page' : '';
 		?>
 		<div class="tablenav-pages<?php echo esc_attr( $page_class ); ?>">
-			<?php echo $this->get_item_count(); ?>
-			<?php if ( 1 < $this->total_pages ) : ?>
+			<?php echo esc_html( $this->get_item_count() ); ?>
+			<?php if ( 1 < $this->total_pages ) { ?>
 				<?php echo $this->get_pagination_links(); ?>
-			<?php endif; ?>
+			<?php } ?>
 		</div>
 		<?php
 	}
@@ -119,11 +119,13 @@ class Mlp_Table_Pagination_View {
 		$this->current_page = $this->data->get_current_page();
 		$this->current_url  = $this->get_current_url();
 
-		if ( $this->current_page === 1 )
+		if ( $this->current_page === 1 ) {
 			$this->disable_first = ' disabled';
+		}
 
-		if ( $this->current_page === $this->total_pages )
+		if ( $this->current_page === $this->total_pages ) {
 			$this->disable_last = ' disabled';
+		}
 	}
 
 	/**

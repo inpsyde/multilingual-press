@@ -141,7 +141,7 @@ class Mlp_Translation_Metabox_View {
 	) {
 
 		if ( ! empty( $post->post_title ) ) {
-			echo '<h2 class="headline" style="margin: 0;">' . $post->post_title . '</h2>';
+			echo '<h2 class="headline" style="margin: 0;">' . esc_attr( $post->post_title ) . '</h2>';
 		}
 	}
 
@@ -158,11 +158,11 @@ class Mlp_Translation_Metabox_View {
 	) {
 
 		$lines = substr_count( $remote_post->post_content, "\n" ) + 1;
-		$rows = min( $lines, 10 );
+		$rows  = min( $lines, 10 );
 
 		printf(
 			'<textarea class="large-text" cols="80" rows="%d$1" placeholder="%2$s" readonly>%3$s</textarea>',
-			$rows,
+			esc_attr( $rows ),
 			esc_attr_x( 'No content yet.', 'placeholder for empty translation textarea', 'multilingual-press' ),
 			esc_textarea( $remote_post->post_content )
 		);
@@ -181,16 +181,16 @@ class Mlp_Translation_Metabox_View {
 		$id = (int) $blog_id;
 		?>
 		<p>
-			<label for="translate_this_post_<?php print $id; ?>">
+			<label for="translate_this_post_<?php echo esc_attr( $id ); ?>">
 				<input
-					type  = "checkbox"
-					id    = "translate_this_post_<?php print $id; ?>"
-					name  = "mlp_to_translate[]"
-					value = "<?php print $id; ?>" />
-				<?php _e( 'Translate this post', 'multilingual-press' ); ?>
+					type="checkbox"
+					id="translate_this_post_<?php esc_attr( $id ); ?>"
+					name="mlp_to_translate[]"
+					value="<?php esc_attr( $id ); ?>" />
+				<?php esc_html_e( 'Translate this post', 'multilingual-press' ); ?>
 			</label>
 		</p>
-	<?php
+		<?php
 	}
 
 }

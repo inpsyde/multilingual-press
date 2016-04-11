@@ -84,11 +84,9 @@ class Mlp_Simple_Nav_Menu_Selectors {
 		$url = $this->get_select_all_url( $list_id );
 		?>
 		<span class="list-controls">
-			<a href="<?php
-			echo esc_url( $url );
-			?>" class="select-all"><?php
-				_e( 'Select All', 'multilingual-press' );
-				?></a>
+			<a href="<?php echo esc_url( $url ); ?>" class="select-all">
+				<?php esc_attr_e( 'Select All', 'multilingual-press' ); ?>
+			</a>
 		</span>
 		<?php
 	}

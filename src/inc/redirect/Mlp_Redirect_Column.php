@@ -63,10 +63,11 @@ class Mlp_Redirect_Column {
 		$column_name, $blog_id
 	) {
 
-		if ( ! get_blog_option( $blog_id, 'inpsyde_multilingual_redirect' ) )
+		if ( ! get_blog_option( $blog_id, 'inpsyde_multilingual_redirect' ) ) {
 			return '';
+		}
 
-		return "<img src='{$this->image_url}' alt='x'>";
+		return '<img src="' . $this->image_url . '" alt="x">';
 	}
 
 	/**

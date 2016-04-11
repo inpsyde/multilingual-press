@@ -62,9 +62,9 @@ class Mlp_New_Site_View {
 							<option value="-1">
 								<?php esc_html_e( 'Choose language', 'multilingual-press' ); ?>
 							</option>
-							<?php foreach ( $languages as $language ) : ?>
-								<?php $this->render_language_option( $language ); ?>
-							<?php endforeach; ?>
+							<?php foreach ( $languages as $language ){
+								$this->render_language_option( $language );
+							} ?>
 						</select>
 					</td>
 				</tr>
@@ -166,7 +166,7 @@ class Mlp_New_Site_View {
 		foreach ( array_keys( $sites ) as $site_id ) {
 			$site_id = (int) $site_id;
 
-			$id = "related_blog_$site_id";
+			$id = 'related_blog_' . $site_id;
 
 			switch_to_blog( $site_id );
 			$blog_name = get_bloginfo( 'name' );

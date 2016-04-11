@@ -46,10 +46,9 @@ class Mlp_Redirect_User_Settings_Html implements Mlp_User_Settings_View_Interfac
 	 */
 	public function show_content( WP_User $user ) {
 
-		$key     = esc_attr( $this->key );
 		$current = (int) get_user_meta( $user->ID, $this->key );
 		$check   = checked( 1, $current, FALSE );
-		$text    = esc_html__(
+		$text    = __(
 			'Do not redirect me automatically to the best matching language version.',
 			'multilingual-press'
 		);
@@ -60,9 +59,9 @@ class Mlp_Redirect_User_Settings_Html implements Mlp_User_Settings_View_Interfac
 				<input type="checkbox" value="1" name="%1$s" id="%1$s_id" %2$s>
 				%3$s
 			</label>',
-			$key,
-			$check,
-			$text
+			esc_attr( $this->key ),
+			esc_attr( $check ),
+			esc_html( $text )
 		);
 	}
 }
