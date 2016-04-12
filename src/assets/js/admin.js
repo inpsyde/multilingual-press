@@ -606,7 +606,7 @@ exports.__esModule = true;
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 /**
- * Returns the name of the given thing.
+ * Returns the name of the given module.
  * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
  * @returns {string} The name of the module.
  */
@@ -662,126 +662,126 @@ var $ = window.jQuery;
  */
 
 var NavMenus = function (_Backbone$View) {
-		_inherits(NavMenus, _Backbone$View);
+	_inherits(NavMenus, _Backbone$View);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function NavMenus() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, NavMenus);
 
 		/**
-   * Constructor. Sets up the properties.
-   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+   * The jQuery object representing the MultilingualPress language checkboxes.
+   * @type {jQuery}
    */
 
-		function NavMenus() {
-				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-				_classCallCheck(this, NavMenus);
+		_this.$languages = _this.$el.find('li [type="checkbox"]');
 
-				/**
-     * The jQuery object representing the MultilingualPress language checkboxes.
-     * @type {jQuery}
-     */
+		/**
+   * The jQuery object representing the input element that contains the currently edited menu's ID.
+   * @type {jQuery}
+   */
+		_this.$menu = $('#menu');
 
-				var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		/**
+   * The jQuery object representing the currently edited menu.
+   * @type {jQuery}
+   */
+		_this.$menuToEdit = $('#menu-to-edit');
 
-				_this.$languages = _this.$el.find('li [type="checkbox"]');
+		/**
+   * The jQuery object representing the Languages meta box spinner.
+   * @type {jQuery}
+   */
+		_this.$spinner = _this.$el.find('.spinner');
 
-				/**
-     * The jQuery object representing the input element that contains the currently edited menu's ID.
-     * @type {jQuery}
-     */
-				_this.$menu = $('#menu');
+		/**
+   * The jQuery object representing the Languages meta box submit button.
+   * @type {jQuery}
+   */
+		_this.$submit = _this.$el.find('#submit-mlp-language');
 
-				/**
-     * The jQuery object representing the currently edited menu.
-     * @type {jQuery}
-     */
-				_this.$menuToEdit = $('#menu-to-edit');
+		/**
+   * The model object.
+   * @type {Model}
+   */
+		_this.model = options.model;
+		_this.listenTo(_this.model, 'change', _this.render);
 
-				/**
-     * The jQuery object representing the Languages meta box spinner.
-     * @type {jQuery}
-     */
-				_this.$spinner = _this.$el.find('.spinner');
+		/**
+   * The module settings.
+   * @type {Object}
+   */
+		_this.moduleSettings = options.moduleSettings;
+		return _this;
+	}
 
-				/**
-     * The jQuery object representing the Languages meta box submit button.
-     * @type {jQuery}
-     */
-				_this.$submit = _this.$el.find('#submit-mlp-language');
+	/**
+  * Requests the according markup for the checked languages in the Languages meta box.
+  * @param {Event} event - The click event of the submit button.
+  */
 
-				/**
-     * The model object.
-     * @type {Model}
-     */
-				_this.model = options.model;
-				_this.listenTo(_this.model, 'change', _this.render);
 
-				/**
-     * The module settings.
-     * @type {Object}
-     */
-				_this.moduleSettings = options.moduleSettings;
-				return _this;
+	NavMenus.prototype.sendRequest = function sendRequest(event) {
+		var data = {
+			action: this.moduleSettings.action,
+			menu: this.$menu.val(),
+			mlp_sites: this.getSites()
+		};
+		data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
+
+		event.preventDefault();
+
+		this.$submit.prop('disabled', true);
+
+		this.$spinner.addClass('is-active');
+
+		this.model.fetch({
+			data: data,
+			processData: true
+		});
+	};
+
+	/**
+  * Returns the site IDs for the checked languages in the Languages meta box.
+  * @returns {number[]} The site IDs.
+  */
+
+
+	NavMenus.prototype.getSites = function getSites() {
+		var ids = [];
+
+		this.$languages.filter(':checked').each(function (index, element) {
+			return ids.push(Number($(element).val()));
+		});
+
+		return ids;
+	};
+
+	/**
+  * Renders the nav menu item to the currently edited menu.
+  */
+
+
+	NavMenus.prototype.render = function render() {
+		if (this.model.get('success')) {
+			this.$menuToEdit.append(this.model.get('data'));
 		}
 
-		/**
-   * Requests the according markup for the checked languages in the Languages meta box.
-   * @param {Event} event - The click event of the submit button.
-   */
+		this.$languages.prop('checked', false);
 
+		this.$spinner.removeClass('is-active');
 
-		NavMenus.prototype.sendRequest = function sendRequest(event) {
-				var data = {
-						action: this.moduleSettings.action,
-						menu: this.$menu.val(),
-						mlp_sites: this.getSites()
-				};
-				data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
+		this.$submit.prop('disabled', false);
+	};
 
-				event.preventDefault();
-
-				this.$submit.prop('disabled', true);
-
-				this.$spinner.addClass('is-active');
-
-				this.model.fetch({
-						data: data,
-						processData: true
-				});
-		};
-
-		/**
-   * Returns the site IDs for the checked languages in the Languages meta box.
-   * @returns {number[]} The site IDs.
-   */
-
-
-		NavMenus.prototype.getSites = function getSites() {
-				var ids = [];
-
-				this.$languages.filter(':checked').each(function (index, element) {
-						return ids.push(Number($(element).val()));
-				});
-
-				return ids;
-		};
-
-		/**
-   * Renders the nav menu item to the currently edited menu.
-   */
-
-
-		NavMenus.prototype.render = function render() {
-				if (this.model.get('success')) {
-						this.$menuToEdit.append(this.model.get('data'));
-				}
-
-				this.$languages.prop('checked', false);
-
-				this.$spinner.removeClass('is-active');
-
-				this.$submit.prop('disabled', false);
-		};
-
-		return NavMenus;
+	return NavMenus;
 }(Backbone.View);
 
 exports.default = NavMenus;

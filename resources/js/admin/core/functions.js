@@ -1,5 +1,5 @@
 /**
- * Returns the name of the given thing.
+ * Returns the name of the given module.
  * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
  * @returns {string} The name of the module.
  */
