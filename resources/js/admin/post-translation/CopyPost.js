@@ -68,7 +68,7 @@ class CopyPost extends Backbone.View {
 
 		event.preventDefault();
 
-		this.fadeOut( remoteSiteID );
+		this.fadeOutMetabox( remoteSiteID );
 
 		$( '#mlp-translation-data-' + remoteSiteID + '-copied-post' ).val( 1 );
 
@@ -173,7 +173,7 @@ class CopyPost extends Backbone.View {
 		 */
 		this.EventManager.trigger( 'CopyPost:updatePostData', data );
 
-		this.fadeIn( data.siteID );
+		this.fadeInMetabox( data.siteID );
 
 		return true;
 	}
@@ -202,18 +202,18 @@ class CopyPost extends Backbone.View {
 	}
 
 	/**
-	 * Fades the Metabox out
-	 * @param {int} remoteSiteID - The remote post ID
+	 * Fades the Metabox out.
+	 * @param {number} remoteSiteID - The remote site ID.
 	 */
-	fadeOut( remoteSiteID ) {
+	fadeOutMetabox( remoteSiteID ) {
 		$( '#inpsyde_multilingual_' + remoteSiteID ).css( 'opacity', 0.4 );
 	}
 
 	/**
-	 * Fades the Metabox in
-	 * @param {int} remoteSiteID - The remote post ID
+	 * Fades the Metabox in.
+	 * @param {number} remoteSiteID - The remote post ID.
 	 */
-	fadeIn( remoteSiteID ) {
+	fadeInMetabox( remoteSiteID ) {
 		$( '#inpsyde_multilingual_' + remoteSiteID ).css( 'opacity', 1 );
 	}
 }

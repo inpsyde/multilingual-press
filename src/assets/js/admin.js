@@ -662,126 +662,126 @@ var $ = window.jQuery;
  */
 
 var NavMenus = function (_Backbone$View) {
-	_inherits(NavMenus, _Backbone$View);
-
-	/**
-  * Constructor. Sets up the properties.
-  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
-  */
-
-	function NavMenus() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-		_classCallCheck(this, NavMenus);
+		_inherits(NavMenus, _Backbone$View);
 
 		/**
-   * The jQuery object representing the MultilingualPress language checkboxes.
-   * @type {jQuery}
+   * Constructor. Sets up the properties.
+   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
    */
 
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		function NavMenus() {
+				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-		_this.$languages = _this.$el.find('li [type="checkbox"]');
+				_classCallCheck(this, NavMenus);
 
-		/**
-   * The jQuery object representing the input element that contains the currently edited menu's ID.
-   * @type {jQuery}
-   */
-		_this.$menu = $('#menu');
+				/**
+     * The jQuery object representing the MultilingualPress language checkboxes.
+     * @type {jQuery}
+     */
 
-		/**
-   * The jQuery object representing the currently edited menu.
-   * @type {jQuery}
-   */
-		_this.$menuToEdit = $('#menu-to-edit');
+				var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		/**
-   * The jQuery object representing the Languages meta box spinner.
-   * @type {jQuery}
-   */
-		_this.$spinner = _this.$el.find('.spinner');
+				_this.$languages = _this.$el.find('li [type="checkbox"]');
 
-		/**
-   * The jQuery object representing the Languages meta box submit button.
-   * @type {jQuery}
-   */
-		_this.$submit = _this.$el.find('#submit-mlp-language');
+				/**
+     * The jQuery object representing the input element that contains the currently edited menu's ID.
+     * @type {jQuery}
+     */
+				_this.$menu = $('#menu');
 
-		/**
-   * The model object.
-   * @type {Model}
-   */
-		_this.model = options.model;
-		_this.listenTo(_this.model, 'change', _this.render);
+				/**
+     * The jQuery object representing the currently edited menu.
+     * @type {jQuery}
+     */
+				_this.$menuToEdit = $('#menu-to-edit');
 
-		/**
-   * The module settings.
-   * @type {Object}
-   */
-		_this.moduleSettings = options.moduleSettings;
-		return _this;
-	}
+				/**
+     * The jQuery object representing the Languages meta box spinner.
+     * @type {jQuery}
+     */
+				_this.$spinner = _this.$el.find('.spinner');
 
-	/**
-  * Requests the according markup for the checked languages in the Languages meta box.
-  * @param {Event} event - The click event of the submit button.
-  */
+				/**
+     * The jQuery object representing the Languages meta box submit button.
+     * @type {jQuery}
+     */
+				_this.$submit = _this.$el.find('#submit-mlp-language');
 
+				/**
+     * The model object.
+     * @type {Model}
+     */
+				_this.model = options.model;
+				_this.listenTo(_this.model, 'change', _this.render);
 
-	NavMenus.prototype.sendRequest = function sendRequest(event) {
-		var data = {
-			action: this.moduleSettings.action,
-			menu: this.$menu.val(),
-			mlp_sites: this.getSites()
-		};
-		data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
-
-		event.preventDefault();
-
-		this.$submit.prop('disabled', true);
-
-		this.$spinner.addClass('is-active');
-
-		this.model.fetch({
-			data: data,
-			processData: true
-		});
-	};
-
-	/**
-  * Returns the site IDs for the checked languages in the Languages meta box.
-  * @returns {number[]} The site IDs.
-  */
-
-
-	NavMenus.prototype.getSites = function getSites() {
-		var ids = [];
-
-		this.$languages.filter(':checked').each(function (index, element) {
-			return ids.push(Number($(element).val()));
-		});
-
-		return ids;
-	};
-
-	/**
-  * Renders the nav menu item to the currently edited menu.
-  */
-
-
-	NavMenus.prototype.render = function render() {
-		if (this.model.get('success')) {
-			this.$menuToEdit.append(this.model.get('data'));
+				/**
+     * The module settings.
+     * @type {Object}
+     */
+				_this.moduleSettings = options.moduleSettings;
+				return _this;
 		}
 
-		this.$languages.prop('checked', false);
+		/**
+   * Requests the according markup for the checked languages in the Languages meta box.
+   * @param {Event} event - The click event of the submit button.
+   */
 
-		this.$spinner.removeClass('is-active');
 
-		this.$submit.prop('disabled', false);
-	};
+		NavMenus.prototype.sendRequest = function sendRequest(event) {
+				var data = {
+						action: this.moduleSettings.action,
+						menu: this.$menu.val(),
+						mlp_sites: this.getSites()
+				};
+				data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
 
-	return NavMenus;
+				event.preventDefault();
+
+				this.$submit.prop('disabled', true);
+
+				this.$spinner.addClass('is-active');
+
+				this.model.fetch({
+						data: data,
+						processData: true
+				});
+		};
+
+		/**
+   * Returns the site IDs for the checked languages in the Languages meta box.
+   * @returns {number[]} The site IDs.
+   */
+
+
+		NavMenus.prototype.getSites = function getSites() {
+				var ids = [];
+
+				this.$languages.filter(':checked').each(function (index, element) {
+						return ids.push(Number($(element).val()));
+				});
+
+				return ids;
+		};
+
+		/**
+   * Renders the nav menu item to the currently edited menu.
+   */
+
+
+		NavMenus.prototype.render = function render() {
+				if (this.model.get('success')) {
+						this.$menuToEdit.append(this.model.get('data'));
+				}
+
+				this.$languages.prop('checked', false);
+
+				this.$spinner.removeClass('is-active');
+
+				this.$submit.prop('disabled', false);
+		};
+
+		return NavMenus;
 }(Backbone.View);
 
 exports.default = NavMenus;
@@ -988,7 +988,7 @@ var CopyPost = function (_Backbone$View) {
 
 		event.preventDefault();
 
-		this.fadeOut(remoteSiteID);
+		this.fadeOutMetabox(remoteSiteID);
 
 		$('#mlp-translation-data-' + remoteSiteID + '-copied-post').val(1);
 
@@ -1099,7 +1099,7 @@ var CopyPost = function (_Backbone$View) {
    */
 		this.EventManager.trigger('CopyPost:updatePostData', data);
 
-		this.fadeIn(data.siteID);
+		this.fadeInMetabox(data.siteID);
 
 		return true;
 	};
@@ -1130,22 +1130,22 @@ var CopyPost = function (_Backbone$View) {
 	};
 
 	/**
-  * Fades the Metabox out
-  * @param {int} remoteSiteID - The remote post ID
+  * Fades the Metabox out.
+  * @param {number} remoteSiteID - The remote site ID.
   */
 
 
-	CopyPost.prototype.fadeOut = function fadeOut(remoteSiteID) {
+	CopyPost.prototype.fadeOutMetabox = function fadeOutMetabox(remoteSiteID) {
 		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', 0.4);
 	};
 
 	/**
-  * Fades the Metabox in
-  * @param {int} remoteSiteID - The remote post ID
+  * Fades the Metabox in.
+  * @param {number} remoteSiteID - The remote post ID.
   */
 
 
-	CopyPost.prototype.fadeIn = function fadeIn(remoteSiteID) {
+	CopyPost.prototype.fadeInMetabox = function fadeInMetabox(remoteSiteID) {
 		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', 1);
 	};
 
