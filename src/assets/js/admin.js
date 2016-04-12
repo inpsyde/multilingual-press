@@ -981,7 +981,6 @@ var CopyPost = function (_Backbone$View) {
 
 
 	CopyPost.prototype.copyPostData = function copyPostData(event) {
-
 		var remoteSiteID = this.getRemoteSiteID($(event.target));
 
 		var data = {};

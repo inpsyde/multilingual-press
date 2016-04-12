@@ -61,7 +61,6 @@ class CopyPost extends Backbone.View {
 	 * @param {Event} event - The click event of a "Copy source post" button.
 	 */
 	copyPostData( event ) {
-
 		const remoteSiteID = this.getRemoteSiteID( $( event.target ) );
 
 		let data = {};
