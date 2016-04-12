@@ -54,6 +54,7 @@
     "grunt-phplint": "~0.0.5",
     "grunt-postcss": "~0.7.1",
     "grunt-shell": "^1.2.1",
+    "grunt-zip": "^0.17.1",
     "load-grunt-tasks": "^3.5.0",
     "sinon": "^1.17.3",
     "tape": "^4.5.1"

@@ -14,6 +14,8 @@ module.exports = function( grunt ) {
 				dest: 'src/assets/images/'
 			},
 
+			name: 'MultilingualPress',
+
 			scripts: {
 				src: 'resources/js/',
 				dest: 'src/assets/js/'
@@ -389,6 +391,20 @@ module.exports = function( grunt ) {
 					'changed:cssmin'
 				]
 			}
+		},
+
+		/**
+		 * @see {@link https://github.com/twolfson/grunt-zip grunt-zip}
+		 */
+		zip: {
+			release: {
+				src: '<%= config.src %>**/*',
+				dest: '<%= config.name %>.zip',
+				router: function( filepath ) {
+					// Rename "src/" to "multilingual-press/".
+					return 'multilingual-press' + filepath.substr( filepath.indexOf( '/' ) );
+				}
+			}
 		}
 	} );
 
@@ -442,6 +458,11 @@ module.exports = function( grunt ) {
 		'lineending',
 		'uglify',
 		'cssmin'
+	] );
+
+	grunt.registerTask( 'release', [
+		'pre-commit',
+		'zip:release'
 	] );
 
 	grunt.registerTask( 'default', 'develop' );
