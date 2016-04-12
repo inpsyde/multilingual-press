@@ -105,7 +105,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], CopyPostAnimation, {
 	events: {
 		'CopyPost:copyPostData': 'fadeIn',
 		'CopyPost:updatePostData': 'fadeOut'
-	},
+	}
 } );
 
 // Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
