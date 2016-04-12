@@ -15,6 +15,7 @@ import RelationshipControl from "./admin/post-translation/RelationshipControl";
 import RemotePostSearch from "./admin/post-translation/RemotePostSearch";
 import TermTranslator from "./admin/term-translation/TermTranslator";
 import UserBackEndLanguage from "./admin/user-settings/UserBackEndLanguage";
+import CopyPostAnimation from "./admin/post-translation/CopyPostAnimation";
 
 const ajaxURL = window.ajaxurl;
 
@@ -95,6 +96,16 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], CopyPost, {
 	},
 	model: new Model( { urlRoot: ajaxURL } ),
 	moduleSettings: F.getSettings( CopyPost )
+} );
+
+// Register the CopyPost module for the Edit Post and Add New Post admin pages.
+controller.registerModule( [ 'post.php', 'post-new.php' ], CopyPostAnimation, {
+	el: '#post-body',
+	EventManager,
+	events: {
+		'CopyPost:copyPostData': 'fadeIn',
+		'CopyPost:updatePostData': 'fadeOut'
+	},
 } );
 
 // Register the RelationshipControl module for the Edit Post and Add New Post admin pages.

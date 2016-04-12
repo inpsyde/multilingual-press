@@ -57,6 +57,10 @@ var _UserBackEndLanguage = require("./admin/user-settings/UserBackEndLanguage");
 
 var _UserBackEndLanguage2 = _interopRequireDefault(_UserBackEndLanguage);
 
+var _CopyPostAnimation = require("./admin/post-translation/CopyPostAnimation");
+
+var _CopyPostAnimation2 = _interopRequireDefault(_CopyPostAnimation);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -138,6 +142,16 @@ controller.registerModule(['post.php', 'post-new.php'], _CopyPost2.default, {
 	moduleSettings: F.getSettings(_CopyPost2.default)
 });
 
+// Register the CopyPost module for the Edit Post and Add New Post admin pages.
+controller.registerModule(['post.php', 'post-new.php'], _CopyPostAnimation2.default, {
+	el: '#post-body',
+	EventManager: _EventManager.EventManager,
+	events: {
+		'CopyPost:copyPostData': 'fadeIn',
+		'CopyPost:updatePostData': 'fadeOut'
+	}
+});
+
 // Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
 controller.registerModule(['post.php', 'post-new.php'], _RelationshipControl2.default, {
 	el: '#post-body',
@@ -194,7 +208,7 @@ jQuery(function () {
 // Externalize the MultilingualPress admin namespace.
 window.MultilingualPressAdmin = MLP;
 
-},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/RelationshipControl":12,"./admin/post-translation/RemotePostSearch":13,"./admin/term-translation/TermTranslator":14,"./admin/user-settings/UserBackEndLanguage":15,"./common/utils":16}],2:[function(require,module,exports){
+},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/CopyPostAnimation":12,"./admin/post-translation/RelationshipControl":13,"./admin/post-translation/RemotePostSearch":14,"./admin/term-translation/TermTranslator":15,"./admin/user-settings/UserBackEndLanguage":16,"./common/utils":17}],2:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -662,126 +676,126 @@ var $ = window.jQuery;
  */
 
 var NavMenus = function (_Backbone$View) {
-	_inherits(NavMenus, _Backbone$View);
-
-	/**
-  * Constructor. Sets up the properties.
-  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
-  */
-
-	function NavMenus() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-		_classCallCheck(this, NavMenus);
+		_inherits(NavMenus, _Backbone$View);
 
 		/**
-   * The jQuery object representing the MultilingualPress language checkboxes.
-   * @type {jQuery}
+   * Constructor. Sets up the properties.
+   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
    */
 
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		function NavMenus() {
+				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-		_this.$languages = _this.$el.find('li [type="checkbox"]');
+				_classCallCheck(this, NavMenus);
 
-		/**
-   * The jQuery object representing the input element that contains the currently edited menu's ID.
-   * @type {jQuery}
-   */
-		_this.$menu = $('#menu');
+				/**
+     * The jQuery object representing the MultilingualPress language checkboxes.
+     * @type {jQuery}
+     */
 
-		/**
-   * The jQuery object representing the currently edited menu.
-   * @type {jQuery}
-   */
-		_this.$menuToEdit = $('#menu-to-edit');
+				var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		/**
-   * The jQuery object representing the Languages meta box spinner.
-   * @type {jQuery}
-   */
-		_this.$spinner = _this.$el.find('.spinner');
+				_this.$languages = _this.$el.find('li [type="checkbox"]');
 
-		/**
-   * The jQuery object representing the Languages meta box submit button.
-   * @type {jQuery}
-   */
-		_this.$submit = _this.$el.find('#submit-mlp-language');
+				/**
+     * The jQuery object representing the input element that contains the currently edited menu's ID.
+     * @type {jQuery}
+     */
+				_this.$menu = $('#menu');
 
-		/**
-   * The model object.
-   * @type {Model}
-   */
-		_this.model = options.model;
-		_this.listenTo(_this.model, 'change', _this.render);
+				/**
+     * The jQuery object representing the currently edited menu.
+     * @type {jQuery}
+     */
+				_this.$menuToEdit = $('#menu-to-edit');
 
-		/**
-   * The module settings.
-   * @type {Object}
-   */
-		_this.moduleSettings = options.moduleSettings;
-		return _this;
-	}
+				/**
+     * The jQuery object representing the Languages meta box spinner.
+     * @type {jQuery}
+     */
+				_this.$spinner = _this.$el.find('.spinner');
 
-	/**
-  * Requests the according markup for the checked languages in the Languages meta box.
-  * @param {Event} event - The click event of the submit button.
-  */
+				/**
+     * The jQuery object representing the Languages meta box submit button.
+     * @type {jQuery}
+     */
+				_this.$submit = _this.$el.find('#submit-mlp-language');
 
+				/**
+     * The model object.
+     * @type {Model}
+     */
+				_this.model = options.model;
+				_this.listenTo(_this.model, 'change', _this.render);
 
-	NavMenus.prototype.sendRequest = function sendRequest(event) {
-		var data = {
-			action: this.moduleSettings.action,
-			menu: this.$menu.val(),
-			mlp_sites: this.getSites()
-		};
-		data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
-
-		event.preventDefault();
-
-		this.$submit.prop('disabled', true);
-
-		this.$spinner.addClass('is-active');
-
-		this.model.fetch({
-			data: data,
-			processData: true
-		});
-	};
-
-	/**
-  * Returns the site IDs for the checked languages in the Languages meta box.
-  * @returns {number[]} The site IDs.
-  */
-
-
-	NavMenus.prototype.getSites = function getSites() {
-		var ids = [];
-
-		this.$languages.filter(':checked').each(function (index, element) {
-			return ids.push(Number($(element).val()));
-		});
-
-		return ids;
-	};
-
-	/**
-  * Renders the nav menu item to the currently edited menu.
-  */
-
-
-	NavMenus.prototype.render = function render() {
-		if (this.model.get('success')) {
-			this.$menuToEdit.append(this.model.get('data'));
+				/**
+     * The module settings.
+     * @type {Object}
+     */
+				_this.moduleSettings = options.moduleSettings;
+				return _this;
 		}
 
-		this.$languages.prop('checked', false);
+		/**
+   * Requests the according markup for the checked languages in the Languages meta box.
+   * @param {Event} event - The click event of the submit button.
+   */
 
-		this.$spinner.removeClass('is-active');
 
-		this.$submit.prop('disabled', false);
-	};
+		NavMenus.prototype.sendRequest = function sendRequest(event) {
+				var data = {
+						action: this.moduleSettings.action,
+						menu: this.$menu.val(),
+						mlp_sites: this.getSites()
+				};
+				data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
 
-	return NavMenus;
+				event.preventDefault();
+
+				this.$submit.prop('disabled', true);
+
+				this.$spinner.addClass('is-active');
+
+				this.model.fetch({
+						data: data,
+						processData: true
+				});
+		};
+
+		/**
+   * Returns the site IDs for the checked languages in the Languages meta box.
+   * @returns {number[]} The site IDs.
+   */
+
+
+		NavMenus.prototype.getSites = function getSites() {
+				var ids = [];
+
+				this.$languages.filter(':checked').each(function (index, element) {
+						return ids.push(Number($(element).val()));
+				});
+
+				return ids;
+		};
+
+		/**
+   * Renders the nav menu item to the currently edited menu.
+   */
+
+
+		NavMenus.prototype.render = function render() {
+				if (this.model.get('success')) {
+						this.$menuToEdit.append(this.model.get('data'));
+				}
+
+				this.$languages.prop('checked', false);
+
+				this.$spinner.removeClass('is-active');
+
+				this.$submit.prop('disabled', false);
+		};
+
+		return NavMenus;
 }(Backbone.View);
 
 exports.default = NavMenus;
@@ -914,222 +928,296 @@ var _ = _window._;
  */
 
 var CopyPost = function (_Backbone$View) {
-	_inherits(CopyPost, _Backbone$View);
+		_inherits(CopyPost, _Backbone$View);
+
+		/**
+   * Constructor. Sets up the properties.
+   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+   */
+
+		function CopyPost() {
+				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+				_classCallCheck(this, CopyPost);
+
+				/**
+     * The jQuery object representing the input element that contains the currently edited post's content.
+     * @type {jQuery}
+     */
+
+				var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
+				_this.$content = $('#content');
+
+				/**
+     * The jQuery object representing the input element that contains the currently edited post's excerpt.
+     * @type {jQuery}
+     */
+				_this.$excerpt = $('#excerpt');
+
+				/**
+     * The jQuery object representing the input element that contains the currently edited post's title.
+     * @type {jQuery}
+     */
+				_this.$title = $('#title');
+
+				/**
+     * The event manager object.
+     * @type {EventManager}
+     */
+				_this.EventManager = options.EventManager;
+
+				/**
+     * The model object.
+     * @type {Model}
+     */
+				_this.model = options.model;
+				_this.listenTo(_this.model, 'change', _this.updatePostData);
+
+				/**
+     * The module settings.
+     * @type {Object}
+     */
+				_this.moduleSettings = options.moduleSettings;
+
+				/**
+     * The currently edited post's ID.
+     * @type {number}
+     */
+				_this.postID = Number($('#post_ID').val());
+				return _this;
+		}
+
+		/**
+   * Copies the post data of the source post to a translation post.
+   * @param {Event} event - The click event of a "Copy source post" button.
+   */
+
+
+		CopyPost.prototype.copyPostData = function copyPostData(event) {
+				var remoteSiteID = this.getRemoteSiteID($(event.target));
+
+				var data = {};
+
+				event.preventDefault();
+
+				$('#mlp-translation-data-' + remoteSiteID + '-copied-post').val(1);
+
+				/**
+     * Triggers the event before copying post data, and passes an object for adding custom data, and the current
+     * site and post IDs and the remote site ID.
+     */
+				this.EventManager.trigger('CopyPost:copyPostData', data, this.moduleSettings.siteID, this.postID, remoteSiteID);
+
+				data = _.extend(data, {
+						action: this.moduleSettings.action,
+						current_post_id: this.postID,
+						remote_site_id: remoteSiteID,
+						title: this.getTitle(),
+						slug: this.getSlug(),
+						content: this.getContent(),
+						excerpt: this.getExcerpt()
+				});
+
+				this.model.fetch({
+						data: data,
+						processData: true
+				});
+		};
+
+		/**
+   * Returns the site ID data attribute value of the given "Copy source post" button.
+   * @param {jQuery} $button - A "Copy source post" button.
+   * @returns {number} The site ID.
+   */
+
+
+		CopyPost.prototype.getRemoteSiteID = function getRemoteSiteID($button) {
+				return Number($button.data('site-id'));
+		};
+
+		/**
+   * Returns the title of the original post.
+   * @returns {string} The post title.
+   */
+
+
+		CopyPost.prototype.getTitle = function getTitle() {
+				return this.$title.val() || '';
+		};
+
+		/**
+   * Returns the slug of the original post.
+   * @returns {string} The post slug.
+   */
+
+
+		CopyPost.prototype.getSlug = function getSlug() {
+				// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
+				return $('#editable-post-name-full').text() || '';
+		};
+
+		/**
+   * Returns the content of the original post.
+   * @returns {string} The post content.
+   */
+
+
+		CopyPost.prototype.getContent = function getContent() {
+				return this.$content.val() || '';
+		};
+
+		/**
+   * Returns the excerpt of the original post.
+   * @returns {string} The post excerpt.
+   */
+
+
+		CopyPost.prototype.getExcerpt = function getExcerpt() {
+				return this.$excerpt.val() || '';
+		};
+
+		/**
+   * Updates the post data in the according meta box for the given site ID.
+   * @returns {boolean} Whether or not the post data have been updated.
+   */
+
+
+		CopyPost.prototype.updatePostData = function updatePostData() {
+				var data = void 0,
+				    prefix = void 0;
+
+				if (!this.model.get('success')) {
+						return false;
+				}
+
+				data = this.model.get('data');
+
+				prefix = 'mlp-translation-data-' + data.siteID + '-';
+
+				$('#' + prefix + 'title').val(data.title);
+
+				$('#' + prefix + 'name').val(data.slug);
+
+				this.setTinyMCEContent(prefix + 'content', data.content);
+
+				$('#' + prefix + 'content').val(data.content);
+
+				$('#' + prefix + 'excerpt').val(data.excerpt);
+
+				/**
+     * Triggers the event for updating the post, and passes the according data.
+     */
+				this.EventManager.trigger('CopyPost:updatePostData', data);
+
+				return true;
+		};
+
+		/**
+   * Sets the given content for the tinyMCE editor with the given ID.
+   * @param {string} editorID - The tinyMCE editor's ID.
+   * @param {string} content - The content.
+   * @returns {boolean} Whether or not the post content has been updated.
+   */
+
+
+		CopyPost.prototype.setTinyMCEContent = function setTinyMCEContent(editorID, content) {
+				var editor = void 0;
+
+				if ('undefined' === typeof window.tinyMCE) {
+						return false;
+				}
+
+				editor = window.tinyMCE.get(editorID);
+				if (!editor) {
+						return false;
+				}
+
+				editor.setContent(content);
+
+				return true;
+		};
+
+		return CopyPost;
+}(Backbone.View);
+
+exports.default = CopyPost;
+
+},{}],12:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var $ = window.jQuery;
+var _window = window;
+var _ = _window._;
+
+/**
+ * Animations for the MultilingualPress CopyPost Module.
+ */
+
+var CopyPostAnimation = function (_Backbone$View) {
+	_inherits(CopyPostAnimation, _Backbone$View);
 
 	/**
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
 
-	function CopyPost() {
+	function CopyPostAnimation() {
 		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-		_classCallCheck(this, CopyPost);
-
-		/**
-   * The jQuery object representing the input element that contains the currently edited post's content.
-   * @type {jQuery}
-   */
-
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
-
-		_this.$content = $('#content');
-
-		/**
-   * The jQuery object representing the input element that contains the currently edited post's excerpt.
-   * @type {jQuery}
-   */
-		_this.$excerpt = $('#excerpt');
-
-		/**
-   * The jQuery object representing the input element that contains the currently edited post's title.
-   * @type {jQuery}
-   */
-		_this.$title = $('#title');
+		_classCallCheck(this, CopyPostAnimation);
 
 		/**
    * The event manager object.
    * @type {EventManager}
    */
+
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
 		_this.EventManager = options.EventManager;
 
-		/**
-   * The model object.
-   * @type {Model}
-   */
-		_this.model = options.model;
-		_this.listenTo(_this.model, 'change', _this.updatePostData);
-
-		/**
-   * The module settings.
-   * @type {Object}
-   */
-		_this.moduleSettings = options.moduleSettings;
-
-		/**
-   * The currently edited post's ID.
-   * @type {number}
-   */
-		_this.postID = Number($('#post_ID').val());
+		_this.EventManager.on('CopyPost:copyPostData', _this.fadeOut, _this);
+		_this.EventManager.on('CopyPost:updatePostData', _this.fadeIn, _this);
 		return _this;
 	}
 
 	/**
-  * Copies the post data of the source post to a translation post.
-  * @param {Event} event - The click event of a "Copy source post" button.
+  * Fades the Metabox out
+  * @param {Object} data - Post data.
+  * @param {int} siteID - The current site ID
+  * @param {int} postID - The current post ID
+  * @param {int} remoteSiteID - The remote post ID
   */
 
 
-	CopyPost.prototype.copyPostData = function copyPostData(event) {
-		var remoteSiteID = this.getRemoteSiteID($(event.target));
-
-		var data = {};
-
-		event.preventDefault();
-
-		$('#mlp-translation-data-' + remoteSiteID + '-copied-post').val(1);
-
-		/**
-   * Triggers the event before copying post data, and passes an object for adding custom data, and the current
-   * site and post IDs and the remote site ID.
-   */
-		this.EventManager.trigger('CopyPost:copyPostData', data, this.moduleSettings.siteID, this.postID, remoteSiteID);
-
-		data = _.extend(data, {
-			action: this.moduleSettings.action,
-			current_post_id: this.postID,
-			remote_site_id: remoteSiteID,
-			title: this.getTitle(),
-			slug: this.getSlug(),
-			content: this.getContent(),
-			excerpt: this.getExcerpt()
-		});
-
-		this.model.fetch({
-			data: data,
-			processData: true
-		});
+	CopyPostAnimation.prototype.fadeOut = function fadeOut(data, siteID, postID, remoteSiteID) {
+		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', 0.4);
 	};
 
 	/**
-  * Returns the site ID data attribute value of the given "Copy source post" button.
-  * @param {jQuery} $button - A "Copy source post" button.
-  * @returns {number} The site ID.
+  * Fades the Metabox in
+  * @param data
   */
 
 
-	CopyPost.prototype.getRemoteSiteID = function getRemoteSiteID($button) {
-		return Number($button.data('site-id'));
+	CopyPostAnimation.prototype.fadeIn = function fadeIn(data) {
+		$('#inpsyde_multilingual_' + data.siteID).css('opacity', 1);
 	};
 
-	/**
-  * Returns the title of the original post.
-  * @returns {string} The post title.
-  */
-
-
-	CopyPost.prototype.getTitle = function getTitle() {
-		return this.$title.val() || '';
-	};
-
-	/**
-  * Returns the slug of the original post.
-  * @returns {string} The post slug.
-  */
-
-
-	CopyPost.prototype.getSlug = function getSlug() {
-		// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
-		return $('#editable-post-name-full').text() || '';
-	};
-
-	/**
-  * Returns the content of the original post.
-  * @returns {string} The post content.
-  */
-
-
-	CopyPost.prototype.getContent = function getContent() {
-		return this.$content.val() || '';
-	};
-
-	/**
-  * Returns the excerpt of the original post.
-  * @returns {string} The post excerpt.
-  */
-
-
-	CopyPost.prototype.getExcerpt = function getExcerpt() {
-		return this.$excerpt.val() || '';
-	};
-
-	/**
-  * Updates the post data in the according meta box for the given site ID.
-  * @returns {boolean} Whether or not the post data have been updated.
-  */
-
-
-	CopyPost.prototype.updatePostData = function updatePostData() {
-		var data = void 0,
-		    prefix = void 0;
-
-		if (!this.model.get('success')) {
-			return false;
-		}
-
-		data = this.model.get('data');
-
-		prefix = 'mlp-translation-data-' + data.siteID + '-';
-
-		$('#' + prefix + 'title').val(data.title);
-
-		$('#' + prefix + 'name').val(data.slug);
-
-		this.setTinyMCEContent(prefix + 'content', data.content);
-
-		$('#' + prefix + 'content').val(data.content);
-
-		$('#' + prefix + 'excerpt').val(data.excerpt);
-
-		/**
-   * Triggers the event for updating the post, and passes the according data.
-   */
-		this.EventManager.trigger('CopyPost:updatePostData', data);
-
-		return true;
-	};
-
-	/**
-  * Sets the given content for the tinyMCE editor with the given ID.
-  * @param {string} editorID - The tinyMCE editor's ID.
-  * @param {string} content - The content.
-  * @returns {boolean} Whether or not the post content has been updated.
-  */
-
-
-	CopyPost.prototype.setTinyMCEContent = function setTinyMCEContent(editorID, content) {
-		var editor = void 0;
-
-		if ('undefined' === typeof window.tinyMCE) {
-			return false;
-		}
-
-		editor = window.tinyMCE.get(editorID);
-		if (!editor) {
-			return false;
-		}
-
-		editor.setContent(content);
-
-		return true;
-	};
-
-	return CopyPost;
+	return CopyPostAnimation;
 }(Backbone.View);
 
-exports.default = CopyPost;
+exports.default = CopyPostAnimation;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1376,7 +1464,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 exports.default = RelationshipControl;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1549,7 +1637,7 @@ var RemotePostSearch = function (_Backbone$View) {
 
 exports.default = RemotePostSearch;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1659,7 +1747,7 @@ var TermTranslator = function (_Backbone$View) {
 
 exports.default = TermTranslator;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1712,7 +1800,7 @@ var UserBackEndLanguage = function (_Backbone$View) {
 
 exports.default = UserBackEndLanguage;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
