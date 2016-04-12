@@ -58,9 +58,13 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	 * @return void
 	 */
 	public function render_content() {
+
+		$action = $this->page_data->get_form_action();
+
+		$name = $this->page_data->get_action_name();
 		?>
-		<form action="<?php echo esc_attr( $this->page_data->get_form_action()); ?>" method="post">
-			<input type="hidden" name="action" value="<?php echo esc_attr( $this->page_data->get_action_name()); ?>" />
+		<form action="<?php echo esc_attr( $action ); ?>" method="post">
+			<input type="hidden" name="action" value="<?php echo esc_attr( $name ); ?>" />
 			<input type="hidden" name="id" value="<?php echo esc_attr($this->blog_id); ?>" />
 			<?php
 			wp_nonce_field(
@@ -243,9 +247,9 @@ class Mlp_Network_Site_Settings_Tab_Content {
 						<label for="<?php echo esc_attr( $id ); ?>">
 							<input id="<?php echo esc_attr( $id ); ?>" <?php echo esc_attr( $checked ); ?>
 								type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $blog_id ) ?>" />
-							<?php echo esc_html( $blog_name ); ?> - <?php
-							echo esc_html( Mlp_Helpers::get_blog_language( $blog_id ) );
-							?>
+							<?php echo esc_html( $blog_name ); ?>
+							-
+							<?php echo esc_html( Mlp_Helpers::get_blog_language( $blog_id ) ); ?>
 						</label>
 					</p>
 					<?php

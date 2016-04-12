@@ -45,13 +45,15 @@ class Mlp_Advanced_Translator_View {
 			return;
 		}
 
+		$name = $this->get_name( $remote_site_id, 'copied_post' );
+
+		$id = $this->get_id( $remote_site_id, 'copied-post' );
 		?>
 		<a href="#" class="button mlp-copy-post-button dashicons-before dashicons-image-rotate-right"
 			data-site-id="<?php echo esc_attr( $matches[1] ); ?>"><?php
 			esc_html_e( 'Copy source post', 'multilingual-press' );
 			?></a>
-		<input type="hidden" name="<?php echo esc_attr( $this->get_name( $remote_site_id, 'copied_post' ) ); ?>"
-			value="" id="<?php echo esc_attr( $this->get_id( $remote_site_id, 'copied-post' ) ); ?>">
+		<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="" id="<?php echo esc_attr( $id ); ?>">
 		<?php
 	}
 
@@ -67,13 +69,18 @@ class Mlp_Advanced_Translator_View {
 		WP_Post $source_post, $remote_blog_id, WP_Post $post
 	) {
 
+		$name = $this->get_name( $remote_blog_id, 'title' );
+
+		$placeholder = $this->get_placeholder_title( $post );
+
+		$id = $this->get_id( $remote_blog_id, 'title' );
 		?>
 		<div class="mlp-titlediv">
 			<div>
-				<input type="text" name="<?php echo esc_attr( $this->get_name( $remote_blog_id, 'title' ) ); ?>"
+				<input type="text" name="<?php echo esc_attr( $name ); ?>"
 					value="<?php echo esc_attr( $post->post_title ); ?>"
-					placeholder="<?php echo esc_attr( $this->get_placeholder_title( $post ) ); ?>" size="30"
-					class="mlp-title" id="<?php echo esc_attr( $this->get_id( $remote_blog_id, 'title' ) ); ?>">
+					placeholder="<?php echo esc_attr( $placeholder ); ?>" size="30" class="mlp-title"
+					id="<?php echo esc_attr( $id ); ?>">
 			</div>
 		</div>
 		<?php
@@ -93,6 +100,8 @@ class Mlp_Advanced_Translator_View {
 
 		$id = $this->get_id( $remote_blog_id, 'name' );
 
+		$name = $this->get_name( $remote_blog_id, 'name' );
+
 		$value = $post->post_name;
 		if ( empty( $value ) ) {
 			$value = sanitize_title( $post->post_title );
@@ -103,7 +112,7 @@ class Mlp_Advanced_Translator_View {
 			<div>
 				<label for="<?php echo esc_attr( $id ); ?>">
 					<?php _e( 'Post Name:', 'multilingual-press' ) ?><br>
-					<input type="text" name="<?php echo esc_attr( $this->get_name( $remote_blog_id, 'name' ) ); ?>"
+					<input type="text" name="<?php echo esc_attr( $name ); ?>"
 						value="<?php echo esc_attr( $value ); ?>"
 						placeholder="<?php echo esc_attr__( 'Enter name here', 'multilingual-press' ) ?>" size="30"
 						class="mlp-name" id="<?php echo esc_attr( $id ); ?>">
@@ -127,13 +136,14 @@ class Mlp_Advanced_Translator_View {
 
 		$id = $this->get_id( $remote_blog_id, 'excerpt' );
 
-		$value = $post->post_excerpt;
+		$name = $this->get_name( $remote_blog_id, 'excerpt' );
 
+		$value = $post->post_excerpt;
 		?>
 		<div class="mlp-excerptdiv">
 			<div>
 				<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Post Excerpt:', 'multilingual-press' ) ?></label>
-				<textarea name="<?php echo esc_attr( $this->get_name( $remote_blog_id, 'excerpt' ) ); ?>"
+				<textarea name="<?php echo esc_attr( $name ); ?>"
 					placeholder="<?php echo esc_attr__( 'Enter excerpt here', 'multilingual-press' ) ?>"
 					class="mlp-excerpt"
 					id="<?php echo esc_attr( $id ); ?>"><?php echo esc_textarea( $value ); ?></textarea>
@@ -183,11 +193,13 @@ class Mlp_Advanced_Translator_View {
 	) {
 
 		$id = $this->get_id( $remote_blog_id, 'thumbnail' ) . '_id';
+
+		$name = $this->get_name( $remote_blog_id, 'thumbnail' );
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $id ); ?>">
-				<input type="checkbox" name="<?php echo esc_attr( $this->get_name( $remote_blog_id, 'thumbnail' ) ); ?>"
-					value="1" id="<?php echo esc_attr( $id ); ?>">
+				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
+					id="<?php echo esc_attr( $id ); ?>">
 				<?php _e( 'Copy the featured image of the source post.', 'multilingual-press' ); ?>
 				<span class="description"><?php
 					_e( 'Overwrites an existing featured image in the target post.', 'multilingual-press' ); ?></span>
@@ -248,11 +260,13 @@ class Mlp_Advanced_Translator_View {
 	 */
 	public function blog_id_input( WP_Post $source_post, $remote_blog_id, WP_Post $post ) {
 
+		$source_name = $this->get_name( $remote_blog_id, 'source_post_id' );
+
+		$remote_name = $this->get_name( $remote_blog_id, 'remote_post_id' );
 		?>
-		<input type="hidden" name="<?php echo esc_attr( $this->get_name( $remote_blog_id, 'source_post_id' ) ); ?>"
+		<input type="hidden" name="<?php echo esc_attr( $source_name ); ?>"
 			value="<?php echo esc_attr( $source_post->ID ); ?>">
-		<input type="hidden" name="<?php echo esc_attr( $this->get_name( $remote_blog_id, 'remote_post_id' ) ); ?>"
-			value="<?php echo absint( $post->ID ); ?>">
+		<input type="hidden" name="<?php echo esc_attr( $remote_name ); ?>" value="<?php echo absint( $post->ID ); ?>">
 		<?php
 	}
 
