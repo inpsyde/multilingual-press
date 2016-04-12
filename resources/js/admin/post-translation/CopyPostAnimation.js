@@ -1,5 +1,4 @@
 const $ = window.jQuery;
-const { _ } = window;
 
 /**
  * Animations for the MultilingualPress CopyPost Module.
