@@ -44,12 +44,16 @@ class Mlp_Language_Manager_Page_View {
 	 */
 	public function render() {
 
+		$title = $this->page_data->get_title();
+
 		$action = $this->page_data->get_form_action();
+
 		$action_name = $this->page_data->get_action_name();
+
 		$paged = $this->pagination_data->get_current_page();
 		?>
 		<div class="wrap">
-			<h1><?php echo esc_html( $this->page_data->get_title() ); ?></h1>
+			<h1><?php echo esc_html( $title ); ?></h1>
 			<?php $this->watcher->update( 'before_form' ); ?>
 			<form action="<?php echo esc_attr( $action ) ?>" method="post">
 				<input type="hidden" name="action" value="<?php echo esc_attr( $action_name ); ?>">

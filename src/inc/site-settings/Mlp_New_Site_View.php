@@ -176,7 +176,9 @@ class Mlp_New_Site_View {
 				<label for="<?php echo esc_attr( $id ); ?>">
 					<input type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $site_id ) ?>"
 						id="<?php echo esc_attr( $id ); ?>">
-					<?php echo esc_html( $blog_name ) . '-' . esc_html( Mlp_Helpers::get_blog_language( $site_id ) ); ?>
+					<?php echo esc_html( $blog_name ); ?>
+					-
+					<?php esc_html( Mlp_Helpers::get_blog_language( $site_id ) ); ?>
 				</label>
 			</p>
 			<?php

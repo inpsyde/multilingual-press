@@ -23,5 +23,8 @@ node_modules
 # PHPUnit
 phpunit.xml
 
+# GitHub release archive
+/*.zip
+
 # This should stay at the bottom
 !.gitkeep
