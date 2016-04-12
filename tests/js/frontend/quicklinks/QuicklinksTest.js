@@ -18,7 +18,7 @@ const createTestee = ( selector ) => {
 
 	resetUtil();
 
-	return new Quicklinks( selector, Util )
+	return new Quicklinks( selector, Util );
 };
 
 test( 'Quicklinks is a constructor function', ( assert ) => {
@@ -32,6 +32,26 @@ test( 'Quicklinks is a constructor function', ( assert ) => {
 		typeof createTestee(),
 		'object',
 		'Quicklinks SHOULD construct an object.'
+	);
+
+	assert.end();
+} );
+
+test( 'constructor behaves as expected', ( assert ) => {
+	const selector = 'selector';
+
+	const testee = new Quicklinks( selector, Util );
+
+	assert.equal(
+		testee.selector,
+		selector,
+		'constructor SHOULD set selector property.'
+	);
+
+	assert.equal(
+		testee.Util,
+		Util,
+		'constructor SHOULD set Util property.'
 	);
 
 	assert.end();
