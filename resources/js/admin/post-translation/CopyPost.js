@@ -61,11 +61,14 @@ class CopyPost extends Backbone.View {
 	 * @param {Event} event - The click event of a "Copy source post" button.
 	 */
 	copyPostData( event ) {
+
 		const remoteSiteID = this.getRemoteSiteID( $( event.target ) );
 
 		let data = {};
 
 		event.preventDefault();
+
+		this.fadeOut( remoteSiteID );
 
 		$( '#mlp-translation-data-' + remoteSiteID + '-copied-post' ).val( 1 );
 
@@ -170,6 +173,8 @@ class CopyPost extends Backbone.View {
 		 */
 		this.EventManager.trigger( 'CopyPost:updatePostData', data );
 
+		this.fadeIn( data.siteID );
+
 		return true;
 	}
 
@@ -194,6 +199,22 @@ class CopyPost extends Backbone.View {
 		editor.setContent( content );
 
 		return true;
+	}
+
+	/**
+	 * Fades the Metabox out
+	 * @param {int} remoteSiteID - The remote post ID
+	 */
+	fadeOut( remoteSiteID ) {
+		$( '#inpsyde_multilingual_' + remoteSiteID ).css( 'opacity', 0.4 );
+	}
+
+	/**
+	 * Fades the Metabox in
+	 * @param {int} remoteSiteID - The remote post ID
+	 */
+	fadeIn( remoteSiteID ) {
+		$( '#inpsyde_multilingual_' + remoteSiteID ).css( 'opacity', 1 );
 	}
 }
 
