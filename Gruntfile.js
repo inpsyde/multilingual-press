@@ -109,6 +109,11 @@ module.exports = function( grunt ) {
 			},
 
 			tests: {
+				options: {
+					rules: {
+						"no-native-reassign": 0
+					}
+				},
 				src: [ '<%= config.tests.js %>**/*.js' ]
 			}
 		},
