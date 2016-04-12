@@ -13,7 +13,7 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 	);
 
 	// Prepare "global" settings.
-	global.window = {
+	window = {
 		ModuleName: 'settings'
 	};
 
@@ -38,7 +38,7 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 	);
 
 	// Prepare "global" settings.
-	global.window.mlpModuleNameSettings = 'other-settings';
+	window.mlpModuleNameSettings = 'other-settings';
 
 	assert.equal(
 		Functions.getSettings( 'ModuleName' ),
