@@ -119,7 +119,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 					<div id="<?php echo esc_attr( $search_selector_id ); ?>"
 						 style="display:none;float:left;max-width:30em">
 
-						<label for="<?php echo ecs_attr( $this->search_input_id ); ?>">
+						<label for="<?php echo esc_attr( $this->search_input_id ); ?>">
 							<?php
 							esc_html_e( 'Live search', 'multilingual-press' );
 							?>
