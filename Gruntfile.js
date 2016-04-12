@@ -375,7 +375,6 @@ module.exports = function( grunt ) {
 				],
 				tasks: [
 					'newer:eslint:src',
-					'newer:delegate:tape',
 					'newer:delegate:browserify',
 					'changed:jsvalidate:dest',
 					'changed:uglify'
