@@ -1,5 +1,3 @@
-const $ = window.jQuery;
-
 /**
  * The MultilingualPress Registry module.
  */
@@ -46,7 +44,12 @@ class Registry {
 	 * @param {Object[]} modules - The modules data.
 	 */
 	createModules( modules ) {
-		$.each( modules, ( index, data ) => this.createModule( data ) );
+		for ( let route in modules ) {
+			if ( !modules.hasOwnProperty( route ) ) {
+				continue;
+			}
+			this.createModule( modules[ route ] );
+		}
 	}
 
 	/**
@@ -63,8 +66,17 @@ class Registry {
 	 * @returns {Object} The module instances registered for the current admin page.
 	 */
 	initializeRoutes() {
-		$.each( this.data, ( route, modules ) => this.initializeRoute( route, modules ) );
+		for ( let route in this.data ) {
+			if ( !this.data.hasOwnProperty( route ) ) {
+				continue;
+			}
+			this.initializeRoute( route, this.data[ route ] );
+		}
 
+
+
+		
+		// this.data.map( ( route, modules ) => this.initializeRoute( route, modules ) );
 		return this.modules;
 	}
 
@@ -72,10 +84,11 @@ class Registry {
 	 * Registers the module with the given data for the given route.
 	 * @param {Object} module - The module data.
 	 * @param {string} route - The route.
+	 * @return {Number} The new array length of the specified routes array
 	 */
 	registerModuleForRoute( module, route ) {
 		this.data[ route ] || ( this.data[ route ] = [] );
-		this.data[ route ].push( module );
+		return this.data[ route ].push( module );
 	}
 }
 

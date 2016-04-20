@@ -41,12 +41,14 @@ module.exports = function( grunt ) {
 		browserify: {
 			babelify: {
 				options: {
-					transform: [
-						/**
-						 * @see {@link https://github.com/babel/babelify babelify}
-						 */
-						[ 'babelify' ]
-					]
+					// transform: [
+					// 	/**
+					// 	 * @see {@link https://github.com/babel/babelify babelify}
+					// 	 * @see {@link https://github.com/thlorenz/browserify-shim browserify-shim}
+					// 	 */
+					// 	[ 'babelify']
+					// ],
+					external: [ 'jquery', 'backbone', 'underscore' ]
 				},
 				expand: true,
 				cwd: '<%= config.scripts.src %>',

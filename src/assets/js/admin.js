@@ -359,8 +359,6 @@ exports.__esModule = true;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var $ = window.jQuery;
-
 /**
  * The MultilingualPress Registry module.
  */
@@ -415,11 +413,12 @@ var Registry = function () {
 
 
 	Registry.prototype.createModules = function createModules(modules) {
-		var _this = this;
-
-		$.each(modules, function (index, data) {
-			return _this.createModule(data);
-		});
+		for (var route in modules) {
+			if (!modules.hasOwnProperty(route)) {
+				continue;
+			}
+			this.createModule(modules[route]);
+		}
 	};
 
 	/**
@@ -430,10 +429,10 @@ var Registry = function () {
 
 
 	Registry.prototype.initializeRoute = function initializeRoute(route, modules) {
-		var _this2 = this;
+		var _this = this;
 
 		this.router.route(route, route, function () {
-			return _this2.createModules(modules);
+			return _this.createModules(modules);
 		});
 	};
 
@@ -444,12 +443,14 @@ var Registry = function () {
 
 
 	Registry.prototype.initializeRoutes = function initializeRoutes() {
-		var _this3 = this;
+		for (var route in this.data) {
+			if (!this.data.hasOwnProperty(route)) {
+				continue;
+			}
+			this.initializeRoute(route, this.data[route]);
+		}
 
-		$.each(this.data, function (route, modules) {
-			return _this3.initializeRoute(route, modules);
-		});
-
+		// this.data.map( ( route, modules ) => this.initializeRoute( route, modules ) );
 		return this.modules;
 	};
 
@@ -457,12 +458,13 @@ var Registry = function () {
   * Registers the module with the given data for the given route.
   * @param {Object} module - The module data.
   * @param {string} route - The route.
+  * @return {Number} The new array length of the specified routes array
   */
 
 
 	Registry.prototype.registerModuleForRoute = function registerModuleForRoute(module, route) {
 		this.data[route] || (this.data[route] = []);
-		this.data[route].push(module);
+		return this.data[route].push(module);
 	};
 
 	return Registry;
@@ -474,6 +476,12 @@ exports.default = Registry;
 "use strict";
 
 exports.__esModule = true;
+
+var _backbone = require("backbone");
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -502,11 +510,11 @@ var Router = function (_Backbone$Router) {
 	}
 
 	return Router;
-}(Backbone.Router);
+}(_backbone2.default.Router);
 
 exports.default = Router;
 
-},{}],7:[function(require,module,exports){
+},{"backbone":"backbone"}],7:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -662,126 +670,126 @@ var $ = window.jQuery;
  */
 
 var NavMenus = function (_Backbone$View) {
-	_inherits(NavMenus, _Backbone$View);
-
-	/**
-  * Constructor. Sets up the properties.
-  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
-  */
-
-	function NavMenus() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-		_classCallCheck(this, NavMenus);
+		_inherits(NavMenus, _Backbone$View);
 
 		/**
-   * The jQuery object representing the MultilingualPress language checkboxes.
-   * @type {jQuery}
+   * Constructor. Sets up the properties.
+   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
    */
 
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		function NavMenus() {
+				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-		_this.$languages = _this.$el.find('li [type="checkbox"]');
+				_classCallCheck(this, NavMenus);
 
-		/**
-   * The jQuery object representing the input element that contains the currently edited menu's ID.
-   * @type {jQuery}
-   */
-		_this.$menu = $('#menu');
+				/**
+     * The jQuery object representing the MultilingualPress language checkboxes.
+     * @type {jQuery}
+     */
 
-		/**
-   * The jQuery object representing the currently edited menu.
-   * @type {jQuery}
-   */
-		_this.$menuToEdit = $('#menu-to-edit');
+				var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		/**
-   * The jQuery object representing the Languages meta box spinner.
-   * @type {jQuery}
-   */
-		_this.$spinner = _this.$el.find('.spinner');
+				_this.$languages = _this.$el.find('li [type="checkbox"]');
 
-		/**
-   * The jQuery object representing the Languages meta box submit button.
-   * @type {jQuery}
-   */
-		_this.$submit = _this.$el.find('#submit-mlp-language');
+				/**
+     * The jQuery object representing the input element that contains the currently edited menu's ID.
+     * @type {jQuery}
+     */
+				_this.$menu = $('#menu');
 
-		/**
-   * The model object.
-   * @type {Model}
-   */
-		_this.model = options.model;
-		_this.listenTo(_this.model, 'change', _this.render);
+				/**
+     * The jQuery object representing the currently edited menu.
+     * @type {jQuery}
+     */
+				_this.$menuToEdit = $('#menu-to-edit');
 
-		/**
-   * The module settings.
-   * @type {Object}
-   */
-		_this.moduleSettings = options.moduleSettings;
-		return _this;
-	}
+				/**
+     * The jQuery object representing the Languages meta box spinner.
+     * @type {jQuery}
+     */
+				_this.$spinner = _this.$el.find('.spinner');
 
-	/**
-  * Requests the according markup for the checked languages in the Languages meta box.
-  * @param {Event} event - The click event of the submit button.
-  */
+				/**
+     * The jQuery object representing the Languages meta box submit button.
+     * @type {jQuery}
+     */
+				_this.$submit = _this.$el.find('#submit-mlp-language');
 
+				/**
+     * The model object.
+     * @type {Model}
+     */
+				_this.model = options.model;
+				_this.listenTo(_this.model, 'change', _this.render);
 
-	NavMenus.prototype.sendRequest = function sendRequest(event) {
-		var data = {
-			action: this.moduleSettings.action,
-			menu: this.$menu.val(),
-			mlp_sites: this.getSites()
-		};
-		data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
-
-		event.preventDefault();
-
-		this.$submit.prop('disabled', true);
-
-		this.$spinner.addClass('is-active');
-
-		this.model.fetch({
-			data: data,
-			processData: true
-		});
-	};
-
-	/**
-  * Returns the site IDs for the checked languages in the Languages meta box.
-  * @returns {number[]} The site IDs.
-  */
-
-
-	NavMenus.prototype.getSites = function getSites() {
-		var ids = [];
-
-		this.$languages.filter(':checked').each(function (index, element) {
-			return ids.push(Number($(element).val()));
-		});
-
-		return ids;
-	};
-
-	/**
-  * Renders the nav menu item to the currently edited menu.
-  */
-
-
-	NavMenus.prototype.render = function render() {
-		if (this.model.get('success')) {
-			this.$menuToEdit.append(this.model.get('data'));
+				/**
+     * The module settings.
+     * @type {Object}
+     */
+				_this.moduleSettings = options.moduleSettings;
+				return _this;
 		}
 
-		this.$languages.prop('checked', false);
+		/**
+   * Requests the according markup for the checked languages in the Languages meta box.
+   * @param {Event} event - The click event of the submit button.
+   */
 
-		this.$spinner.removeClass('is-active');
 
-		this.$submit.prop('disabled', false);
-	};
+		NavMenus.prototype.sendRequest = function sendRequest(event) {
+				var data = {
+						action: this.moduleSettings.action,
+						menu: this.$menu.val(),
+						mlp_sites: this.getSites()
+				};
+				data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
 
-	return NavMenus;
+				event.preventDefault();
+
+				this.$submit.prop('disabled', true);
+
+				this.$spinner.addClass('is-active');
+
+				this.model.fetch({
+						data: data,
+						processData: true
+				});
+		};
+
+		/**
+   * Returns the site IDs for the checked languages in the Languages meta box.
+   * @returns {number[]} The site IDs.
+   */
+
+
+		NavMenus.prototype.getSites = function getSites() {
+				var ids = [];
+
+				this.$languages.filter(':checked').each(function (index, element) {
+						return ids.push(Number($(element).val()));
+				});
+
+				return ids;
+		};
+
+		/**
+   * Renders the nav menu item to the currently edited menu.
+   */
+
+
+		NavMenus.prototype.render = function render() {
+				if (this.model.get('success')) {
+						this.$menuToEdit.append(this.model.get('data'));
+				}
+
+				this.$languages.prop('checked', false);
+
+				this.$spinner.removeClass('is-active');
+
+				this.$submit.prop('disabled', false);
+		};
+
+		return NavMenus;
 }(Backbone.View);
 
 exports.default = NavMenus;
@@ -981,7 +989,6 @@ var CopyPost = function (_Backbone$View) {
 
 
 	CopyPost.prototype.copyPostData = function copyPostData(event) {
-
 		var remoteSiteID = this.getRemoteSiteID($(event.target));
 
 		var data = {};
