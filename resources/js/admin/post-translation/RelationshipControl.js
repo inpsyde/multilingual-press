@@ -33,7 +33,7 @@ class RelationshipControl extends Backbone.View {
 		 * The set of utility methods.
 		 * @type {Object}
 		 */
-		this.Util = options.util;
+		this.Util = options.Util;
 	}
 
 	/**

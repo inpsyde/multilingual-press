@@ -1208,7 +1208,7 @@ var RelationshipControl = function (_Backbone$View) {
    * The set of utility methods.
    * @type {Object}
    */
-		_this.Util = options.util;
+		_this.Util = options.Util;
 		return _this;
 	}
 
