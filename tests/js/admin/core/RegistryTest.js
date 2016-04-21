@@ -57,17 +57,28 @@ test( 'initializeRoute behaves as expected', ( assert ) => {
 	const testee = createTestee();
 	const route = 'testroute';
 	const modules = [ {} ];
-	// How do we actually test this?
+
 	testee.initializeRoute( route, modules );
+
+	assert.equal(
+		testee.router.route.callCount,
+		1,
+		'Router should have routed once' );
 
 	assert.end();
 } );
 
 test( 'initializeRoutes behaves as expected', ( assert ) => {
 	const testee = createTestee();
-	
-	// How do we actually test this?
+
+	testee.data = { 'testroute_1': {}, 'testroute_2': {} };
+
 	testee.initializeRoutes();
+
+	assert.equal(
+		testee.router.route.callCount,
+		2,
+		'Router should have routed once' );
 
 	assert.end();
 } );
