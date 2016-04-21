@@ -1,4 +1,3 @@
-import proxyquire from "proxyquire";
 import test from "tape";
 import sinon from "sinon";
 import * as F from "../../functions";

@@ -200,7 +200,7 @@ window.MultilingualPressAdmin = MLP;
 
 exports.__esModule = true;
 
-var _jquery = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefined" ? global['$'] : null);
+var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -527,7 +527,7 @@ exports.default = Router;
 exports.__esModule = true;
 exports.Toggler = undefined;
 
-var _jquery = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefined" ? global['$'] : null);
+var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -813,9 +813,20 @@ var NavMenus = function (_Backbone$View) {
 exports.default = NavMenus;
 
 },{}],10:[function(require,module,exports){
+(function (global){
 'use strict';
 
 exports.__esModule = true;
+
+var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -823,7 +834,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var $ = window.jQuery;
+_backbone2.default.$ = _jquery2.default;
 var _window = window;
 var _ = _window._;
 
@@ -852,7 +863,7 @@ var AddNewSite = function (_Backbone$View) {
 
 		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		var markup = $('#mlp-add-new-site-template').html() || '';
+		var markup = (0, _jquery2.default)('#mlp-add-new-site-template').html() || '';
 		if ('' !== markup) {
 			/**
     * The templating function.
@@ -868,13 +879,13 @@ var AddNewSite = function (_Backbone$View) {
    * The jQuery object representing the MultilingualPress language select.
    * @type {jQuery}
    */
-		_this.$language = $('#mlp-site-language');
+		_this.$language = (0, _jquery2.default)('#mlp-site-language');
 
 		/**
    * The jQuery object representing the table row that contains the plugin activation checkbox.
    * @type {jQuery}
    */
-		_this.$pluginsRow = $('#mlp-activate-plugins').closest('tr');
+		_this.$pluginsRow = (0, _jquery2.default)('#mlp-activate-plugins').closest('tr');
 		return _this;
 	}
 
@@ -886,7 +897,7 @@ var AddNewSite = function (_Backbone$View) {
 
 
 	AddNewSite.prototype.adaptLanguage = function adaptLanguage(event) {
-		var language = this.getLanguage($(event.target));
+		var language = this.getLanguage((0, _jquery2.default)(event.target));
 
 		if (this.$language.find('[value="' + language + '"]').length) {
 			this.$language.val(language);
@@ -917,14 +928,15 @@ var AddNewSite = function (_Backbone$View) {
 
 
 	AddNewSite.prototype.togglePluginsRow = function togglePluginsRow(event) {
-		this.$pluginsRow.toggle(0 < $(event.target).val());
+		this.$pluginsRow.toggle(0 < (0, _jquery2.default)(event.target).val());
 	};
 
 	return AddNewSite;
-}(Backbone.View);
+}(_backbone2.default.View);
 
 exports.default = AddNewSite;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],11:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -935,7 +947,7 @@ var _window = require('../../common/globals/window');
 
 var _window2 = _interopRequireDefault(_window);
 
-var _jquery = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefined" ? global['$'] : null);
+var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 

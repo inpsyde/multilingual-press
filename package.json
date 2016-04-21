@@ -69,7 +69,7 @@
     ]
   },
   "browserify-shim": {
-    "jquery": "global:$",
+    "jquery": "global:jQuery",
     "backbone": "global:Backbone",
     "underscore": "global:_"
   }
