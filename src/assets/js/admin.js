@@ -1881,9 +1881,12 @@ var localWindow = void 0;
 
 if ('undefined' === typeof window) {
 	localWindow = {};
+	// global.document = {
+	// 	createElement:function(){}
+	// };
 } else {
-	localWindow = window;
-}
+		localWindow = window;
+	}
 
 exports.default = localWindow;
 

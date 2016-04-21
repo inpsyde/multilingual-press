@@ -1,3 +1,4 @@
+import jsdom from "../../jsDomEnv";
 import test from "tape";
 import sinon from "sinon";
 import * as F from "../../functions";
@@ -8,6 +9,7 @@ const createTestee = ( router ) => {
 };
 
 test( 'CopyPost is a constructor function', ( assert ) => {
+
 	assert.equal(
 		typeof CopyPost,
 		'function',
