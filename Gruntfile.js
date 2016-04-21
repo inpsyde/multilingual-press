@@ -47,8 +47,7 @@ module.exports = function( grunt ) {
 						 * @see {@link https://github.com/thlorenz/browserify-shim browserify-shim}
 						 */
 						[ 'babelify']
-					],
-					external: [ 'jquery', 'backbone', 'underscore' ]
+					]
 				},
 				expand: true,
 				cwd: '<%= config.scripts.src %>',
