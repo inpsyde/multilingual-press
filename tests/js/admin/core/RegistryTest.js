@@ -1,12 +1,16 @@
+import dom from "../../domStub";
 import test from "tape";
 import sinon from "sinon";
 // import * as F from "../../functions";
 import Registry from "../../../../resources/js/admin/core/Registry";
-import Router from "../../../../resources/js/admin/core/Router";
+dom;
 const createTestee = ( router ) => {
-	router = router || new Router();
+	if ( !router ) {
+		router = sinon.stub();
+		router.prototype.route = sinon.spy();
+	}
 
-	return new Registry( router );
+	return new Registry( new router() );
 };
 
 test( 'Registry is a constructor function', ( assert ) => {
