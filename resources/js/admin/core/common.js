@@ -1,4 +1,5 @@
 const $ = window.jQuery;
+
 /**
  * The MultilingualPress Toggler module.
  */

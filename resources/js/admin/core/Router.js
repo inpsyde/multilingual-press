@@ -10,4 +10,5 @@ class Router extends Backbone.Router {
 		super( options );
 	}
 }
+
 export default Router;

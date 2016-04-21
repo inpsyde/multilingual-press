@@ -306,7 +306,7 @@ exports.__esModule = true;
 /**
  * The MultilingualPress EventManager module.
  */
-var EventManager = exports.EventManager = _.extend({}, Backbone.Events);
+var EventManager = exports.EventManager = window._.extend({}, Backbone.Events);
 
 },{}],4:[function(require,module,exports){
 "use strict";
@@ -518,6 +518,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var $ = window.jQuery;
+
 /**
  * The MultilingualPress Toggler module.
  */
@@ -1589,6 +1590,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var $ = window.jQuery;
+
 /**
  * MultilingualPress TermTranslator module.
  */

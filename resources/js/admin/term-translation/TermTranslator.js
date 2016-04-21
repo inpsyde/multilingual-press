@@ -1,4 +1,5 @@
 const $ = window.jQuery;
+
 /**
  * MultilingualPress TermTranslator module.
  */
