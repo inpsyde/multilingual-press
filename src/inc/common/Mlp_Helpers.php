@@ -270,14 +270,14 @@ class Mlp_Helpers {
 
 		// set the current element in the mlp class
 		$languages    = mlp_get_available_languages();
-		$current_blog = get_current_blog_id();
+		$current_blog_id = get_current_blog_id();
 
 		if ( 0 == count( $languages ) )
 			return NULL;
 
 		foreach ( $languages as $language_id => $language_name ) {
 
-			if ( $current_blog == $language_id )
+			if ( $current_blog_id == $language_id )
 				continue;
 
 			switch_to_blog( $language_id );

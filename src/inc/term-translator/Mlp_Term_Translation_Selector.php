@@ -70,7 +70,7 @@ class Mlp_Term_Translation_Selector {
 				$label_id           = $this->get_label_id( $key );
 				$terms              = $this->presenter->get_terms_for_site( $site_id );
 				$current_term       = $this->get_current_term( $site_id );
-				$empty_option_value = $current_term > 0 ? 0 : - 1;
+				$empty_option_value = $current_term > 0 ? 0 : -1;
 				?>
 				<tr>
 					<th>

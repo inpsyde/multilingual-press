@@ -28,7 +28,9 @@ class Mlp_New_Site_View {
 	}
 
 	/**
-	 * Prints the template for the MultilingualPress table, and fires an action to inject markup.
+	 * Prints the MultilingualPress table as template.
+	 *
+	 * @todo Remove with the release of WordPress 4.5.0 + 2.
 	 *
 	 * @wp-hook admin_footer
 	 *
@@ -41,78 +43,91 @@ class Mlp_New_Site_View {
 		if ( 'site-new.php' !== $hook_suffix ) {
 			return;
 		}
+		?>
+		<script type="text/html" id="mlp-add-new-site-template">
+			<?php $this->render(); ?>
+		</script>
+		<?php
+	}
+
+	/**
+	 * Renders the MultilingualPress table, and fires an action to inject markup.
+	 *
+	 * @wp-hook network_site_new_form
+	 *
+	 * @return void
+	 */
+	public function render() {
 
 		$db = $this->language_api->get_db();
 
-		$languages = $db->get_items( array( 'page' => - 1 ) );
+		$languages = $db->get_items( array( 'page' => -1 ) );
 		?>
-		<script type="text/html" id="mlp-add-new-site-template">
-			<h2>
-				<?php esc_html_e( 'MultilingualPress', 'multilingual-press' ); ?>
-			</h2>
-			<table class="form-table">
-				<tr class="form-field">
-					<th scope="row">
-						<label for="mlp-site-language">
-							<?php esc_html_e( 'Language', 'multilingual-press' ); ?>
-						</label>
-					</th>
-					<td>
-						<select name="inpsyde_multilingual_lang" id="mlp-site-language" autocomplete="off">
-							<option value="-1">
-								<?php esc_html_e( 'Choose language', 'multilingual-press' ); ?>
-							</option>
-							<?php foreach ( $languages as $language ){
-								$this->render_language_option( $language );
-							} ?>
-						</select>
-					</td>
-				</tr>
-				<tr class="form-field">
-					<th scope="row">
-						<label for="inpsyde_multilingual_text">
-							<?php esc_html_e( 'Alternative language title', 'multilingual-press' ); ?>
-						</label>
-					</th>
-					<td>
-						<input type="text" name="inpsyde_multilingual_text" class="regular-text"
-							id="inpsyde_multilingual_text">
-						<p class="description">
-							<?php
-							esc_html_e(
-								'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
-								'multilingual-press'
-							);
-							?>
-						</p>
-					</td>
-				</tr>
-				<tr class="form-field">
-					<th scope="row">
-						<label for="inpsyde_multilingual_text">
-							<?php esc_html_e( 'Relationships', 'multilingual-press' ); ?>
-						</label>
-					</th>
-					<td>
-						<?php $this->render_relationships(); ?>
-						<p class="description">
-							<?php
-							esc_html_e(
-								'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
-								'multilingual-press'
-							);
-							?>
-						</p>
-					</td>
-				</tr>
-				<?php
-				/**
-				 * Runs at the end but still inside the new blog fields table.
-				 */
-				do_action( 'mlp_after_new_blog_fields' );
-				?>
-			</table>
-		</script>
+		<h2>
+			<?php esc_html_e( 'MultilingualPress', 'multilingual-press' ); ?>
+		</h2>
+		<table class="form-table">
+			<tr class="form-field">
+				<th scope="row">
+					<label for="mlp-site-language">
+						<?php esc_html_e( 'Language', 'multilingual-press' ); ?>
+					</label>
+				</th>
+				<td>
+					<select name="inpsyde_multilingual_lang" id="mlp-site-language" autocomplete="off">
+						<option value="-1">
+							<?php esc_html_e( 'Choose language', 'multilingual-press' ); ?>
+						</option>
+						<?php foreach ( $languages as $language ) : ?>
+							<?php $this->render_language_option( $language ); ?>
+						<?php endforeach; ?>
+					</select>
+				</td>
+			</tr>
+			<tr class="form-field">
+				<th scope="row">
+					<label for="inpsyde_multilingual_text">
+						<?php esc_html_e( 'Alternative language title', 'multilingual-press' ); ?>
+					</label>
+				</th>
+				<td>
+					<input type="text" name="inpsyde_multilingual_text" class="regular-text"
+						id="inpsyde_multilingual_text">
+					<p class="description">
+						<?php
+						esc_html_e(
+							'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
+							'multilingual-press'
+						);
+						?>
+					</p>
+				</td>
+			</tr>
+			<tr class="form-field">
+				<th scope="row">
+					<label for="inpsyde_multilingual_text">
+						<?php esc_html_e( 'Relationships', 'multilingual-press' ); ?>
+					</label>
+				</th>
+				<td>
+					<?php $this->render_relationships(); ?>
+					<p class="description">
+						<?php
+						esc_html_e(
+							'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
+							'multilingual-press'
+						);
+						?>
+					</p>
+				</td>
+			</tr>
+			<?php
+			/**
+			 * Fires at the end of but still inside the MultilingualPress table on the Add New Site admin page.
+			 */
+			do_action( 'mlp_after_new_blog_fields' );
+			?>
+		</table>
 		<?php
 	}
 

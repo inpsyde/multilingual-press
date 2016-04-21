@@ -27,6 +27,10 @@ props luisarn.
 - Lots of
 [late](https://vip.wordpress.com/documentation/best-practices/security/validating-sanitizing-escaping/#always-escape-late)
 [escaping](https://vip.wordpress.com/2014/06/20/the-importance-of-escaping-all-the-things/).
+- [Implement](https://make.wordpress.org/core/?p=17066) [selective refresh](https://make.wordpress.org/core/?p=16546)
+support for the Language Switcher widget.
+- Adapt the Term Translator to the new Edit Tag admin page introduced in WordPress 4.5.0.
+- Use the new `network_site_new_form` action hook (where available) instead of injecting markup with jQuery. Yay!
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see

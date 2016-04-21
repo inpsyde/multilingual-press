@@ -43,7 +43,16 @@ class Mlp_Network_New_Site_Controller {
 
 		add_action( 'wpmu_new_blog', array ( $this, 'update' ) );
 
-		add_action( 'admin_footer', array ( new Mlp_New_Site_View( $this->language_api ), 'print_template' ) );
+		// TODO: Simplify, by deleting the template stuff, with the release of WordPress 4.5.0 + 2.
+		$view = new Mlp_New_Site_View( $this->language_api );
+		// Get the unaltered WordPress version.
+		require ABSPATH . WPINC . '/version.php';
+		/** @var string $wp_version */
+		if ( version_compare( $wp_version, '4.5-alpha', '<' ) ) {
+			add_action( 'admin_footer', array( $view, 'print_template' ) );
+		} else {
+			add_action( 'network_site_new_form', array( $view, 'render' ) );
+		}
 	}
 
 	/**
