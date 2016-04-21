@@ -30,6 +30,7 @@ props luisarn.
 - [Implement](https://make.wordpress.org/core/?p=17066) [selective refresh](https://make.wordpress.org/core/?p=16546)
 support for the Language Switcher widget.
 - Adapt the Term Translator to the new Edit Tag admin page introduced in WordPress 4.5.0.
+- Use the new `network_site_new_form` action hook (where available) instead of injecting markup with jQuery. Yay!
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see

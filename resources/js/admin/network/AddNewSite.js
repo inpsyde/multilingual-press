@@ -1,4 +1,5 @@
 const $ = window.jQuery;
+const { _ } = window;
 
 /**
  * MultilingualPress AddNewSite module.
@@ -12,18 +13,21 @@ class AddNewSite extends Backbone.View {
 		super( options );
 
 		/**
-		 * The templating function.
-		 * @type {Function}
+		 * As of WordPress 4.5.0, there is now an appropriate action hook on the Add New Site network admin page.
+		 * Due to our BC policy, we have to wait for WordPress 4.5.0 + 2 in order to make use of it, though.
+		 * TODO: Remove the following (and adapt the according PHP parts) with the release of WordPress 4.5.0 + 2.
 		 */
-		this.template = _.template( $( '#mlp-add-new-site-template' ).html() || '' );
+		const markup = $( '#mlp-add-new-site-template' ).html() || '';
+		if ( '' !== markup ) {
+			/**
+			 * The templating function.
+			 * @type {Function}
+			 */
+			this.template = _.template( markup );
 
-		/**
-		 * As of WordPress 4.5.0, there are now several action hooks on the Add New Site network admin page.
-		 * Due to our BC policy, we have to wait for WordPress 4.7.0 in order to make use of these, though.
-		 * TODO: Refactor this (and the according PHP parts) with the release of WordPress 4.7.0.
-		 */
-		// FIRST render the template, THEN set up the properties using elements that just got injected into the DOM.
-		this.$el.find( '.submit' ).before( this.template() );
+			// FIRST render the template, THEN set up the properties using elements that just got injected into the DOM.
+			this.$el.find( '.submit' ).before( this.template() );
+		}
 
 		/**
 		 * The jQuery object representing the MultilingualPress language select.

@@ -798,6 +798,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var $ = window.jQuery;
+var _window = window;
+var _ = _window._;
 
 /**
  * MultilingualPress AddNewSite module.
@@ -817,21 +819,24 @@ var AddNewSite = function (_Backbone$View) {
 		_classCallCheck(this, AddNewSite);
 
 		/**
-   * The templating function.
-   * @type {Function}
+   * As of WordPress 4.5.0, there is now an appropriate action hook on the Add New Site network admin page.
+   * Due to our BC policy, we have to wait for WordPress 4.5.0 + 2 in order to make use of it, though.
+   * TODO: Remove the following (and adapt the according PHP parts) with the release of WordPress 4.5.0 + 2.
    */
 
 		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		_this.template = _.template($('#mlp-add-new-site-template').html() || '');
+		var markup = $('#mlp-add-new-site-template').html() || '';
+		if ('' !== markup) {
+			/**
+    * The templating function.
+    * @type {Function}
+    */
+			_this.template = _.template(markup);
 
-		/**
-   * As of WordPress 4.5.0, there are now several action hooks on the Add New Site network admin page.
-   * Due to our BC policy, we have to wait for WordPress 4.7.0 in order to make use of these, though.
-   * TODO: Refactor this (and the according PHP parts) with the release of WordPress 4.7.0.
-   */
-		// FIRST render the template, THEN set up the properties using elements that just got injected into the DOM.
-		_this.$el.find('.submit').before(_this.template());
+			// FIRST render the template, THEN set up the properties using elements that just got injected into the DOM.
+			_this.$el.find('.submit').before(_this.template());
+		}
 
 		/**
    * The jQuery object representing the MultilingualPress language select.
