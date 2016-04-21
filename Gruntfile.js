@@ -44,9 +44,8 @@ module.exports = function( grunt ) {
 					transform: [
 						/**
 						 * @see {@link https://github.com/babel/babelify babelify}
-						 * @see {@link https://github.com/thlorenz/browserify-shim browserify-shim}
 						 */
-						[ 'babelify']
+						[ 'babelify' ]
 					]
 				},
 				expand: true,
