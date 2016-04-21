@@ -1,5 +1,8 @@
-const $ = window.jQuery;
-const { _ } = window;
+import window from '../../common/globals/window';
+import $ from 'jquery';
+import Backbone from 'backbone';
+
+Backbone.$ = $;
 
 /**
  * The MultilingualPress CopyPost module.

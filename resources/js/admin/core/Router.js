@@ -1,5 +1,4 @@
-import Backbone from "backbone";
-
+import Backbone from 'backbone';
 
 /**
  * The MultilingualPress Router module.
@@ -13,5 +12,4 @@ class Router extends Backbone.Router {
 		super( options );
 	}
 }
-
 export default Router;

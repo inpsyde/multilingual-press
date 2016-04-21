@@ -194,16 +194,19 @@ jQuery(function () {
 // Externalize the MultilingualPress admin namespace.
 window.MultilingualPressAdmin = MLP;
 
-},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/RelationshipControl":12,"./admin/post-translation/RemotePostSearch":13,"./admin/term-translation/TermTranslator":14,"./admin/user-settings/UserBackEndLanguage":15,"./common/utils":16}],2:[function(require,module,exports){
-"use strict";
+},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/RelationshipControl":12,"./admin/post-translation/RemotePostSearch":13,"./admin/term-translation/TermTranslator":14,"./admin/user-settings/UserBackEndLanguage":15,"./common/utils":17}],2:[function(require,module,exports){
+(function (global){
+'use strict';
 
 exports.__esModule = true;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _jquery = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefined" ? global['$'] : null);
 
-var $ = window.jQuery;
-var _window = window;
-var _ = _window._;
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * The MultilingualPress admin controller.
@@ -289,7 +292,7 @@ var Controller = function () {
 
 		_.isArray(routes) || (routes = [routes]);
 
-		$.each(routes, function (index, route) {
+		_jquery2.default.each(routes, function (index, route) {
 			return _this.registry.registerModuleForRoute(moduleData, route);
 		});
 	};
@@ -299,6 +302,7 @@ var Controller = function () {
 
 exports.default = Controller;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],3:[function(require,module,exports){
 "use strict";
 
@@ -473,11 +477,12 @@ var Registry = function () {
 exports.default = Registry;
 
 },{}],6:[function(require,module,exports){
-"use strict";
+(function (global){
+'use strict';
 
 exports.__esModule = true;
 
-var _backbone = require("backbone");
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
 
 var _backbone2 = _interopRequireDefault(_backbone);
 
@@ -514,10 +519,23 @@ var Router = function (_Backbone$Router) {
 
 exports.default = Router;
 
-},{"backbone":"backbone"}],7:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],7:[function(require,module,exports){
+(function (global){
 'use strict';
 
 exports.__esModule = true;
+exports.Toggler = undefined;
+
+var _jquery = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefined" ? global['$'] : null);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -525,8 +543,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var $ = window.jQuery;
-
+_backbone2.default.$ = _jquery2.default;
 /**
  * The MultilingualPress Toggler module.
  */
@@ -554,9 +571,9 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 
 
 	Toggler.prototype.initializeStateToggler = function initializeStateToggler(element) {
-		var $toggler = $(element);
+		var $toggler = (0, _jquery2.default)(element);
 
-		$('[name="' + $toggler.attr('name') + '"]').on('change', {
+		(0, _jquery2.default)('[name="' + $toggler.attr('name') + '"]').on('change', {
 			$toggler: $toggler
 		}, this.toggleElementIfChecked);
 	};
@@ -569,7 +586,7 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 	Toggler.prototype.initializeStateTogglers = function initializeStateTogglers() {
 		var _this2 = this;
 
-		$('.mlp-state-toggler').each(function (index, element) {
+		(0, _jquery2.default)('.mlp-state-toggler').each(function (index, element) {
 			return _this2.initializeStateToggler(element);
 		});
 	};
@@ -581,10 +598,10 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 
 
 	Toggler.prototype.toggleElement = function toggleElement(event) {
-		var targetID = $(event.target).data('toggle-target');
+		var targetID = (0, _jquery2.default)(event.target).data('toggle-target');
 
 		if (targetID) {
-			$(targetID).toggle();
+			(0, _jquery2.default)(targetID).toggle();
 		}
 	};
 
@@ -599,13 +616,14 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 		    targetID = $toggler.data('toggle-target');
 
 		if (targetID) {
-			$(targetID).toggle($toggler.is(':checked'));
+			(0, _jquery2.default)(targetID).toggle($toggler.is(':checked'));
 		}
 	};
 
 	return Toggler;
-}(Backbone.View);
+}(_backbone2.default.View);
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],8:[function(require,module,exports){
 'use strict';
 
@@ -903,9 +921,24 @@ var AddNewSite = function (_Backbone$View) {
 exports.default = AddNewSite;
 
 },{}],11:[function(require,module,exports){
+(function (global){
 'use strict';
 
 exports.__esModule = true;
+
+var _window = require('../../common/globals/window');
+
+var _window2 = _interopRequireDefault(_window);
+
+var _jquery = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefined" ? global['$'] : null);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -913,9 +946,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var $ = window.jQuery;
-var _window = window;
-var _ = _window._;
+_backbone2.default.$ = _jquery2.default;
 
 /**
  * The MultilingualPress CopyPost module.
@@ -941,19 +972,19 @@ var CopyPost = function (_Backbone$View) {
 
 		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		_this.$content = $('#content');
+		_this.$content = (0, _jquery2.default)('#content');
 
 		/**
    * The jQuery object representing the input element that contains the currently edited post's excerpt.
    * @type {jQuery}
    */
-		_this.$excerpt = $('#excerpt');
+		_this.$excerpt = (0, _jquery2.default)('#excerpt');
 
 		/**
    * The jQuery object representing the input element that contains the currently edited post's title.
    * @type {jQuery}
    */
-		_this.$title = $('#title');
+		_this.$title = (0, _jquery2.default)('#title');
 
 		/**
    * The event manager object.
@@ -978,7 +1009,7 @@ var CopyPost = function (_Backbone$View) {
    * The currently edited post's ID.
    * @type {number}
    */
-		_this.postID = Number($('#post_ID').val());
+		_this.postID = Number((0, _jquery2.default)('#post_ID').val());
 		return _this;
 	}
 
@@ -989,7 +1020,7 @@ var CopyPost = function (_Backbone$View) {
 
 
 	CopyPost.prototype.copyPostData = function copyPostData(event) {
-		var remoteSiteID = this.getRemoteSiteID($(event.target));
+		var remoteSiteID = this.getRemoteSiteID((0, _jquery2.default)(event.target));
 
 		var data = {};
 
@@ -997,7 +1028,7 @@ var CopyPost = function (_Backbone$View) {
 
 		this.fadeOutMetaBox(remoteSiteID);
 
-		$('#mlp-translation-data-' + remoteSiteID + '-copied-post').val(1);
+		(0, _jquery2.default)('#mlp-translation-data-' + remoteSiteID + '-copied-post').val(1);
 
 		/**
    * Triggers the event before copying post data, and passes an object for adding custom data, and the current
@@ -1039,7 +1070,7 @@ var CopyPost = function (_Backbone$View) {
 
 
 	CopyPost.prototype.fadeOutMetaBox = function fadeOutMetaBox(remoteSiteID) {
-		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', .4);
+		(0, _jquery2.default)('#inpsyde_multilingual_' + remoteSiteID).css('opacity', .4);
 	};
 
 	/**
@@ -1060,7 +1091,7 @@ var CopyPost = function (_Backbone$View) {
 
 	CopyPost.prototype.getSlug = function getSlug() {
 		// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
-		return $('#editable-post-name-full').text() || '';
+		return (0, _jquery2.default)('#editable-post-name-full').text() || '';
 	};
 
 	/**
@@ -1101,15 +1132,15 @@ var CopyPost = function (_Backbone$View) {
 
 		prefix = 'mlp-translation-data-' + data.siteID + '-';
 
-		$('#' + prefix + 'title').val(data.title);
+		(0, _jquery2.default)('#' + prefix + 'title').val(data.title);
 
-		$('#' + prefix + 'name').val(data.slug);
+		(0, _jquery2.default)('#' + prefix + 'name').val(data.slug);
 
 		this.setTinyMCEContent(prefix + 'content', data.content);
 
-		$('#' + prefix + 'content').val(data.content);
+		(0, _jquery2.default)('#' + prefix + 'content').val(data.content);
 
-		$('#' + prefix + 'excerpt').val(data.excerpt);
+		(0, _jquery2.default)('#' + prefix + 'excerpt').val(data.excerpt);
 
 		/**
    * Triggers the event for updating the post, and passes the according data.
@@ -1132,11 +1163,11 @@ var CopyPost = function (_Backbone$View) {
 	CopyPost.prototype.setTinyMCEContent = function setTinyMCEContent(editorID, content) {
 		var editor = void 0;
 
-		if ('undefined' === typeof window.tinyMCE) {
+		if ('undefined' === typeof _window2.default.tinyMCE) {
 			return false;
 		}
 
-		editor = window.tinyMCE.get(editorID);
+		editor = _window2.default.tinyMCE.get(editorID);
 		if (!editor) {
 			return false;
 		}
@@ -1153,15 +1184,16 @@ var CopyPost = function (_Backbone$View) {
 
 
 	CopyPost.prototype.fadeInMetaBox = function fadeInMetaBox(remoteSiteID) {
-		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', 1);
+		(0, _jquery2.default)('#inpsyde_multilingual_' + remoteSiteID).css('opacity', 1);
 	};
 
 	return CopyPost;
-}(Backbone.View);
+}(_backbone2.default.View);
 
 exports.default = CopyPost;
 
-},{}],12:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../../common/globals/window":16}],12:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1745,6 +1777,20 @@ var UserBackEndLanguage = function (_Backbone$View) {
 exports.default = UserBackEndLanguage;
 
 },{}],16:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+var localWindow = void 0;
+
+if ('undefined' === typeof window) {
+	localWindow = {};
+} else {
+	localWindow = window;
+}
+
+exports.default = localWindow;
+
+},{}],17:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
