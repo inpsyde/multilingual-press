@@ -1,10 +1,10 @@
 import jsdom from "../../jsDomEnv";
 import test from "tape";
-import sinon from "sinon";
-import * as F from "../../functions";
+// import sinon from "sinon";
+// import * as F from "../../functions";
 import CopyPost from "../../../../resources/js/admin/post-translation/CopyPost";
-
-const createTestee = ( router ) => {
+jsdom;//Make CI happy
+const createTestee = () => {
 	return new CopyPost();
 };
 

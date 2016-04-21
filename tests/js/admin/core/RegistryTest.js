@@ -1,9 +1,8 @@
 import test from "tape";
 import sinon from "sinon";
-import * as F from "../../functions";
+// import * as F from "../../functions";
 import Registry from "../../../../resources/js/admin/core/Registry";
 import Router from "../../../../resources/js/admin/core/Router";
-Router.__Rewire__( 'Backbone', require( 'backbone' ) );
 const createTestee = ( router ) => {
 	router = router || new Router();
 
