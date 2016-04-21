@@ -166,8 +166,8 @@ controller.registerModule(['post.php', 'post-new.php'], _RemotePostSearch2.defau
 	return module.initializeResults();
 });
 
-// Register the TermTranslator module for the Edit Tags admin page.
-controller.registerModule('edit-tags.php', _TermTranslator2.default, {
+// Register the TermTranslator module for the Tags and Edit Tag admin page.
+controller.registerModule(['edit-tags.php', 'term.php'], _TermTranslator2.default, {
 	el: '#mlp-term-translations',
 	events: {
 		'change select': 'propagateSelectedTerm'
@@ -1216,7 +1216,7 @@ var RelationshipControl = function (_Backbone$View) {
    * The set of utility methods.
    * @type {Object}
    */
-		_this.Util = options.util;
+		_this.Util = options.Util;
 		return _this;
 	}
 

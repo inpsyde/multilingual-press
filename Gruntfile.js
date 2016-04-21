@@ -427,6 +427,21 @@ module.exports = function( grunt ) {
 		} );
 	} );
 
+	grunt.registerTask( 'scripts', [
+		'newer:eslint:src',
+		'newer:delegate:babelify',
+		'newer:jsvalidate:dest',
+		'newer:lineending:scripts',
+		'changed:uglify'
+	] );
+
+	grunt.registerTask( 'styles', [
+		'newer:delegate:sass-convert',
+		'newer:postcss',
+		'newer:lineending:styles',
+		'changed:cssmin'
+	] );
+
 	grunt.registerTask( 'common', [
 		'jsonlint',
 		'phplint',
@@ -442,29 +457,25 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'develop', [
+		'newer:eslint',
+		'newer:jsvalidate:gruntfile',
 		'newer:delegate:imagemin-images',
 		'newer:jsonlint',
 		'newer:phplint:src',
-		'newer:eslint',
-		'newer:delegate:babelify',
-		'newer:jsvalidate',
-		'newer:delegate:sass-convert',
-		'newer:postcss',
 		'newer:lineending',
-		'changed:uglify',
-		'changed:cssmin'
+		'scripts',
+		'styles'
 	] );
 
 	grunt.registerTask( 'pre-commit', [
+		'changed-clean',
+		'newer-clean',
+		'jsvalidate:gruntfile',
 		'imagemin',
 		'common',
-		'browserify:babelify',
-		'jsvalidate',
-		'sass:convert',
-		'postcss',
 		'lineending',
-		'uglify',
-		'cssmin'
+		'scripts',
+		'styles'
 	] );
 
 	grunt.registerTask( 'release', [

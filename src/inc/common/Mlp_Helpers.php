@@ -364,7 +364,7 @@ class Mlp_Helpers {
 		);
 		$params = wp_parse_args( $args, $defaults );
 
-		// TODO: Eventually remove this, with version 2.6.0 at the earliest.
+		// TODO: Eventually remove this, with version 2.2.0 + 4 at the earliest.
 		switch ( $params[ 'link_text' ] ) {
 			case 'text_flag':
 				_doing_it_wrong(

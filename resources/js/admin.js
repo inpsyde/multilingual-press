@@ -121,8 +121,8 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
 	moduleSettings: F.getSettings( RemotePostSearch )
 }, ( module ) => module.initializeResults() );
 
-// Register the TermTranslator module for the Edit Tags admin page.
-controller.registerModule( 'edit-tags.php', TermTranslator, {
+// Register the TermTranslator module for the Tags and Edit Tag admin page.
+controller.registerModule( [ 'edit-tags.php', 'term.php' ], TermTranslator, {
 	el: '#mlp-term-translations',
 	events: {
 		'change select': 'propagateSelectedTerm'
