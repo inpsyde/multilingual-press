@@ -1,4 +1,5 @@
-import $ from 'jquery';
+const $ = window.jQuery;
+const { _ } = window;
 
 /**
  * The MultilingualPress admin controller.

@@ -1,5 +1,3 @@
-import Backbone from 'backbone';
-
 /**
  * The MultilingualPress Router module.
  */

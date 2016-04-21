@@ -1,4 +1,5 @@
 import sinon from "sinon";
+
 global.document = sinon.spy();
 global.window = {};
 global.Backbone = sinon.spy();
@@ -10,6 +11,7 @@ Backbone.View.prototype.listenTo = sinon.spy();
 global._ = sinon.spy();
 
 let jQuery = function( selector ) {
+	selector = selector || false;
 	return {
 		val: sinon.spy()
 	}

@@ -1,4 +1,3 @@
-import _ from 'underscore';
 /**
  * The MultilingualPress EventManager module.
  */
