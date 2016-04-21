@@ -62,6 +62,20 @@ class Mlp_Nav_Menu_Controller {
 	}
 
 	/**
+	 * Wires up all general functions.
+	 *
+	 * @return void
+	 */
+	public function initialize() {
+
+		global $wpdb;
+
+		$deletor = new Mlp_Nav_Menu_Item_Deletor( $wpdb, $this->meta_key );
+
+		add_action( 'delete_blog', array( $deletor, 'delete_items_for_deleted_site' ) );
+	}
+
+	/**
 	 * Register filter for nav menu items.
 	 *
 	 * @wp-hook template_redirect

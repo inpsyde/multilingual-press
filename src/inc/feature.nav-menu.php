@@ -13,6 +13,7 @@ function mlp_nav_menu_init( Inpsyde_Property_List_Interface $data ) {
 		$data->get( 'language_api' ),
 		$data->get( 'assets' )
 	);
+	$controller->initialize();
 
 	if ( is_admin() ) {
 		$controller->backend_setup();
