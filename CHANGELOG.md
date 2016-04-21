@@ -31,6 +31,7 @@ props luisarn.
 support for the Language Switcher widget.
 - Adapt the Term Translator to the new Edit Tag admin page introduced in WordPress 4.5.0.
 - Use the new `network_site_new_form` action hook (where available) instead of injecting markup with jQuery. Yay!
+- Delete the according Language nav menu items when a site is deleted.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
