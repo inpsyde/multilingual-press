@@ -26,11 +26,11 @@ class Mlp_Widget extends WP_Widget {
 
 		add_action( 'template_redirect', array( $this, 'require_style' ) );
 
-		$widget_ops = array(
-			'classname'   => self::$handle,
-			'description' => __( 'MultilingualPress Translations', 'multilingual-press' ),
-		);
-		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingual-press' ), $widget_ops );
+		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingual-press' ), array(
+			'classname'                   => self::$handle,
+			'description'                 => __( 'MultilingualPress Translations', 'multilingual-press' ),
+			'customize_selective_refresh' => true,
+		) );
 	}
 
 	/**
