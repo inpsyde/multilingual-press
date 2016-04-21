@@ -1,4 +1,5 @@
+import _ from 'underscore';
 /**
  * The MultilingualPress EventManager module.
  */
-export const EventManager = window._.extend( {}, Backbone.Events );
+export const EventManager = _.extend( {}, Backbone.Events );

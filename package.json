@@ -61,7 +61,8 @@
     "jquery": "^2.2.3",
     "load-grunt-tasks": "^3.5.0",
     "sinon": "^1.17.3",
-    "tape": "^4.5.1"
+    "tape": "^4.5.1",
+    "underscore": "^1.8.3"
   },
   "browserify": {
     "transform": [

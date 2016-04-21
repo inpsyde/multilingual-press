@@ -304,18 +304,35 @@ exports.default = Controller;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],3:[function(require,module,exports){
-"use strict";
+(function (global){
+'use strict';
 
 exports.__esModule = true;
+exports.EventManager = undefined;
+
+var _underscore = (typeof window !== "undefined" ? window['_'] : typeof global !== "undefined" ? global['_'] : null);
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * The MultilingualPress EventManager module.
  */
-var EventManager = exports.EventManager = window._.extend({}, Backbone.Events);
+var EventManager = exports.EventManager = _underscore2.default.extend({}, Backbone.Events);
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],4:[function(require,module,exports){
-"use strict";
+(function (global){
+'use strict';
 
 exports.__esModule = true;
+
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -352,10 +369,11 @@ var Model = function (_Backbone$Model) {
 	}
 
 	return Model;
-}(Backbone.Model);
+}(_backbone2.default.Model);
 
 exports.default = Model;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],5:[function(require,module,exports){
 "use strict";
 
@@ -671,9 +689,20 @@ var getSettings = exports.getSettings = function getSettings(module) {
 };
 
 },{}],9:[function(require,module,exports){
+(function (global){
 'use strict';
 
 exports.__esModule = true;
+
+var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -681,7 +710,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var $ = window.jQuery;
+_backbone2.default.$ = _jquery2.default;
 
 /**
  * The MultilingualPress NavMenus module.
@@ -713,13 +742,13 @@ var NavMenus = function (_Backbone$View) {
      * The jQuery object representing the input element that contains the currently edited menu's ID.
      * @type {jQuery}
      */
-				_this.$menu = $('#menu');
+				_this.$menu = (0, _jquery2.default)('#menu');
 
 				/**
      * The jQuery object representing the currently edited menu.
      * @type {jQuery}
      */
-				_this.$menuToEdit = $('#menu-to-edit');
+				_this.$menuToEdit = (0, _jquery2.default)('#menu-to-edit');
 
 				/**
      * The jQuery object representing the Languages meta box spinner.
@@ -784,7 +813,7 @@ var NavMenus = function (_Backbone$View) {
 				var ids = [];
 
 				this.$languages.filter(':checked').each(function (index, element) {
-						return ids.push(Number($(element).val()));
+						return ids.push(Number((0, _jquery2.default)(element).val()));
 				});
 
 				return ids;
@@ -808,10 +837,11 @@ var NavMenus = function (_Backbone$View) {
 		};
 
 		return NavMenus;
-}(Backbone.View);
+}(_backbone2.default.View);
 
 exports.default = NavMenus;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],10:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -1211,9 +1241,20 @@ exports.default = CopyPost;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../../common/globals/window":16}],12:[function(require,module,exports){
+(function (global){
 'use strict';
 
 exports.__esModule = true;
+
+var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1221,7 +1262,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var $ = window.jQuery;
+_backbone2.default.$ = _jquery2.default;
 
 /**
  * The MultilingualPress RelationshipControl module.
@@ -1289,7 +1330,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 
 	RelationshipControl.prototype.updateUnsavedRelationships = function updateUnsavedRelationships(event) {
-		var $input = $(event.target),
+		var $input = (0, _jquery2.default)(event.target),
 		    $metaBox = $input.closest('.mlp-translation-meta-box'),
 		    $button = $metaBox.find('.mlp-save-relationship-button'),
 		    index = this.findMetaBox($metaBox);
@@ -1317,7 +1358,7 @@ var RelationshipControl = function (_Backbone$View) {
 	RelationshipControl.prototype.findMetaBox = function findMetaBox($metaBox) {
 		var metaBoxIndex = -1;
 
-		$.each(this.unsavedRelationships, function (index, element) {
+		_jquery2.default.each(this.unsavedRelationships, function (index, element) {
 			if (element === $metaBox) {
 				metaBoxIndex = index;
 			}
@@ -1345,9 +1386,9 @@ var RelationshipControl = function (_Backbone$View) {
 
 
 	RelationshipControl.prototype.saveRelationship = function saveRelationship(event) {
-		var $button = $(event.target),
+		var $button = (0, _jquery2.default)(event.target),
 		    remoteSiteID = $button.data('remote-site-id'),
-		    action = $('input[name="mlp-rc-action[' + remoteSiteID + ']"]:checked').val(),
+		    action = (0, _jquery2.default)('input[name="mlp-rc-action[' + remoteSiteID + ']"]:checked').val(),
 		    eventName = this.getEventName(action);
 
 		if ('stay' === action) {
@@ -1398,7 +1439,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 
 	RelationshipControl.prototype.connectNewPost = function connectNewPost(data) {
-		data.new_post_title = $('input[name="post_title"]').val();
+		data.new_post_title = (0, _jquery2.default)('input[name="post_title"]').val();
 
 		this.sendRequest(data);
 	};
@@ -1421,7 +1462,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 
 	RelationshipControl.prototype.connectExistingPost = function connectExistingPost(data) {
-		var newPostID = Number($('input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked').val());
+		var newPostID = Number((0, _jquery2.default)('input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked').val());
 
 		if (!newPostID) {
 			window.alert(this.moduleSettings.L10n.noPostSelected);
@@ -1443,7 +1484,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 
 	RelationshipControl.prototype.sendRequest = function sendRequest(data) {
-		$.ajax({
+		_jquery2.default.ajax({
 			type: 'POST',
 			url: window.ajaxurl,
 			data: data,
@@ -1453,14 +1494,26 @@ var RelationshipControl = function (_Backbone$View) {
 	};
 
 	return RelationshipControl;
-}(Backbone.View);
+}(_backbone2.default.View);
 
 exports.default = RelationshipControl;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],13:[function(require,module,exports){
+(function (global){
 'use strict';
 
 exports.__esModule = true;
+
+var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1468,7 +1521,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var $ = window.jQuery;
+_backbone2.default.$ = _jquery2.default;
 
 /**
  * The MultilingualPress RemotePostSearch module.
@@ -1530,8 +1583,8 @@ var RemotePostSearch = function (_Backbone$View) {
 
 
 	RemotePostSearch.prototype.initializeResult = function initializeResult(element) {
-		var $element = $(element),
-		    $resultsContainer = $('#' + $element.data('results-container-id')),
+		var $element = (0, _jquery2.default)(element),
+		    $resultsContainer = (0, _jquery2.default)('#' + $element.data('results-container-id')),
 		    siteID = $element.data('remote-site-id');
 
 		this.defaultResults[siteID] = $resultsContainer.html();
@@ -1546,7 +1599,7 @@ var RemotePostSearch = function (_Backbone$View) {
 	RemotePostSearch.prototype.initializeResults = function initializeResults() {
 		var _this2 = this;
 
-		$('.mlp-search-field').each(function (index, element) {
+		(0, _jquery2.default)('.mlp-search-field').each(function (index, element) {
 			return _this2.initializeResult(element);
 		});
 	};
@@ -1572,8 +1625,8 @@ var RemotePostSearch = function (_Backbone$View) {
 	RemotePostSearch.prototype.reactToInput = function reactToInput(event) {
 		var _this3 = this;
 
-		var $input = $(event.target),
-		    value = $.trim($input.val() || '');
+		var $input = (0, _jquery2.default)(event.target),
+		    value = _jquery2.default.trim($input.val() || '');
 
 		var remoteSiteID = void 0;
 
@@ -1626,14 +1679,26 @@ var RemotePostSearch = function (_Backbone$View) {
 	};
 
 	return RemotePostSearch;
-}(Backbone.View);
+}(_backbone2.default.View);
 
 exports.default = RemotePostSearch;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],14:[function(require,module,exports){
+(function (global){
 'use strict';
 
 exports.__esModule = true;
+
+var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1641,7 +1706,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var $ = window.jQuery;
+_backbone2.default.$ = _jquery2.default;
 
 /**
  * MultilingualPress TermTranslator module.
@@ -1695,12 +1760,12 @@ var TermTranslator = function (_Backbone$View) {
 
 		this.isPropagating = true;
 
-		$select = $(event.target);
+		$select = (0, _jquery2.default)(event.target);
 
 		relation = this.getSelectedRelation($select);
 		if ('' !== relation) {
 			this.$selects.not($select).each(function (index, element) {
-				return _this2.selectTerm($(element), relation);
+				return _this2.selectTerm((0, _jquery2.default)(element), relation);
 			});
 		}
 
@@ -1736,20 +1801,34 @@ var TermTranslator = function (_Backbone$View) {
 	};
 
 	return TermTranslator;
-}(Backbone.View);
+}(_backbone2.default.View);
 
 exports.default = TermTranslator;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],15:[function(require,module,exports){
-"use strict";
+(function (global){
+'use strict';
 
 exports.__esModule = true;
+
+var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
+
+var _backbone2 = _interopRequireDefault(_backbone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+_backbone2.default.$ = _jquery2.default;
 
 /**
  * MultilingualPress UserBackEndLanguage module.
@@ -1789,10 +1868,11 @@ var UserBackEndLanguage = function (_Backbone$View) {
 	};
 
 	return UserBackEndLanguage;
-}(Backbone.View);
+}(_backbone2.default.View);
 
 exports.default = UserBackEndLanguage;
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],16:[function(require,module,exports){
 'use strict';
 

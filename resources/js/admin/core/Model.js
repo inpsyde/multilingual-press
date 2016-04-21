@@ -1,3 +1,5 @@
+import Backbone from 'backbone';
+
 /**
  * The MultilingualPress Model module.
  */

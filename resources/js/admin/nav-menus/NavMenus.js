@@ -1,4 +1,6 @@
-const $ = window.jQuery;
+import $ from 'jquery';
+import Backbone from 'backbone';
+Backbone.$ = $;
 
 /**
  * The MultilingualPress NavMenus module.
