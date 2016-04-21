@@ -194,7 +194,7 @@ jQuery(function () {
 // Externalize the MultilingualPress admin namespace.
 window.MultilingualPressAdmin = MLP;
 
-},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/RelationshipControl":12,"./admin/post-translation/RemotePostSearch":13,"./admin/term-translation/TermTranslator":14,"./admin/user-settings/UserBackEndLanguage":15,"./common/utils":17}],2:[function(require,module,exports){
+},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/RelationshipControl":12,"./admin/post-translation/RemotePostSearch":13,"./admin/term-translation/TermTranslator":14,"./admin/user-settings/UserBackEndLanguage":15,"./common/utils":16}],2:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -471,8 +471,6 @@ var Registry = function () {
 			}
 			this.initializeRoute(route, this.data[route]);
 		}
-
-		// this.data.map( ( route, modules ) => this.initializeRoute( route, modules ) );
 		return this.modules;
 	};
 
@@ -968,24 +966,9 @@ exports.default = AddNewSite;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],11:[function(require,module,exports){
-(function (global){
 'use strict';
 
 exports.__esModule = true;
-
-var _window = require('../../common/globals/window');
-
-var _window2 = _interopRequireDefault(_window);
-
-var _jquery = (typeof window !== "undefined" ? window['jQuery'] : typeof global !== "undefined" ? global['jQuery'] : null);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _backbone = (typeof window !== "undefined" ? window['Backbone'] : typeof global !== "undefined" ? global['Backbone'] : null);
-
-var _backbone2 = _interopRequireDefault(_backbone);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -993,7 +976,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-_backbone2.default.$ = _jquery2.default;
+var $ = window.jQuery;
+var _window = window;
+var _ = _window._;
 
 /**
  * The MultilingualPress CopyPost module.
@@ -1019,19 +1004,19 @@ var CopyPost = function (_Backbone$View) {
 
 		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		_this.$content = (0, _jquery2.default)('#content');
+		_this.$content = $('#content');
 
 		/**
    * The jQuery object representing the input element that contains the currently edited post's excerpt.
    * @type {jQuery}
    */
-		_this.$excerpt = (0, _jquery2.default)('#excerpt');
+		_this.$excerpt = $('#excerpt');
 
 		/**
    * The jQuery object representing the input element that contains the currently edited post's title.
    * @type {jQuery}
    */
-		_this.$title = (0, _jquery2.default)('#title');
+		_this.$title = $('#title');
 
 		/**
    * The event manager object.
@@ -1056,7 +1041,7 @@ var CopyPost = function (_Backbone$View) {
    * The currently edited post's ID.
    * @type {number}
    */
-		_this.postID = Number((0, _jquery2.default)('#post_ID').val());
+		_this.postID = Number($('#post_ID').val());
 		return _this;
 	}
 
@@ -1067,7 +1052,7 @@ var CopyPost = function (_Backbone$View) {
 
 
 	CopyPost.prototype.copyPostData = function copyPostData(event) {
-		var remoteSiteID = this.getRemoteSiteID((0, _jquery2.default)(event.target));
+		var remoteSiteID = this.getRemoteSiteID($(event.target));
 
 		var data = {};
 
@@ -1075,7 +1060,7 @@ var CopyPost = function (_Backbone$View) {
 
 		this.fadeOutMetaBox(remoteSiteID);
 
-		(0, _jquery2.default)('#mlp-translation-data-' + remoteSiteID + '-copied-post').val(1);
+		$('#mlp-translation-data-' + remoteSiteID + '-copied-post').val(1);
 
 		/**
    * Triggers the event before copying post data, and passes an object for adding custom data, and the current
@@ -1117,7 +1102,7 @@ var CopyPost = function (_Backbone$View) {
 
 
 	CopyPost.prototype.fadeOutMetaBox = function fadeOutMetaBox(remoteSiteID) {
-		(0, _jquery2.default)('#inpsyde_multilingual_' + remoteSiteID).css('opacity', .4);
+		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', .4);
 	};
 
 	/**
@@ -1138,7 +1123,7 @@ var CopyPost = function (_Backbone$View) {
 
 	CopyPost.prototype.getSlug = function getSlug() {
 		// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
-		return (0, _jquery2.default)('#editable-post-name-full').text() || '';
+		return $('#editable-post-name-full').text() || '';
 	};
 
 	/**
@@ -1179,15 +1164,15 @@ var CopyPost = function (_Backbone$View) {
 
 		prefix = 'mlp-translation-data-' + data.siteID + '-';
 
-		(0, _jquery2.default)('#' + prefix + 'title').val(data.title);
+		$('#' + prefix + 'title').val(data.title);
 
-		(0, _jquery2.default)('#' + prefix + 'name').val(data.slug);
+		$('#' + prefix + 'name').val(data.slug);
 
 		this.setTinyMCEContent(prefix + 'content', data.content);
 
-		(0, _jquery2.default)('#' + prefix + 'content').val(data.content);
+		$('#' + prefix + 'content').val(data.content);
 
-		(0, _jquery2.default)('#' + prefix + 'excerpt').val(data.excerpt);
+		$('#' + prefix + 'excerpt').val(data.excerpt);
 
 		/**
    * Triggers the event for updating the post, and passes the according data.
@@ -1210,11 +1195,11 @@ var CopyPost = function (_Backbone$View) {
 	CopyPost.prototype.setTinyMCEContent = function setTinyMCEContent(editorID, content) {
 		var editor = void 0;
 
-		if ('undefined' === typeof _window2.default.tinyMCE) {
+		if ('undefined' === typeof window.tinyMCE) {
 			return false;
 		}
 
-		editor = _window2.default.tinyMCE.get(editorID);
+		editor = window.tinyMCE.get(editorID);
 		if (!editor) {
 			return false;
 		}
@@ -1231,16 +1216,15 @@ var CopyPost = function (_Backbone$View) {
 
 
 	CopyPost.prototype.fadeInMetaBox = function fadeInMetaBox(remoteSiteID) {
-		(0, _jquery2.default)('#inpsyde_multilingual_' + remoteSiteID).css('opacity', 1);
+		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', 1);
 	};
 
 	return CopyPost;
-}(_backbone2.default.View);
+}(Backbone.View);
 
 exports.default = CopyPost;
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../common/globals/window":16}],12:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1874,23 +1858,6 @@ exports.default = UserBackEndLanguage;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],16:[function(require,module,exports){
-'use strict';
-
-exports.__esModule = true;
-var localWindow = void 0;
-
-if ('undefined' === typeof window) {
-	localWindow = {};
-	// global.document = {
-	// 	createElement:function(){}
-	// };
-} else {
-		localWindow = window;
-	}
-
-exports.default = localWindow;
-
-},{}],17:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;

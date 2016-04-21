@@ -72,9 +72,6 @@ class Registry {
 			}
 			this.initializeRoute( route, this.data[ route ] );
 		}
-
-
-		// this.data.map( ( route, modules ) => this.initializeRoute( route, modules ) );
 		return this.modules;
 	}
 
