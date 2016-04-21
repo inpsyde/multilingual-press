@@ -78,7 +78,7 @@ test( 'initializeRoutes behaves as expected', ( assert ) => {
 	assert.equal(
 		testee.router.route.callCount,
 		2,
-		'Router should have routed once' );
+		'Router should have routed twice' );
 
 	assert.end();
 } );
