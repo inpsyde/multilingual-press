@@ -11,15 +11,14 @@ const Util = {
 const resetUtil = () => {
 	Util.addEventListener.reset();
 	Util.setLocation.reset();
+
+	return Util;
 };
 
-const createTestee = ( selector ) => {
-	selector = selector || 'selector';
+const createTestee = ( selector ) => new Quicklinks( selector || 'selector', resetUtil() );
 
-	resetUtil();
-
-	return new Quicklinks( selector, Util );
-};
+// TODO: Make use of a (i.e., Moritz's) "global" module...?!
+global.document = {};
 
 test( 'Quicklinks is a constructor function', ( assert ) => {
 	assert.equal(
@@ -40,7 +39,7 @@ test( 'Quicklinks is a constructor function', ( assert ) => {
 test( 'selector behaves as expected', ( assert ) => {
 	const selector = 'selector';
 
-	const testee = new Quicklinks( selector, Util );
+	const testee = createTestee( selector );
 
 	assert.equal(
 		testee.selector,
@@ -77,9 +76,7 @@ test( 'initialize behaves as expected', ( assert ) => {
 test( 'attachSubmitHandler behaves as expected for an incorrect selector', ( assert ) => {
 	const testee = createTestee( 'incorrect-selector' );
 
-	global.document = {
-		querySelector: F.returnNull
-	};
+	global.document.querySelector = F.returnNull;
 
 	assert.equal(
 		testee.attachSubmitHandler(),
@@ -91,16 +88,11 @@ test( 'attachSubmitHandler behaves as expected for an incorrect selector', ( ass
 } );
 
 test( 'attachSubmitHandler behaves as expected for the correct selector', ( assert ) => {
-	// Reset Util spies.
-	resetUtil();
-
 	const testee = createTestee( 'correct-selector' );
 
 	const $element = 'element';
 
-	global.document = {
-		querySelector: () => $element
-	};
+	global.document.querySelector = () => $element;
 
 	assert.equal(
 		testee.attachSubmitHandler(),
@@ -124,7 +116,7 @@ test( 'attachSubmitHandler behaves as expected for the correct selector', ( asse
 	assert.end();
 } );
 
-test( 'submitForm behaves as expected', ( assert ) => {
+test( 'submitForm behaves as expected for a missing select element', ( assert ) => {
 	const testee = createTestee();
 
 	const event = {
@@ -144,8 +136,16 @@ test( 'submitForm behaves as expected', ( assert ) => {
 		'submitForm SHOULD NOT call event.prevenDefault for a missing select element.'
 	);
 
-	// Reset Util spies.
-	resetUtil();
+	assert.end();
+} );
+
+test( 'submitForm behaves as expected for a present select element', ( assert ) => {
+	const testee = createTestee();
+
+	const event = {
+		preventDefault: sinon.spy(),
+		target: {}
+	};
 
 	const $select = {
 		value: 'value'
@@ -174,5 +174,6 @@ test( 'submitForm behaves as expected', ( assert ) => {
 		true,
 		'submitForm SHOULD call Util.setLocation with the select value for a present select element.'
 	);
+
 	assert.end();
 } );
