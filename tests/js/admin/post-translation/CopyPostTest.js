@@ -1,21 +1,21 @@
-import globalStub from "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
-// import * as F from "../../functions";
+import * as F from "../../functions";
+import globalStub from "../../stubs/global";
 import CopyPost from "../../../../resources/js/admin/post-translation/CopyPost";
-globalStub; // eslint...
-// let { window } = globalStub;
+
+const { $ } = globalStub;
 
 const createTestee = () => {
 	return new CopyPost();
 };
 
 test( 'CopyPost is a constructor function', ( assert ) => {
-
 	assert.equal(
 		typeof CopyPost,
 		'function',
-		'CopyPost SHOULD be a function.' );
+		'CopyPost SHOULD be a function.'
+	);
 
 	assert.equal(
 		typeof createTestee(),
@@ -26,118 +26,144 @@ test( 'CopyPost is a constructor function', ( assert ) => {
 	assert.end();
 } );
 
-test( 'CopyPost content getter should behave as expected', ( assert ) => {
-
+test( 'content behaves as expected if the element does not exist', ( assert ) => {
 	const testee = createTestee();
+
 	assert.equal(
 		testee.content,
 		'',
-		'Content SHOULD be empty string when jQuery selector is empty' );
+		'content SHOULD be empty if the element does not exist.'
+	);
 
-	const testValue = 'LoremIpsum';
+	assert.end();
+} );
 
-	window.$.val.returns( testValue );
+test( 'content behaves as expected if the element does exist', ( assert ) => {
+	const content = F.getRandomString();
+
+	$.withArgs( '#content' ).returns( {
+		val: () => content
+	} );
+
+	const testee = createTestee();
 
 	assert.equal(
 		testee.content,
-		testValue,
-		'Content SHOULD equal test string when jQuery selector is not empty' );
-
-	window.$.val.returns( undefined );
+		content,
+		'content SHOULD have the value of the according element.'
+	);
 
 	assert.end();
 } );
 
-test( 'CopyPost excerpt getter should behave as expected', ( assert ) => {
-
+test( 'excerpt behaves as expected if the element does not exist', ( assert ) => {
 	const testee = createTestee();
+
 	assert.equal(
 		testee.excerpt,
 		'',
-		'Excerpt SHOULD be empty string when jQuery selector is empty' );
+		'excerpt SHOULD be empty if the element does not exist.'
+	);
 
-	const testValue = 'LoremIpsum';
+	assert.end();
+} );
 
-	window.$.val.returns( testValue );
+test( 'excerpt behaves as expected if the element does exist', ( assert ) => {
+	const excerpt = F.getRandomString();
+
+	$.withArgs( '#excerpt' ).returns( {
+		val: () => excerpt
+	} );
+
+	const testee = createTestee();
 
 	assert.equal(
 		testee.excerpt,
-		testValue,
-		'Excerpt SHOULD equal test string when jQuery selector is not empty' );
-
-	window.$.val.returns( undefined );
+		excerpt,
+		'excerpt SHOULD have the value of the according element.'
+	);
 
 	assert.end();
 } );
 
-test( 'CopyPost slug getter should behave as expected', ( assert ) => {
-
+test( 'slug behaves as expected if the element does not exist', ( assert ) => {
 	const testee = createTestee();
+
 	assert.equal(
 		testee.slug,
 		'',
-		'Slug SHOULD be empty string when jQuery selector is empty' );
+		'slug SHOULD be empty if the element does not exist.'
+	);
 
-	const testValue = 'LoremIpsum';
+	assert.end();
+} );
 
-	window.$.text.returns( testValue );
+test( 'slug behaves as expected if the element does exist', ( assert ) => {
+	const slug = F.getRandomString();
+
+	$.withArgs( '#editable-post-name-full' ).returns( {
+		text: () => slug
+	} );
+
+	const testee = createTestee();
 
 	assert.equal(
 		testee.slug,
-		testValue,
-		'Slug SHOULD equal test string when jQuery selector is not empty' );
-
-	window.$.text.returns( undefined );
+		slug,
+		'excerpt SHOULD have the value of the according element.'
+	);
 
 	assert.end();
 } );
 
-test( 'CopyPost title getter should behave as expected', ( assert ) => {
-
+test( 'title behaves as expected if the element does not exist', ( assert ) => {
 	const testee = createTestee();
+
 	assert.equal(
 		testee.title,
 		'',
-		'Title SHOULD be empty string when jQuery selector is empty' );
-
-	const testValue = 'LoremIpsum';
-
-	window.$.val.returns( testValue );
-
-	assert.equal(
-		testee.title,
-		testValue,
-		'Title SHOULD equal test string when jQuery selector is not empty' );
-
-	window.$.val.returns( undefined );
+		'title SHOULD be empty if the element does not exist.'
+	);
 
 	assert.end();
 } );
 
+test( 'title behaves as expected if the element does exist', ( assert ) => {
+	const title = F.getRandomString();
 
-//TODO: Test for copyPostData
+	$.withArgs( '#title' ).returns( {
+		val: () => title
+	} );
 
+	const testee = createTestee();
+
+	assert.equal(
+		testee.title,
+		title,
+		'title SHOULD have the value of the according element.'
+	);
+
+	assert.end();
+} );
+
+// TODO: Test copyPostData
 
 test( 'getRemoteSiteID behaves as expected', ( assert ) => {
+	const testee = new CopyPost();
 
-	const testee = createTestee();
+	const siteID = F.getRandomInteger();
 
-	const testButton = {
-		data: sinon.stub()
+	const $button = {
+		data: () => siteID
 	};
-	testButton.data.returns( 42 );
 
 	assert.equal(
-		testee.getRemoteSiteID( testButton ),
-		42,
-		'Return value should be the same as the test object data' );
-
-	testButton.data.returns( "42.0" );
-	assert.equal(
-		testee.getRemoteSiteID( testButton ),
-		42.0,
-		'Return value should be numeric' );
+		testee.getRemoteSiteID( $button ),
+		siteID,
+		'getRemoteSiteID SHOULD return the expected value.'
+	);
 
 	assert.end();
 } );
 
+// TODO: Test missing methods...
