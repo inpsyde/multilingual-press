@@ -1,32 +1,50 @@
 import sinon from "sinon";
-let globalStub = {};
-global.document = globalStub.document = {};
-global.window = globalStub.window = {};
-global.Backbone = globalStub.Backbone = {};
 
-Backbone.View = Backbone.Model = Backbone.Router = class {
+const _ = sinon.stub();
+
+const Backbone = {
+	Events: {},
+	history: {
+		start: sinon.spy()
+	},
+	History: {
+		started: false
+	},
+	Model: () => {},
+	Router: () => {},
+	View: () => {}
 };
+Backbone.Model.prototype.fetch = sinon.spy();
+Backbone.Model.prototype.get = sinon.stub();
+Backbone.Router.prototype.route = sinon.spy();
 Backbone.View.prototype.listenTo = sinon.spy();
 
-global._ = globalStub._ = sinon.spy();
+const document = {};
 
-const jQueryMethods = {
-	val: sinon.stub(),
-	text: sinon.stub()
+const jQuery = sinon.stub().returns( {
+	text: sinon.stub(),
+	val: sinon.stub()
+} );
+
+const window = {
+	$: jQuery,
+	_,
+	Backbone,
+	jQuery
 };
-let jQuery = sinon.stub();
-jQuery.returns(jQueryMethods);
 
-for ( let method in jQueryMethods ) {
-	if ( jQueryMethods.hasOwnProperty( method ) ) {
-		jQuery[ method ] = jQueryMethods[ method ];
-	}
-}
+const globalStub = {
+	document,
+	window
+};
 
-window.$
-	= window.jQuery
-	= globalStub.$
-	= globalStub.jQuery
-	= jQuery;
+// Pollute the global scope.
+Object.keys( globalStub ).forEach( function( key ) {
+	global[ key ] = globalStub[ key ];
+} );
+
+Object.keys( window ).forEach( function( key ) {
+	global[ key ] = globalStub[ key ] = window[ key ];
+} );
 
 export default globalStub;
