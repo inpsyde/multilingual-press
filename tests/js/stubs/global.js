@@ -10,15 +10,16 @@ Backbone.View.prototype.listenTo = sinon.spy();
 
 global._ = globalStub._ = sinon.spy();
 
+const jQueryMethods = {
+	val: sinon.spy()
+};
+
 let jQuery = function( selector ) {
 	selector = selector || false;
-	return {
-		val: sinon.spy()
-	}
+	return jQueryMethods;
 };
-global.$
-	= global.jQuery
-	= window.$
+
+window.$
 	= window.jQuery
 	= globalStub.$
 	= globalStub.jQuery
