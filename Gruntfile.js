@@ -311,7 +311,7 @@ module.exports = function( grunt ) {
 					 * @see {@link https://github.com/babel/babel/tree/master/packages/babel-cli babel-cli}
 					 * @see {@link https://github.com/substack/faucet faucet}
 					 */
-					return '"./node_modules/.bin/babel-node" --plugins rewire ' + file + ' | "./node_modules/.bin/faucet"';
+					return '"./node_modules/.bin/babel-node" ' + file + ' | "./node_modules/.bin/faucet"';
 				}
 			}
 		},
