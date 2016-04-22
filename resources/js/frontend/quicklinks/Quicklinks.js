@@ -12,12 +12,14 @@ class Quicklinks {
 	/**
 	 * Constructor. Sets up the properties.
 	 * @param {string} selector - The form element selector.
-	 * @param {Object} [Util=null] - Optional. The set of utility methods. Defaults to null.
+	 * @param {Object} [Util=undefined] - Optional. The set of utility methods. Defaults to undefined.
 	 */
 	constructor( selector, Util ) {
 		_this.selector = selector;
 
-		Util && ( _this.Util = Util );
+		if ( Util ) {
+			_this.Util = Util;
+		}
 	}
 
 	/**
