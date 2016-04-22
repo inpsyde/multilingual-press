@@ -42,8 +42,8 @@ test( 'CopyPost content getter should behave as expected', ( assert ) => {
 		testee.content,
 		testValue,
 		'Content should equal test string when jQuery selector is not empty' );
-	
-	window.$.val.restore();
+
+	window.$.val.reset();
 
 	assert.end();
 } );

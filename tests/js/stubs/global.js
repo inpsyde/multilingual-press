@@ -16,7 +16,7 @@ const jQueryMethods = {
 let jQuery = sinon.stub();
 jQuery.returns(jQueryMethods);
 
-for ( var method in jQueryMethods ) {
+for ( let method in jQueryMethods ) {
 	if ( jQueryMethods.hasOwnProperty( method ) ) {
 		jQuery[ method ] = jQueryMethods[ method ];
 	}
