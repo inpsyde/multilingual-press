@@ -13,7 +13,7 @@ const MLP = {
 	 * The MultilingualPress Quicklinks instance.
 	 * @type {Quicklinks}
 	 */
-	quicklinks: new Quicklinks( '#mlp-quicklink-form', Util ),
+	quicklinks: new Quicklinks( '#mlp-quicklink-form' ),
 
 	/**
 	 * The set of utility methods.

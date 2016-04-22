@@ -58,7 +58,7 @@ var MLP = {
   * The MultilingualPress Quicklinks instance.
   * @type {Quicklinks}
   */
-	quicklinks: new _Quicklinks2.default('#mlp-quicklink-form', Util),
+	quicklinks: new _Quicklinks2.default('#mlp-quicklink-form'),
 
 	/**
   * The set of utility methods.
@@ -83,10 +83,18 @@ exports.__esModule = true;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _utils = require('../../common/utils');
+
+var Util = _interopRequireWildcard(_utils);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // Internal pseudo-namespace for private data.
-var _this = {};
+var _this = {
+	Util: Util
+};
 
 /**
  * The MultilingualPress Quicklinks module.
@@ -96,7 +104,7 @@ var Quicklinks = function () {
 	/**
   * Constructor. Sets up the properties.
   * @param {string} selector - The form element selector.
-  * @param {Object} Util - The set of utility methods.
+  * @param {Object} [Util=null] - Optional. The set of utility methods. Defaults to null.
   */
 
 	function Quicklinks(selector, Util) {
@@ -104,11 +112,7 @@ var Quicklinks = function () {
 
 		_this.selector = selector;
 
-		/**
-   * The set of utility methods.
-   * @type {Object}
-   */
-		this.Util = Util;
+		Util && (_this.Util = Util);
 	}
 
 	/**
@@ -138,7 +142,7 @@ var Quicklinks = function () {
 			return false;
 		}
 
-		this.Util.addEventListener($form, 'submit', this.submitForm.bind(this));
+		_this.Util.addEventListener($form, 'submit', this.submitForm.bind(this));
 
 		return true;
 	};
@@ -158,7 +162,7 @@ var Quicklinks = function () {
 
 		event.preventDefault();
 
-		this.Util.setLocation($select.value);
+		_this.Util.setLocation($select.value);
 	};
 
 	_createClass(Quicklinks, [{
@@ -173,4 +177,4 @@ var Quicklinks = function () {
 
 exports.default = Quicklinks;
 
-},{}]},{},[2]);
+},{"../../common/utils":1}]},{},[2]);
