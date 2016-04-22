@@ -15,12 +15,12 @@ test( 'CopyPost is a constructor function', ( assert ) => {
 	assert.equal(
 		typeof CopyPost,
 		'function',
-		'Registry SHOULD be a function.' );
+		'CopyPost SHOULD be a function.' );
 
 	assert.equal(
 		typeof createTestee(),
 		'object',
-		'Registry SHOULD construct an object.'
+		'CopyPost SHOULD construct an object.'
 	);
 
 	assert.end();
@@ -32,7 +32,7 @@ test( 'CopyPost content getter should behave as expected', ( assert ) => {
 	assert.equal(
 		testee.content,
 		'',
-		'Content should be empty string when jQuery selector is empty' );
+		'Content SHOULD be empty string when jQuery selector is empty' );
 
 	const testValue = 'LoremIpsum';
 
@@ -41,7 +41,7 @@ test( 'CopyPost content getter should behave as expected', ( assert ) => {
 	assert.equal(
 		testee.content,
 		testValue,
-		'Content should equal test string when jQuery selector is not empty' );
+		'Content SHOULD equal test string when jQuery selector is not empty' );
 
 	window.$.val.returns( undefined );
 
@@ -54,7 +54,7 @@ test( 'CopyPost excerpt getter should behave as expected', ( assert ) => {
 	assert.equal(
 		testee.excerpt,
 		'',
-		'Excerpt should be empty string when jQuery selector is empty' );
+		'Excerpt SHOULD be empty string when jQuery selector is empty' );
 
 	const testValue = 'LoremIpsum';
 
@@ -63,7 +63,7 @@ test( 'CopyPost excerpt getter should behave as expected', ( assert ) => {
 	assert.equal(
 		testee.excerpt,
 		testValue,
-		'Excerpt should equal test string when jQuery selector is not empty' );
+		'Excerpt SHOULD equal test string when jQuery selector is not empty' );
 
 	window.$.val.returns( undefined );
 
@@ -76,7 +76,7 @@ test( 'CopyPost slug getter should behave as expected', ( assert ) => {
 	assert.equal(
 		testee.slug,
 		'',
-		'Slug should be empty string when jQuery selector is empty' );
+		'Slug SHOULD be empty string when jQuery selector is empty' );
 
 	const testValue = 'LoremIpsum';
 
@@ -85,7 +85,7 @@ test( 'CopyPost slug getter should behave as expected', ( assert ) => {
 	assert.equal(
 		testee.slug,
 		testValue,
-		'Slug should equal test string when jQuery selector is not empty' );
+		'Slug SHOULD equal test string when jQuery selector is not empty' );
 
 	window.$.text.returns( undefined );
 
@@ -98,7 +98,7 @@ test( 'CopyPost title getter should behave as expected', ( assert ) => {
 	assert.equal(
 		testee.title,
 		'',
-		'Title should be empty string when jQuery selector is empty' );
+		'Title SHOULD be empty string when jQuery selector is empty' );
 
 	const testValue = 'LoremIpsum';
 
@@ -107,7 +107,7 @@ test( 'CopyPost title getter should behave as expected', ( assert ) => {
 	assert.equal(
 		testee.title,
 		testValue,
-		'Title should equal test string when jQuery selector is not empty' );
+		'Title SHOULD equal test string when jQuery selector is not empty' );
 
 	window.$.val.returns( undefined );
 
@@ -124,7 +124,7 @@ test( 'getRemoteSiteID behaves as expected', ( assert ) => {
 
 	const testButton = {
 		data: sinon.stub()
-	}
+	};
 	testButton.data.returns( 42 );
 
 	assert.equal(
