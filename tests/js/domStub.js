@@ -1,19 +1,27 @@
 import sinon from "sinon";
-
-global.document = sinon.spy();
-global.window = {};
-global.Backbone = sinon.spy();
+let globalStub = {};
+global.document = globalStub.document = sinon.spy();
+global.window = globalStub.window = {};
+global.Backbone = globalStub.Backbone = sinon.spy();
 
 Backbone.View = Backbone.Model = Backbone.Router = class {
-}
+};
 Backbone.View.prototype.listenTo = sinon.spy();
 
-global._ = sinon.spy();
+global._ = globalStub._ = sinon.spy();
 
 let jQuery = function( selector ) {
 	selector = selector || false;
 	return {
 		val: sinon.spy()
 	}
-}
-global.$ = global.jQuery = window.$ = window.jQuery = jQuery;
+};
+global.$
+	= global.jQuery
+	= window.$
+	= window.jQuery
+	= globalStub.$
+	= globalStub.jQuery
+	= jQuery;
+
+export default globalStub;

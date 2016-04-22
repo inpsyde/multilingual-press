@@ -1,9 +1,10 @@
-import dom from "../../domStub";
+import globalStub from "../../domStub";
 import test from "tape";
 // import sinon from "sinon";
 // import * as F from "../../functions";
 import CopyPost from "../../../../resources/js/admin/post-translation/CopyPost";
-dom;//Make CI happy
+globalStub; // eslint...
+// let { window } = globalStub;
 
 const createTestee = () => {
 	return new CopyPost();
