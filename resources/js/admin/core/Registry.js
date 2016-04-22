@@ -38,7 +38,9 @@ class Registry {
 
 		this.modules[ Constructor.name ] = module;
 
-		data.callback && data.callback( module );
+		if ( 'function' === typeof data.callback ) {
+			data.callback( module );
+		}
 	}
 
 	/**
@@ -72,10 +74,14 @@ class Registry {
 	 * Registers the module with the given data for the given route.
 	 * @param {Object} module - The module data.
 	 * @param {string} route - The route.
+	 * @returns {number} The number of the currently registered routes.
 	 */
 	registerModuleForRoute( module, route ) {
-		this.data[ route ] || ( this.data[ route ] = [] );
-		this.data[ route ].push( module );
+		if ( ! this.data[ route ] ) {
+			this.data[ route ] = [];
+		}
+
+		return this.data[ route ].push( module );
 	}
 }
 
