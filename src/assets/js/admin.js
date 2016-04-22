@@ -359,6 +359,8 @@ exports.__esModule = true;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var $ = window.jQuery;
+
 /**
  * The MultilingualPress Registry module.
  */
@@ -413,12 +415,11 @@ var Registry = function () {
 
 
 	Registry.prototype.createModules = function createModules(modules) {
-		for (var route in modules) {
-			if (!modules.hasOwnProperty(route)) {
-				continue;
-			}
-			this.createModule(modules[route]);
-		}
+		var _this = this;
+
+		$.each(modules, function (index, data) {
+			return _this.createModule(data);
+		});
 	};
 
 	/**
@@ -429,10 +430,10 @@ var Registry = function () {
 
 
 	Registry.prototype.initializeRoute = function initializeRoute(route, modules) {
-		var _this = this;
+		var _this2 = this;
 
 		this.router.route(route, route, function () {
-			return _this.createModules(modules);
+			return _this2.createModules(modules);
 		});
 	};
 
@@ -443,12 +444,12 @@ var Registry = function () {
 
 
 	Registry.prototype.initializeRoutes = function initializeRoutes() {
-		for (var route in this.data) {
-			if (!this.data.hasOwnProperty(route)) {
-				continue;
-			}
-			this.initializeRoute(route, this.data[route]);
-		}
+		var _this3 = this;
+
+		$.each(this.data, function (route, modules) {
+			return _this3.initializeRoute(route, modules);
+		});
+
 		return this.modules;
 	};
 
@@ -456,13 +457,12 @@ var Registry = function () {
   * Registers the module with the given data for the given route.
   * @param {Object} module - The module data.
   * @param {string} route - The route.
-  * @return {Number} The new array length of the specified routes array
   */
 
 
 	Registry.prototype.registerModuleForRoute = function registerModuleForRoute(module, route) {
 		this.data[route] || (this.data[route] = []);
-		return this.data[route].push(module);
+		this.data[route].push(module);
 	};
 
 	return Registry;
@@ -649,6 +649,8 @@ var getSettings = exports.getSettings = function getSettings(module) {
 
 exports.__esModule = true;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -662,126 +664,128 @@ var $ = window.jQuery;
  */
 
 var NavMenus = function (_Backbone$View) {
-		_inherits(NavMenus, _Backbone$View);
+	_inherits(NavMenus, _Backbone$View);
+
+	/**
+  * Constructor. Sets up the properties.
+  * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+  */
+
+	function NavMenus() {
+		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+		_classCallCheck(this, NavMenus);
 
 		/**
-   * Constructor. Sets up the properties.
-   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
+   * The jQuery object representing the MultilingualPress language checkboxes.
+   * @type {jQuery}
    */
 
-		function NavMenus() {
-				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-				_classCallCheck(this, NavMenus);
+		_this.$languages = _this.$el.find('li [type="checkbox"]');
 
-				/**
-     * The jQuery object representing the MultilingualPress language checkboxes.
-     * @type {jQuery}
-     */
+		/**
+   * The jQuery object representing the input element that contains the currently edited menu's ID.
+   * @type {jQuery}
+   */
+		_this.$menu = $('#menu');
 
-				var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		/**
+   * The jQuery object representing the currently edited menu.
+   * @type {jQuery}
+   */
+		_this.$menuToEdit = $('#menu-to-edit');
 
-				_this.$languages = _this.$el.find('li [type="checkbox"]');
+		/**
+   * The jQuery object representing the Languages meta box spinner.
+   * @type {jQuery}
+   */
+		_this.$spinner = _this.$el.find('.spinner');
 
-				/**
-     * The jQuery object representing the input element that contains the currently edited menu's ID.
-     * @type {jQuery}
-     */
-				_this.$menu = $('#menu');
+		/**
+   * The jQuery object representing the Languages meta box submit button.
+   * @type {jQuery}
+   */
+		_this.$submit = _this.$el.find('#submit-mlp-language');
 
-				/**
-     * The jQuery object representing the currently edited menu.
-     * @type {jQuery}
-     */
-				_this.$menuToEdit = $('#menu-to-edit');
+		/**
+   * The model object.
+   * @type {Model}
+   */
+		_this.model = options.model;
+		_this.listenTo(_this.model, 'change', _this.render);
 
-				/**
-     * The jQuery object representing the Languages meta box spinner.
-     * @type {jQuery}
-     */
-				_this.$spinner = _this.$el.find('.spinner');
+		/**
+   * The module settings.
+   * @type {Object}
+   */
+		_this.moduleSettings = options.moduleSettings;
+		return _this;
+	}
 
-				/**
-     * The jQuery object representing the Languages meta box submit button.
-     * @type {jQuery}
-     */
-				_this.$submit = _this.$el.find('#submit-mlp-language');
+	/**
+  * Returns the site IDs for the checked languages in the Languages meta box.
+  * @returns {number[]} The site IDs.
+  */
 
-				/**
-     * The model object.
-     * @type {Model}
-     */
-				_this.model = options.model;
-				_this.listenTo(_this.model, 'change', _this.render);
 
-				/**
-     * The module settings.
-     * @type {Object}
-     */
-				_this.moduleSettings = options.moduleSettings;
-				return _this;
+	/**
+  * Requests the according markup for the checked languages in the Languages meta box.
+  * @param {Event} event - The click event of the submit button.
+  */
+
+	NavMenus.prototype.sendRequest = function sendRequest(event) {
+		var data = {
+			action: this.moduleSettings.action,
+			menu: this.$menu.val(),
+			mlp_sites: this.sites
+		};
+		data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
+
+		event.preventDefault();
+
+		this.$submit.prop('disabled', true);
+
+		this.$spinner.addClass('is-active');
+
+		this.model.fetch({
+			data: data,
+			processData: true
+		});
+	};
+
+	/**
+  * Renders the nav menu item to the currently edited menu.
+  */
+
+
+	NavMenus.prototype.render = function render() {
+		if (this.model.get('success')) {
+			this.$menuToEdit.append(this.model.get('data'));
 		}
 
-		/**
-   * Requests the according markup for the checked languages in the Languages meta box.
-   * @param {Event} event - The click event of the submit button.
-   */
+		this.$languages.prop('checked', false);
 
+		this.$spinner.removeClass('is-active');
 
-		NavMenus.prototype.sendRequest = function sendRequest(event) {
-				var data = {
-						action: this.moduleSettings.action,
-						menu: this.$menu.val(),
-						mlp_sites: this.getSites()
-				};
-				data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
+		this.$submit.prop('disabled', false);
+	};
 
-				event.preventDefault();
+	_createClass(NavMenus, [{
+		key: 'sites',
+		get: function get() {
+			var ids = [];
 
-				this.$submit.prop('disabled', true);
+			this.$languages.filter(':checked').each(function (index, element) {
+				return ids.push(Number($(element).val()));
+			});
 
-				this.$spinner.addClass('is-active');
+			return ids;
+		}
+	}]);
 
-				this.model.fetch({
-						data: data,
-						processData: true
-				});
-		};
-
-		/**
-   * Returns the site IDs for the checked languages in the Languages meta box.
-   * @returns {number[]} The site IDs.
-   */
-
-
-		NavMenus.prototype.getSites = function getSites() {
-				var ids = [];
-
-				this.$languages.filter(':checked').each(function (index, element) {
-						return ids.push(Number($(element).val()));
-				});
-
-				return ids;
-		};
-
-		/**
-   * Renders the nav menu item to the currently edited menu.
-   */
-
-
-		NavMenus.prototype.render = function render() {
-				if (this.model.get('success')) {
-						this.$menuToEdit.append(this.model.get('data'));
-				}
-
-				this.$languages.prop('checked', false);
-
-				this.$spinner.removeClass('is-active');
-
-				this.$submit.prop('disabled', false);
-		};
-
-		return NavMenus;
+	return NavMenus;
 }(Backbone.View);
 
 exports.default = NavMenus;
@@ -904,6 +908,8 @@ exports.default = AddNewSite;
 
 exports.__esModule = true;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -980,10 +986,15 @@ var CopyPost = function (_Backbone$View) {
 	}
 
 	/**
+  * Returns the content of the original post.
+  * @returns {string} The post content.
+  */
+
+
+	/**
   * Copies the post data of the source post to a translation post.
   * @param {Event} event - The click event of a "Copy source post" button.
   */
-
 
 	CopyPost.prototype.copyPostData = function copyPostData(event) {
 		var remoteSiteID = this.getRemoteSiteID($(event.target));
@@ -1006,10 +1017,10 @@ var CopyPost = function (_Backbone$View) {
 			action: this.moduleSettings.action,
 			current_post_id: this.postID,
 			remote_site_id: remoteSiteID,
-			title: this.getTitle(),
-			slug: this.getSlug(),
-			content: this.getContent(),
-			excerpt: this.getExcerpt()
+			title: this.title,
+			slug: this.slug,
+			content: this.content,
+			excerpt: this.excerpt
 		});
 
 		this.model.fetch({
@@ -1037,47 +1048,6 @@ var CopyPost = function (_Backbone$View) {
 
 	CopyPost.prototype.fadeOutMetaBox = function fadeOutMetaBox(remoteSiteID) {
 		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', .4);
-	};
-
-	/**
-  * Returns the title of the original post.
-  * @returns {string} The post title.
-  */
-
-
-	CopyPost.prototype.getTitle = function getTitle() {
-		return this.$title.val() || '';
-	};
-
-	/**
-  * Returns the slug of the original post.
-  * @returns {string} The post slug.
-  */
-
-
-	CopyPost.prototype.getSlug = function getSlug() {
-		// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
-		return $('#editable-post-name-full').text() || '';
-	};
-
-	/**
-  * Returns the content of the original post.
-  * @returns {string} The post content.
-  */
-
-
-	CopyPost.prototype.getContent = function getContent() {
-		return this.$content.val() || '';
-	};
-
-	/**
-  * Returns the excerpt of the original post.
-  * @returns {string} The post excerpt.
-  */
-
-
-	CopyPost.prototype.getExcerpt = function getExcerpt() {
-		return this.$excerpt.val() || '';
 	};
 
 	/**
@@ -1152,6 +1122,47 @@ var CopyPost = function (_Backbone$View) {
 	CopyPost.prototype.fadeInMetaBox = function fadeInMetaBox(remoteSiteID) {
 		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', 1);
 	};
+
+	_createClass(CopyPost, [{
+		key: 'content',
+		get: function get() {
+			return this.$content.val() || '';
+		}
+
+		/**
+   * Returns the excerpt of the original post.
+   * @returns {string} The post excerpt.
+   */
+
+	}, {
+		key: 'excerpt',
+		get: function get() {
+			return this.$excerpt.val() || '';
+		}
+
+		/**
+   * Returns the slug of the original post.
+   * @returns {string} The post slug.
+   */
+
+	}, {
+		key: 'slug',
+		get: function get() {
+			// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
+			return $('#editable-post-name-full').text() || '';
+		}
+
+		/**
+   * Returns the title of the original post.
+   * @returns {string} The post title.
+   */
+
+	}, {
+		key: 'title',
+		get: function get() {
+			return this.$title.val() || '';
+		}
+	}]);
 
 	return CopyPost;
 }(Backbone.View);

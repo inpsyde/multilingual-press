@@ -57,6 +57,39 @@ class CopyPost extends Backbone.View {
 	}
 
 	/**
+	 * Returns the content of the original post.
+	 * @returns {string} The post content.
+	 */
+	get content() {
+		return this.$content.val() || '';
+	}
+
+	/**
+	 * Returns the excerpt of the original post.
+	 * @returns {string} The post excerpt.
+	 */
+	get excerpt() {
+		return this.$excerpt.val() || '';
+	}
+
+	/**
+	 * Returns the slug of the original post.
+	 * @returns {string} The post slug.
+	 */
+	get slug() {
+		// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
+		return $( '#editable-post-name-full' ).text() || '';
+	}
+
+	/**
+	 * Returns the title of the original post.
+	 * @returns {string} The post title.
+	 */
+	get title() {
+		return this.$title.val() || '';
+	}
+
+	/**
 	 * Copies the post data of the source post to a translation post.
 	 * @param {Event} event - The click event of a "Copy source post" button.
 	 */
@@ -87,10 +120,10 @@ class CopyPost extends Backbone.View {
 			action: this.moduleSettings.action,
 			current_post_id: this.postID,
 			remote_site_id: remoteSiteID,
-			title: this.getTitle(),
-			slug: this.getSlug(),
-			content: this.getContent(),
-			excerpt: this.getExcerpt()
+			title: this.title,
+			slug: this.slug,
+			content: this.content,
+			excerpt: this.excerpt
 		} );
 
 		this.model.fetch( {
@@ -114,39 +147,6 @@ class CopyPost extends Backbone.View {
 	 */
 	fadeOutMetaBox( remoteSiteID ) {
 		$( '#inpsyde_multilingual_' + remoteSiteID ).css( 'opacity', .4 );
-	}
-
-	/**
-	 * Returns the title of the original post.
-	 * @returns {string} The post title.
-	 */
-	getTitle() {
-		return this.$title.val() || '';
-	}
-
-	/**
-	 * Returns the slug of the original post.
-	 * @returns {string} The post slug.
-	 */
-	getSlug() {
-		// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
-		return $( '#editable-post-name-full' ).text() || '';
-	}
-
-	/**
-	 * Returns the content of the original post.
-	 * @returns {string} The post content.
-	 */
-	getContent() {
-		return this.$content.val() || '';
-	}
-
-	/**
-	 * Returns the excerpt of the original post.
-	 * @returns {string} The post excerpt.
-	 */
-	getExcerpt() {
-		return this.$excerpt.val() || '';
 	}
 
 	/**

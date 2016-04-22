@@ -37,7 +37,7 @@ test( 'Quicklinks is a constructor function', ( assert ) => {
 	assert.end();
 } );
 
-test( 'constructor behaves as expected', ( assert ) => {
+test( 'selector behaves as expected', ( assert ) => {
 	const selector = 'selector';
 
 	const testee = new Quicklinks( selector, Util );
@@ -45,13 +45,7 @@ test( 'constructor behaves as expected', ( assert ) => {
 	assert.equal(
 		testee.selector,
 		selector,
-		'constructor SHOULD set selector property.'
-	);
-
-	assert.equal(
-		testee.Util,
-		Util,
-		'constructor SHOULD set Util property.'
+		'selector SHOULD return the expected value.'
 	);
 
 	assert.end();
