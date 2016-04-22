@@ -3,22 +3,20 @@ import sinon from "sinon";
 import * as F from "../../functions";
 import Quicklinks from "../../../../resources/js/frontend/quicklinks/Quicklinks";
 
-const Util = {
-	addEventListener: sinon.spy(),
-	setLocation: sinon.spy()
-};
+const Util = {};
 
 const resetUtil = () => {
-	Util.addEventListener.reset();
-	Util.setLocation.reset();
+	Util.addEventListener = sinon.spy();
+	Util.setLocation = sinon.spy();
 
 	return Util;
 };
 
 const createTestee = ( selector ) => new Quicklinks( selector || 'selector', resetUtil() );
 
-// TODO: Make use of a (i.e., Moritz's) "global" module...?!
 global.document = {};
+
+const { document } = global;
 
 test( 'Quicklinks is a constructor function', ( assert ) => {
 	assert.equal(
@@ -37,7 +35,7 @@ test( 'Quicklinks is a constructor function', ( assert ) => {
 } );
 
 test( 'selector behaves as expected', ( assert ) => {
-	const selector = 'selector';
+	const selector = F.getRandomString();
 
 	const testee = createTestee( selector );
 
@@ -76,7 +74,7 @@ test( 'initialize behaves as expected', ( assert ) => {
 test( 'attachSubmitHandler behaves as expected for an incorrect selector', ( assert ) => {
 	const testee = createTestee( 'incorrect-selector' );
 
-	global.document.querySelector = F.returnNull;
+	document.querySelector = F.returnNull;
 
 	assert.equal(
 		testee.attachSubmitHandler(),
@@ -90,9 +88,9 @@ test( 'attachSubmitHandler behaves as expected for an incorrect selector', ( ass
 test( 'attachSubmitHandler behaves as expected for the correct selector', ( assert ) => {
 	const testee = createTestee( 'correct-selector' );
 
-	const $element = 'element';
+	const $element = F.getRandomString();
 
-	global.document.querySelector = () => $element;
+	document.querySelector = () => $element;
 
 	assert.equal(
 		testee.attachSubmitHandler(),
@@ -121,12 +119,10 @@ test( 'submitForm behaves as expected for a missing select element', ( assert ) 
 
 	const event = {
 		preventDefault: sinon.spy(),
-		target: {}
+		target: {
+			querySelector: F.returnNull
+		}
 	};
-
-	// Configure event.
-	event.preventDefault.reset();
-	event.target.querySelector = F.returnNull;
 
 	testee.submitForm( event );
 
@@ -142,18 +138,16 @@ test( 'submitForm behaves as expected for a missing select element', ( assert ) 
 test( 'submitForm behaves as expected for a present select element', ( assert ) => {
 	const testee = createTestee();
 
+	const $select = {
+		value: F.getRandomString()
+	};
+
 	const event = {
 		preventDefault: sinon.spy(),
-		target: {}
+		target: {
+			querySelector: () => $select
+		}
 	};
-
-	const $select = {
-		value: 'value'
-	};
-
-	// Configure event.
-	event.preventDefault.reset();
-	event.target.querySelector = () => $select;
 
 	testee.submitForm( event );
 
