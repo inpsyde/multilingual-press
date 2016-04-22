@@ -26,3 +26,14 @@ test( 'CopyPost is a constructor function', ( assert ) => {
 	assert.end();
 } );
 
+test( 'CopyPost content getter should behave as expected', ( assert ) => {
+	
+	const testee = createTestee();
+	assert.equal(
+		testee.content,
+		'',
+		'Content should be empty string when jQuery selector is empty' );
+
+	assert.end();
+} );
+
