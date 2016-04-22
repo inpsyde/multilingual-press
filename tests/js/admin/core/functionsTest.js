@@ -4,8 +4,6 @@ import * as Functions from "../../../../resources/js/admin/core/functions";
 global.window = {};
 
 test( 'getSettings returns the expected settings object', ( assert ) => {
-	window = {};
-
 	assert.deepEqual(
 		Functions.getSettings( 'module' ),
 		{},
@@ -13,7 +11,7 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 	);
 
 	// Prepare "global" settings.
-	window = {
+	global.window = {
 		ModuleName: 'settings'
 	};
 

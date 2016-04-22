@@ -56,6 +56,18 @@ class NavMenus extends Backbone.View {
 	}
 
 	/**
+	 * Returns the site IDs for the checked languages in the Languages meta box.
+	 * @returns {number[]} The site IDs.
+	 */
+	get sites() {
+		const ids = [];
+
+		this.$languages.filter( ':checked' ).each( ( index, element ) => ids.push( Number( $( element ).val() ) ) );
+
+		return ids;
+	}
+
+	/**
 	 * Requests the according markup for the checked languages in the Languages meta box.
 	 * @param {Event} event - The click event of the submit button.
 	 */
@@ -63,7 +75,7 @@ class NavMenus extends Backbone.View {
 		const data = {
 			action: this.moduleSettings.action,
 			menu: this.$menu.val(),
-			mlp_sites: this.getSites()
+			mlp_sites: this.sites
 		};
 		data[ this.moduleSettings.nonceName ] = this.moduleSettings.nonce;
 
@@ -77,18 +89,6 @@ class NavMenus extends Backbone.View {
 			data,
 			processData: true
 		} );
-	}
-
-	/**
-	 * Returns the site IDs for the checked languages in the Languages meta box.
-	 * @returns {number[]} The site IDs.
-	 */
-	getSites() {
-		const ids = [];
-
-		this.$languages.filter( ':checked' ).each( ( index, element ) => ids.push( Number( $( element ).val() ) ) );
-
-		return ids;
 	}
 
 	/**

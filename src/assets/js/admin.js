@@ -649,6 +649,8 @@ var getSettings = exports.getSettings = function getSettings(module) {
 
 exports.__esModule = true;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -723,16 +725,21 @@ var NavMenus = function (_Backbone$View) {
 	}
 
 	/**
+  * Returns the site IDs for the checked languages in the Languages meta box.
+  * @returns {number[]} The site IDs.
+  */
+
+
+	/**
   * Requests the according markup for the checked languages in the Languages meta box.
   * @param {Event} event - The click event of the submit button.
   */
-
 
 	NavMenus.prototype.sendRequest = function sendRequest(event) {
 		var data = {
 			action: this.moduleSettings.action,
 			menu: this.$menu.val(),
-			mlp_sites: this.getSites()
+			mlp_sites: this.sites
 		};
 		data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
 
@@ -746,22 +753,6 @@ var NavMenus = function (_Backbone$View) {
 			data: data,
 			processData: true
 		});
-	};
-
-	/**
-  * Returns the site IDs for the checked languages in the Languages meta box.
-  * @returns {number[]} The site IDs.
-  */
-
-
-	NavMenus.prototype.getSites = function getSites() {
-		var ids = [];
-
-		this.$languages.filter(':checked').each(function (index, element) {
-			return ids.push(Number($(element).val()));
-		});
-
-		return ids;
 	};
 
 	/**
@@ -780,6 +771,19 @@ var NavMenus = function (_Backbone$View) {
 
 		this.$submit.prop('disabled', false);
 	};
+
+	_createClass(NavMenus, [{
+		key: 'sites',
+		get: function get() {
+			var ids = [];
+
+			this.$languages.filter(':checked').each(function (index, element) {
+				return ids.push(Number($(element).val()));
+			});
+
+			return ids;
+		}
+	}]);
 
 	return NavMenus;
 }(Backbone.View);
@@ -904,6 +908,8 @@ exports.default = AddNewSite;
 
 exports.__esModule = true;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -980,10 +986,15 @@ var CopyPost = function (_Backbone$View) {
 	}
 
 	/**
+  * Returns the content of the original post.
+  * @returns {string} The post content.
+  */
+
+
+	/**
   * Copies the post data of the source post to a translation post.
   * @param {Event} event - The click event of a "Copy source post" button.
   */
-
 
 	CopyPost.prototype.copyPostData = function copyPostData(event) {
 		var remoteSiteID = this.getRemoteSiteID($(event.target));
@@ -1006,10 +1017,10 @@ var CopyPost = function (_Backbone$View) {
 			action: this.moduleSettings.action,
 			current_post_id: this.postID,
 			remote_site_id: remoteSiteID,
-			title: this.getTitle(),
-			slug: this.getSlug(),
-			content: this.getContent(),
-			excerpt: this.getExcerpt()
+			title: this.title,
+			slug: this.slug,
+			content: this.content,
+			excerpt: this.excerpt
 		});
 
 		this.model.fetch({
@@ -1037,47 +1048,6 @@ var CopyPost = function (_Backbone$View) {
 
 	CopyPost.prototype.fadeOutMetaBox = function fadeOutMetaBox(remoteSiteID) {
 		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', .4);
-	};
-
-	/**
-  * Returns the title of the original post.
-  * @returns {string} The post title.
-  */
-
-
-	CopyPost.prototype.getTitle = function getTitle() {
-		return this.$title.val() || '';
-	};
-
-	/**
-  * Returns the slug of the original post.
-  * @returns {string} The post slug.
-  */
-
-
-	CopyPost.prototype.getSlug = function getSlug() {
-		// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
-		return $('#editable-post-name-full').text() || '';
-	};
-
-	/**
-  * Returns the content of the original post.
-  * @returns {string} The post content.
-  */
-
-
-	CopyPost.prototype.getContent = function getContent() {
-		return this.$content.val() || '';
-	};
-
-	/**
-  * Returns the excerpt of the original post.
-  * @returns {string} The post excerpt.
-  */
-
-
-	CopyPost.prototype.getExcerpt = function getExcerpt() {
-		return this.$excerpt.val() || '';
 	};
 
 	/**
@@ -1152,6 +1122,47 @@ var CopyPost = function (_Backbone$View) {
 	CopyPost.prototype.fadeInMetaBox = function fadeInMetaBox(remoteSiteID) {
 		$('#inpsyde_multilingual_' + remoteSiteID).css('opacity', 1);
 	};
+
+	_createClass(CopyPost, [{
+		key: 'content',
+		get: function get() {
+			return this.$content.val() || '';
+		}
+
+		/**
+   * Returns the excerpt of the original post.
+   * @returns {string} The post excerpt.
+   */
+
+	}, {
+		key: 'excerpt',
+		get: function get() {
+			return this.$excerpt.val() || '';
+		}
+
+		/**
+   * Returns the slug of the original post.
+   * @returns {string} The post slug.
+   */
+
+	}, {
+		key: 'slug',
+		get: function get() {
+			// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
+			return $('#editable-post-name-full').text() || '';
+		}
+
+		/**
+   * Returns the title of the original post.
+   * @returns {string} The post title.
+   */
+
+	}, {
+		key: 'title',
+		get: function get() {
+			return this.$title.val() || '';
+		}
+	}]);
 
 	return CopyPost;
 }(Backbone.View);

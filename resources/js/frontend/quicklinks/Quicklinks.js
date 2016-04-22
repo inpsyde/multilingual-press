@@ -1,3 +1,6 @@
+// Internal pseudo-namespace for private data.
+const _this = {};
+
 /**
  * The MultilingualPress Quicklinks module.
  */
@@ -8,17 +11,21 @@ class Quicklinks {
 	 * @param {Object} Util - The set of utility methods.
 	 */
 	constructor( selector, Util ) {
-		/**
-		 * The form element selector.
-		 * @type {string}
-		 */
-		this.selector = selector;
+		_this.selector = selector;
 
 		/**
 		 * The set of utility methods.
 		 * @type {Object}
 		 */
 		this.Util = Util;
+	}
+
+	/**
+	 * Returns the form element selector.
+	 * @returns {string} The form element selector.
+	 */
+	get selector() {
+		return _this.selector || '';
 	}
 
 	/**
