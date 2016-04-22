@@ -1,6 +1,6 @@
 import globalStub from "../../stubs/global";
 import test from "tape";
-// import sinon from "sinon";
+import sinon from "sinon";
 // import * as F from "../../functions";
 import CopyPost from "../../../../resources/js/admin/post-translation/CopyPost";
 globalStub; // eslint...
@@ -110,6 +110,33 @@ test( 'CopyPost title getter should behave as expected', ( assert ) => {
 		'Title should equal test string when jQuery selector is not empty' );
 
 	window.$.val.returns( undefined );
+
+	assert.end();
+} );
+
+
+//TODO: Test for copyPostData
+
+
+test( 'getRemoteSiteID behaves as expected', ( assert ) => {
+
+	const testee = createTestee();
+
+	const testButton = {
+		data: sinon.stub()
+	}
+	testButton.data.returns( 42 );
+
+	assert.equal(
+		testee.getRemoteSiteID( testButton ),
+		42,
+		'Return value should be the same as the test object data' );
+
+	testButton.data.returns( "42.0" );
+	assert.equal(
+		testee.getRemoteSiteID( testButton ),
+		42.0,
+		'Return value should be numeric' );
 
 	assert.end();
 } );
