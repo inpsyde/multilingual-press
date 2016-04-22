@@ -1,8 +1,8 @@
 import sinon from "sinon";
 let globalStub = {};
-global.document = globalStub.document = sinon.spy();
+global.document = globalStub.document = {};
 global.window = globalStub.window = {};
-global.Backbone = globalStub.Backbone = sinon.spy();
+global.Backbone = globalStub.Backbone = {};
 
 Backbone.View = Backbone.Model = Backbone.Router = class {
 };

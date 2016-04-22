@@ -1,4 +1,4 @@
-import dom from "../../domStub";
+import dom from "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
 // import * as F from "../../functions";
