@@ -43,7 +43,51 @@ test( 'CopyPost content getter should behave as expected', ( assert ) => {
 		testValue,
 		'Content should equal test string when jQuery selector is not empty' );
 
-	window.$.val.reset();
+	window.$.val.returns( undefined );
+
+	assert.end();
+} );
+
+test( 'CopyPost excerpt getter should behave as expected', ( assert ) => {
+
+	const testee = createTestee();
+	assert.equal(
+		testee.content,
+		'',
+		'Excerpt should be empty string when jQuery selector is empty' );
+
+	const testValue = 'LoremIpsum';
+
+	window.$.val.returns( testValue );
+
+	assert.equal(
+		testee.excerpt,
+		testValue,
+		'Excerpt should equal test string when jQuery selector is not empty' );
+
+	window.$.val.returns( undefined );
+
+	assert.end();
+} );
+
+test( 'CopyPost slug getter should behave as expected', ( assert ) => {
+
+	const testee = createTestee();
+	assert.equal(
+		testee.content,
+		'',
+		'Slug should be empty string when jQuery selector is empty' );
+
+	const testValue = 'LoremIpsum';
+
+	window.$.text.returns( testValue );
+
+	assert.equal(
+		testee.slug,
+		testValue,
+		'Slug should equal test string when jQuery selector is not empty' );
+
+	window.$.text.returns( undefined );
 
 	assert.end();
 } );

@@ -11,7 +11,8 @@ Backbone.View.prototype.listenTo = sinon.spy();
 global._ = globalStub._ = sinon.spy();
 
 const jQueryMethods = {
-	val: sinon.stub()
+	val: sinon.stub(),
+	text: sinon.stub()
 };
 let jQuery = sinon.stub();
 jQuery.returns(jQueryMethods);
