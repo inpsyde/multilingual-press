@@ -11,13 +11,16 @@ Backbone.View.prototype.listenTo = sinon.spy();
 global._ = globalStub._ = sinon.spy();
 
 const jQueryMethods = {
-	val: sinon.spy()
+	val: sinon.stub()
 };
+let jQuery = sinon.stub();
+jQuery.returns(jQueryMethods);
 
-let jQuery = function( selector ) {
-	selector = selector || false;
-	return jQueryMethods;
-};
+for ( var method in jQueryMethods ) {
+	if ( jQueryMethods.hasOwnProperty( method ) ) {
+		jQuery[ method ] = jQueryMethods[ method ];
+	}
+}
 
 window.$
 	= window.jQuery

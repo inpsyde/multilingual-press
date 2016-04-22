@@ -27,12 +27,23 @@ test( 'CopyPost is a constructor function', ( assert ) => {
 } );
 
 test( 'CopyPost content getter should behave as expected', ( assert ) => {
-	
+
 	const testee = createTestee();
 	assert.equal(
 		testee.content,
 		'',
 		'Content should be empty string when jQuery selector is empty' );
+
+	const testValue = 'LoremIpsum';
+
+	window.$.val.returns( testValue );
+
+	assert.equal(
+		testee.content,
+		testValue,
+		'Content should equal test string when jQuery selector is not empty' );
+	
+	window.$.val.restore();
 
 	assert.end();
 } );
