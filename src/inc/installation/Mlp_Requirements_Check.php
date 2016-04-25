@@ -164,7 +164,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		);
 		$this->errors[ 'installation' ] = sprintf(
 			$msg,
-			'http://make.marketpress.com/multilingualpress/2014/02/how-to-install-multi-site/'
+			'http://make.multilingualpress.pro/2014/02/how-to-install-multi-site/'
 		);
 	}
 

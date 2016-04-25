@@ -249,7 +249,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 								type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $blog_id ) ?>" />
 							<?php echo esc_html( $blog_name ); ?>
 							-
-							<?php echo esc_html( Mlp_Helpers::get_blog_language( $blog_id ) ); ?>
+							<?php echo esc_html( Mlp_Helpers::get_blog_language( $blog_id, false ) ); ?>
 						</label>
 					</p>
 					<?php

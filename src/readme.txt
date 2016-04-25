@@ -2,7 +2,7 @@
 Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont, ChriCo, dnaber-de, paddelboot
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.0
-Tested up to: 4.4
+Tested up to: 4.5
 Stable tag: 2.3.2
 
 Create a fast translation network on WordPress multisite.
@@ -24,7 +24,7 @@ Our **Language Manager** offers 174 languages, and you can edit them.
 
 We cannot guarantee free ad hoc support. Please be patient, we are a small team.
 You can follow our progress and development notices on our
-[developer blog](http://make.marketpress.com/multilingualpress/).
+[developer blog](http://make.multilingualpress.pro).
 
 = Features =
 
@@ -52,7 +52,7 @@ without affecting the output of the front-end.
 
 = Premium Support =
 
-We also offer [premium support](http://marketpress.com/product/multilingual-press-pro/) to save your time.
+We also offer [premium support](http://multilingualpress.pro/#pricing) to save your time.
 You get direct help from the developers of the plugin-and support the development.
 
 = WPML to MultilingualPress =
@@ -62,8 +62,7 @@ If you would like to switch from the WPML plugin to MultilingualPress, you can u
 an existing WPML multilingual site via XLIFF export/import for MultilingualPress.
 
 = Crafted by Inpsyde =
-The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006. And yes, we also run that
-[marketplace for premium WordPress plugins and themes](https://marketpress.com).
+The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006.
 
 == Installation ==
 
@@ -309,7 +308,7 @@ later.
 - Improved German translation.
 - Made all text domain references static strings.
 - Unify hook names. **Developers: we will change our API completely in version 1.2.** If you have
-  any questions, please [contact us](http://marketpress.com/contact/) before you write new code.
+  any questions, please [contact us](http://inpsyde.com/#contact) before you write new code.
 - Added a language list in `inc/language-list.php` to get languages in native and English writing by ISO codes.
 - Added a helper class `Mlp_Db_Replace` to update multiple tables and columns at once.
 - Many minor stability and performance improvements.
