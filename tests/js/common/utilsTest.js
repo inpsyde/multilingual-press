@@ -1,5 +1,6 @@
 import test from "tape";
 import sinon from "sinon";
+import * as F from "../functions";
 import * as Util from "../../../resources/js/common/utils";
 
 test( 'addEventListener attaches the given listener to the given element for the given event', ( assert ) => {
@@ -13,7 +14,7 @@ test( 'addEventListener attaches the given listener to the given element for the
 		attachEvent: sinon.spy()
 	};
 
-	const type = 'type';
+	const type = F.getRandomString();
 
 	const listener = sinon.spy();
 
@@ -103,7 +104,7 @@ test( 'setLocation redirects the user to the given URL', ( assert ) => {
 		}
 	};
 
-	const url = 'url';
+	const url = F.getRandomString();
 
 	Util.setLocation( url );
 
