@@ -36,6 +36,7 @@ script:
   - grunt ci
 
 notifications:
+  email: false
   slack:
     rooms: inpsyde:Qr1HAtG5koIbTu0nnwWYofSj
     on_start: never
