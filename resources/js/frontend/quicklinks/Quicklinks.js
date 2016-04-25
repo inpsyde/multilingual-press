@@ -2,6 +2,10 @@ import * as Util from "../../common/utils";
 
 // Internal pseudo-namespace for private data.
 const _this = {
+	/**
+	 * The set of utility methods.
+	 * @type {Object}
+	 */
 	Util
 };
 
@@ -15,6 +19,10 @@ class Quicklinks {
 	 * @param {Object} [Util=undefined] - Optional. The set of utility methods. Defaults to undefined.
 	 */
 	constructor( selector, Util ) {
+		/**
+		 * The form element selector.
+		 * @type {string}
+		 */
 		_this.selector = selector;
 
 		if ( Util ) {
@@ -27,7 +35,7 @@ class Quicklinks {
 	 * @returns {string} The form element selector.
 	 */
 	get selector() {
-		return _this.selector || '';
+		return _this.selector;
 	}
 
 	/**

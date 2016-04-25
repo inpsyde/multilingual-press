@@ -1,3 +1,18 @@
+// Internal pseudo-namespace for private data.
+const _this = {
+	/**
+	 * The registry data (i.e., module-per-route).
+	 * @type {Object}
+	 */
+	data: {},
+
+	/**
+	 * The module instances registered for the current admin page.
+	 * @type {Object}
+	 */
+	modules: {}
+};
+
 /**
  * The MultilingualPress Registry module.
  */
@@ -8,22 +23,10 @@ class Registry {
 	 */
 	constructor( router ) {
 		/**
-		 * The registry data (i.e., module-per-route).
-		 * @type {Object}
-		 */
-		this.data = {};
-
-		/**
-		 * The module instances registered for the current admin page.
-		 * @type {Object}
-		 */
-		this.modules = {};
-
-		/**
 		 * The router object.
 		 * @type {Router}
 		 */
-		this.router = router;
+		_this.router = router;
 	}
 
 	/**
@@ -34,7 +37,7 @@ class Registry {
 		const Constructor = data.Constructor,
 			module = new Constructor( data.options );
 
-		this.modules[ Constructor.name ] = module;
+		_this.modules[ Constructor.name ] = module;
 
 		if ( 'function' === typeof data.callback ) {
 			data.callback( module );
@@ -47,10 +50,9 @@ class Registry {
 	 */
 	createModules( modules ) {
 		for ( let route in modules ) {
-			if ( !modules.hasOwnProperty( route ) ) {
-				continue;
+			if ( modules.hasOwnProperty( route ) ) {
+				this.createModule( modules[ route ] );
 			}
-			this.createModule( modules[ route ] );
 		}
 	}
 
@@ -60,7 +62,7 @@ class Registry {
 	 * @param {Object[]} modules - The modules data.
 	 */
 	initializeRoute( route, modules ) {
-		this.router.route( route, route, () => this.createModules( modules ) );
+		_this.router.route( route, route, () => this.createModules( modules ) );
 	}
 
 	/**
@@ -68,13 +70,13 @@ class Registry {
 	 * @returns {Object} The module instances registered for the current admin page.
 	 */
 	initializeRoutes() {
-		for ( let route in this.data ) {
-			if ( !this.data.hasOwnProperty( route ) ) {
-				continue;
+		for ( let route in _this.data ) {
+			if ( _this.data.hasOwnProperty( route ) ) {
+				this.initializeRoute( route, _this.data[ route ] );
 			}
-			this.initializeRoute( route, this.data[ route ] );
 		}
-		return this.modules;
+
+		return _this.modules;
 	}
 
 	/**
@@ -84,11 +86,11 @@ class Registry {
 	 * @returns {number} The number of the currently registered routes.
 	 */
 	registerModuleForRoute( module, route ) {
-		if ( ! this.data[ route ] ) {
-			this.data[ route ] = [];
+		if ( ! _this.data[ route ] ) {
+			_this.data[ route ] = [];
 		}
 
-		return this.data[ route ].push( module );
+		return _this.data[ route ].push( module );
 	}
 }
 

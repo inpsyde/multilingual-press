@@ -14,8 +14,16 @@ class Controller {
 	 * @param {Object} settings - The controller settings.
 	 */
 	constructor( registry, settings ) {
+		/**
+		 * The registry object.
+		 * @type {Registry}
+		 */
 		_this.registry = registry;
 
+		/**
+		 * The controller settings.
+		 * @type {Object}
+		 */
 		_this.settings = settings;
 	}
 
