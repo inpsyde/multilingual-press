@@ -1,3 +1,7 @@
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+const _this = {};
+
 /**
  * MultilingualPress UserBackEndLanguage module.
  */
@@ -10,17 +14,25 @@ class UserBackEndLanguage extends Backbone.View {
 		super( options );
 
 		/**
-		 * The module settings.
+		 * The settings.
 		 * @type {Object}
 		 */
-		this.moduleSettings = options.moduleSettings;
+		_this.settings = options.settings;
+	}
+
+	/**
+	 * Returns the settings.
+	 * @returns {Object} The settings.
+	 */
+	get settings() {
+		return _this.settings;
 	}
 
 	/**
 	 * Sets the Site Language value to what it should be.
 	 */
 	updateSiteLanguage() {
-		this.$el.val( this.moduleSettings.locale );
+		this.$el.val( this.settings.locale );
 	}
 }
 

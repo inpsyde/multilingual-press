@@ -1,6 +1,10 @@
 const $ = window.jQuery;
 const { _ } = window;
 
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+const _this = {};
+
 /**
  * The MultilingualPress CopyPost module.
  */
@@ -16,44 +20,39 @@ class CopyPost extends Backbone.View {
 		 * The jQuery object representing the input element that contains the currently edited post's content.
 		 * @type {jQuery}
 		 */
-		this.$content = $( '#content' );
+		_this.$content = $( '#content' );
 
 		/**
 		 * The jQuery object representing the input element that contains the currently edited post's excerpt.
 		 * @type {jQuery}
 		 */
-		this.$excerpt = $( '#excerpt' );
+		_this.$excerpt = $( '#excerpt' );
 
 		/**
 		 * The jQuery object representing the input element that contains the currently edited post's title.
 		 * @type {jQuery}
 		 */
-		this.$title = $( '#title' );
+		_this.$title = $( '#title' );
 
 		/**
 		 * The event manager object.
 		 * @type {EventManager}
 		 */
-		this.EventManager = options.EventManager;
-
-		/**
-		 * The model object.
-		 * @type {Model}
-		 */
-		this.model = options.model;
-		this.listenTo( this.model, 'change', this.updatePostData );
-
-		/**
-		 * The module settings.
-		 * @type {Object}
-		 */
-		this.moduleSettings = options.moduleSettings;
+		_this.EventManager = options.EventManager;
 
 		/**
 		 * The currently edited post's ID.
 		 * @type {number}
 		 */
-		this.postID = Number( $( '#post_ID' ).val() );
+		_this.postID = Number( $( '#post_ID' ).val() );
+
+		/**
+		 * The settings.
+		 * @type {Object}
+		 */
+		_this.settings = options.settings;
+
+		this.listenTo( this.model, 'change', this.updatePostData );
 	}
 
 	/**
@@ -61,7 +60,7 @@ class CopyPost extends Backbone.View {
 	 * @returns {string} The post content.
 	 */
 	get content() {
-		return this.$content.val() || '';
+		return _this.$content.val() || '';
 	}
 
 	/**
@@ -69,7 +68,23 @@ class CopyPost extends Backbone.View {
 	 * @returns {string} The post excerpt.
 	 */
 	get excerpt() {
-		return this.$excerpt.val() || '';
+		return _this.$excerpt.val() || '';
+	}
+
+	/**
+	 * Returns the currently edited post's ID.
+	 * @returns {number} The currently edited post's ID.
+	 */
+	get postID() {
+		return _this.postID;
+	}
+
+	/**
+	 * Returns the settings.
+	 * @returns {Object} The settings.
+	 */
+	get settings() {
+		return _this.settings;
 	}
 
 	/**
@@ -86,7 +101,7 @@ class CopyPost extends Backbone.View {
 	 * @returns {string} The post title.
 	 */
 	get title() {
-		return this.$title.val() || '';
+		return _this.$title.val() || '';
 	}
 
 	/**
@@ -108,16 +123,16 @@ class CopyPost extends Backbone.View {
 		 * Triggers the event before copying post data, and passes an object for adding custom data, and the current
 		 * site and post IDs and the remote site ID.
 		 */
-		this.EventManager.trigger(
+		_this.EventManager.trigger(
 			'CopyPost:copyPostData',
 			data,
-			this.moduleSettings.siteID,
+			this.settings.siteID,
 			this.postID,
 			remoteSiteID
 		);
 
 		data = _.extend( data, {
-			action: this.moduleSettings.action,
+			action: this.settings.action,
 			current_post_id: this.postID,
 			remote_site_id: remoteSiteID,
 			title: this.title,
@@ -178,7 +193,7 @@ class CopyPost extends Backbone.View {
 		/**
 		 * Triggers the event for updating the post, and passes the according data.
 		 */
-		this.EventManager.trigger( 'CopyPost:updatePostData', data );
+		_this.EventManager.trigger( 'CopyPost:updatePostData', data );
 
 		this.fadeInMetaBox( data.siteID );
 

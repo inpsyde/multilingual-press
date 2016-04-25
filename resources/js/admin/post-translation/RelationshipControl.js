@@ -1,5 +1,15 @@
 const $ = window.jQuery;
 
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+const _this = {
+	/**
+	 * Array of jQuery objects representing meta boxes with unsaved relationships.
+	 * @type {jQuery[]}
+	 */
+	unsavedRelationships: []
+};
+
 /**
  * The MultilingualPress RelationshipControl module.
  */
@@ -15,32 +25,34 @@ class RelationshipControl extends Backbone.View {
 		 * The event manager object.
 		 * @type {EventManager}
 		 */
-		this.EventManager = options.EventManager;
+		_this.EventManager = options.EventManager;
 
 		/**
-		 * The module settings.
+		 * The settings.
 		 * @type {Object}
 		 */
-		this.moduleSettings = options.moduleSettings;
-
-		/**
-		 * Array of jQuery objects representing meta boxes with unsaved relationships.
-		 * @type {jQuery[]}
-		 */
-		this.unsavedRelationships = [];
+		_this.settings = options.settings;
 
 		/**
 		 * The set of utility methods.
 		 * @type {Object}
 		 */
-		this.Util = options.Util;
+		_this.Util = options.Util;
+	}
+
+	/**
+	 * Returns the settings.
+	 * @returns {Object} The settings.
+	 */
+	get settings() {
+		return _this.settings;
 	}
 
 	/**
 	 * Initializes the event handlers for all custom relationship control events.
 	 */
 	initializeEventHandlers() {
-		this.EventManager.on( {
+		_this.EventManager.on( {
 			'RelationshipControl:connectExistingPost': this.connectExistingPost,
 			'RelationshipControl:connectNewPost': this.connectNewPost,
 			'RelationshipControl:disconnectPost': this.disconnectPost
@@ -61,10 +73,10 @@ class RelationshipControl extends Backbone.View {
 			$button.prop( 'disabled', 'disabled' );
 
 			if ( -1 !== index ) {
-				this.unsavedRelationships.splice( index, 1 );
+				_this.unsavedRelationships.splice( index, 1 );
 			}
 		} else if ( -1 === index ) {
-			this.unsavedRelationships.push( $metaBox );
+			_this.unsavedRelationships.push( $metaBox );
 
 			$button.removeAttr( 'disabled' );
 		}
@@ -78,7 +90,7 @@ class RelationshipControl extends Backbone.View {
 	findMetaBox( $metaBox ) {
 		var metaBoxIndex = -1;
 
-		$.each( this.unsavedRelationships, ( index, element ) => {
+		$.each( _this.unsavedRelationships, ( index, element ) => {
 			if ( element === $metaBox ) {
 				metaBoxIndex = index;
 			}
@@ -92,7 +104,7 @@ class RelationshipControl extends Backbone.View {
 	 * @param {Event} event - The click event of the publish button.
 	 */
 	confirmUnsavedRelationships( event ) {
-		if ( this.unsavedRelationships.length && ! window.confirm( this.moduleSettings.L10n.unsavedRelationships ) ) {
+		if ( _this.unsavedRelationships.length && ! window.confirm( this.settings.L10n.unsavedRelationships ) ) {
 			event.preventDefault();
 		}
 	}
@@ -116,7 +128,7 @@ class RelationshipControl extends Backbone.View {
 		/**
 		 * Triggers the according event for the current relationship action, and passes data and the event's name.
 		 */
-		this.EventManager.trigger( 'RelationshipControl:' + eventName, {
+		_this.EventManager.trigger( 'RelationshipControl:' + eventName, {
 			action: 'mlp_rc_' + action,
 			remote_site_id: remoteSiteID,
 			remote_post_id: $button.data( 'remote-post-id' ),
@@ -173,7 +185,7 @@ class RelationshipControl extends Backbone.View {
 		const newPostID = Number( $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() );
 
 		if ( ! newPostID ) {
-			window.alert( this.moduleSettings.L10n.noPostSelected );
+			window.alert( this.settings.L10n.noPostSelected );
 
 			return false;
 		}
@@ -194,7 +206,7 @@ class RelationshipControl extends Backbone.View {
 			type: 'POST',
 			url: window.ajaxurl,
 			data,
-			success: this.Util.reloadLocation,
+			success: _this.Util.reloadLocation,
 			async: false
 		} );
 	}

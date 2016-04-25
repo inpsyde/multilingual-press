@@ -1,4 +1,4 @@
 /**
  * The MultilingualPress EventManager module.
  */
-export const EventManager = window._.extend( {}, Backbone.Events );
+export default window._.extend( {}, Backbone.Events );

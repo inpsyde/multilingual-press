@@ -180,7 +180,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 		$threshold = max( 1, $threshold );
 
 		wp_localize_script( 'mlp-admin', 'mlpRemotePostSearchSettings', array(
-			'searchThreshold' => $threshold,
+			'threshold' => $threshold,
 		) );
 	}
 

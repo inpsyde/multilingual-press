@@ -1,14 +1,6 @@
-import * as Util from "../../common/utils";
-
 // Internal pseudo-namespace for private data.
 // NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
-const _this = {
-	/**
-	 * The set of utility methods.
-	 * @type {Object}
-	 */
-	Util
-};
+const _this = {};
 
 /**
  * The MultilingualPress Quicklinks module.
@@ -17,7 +9,7 @@ class Quicklinks {
 	/**
 	 * Constructor. Sets up the properties.
 	 * @param {string} selector - The form element selector.
-	 * @param {Object} [Util=undefined] - Optional. The set of utility methods. Defaults to undefined.
+	 * @param {Object} Util - The set of utility methods.
 	 */
 	constructor( selector, Util ) {
 		/**
@@ -26,9 +18,11 @@ class Quicklinks {
 		 */
 		_this.selector = selector;
 
-		if ( Util ) {
-			_this.Util = Util;
-		}
+		/**
+		 * The set of utility methods.
+		 * @type {Object}
+		 */
+		_this.Util = Util;
 	}
 
 	/**

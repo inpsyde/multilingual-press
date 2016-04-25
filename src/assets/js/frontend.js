@@ -58,7 +58,7 @@ var MLP = {
   * The MultilingualPress Quicklinks instance.
   * @type {Quicklinks}
   */
-	quicklinks: new _Quicklinks2.default('#mlp-quicklink-form'),
+	quicklinks: new _Quicklinks2.default('#mlp-quicklink-form', Util),
 
 	/**
   * The set of utility methods.
@@ -83,23 +83,11 @@ exports.__esModule = true;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _utils = require('../../common/utils');
-
-var Util = _interopRequireWildcard(_utils);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // Internal pseudo-namespace for private data.
 // NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
-var _this = {
-	/**
-  * The set of utility methods.
-  * @type {Object}
-  */
-	Util: Util
-};
+var _this = {};
 
 /**
  * The MultilingualPress Quicklinks module.
@@ -109,7 +97,7 @@ var Quicklinks = function () {
 	/**
   * Constructor. Sets up the properties.
   * @param {string} selector - The form element selector.
-  * @param {Object} [Util=undefined] - Optional. The set of utility methods. Defaults to undefined.
+  * @param {Object} Util - The set of utility methods.
   */
 
 	function Quicklinks(selector, Util) {
@@ -121,9 +109,11 @@ var Quicklinks = function () {
    */
 		_this.selector = selector;
 
-		if (Util) {
-			_this.Util = Util;
-		}
+		/**
+   * The set of utility methods.
+   * @type {Object}
+   */
+		_this.Util = Util;
 	}
 
 	/**
@@ -188,4 +178,4 @@ var Quicklinks = function () {
 
 exports.default = Quicklinks;
 
-},{"../../common/utils":1}]},{},[2]);
+},{}]},{},[2]);

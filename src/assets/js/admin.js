@@ -17,6 +17,8 @@ var _Controller2 = _interopRequireDefault(_Controller);
 
 var _EventManager = require("./admin/core/EventManager");
 
+var _EventManager2 = _interopRequireDefault(_EventManager);
+
 var _Model = require("./admin/core/Model");
 
 var _Model2 = _interopRequireDefault(_Model);
@@ -115,7 +117,7 @@ controller.registerModule('nav-menus.php', _NavMenus2.default, {
 		'click #submit-mlp-language': 'sendRequest'
 	},
 	model: new _Model2.default({ urlRoot: ajaxURL }),
-	moduleSettings: settings
+	settings: settings
 });
 
 // Register the AddNewSite module for the Add New Site network admin page.
@@ -130,24 +132,24 @@ controller.registerModule('network/site-new.php', _AddNewSite2.default, {
 // Register the CopyPost module for the Edit Post and Add New Post admin pages.
 controller.registerModule(['post.php', 'post-new.php'], _CopyPost2.default, {
 	el: '#post-body',
-	EventManager: _EventManager.EventManager,
+	EventManager: _EventManager2.default,
 	events: {
 		'click .mlp-copy-post-button': 'copyPostData'
 	},
 	model: new _Model2.default({ urlRoot: ajaxURL }),
-	moduleSettings: F.getSettings(_CopyPost2.default)
+	settings: F.getSettings(_CopyPost2.default)
 });
 
 // Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
 controller.registerModule(['post.php', 'post-new.php'], _RelationshipControl2.default, {
 	el: '#post-body',
-	EventManager: _EventManager.EventManager,
+	EventManager: _EventManager2.default,
 	events: {
 		'change .mlp-rc-actions input': 'updateUnsavedRelationships',
 		'click #publish': 'confirmUnsavedRelationships',
 		'click .mlp-save-relationship-button': 'saveRelationship'
 	},
-	moduleSettings: F.getSettings(_RelationshipControl2.default),
+	settings: F.getSettings(_RelationshipControl2.default),
 	Util: Util
 }, function (module) {
 	return module.initializeEventHandlers();
@@ -161,7 +163,7 @@ controller.registerModule(['post.php', 'post-new.php'], _RemotePostSearch2.defau
 		'keyup .mlp-search-field': 'reactToInput'
 	},
 	model: new _Model2.default({ urlRoot: ajaxURL }),
-	moduleSettings: F.getSettings(_RemotePostSearch2.default)
+	settings: F.getSettings(_RemotePostSearch2.default)
 }, function (module) {
 	return module.initializeResults();
 });
@@ -177,7 +179,7 @@ controller.registerModule(['edit-tags.php', 'term.php'], _TermTranslator2.defaul
 // Register the UserBackEndLanguage module for the General Settings admin page.
 controller.registerModule('options-general.php', _UserBackEndLanguage2.default, {
 	el: '#WPLANG',
-	moduleSettings: F.getSettings(_UserBackEndLanguage2.default)
+	settings: F.getSettings(_UserBackEndLanguage2.default)
 }, function (module) {
 	return module.updateSiteLanguage();
 });
@@ -323,7 +325,7 @@ exports.__esModule = true;
 /**
  * The MultilingualPress EventManager module.
  */
-var EventManager = exports.EventManager = window._.extend({}, Backbone.Events);
+exports.default = window._.extend({}, Backbone.Events);
 
 },{}],4:[function(require,module,exports){
 "use strict";
@@ -684,6 +686,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var $ = window.jQuery;
 
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+var _this = {};
+
 /**
  * The MultilingualPress NavMenus module.
  */
@@ -706,9 +712,9 @@ var NavMenus = function (_Backbone$View) {
    * @type {jQuery}
    */
 
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		_this.$languages = _this.$el.find('li [type="checkbox"]');
+		_this.$languages = _this2.$el.find('li [type="checkbox"]');
 
 		/**
    * The jQuery object representing the input element that contains the currently edited menu's ID.
@@ -726,32 +732,27 @@ var NavMenus = function (_Backbone$View) {
    * The jQuery object representing the Languages meta box spinner.
    * @type {jQuery}
    */
-		_this.$spinner = _this.$el.find('.spinner');
+		_this.$spinner = _this2.$el.find('.spinner');
 
 		/**
    * The jQuery object representing the Languages meta box submit button.
    * @type {jQuery}
    */
-		_this.$submit = _this.$el.find('#submit-mlp-language');
+		_this.$submit = _this2.$el.find('#submit-mlp-language');
 
 		/**
-   * The model object.
-   * @type {Model}
-   */
-		_this.model = options.model;
-		_this.listenTo(_this.model, 'change', _this.render);
-
-		/**
-   * The module settings.
+   * The settings.
    * @type {Object}
    */
-		_this.moduleSettings = options.moduleSettings;
-		return _this;
+		_this.settings = options.settings;
+
+		_this2.listenTo(_this2.model, 'change', _this2.render);
+		return _this2;
 	}
 
 	/**
-  * Returns the site IDs for the checked languages in the Languages meta box.
-  * @returns {number[]} The site IDs.
+  * Returns the settings.
+  * @returns {Object} The settings.
   */
 
 
@@ -762,22 +763,38 @@ var NavMenus = function (_Backbone$View) {
 
 	NavMenus.prototype.sendRequest = function sendRequest(event) {
 		var data = {
-			action: this.moduleSettings.action,
-			menu: this.$menu.val(),
-			mlp_sites: this.sites
+			action: this.settings.action,
+			menu: _this.$menu.val(),
+			mlp_sites: this.getSiteIDs()
 		};
-		data[this.moduleSettings.nonceName] = this.moduleSettings.nonce;
+		data[this.settings.nonceName] = this.settings.nonce;
 
 		event.preventDefault();
 
-		this.$submit.prop('disabled', true);
+		_this.$submit.prop('disabled', true);
 
-		this.$spinner.addClass('is-active');
+		_this.$spinner.addClass('is-active');
 
 		this.model.fetch({
 			data: data,
 			processData: true
 		});
+	};
+
+	/**
+  * Returns the site IDs for the checked languages in the Languages meta box.
+  * @returns {number[]} The site IDs.
+  */
+
+
+	NavMenus.prototype.getSiteIDs = function getSiteIDs() {
+		var ids = [];
+
+		_this.$languages.filter(':checked').each(function (index, element) {
+			return ids.push(Number($(element).val()));
+		});
+
+		return ids;
 	};
 
 	/**
@@ -787,26 +804,20 @@ var NavMenus = function (_Backbone$View) {
 
 	NavMenus.prototype.render = function render() {
 		if (this.model.get('success')) {
-			this.$menuToEdit.append(this.model.get('data'));
+			_this.$menuToEdit.append(this.model.get('data'));
 		}
 
-		this.$languages.prop('checked', false);
+		_this.$languages.prop('checked', false);
 
-		this.$spinner.removeClass('is-active');
+		_this.$spinner.removeClass('is-active');
 
-		this.$submit.prop('disabled', false);
+		_this.$submit.prop('disabled', false);
 	};
 
 	_createClass(NavMenus, [{
-		key: 'sites',
+		key: 'settings',
 		get: function get() {
-			var ids = [];
-
-			this.$languages.filter(':checked').each(function (index, element) {
-				return ids.push(Number($(element).val()));
-			});
-
-			return ids;
+			return _this.settings;
 		}
 	}]);
 
@@ -829,6 +840,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var $ = window.jQuery;
 var _window = window;
 var _ = _window._;
+
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+
+var _this = {};
 
 /**
  * MultilingualPress AddNewSite module.
@@ -853,18 +869,12 @@ var AddNewSite = function (_Backbone$View) {
    * TODO: Remove the following (and adapt the according PHP parts) with the release of WordPress 4.5.0 + 2.
    */
 
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		var markup = $('#mlp-add-new-site-template').html() || '';
 		if ('' !== markup) {
-			/**
-    * The templating function.
-    * @type {Function}
-    */
-			_this.template = _.template(markup);
-
 			// FIRST render the template, THEN set up the properties using elements that just got injected into the DOM.
-			_this.$el.find('.submit').before(_this.template());
+			_this2.$el.find('.submit').before(_.template(markup)());
 		}
 
 		/**
@@ -878,7 +888,7 @@ var AddNewSite = function (_Backbone$View) {
    * @type {jQuery}
    */
 		_this.$pluginsRow = $('#mlp-activate-plugins').closest('tr');
-		return _this;
+		return _this2;
 	}
 
 	/**
@@ -891,14 +901,14 @@ var AddNewSite = function (_Backbone$View) {
 	AddNewSite.prototype.adaptLanguage = function adaptLanguage(event) {
 		var language = this.getLanguage($(event.target));
 
-		if (this.$language.find('[value="' + language + '"]').length) {
-			this.$language.val(language);
+		if (_this.$language.find('[value="' + language + '"]').length) {
+			_this.$language.val(language);
 		}
 	};
 
 	/**
   * Returns the selected language of the given select element.
-  * @param {HTMLElement} $select - A select element.
+  * @param {jQuery} $select - A select element.
   * @returns {string} The selected language.
   */
 
@@ -920,7 +930,7 @@ var AddNewSite = function (_Backbone$View) {
 
 
 	AddNewSite.prototype.togglePluginsRow = function togglePluginsRow(event) {
-		this.$pluginsRow.toggle(0 < $(event.target).val());
+		_this.$pluginsRow.toggle(0 < $(event.target).val());
 	};
 
 	return AddNewSite;
@@ -945,6 +955,11 @@ var $ = window.jQuery;
 var _window = window;
 var _ = _window._;
 
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+
+var _this = {};
+
 /**
  * The MultilingualPress CopyPost module.
  */
@@ -967,7 +982,7 @@ var CopyPost = function (_Backbone$View) {
    * @type {jQuery}
    */
 
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.$content = $('#content');
 
@@ -990,24 +1005,19 @@ var CopyPost = function (_Backbone$View) {
 		_this.EventManager = options.EventManager;
 
 		/**
-   * The model object.
-   * @type {Model}
-   */
-		_this.model = options.model;
-		_this.listenTo(_this.model, 'change', _this.updatePostData);
-
-		/**
-   * The module settings.
-   * @type {Object}
-   */
-		_this.moduleSettings = options.moduleSettings;
-
-		/**
    * The currently edited post's ID.
    * @type {number}
    */
 		_this.postID = Number($('#post_ID').val());
-		return _this;
+
+		/**
+   * The settings.
+   * @type {Object}
+   */
+		_this.settings = options.settings;
+
+		_this2.listenTo(_this2.model, 'change', _this2.updatePostData);
+		return _this2;
 	}
 
 	/**
@@ -1036,10 +1046,10 @@ var CopyPost = function (_Backbone$View) {
    * Triggers the event before copying post data, and passes an object for adding custom data, and the current
    * site and post IDs and the remote site ID.
    */
-		this.EventManager.trigger('CopyPost:copyPostData', data, this.moduleSettings.siteID, this.postID, remoteSiteID);
+		_this.EventManager.trigger('CopyPost:copyPostData', data, this.settings.siteID, this.postID, remoteSiteID);
 
 		data = _.extend(data, {
-			action: this.moduleSettings.action,
+			action: this.settings.action,
 			current_post_id: this.postID,
 			remote_site_id: remoteSiteID,
 			title: this.title,
@@ -1106,7 +1116,7 @@ var CopyPost = function (_Backbone$View) {
 		/**
    * Triggers the event for updating the post, and passes the according data.
    */
-		this.EventManager.trigger('CopyPost:updatePostData', data);
+		_this.EventManager.trigger('CopyPost:updatePostData', data);
 
 		this.fadeInMetaBox(data.siteID);
 
@@ -1151,7 +1161,7 @@ var CopyPost = function (_Backbone$View) {
 	_createClass(CopyPost, [{
 		key: 'content',
 		get: function get() {
-			return this.$content.val() || '';
+			return _this.$content.val() || '';
 		}
 
 		/**
@@ -1162,7 +1172,29 @@ var CopyPost = function (_Backbone$View) {
 	}, {
 		key: 'excerpt',
 		get: function get() {
-			return this.$excerpt.val() || '';
+			return _this.$excerpt.val() || '';
+		}
+
+		/**
+   * Returns the currently edited post's ID.
+   * @returns {number} The currently edited post's ID.
+   */
+
+	}, {
+		key: 'postID',
+		get: function get() {
+			return _this.postID;
+		}
+
+		/**
+   * Returns the settings.
+   * @returns {Object} The settings.
+   */
+
+	}, {
+		key: 'settings',
+		get: function get() {
+			return _this.settings;
 		}
 
 		/**
@@ -1185,7 +1217,7 @@ var CopyPost = function (_Backbone$View) {
 	}, {
 		key: 'title',
 		get: function get() {
-			return this.$title.val() || '';
+			return _this.$title.val() || '';
 		}
 	}]);
 
@@ -1199,6 +1231,8 @@ exports.default = CopyPost;
 
 exports.__esModule = true;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1206,6 +1240,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var $ = window.jQuery;
+
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+var _this = {
+	/**
+  * Array of jQuery objects representing meta boxes with unsaved relationships.
+  * @type {jQuery[]}
+  */
+	unsavedRelationships: []
+};
 
 /**
  * The MultilingualPress RelationshipControl module.
@@ -1229,37 +1273,36 @@ var RelationshipControl = function (_Backbone$View) {
    * @type {EventManager}
    */
 
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.EventManager = options.EventManager;
 
 		/**
-   * The module settings.
+   * The settings.
    * @type {Object}
    */
-		_this.moduleSettings = options.moduleSettings;
-
-		/**
-   * Array of jQuery objects representing meta boxes with unsaved relationships.
-   * @type {jQuery[]}
-   */
-		_this.unsavedRelationships = [];
+		_this.settings = options.settings;
 
 		/**
    * The set of utility methods.
    * @type {Object}
    */
 		_this.Util = options.Util;
-		return _this;
+		return _this2;
 	}
+
+	/**
+  * Returns the settings.
+  * @returns {Object} The settings.
+  */
+
 
 	/**
   * Initializes the event handlers for all custom relationship control events.
   */
 
-
 	RelationshipControl.prototype.initializeEventHandlers = function initializeEventHandlers() {
-		this.EventManager.on({
+		_this.EventManager.on({
 			'RelationshipControl:connectExistingPost': this.connectExistingPost,
 			'RelationshipControl:connectNewPost': this.connectNewPost,
 			'RelationshipControl:disconnectPost': this.disconnectPost
@@ -1282,10 +1325,10 @@ var RelationshipControl = function (_Backbone$View) {
 			$button.prop('disabled', 'disabled');
 
 			if (-1 !== index) {
-				this.unsavedRelationships.splice(index, 1);
+				_this.unsavedRelationships.splice(index, 1);
 			}
 		} else if (-1 === index) {
-			this.unsavedRelationships.push($metaBox);
+			_this.unsavedRelationships.push($metaBox);
 
 			$button.removeAttr('disabled');
 		}
@@ -1301,7 +1344,7 @@ var RelationshipControl = function (_Backbone$View) {
 	RelationshipControl.prototype.findMetaBox = function findMetaBox($metaBox) {
 		var metaBoxIndex = -1;
 
-		$.each(this.unsavedRelationships, function (index, element) {
+		$.each(_this.unsavedRelationships, function (index, element) {
 			if (element === $metaBox) {
 				metaBoxIndex = index;
 			}
@@ -1317,7 +1360,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 
 	RelationshipControl.prototype.confirmUnsavedRelationships = function confirmUnsavedRelationships(event) {
-		if (this.unsavedRelationships.length && !window.confirm(this.moduleSettings.L10n.unsavedRelationships)) {
+		if (_this.unsavedRelationships.length && !window.confirm(this.settings.L10n.unsavedRelationships)) {
 			event.preventDefault();
 		}
 	};
@@ -1343,7 +1386,7 @@ var RelationshipControl = function (_Backbone$View) {
 		/**
    * Triggers the according event for the current relationship action, and passes data and the event's name.
    */
-		this.EventManager.trigger('RelationshipControl:' + eventName, {
+		_this.EventManager.trigger('RelationshipControl:' + eventName, {
 			action: 'mlp_rc_' + action,
 			remote_site_id: remoteSiteID,
 			remote_post_id: $button.data('remote-post-id'),
@@ -1408,7 +1451,7 @@ var RelationshipControl = function (_Backbone$View) {
 		var newPostID = Number($('input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked').val());
 
 		if (!newPostID) {
-			window.alert(this.moduleSettings.L10n.noPostSelected);
+			window.alert(this.settings.L10n.noPostSelected);
 
 			return false;
 		}
@@ -1431,10 +1474,17 @@ var RelationshipControl = function (_Backbone$View) {
 			type: 'POST',
 			url: window.ajaxurl,
 			data: data,
-			success: this.Util.reloadLocation,
+			success: _this.Util.reloadLocation,
 			async: false
 		});
 	};
+
+	_createClass(RelationshipControl, [{
+		key: 'settings',
+		get: function get() {
+			return _this.settings;
+		}
+	}]);
 
 	return RelationshipControl;
 }(Backbone.View);
@@ -1446,6 +1496,8 @@ exports.default = RelationshipControl;
 
 exports.__esModule = true;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1453,6 +1505,22 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var $ = window.jQuery;
+
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+var _this = {
+	/**
+  * Array holding the default search result HTML strings.
+  * @type {string[]}
+  */
+	defaultResults: [],
+
+	/**
+  * Array holding jQuery objects representing the search result containers.
+  * @type {jQuery[]}
+  */
+	resultsContainers: []
+};
 
 /**
  * The MultilingualPress RemotePostSearch module.
@@ -1472,54 +1540,42 @@ var RemotePostSearch = function (_Backbone$View) {
 		_classCallCheck(this, RemotePostSearch);
 
 		/**
-   * Array holding the default search result HTML strings.
-   * @type {string[]}
-   */
-
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
-
-		_this.defaultResults = [];
-
-		/**
-   * Array holding jQuery objects representing the search result containers.
-   * @type {jQuery[]}
-   */
-		_this.resultsContainers = [];
-
-		/**
-   * The module settings.
+   * The settings.
    * @type {Object}
    */
-		_this.moduleSettings = options.moduleSettings;
+
+		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+
+		_this.settings = options.settings;
 
 		/**
    * Minimum number of characters required to fire the remote post search.
    * @type {number}
    */
-		_this.searchThreshold = parseInt(_this.moduleSettings.searchThreshold, 10);
+		_this.threshold = parseInt(options.settings.threshold, 10);
 
-		/**
-   * The model object.
-   * @type {Model}
-   */
-		_this.model = options.model;
-		_this.listenTo(_this.model, 'change', _this.render);
-		return _this;
+		_this2.listenTo(_this2.model, 'change', _this2.render);
+		return _this2;
 	}
 
 	/**
-  * Initializes both the default search result view as well as the result container for the given element.
-  * @param {Element} element - The HTML element.
+  * Returns the settings.
+  * @returns {Object} The settings.
   */
 
+
+	/**
+  * Initializes both the default search result view as well as the result container for the given element.
+  * @param {HTMLElement} element - The HTML element.
+  */
 
 	RemotePostSearch.prototype.initializeResult = function initializeResult(element) {
 		var $element = $(element),
 		    $resultsContainer = $('#' + $element.data('results-container-id')),
 		    siteID = $element.data('remote-site-id');
 
-		this.defaultResults[siteID] = $resultsContainer.html();
-		this.resultsContainers[siteID] = $resultsContainer;
+		_this.defaultResults[siteID] = $resultsContainer.html();
+		_this.resultsContainers[siteID] = $resultsContainer;
 	};
 
 	/**
@@ -1528,10 +1584,10 @@ var RemotePostSearch = function (_Backbone$View) {
 
 
 	RemotePostSearch.prototype.initializeResults = function initializeResults() {
-		var _this2 = this;
+		var _this3 = this;
 
 		$('.mlp-search-field').each(function (index, element) {
-			return _this2.initializeResult(element);
+			return _this3.initializeResult(element);
 		});
 	};
 
@@ -1554,7 +1610,7 @@ var RemotePostSearch = function (_Backbone$View) {
 
 
 	RemotePostSearch.prototype.reactToInput = function reactToInput(event) {
-		var _this3 = this;
+		var _this4 = this;
 
 		var $input = $(event.target),
 		    value = $.trim($input.val() || '');
@@ -1572,10 +1628,10 @@ var RemotePostSearch = function (_Backbone$View) {
 		remoteSiteID = $input.data('remote-site-id');
 
 		if ('' === value) {
-			this.resultsContainers[remoteSiteID].html(this.defaultResults[remoteSiteID]);
-		} else if (value.length >= this.searchThreshold) {
+			_this.resultsContainers[remoteSiteID].html(_this.defaultResults[remoteSiteID]);
+		} else if (value.length >= _this.threshold) {
 			this.reactToInputTimer = setTimeout(function () {
-				_this3.model.fetch({
+				_this4.model.fetch({
 					data: {
 						action: 'mlp_rc_remote_post_search',
 						remote_site_id: remoteSiteID,
@@ -1601,13 +1657,20 @@ var RemotePostSearch = function (_Backbone$View) {
 
 		if (this.model.get('success')) {
 			data = this.model.get('data');
-			this.resultsContainers[data.remoteSiteID].html(data.html);
+			_this.resultsContainers[data.remoteSiteID].html(data.html);
 
 			return true;
 		}
 
 		return false;
 	};
+
+	_createClass(RemotePostSearch, [{
+		key: 'settings',
+		get: function get() {
+			return _this.settings;
+		}
+	}]);
 
 	return RemotePostSearch;
 }(Backbone.View);
@@ -1619,6 +1682,8 @@ exports.default = RemotePostSearch;
 
 exports.__esModule = true;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1626,6 +1691,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var $ = window.jQuery;
+
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+var _this = {
+	/**
+  * Flag to indicate an ongoing term propagation.
+  * @type {boolean}
+  */
+	isPropagating: false
+};
 
 /**
  * MultilingualPress TermTranslator module.
@@ -1649,46 +1724,45 @@ var TermTranslator = function (_Backbone$View) {
    * @type {jQuery}
    */
 
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		_this.$selects = _this.$el.find('select');
-
-		/**
-   * Flag to indicate an ongoing term propagation.
-   * @type {boolean}
-   */
-		_this.isPropagating = false;
-		return _this;
+		_this.$selects = _this2.$el.find('select');
+		return _this2;
 	}
+
+	/**
+  * Returns the jQuery object representing the MultilingualPress term selects.
+  * @returns {jQuery}
+  */
+
 
 	/**
   * Propagates the new value of one term select element to all other term select elements.
   * @param {Event} event - The change event of a term select element.
   */
 
-
 	TermTranslator.prototype.propagateSelectedTerm = function propagateSelectedTerm(event) {
-		var _this2 = this;
+		var _this3 = this;
 
 		var $select = void 0,
 		    relation = void 0;
 
-		if (this.isPropagating) {
+		if (_this.isPropagating) {
 			return;
 		}
 
-		this.isPropagating = true;
+		_this.isPropagating = true;
 
 		$select = $(event.target);
 
 		relation = this.getSelectedRelation($select);
 		if ('' !== relation) {
 			this.$selects.not($select).each(function (index, element) {
-				return _this2.selectTerm($(element), relation);
+				return _this3.selectTerm($(element), relation);
 			});
 		}
 
-		this.isPropagating = false;
+		_this.isPropagating = false;
 	};
 
 	/**
@@ -1719,6 +1793,13 @@ var TermTranslator = function (_Backbone$View) {
 		}
 	};
 
+	_createClass(TermTranslator, [{
+		key: '$selects',
+		get: function get() {
+			return _this.$selects;
+		}
+	}]);
+
 	return TermTranslator;
 }(Backbone.View);
 
@@ -1729,11 +1810,17 @@ exports.default = TermTranslator;
 
 exports.__esModule = true;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+var _this = {};
 
 /**
  * MultilingualPress UserBackEndLanguage module.
@@ -1753,24 +1840,36 @@ var UserBackEndLanguage = function (_Backbone$View) {
 		_classCallCheck(this, UserBackEndLanguage);
 
 		/**
-   * The module settings.
+   * The settings.
    * @type {Object}
    */
 
-		var _this = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
+		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
-		_this.moduleSettings = options.moduleSettings;
-		return _this;
+		_this.settings = options.settings;
+		return _this2;
 	}
+
+	/**
+  * Returns the settings.
+  * @returns {Object} The settings.
+  */
+
 
 	/**
   * Sets the Site Language value to what it should be.
   */
 
-
 	UserBackEndLanguage.prototype.updateSiteLanguage = function updateSiteLanguage() {
-		this.$el.val(this.moduleSettings.locale);
+		this.$el.val(this.settings.locale);
 	};
+
+	_createClass(UserBackEndLanguage, [{
+		key: "settings",
+		get: function get() {
+			return _this.settings;
+		}
+	}]);
 
 	return UserBackEndLanguage;
 }(Backbone.View);

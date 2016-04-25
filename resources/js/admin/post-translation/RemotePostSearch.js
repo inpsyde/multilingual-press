@@ -1,5 +1,21 @@
 const $ = window.jQuery;
 
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+const _this = {
+	/**
+	 * Array holding the default search result HTML strings.
+	 * @type {string[]}
+	 */
+	defaultResults: [],
+
+	/**
+	 * Array holding jQuery objects representing the search result containers.
+	 * @type {jQuery[]}
+	 */
+	resultsContainers: []
+};
+
 /**
  * The MultilingualPress RemotePostSearch module.
  */
@@ -12,48 +28,39 @@ class RemotePostSearch extends Backbone.View {
 		super( options );
 
 		/**
-		 * Array holding the default search result HTML strings.
-		 * @type {string[]}
-		 */
-		this.defaultResults = [];
-
-		/**
-		 * Array holding jQuery objects representing the search result containers.
-		 * @type {jQuery[]}
-		 */
-		this.resultsContainers = [];
-
-		/**
-		 * The module settings.
+		 * The settings.
 		 * @type {Object}
 		 */
-		this.moduleSettings = options.moduleSettings;
+		_this.settings = options.settings;
 
 		/**
 		 * Minimum number of characters required to fire the remote post search.
 		 * @type {number}
 		 */
-		this.searchThreshold = parseInt( this.moduleSettings.searchThreshold, 10 );
+		_this.threshold = parseInt( options.settings.threshold, 10 );
 
-		/**
-		 * The model object.
-		 * @type {Model}
-		 */
-		this.model = options.model;
 		this.listenTo( this.model, 'change', this.render );
 	}
 
 	/**
+	 * Returns the settings.
+	 * @returns {Object} The settings.
+	 */
+	get settings() {
+		return _this.settings;
+	}
+
+	/**
 	 * Initializes both the default search result view as well as the result container for the given element.
-	 * @param {Element} element - The HTML element.
+	 * @param {HTMLElement} element - The HTML element.
 	 */
 	initializeResult( element ) {
 		const $element = $( element ),
 			$resultsContainer = $( '#' + $element.data( 'results-container-id' ) ),
 			siteID = $element.data( 'remote-site-id' );
 
-		this.defaultResults[ siteID ] = $resultsContainer.html();
-		this.resultsContainers[ siteID ] = $resultsContainer;
+		_this.defaultResults[ siteID ] = $resultsContainer.html();
+		_this.resultsContainers[ siteID ] = $resultsContainer;
 	}
 
 	/**
@@ -94,8 +101,8 @@ class RemotePostSearch extends Backbone.View {
 		remoteSiteID = $input.data( 'remote-site-id' );
 
 		if ( '' === value ) {
-			this.resultsContainers[ remoteSiteID ].html( this.defaultResults[ remoteSiteID ] );
-		} else if ( value.length >= this.searchThreshold ) {
+			_this.resultsContainers[ remoteSiteID ].html( _this.defaultResults[ remoteSiteID ] );
+		} else if ( value.length >= _this.threshold ) {
 			this.reactToInputTimer = setTimeout( () => {
 				this.model.fetch( {
 					data: {
@@ -121,7 +128,7 @@ class RemotePostSearch extends Backbone.View {
 
 		if ( this.model.get( 'success' ) ) {
 			data = this.model.get( 'data' );
-			this.resultsContainers[ data.remoteSiteID ].html( data.html );
+			_this.resultsContainers[ data.remoteSiteID ].html( data.html );
 
 			return true;
 		}

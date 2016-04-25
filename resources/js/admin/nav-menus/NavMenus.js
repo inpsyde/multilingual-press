@@ -1,5 +1,9 @@
 const $ = window.jQuery;
 
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+const _this = {};
+
 /**
  * The MultilingualPress NavMenus module.
  */
@@ -15,56 +19,47 @@ class NavMenus extends Backbone.View {
 		 * The jQuery object representing the MultilingualPress language checkboxes.
 		 * @type {jQuery}
 		 */
-		this.$languages = this.$el.find( 'li [type="checkbox"]' );
+		_this.$languages = this.$el.find( 'li [type="checkbox"]' );
 
 		/**
 		 * The jQuery object representing the input element that contains the currently edited menu's ID.
 		 * @type {jQuery}
 		 */
-		this.$menu = $( '#menu' );
+		_this.$menu = $( '#menu' );
 
 		/**
 		 * The jQuery object representing the currently edited menu.
 		 * @type {jQuery}
 		 */
-		this.$menuToEdit = $( '#menu-to-edit' );
+		_this.$menuToEdit = $( '#menu-to-edit' );
 
 		/**
 		 * The jQuery object representing the Languages meta box spinner.
 		 * @type {jQuery}
 		 */
-		this.$spinner = this.$el.find( '.spinner' );
+		_this.$spinner = this.$el.find( '.spinner' );
 
 		/**
 		 * The jQuery object representing the Languages meta box submit button.
 		 * @type {jQuery}
 		 */
-		this.$submit = this.$el.find( '#submit-mlp-language' );
+		_this.$submit = this.$el.find( '#submit-mlp-language' );
 
 		/**
-		 * The model object.
-		 * @type {Model}
-		 */
-		this.model = options.model;
-		this.listenTo( this.model, 'change', this.render );
-
-		/**
-		 * The module settings.
+		 * The settings.
 		 * @type {Object}
 		 */
-		this.moduleSettings = options.moduleSettings;
+		_this.settings = options.settings;
+
+		this.listenTo( this.model, 'change', this.render );
 	}
 
 	/**
-	 * Returns the site IDs for the checked languages in the Languages meta box.
-	 * @returns {number[]} The site IDs.
+	 * Returns the settings.
+	 * @returns {Object} The settings.
 	 */
-	get sites() {
-		const ids = [];
-
-		this.$languages.filter( ':checked' ).each( ( index, element ) => ids.push( Number( $( element ).val() ) ) );
-
-		return ids;
+	get settings() {
+		return _this.settings;
 	}
 
 	/**
@@ -73,17 +68,17 @@ class NavMenus extends Backbone.View {
 	 */
 	sendRequest( event ) {
 		const data = {
-			action: this.moduleSettings.action,
-			menu: this.$menu.val(),
-			mlp_sites: this.sites
+			action: this.settings.action,
+			menu: _this.$menu.val(),
+			mlp_sites: this.getSiteIDs()
 		};
-		data[ this.moduleSettings.nonceName ] = this.moduleSettings.nonce;
+		data[ this.settings.nonceName ] = this.settings.nonce;
 
 		event.preventDefault();
 
-		this.$submit.prop( 'disabled', true );
+		_this.$submit.prop( 'disabled', true );
 
-		this.$spinner.addClass( 'is-active' );
+		_this.$spinner.addClass( 'is-active' );
 
 		this.model.fetch( {
 			data,
@@ -92,18 +87,30 @@ class NavMenus extends Backbone.View {
 	}
 
 	/**
+	 * Returns the site IDs for the checked languages in the Languages meta box.
+	 * @returns {number[]} The site IDs.
+	 */
+	getSiteIDs() {
+		const ids = [];
+
+		_this.$languages.filter( ':checked' ).each( ( index, element ) => ids.push( Number( $( element ).val() ) ) );
+
+		return ids;
+	}
+
+	/**
 	 * Renders the nav menu item to the currently edited menu.
 	 */
 	render() {
 		if ( this.model.get( 'success' ) ) {
-			this.$menuToEdit.append( this.model.get( 'data' ) );
+			_this.$menuToEdit.append( this.model.get( 'data' ) );
 		}
 
-		this.$languages.prop( 'checked', false );
+		_this.$languages.prop( 'checked', false );
 
-		this.$spinner.removeClass( 'is-active' );
+		_this.$spinner.removeClass( 'is-active' );
 
-		this.$submit.prop( 'disabled', false );
+		_this.$submit.prop( 'disabled', false );
 	}
 }
 
