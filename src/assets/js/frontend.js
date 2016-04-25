@@ -92,7 +92,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
 var _this = {
+	/**
+  * The set of utility methods.
+  * @type {Object}
+  */
 	Util: Util
 };
 
@@ -110,6 +115,10 @@ var Quicklinks = function () {
 	function Quicklinks(selector, Util) {
 		_classCallCheck(this, Quicklinks);
 
+		/**
+   * The form element selector.
+   * @type {string}
+   */
 		_this.selector = selector;
 
 		if (Util) {
@@ -170,7 +179,7 @@ var Quicklinks = function () {
 	_createClass(Quicklinks, [{
 		key: 'selector',
 		get: function get() {
-			return _this.selector || '';
+			return _this.selector;
 		}
 	}]);
 

@@ -199,11 +199,18 @@ window.MultilingualPressAdmin = MLP;
 
 exports.__esModule = true;
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var $ = window.jQuery;
 var _window = window;
 var _ = _window._;
+
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+
+var _this = {};
 
 /**
  * The MultilingualPress admin controller.
@@ -223,23 +230,28 @@ var Controller = function () {
    * The registry object.
    * @type {Registry}
    */
-		this.registry = registry;
+		_this.registry = registry;
 
 		/**
    * The controller settings.
    * @type {Object}
    */
-		this.settings = settings;
+		_this.settings = settings;
 	}
+
+	/**
+  * Returns the settings object.
+  * @returns {Object} The settings object.
+  */
+
 
 	/**
   * Initializes the instance.
   * @returns {Object} The module instances registered for the current admin page.
   */
 
-
 	Controller.prototype.initialize = function initialize() {
-		var modules = this.registry.initializeRoutes();
+		var modules = _this.registry.initializeRoutes();
 
 		this.maybeStartHistory();
 
@@ -276,8 +288,6 @@ var Controller = function () {
 
 
 	Controller.prototype.registerModule = function registerModule(routes, Constructor) {
-		var _this = this;
-
 		var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 		var callback = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
 
@@ -293,6 +303,13 @@ var Controller = function () {
 			return _this.registry.registerModuleForRoute(moduleData, route);
 		});
 	};
+
+	_createClass(Controller, [{
+		key: "settings",
+		get: function get() {
+			return _this.settings;
+		}
+	}]);
 
 	return Controller;
 }();
@@ -359,7 +376,21 @@ exports.__esModule = true;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var $ = window.jQuery;
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+var _this = {
+	/**
+  * The registry data (i.e., module-per-route).
+  * @type {Object}
+  */
+	data: {},
+
+	/**
+  * The module instances registered for the current admin page.
+  * @type {Object}
+  */
+	modules: {}
+};
 
 /**
  * The MultilingualPress Registry module.
@@ -375,22 +406,10 @@ var Registry = function () {
 		_classCallCheck(this, Registry);
 
 		/**
-   * The registry data (i.e., module-per-route).
-   * @type {Object}
-   */
-		this.data = {};
-
-		/**
-   * The module instances registered for the current admin page.
-   * @type {Object}
-   */
-		this.modules = {};
-
-		/**
    * The router object.
    * @type {Router}
    */
-		this.router = router;
+		_this.router = router;
 	}
 
 	/**
@@ -403,7 +422,7 @@ var Registry = function () {
 		var Constructor = data.Constructor,
 		    module = new Constructor(data.options);
 
-		this.modules[Constructor.name] = module;
+		_this.modules[Constructor.name] = module;
 
 		if ('function' === typeof data.callback) {
 			data.callback(module);
@@ -417,11 +436,11 @@ var Registry = function () {
 
 
 	Registry.prototype.createModules = function createModules(modules) {
-		var _this = this;
-
-		$.each(modules, function (index, data) {
-			return _this.createModule(data);
-		});
+		for (var route in modules) {
+			if (modules.hasOwnProperty(route)) {
+				this.createModule(modules[route]);
+			}
+		}
 	};
 
 	/**
@@ -434,7 +453,7 @@ var Registry = function () {
 	Registry.prototype.initializeRoute = function initializeRoute(route, modules) {
 		var _this2 = this;
 
-		this.router.route(route, route, function () {
+		_this.router.route(route, route, function () {
 			return _this2.createModules(modules);
 		});
 	};
@@ -446,13 +465,13 @@ var Registry = function () {
 
 
 	Registry.prototype.initializeRoutes = function initializeRoutes() {
-		var _this3 = this;
+		for (var route in _this.data) {
+			if (_this.data.hasOwnProperty(route)) {
+				this.initializeRoute(route, _this.data[route]);
+			}
+		}
 
-		$.each(this.data, function (route, modules) {
-			return _this3.initializeRoute(route, modules);
-		});
-
-		return this.modules;
+		return _this.modules;
 	};
 
 	/**
@@ -464,11 +483,11 @@ var Registry = function () {
 
 
 	Registry.prototype.registerModuleForRoute = function registerModuleForRoute(module, route) {
-		if (!this.data[route]) {
-			this.data[route] = [];
+		if (!_this.data[route]) {
+			_this.data[route] = [];
 		}
 
-		return this.data[route].push(module);
+		return _this.data[route].push(module);
 	};
 
 	return Registry;
