@@ -70,4 +70,3 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 
 	assert.end();
 } );
-
