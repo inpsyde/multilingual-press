@@ -1,4 +1,5 @@
 import sinon from "sinon";
+import jQueryStub from "./jQueryObject";
 
 const _ = sinon.stub();
 
@@ -21,10 +22,7 @@ Backbone.View.prototype.listenTo = sinon.spy();
 
 const document = {};
 
-const jQuery = sinon.stub().returns( {
-	text: sinon.stub(),
-	val: sinon.stub()
-} );
+const jQuery = sinon.stub().returns( new jQueryStub() );
 
 const window = {
 	$: jQuery,
@@ -39,10 +37,10 @@ const globalStub = {
 };
 
 // Pollute the global scope.
-Object.keys( globalStub ).forEach( function( key ) {
+Object.keys( globalStub ).forEach( ( key ) => {
 	global[ key ] = globalStub[ key ];
 } );
 
-Object.keys( window ).forEach( function( key ) {
+Object.keys( window ).forEach( ( key ) => {
 	global[ key ] = globalStub[ key ] = window[ key ];
 } );

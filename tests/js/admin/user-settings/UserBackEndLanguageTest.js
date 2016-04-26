@@ -2,6 +2,7 @@ import "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
 import * as F from "../../functions";
+import jQueryStub from "../../stubs/jQueryObject";
 import UserBackEndLanguage from "../../../../resources/js/admin/user-settings/UserBackEndLanguage";
 
 test( 'settings behaves as expected', ( assert ) => {
@@ -19,14 +20,18 @@ test( 'settings behaves as expected', ( assert ) => {
 } );
 
 test( 'updateSiteLanguage behaves as expected', ( assert ) => {
-	const locale = F.getRandomString();
+	const options = {
+		settings: {
+			locale: F.getRandomString()
+		}
+	};
 
-	const testee = new UserBackEndLanguage( { settings: { locale } } );
+	const testee = new UserBackEndLanguage( options );
 
 	// Assign fake jQuery object.
-	testee.$el = {
+	testee.$el = new jQueryStub( {
 		val: sinon.spy()
-	};
+	} );
 
 	testee.updateSiteLanguage();
 
@@ -37,7 +42,7 @@ test( 'updateSiteLanguage behaves as expected', ( assert ) => {
 	);
 
 	assert.equal(
-		testee.$el.val.calledWith( locale ),
+		testee.$el.val.calledWith( options.settings.locale ),
 		true,
 		'updateSiteLanguage SHOULD set the expected value.'
 	);
