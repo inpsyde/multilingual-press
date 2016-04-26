@@ -14,25 +14,7 @@ const resetUtil = () => {
 
 const createTestee = ( selector ) => new Quicklinks( selector || 'selector', resetUtil() );
 
-global.document = {};
-
-const { document } = global;
-
-test( 'Quicklinks is a constructor function', ( assert ) => {
-	assert.equal(
-		typeof Quicklinks,
-		'function',
-		'Quicklinks SHOULD be a function.'
-	);
-
-	assert.equal(
-		typeof createTestee(),
-		'object',
-		'Quicklinks SHOULD construct an object.'
-	);
-
-	assert.end();
-} );
+const document = global.document = {};
 
 test( 'selector behaves as expected', ( assert ) => {
 	const selector = F.getRandomString();
@@ -50,12 +32,6 @@ test( 'selector behaves as expected', ( assert ) => {
 
 test( 'initialize behaves as expected', ( assert ) => {
 	const testee = createTestee();
-
-	assert.equal(
-		typeof testee.initialize,
-		'function',
-		'initialize SHOULD be a function.'
-	);
 
 	// Turn method into spy.
 	testee.attachSubmitHandler = sinon.spy();
@@ -80,6 +56,12 @@ test( 'attachSubmitHandler behaves as expected for an incorrect selector', ( ass
 		testee.attachSubmitHandler(),
 		false,
 		'attachSubmitHandler SHOULD return false for an incorrect selector.'
+	);
+
+	assert.equal(
+		Util.addEventListener.callCount,
+		0,
+		'attachSubmitHandler SHOULD NOT attach any event handlers for an incorrect selector.'
 	);
 
 	assert.end();

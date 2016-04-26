@@ -3,13 +3,7 @@ import sinon from "sinon";
 import * as F from "../functions";
 import * as Util from "../../../resources/js/common/utils";
 
-test( 'addEventListener attaches the given listener to the given element for the given event', ( assert ) => {
-	assert.equal(
-		typeof Util.addEventListener,
-		'function',
-		'addEventListener SHOULD be a function.'
-	);
-
+test( 'addEventListener attaches the expected event listener using IE8 methods for IE8 browsers', ( assert ) => {
 	const $element = {
 		attachEvent: sinon.spy()
 	};
@@ -29,21 +23,43 @@ test( 'addEventListener attaches the given listener to the given element for the
 	assert.equal(
 		$element.attachEvent.calledWith( 'on' + type ),
 		true,
+		'addEventListener SHOULD attach the event listener on the expected event using IE8 methods for IE8 browsers.'
+	);
+
+	// Execute the callback passed as second argument.
+	$element.attachEvent.firstCall.args[ 1 ]();
+
+	assert.equal(
+		listener.callCount,
+		1,
 		'addEventListener SHOULD attach the expected event listener using IE8 methods for IE8 browsers.'
 	);
 
-	// Reset spy.
-	$element.attachEvent.reset();
+	assert.equal(
+		listener.calledOn( $element ),
+		true,
+		'addEventListener SHOULD specify the expected context for the event listener using IE8 methods for IE8 browsers.'
+	);
 
-	// Add IE8+ method.
-	$element.addEventListener = sinon.spy();
+	assert.end();
+} );
+
+test( 'addEventListener attaches the expected event listener using IE8+ methods for IE8+ browsers', ( assert ) => {
+	const $element = {
+		addEventListener: sinon.spy(),
+		attachEvent: sinon.spy()
+	};
+
+	const type = F.getRandomString();
+
+	const listener = sinon.spy();
 
 	Util.addEventListener( $element, type, listener );
 
 	assert.equal(
 		$element.attachEvent.callCount,
 		0,
-		'addEventListener SHOULD NOT attach an event listener using IE8 methods for IE8+ browsers.'
+		'addEventListener SHOULD NOT attach any event listeners using IE8 methods for IE8+ browsers.'
 	);
 
 	assert.equal(
@@ -62,12 +78,6 @@ test( 'addEventListener attaches the given listener to the given element for the
 } );
 
 test( 'reloadLocation reloads the current page', ( assert ) => {
-	assert.equal(
-		typeof Util.reloadLocation,
-		'function',
-		'reloadLocation SHOULD be a function.'
-	);
-
 	global.window = {
 		location: {
 			reload: sinon.spy()
@@ -92,12 +102,6 @@ test( 'reloadLocation reloads the current page', ( assert ) => {
 } );
 
 test( 'setLocation redirects the user to the given URL', ( assert ) => {
-	assert.equal(
-		typeof Util.setLocation,
-		'function',
-		'setLocation SHOULD be a function.'
-	);
-
 	global.window = {
 		location: {
 			href: ''
