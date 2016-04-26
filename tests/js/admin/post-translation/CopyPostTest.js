@@ -1,10 +1,10 @@
+import "../../stubs/global";
 import test from "tape";
 // import sinon from "sinon";
 import * as F from "../../functions";
-import globalStub from "../../stubs/global";
 import CopyPost from "../../../../resources/js/admin/post-translation/CopyPost";
 
-const { $ } = globalStub;
+const { $ } = global;
 
 const createTestee = () => {
 	return new CopyPost();
