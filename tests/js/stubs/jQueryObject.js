@@ -5,12 +5,16 @@ const defaultMembers = {
 	val: sinon.stub()
 };
 
-export default function( members = {} ) {
+export default function( customMembers = {} ) {
+	const members = {};
+
 	Object.keys( defaultMembers ).forEach( ( key ) => {
-		this[ key ] = defaultMembers[ key ];
+		members[ key ] = defaultMembers[ key ];
 	} );
 
-	Object.keys( members ).forEach( ( key ) => {
-		this[ key ] = members[ key ];
+	Object.keys( customMembers ).forEach( ( key ) => {
+		members[ key ] = customMembers[ key ];
 	} );
-};
+
+	return members;
+}
