@@ -46,5 +46,3 @@ Object.keys( globalStub ).forEach( function( key ) {
 Object.keys( window ).forEach( function( key ) {
 	global[ key ] = globalStub[ key ] = window[ key ];
 } );
-
-export default globalStub;
