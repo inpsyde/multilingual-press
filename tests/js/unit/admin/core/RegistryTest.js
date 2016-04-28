@@ -2,7 +2,7 @@ import dom from "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
 // import * as F from "../../functions";
-import Registry from "../../../../resources/js/admin/core/Registry";
+import Registry from "../../../../../resources/js/admin/core/Registry";
 dom;
 const createTestee = ( router ) => {
 	if ( !router ) {

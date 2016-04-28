@@ -3,6 +3,7 @@ import sinon from "sinon";
 const defaultMembers = {
 	each: ( callback ) => callback(),
 	find: sinon.stub(),
+	length: 1,
 	text: sinon.stub(),
 	val: sinon.stub()
 };

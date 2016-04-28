@@ -1,25 +1,26 @@
 import "../../stubs/global";
 import test from "tape";
-import sinon from "sinon";
 import * as F from "../../functions";
 import jQueryObject from "../../stubs/jQueryObject";
-import UserBackEndLanguage from "../../../../resources/js/admin/user-settings/UserBackEndLanguage";
+import UserBackEndLanguage from "../../../../../resources/js/admin/user-settings/UserBackEndLanguage";
 
-test( 'settings behaves as expected', ( assert ) => {
-	const settings = F.getRandomString();
+test( 'settings ...', ( assert ) => {
+	const options = {
+		settings: F.getRandomString()
+	};
 
-	const testee = new UserBackEndLanguage( { settings } );
+	const testee = new UserBackEndLanguage( options );
 
 	assert.equal(
 		testee.settings,
-		settings,
-		'settings SHOULD have the expected value.'
+		options.settings,
+		'... SHOULD have the expected value.'
 	);
 
 	assert.end();
 } );
 
-test( 'updateSiteLanguage behaves as expected', ( assert ) => {
+test( 'updateSiteLanguage ...', ( assert ) => {
 	const options = {
 		settings: {
 			locale: F.getRandomString()
@@ -29,22 +30,20 @@ test( 'updateSiteLanguage behaves as expected', ( assert ) => {
 	const testee = new UserBackEndLanguage( options );
 
 	// Assign fake jQuery object.
-	testee.$el = new jQueryObject( {
-		val: sinon.spy()
-	} );
+	testee.$el = new jQueryObject();
 
 	testee.updateSiteLanguage();
 
 	assert.equal(
 		testee.$el.val.callCount,
 		1,
-		'updateSiteLanguage SHOULD set a value.'
+		'... SHOULD set a value.'
 	);
 
 	assert.equal(
 		testee.$el.val.calledWith( options.settings.locale ),
 		true,
-		'updateSiteLanguage SHOULD set the expected value.'
+		'... SHOULD set the expected value.'
 	);
 
 	assert.end();

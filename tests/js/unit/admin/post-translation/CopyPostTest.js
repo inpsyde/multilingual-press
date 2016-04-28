@@ -2,7 +2,7 @@ import "../../stubs/global";
 import test from "tape";
 // import sinon from "sinon";
 import * as F from "../../functions";
-import CopyPost from "../../../../resources/js/admin/post-translation/CopyPost";
+import CopyPost from "../../../../../resources/js/admin/post-translation/CopyPost";
 
 const { $ } = global;
 

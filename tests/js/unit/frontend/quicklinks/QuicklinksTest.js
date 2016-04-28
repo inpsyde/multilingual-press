@@ -1,7 +1,7 @@
 import test from "tape";
 import sinon from "sinon";
 import * as F from "../../functions";
-import Quicklinks from "../../../../resources/js/frontend/quicklinks/Quicklinks";
+import Quicklinks from "../../../../../resources/js/frontend/quicklinks/Quicklinks";
 
 const Util = {};
 
@@ -16,7 +16,7 @@ const createTestee = ( selector ) => new Quicklinks( selector || 'selector', res
 
 const document = global.document = {};
 
-test( 'selector behaves as expected', ( assert ) => {
+test( 'selector ...', ( assert ) => {
 	const selector = F.getRandomString();
 
 	const testee = createTestee( selector );
@@ -24,13 +24,13 @@ test( 'selector behaves as expected', ( assert ) => {
 	assert.equal(
 		testee.selector,
 		selector,
-		'selector SHOULD return the expected value.'
+		'... SHOULD return the expected value.'
 	);
 
 	assert.end();
 } );
 
-test( 'initialize behaves as expected', ( assert ) => {
+test( 'initialize ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Turn method into spy.
@@ -41,13 +41,13 @@ test( 'initialize behaves as expected', ( assert ) => {
 	assert.equal(
 		testee.attachSubmitHandler.callCount,
 		1,
-		'initialize SHOULD pass the expected callback to jQuery.'
+		'... SHOULD pass the expected callback to jQuery.'
 	);
 
 	assert.end();
 } );
 
-test( 'attachSubmitHandler behaves as expected for an incorrect selector', ( assert ) => {
+test( 'attachSubmitHandler ...', ( assert ) => {
 	const testee = createTestee( 'incorrect-selector' );
 
 	document.querySelector = F.returnNull;
@@ -55,19 +55,19 @@ test( 'attachSubmitHandler behaves as expected for an incorrect selector', ( ass
 	assert.equal(
 		testee.attachSubmitHandler(),
 		false,
-		'attachSubmitHandler SHOULD return false for an incorrect selector.'
+		'... SHOULD return false for an incorrect selector.'
 	);
 
 	assert.equal(
 		Util.addEventListener.callCount,
 		0,
-		'attachSubmitHandler SHOULD NOT attach any event handlers for an incorrect selector.'
+		'... SHOULD NOT attach any event handlers for an incorrect selector.'
 	);
 
 	assert.end();
 } );
 
-test( 'attachSubmitHandler behaves as expected for the correct selector', ( assert ) => {
+test( 'attachSubmitHandler ...', ( assert ) => {
 	const testee = createTestee( 'correct-selector' );
 
 	const $element = F.getRandomString();
@@ -77,26 +77,26 @@ test( 'attachSubmitHandler behaves as expected for the correct selector', ( asse
 	assert.equal(
 		testee.attachSubmitHandler(),
 		true,
-		'attachSubmitHandler SHOULD return true for the correct selector.'
+		'... SHOULD return true for the correct selector.'
 	);
 
 	assert.equal(
 		Util.addEventListener.callCount,
 		1,
-		'attachSubmitHandler SHOULD attach one event handler for the correct selector.'
+		'... SHOULD attach one event handler for the correct selector.'
 	);
 
 	assert.equal(
 		// The third argument (i.e., the listener) is missing because it is a bound function, which sinon cannot handle.
 		Util.addEventListener.calledWith( $element, 'submit' ),
 		true,
-		'attachSubmitHandler SHOULD attach the expected event handler for the correct selector.'
+		'... SHOULD attach the expected event handler for the correct selector.'
 	);
 
 	assert.end();
 } );
 
-test( 'submitForm behaves as expected for a missing select element', ( assert ) => {
+test( 'submitForm ...', ( assert ) => {
 	const testee = createTestee();
 
 	const event = {
@@ -111,13 +111,13 @@ test( 'submitForm behaves as expected for a missing select element', ( assert ) 
 	assert.equal(
 		event.preventDefault.callCount,
 		0,
-		'submitForm SHOULD NOT call event.prevenDefault for a missing select element.'
+		'... SHOULD NOT call event.prevenDefault for a missing select element.'
 	);
 
 	assert.end();
 } );
 
-test( 'submitForm behaves as expected for a present select element', ( assert ) => {
+test( 'submitForm ...', ( assert ) => {
 	const testee = createTestee();
 
 	const $select = {
@@ -136,19 +136,19 @@ test( 'submitForm behaves as expected for a present select element', ( assert ) 
 	assert.equal(
 		event.preventDefault.callCount,
 		1,
-		'submitForm SHOULD call event.prevenDefault for a present select element.'
+		'... SHOULD call event.prevenDefault for a present select element.'
 	);
 
 	assert.equal(
 		Util.setLocation.callCount,
 		1,
-		'submitForm should call Util.setLocation once for a present select element.'
+		'... should call Util.setLocation once for a present select element.'
 	);
 
 	assert.equal(
 		Util.setLocation.calledWith( $select.value ),
 		true,
-		'submitForm SHOULD call Util.setLocation with the select value for a present select element.'
+		'... SHOULD call Util.setLocation with the select value for a present select element.'
 	);
 
 	assert.end();
