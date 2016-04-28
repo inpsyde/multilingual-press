@@ -24,7 +24,7 @@ test( '$selects ...', ( assert ) => {
 	assert.end();
 } );
 
-// TODO: Test propagateSelectedTerm (need to manipulate "private" property isPropagating somehow)...
+// TODO: Test propagateSelectedTerm (need to manipulate "private" property isPropagating via __Rewire__)...
 
 test( 'getSelectedRelation ...', ( assert ) => {
 	const testee = new TermTranslator();
@@ -79,19 +79,50 @@ test( 'selectTerm ...', ( assert ) => {
 	assert.equal(
 		$select.val.callCount,
 		1,
-		'... SHOULD set a term value for an existing relation.'
+		'... SHOULD set a term value for a matching relation.'
 	);
 
 	assert.equal(
 		$select.val.calledWith( termID ),
 		true,
-		'... SHOULD set the expected term value for an existing relation.'
+		'... SHOULD set the expected term value for a matching relation.'
 	);
 
 	assert.end();
 } );
 
-// TODO: Test selectTerm (need to mock testee.getSelectedRelation in one case)...
+test( 'selectTerm ...', ( assert ) => {
+	const testee = new TermTranslator();
+
+	// Make method return a random string (i.e., relation found).
+	testee.getSelectedRelation = () => F.getRandomString();
+
+	const termID = F.getRandomInteger();
+
+	const $select = new jQueryObject();
+	$select.find.returns( {
+		length: 0,
+		first: () => new jQueryObject( {
+			val: () => termID
+		} )
+	} );
+
+	testee.selectTerm( $select, 'relation' );
+
+	assert.equal(
+		$select.val.callCount,
+		1,
+		'... SHOULD set a term value for a not-matching relation.'
+	);
+
+	assert.equal(
+		$select.val.calledWith( termID ),
+		true,
+		'... SHOULD set the expected term value for a not-matching relation.'
+	);
+
+	assert.end();
+} );
 
 test( 'selectTerm ...', ( assert ) => {
 	const testee = new TermTranslator();

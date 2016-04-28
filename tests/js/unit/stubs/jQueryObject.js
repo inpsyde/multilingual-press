@@ -5,7 +5,6 @@ export default function jQueryObject( customMembers = {} ) {
 	const members = _.extend( {
 		length: 1,
 
-		each: ( callback ) => callback(),
 		find: sinon.stub(),
 		text: sinon.stub(),
 		val: sinon.stub()
