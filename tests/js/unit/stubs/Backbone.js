@@ -15,6 +15,7 @@ const Backbone = {
 	},
 	View: function( options = {} ) {
 		this.$el = options.$el || new jQueryObject();
+		this.model = options.model || new Backbone.Model();
 	}
 };
 Backbone.Model.prototype.fetch = sinon.spy();
