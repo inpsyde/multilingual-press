@@ -1,25 +1,17 @@
 import sinon from "sinon";
+import * as _ from "lodash";
 
-const defaultMembers = {
-	each: ( callback ) => callback(),
-	find: sinon.stub(),
-	length: 1,
-	text: sinon.stub(),
-	val: sinon.stub()
-};
+export default function jQueryObject( customMembers = {} ) {
+	const members = _.extend( {
+		length: 1,
 
-const jQueryObject = function( customMembers = {} ) {
-	const members = {};
-
-	Object.keys( defaultMembers ).forEach( ( key ) => {
-		members[ key ] = defaultMembers[ key ];
+		each: ( callback ) => callback(),
+		find: sinon.stub(),
+		text: sinon.stub(),
+		val: sinon.stub()
+	}, customMembers );
+	Object.keys( members ).forEach( ( key ) => {
+		// eslint-disable-next-line no-invalid-this
+		this[ key ] = members[ key ];
 	} );
-
-	Object.keys( customMembers ).forEach( ( key ) => {
-		members[ key ] = customMembers[ key ];
-	} );
-
-	return members;
-};
-
-export default jQueryObject;
+}
