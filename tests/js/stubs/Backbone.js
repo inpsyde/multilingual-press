@@ -9,9 +9,9 @@ const Backbone = {
 	History: {
 		started: false
 	},
-	Model: function( options = {} ) {
+	Model: function() {
 	},
-	Router: function( options = {} ) {
+	Router: function() {
 	},
 	View: function( options = {} ) {
 		this.$el = options.$el || new jQueryObject();
