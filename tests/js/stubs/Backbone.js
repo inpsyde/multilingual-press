@@ -1,4 +1,5 @@
 import sinon from "sinon";
+import jQueryObject from "./jQueryObject";
 
 const Backbone = {
 	Events: {},
@@ -8,11 +9,12 @@ const Backbone = {
 	History: {
 		started: false
 	},
-	Model: () => {
+	Model: function( options = {} ) {
 	},
-	Router: () => {
+	Router: function( options = {} ) {
 	},
-	View: () => {
+	View: function( options = {} ) {
+		this.$el = options.$el || new jQueryObject();
 	}
 };
 Backbone.Model.prototype.fetch = sinon.spy();

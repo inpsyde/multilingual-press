@@ -1,8 +1,8 @@
 import sinon from "sinon";
 import Backbone from "./Backbone";
-import jQueryStub from "./jQueryObject";
+import jQueryObject from "./jQueryObject";
 
-const jQuery = sinon.stub().returns( new jQueryStub() );
+const jQuery = sinon.stub().returns( new jQueryObject() );
 
 const window = {
 	$: jQuery,

@@ -1,11 +1,13 @@
 import sinon from "sinon";
 
 const defaultMembers = {
+	each: ( callback ) => callback(),
+	find: sinon.stub(),
 	text: sinon.stub(),
 	val: sinon.stub()
 };
 
-export default function( customMembers = {} ) {
+const jQueryObject = function( customMembers = {} ) {
 	const members = {};
 
 	Object.keys( defaultMembers ).forEach( ( key ) => {
@@ -17,4 +19,6 @@ export default function( customMembers = {} ) {
 	} );
 
 	return members;
-}
+};
+
+export default jQueryObject;
