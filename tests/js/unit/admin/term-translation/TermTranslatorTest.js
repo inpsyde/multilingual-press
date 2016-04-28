@@ -93,8 +93,7 @@ test( 'selectTerm ...', ( assert ) => {
 
 // TODO: Test selectTerm (need to mock testee.getSelectedRelation in one case)...
 
-// TODO: Recheck why creating a new jQueryObject doesn't create a fresh state (of the spies, stubs and the like)...!
-test.skip( 'selectTerm ...', ( assert ) => {
+test( 'selectTerm ...', ( assert ) => {
 	const testee = new TermTranslator();
 
 	// Make method return an empty string (i.e., no relation found).
