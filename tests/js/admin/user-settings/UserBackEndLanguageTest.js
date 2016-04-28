@@ -2,7 +2,7 @@ import "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
 import * as F from "../../functions";
-import jQueryStub from "../../stubs/jQueryObject";
+import jQueryObject from "../../stubs/jQueryObject";
 import UserBackEndLanguage from "../../../../resources/js/admin/user-settings/UserBackEndLanguage";
 
 test( 'settings behaves as expected', ( assert ) => {
@@ -29,7 +29,7 @@ test( 'updateSiteLanguage behaves as expected', ( assert ) => {
 	const testee = new UserBackEndLanguage( options );
 
 	// Assign fake jQuery object.
-	testee.$el = new jQueryStub( {
+	testee.$el = new jQueryObject( {
 		val: sinon.spy()
 	} );
 
