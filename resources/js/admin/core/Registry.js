@@ -1,3 +1,5 @@
+const $ = window.jQuery;
+
 // Internal pseudo-namespace for private data.
 // NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
 const _this = {
@@ -50,11 +52,7 @@ class Registry {
 	 * @param {Object[]} modules - The modules data.
 	 */
 	createModules( modules ) {
-		for ( let route in modules ) {
-			if ( modules.hasOwnProperty( route ) ) {
-				this.createModule( modules[ route ] );
-			}
-		}
+		$.each( modules, ( module, data ) => this.createModule( data ) );
 	}
 
 	/**
@@ -71,11 +69,7 @@ class Registry {
 	 * @returns {Object} The module instances registered for the current admin page.
 	 */
 	initializeRoutes() {
-		for ( let route in _this.data ) {
-			if ( _this.data.hasOwnProperty( route ) ) {
-				this.initializeRoute( route, _this.data[ route ] );
-			}
-		}
+		$.each( _this.data, ( route, modules ) => this.initializeRoute( route, modules ) );
 
 		return _this.modules;
 	}
@@ -87,7 +81,7 @@ class Registry {
 	 * @returns {number} The number of the currently registered routes.
 	 */
 	registerModuleForRoute( module, route ) {
-		if ( ! _this.data[ route ] ) {
+		if ( !_this.data[ route ] ) {
 			_this.data[ route ] = [];
 		}
 

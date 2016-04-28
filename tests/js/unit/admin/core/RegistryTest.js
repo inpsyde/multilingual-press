@@ -1,9 +1,8 @@
-import dom from "../../stubs/global";
+import "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
-// import * as F from "../../functions";
 import Registry from "../../../../../resources/js/admin/core/Registry";
-dom;
+
 const createTestee = ( router ) => {
 	if ( !router ) {
 		router = sinon.stub();
@@ -15,100 +14,118 @@ const createTestee = ( router ) => {
 
 // TODO: Adapt test to new private properties...
 
-test.only( 'Registry is a constructor function', ( assert ) => {
-	assert.equal(
-		typeof Registry,
-		'function',
-		'Registry SHOULD be a function.' );
+test( 'Registry is a constructor function', ( assert ) => {
+		assert.equal(
+			typeof Registry,
+			'function',
+			'Registry SHOULD be a function.'
+		);
 
-	assert.equal(
-		typeof createTestee(),
-		'object',
-		'Registry SHOULD construct an object.'
-	);
+		assert.equal(
+			typeof createTestee(),
+			'object',
+			'Registry SHOULD construct an object.'
+		);
 
-	assert.end();
-} );
+		assert.end();
+	}
+);
 
-test( 'createModule behaves as expected', ( assert ) => {
-	const testee = createTestee();
+test( 'createModule...', ( assert ) => {
 
-	let ModuleMock = sinon.spy();
+		const testee = createTestee();
 
-	const moduleData = {
-		Constructor: ModuleMock,
-		options    : {},
-		callback   : sinon.spy()
-	};
+		let ModuleMock = sinon.stub();
 
-	testee.createModule( moduleData );
+		const moduleData = {
+			Constructor: ModuleMock,
+			options    : {},
+			callback   : sinon.spy()
+		};
 
-	assert.ok(
-		testee.modules[ ModuleMock.name ] instanceof ModuleMock,
-		'createModule should register an instance of the Module by its name.'
-	);
+		testee.createModule( moduleData );
 
-	assert.equal(
-		moduleData.callback.callCount,
-		1,
-		'Module callback should have been fired once' );
-	assert.end();
-} );
+		assert.equal(
+			moduleData.callback.callCount,
+			1,
+			'....SHOULD fire a callback if it was passed'
+		);
+		assert.end();
+	}
+);
 
-test( 'initializeRoute behaves as expected', ( assert ) => {
-	const testee = createTestee();
-	const route = 'testroute';
-	const modules = [ {} ];
+test( 'initializeRoute...', ( assert ) => {
+		const testee = createTestee();
+		const route = 'testroute';
+		const modules = [ {} ];
 
-	testee.initializeRoute( route, modules );
+		const routeSpy = sinon.spy();
+		Registry.__Rewire__( '_this', {
+				router: {
+					route: routeSpy
+				}
+			}
+		);
 
-	assert.equal(
-		testee.router.route.callCount,
-		1,
-		'Router should have routed once' );
+		testee.initializeRoute( route, modules );
 
-	assert.end();
-} );
+		assert.equal(
+			routeSpy.callCount,
+			1,
+			'Router should have routed once'
+		);
 
-test( 'initializeRoutes behaves as expected', ( assert ) => {
-	const testee = createTestee();
+		Registry.__ResetDependency__( '_this' );
+		assert.end();
+	}
+);
 
-	testee.data = { 'testroute_1': {}, 'testroute_2': {} };
+test( 'initializeRoutes...', ( assert ) => {
+		const testee = createTestee();
 
-	testee.initializeRoutes();
+		Registry.__Rewire__( '_this', {
+				data: { 'testroute_1': {}, 'testroute_2': {} }
+			}
+		);
 
-	assert.equal(
-		testee.router.route.callCount,
-		2,
-		'Router should have routed twice' );
+		// We don't care about what this method does, just about the fact that it's being called
+		testee.initializeRoute = sinon.spy();
 
-	assert.end();
-} );
+		// Create a simple mock for $.each()
+		$.each = ( o = {}, c ) => {
+			for ( let k in o ) {
+				if ( o.hasOwnProperty( k ) ) {
+					c( k, o[ k ] );
+				}
+			}
+		};
 
-test( 'registerModuleForRoute behaves as expected', ( assert ) => {
-	const testee = createTestee(),
-		route = 'testroute',
-		module = {};
+		testee.initializeRoutes();
 
-	let result = testee.registerModuleForRoute( module, route );
+		assert.equal(
+			testee.initializeRoute.callCount,
+			2,
+			'...SHOULD call initializeRoute() for each passed route'
+		);
 
-	assert.ok(
-		testee.data.hasOwnProperty( route ),
-		'Registry data SHOULD contain an array under the given key.'
-	);
+		assert.end();
+	}
+);
 
-	assert.equal(
-		typeof result,
-		'number',
-		'Return type should be the numeric.'
-	);
+test( 'registerModuleForRoute...', ( assert ) => {
+		const testee = createTestee(),
+			route = 'testroute',
+			module = {};
 
-	assert.notEqual(
-		testee.data[ route ].indexOf( module ),
-		-1,
-		'Registry data array SHOULD contain the given module.'
-	);
+		let result = testee.registerModuleForRoute( module, route );
 
-	assert.end();
-} );
+		assert.equal(
+			typeof result,
+			'number',
+			'...SHOULD return a number.'
+		);
+
+		assert.end();
+	}
+);
 
