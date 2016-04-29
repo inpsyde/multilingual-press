@@ -15,6 +15,7 @@ export default function jQueryObject( customMembers = {} ) {
 		},
 		find: sinon.stub(),
 		text: sinon.stub(),
+		toggle: sinon.stub(),
 		val: sinon.stub(),
 		attr: sinon.stub(),
 		on: sinon.stub()

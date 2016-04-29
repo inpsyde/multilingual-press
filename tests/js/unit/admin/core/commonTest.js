@@ -51,8 +51,36 @@ test( 'initializeStateTogglers...', ( assert ) => {
 );
 
 test( 'toggleElement...', ( assert ) => {
+		const testee = new Toggler();
 
-		//TODO
+		const target = F.getRandomString();
+
+		const event = {
+			target
+		};
+		const $stub = new jQueryObject();
+
+		const targetID = F.getRandomBool() ? F.getRandomString() : false;
+
+		$stub.data.returns( targetID );
+
+		$.withArgs( target ).returns( $stub );
+
+		const result = testee.toggleElement( event );
+
+		assert.equal(
+			(targetID),
+			result,
+			'... SHOULD return whether or not it has toggled an element'
+		);
+
+		if ( targetID ) {
+			assert.equal(
+				$stub.toggle.callCount,
+				1,
+				'... SHOULD call toggle() on the jQuery element if a targetID is found'
+			);
+		}
 
 		assert.end();
 	}
