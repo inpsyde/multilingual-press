@@ -4,6 +4,7 @@ import sinon from "sinon";
 import * as _ from "lodash";
 import * as F from "../../functions";
 import Backbone from "../../stubs/Backbone";
+import jQueryObject from "../../stubs/jQueryObject";
 import RemotePostSearch from "../../../../../resources/js/admin/post-translation/RemotePostSearch";
 
 const { $ } = global;
@@ -55,8 +56,7 @@ test( 'initializeResult ...', ( assert ) => {
 	assert.end();
 } );
 
-// TODO: Unskip as soon as $.each() has been committed.
-test.skip( 'initializeResults ...', ( assert ) => {
+test( 'initializeResults ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Turn method into spy.
@@ -64,15 +64,17 @@ test.skip( 'initializeResults ...', ( assert ) => {
 
 	const element = F.getRandomString();
 
-	const $elements = F.getRandomArray( 10, element );
+	const _elements = F.getRandomArray( 1, 10, element );
 
-	$.withArgs( '.mlp-search-field' ).returns( $elements );
+	assert.comment( _elements );
+
+	$.withArgs( '.mlp-search-field' ).returns( new jQueryObject( { _elements } ) );
 
 	testee.initializeResults();
 
 	assert.equal(
 		testee.initializeResult.callCount,
-		$elements.length,
+		_elements.length,
 		'... SHOULD initialize each element.'
 	);
 
