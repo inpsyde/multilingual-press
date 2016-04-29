@@ -26,20 +26,20 @@ export const returnUndefined = () => undefined;
 //
 // Dependent (!) functions.
 //
-export const getRandomArray = ( max = 10, value ) => {
+export const getRandomArray = ( min = 0, max = 10, value ) => {
 	const a = [];
 
-	for ( let i = 0; i < getRandomInteger( 0, max ); i++ ) {
+	for ( let i = 0; i < getRandomInteger( min, max ); i++ ) {
 		a.push( value || getRandomString() );
 	}
 
 	return a;
 };
 
-export const getRandomObject = ( max = 10, value ) => {
+export const getRandomObject = ( min = 0, max = 10, value ) => {
 	const o = {};
 
-	for ( let i = 0; i < getRandomInteger( 0, max ); i++ ) {
+	for ( let i = 0; i < getRandomInteger( min, max ); i++ ) {
 		o[ 'element' + i ] = value || getRandomString();
 	}
 
