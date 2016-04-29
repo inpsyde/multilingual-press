@@ -2,7 +2,11 @@ import * as _ from "lodash";
 import sinon from "sinon";
 import jQueryObject from "./jQueryObject";
 
-const arrayEach = ( a, c ) => a.forEach( c );
+const arrayEach = ( a, c ) => {
+	for ( let i = 0; i < a.length; i++ ) {
+		c( i, a[ i ] );
+	}
+};
 
 const objectEach = ( o, c ) => {
 	for ( let k in o ) {
