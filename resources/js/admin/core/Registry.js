@@ -38,7 +38,7 @@ class Registry {
 	 */
 	createModule( data ) {
 		const Constructor = data.Constructor,
-			module = new Constructor( data.options );
+			module = new Constructor( data.options || {} );
 
 		_this.modules[ Constructor.name ] = module;
 
@@ -81,7 +81,7 @@ class Registry {
 	 * @returns {number} The number of the currently registered routes.
 	 */
 	registerModuleForRoute( module, route ) {
-		if ( !_this.data[ route ] ) {
+		if ( ! _this.data[ route ] ) {
 			_this.data[ route ] = [];
 		}
 
