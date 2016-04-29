@@ -75,7 +75,7 @@ test( 'toggleElement...', ( assert ) => {
 
 		assert.equal(
 			result,
-			!!targetID,
+			Boolean( targetID ),
 			'... SHOULD return whether or not it has toggled an element'
 		);
 
