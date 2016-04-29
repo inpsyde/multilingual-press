@@ -35,6 +35,7 @@ class Registry {
 	/**
 	 * Creates and stores the module instance for the given module data.
 	 * @param {Object} data - The module data.
+	 * @returns {Object} module - The instance of the module that was created
 	 */
 	createModule( data ) {
 		const Constructor = data.Constructor,
