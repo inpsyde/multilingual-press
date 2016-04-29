@@ -51,19 +51,17 @@ test( 'initializeStateTogglers...', ( assert ) => {
 );
 
 test( 'toggleElement...', ( assert ) => {
-		const testee = new Toggler();
+		const testee = new Toggler(),
 
-		const target = F.getRandomString();
+			target = F.getRandomString(),
 
-		const event = {
-			target
-		};
+			event = { target },
 		// Create 2 jQuery stubs for different selector calls
-		const $dataStub = new jQueryObject();
+			$dataStub = new jQueryObject(),
 
-		const $toggleStub = new jQueryObject();
+			$toggleStub = new jQueryObject(),
 
-		const targetID = F.getRandomBool() ? F.getRandomString() : false;
+			targetID = F.getRandomBool() ? F.getRandomString() : false;
 
 		$dataStub.data.returns( targetID );
 
@@ -71,13 +69,7 @@ test( 'toggleElement...', ( assert ) => {
 		$.withArgs( target ).returns( $dataStub );
 		$.withArgs( targetID ).returns( $toggleStub );
 
-		const result = testee.toggleElement( event );
-
-		assert.equal(
-			result,
-			Boolean( targetID ),
-			'... SHOULD return whether or not it has toggled an element'
-		);
+		testee.toggleElement( event );
 
 		if ( targetID ) {
 			assert.equal(
@@ -85,6 +77,50 @@ test( 'toggleElement...', ( assert ) => {
 				1,
 				'... SHOULD call toggle() on the jQuery element if a targetID was found'
 			);
+		}
+
+		assert.end();
+	}
+);
+
+test( 'toggleElementIfChecked...', ( assert ) => {
+		const testee = new Toggler(),
+
+			$toggler = new jQueryObject(),
+
+			data = { $toggler },
+
+			event = { data },
+
+			$toggleStub = new jQueryObject(),
+
+			targetID = F.getRandomBool() ? F.getRandomString() : false,
+
+			checked = F.getRandomBool();
+
+		$toggler.data.returns( targetID );
+
+		$toggler.is.returns( checked );
+
+		$.withArgs( targetID ).returns( $toggleStub );
+
+		testee.toggleElementIfChecked( event );
+
+		if ( targetID ) {
+			assert.equal(
+				$toggleStub.toggle.callCount,
+				1,
+				'... SHOULD call toggle() on the jQuery element if a targetID was found'
+			);
+
+			const toggleCall = $toggleStub.toggle.getCall( 0 );
+
+			assert.equal(
+				toggleCall.args[ 0 ],
+				checked,
+				'... SHOULD call toggle() with the toggler\'s "checked" state'
+			);
+
 		}
 
 		assert.end();

@@ -42,7 +42,6 @@ export class Toggler extends Backbone.View {
 		if ( targetID ) {
 			$( targetID ).toggle();
 		}
-		return Boolean( targetID );
 	}
 
 	/**
