@@ -1,5 +1,5 @@
-import sinon from "sinon";
 import * as _ from "lodash";
+import sinon from "sinon";
 
 export default function jQueryObject( customMembers = {} ) {
 	const members = _.extend( {
