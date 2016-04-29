@@ -46,8 +46,9 @@ test( 'createModule ...', ( assert ) => {
 		);
 	}
 
-	assert.ok(
+	assert.equal(
 		module instanceof data.Constructor,
+		true,
 		'... SHOULD return the module instance'
 	);
 
