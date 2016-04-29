@@ -1,7 +1,7 @@
 //
 // Independent functions.
 //
-export const getRandomBool = () => Math.random() < .5;
+export const getRandomBool = () => .5 > Math.random();
 
 export const getRandomInteger = ( min = 0, max = 10e14 - 1 ) => Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 
