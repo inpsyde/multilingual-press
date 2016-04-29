@@ -1,131 +1,156 @@
 import "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
+import * as F from "../../functions";
 import Registry from "../../../../../resources/js/admin/core/Registry";
 
-const createTestee = ( router ) => {
-	if ( !router ) {
-		router = sinon.stub();
-		router.prototype.route = sinon.spy();
-	}
+const createTestee = () => {
+	const router = sinon.stub();
+	router.route = sinon.spy();
 
-	return new Registry( new router() );
+	return new Registry( router );
 };
 
-// TODO: Adapt test to new private properties...
+test( 'createModule ...', ( assert ) => {
+	const testee = createTestee();
 
-test( 'Registry is a constructor function', ( assert ) => {
-		assert.equal(
-			typeof Registry,
-			'function',
-			'Registry SHOULD be a function.'
-		);
+	const data = {
+		Constructor: sinon.spy(),
+		options: F.getRandomString()
+	};
 
-		assert.equal(
-			typeof createTestee(),
-			'object',
-			'Registry SHOULD construct an object.'
-		);
-
-		assert.end();
+	// Maybe add a callback...
+	if ( F.getRandomBool() ) {
+		data.callback = sinon.spy();
 	}
-);
 
-test( 'createModule...', ( assert ) => {
+	testee.createModule( data );
 
-		const testee = createTestee();
+	assert.equal(
+		data.Constructor.callCount,
+		1,
+		'... SHOULD create one module instance.'
+	);
 
-		let ModuleMock = sinon.stub();
+	assert.equal(
+		data.Constructor.calledWith( data.options ),
+		true,
+		'... SHOULD pass the expected options to the module constructor.'
+	);
 
-		const moduleData = {
-			Constructor: ModuleMock,
-			options    : {},
-			callback   : sinon.spy()
-		};
-
-		testee.createModule( moduleData );
-
+	if ( data.callback ) {
 		assert.equal(
-			moduleData.callback.callCount,
+			data.callback.callCount,
 			1,
-			'....SHOULD fire a callback if it was passed'
+			'... SHOULD fire a callback IF it was passed.'
 		);
-		assert.end();
 	}
-);
 
-test( 'initializeRoute...', ( assert ) => {
-		const testee = createTestee();
-		const route = 'testroute';
-		const modules = [ {} ];
+	assert.end();
+} );
 
-		const routeSpy = sinon.spy();
-		Registry.__Rewire__( '_this', {
-				router: {
-					route: routeSpy
-				}
-			}
-		);
+// TODO: Test for createModules (plural).
 
-		testee.initializeRoute( route, modules );
+test( 'initializeRoute ...', ( assert ) => {
+	const testee = createTestee();
 
-		assert.equal(
-			routeSpy.callCount,
-			1,
-			'Router should have routed once'
-		);
+	// Turn method into spy.
+	testee.createModules = sinon.spy();
 
-		Registry.__ResetDependency__( '_this' );
-		assert.end();
-	}
-);
+	const router = {
+		route: sinon.spy()
+	};
 
-test( 'initializeRoutes...', ( assert ) => {
-		const testee = createTestee();
+	Registry.__Rewire__( '_this', { router } );
 
-		Registry.__Rewire__( '_this', {
-				data: { 'testroute_1': {}, 'testroute_2': {} }
-			}
-		);
+	const route = F.getRandomString();
 
-		// We don't care about what this method does, just about the fact that it's being called
-		testee.initializeRoute = sinon.spy();
+	const modules = F.getRandomString();
 
-		// Create a simple mock for $.each()
-		$.each = ( o = {}, c ) => {
-			for ( let k in o ) {
-				if ( o.hasOwnProperty( k ) ) {
-					c( k, o[ k ] );
-				}
-			}
-		};
+	testee.initializeRoute( route, modules );
 
-		testee.initializeRoutes();
+	assert.equal(
+		router.route.callCount,
+		1,
+		'... SHOULD route once.'
+	);
 
-		assert.equal(
-			testee.initializeRoute.callCount,
-			2,
-			'...SHOULD call initializeRoute() for each passed route'
-		);
+	assert.equal(
+		// The third argument (i.e., the callback) is missing because it is an (arrow) function, which sinon cannot handle.
+		router.route.calledWith( route, route ),
+		true,
+		'... SHOULD pass the expected arguments to router.route().'
+	);
 
-		assert.end();
-	}
-);
+	// Execute the callback passed as third argument.
+	router.route.firstCall.args[ 2 ]();
 
-test( 'registerModuleForRoute...', ( assert ) => {
-		const testee = createTestee(),
-			route = 'testroute',
-			module = {};
+	assert.equal(
+		testee.createModules.callCount,
+		1,
+		'... SHOULD pass the expected callback to router.route.'
+	);
 
-		let result = testee.registerModuleForRoute( module, route );
+	assert.equal(
+		testee.createModules.calledWith( modules ),
+		true,
+		'... SHOULD pass the expected modules to the callback.'
+	);
 
-		assert.equal(
-			typeof result,
-			'number',
-			'...SHOULD return a number.'
-		);
+	Registry.__ResetDependency__( '_this' );
 
-		assert.end();
-	}
-);
+	assert.end();
+} );
 
+test( 'initializeRoutes ...', ( assert ) => {
+	const testee = createTestee();
+
+	// Turn method into spy.
+	testee.initializeRoute = sinon.spy();
+
+	const data = F.getRandomObject();
+
+	const modules = F.getRandomString();
+
+	Registry.__Rewire__( '_this', {
+		data,
+		modules
+	} );
+
+	assert.equal(
+		testee.initializeRoutes(),
+		modules,
+		'... SHOULD return the expected modules.'
+	);
+
+	assert.equal(
+		testee.initializeRoute.callCount,
+		Object.keys( data ).length,
+		'... SHOULD initialize each passed route.'
+	);
+
+	Registry.__ResetDependency__( '_this' );
+
+	assert.end();
+} );
+
+test( 'registerModuleForRoute ...', ( assert ) => {
+	const testee = createTestee();
+
+	const route = F.getRandomString();
+
+	const data = {};
+	data[ route ] = F.getRandomArray();
+
+	Registry.__Rewire__( '_this', { data } );
+
+	assert.equal(
+		testee.registerModuleForRoute( module, route ),
+		data[ route ].length + 1,
+		'... SHOULD return the expected result.'
+	);
+
+	Registry.__ResetDependency__( '_this' );
+
+	assert.end();
+} );
