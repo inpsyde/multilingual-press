@@ -87,7 +87,7 @@ test( 'attachSubmitHandler ...', ( assert ) => {
 	);
 
 	assert.equal(
-		// The third argument (i.e., the listener) is missing because it is a bound function, which sinon cannot handle.
+		// The third argument (i.e., the listener) is missing as it is a bound function, which sinon cannot handle.
 		Util.addEventListener.calledWith( $element, 'submit' ),
 		true,
 		'... SHOULD attach the expected event handler for the correct selector.'
