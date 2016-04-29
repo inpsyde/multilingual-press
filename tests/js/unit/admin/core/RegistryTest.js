@@ -16,7 +16,7 @@ test( 'createModule ...', ( assert ) => {
 
 	const data = {
 		Constructor: sinon.spy(),
-		options: F.getRandomString()
+		options    : F.getRandomString()
 	};
 
 	// Maybe add a callback...
@@ -76,7 +76,7 @@ test( 'initializeRoute ...', ( assert ) => {
 	);
 
 	assert.equal(
-		// The third argument (i.e., the callback) is missing because it is an (arrow) function, which sinon cannot handle.
+		// The third argument (i.e., the callback) is missing as it is an (arrow) function, which sinon cannot handle.
 		router.route.calledWith( route, route ),
 		true,
 		'... SHOULD pass the expected arguments to router.route().'
@@ -140,13 +140,16 @@ test( 'registerModuleForRoute ...', ( assert ) => {
 	const route = F.getRandomString();
 
 	const data = {};
+
 	data[ route ] = F.getRandomArray();
+
+	const numRoutes = data[ route ].length;
 
 	Registry.__Rewire__( '_this', { data } );
 
 	assert.equal(
 		testee.registerModuleForRoute( module, route ),
-		data[ route ].length + 1,
+		numRoutes + 1,
 		'... SHOULD return the expected result.'
 	);
 
