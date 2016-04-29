@@ -128,7 +128,10 @@ class RemotePostSearch extends Backbone.View {
 
 		if ( this.model.get( 'success' ) ) {
 			data = this.model.get( 'data' );
-			_this.resultsContainers[ data.remoteSiteID ].html( data.html );
+
+			if ( _this.resultsContainers[ data.remoteSiteID ] ) {
+				_this.resultsContainers[ data.remoteSiteID ].html( data.html );
+			}
 
 			return true;
 		}
