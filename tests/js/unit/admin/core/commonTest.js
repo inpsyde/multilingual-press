@@ -58,27 +58,32 @@ test( 'toggleElement...', ( assert ) => {
 		const event = {
 			target
 		};
-		const $stub = new jQueryObject();
+		// Create 2 jQuery stubs for different selector calls
+		const $dataStub = new jQueryObject();
+
+		const $toggleStub = new jQueryObject();
 
 		const targetID = F.getRandomBool() ? F.getRandomString() : false;
 
-		$stub.data.returns( targetID );
+		$dataStub.data.returns( targetID );
 
-		$.withArgs( target ).returns( $stub );
+		// Wire up the jQuery stubs with the appropriate selectors
+		$.withArgs( target ).returns( $dataStub );
+		$.withArgs( targetID ).returns( $toggleStub );
 
 		const result = testee.toggleElement( event );
 
 		assert.equal(
-			(targetID),
 			result,
+			!!targetID,
 			'... SHOULD return whether or not it has toggled an element'
 		);
 
 		if ( targetID ) {
 			assert.equal(
-				$stub.toggle.callCount,
+				$toggleStub.toggle.callCount,
 				1,
-				'... SHOULD call toggle() on the jQuery element if a targetID is found'
+				'... SHOULD call toggle() on the jQuery element if a targetID was found'
 			);
 		}
 

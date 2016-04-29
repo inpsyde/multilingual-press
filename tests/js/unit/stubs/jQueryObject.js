@@ -17,11 +17,8 @@ export default function jQueryObject( customMembers = {} ) {
 		find: sinon.stub(),
 		on: sinon.stub(),
 		text: sinon.stub(),
-		val: sinon.stub()
 		toggle: sinon.stub(),
-		val: sinon.stub(),
-		attr: sinon.stub(),
-		on: sinon.stub()
+		val: sinon.stub()
 	}, customMembers );
 	Object.keys( members ).forEach( ( key ) => {
 		this[ key ] = members[ key ];
