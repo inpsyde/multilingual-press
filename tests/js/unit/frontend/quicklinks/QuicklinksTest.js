@@ -3,8 +3,14 @@ import sinon from "sinon";
 import * as F from "../../functions";
 import Quicklinks from "../../../../../resources/js/frontend/quicklinks/Quicklinks";
 
+const document = global.document = {};
+
 const Util = {};
 
+/**
+ * Returns a fresh Util stub.
+ * @returns {Object} The Util stub.
+ */
 const resetUtil = () => {
 	Util.addEventListener = sinon.spy();
 	Util.setLocation = sinon.spy();
@@ -12,9 +18,12 @@ const resetUtil = () => {
 	return Util;
 };
 
+/**
+ * Returns a new instance of the class under test.
+ * @param {string} [selector] - Optional. The form element selector. Defaults to 'selector'.
+ * @returns {Quicklinks} The instance of the class under test.
+ */
 const createTestee = ( selector ) => new Quicklinks( selector || 'selector', resetUtil() );
-
-const document = global.document = {};
 
 test( 'selector ...', ( assert ) => {
 	const selector = F.getRandomString();

@@ -5,8 +5,8 @@ import * as F from "../../functions";
 import Registry from "../../../../../resources/js/admin/core/Registry";
 
 /**
- * Sets up a Registry stub for use in tests
- * @returns {Registry}
+ * Returns a new instance of the class under test.
+ * @returns {Registry} The instance of the class under test.
  */
 const createTestee = () => {
 	const router = sinon.stub();
@@ -62,10 +62,10 @@ test( 'createModule ...', ( assert ) => {
 test( 'createModules ...', ( assert ) => {
 	const testee = createTestee();
 
-	const modules = F.getRandomArray();
-	
 	// Turn method into spy.
 	testee.createModule = sinon.spy();
+
+	const modules = F.getRandomArray();
 
 	testee.createModules( modules );
 
@@ -167,7 +167,6 @@ test( 'registerModuleForRoute ...', ( assert ) => {
 	const route = F.getRandomString();
 
 	const data = {};
-
 	data[ route ] = F.getRandomArray();
 
 	const numRoutes = data[ route ].length;

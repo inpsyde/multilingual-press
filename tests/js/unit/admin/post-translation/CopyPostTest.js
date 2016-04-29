@@ -6,25 +6,11 @@ import CopyPost from "../../../../../resources/js/admin/post-translation/CopyPos
 
 const { $ } = global;
 
-const createTestee = () => {
-	return new CopyPost();
-};
-
-test( 'CopyPost is a constructor function', ( assert ) => {
-	assert.equal(
-		typeof CopyPost,
-		'function',
-		'CopyPost SHOULD be a function.'
-	);
-
-	assert.equal(
-		typeof createTestee(),
-		'object',
-		'CopyPost SHOULD construct an object.'
-	);
-
-	assert.end();
-} );
+/**
+ * Returns a new instance of the class under test.
+ * @returns {CopyPost} The instance of the class under test.
+ */
+const createTestee = () => new CopyPost();
 
 test( 'content behaves as expected if the element does not exist', ( assert ) => {
 	const testee = createTestee();
