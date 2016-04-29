@@ -7,6 +7,7 @@ export default function jQueryObject( customMembers = {} ) {
 	const members = _.extend( {
 		_elements: [],
 
+		attr: sinon.stub(),
 		data: sinon.stub(),
 		each: ( c ) => {
 			for ( let i = 0; i < this._elements.length; i++ ) {
@@ -14,7 +15,9 @@ export default function jQueryObject( customMembers = {} ) {
 			}
 		},
 		find: sinon.stub(),
+		on: sinon.stub(),
 		text: sinon.stub(),
+		val: sinon.stub()
 		toggle: sinon.stub(),
 		val: sinon.stub(),
 		attr: sinon.stub(),

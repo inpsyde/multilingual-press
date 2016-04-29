@@ -66,8 +66,6 @@ test( 'initializeResults ...', ( assert ) => {
 
 	const _elements = F.getRandomArray( 1, 10, element );
 
-	assert.comment( _elements );
-
 	$.withArgs( '.mlp-search-field' ).returns( new jQueryObject( { _elements } ) );
 
 	testee.initializeResults();
