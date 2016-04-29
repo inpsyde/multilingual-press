@@ -4,6 +4,10 @@ import sinon from "sinon";
 import * as F from "../../functions";
 import Registry from "../../../../../resources/js/admin/core/Registry";
 
+/**
+ * Sets up a Registry stub for use in tests
+ * @returns {Registry}
+ */
 const createTestee = () => {
 	const router = sinon.stub();
 	router.route = sinon.spy();
@@ -49,13 +53,30 @@ test( 'createModule ...', ( assert ) => {
 	assert.equal(
 		module instanceof data.Constructor,
 		true,
-		'... SHOULD return the module instance'
+		'... SHOULD return the module instance.'
 	);
 
 	assert.end();
 } );
 
-// TODO: Test for createModules (plural).
+test( 'createModules ...', ( assert ) => {
+	const testee = createTestee();
+
+	const modules = F.getRandomArray();
+	
+	// Turn method into spy.
+	testee.createModule = sinon.spy();
+
+	testee.createModules( modules );
+
+	assert.equal(
+		testee.createModule.callCount,
+		modules.length,
+		'... SHOULD call createModule() for each module.'
+	);
+
+	assert.end();
+} );
 
 test( 'initializeRoute ...', ( assert ) => {
 	const testee = createTestee();
