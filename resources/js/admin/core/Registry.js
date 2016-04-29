@@ -45,6 +45,8 @@ class Registry {
 		if ( 'function' === typeof data.callback ) {
 			data.callback( module );
 		}
+
+		return module;
 	}
 
 	/**

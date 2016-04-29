@@ -24,7 +24,7 @@ test( 'createModule ...', ( assert ) => {
 		data.callback = sinon.spy();
 	}
 
-	testee.createModule( data );
+	const module = testee.createModule( data );
 
 	assert.equal(
 		data.Constructor.callCount,
@@ -45,6 +45,11 @@ test( 'createModule ...', ( assert ) => {
 			'... SHOULD fire a callback IF it was passed.'
 		);
 	}
+
+	assert.ok(
+		module instanceof data.Constructor,
+		'... SHOULD return the module instance'
+	);
 
 	assert.end();
 } );
