@@ -68,11 +68,10 @@ test( 'selectTerm ...', ( assert ) => {
 	const termID = F.getRandomInteger();
 
 	const $select = new jQueryObject();
-	$select.find.returns(
-		new jQueryObject( {
-			val: () => termID
-		} )
-	);
+	$select.find.returns( new jQueryObject( {
+		_elements: [ 'element' ],
+		val: () => termID
+	} ) );
 
 	testee.selectTerm( $select, 'relation' );
 
@@ -100,12 +99,11 @@ test( 'selectTerm ...', ( assert ) => {
 	const termID = F.getRandomInteger();
 
 	const $select = new jQueryObject();
-	$select.find.returns( {
-		length: 0,
+	$select.find.returns( new jQueryObject( {
 		first: () => new jQueryObject( {
 			val: () => termID
 		} )
-	} );
+	} ) );
 
 	testee.selectTerm( $select, 'relation' );
 
