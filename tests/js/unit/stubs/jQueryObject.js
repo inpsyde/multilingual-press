@@ -15,10 +15,10 @@ export default function jQueryObject( customMembers = {} ) {
 			}
 		},
 		find: sinon.stub(),
-		is:sinon.stub(),
+		is: sinon.stub(),
 		on: sinon.stub(),
 		text: sinon.stub(),
-		toggle: sinon.stub(),
+		toggle: sinon.spy(),
 		val: sinon.stub()
 	}, customMembers );
 	Object.keys( members ).forEach( ( key ) => {
