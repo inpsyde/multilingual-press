@@ -152,10 +152,9 @@ class RelationshipControl extends Backbone.View {
 
 			case 'disconnect':
 				return 'disconnectPost';
-
-			default:
-				return '';
 		}
+
+		return '';
 	}
 
 	/**

@@ -33,6 +33,8 @@ test( 'settings ...', ( assert ) => {
 } );
 
 test( 'initializeEventHandlers ...', ( assert ) => {
+	Backbone.Events.on.reset();
+
 	const options = {
 		EventManager: Backbone.Events
 	};
@@ -68,9 +70,197 @@ test( 'initializeEventHandlers ...', ( assert ) => {
 
 // TODO: confirmUnsavedRelationships
 
-// TODO: saveRelationship
+test( 'saveRelationship ...', ( assert ) => {
+	Backbone.Events.trigger.reset();
 
-// TODO: getEventName
+	const options = {
+		EventManager: Backbone.Events
+	};
+
+	const testee = createTestee( options );
+
+	// Turn method into spy.
+	testee.getEventName = sinon.spy();
+
+	const event = {
+		target: F.getRandomString()
+	};
+
+	const action = 'stay';
+
+	const $input = new jQueryObject();
+	$input.val.returns( action );
+
+	$.returns( $input );
+
+	testee.saveRelationship( event );
+
+	assert.equal(
+		testee.getEventName.callCount,
+		1,
+		'... SHOULD call getEventName().'
+	);
+
+	assert.equal(
+		testee.getEventName.calledWith( action ),
+		true,
+		'... SHOULD call getEventName() with the expected action.'
+	);
+
+	assert.equal(
+		options.EventManager.trigger.callCount,
+		0,
+		'... SHOULD NOT trigger any events in case nothing changed.'
+	);
+
+	// Restore jQuery.
+	$.reset();
+
+	assert.end();
+} );
+
+test( 'saveRelationship ...', ( assert ) => {
+	Backbone.Events.trigger.reset();
+
+	const options = {
+		EventManager: Backbone.Events
+	};
+
+	const testee = createTestee( options );
+
+	const eventName = F.getRandomString();
+
+	// Turn method into spy.
+	testee.getEventName = sinon.stub().returns( eventName );
+
+	const event = {
+		target: F.getRandomString()
+	};
+
+	const action = F.getRandomString();
+
+	const $input = new jQueryObject();
+	$input.val.returns( action );
+
+	const $button = new jQueryObject();
+	$button.data.returnsArg( 0 );
+
+	$.returns( $input )
+		.withArgs( event.target ).returns( $button );
+
+	testee.saveRelationship( event );
+
+	assert.equal(
+		testee.getEventName.callCount,
+		1,
+		'... SHOULD call getEventName().'
+	);
+
+	assert.equal(
+		testee.getEventName.calledWith( action ),
+		true,
+		'... SHOULD call getEventName() with the expected action.'
+	);
+
+	assert.equal(
+		$button.prop.callCount,
+		1,
+		'... SHOULD call prop().'
+	);
+
+	assert.equal(
+		$button.prop.calledWith( 'disabled', 'disabled' ),
+		true,
+		'... SHOULD disable the button.'
+	);
+
+	assert.equal(
+		options.EventManager.trigger.callCount,
+		1,
+		'... SHOULD trigger an event.'
+	);
+
+	const args = options.EventManager.trigger.firstCall.args;
+
+	assert.equal(
+		args[ 0 ],
+		'RelationshipControl:' + eventName,
+		'... SHOULD trigger the expected event.'
+	);
+
+	const eventData = {
+		action: 'mlp_rc_' + action,
+		remote_post_id: 'remote-post-id',
+		remote_site_id: 'remote-site-id',
+		source_post_id: 'source-post-id',
+		source_site_id: 'source-site-id'
+	};
+
+	assert.deepEqual(
+		args[ 1 ],
+		eventData,
+		'... SHOULD pass along the expected data.'
+	);
+
+	assert.deepEqual(
+		args[ 2 ],
+		eventName,
+		'... SHOULD pass along the expected event name.'
+	);
+
+	// Restore jQuery.
+	$.reset();
+
+	assert.end();
+} );
+
+test( 'getEventName ...', ( assert ) => {
+	const testee = createTestee();
+
+	assert.equal(
+		testee.getEventName( 'search' ),
+		'connectExistingPost',
+		'... SHOULD return the expected result for "search".'
+	);
+
+	assert.end();
+} );
+
+test( 'getEventName ...', ( assert ) => {
+	const testee = createTestee();
+
+	assert.equal(
+		testee.getEventName( 'new' ),
+		'connectNewPost',
+		'... SHOULD return the expected result for "new".'
+	);
+
+	assert.end();
+} );
+
+test( 'getEventName ...', ( assert ) => {
+	const testee = createTestee();
+
+	assert.equal(
+		testee.getEventName( 'disconnect' ),
+		'disconnectPost',
+		'... SHOULD return the expected result for "disconnect".'
+	);
+
+	assert.end();
+} );
+
+test( 'getEventName ...', ( assert ) => {
+	const testee = createTestee();
+
+	assert.equal(
+		testee.getEventName(),
+		'',
+		'... SHOULD return an empty string for any unknown action.'
+	);
+
+	assert.end();
+} );
 
 test( 'connectNewPost ...', ( assert ) => {
 	const testee = createTestee();
