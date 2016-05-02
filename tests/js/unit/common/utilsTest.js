@@ -3,7 +3,12 @@ import sinon from "sinon";
 import * as F from "../functions";
 import * as Util from "../../../../resources/js/common/utils";
 
-const window = global.window = {};
+const window = global.window = {
+	location: {
+		href: '',
+		reload: sinon.spy()
+	}
+};
 
 test( 'addEventListener ...', ( assert ) => {
 	const $element = {
@@ -80,9 +85,7 @@ test( 'addEventListener ...', ( assert ) => {
 } );
 
 test( 'reloadLocation ...', ( assert ) => {
-	window.location = {
-		reload: sinon.spy()
-	};
+	window.location.reload.reset();
 
 	Util.reloadLocation();
 
@@ -102,9 +105,7 @@ test( 'reloadLocation ...', ( assert ) => {
 } );
 
 test( 'setLocation ...', ( assert ) => {
-	window.location = {
-		href: ''
-	};
+	window.location.href = '';
 
 	const url = F.getRandomString();
 
