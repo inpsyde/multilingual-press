@@ -88,7 +88,7 @@ class RelationshipControl extends Backbone.View {
 	 * @returns {number} The index of the meta box.
 	 */
 	findMetaBox( $metaBox ) {
-		var metaBoxIndex = -1;
+		let metaBoxIndex = -1;
 
 		$.each( _this.unsavedRelationships, ( index, element ) => {
 			if ( element === $metaBox ) {
