@@ -73,6 +73,9 @@ test( 'attachSubmitHandler ...', ( assert ) => {
 		'... SHOULD NOT attach any event handlers for an incorrect selector.'
 	);
 
+	// Restore global scope.
+	delete document.querySelector;
+
 	assert.end();
 } );
 
@@ -101,6 +104,9 @@ test( 'attachSubmitHandler ...', ( assert ) => {
 		true,
 		'... SHOULD attach the expected event handler for the correct selector.'
 	);
+
+	// Restore global scope.
+	delete document.querySelector;
 
 	assert.end();
 } );
