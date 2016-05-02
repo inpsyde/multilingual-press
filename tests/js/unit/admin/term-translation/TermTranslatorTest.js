@@ -29,10 +29,11 @@ test( '$selects ...', ( assert ) => {
 test( 'getSelectedRelation ...', ( assert ) => {
 	const testee = new TermTranslator();
 
+	const $option = new jQueryObject();
+	$option.data.returns( undefined );
+
 	const $select = new jQueryObject();
-	$select.find.returns( {
-		data: F.returnUndefined
-	} );
+	$select.find.returns( $option );
 
 	assert.equal(
 		testee.getSelectedRelation( $select ),
@@ -48,10 +49,11 @@ test( 'getSelectedRelation ...', ( assert ) => {
 
 	const relation = F.getRandomString();
 
+	const $option = new jQueryObject();
+	$option.data.returns( relation );
+
 	const $select = new jQueryObject();
-	$select.find.returns( {
-		data: () => relation
-	} );
+	$select.find.returns( $option );
 
 	assert.equal(
 		testee.getSelectedRelation( $select ),
@@ -67,11 +69,13 @@ test( 'selectTerm ...', ( assert ) => {
 
 	const termID = F.getRandomInteger();
 
+	const $option = new jQueryObject( {
+		_elements: [ 'element' ]
+	} );
+	$option.val.returns( termID );
+
 	const $select = new jQueryObject();
-	$select.find.returns( new jQueryObject( {
-		_elements: [ 'element' ],
-		val: () => termID
-	} ) );
+	$select.find.returns( $option );
 
 	testee.selectTerm( $select, 'relation' );
 
@@ -94,16 +98,19 @@ test( 'selectTerm ...', ( assert ) => {
 	const testee = new TermTranslator();
 
 	// Make method return a random string (i.e., relation found).
+	// Due to incompatible arguments, this has to stay an arrow function (i..e, not just a function reference).
 	testee.getSelectedRelation = () => F.getRandomString();
 
 	const termID = F.getRandomInteger();
 
+	const $option = new jQueryObject();
+	$option.val.returns( termID );
+
+	const $options = new jQueryObject();
+	$options.first.returns( $option );
+
 	const $select = new jQueryObject();
-	$select.find.returns( new jQueryObject( {
-		first: () => new jQueryObject( {
-			val: () => termID
-		} )
-	} ) );
+	$select.find.returns( $options );
 
 	testee.selectTerm( $select, 'relation' );
 
