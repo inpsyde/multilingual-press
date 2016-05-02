@@ -7,7 +7,7 @@ import Backbone from "../../stubs/Backbone";
 import jQueryObject from "../../stubs/jQueryObject";
 import RelationshipControl from "../../../../../resources/js/admin/post-translation/RelationshipControl";
 
-const { $ } = global;
+const { $, window } = global;
 
 /**
  * Returns a new instance of the class under test.
@@ -104,6 +104,9 @@ test( 'connectNewPost ...', ( assert ) => {
 		'... SHOULD pass the expected data to sendRequest().'
 	);
 
+	// Restore jQuery.
+	$.reset();
+
 	assert.end();
 } );
 
@@ -132,7 +135,99 @@ test( 'disconnectPost ...', ( assert ) => {
 	assert.end();
 } );
 
-// TODO: connectExistingPost
+test( 'connectExistingPost ...', ( assert ) => {
+	const testee = createTestee();
+
+	window.alert.reset();
+
+	// Turn method in to spy.
+	testee.sendRequest = sinon.spy();
+
+	const postID = F.getRandomInteger( 1 );
+
+	const data = F.getRandomObject();
+	data.remote_site_id = F.getRandomInteger();
+
+	const $input = new jQueryObject();
+	$input.val.returns( postID );
+
+	$.returns( $input );
+
+	assert.equal(
+		testee.connectExistingPost( data ),
+		true,
+		'... SHOULD return the expected result.'
+	);
+
+	assert.equal(
+		window.alert.callCount,
+		0,
+		'... SHOULD NOT show an alert.'
+	);
+
+	assert.equal(
+		testee.sendRequest.callCount,
+		1,
+		'... SHOULD call sendRequest() in case of a checked post input.'
+	);
+
+	// Manipulate data object for subsequent test.
+	data.new_post_id = postID;
+
+	assert.deepEqual(
+		testee.sendRequest.firstCall.args[ 0 ],
+		data,
+		'... SHOULD pass the expected data to sendRequest() in case of a checked post input.'
+	);
+
+	// Restore global scope.
+	$.reset();
+
+	assert.end();
+} );
+
+test( 'connectExistingPost ...', ( assert ) => {
+	const settings = {
+		L10n: {
+			noPostSelected: ''
+		}
+	};
+
+	const testee = createTestee( { settings } );
+
+	window.alert.reset();
+
+	// Turn method in to spy.
+	testee.sendRequest = sinon.spy();
+
+	const $input = new jQueryObject();
+	$input.val.returns( '' );
+
+	$.returns( $input );
+
+	const data = F.getRandomObject();
+	data.remote_site_id = F.getRandomInteger();
+
+	assert.equal(
+		testee.connectExistingPost( data ),
+		false,
+		'... SHOULD return the expected result.'
+	);
+
+	assert.equal(
+		window.alert.callCount,
+		1,
+		'... SHOULD show an alert.'
+	);
+
+	assert.equal(
+		testee.sendRequest.callCount,
+		0,
+		'... SHOULD NOT call sendRequest() in case of no checked post input.'
+	);
+
+	assert.end();
+} );
 
 test( 'sendRequest ...', ( assert ) => {
 	const Util = {
@@ -141,7 +236,7 @@ test( 'sendRequest ...', ( assert ) => {
 
 	const testee = createTestee( { Util } );
 
-	const url = window.ajaxurl = F.getRandomString();
+	const url = window.ajaxurl = 'ajaxurl';
 
 	const data = F.getRandomString();
 
