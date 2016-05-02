@@ -18,5 +18,6 @@ const objectEach = ( o, c ) => {
 
 const jQuery = sinon.stub().returns( new jQueryObject() );
 jQuery.each = ( o = {}, c ) => _.isArray( o ) ? arrayEach( o, c ) : objectEach( o, c );
+jQuery.trim = ( a ) => a;
 
 export default jQuery;
