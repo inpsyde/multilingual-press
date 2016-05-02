@@ -1,5 +1,6 @@
 import "../../stubs/global";
 import test from "tape";
+import sinon from "sinon";
 import * as F from "../../functions";
 import jQueryObject from "../../stubs/jQueryObject";
 import TermTranslator from "../../../../../resources/js/admin/term-translation/TermTranslator";
@@ -24,7 +25,97 @@ test( '$selects ...', ( assert ) => {
 	assert.end();
 } );
 
-// TODO: Test propagateSelectedTerm (need to manipulate "private" property isPropagating via __Rewire__)...
+test( 'propagateSelectedTerm ...', ( assert ) => {
+	const testee = new TermTranslator();
+
+	// Rewire internal data.
+	TermTranslator.__Rewire__( '_this', { isPropagating: true } );
+
+	// Turn method into spy.
+	testee.getSelectedRelation = sinon.spy();
+
+	// Turn method into spy.
+	testee.selectTerm = sinon.spy();
+
+	testee.propagateSelectedTerm( 'event' );
+
+	assert.equal(
+		testee.getSelectedRelation.callCount,
+		0,
+		'... SHOULD NOT call getSelectedRelation() in case of an ongoing term propagation.'
+	);
+
+	assert.equal(
+		testee.selectTerm.callCount,
+		0,
+		'... SHOULD NOT call selectTerm() in case of an ongoing term propagation.'
+	);
+
+	// Restore internal data.
+	TermTranslator.__ResetDependency__( '_this' );
+
+	assert.end();
+} );
+
+test( 'propagateSelectedTerm ...', ( assert ) => {
+	const testee = new TermTranslator();
+
+	// Turn method into stub.
+	testee.getSelectedRelation = sinon.stub().returns( '' );
+
+	// Turn method into spy.
+	testee.selectTerm = sinon.spy();
+
+	testee.propagateSelectedTerm( { target: 'target' } );
+
+	assert.equal(
+		testee.getSelectedRelation.callCount,
+		1,
+		'... SHOULD call getSelectedRelation() in case of no ongoing term propagation.'
+	);
+
+	assert.equal(
+		testee.selectTerm.callCount,
+		0,
+		'... SHOULD NOT call selectTerm() in case of no valid relation.'
+	);
+
+	assert.end();
+} );
+
+test( 'propagateSelectedTerm ...', ( assert ) => {
+	const _elements = F.getRandomArray();
+
+	const $selects = new jQueryObject( { _elements } );
+	$selects.not.returns( $selects );
+
+	const $el = new jQueryObject();
+	$el.find.returns( $selects );
+
+	const testee = new TermTranslator( { $el } );
+
+	// Turn method into stub.
+	testee.getSelectedRelation = sinon.stub().returns( F.getRandomString() );
+
+	// Turn method into spy.
+	testee.selectTerm = sinon.spy();
+
+	testee.propagateSelectedTerm( { target: 'target' } );
+
+	assert.equal(
+		testee.getSelectedRelation.callCount,
+		1,
+		'... SHOULD call getSelectedRelation() in case of no ongoing term propagation.'
+	);
+
+	assert.equal(
+		testee.selectTerm.callCount,
+		_elements.length,
+		'... SHOULD NOT call selectTerm() in case of no valid relation.'
+	);
+
+	assert.end();
+} );
 
 test( 'getSelectedRelation ...', ( assert ) => {
 	const testee = new TermTranslator();
