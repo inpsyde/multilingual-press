@@ -37,7 +37,7 @@ class RemotePostSearch extends Backbone.View {
 		 * Minimum number of characters required to fire the remote post search.
 		 * @type {number}
 		 */
-		_this.threshold = parseInt( options.settings.threshold, 10 );
+		_this.threshold = parseInt( options.settings.threshold, 10 ) || 3;
 
 		this.listenTo( this.model, 'change', this.render );
 	}
