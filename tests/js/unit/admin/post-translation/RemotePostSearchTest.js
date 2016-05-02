@@ -82,6 +82,9 @@ test( 'initializeResults ...', ( assert ) => {
 		'... SHOULD initialize the expected elements.'
 	);
 
+	// Restore jQuery.
+	$.reset();
+
 	assert.end();
 } );
 
@@ -151,6 +154,9 @@ test( 'reactToInput ...', ( assert ) => {
 		'... SHOULD NOT fetch new data in case of an unchanged input value.'
 	);
 
+	// Restore jQuery.
+	$.reset();
+
 	assert.end();
 } );
 
@@ -199,6 +205,9 @@ test( 'reactToInput ...', ( assert ) => {
 			'... SHOULD fetch new data in case of a changed input value.'
 		);
 	}, 600 );
+
+	// Restore jQuery.
+	$.reset();
 
 	assert.end();
 } );
