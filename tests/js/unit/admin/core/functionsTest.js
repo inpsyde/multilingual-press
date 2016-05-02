@@ -26,6 +26,9 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 		'getSettings SHOULD return the expected settings for a valid (module constructor) function.'
 	);
 
+	// Restore window.
+	delete window.ModuleName;
+
 	assert.end();
 } );
 
@@ -38,6 +41,9 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 		window.ModuleName,
 		'getSettings SHOULD return the expected settings for a valid module name.'
 	);
+
+	// Restore window.
+	delete window.ModuleName;
 
 	assert.end();
 } );
@@ -54,6 +60,9 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 		'getSettings SHOULD return the expected settings for a valid module instance.'
 	);
 
+	// Restore window.
+	delete window.ModuleName;
+
 	assert.end();
 } );
 
@@ -67,6 +76,10 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 		window.mlpModuleNameSettings,
 		'getSettings SHOULD return the expected settings for a valid module name.'
 	);
+
+	// Restore window.
+	delete window.ModuleName;
+	delete window.mlpModuleNameSettings;
 
 	assert.end();
 } );
