@@ -34,7 +34,6 @@ export class Toggler extends Backbone.View {
 	/**
 	 * Toggles the element with the ID given in the according data attribute.
 	 * @param {Event} event - The click event of a toggler element.
-	 * @return {boolean} Whether or not an element was toggled
 	 */
 	toggleElement( event ) {
 		const targetID = $( event.target ).data( 'toggle-target' );
