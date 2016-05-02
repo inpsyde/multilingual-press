@@ -16,6 +16,7 @@ const objectEach = ( o, c ) => {
 	}
 };
 
+// TODO: On each call, return a fresh jQueryObject. Depends on something like sinon.stub().returnsCallbackResult()`.
 const jQuery = sinon.stub().returns( new jQueryObject() );
 jQuery.ajax = sinon.stub();
 jQuery.each = ( o = {}, c ) => _.isArray( o ) ? arrayEach( o, c ) : objectEach( o, c );
