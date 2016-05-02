@@ -2,7 +2,10 @@ import sinon from "sinon";
 import jQueryObject from "./jQueryObject";
 
 const Backbone = {
-	Events: {},
+	Events: {
+		on: sinon.spy(),
+		trigger: sinon.spy()
+	},
 	history: {
 		start: sinon.spy()
 	},
@@ -18,9 +21,12 @@ const Backbone = {
 		this.model = options.model || new Backbone.Model();
 	}
 };
+
 Backbone.Model.prototype.fetch = sinon.spy();
 Backbone.Model.prototype.get = sinon.stub();
+
 Backbone.Router.prototype.route = sinon.spy();
+
 Backbone.View.prototype.listenTo = sinon.spy();
 
 export default Backbone;
