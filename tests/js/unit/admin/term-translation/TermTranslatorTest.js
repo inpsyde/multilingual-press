@@ -129,7 +129,7 @@ test( 'selectTerm ...', ( assert ) => {
 	testee.getSelectedRelation = F.returnEmptyString;
 
 	const $select = new jQueryObject();
-	$select.find.returns( [] );
+	$select.find.returns( new jQueryObject() );
 
 	testee.selectTerm( $select, 'relation' );
 
