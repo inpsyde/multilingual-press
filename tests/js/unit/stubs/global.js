@@ -5,7 +5,9 @@ import jQuery from "./jQuery";
 const window = {
 	$: jQuery,
 	_: sinon.stub(),
+	alert: sinon.spy(),
 	Backbone,
+	confirm: sinon.stub(),
 	jQuery
 };
 
