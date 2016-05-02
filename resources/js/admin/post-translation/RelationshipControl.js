@@ -190,7 +190,7 @@ class RelationshipControl extends Backbone.View {
 			return false;
 		}
 
-		data.new_post_id = Number( newPostID );
+		data.new_post_id = newPostID;
 
 		this.sendRequest( data );
 
