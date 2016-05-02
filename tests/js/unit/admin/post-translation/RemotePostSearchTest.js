@@ -108,7 +108,100 @@ test( 'preventFormSubmission ...', ( assert ) => {
 	assert.end();
 } );
 
-// TODO: Test reactToInput().
+test( 'reactToInput ...', ( assert ) => {
+	const model = new Backbone.Model();
+
+	const options = {
+		model
+	};
+
+	const testee = createTestee( options );
+
+	const target = 'target';
+
+	const event = {
+		target
+	};
+
+	const value = F.getRandomString();
+
+	const $input = new jQueryObject();
+	$input.data.withArgs( 'value' ).returns( value );
+	$input.val.returns( value );
+
+	$.withArgs( target ).returns( $input );
+
+	testee.reactToInput( event );
+
+	assert.equal(
+		$input.data.callCount,
+		1,
+		'... SHOULD read input data.'
+	);
+
+	assert.equal(
+		$input.data.calledWithExactly( 'value' ),
+		true,
+		'... SHOULD NOT write any input data in case of an unchanged input value.'
+	);
+
+	assert.equal(
+		model.fetch.callCount,
+		0,
+		'... SHOULD NOT fetch new data in case of an unchanged input value.'
+	);
+
+	assert.end();
+} );
+
+test( 'reactToInput ...', ( assert ) => {
+	const model = new Backbone.Model();
+
+	const options = {
+		model
+	};
+
+	const testee = createTestee( options );
+
+	const target = 'target';
+
+	const value = F.getRandomString();
+
+	const $input = new jQueryObject();
+	$input.data.withArgs( 'value' ).returns( 'value' );
+	$input.val.returns( value );
+
+	$.withArgs( target ).returns( $input );
+
+	const event = {
+		target
+	};
+
+	testee.reactToInput( event );
+
+	assert.equal(
+		$input.data.calledWithExactly( 'value' ),
+		true,
+		'... SHOULD read input data.'
+	);
+
+	assert.equal(
+		$input.data.calledWithExactly( 'value', value ),
+		true,
+		'... SHOULD write input data in case of a changed input value.'
+	);
+
+	// Test a timed action after 1.5 times the original delay.
+	setTimeout( () => {
+		assert.equal(
+			model.fetch.callCount,
+			1,
+			'... SHOULD fetch new data in case of a changed input value.'
+		);
+	}, 600 );
+
+	assert.end();
+} );
 
 test( 'render ...', ( assert ) => {
 	const success = F.getRandomBool();
