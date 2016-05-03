@@ -89,6 +89,7 @@ test( 'findMetaBox ...', ( assert ) => {
 
 	unsavedRelationships[ index ] = $metaBox;
 
+	// Rewire internal data.
 	RelationshipControl.__Rewire__( '_this', { unsavedRelationships } );
 
 	assert.equal(
@@ -97,12 +98,103 @@ test( 'findMetaBox ...', ( assert ) => {
 		'... SHOULD return the expected index.'
 	);
 
+	// Restore internal data.
 	RelationshipControl.__ResetDependency__( '_this' );
 
 	assert.end();
 } );
 
-// TODO: confirmUnsavedRelationships
+test( 'confirmUnsavedRelationships ...', ( assert ) => {
+	const testee = createTestee();
+
+	const event = {
+		preventDefault: sinon.spy()
+	};
+
+	testee.confirmUnsavedRelationships( event );
+
+	assert.equal(
+		event.preventDefault.callCount,
+		0,
+		'... SHOULD NOT prevent publishing in case there are no unsaved relationships.'
+	);
+
+	assert.end();
+} );
+
+test( 'confirmUnsavedRelationships ...', ( assert ) => {
+	const testee = createTestee();
+
+	// Rewire internal data.
+	RelationshipControl.__Rewire__( '_this', {
+		settings: {
+			L10n: {
+				unsavedRelationships: ''
+			}
+		},
+		unsavedRelationships: [ 'metaBox' ]
+	} );
+
+	const event = {
+		preventDefault: sinon.spy()
+	};
+
+	// Make the "user" confirm discarding all unsaved relationships.
+	window.confirm.returns( true );
+
+	testee.confirmUnsavedRelationships( event );
+
+	assert.equal(
+		event.preventDefault.callCount,
+		0,
+		'... SHOULD NOT prevent publishing in case of actively discarded unsaved relationships.'
+	);
+
+	// Reset window.
+	window.confirm.reset();
+
+	// Restore internal data.
+	RelationshipControl.__ResetDependency__( '_this' );
+
+	assert.end();
+} );
+
+test( 'confirmUnsavedRelationships ...', ( assert ) => {
+	const testee = createTestee();
+
+	// Rewire internal data.
+	RelationshipControl.__Rewire__( '_this', {
+		settings: {
+			L10n: {
+				unsavedRelationships: ''
+			}
+		},
+		unsavedRelationships: [ 'metaBox' ]
+	} );
+
+	const event = {
+		preventDefault: sinon.spy()
+	};
+
+	// Make the "user" cancel publishing (i.e., discarding all unsaved relationships).
+	window.confirm.returns( false );
+
+	testee.confirmUnsavedRelationships( event );
+
+	assert.equal(
+		event.preventDefault.callCount,
+		1,
+		'... SHOULD prevent publishing.'
+	);
+
+	// Reset window.
+	window.confirm.reset();
+
+	// Restore internal data.
+	RelationshipControl.__ResetDependency__( '_this' );
+
+	assert.end();
+} );
 
 test( 'saveRelationship ...', ( assert ) => {
 	Backbone.Events.trigger.reset();
