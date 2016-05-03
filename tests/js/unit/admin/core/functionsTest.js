@@ -4,17 +4,17 @@ import * as Functions from "../../../../../resources/js/admin/core/functions";
 
 const window = global.window = {};
 
-test( 'getSettings returns an empty object if the requested settings could not be found', ( assert ) => {
+test( 'getSettings (settings not found) ...', ( assert ) => {
 	assert.deepEqual(
 		Functions.getSettings( 'module' ),
 		{},
-		'getSettings SHOULD return an empty object if the requested settings could not be found.'
+		'... SHOULD return an empty object.'
 	);
 
 	assert.end();
 } );
 
-test( 'getSettings returns the expected settings object', ( assert ) => {
+test( 'getSettings (constructor function) ...', ( assert ) => {
 	// Prepare "global" settings.
 	window.ModuleName = F.getRandomString();
 
@@ -23,7 +23,7 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 	assert.equal(
 		Functions.getSettings( ModuleName ),
 		window.ModuleName,
-		'getSettings SHOULD return the expected settings for a valid (module constructor) function.'
+		'... SHOULD return the expected settings object.'
 	);
 
 	// Restore window.
@@ -32,14 +32,14 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getSettings returns the expected settings object', ( assert ) => {
+test( 'getSettings (module name) ...', ( assert ) => {
 	// Prepare "global" settings.
 	window.ModuleName = F.getRandomString();
 
 	assert.equal(
 		Functions.getSettings( 'ModuleName' ),
 		window.ModuleName,
-		'getSettings SHOULD return the expected settings for a valid module name.'
+		'... SHOULD return the expected settings object.'
 	);
 
 	// Restore window.
@@ -48,7 +48,7 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getSettings returns the expected settings object', ( assert ) => {
+test( 'getSettings (module instance) ...', ( assert ) => {
 	// Prepare "global" settings.
 	window.ModuleName = F.getRandomString();
 
@@ -57,7 +57,7 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 	assert.equal(
 		Functions.getSettings( new ModuleName() ),
 		window.ModuleName,
-		'getSettings SHOULD return the expected settings for a valid module instance.'
+		'... SHOULD return the expected settings object.'
 	);
 
 	// Restore window.
@@ -66,20 +66,20 @@ test( 'getSettings returns the expected settings object', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getSettings returns the expected settings object', ( assert ) => {
+test( 'getSettings (module name, settings variable pre- and postfixed) ...', ( assert ) => {
 	// Prepare "global" settings.
-	window.ModuleName = F.getRandomString();
 	window.mlpModuleNameSettings = F.getRandomString();
+	window.ModuleName = F.getRandomString();
 
 	assert.equal(
 		Functions.getSettings( 'ModuleName' ),
 		window.mlpModuleNameSettings,
-		'getSettings SHOULD return the expected settings for a valid module name.'
+		'... SHOULD return the expected settings object.'
 	);
 
 	// Restore window.
-	delete window.ModuleName;
 	delete window.mlpModuleNameSettings;
+	delete window.ModuleName;
 
 	assert.end();
 } );
