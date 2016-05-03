@@ -100,9 +100,12 @@ class NavMenus extends Backbone.View {
 
 	/**
 	 * Renders the nav menu item to the currently edited menu.
+	 * @returns {boolean} Whether or not the nav menu item was rendered.
 	 */
 	render() {
-		if ( this.model.get( 'success' ) ) {
+		const success = this.model.get( 'success' );
+
+		if ( success ) {
 			_this.$menuToEdit.append( this.model.get( 'data' ) );
 		}
 
@@ -111,6 +114,8 @@ class NavMenus extends Backbone.View {
 		_this.$spinner.removeClass( 'is-active' );
 
 		_this.$submit.prop( 'disabled', false );
+
+		return success;
 	}
 }
 
