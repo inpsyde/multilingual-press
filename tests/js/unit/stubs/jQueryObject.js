@@ -8,6 +8,7 @@ export default function jQueryObject( customMembers = {} ) {
 		_elements: [],
 
 		attr: sinon.stub(),
+		before: sinon.spy(),
 		closest: sinon.stub(),
 		css: sinon.spy(),
 		data: sinon.stub(),
@@ -18,6 +19,7 @@ export default function jQueryObject( customMembers = {} ) {
 		},
 		find: sinon.stub(),
 		first: sinon.stub(),
+		html: sinon.stub(),
 		is: sinon.stub(),
 		not: sinon.stub(),
 		on: sinon.stub(),

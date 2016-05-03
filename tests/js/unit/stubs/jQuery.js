@@ -22,8 +22,8 @@ jQuery.each = ( o = {}, c ) => _.isArray( o ) ? arrayEach( o, c ) : objectEach( 
 jQuery.trim = ( a ) => a;
 
 jQuery._restore = () => {
-	// Restore jQuery.
 	jQuery.reset().resetBehavior();
+
 	// TODO: On each call, return a fresh jQueryObject. Depends on something like sinon.stub().returnsCallbackResult()`.
 	jQuery.returns( new jQueryObject() );
 };
