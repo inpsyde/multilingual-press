@@ -10,7 +10,7 @@ const window = global.window = {
 	}
 };
 
-test( 'addEventListener ...', ( assert ) => {
+test( 'addEventListener (using an IE8 browser) ...', ( assert ) => {
 	const $element = {
 		attachEvent: sinon.spy()
 	};
@@ -24,13 +24,13 @@ test( 'addEventListener ...', ( assert ) => {
 	assert.equal(
 		$element.attachEvent.callCount,
 		1,
-		'... SHOULD attach one event listener using IE8 methods for IE8 browsers.'
+		'... SHOULD attach one event listener using IE8 methods.'
 	);
 
 	assert.equal(
 		$element.attachEvent.calledWith( 'on' + type ),
 		true,
-		'... SHOULD attach the event listener on the expected event using IE8 methods for IE8 browsers.'
+		'... SHOULD attach the event listener on the expected event using IE8 methods.'
 	);
 
 	// Execute the callback passed as second argument.
@@ -39,19 +39,19 @@ test( 'addEventListener ...', ( assert ) => {
 	assert.equal(
 		listener.callCount,
 		1,
-		'... SHOULD attach the expected event listener using IE8 methods for IE8 browsers.'
+		'... SHOULD attach the expected event listener using IE8 methods.'
 	);
 
 	assert.equal(
 		listener.calledOn( $element ),
 		true,
-		'... SHOULD specify the expected context for the event listener using IE8 methods for IE8 browsers.'
+		'... SHOULD specify the expected context for the event listener using IE8 methods.'
 	);
 
 	assert.end();
 } );
 
-test( 'addEventListener ...', ( assert ) => {
+test( 'addEventListener (using an IE8+ browser) ...', ( assert ) => {
 	const $element = {
 		addEventListener: sinon.spy(),
 		attachEvent: sinon.spy()
@@ -66,19 +66,19 @@ test( 'addEventListener ...', ( assert ) => {
 	assert.equal(
 		$element.attachEvent.callCount,
 		0,
-		'... SHOULD NOT attach any event listeners using IE8 methods for IE8+ browsers.'
+		'... SHOULD NOT attach any event listeners using IE8 methods.'
 	);
 
 	assert.equal(
 		$element.addEventListener.callCount,
 		1,
-		'... SHOULD attach one event listener using IE8+ methods for IE8+ browsers.'
+		'... SHOULD attach one event listener using IE8+ methods.'
 	);
 
 	assert.equal(
 		$element.addEventListener.calledWith( type, listener ),
 		true,
-		'... SHOULD attach the expected event listener using IE8+ methods for IE8+ browsers.'
+		'... SHOULD attach the expected event listener using IE8+ methods.'
 	);
 
 	assert.end();

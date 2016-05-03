@@ -33,7 +33,7 @@ test( 'selector ...', ( assert ) => {
 	assert.equal(
 		testee.selector,
 		selector,
-		'... SHOULD return the expected value.'
+		'... SHOULD have the expected value.'
 	);
 
 	assert.end();
@@ -56,7 +56,7 @@ test( 'initialize ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'attachSubmitHandler ...', ( assert ) => {
+test( 'attachSubmitHandler (incorrect selector) ...', ( assert ) => {
 	const testee = createTestee( 'incorrect-selector' );
 
 	document.querySelector = F.returnNull;
@@ -64,13 +64,13 @@ test( 'attachSubmitHandler ...', ( assert ) => {
 	assert.equal(
 		testee.attachSubmitHandler(),
 		false,
-		'... SHOULD return false for an incorrect selector.'
+		'... SHOULD return false.'
 	);
 
 	assert.equal(
 		Util.addEventListener.callCount,
 		0,
-		'... SHOULD NOT attach any event handlers for an incorrect selector.'
+		'... SHOULD NOT attach any event handlers.'
 	);
 
 	// Restore global scope.
@@ -79,7 +79,7 @@ test( 'attachSubmitHandler ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'attachSubmitHandler ...', ( assert ) => {
+test( 'attachSubmitHandler (correct selector) ...', ( assert ) => {
 	const testee = createTestee( 'correct-selector' );
 
 	const $element = F.getRandomString();
@@ -89,20 +89,20 @@ test( 'attachSubmitHandler ...', ( assert ) => {
 	assert.equal(
 		testee.attachSubmitHandler(),
 		true,
-		'... SHOULD return true for the correct selector.'
+		'... SHOULD return true.'
 	);
 
 	assert.equal(
 		Util.addEventListener.callCount,
 		1,
-		'... SHOULD attach one event handler for the correct selector.'
+		'... SHOULD attach one event handler.'
 	);
 
 	assert.equal(
 		// The third argument (i.e., the listener) is missing as it is a bound function, which sinon cannot handle.
 		Util.addEventListener.calledWith( $element, 'submit' ),
 		true,
-		'... SHOULD attach the expected event handler for the correct selector.'
+		'... SHOULD attach the expected event handler.'
 	);
 
 	// Restore global scope.
@@ -111,7 +111,7 @@ test( 'attachSubmitHandler ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'submitForm ...', ( assert ) => {
+test( 'submitForm (element missing) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const event = {
@@ -126,13 +126,13 @@ test( 'submitForm ...', ( assert ) => {
 	assert.equal(
 		event.preventDefault.callCount,
 		0,
-		'... SHOULD NOT call event.prevenDefault for a missing select element.'
+		'... SHOULD NOT call event.prevenDefault.'
 	);
 
 	assert.end();
 } );
 
-test( 'submitForm ...', ( assert ) => {
+test( 'submitForm (element present) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const $select = {
@@ -151,19 +151,19 @@ test( 'submitForm ...', ( assert ) => {
 	assert.equal(
 		event.preventDefault.callCount,
 		1,
-		'... SHOULD call event.prevenDefault for a present select element.'
+		'... SHOULD call event.prevenDefault.'
 	);
 
 	assert.equal(
 		Util.setLocation.callCount,
 		1,
-		'... should call Util.setLocation once for a present select element.'
+		'... should call Util.setLocation once.'
 	);
 
 	assert.equal(
 		Util.setLocation.calledWith( $select.value ),
 		true,
-		'... SHOULD call Util.setLocation with the select value for a present select element.'
+		'... SHOULD call Util.setLocation with the select value.'
 	);
 
 	assert.end();

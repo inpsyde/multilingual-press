@@ -40,7 +40,7 @@ test( '$selects ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'propagateSelectedTerm ...', ( assert ) => {
+test( 'propagateSelectedTerm (propagating) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Rewire internal data.
@@ -57,19 +57,19 @@ test( 'propagateSelectedTerm ...', ( assert ) => {
 	assert.equal(
 		testee.getSelectedRelation.callCount,
 		0,
-		'... SHOULD NOT call getSelectedRelation() in case of an ongoing term propagation.'
+		'... SHOULD NOT call getSelectedRelation().'
 	);
 
 	assert.equal(
 		testee.selectTerm.callCount,
 		0,
-		'... SHOULD NOT call selectTerm() in case of an ongoing term propagation.'
+		'... SHOULD NOT call selectTerm().'
 	);
 
 	assert.end();
 } );
 
-test( 'propagateSelectedTerm ...', ( assert ) => {
+test( 'propagateSelectedTerm (not propagating, invalid relation) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Turn method into stub.
@@ -83,19 +83,19 @@ test( 'propagateSelectedTerm ...', ( assert ) => {
 	assert.equal(
 		testee.getSelectedRelation.callCount,
 		1,
-		'... SHOULD call getSelectedRelation() in case of no ongoing term propagation.'
+		'... SHOULD call getSelectedRelation().'
 	);
 
 	assert.equal(
 		testee.selectTerm.callCount,
 		0,
-		'... SHOULD NOT call selectTerm() in case of no valid relation.'
+		'... SHOULD NOT call selectTerm().'
 	);
 
 	assert.end();
 } );
 
-test( 'propagateSelectedTerm ...', ( assert ) => {
+test( 'propagateSelectedTerm (not propagating, valid relation) ...', ( assert ) => {
 	const _elements = F.getRandomArray();
 
 	const $selects = new jQueryObject( { _elements } );
@@ -117,19 +117,19 @@ test( 'propagateSelectedTerm ...', ( assert ) => {
 	assert.equal(
 		testee.getSelectedRelation.callCount,
 		1,
-		'... SHOULD call getSelectedRelation() in case of no ongoing term propagation.'
+		'... SHOULD call getSelectedRelation().'
 	);
 
 	assert.equal(
 		testee.selectTerm.callCount,
 		_elements.length,
-		'... SHOULD NOT call selectTerm() in case of no valid relation.'
+		'... SHOULD call selectTerm() for each select element.'
 	);
 
 	assert.end();
 } );
 
-test( 'getSelectedRelation ...', ( assert ) => {
+test( 'getSelectedRelation (relation missing) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const $option = new jQueryObject();
@@ -141,13 +141,13 @@ test( 'getSelectedRelation ...', ( assert ) => {
 	assert.equal(
 		testee.getSelectedRelation( $select ),
 		'',
-		'... SHOULD return an empty string for a missing relation.'
+		'... SHOULD return an empty string.'
 	);
 
 	assert.end();
 } );
 
-test( 'getSelectedRelation ...', ( assert ) => {
+test( 'getSelectedRelation (relation specified) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const relation = F.getRandomString();
@@ -161,13 +161,13 @@ test( 'getSelectedRelation ...', ( assert ) => {
 	assert.equal(
 		testee.getSelectedRelation( $select ),
 		relation,
-		'... SHOULD return the expected relation for an existing relation.'
+		'... SHOULD return the expected relation.'
 	);
 
 	assert.end();
 } );
 
-test( 'selectTerm ...', ( assert ) => {
+test( 'selectTerm (matching relation) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const termID = F.getRandomInteger();
@@ -189,19 +189,19 @@ test( 'selectTerm ...', ( assert ) => {
 	assert.equal(
 		$select.val.callCount,
 		1,
-		'... SHOULD set a term value for a matching relation.'
+		'... SHOULD set a term value.'
 	);
 
 	assert.equal(
 		$select.val.calledWith( termID ),
 		true,
-		'... SHOULD set the expected term value for a matching relation.'
+		'... SHOULD set the expected term value.'
 	);
 
 	assert.end();
 } );
 
-test( 'selectTerm ...', ( assert ) => {
+test( 'selectTerm (no matching relation) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Make method return a random string (i.e., relation found).
@@ -228,19 +228,19 @@ test( 'selectTerm ...', ( assert ) => {
 	assert.equal(
 		$select.val.callCount,
 		1,
-		'... SHOULD set a term value for a not-matching relation.'
+		'... SHOULD set a term value.'
 	);
 
 	assert.equal(
 		$select.val.calledWith( termID ),
 		true,
-		'... SHOULD set the expected term value for a not-matching relation.'
+		'... SHOULD set the expected term value.'
 	);
 
 	assert.end();
 } );
 
-test( 'selectTerm ...', ( assert ) => {
+test( 'selectTerm (relation missing) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Make method return an empty string (i.e., no relation found).
@@ -258,7 +258,7 @@ test( 'selectTerm ...', ( assert ) => {
 	assert.equal(
 		$select.val.callCount,
 		0,
-		'... SHOULD NOT set a term value for a missing relation.'
+		'... SHOULD NOT set a term value.'
 	);
 
 	assert.end();

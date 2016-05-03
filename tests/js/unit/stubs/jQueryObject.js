@@ -9,6 +9,7 @@ export default function jQueryObject( customMembers = {} ) {
 
 		attr: sinon.stub(),
 		closest: sinon.stub(),
+		css: sinon.spy(),
 		data: sinon.stub(),
 		each: ( c ) => {
 			for ( let i = 0; i < this._elements.length; i++ ) {
