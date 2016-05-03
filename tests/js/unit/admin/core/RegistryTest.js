@@ -20,7 +20,7 @@ test( 'createModule ...', ( assert ) => {
 
 	const data = {
 		Constructor: sinon.spy(),
-		options    : F.getRandomString()
+		options: F.getRandomString()
 	};
 
 	// Maybe add a callback...
