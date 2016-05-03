@@ -16,10 +16,18 @@ const objectEach = ( o, c ) => {
 	}
 };
 
-// TODO: On each call, return a fresh jQueryObject. Depends on something like sinon.stub().returnsCallbackResult()`.
-const jQuery = sinon.stub().returns( new jQueryObject() );
+const jQuery = sinon.stub();
 jQuery.ajax = sinon.stub();
 jQuery.each = ( o = {}, c ) => _.isArray( o ) ? arrayEach( o, c ) : objectEach( o, c );
 jQuery.trim = ( a ) => a;
+
+jQuery._restore = () => {
+	// Restore jQuery.
+	jQuery.reset().resetBehavior();
+	// TODO: On each call, return a fresh jQueryObject. Depends on something like sinon.stub().returnsCallbackResult()`.
+	jQuery.returns( new jQueryObject() );
+};
+
+jQuery._restore();
 
 export default jQuery;
