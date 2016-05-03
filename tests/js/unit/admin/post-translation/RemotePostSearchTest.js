@@ -119,7 +119,7 @@ test( 'preventFormSubmission ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'reactToInput ...', ( assert ) => {
+test( 'reactToInput (unchanged input value) ...', ( assert ) => {
 	const model = new Backbone.Model();
 
 	const options = {
@@ -153,13 +153,13 @@ test( 'reactToInput ...', ( assert ) => {
 	assert.equal(
 		$input.data.calledWithExactly( 'value' ),
 		true,
-		'... SHOULD NOT write any input data in case of an unchanged input value.'
+		'... SHOULD NOT write any input data.'
 	);
 
 	assert.equal(
 		model.fetch.callCount,
 		0,
-		'... SHOULD NOT fetch new data in case of an unchanged input value.'
+		'... SHOULD NOT fetch new data.'
 	);
 
 	// Restore jQuery.
@@ -168,7 +168,7 @@ test( 'reactToInput ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'reactToInput ...', ( assert ) => {
+test( 'reactToInput (changed input value) ...', ( assert ) => {
 	const model = new Backbone.Model();
 
 	const options = {
@@ -202,7 +202,7 @@ test( 'reactToInput ...', ( assert ) => {
 	assert.equal(
 		$input.data.calledWithExactly( 'value', value ),
 		true,
-		'... SHOULD write input data in case of a changed input value.'
+		'... SHOULD write input data.'
 	);
 
 	// Test a timed action after 1.5 times the original delay.
@@ -210,7 +210,7 @@ test( 'reactToInput ...', ( assert ) => {
 		assert.equal(
 			model.fetch.callCount,
 			1,
-			'... SHOULD fetch new data in case of a changed input value.'
+			'... SHOULD fetch new data.'
 		);
 	}, 600 );
 
@@ -237,7 +237,7 @@ test( 'render ...', ( assert ) => {
 	assert.equal(
 		testee.render(),
 		success,
-		'... SHOULD return expected result.'
+		'... SHOULD return the expected result.'
 	);
 
 	assert.end();

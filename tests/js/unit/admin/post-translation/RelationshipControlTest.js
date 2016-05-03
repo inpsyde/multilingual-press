@@ -71,7 +71,7 @@ test( 'initializeEventHandlers ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'updateUnsavedRelationships ...', ( assert ) => {
+test( 'updateUnsavedRelationships (changed input, meta box already stored) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const unsavedRelationships = [ 'metaBox' ];
@@ -103,7 +103,7 @@ test( 'updateUnsavedRelationships ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'updateUnsavedRelationships ...', ( assert ) => {
+test( 'updateUnsavedRelationships (unchanged input, meta box not stored) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const unsavedRelationships = [ 'metaBox' ];
@@ -139,7 +139,7 @@ test( 'updateUnsavedRelationships ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'updateUnsavedRelationships ...', ( assert ) => {
+test( 'updateUnsavedRelationships (unchanged input, meta box stored) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Rewire internal data.
@@ -173,7 +173,7 @@ test( 'updateUnsavedRelationships ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'updateUnsavedRelationships ...', ( assert ) => {
+test( 'updateUnsavedRelationships (changed input, meta box not stored) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Turn method into stub.
@@ -203,19 +203,19 @@ test( 'updateUnsavedRelationships ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'findMetaBox ...', ( assert ) => {
+test( 'findMetaBox (meta box not found) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
 		testee.findMetaBox( 'metaBox' ),
 		-1,
-		'... SHOULD return -1 in case the meta box was not found.'
+		'... SHOULD return -1.'
 	);
 
 	assert.end();
 } );
 
-test( 'findMetaBox ...', ( assert ) => {
+test( 'findMetaBox (meta box found) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const $metaBox = 'metaBox';
@@ -238,7 +238,7 @@ test( 'findMetaBox ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'confirmUnsavedRelationships ...', ( assert ) => {
+test( 'confirmUnsavedRelationships (no unsaved relationships) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const event = {
@@ -250,13 +250,13 @@ test( 'confirmUnsavedRelationships ...', ( assert ) => {
 	assert.equal(
 		event.preventDefault.callCount,
 		0,
-		'... SHOULD NOT prevent publishing in case there are no unsaved relationships.'
+		'... SHOULD NOT prevent publishing.'
 	);
 
 	assert.end();
 } );
 
-test( 'confirmUnsavedRelationships ...', ( assert ) => {
+test( 'confirmUnsavedRelationships (unsaved relationships, user confirmed discarding) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Rewire internal data.
@@ -281,7 +281,7 @@ test( 'confirmUnsavedRelationships ...', ( assert ) => {
 	assert.equal(
 		event.preventDefault.callCount,
 		0,
-		'... SHOULD NOT prevent publishing in case of actively discarded unsaved relationships.'
+		'... SHOULD NOT prevent publishing.'
 	);
 
 	// Reset window.
@@ -290,7 +290,7 @@ test( 'confirmUnsavedRelationships ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'confirmUnsavedRelationships ...', ( assert ) => {
+test( 'confirmUnsavedRelationships (unsaved relationships, user canceled discarding) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Rewire internal data.
@@ -307,7 +307,7 @@ test( 'confirmUnsavedRelationships ...', ( assert ) => {
 		preventDefault: sinon.spy()
 	};
 
-	// Make the "user" cancel publishing (i.e., discarding all unsaved relationships).
+	// Make the "user" cancel discarding all unsaved relationships.
 	window.confirm.returns( false );
 
 	testee.confirmUnsavedRelationships( event );
@@ -324,7 +324,7 @@ test( 'confirmUnsavedRelationships ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'saveRelationship ...', ( assert ) => {
+test( 'saveRelationship (nothing changed) ...', ( assert ) => {
 	Backbone.Events.trigger.reset();
 
 	const options = {
@@ -364,7 +364,7 @@ test( 'saveRelationship ...', ( assert ) => {
 	assert.equal(
 		options.EventManager.trigger.callCount,
 		0,
-		'... SHOULD NOT trigger any events in case nothing changed.'
+		'... SHOULD NOT trigger any events.'
 	);
 
 	// Restore jQuery.
@@ -373,7 +373,7 @@ test( 'saveRelationship ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'saveRelationship ...', ( assert ) => {
+test( 'saveRelationship (data changed) ...', ( assert ) => {
 	Backbone.Events.trigger.reset();
 
 	const options = {
@@ -468,49 +468,49 @@ test( 'saveRelationship ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getEventName ...', ( assert ) => {
+test( 'getEventName (search) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
 		testee.getEventName( 'search' ),
 		'connectExistingPost',
-		'... SHOULD return the expected result for "search".'
+		'... SHOULD return the expected result.'
 	);
 
 	assert.end();
 } );
 
-test( 'getEventName ...', ( assert ) => {
+test( 'getEventName (new) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
 		testee.getEventName( 'new' ),
 		'connectNewPost',
-		'... SHOULD return the expected result for "new".'
+		'... SHOULD return the expected result.'
 	);
 
 	assert.end();
 } );
 
-test( 'getEventName ...', ( assert ) => {
+test( 'getEventName (disconnect) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
 		testee.getEventName( 'disconnect' ),
 		'disconnectPost',
-		'... SHOULD return the expected result for "disconnect".'
+		'... SHOULD return the expected result.'
 	);
 
 	assert.end();
 } );
 
-test( 'getEventName ...', ( assert ) => {
+test( 'getEventName (unknown action) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
 		testee.getEventName(),
 		'',
-		'... SHOULD return an empty string for any unknown action.'
+		'... SHOULD return an empty string.'
 	);
 
 	assert.end();
@@ -579,7 +579,7 @@ test( 'disconnectPost ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'connectExistingPost ...', ( assert ) => {
+test( 'connectExistingPost (input checked) ...', ( assert ) => {
 	const testee = createTestee();
 
 	window.alert.reset();
@@ -612,7 +612,7 @@ test( 'connectExistingPost ...', ( assert ) => {
 	assert.equal(
 		testee.sendRequest.callCount,
 		1,
-		'... SHOULD call sendRequest() in case of a checked post input.'
+		'... SHOULD call sendRequest().'
 	);
 
 	// Manipulate data object for subsequent test.
@@ -621,7 +621,7 @@ test( 'connectExistingPost ...', ( assert ) => {
 	assert.deepEqual(
 		testee.sendRequest.firstCall.args[ 0 ],
 		data,
-		'... SHOULD pass the expected data to sendRequest() in case of a checked post input.'
+		'... SHOULD pass the expected data to sendRequest().'
 	);
 
 	// Restore global scope.
@@ -630,7 +630,7 @@ test( 'connectExistingPost ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'connectExistingPost ...', ( assert ) => {
+test( 'connectExistingPost (no input checked) ...', ( assert ) => {
 	const settings = {
 		L10n: {
 			noPostSelected: ''
@@ -667,7 +667,7 @@ test( 'connectExistingPost ...', ( assert ) => {
 	assert.equal(
 		testee.sendRequest.callCount,
 		0,
-		'... SHOULD NOT call sendRequest() in case of no checked post input.'
+		'... SHOULD NOT call sendRequest().'
 	);
 
 	// Restore global scope.
