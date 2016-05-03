@@ -1,4 +1,3 @@
-const $ = window.jQuery;
 const { _ } = window;
 
 // Internal pseudo-namespace for private data.
@@ -82,7 +81,7 @@ class Controller {
 
 		_.isArray( routes ) || ( routes = [ routes ] );
 
-		$.each( routes, ( index, route ) => _this.registry.registerModuleForRoute( moduleData, route ) );
+		routes.forEach( ( route ) => _this.registry.registerModuleForRoute( moduleData, route ) );
 	}
 }
 
