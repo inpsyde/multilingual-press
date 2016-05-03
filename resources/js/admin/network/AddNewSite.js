@@ -43,7 +43,6 @@ class AddNewSite extends Backbone.View {
 	/**
 	 * Sets MultilingualPress's language select to the currently selected site language.
 	 * @param {Event} event - The change event of the site language select element.
-	 * @returns {boolean} Whether or not the languages has been adapted.
 	 */
 	adaptLanguage( event ) {
 		const language = this.getLanguage( $( event.target ) );
