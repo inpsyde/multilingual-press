@@ -93,7 +93,7 @@ class NavMenus extends Backbone.View {
 	getSiteIDs() {
 		const ids = [];
 
-		_this.$languages.filter( ':checked' ).each( ( index, element ) => ids.push( Number( $( element ).val() ) ) );
+		_this.$languages.filter( ':checked' ).each( ( i, element ) => ids.push( Number( $( element ).val() || 0 ) ) );
 
 		return ids;
 	}

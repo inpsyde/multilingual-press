@@ -44,7 +44,7 @@ class CopyPost extends Backbone.View {
 		 * The currently edited post's ID.
 		 * @type {number}
 		 */
-		_this.postID = Number( $( '#post_ID' ).val() );
+		_this.postID = Number( $( '#post_ID' ).val() || 0 );
 
 		/**
 		 * The settings.
@@ -153,7 +153,7 @@ class CopyPost extends Backbone.View {
 	 * @returns {number} The site ID.
 	 */
 	getRemoteSiteID( $button ) {
-		return Number( $button.data( 'site-id' ) );
+		return Number( $button.data( 'site-id' ) || 0 );
 	}
 
 	/**
