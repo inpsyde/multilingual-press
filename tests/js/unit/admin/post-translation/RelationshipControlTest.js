@@ -1,4 +1,4 @@
-import "../../stubs/global";
+import globalStub from "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
 import * as _ from "lodash";
@@ -97,8 +97,8 @@ test( 'updateUnsavedRelationships (changed input, meta box already stored) ...',
 		'... SHOULD return the unaltered unsaved relationships array.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -133,8 +133,8 @@ test( 'updateUnsavedRelationships (unchanged input, meta box not stored) ...', (
 		'... SHOULD return the unaltered unsaved relationships array.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -167,8 +167,8 @@ test( 'updateUnsavedRelationships (unchanged input, meta box stored) ...', ( ass
 		'... SHOULD return an empty array (which prior to calling updateUnsavedRelationships held one meta box object.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -197,8 +197,8 @@ test( 'updateUnsavedRelationships (changed input, meta box not stored) ...', ( a
 		'... SHOULD return the expected meta box object in the unsaved relationships array (which is empty by default).'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -367,8 +367,8 @@ test( 'saveRelationship (nothing changed) ...', ( assert ) => {
 		'... SHOULD NOT trigger any events.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -462,8 +462,8 @@ test( 'saveRelationship (data changed) ...', ( assert ) => {
 		'... SHOULD pass along the expected event name.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -548,8 +548,8 @@ test( 'connectNewPost ...', ( assert ) => {
 		'... SHOULD pass the expected data to sendRequest().'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );

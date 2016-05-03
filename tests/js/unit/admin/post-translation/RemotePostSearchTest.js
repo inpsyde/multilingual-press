@@ -1,4 +1,4 @@
-import "../../stubs/global";
+import globalStub from "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
 import * as _ from "lodash";
@@ -90,8 +90,8 @@ test( 'initializeResults ...', ( assert ) => {
 		'... SHOULD initialize the expected elements.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -162,8 +162,8 @@ test( 'reactToInput (unchanged input value) ...', ( assert ) => {
 		'... SHOULD NOT fetch new data.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -214,8 +214,8 @@ test( 'reactToInput (changed input value) ...', ( assert ) => {
 		);
 	}, 600 );
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
