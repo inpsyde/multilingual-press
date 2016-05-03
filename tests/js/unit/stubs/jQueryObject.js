@@ -8,6 +8,7 @@ export default function jQueryObject( customMembers = {} ) {
 		_elements: [],
 
 		attr: sinon.stub(),
+		closest: sinon.stub(),
 		data: sinon.stub(),
 		each: ( c ) => {
 			for ( let i = 0; i < this._elements.length; i++ ) {
@@ -20,6 +21,7 @@ export default function jQueryObject( customMembers = {} ) {
 		not: sinon.stub(),
 		on: sinon.stub(),
 		prop: sinon.stub(),
+		removeAttr: sinon.spy(),
 		text: sinon.stub(),
 		toggle: sinon.spy(),
 		val: sinon.stub()
