@@ -22,12 +22,14 @@ export default function jQueryObject( customMembers = {} ) {
 		on: sinon.stub(),
 		prop: sinon.stub(),
 		removeAttr: sinon.spy(),
-		text: sinon.stub(),
+		text: sinon.stub().returns( '' ),
 		toggle: sinon.spy(),
 		val: sinon.stub()
 	}, customMembers );
+
 	Object.keys( members ).forEach( ( key ) => {
 		this[ key ] = members[ key ];
 	} );
+
 	this.length = this._elements.length;
 }
