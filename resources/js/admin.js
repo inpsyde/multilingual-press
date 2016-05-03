@@ -16,7 +16,7 @@ import RemotePostSearch from "./admin/post-translation/RemotePostSearch";
 import TermTranslator from "./admin/term-translation/TermTranslator";
 import UserBackEndLanguage from "./admin/user-settings/UserBackEndLanguage";
 
-const ajaxURL = window.ajaxurl;
+const { ajaxURL, jQuery } = window;
 
 /**
  * The MultilingualPress admin namespace.
