@@ -50,7 +50,7 @@ test( 'initialize ...', ( assert ) => {
 	assert.equal(
 		testee.attachSubmitHandler.callCount,
 		1,
-		'... SHOULD pass the expected callback to jQuery.'
+		'... SHOULD call attachSubmitHandler().'
 	);
 
 	assert.end();
