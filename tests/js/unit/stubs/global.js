@@ -1,10 +1,11 @@
 import sinon from "sinon";
+import _ from "./lodash";
 import Backbone from "./Backbone";
 import jQuery from "./jQuery";
 
 const window = {
 	$: jQuery,
-	_: sinon.stub(),
+	_,
 	ajaxurl: 'ajaxurl',
 	alert: sinon.spy(),
 	Backbone,
@@ -27,6 +28,7 @@ Object.keys( window ).forEach( ( key ) => {
 } );
 
 globalStub.restore = () => {
+	_._restore();
 	jQuery._restore();
 };
 
