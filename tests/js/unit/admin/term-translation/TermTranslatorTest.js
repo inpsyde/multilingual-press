@@ -168,7 +168,11 @@ test( 'selectTerm ...', ( assert ) => {
 	const $select = new jQueryObject();
 	$select.find.returns( $option );
 
-	testee.selectTerm( $select, 'relation' );
+	assert.equal(
+		testee.selectTerm( $select, 'relation' ),
+		true,
+		'... SHOULD return the expected result.'
+	);
 
 	assert.equal(
 		$select.val.callCount,
@@ -203,7 +207,11 @@ test( 'selectTerm ...', ( assert ) => {
 	const $select = new jQueryObject();
 	$select.find.returns( $options );
 
-	testee.selectTerm( $select, 'relation' );
+	assert.equal(
+		testee.selectTerm( $select, 'relation' ),
+		true,
+		'... SHOULD return the expected result.'
+	);
 
 	assert.equal(
 		$select.val.callCount,
@@ -229,7 +237,11 @@ test( 'selectTerm ...', ( assert ) => {
 	const $select = new jQueryObject();
 	$select.find.returns( new jQueryObject() );
 
-	testee.selectTerm( $select, 'relation' );
+	assert.equal(
+		testee.selectTerm( $select, 'relation' ),
+		false,
+		'... SHOULD return the expected result.'
+	);
 
 	assert.equal(
 		$select.val.callCount,
