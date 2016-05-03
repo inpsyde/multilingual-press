@@ -73,15 +73,22 @@ class TermTranslator extends Backbone.View {
 	 * Sets the given select element's value to that of the option with the given relation, or the first option.
 	 * @param {jQuery} $select - A select element.
 	 * @param {string} relation - The relation of a term.
+	 * @returns {boolean} Whether or not a term was selected.
 	 */
 	selectTerm( $select, relation ) {
 		const $option = $select.find( 'option[data-relation="' + relation + '"]' );
 
 		if ( $option.length ) {
 			$select.val( $option.val() );
+
+			return true;
 		} else if ( this.getSelectedRelation( $select ) ) {
 			$select.val( $select.find( 'option' ).first().val() );
+
+			return true;
 		}
+
+		return false;
 	}
 }
 
