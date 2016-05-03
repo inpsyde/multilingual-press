@@ -66,7 +66,41 @@ test( 'initializeEventHandlers ...', ( assert ) => {
 
 // TODO: updateUnsavedRelationships
 
-// TODO: findMetaBox
+test( 'findMetaBox ...', ( assert ) => {
+	const testee = createTestee();
+
+	assert.equal(
+		testee.findMetaBox( 'metaBox' ),
+		-1,
+		'... SHOULD return -1 in case the meta box was not found.'
+	);
+
+	assert.end();
+} );
+
+test( 'findMetaBox ...', ( assert ) => {
+	const testee = createTestee();
+
+	const $metaBox = 'metaBox';
+
+	const unsavedRelationships = F.getRandomArray();
+
+	const index = F.getRandomInteger( 0, unsavedRelationships.length );
+
+	unsavedRelationships[ index ] = $metaBox;
+
+	RelationshipControl.__Rewire__( '_this', { unsavedRelationships } );
+
+	assert.equal(
+		testee.findMetaBox( $metaBox ),
+		index,
+		'... SHOULD return the expected index.'
+	);
+
+	RelationshipControl.__ResetDependency__( '_this' );
+
+	assert.end();
+} );
 
 // TODO: confirmUnsavedRelationships
 
@@ -416,6 +450,9 @@ test( 'connectExistingPost ...', ( assert ) => {
 		'... SHOULD NOT call sendRequest() in case of no checked post input.'
 	);
 
+	// Restore global scope.
+	$.reset();
+
 	assert.end();
 } );
 
@@ -425,8 +462,6 @@ test( 'sendRequest ...', ( assert ) => {
 	};
 
 	const testee = createTestee( { Util } );
-
-	const url = window.ajaxurl = 'ajaxurl';
 
 	const data = F.getRandomString();
 
@@ -443,7 +478,7 @@ test( 'sendRequest ...', ( assert ) => {
 		data,
 		success: Util.reloadLocation,
 		type: 'POST',
-		url
+		url: window.ajaxurl
 	};
 
 	assert.deepEqual(
