@@ -62,6 +62,7 @@ class RelationshipControl extends Backbone.View {
 	/**
 	 * Updates the unsaved relationships array for the meta box containing the changed radio input element.
 	 * @param {Event} event - The change event of a radio input element.
+	 * @returns {jQuery[]} The array of jQuery objects representing meta boxes with unsaved relationships.
 	 */
 	updateUnsavedRelationships( event ) {
 		const $input = $( event.target ),
@@ -80,6 +81,8 @@ class RelationshipControl extends Backbone.View {
 
 			$button.removeAttr( 'disabled' );
 		}
+
+		return _this.unsavedRelationships;
 	}
 
 	/**
@@ -88,15 +91,13 @@ class RelationshipControl extends Backbone.View {
 	 * @returns {number} The index of the meta box.
 	 */
 	findMetaBox( $metaBox ) {
-		let metaBoxIndex = -1;
-
-		$.each( _this.unsavedRelationships, ( index, element ) => {
-			if ( element === $metaBox ) {
-				metaBoxIndex = index;
+		for ( let i = 0; i < _this.unsavedRelationships.length; i++ ) {
+			if ( _this.unsavedRelationships[ i ] === $metaBox ) {
+				return i;
 			}
-		} );
+		}
 
-		return metaBoxIndex;
+		return -1;
 	}
 
 	/**
