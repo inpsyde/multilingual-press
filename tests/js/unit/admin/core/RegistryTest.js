@@ -81,14 +81,15 @@ test( 'createModules ...', ( assert ) => {
 test( 'initializeRoute ...', ( assert ) => {
 	const testee = createTestee();
 
-	// Turn method into spy.
-	testee.createModules = sinon.spy();
-
 	const router = {
 		route: sinon.spy()
 	};
 
+	// Rewire internal data.
 	Registry.__Rewire__( '_this', { router } );
+
+	// Turn method into spy.
+	testee.createModules = sinon.spy();
 
 	const route = F.getRandomString();
 
@@ -124,6 +125,7 @@ test( 'initializeRoute ...', ( assert ) => {
 		'... SHOULD pass the expected modules to the callback.'
 	);
 
+	// Restore internal data.
 	Registry.__ResetDependency__( '_this' );
 
 	assert.end();
@@ -132,17 +134,18 @@ test( 'initializeRoute ...', ( assert ) => {
 test( 'initializeRoutes ...', ( assert ) => {
 	const testee = createTestee();
 
-	// Turn method into spy.
-	testee.initializeRoute = sinon.spy();
-
 	const data = F.getRandomObject();
 
 	const modules = F.getRandomString();
 
+	// Rewire internal data.
 	Registry.__Rewire__( '_this', {
 		data,
 		modules
 	} );
+
+	// Turn method into spy.
+	testee.initializeRoute = sinon.spy();
 
 	assert.equal(
 		testee.initializeRoutes(),
@@ -156,6 +159,7 @@ test( 'initializeRoutes ...', ( assert ) => {
 		'... SHOULD initialize each passed route.'
 	);
 
+	// Restore internal data.
 	Registry.__ResetDependency__( '_this' );
 
 	assert.end();
@@ -171,6 +175,7 @@ test( 'registerModuleForRoute ...', ( assert ) => {
 
 	const numRoutes = data[ route ].length;
 
+	// Rewire internal data.
 	Registry.__Rewire__( '_this', { data } );
 
 	assert.equal(
@@ -179,6 +184,7 @@ test( 'registerModuleForRoute ...', ( assert ) => {
 		'... SHOULD return the expected result.'
 	);
 
+	// Restore internal data.
 	Registry.__ResetDependency__( '_this' );
 
 	assert.end();
