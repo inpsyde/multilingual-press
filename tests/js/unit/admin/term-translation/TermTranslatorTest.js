@@ -1,9 +1,24 @@
 import "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
+import * as _ from "lodash";
 import * as F from "../../functions";
 import jQueryObject from "../../stubs/jQueryObject";
 import TermTranslator from "../../../../../resources/js/admin/term-translation/TermTranslator";
+
+/**
+ * Returns a new instance of the class under test.
+ * @param {Object} [options] - Optional. The constructor options.
+ * @returns {TermTranslator} The instance of the class under test.
+ */
+const createTestee = ( options ) => {
+	// Rewire internal data.
+	TermTranslator.__Rewire__( '_this', {
+		isPropagating: false
+	} );
+
+	return new TermTranslator( _.extend( { settings: {} }, options ) );
+};
 
 test( '$selects ...', ( assert ) => {
 	const $selects = F.getRandomString();
@@ -14,7 +29,7 @@ test( '$selects ...', ( assert ) => {
 		} )
 	};
 
-	const testee = new TermTranslator( options );
+	const testee = createTestee( options );
 
 	assert.equal(
 		testee.$selects,
@@ -26,7 +41,7 @@ test( '$selects ...', ( assert ) => {
 } );
 
 test( 'propagateSelectedTerm ...', ( assert ) => {
-	const testee = new TermTranslator();
+	const testee = createTestee();
 
 	// Rewire internal data.
 	TermTranslator.__Rewire__( '_this', { isPropagating: true } );
@@ -51,14 +66,11 @@ test( 'propagateSelectedTerm ...', ( assert ) => {
 		'... SHOULD NOT call selectTerm() in case of an ongoing term propagation.'
 	);
 
-	// Restore internal data.
-	TermTranslator.__ResetDependency__( '_this' );
-
 	assert.end();
 } );
 
 test( 'propagateSelectedTerm ...', ( assert ) => {
-	const testee = new TermTranslator();
+	const testee = createTestee();
 
 	// Turn method into stub.
 	testee.getSelectedRelation = sinon.stub().returns( '' );
@@ -92,7 +104,7 @@ test( 'propagateSelectedTerm ...', ( assert ) => {
 	const $el = new jQueryObject();
 	$el.find.returns( $selects );
 
-	const testee = new TermTranslator( { $el } );
+	const testee = createTestee( { $el } );
 
 	// Turn method into stub.
 	testee.getSelectedRelation = sinon.stub().returns( F.getRandomString() );
@@ -118,7 +130,7 @@ test( 'propagateSelectedTerm ...', ( assert ) => {
 } );
 
 test( 'getSelectedRelation ...', ( assert ) => {
-	const testee = new TermTranslator();
+	const testee = createTestee();
 
 	const $option = new jQueryObject();
 	$option.data.returns( undefined );
@@ -136,7 +148,7 @@ test( 'getSelectedRelation ...', ( assert ) => {
 } );
 
 test( 'getSelectedRelation ...', ( assert ) => {
-	const testee = new TermTranslator();
+	const testee = createTestee();
 
 	const relation = F.getRandomString();
 
@@ -156,7 +168,7 @@ test( 'getSelectedRelation ...', ( assert ) => {
 } );
 
 test( 'selectTerm ...', ( assert ) => {
-	const testee = new TermTranslator();
+	const testee = createTestee();
 
 	const termID = F.getRandomInteger();
 
@@ -190,7 +202,7 @@ test( 'selectTerm ...', ( assert ) => {
 } );
 
 test( 'selectTerm ...', ( assert ) => {
-	const testee = new TermTranslator();
+	const testee = createTestee();
 
 	// Make method return a random string (i.e., relation found).
 	// Due to incompatible arguments, this has to stay an arrow function (i..e, not just a function reference).
@@ -229,7 +241,7 @@ test( 'selectTerm ...', ( assert ) => {
 } );
 
 test( 'selectTerm ...', ( assert ) => {
-	const testee = new TermTranslator();
+	const testee = createTestee();
 
 	// Make method return an empty string (i.e., no relation found).
 	testee.getSelectedRelation = F.returnEmptyString;

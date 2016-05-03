@@ -14,7 +14,15 @@ const { $ } = global;
  * @param {Object} [options] - Optional. The constructor options.
  * @returns {RemotePostSearch} The instance of the class under test.
  */
-const createTestee = ( options ) => new RemotePostSearch( _.extend( { settings: {} }, options ) );
+const createTestee = ( options ) => {
+	// Rewire internal data.
+	RemotePostSearch.__Rewire__( '_this', {
+		defaultResults: [],
+		resultsContainers: []
+	} );
+
+	return new RemotePostSearch( _.extend( { settings: {} }, options ) );
+};
 
 test( 'constructor ...', ( assert ) => {
 	const testee = createTestee();
