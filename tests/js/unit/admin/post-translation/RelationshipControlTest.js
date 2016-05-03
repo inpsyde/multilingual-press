@@ -50,21 +50,15 @@ test( 'initializeEventHandlers ...', ( assert ) => {
 
 	testee.initializeEventHandlers();
 
-	assert.equal(
-		options.EventManager.on.callCount,
-		1,
-		'... SHOULD attach callbacks.'
-	);
-
 	const callbacks = {
 		'RelationshipControl:connectExistingPost': testee.connectExistingPost,
 		'RelationshipControl:connectNewPost': testee.connectNewPost,
 		'RelationshipControl:disconnectPost': testee.disconnectPost
 	};
 
-	assert.deepEqual(
-		options.EventManager.on.firstCall.args[ 0 ],
-		callbacks,
+	assert.equal(
+		options.EventManager.on.calledWith( callbacks ),
+		true,
 		'... SHOULD attach the expected callbacks.'
 	);
 
@@ -350,15 +344,9 @@ test( 'saveRelationship (nothing changed) ...', ( assert ) => {
 	testee.saveRelationship( event );
 
 	assert.equal(
-		testee.getEventName.callCount,
-		1,
-		'... SHOULD call getEventName().'
-	);
-
-	assert.equal(
 		testee.getEventName.calledWith( action ),
 		true,
-		'... SHOULD call getEventName() with the expected action.'
+		'... SHOULD fetch the event name for the expected action.'
 	);
 
 	assert.equal(
@@ -405,41 +393,15 @@ test( 'saveRelationship (data changed) ...', ( assert ) => {
 	testee.saveRelationship( event );
 
 	assert.equal(
-		testee.getEventName.callCount,
-		1,
-		'... SHOULD call getEventName().'
-	);
-
-	assert.equal(
 		testee.getEventName.calledWith( action ),
 		true,
-		'... SHOULD call getEventName() with the expected action.'
-	);
-
-	assert.equal(
-		$button.prop.callCount,
-		1,
-		'... SHOULD call prop().'
+		'... SHOULD fetch the event name for the expected action.'
 	);
 
 	assert.equal(
 		$button.prop.calledWith( 'disabled', 'disabled' ),
 		true,
 		'... SHOULD disable the button.'
-	);
-
-	assert.equal(
-		options.EventManager.trigger.callCount,
-		1,
-		'... SHOULD trigger an event.'
-	);
-
-	const args = options.EventManager.trigger.firstCall.args;
-
-	assert.equal(
-		args[ 0 ],
-		'RelationshipControl:' + eventName,
-		'... SHOULD trigger the expected event.'
 	);
 
 	const eventData = {
@@ -450,16 +412,10 @@ test( 'saveRelationship (data changed) ...', ( assert ) => {
 		source_site_id: 'source-site-id'
 	};
 
-	assert.deepEqual(
-		args[ 1 ],
-		eventData,
-		'... SHOULD pass along the expected data.'
-	);
-
-	assert.deepEqual(
-		args[ 2 ],
-		eventName,
-		'... SHOULD pass along the expected event name.'
+	assert.equal(
+		options.EventManager.trigger.calledWith( 'RelationshipControl:' + eventName, eventData, eventName ),
+		true,
+		'... SHOULD trigger the expected event.'
 	);
 
 	// Restore global scope.
@@ -533,19 +489,13 @@ test( 'connectNewPost ...', ( assert ) => {
 
 	testee.connectNewPost( data );
 
-	assert.equal(
-		testee.sendRequest.callCount,
-		1,
-		'... SHOULD call sendRequest().'
-	);
-
 	// Manipulate data object for subsequent test.
 	data.new_post_title = postTitle;
 
-	assert.deepEqual(
-		testee.sendRequest.firstCall.args[ 0 ],
-		data,
-		'... SHOULD pass the expected data to sendRequest().'
+	assert.equal(
+		testee.sendRequest.calledWith( data ),
+		true,
+		'... SHOULD send a request with the expected data.'
 	);
 
 	// Restore global scope.
@@ -565,15 +515,9 @@ test( 'disconnectPost ...', ( assert ) => {
 	testee.disconnectPost( data );
 
 	assert.equal(
-		testee.sendRequest.callCount,
-		1,
-		'... SHOULD call sendRequest().'
-	);
-
-	assert.equal(
 		testee.sendRequest.calledWith( data ),
 		true,
-		'... SHOULD pass the expected data to sendRequest().'
+		'... SHOULD send a request with the expected data.'
 	);
 
 	assert.end();
@@ -609,19 +553,13 @@ test( 'connectExistingPost (input checked) ...', ( assert ) => {
 		'... SHOULD NOT show an alert.'
 	);
 
-	assert.equal(
-		testee.sendRequest.callCount,
-		1,
-		'... SHOULD call sendRequest().'
-	);
-
 	// Manipulate data object for subsequent test.
 	data.new_post_id = postID;
 
 	assert.deepEqual(
-		testee.sendRequest.firstCall.args[ 0 ],
-		data,
-		'... SHOULD pass the expected data to sendRequest().'
+		testee.sendRequest.calledWith( data ),
+		true,
+		'... SHOULD send a request with the expected data.'
 	);
 
 	// Restore global scope.
@@ -687,12 +625,6 @@ test( 'sendRequest ...', ( assert ) => {
 
 	testee.sendRequest( data );
 
-	assert.equal(
-		$.ajax.callCount,
-		1,
-		'... SHOULD send an AJAX request.'
-	);
-
 	const ajaxData = {
 		async: false,
 		data,
@@ -701,10 +633,10 @@ test( 'sendRequest ...', ( assert ) => {
 		url: window.ajaxurl
 	};
 
-	assert.deepEqual(
-		$.ajax.firstCall.args[ 0 ],
-		ajaxData,
-		'... SHOULD pass along the expected data.'
+	assert.equal(
+		$.ajax.calledWith( ajaxData ),
+		true,
+		'... SHOULD send an AJAX request with the expected data.'
 	);
 
 	assert.end();

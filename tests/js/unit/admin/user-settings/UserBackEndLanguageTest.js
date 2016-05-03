@@ -33,12 +33,6 @@ test( 'updateSiteLanguage ...', ( assert ) => {
 	testee.updateSiteLanguage();
 
 	assert.equal(
-		testee.$el.val.callCount,
-		1,
-		'... SHOULD set a value.'
-	);
-
-	assert.equal(
 		testee.$el.val.calledWith( options.settings.locale ),
 		true,
 		'... SHOULD set the expected value.'

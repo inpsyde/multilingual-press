@@ -31,15 +31,9 @@ test( 'createModule ...', ( assert ) => {
 	const module = testee.createModule( data );
 
 	assert.equal(
-		data.Constructor.callCount,
-		1,
-		'... SHOULD create one module instance.'
-	);
-
-	assert.equal(
 		data.Constructor.calledWith( data.options ),
 		true,
-		'... SHOULD pass the expected options to the module constructor.'
+		'... SHOULD create a module instance, and pass along the expected options.'
 	);
 
 	if ( data.callback ) {
@@ -98,31 +92,19 @@ test( 'initializeRoute ...', ( assert ) => {
 	testee.initializeRoute( route, modules );
 
 	assert.equal(
-		router.route.callCount,
-		1,
-		'... SHOULD route once.'
-	);
-
-	assert.equal(
 		// The third argument (i.e., the callback) is missing as it is an (arrow) function, which sinon cannot handle.
 		router.route.calledWith( route, route ),
 		true,
-		'... SHOULD pass the expected arguments to router.route().'
+		'... SHOULD route once, and pass along the expected arguments.'
 	);
 
 	// Execute the callback passed as third argument.
 	router.route.firstCall.args[ 2 ]();
 
 	assert.equal(
-		testee.createModules.callCount,
-		1,
-		'... SHOULD pass the expected callback to router.route.'
-	);
-
-	assert.equal(
 		testee.createModules.calledWith( modules ),
 		true,
-		'... SHOULD pass the expected modules to the callback.'
+		'... SHOULD create the expected modules.'
 	);
 
 	// Restore internal data.

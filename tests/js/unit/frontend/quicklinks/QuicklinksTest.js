@@ -93,12 +93,6 @@ test( 'attachSubmitHandler (correct selector) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		Util.addEventListener.callCount,
-		1,
-		'... SHOULD attach one event handler.'
-	);
-
-	assert.equal(
 		// The third argument (i.e., the listener) is missing as it is a bound function, which sinon cannot handle.
 		Util.addEventListener.calledWith( $element, 'submit' ),
 		true,
@@ -155,15 +149,9 @@ test( 'submitForm (element present) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		Util.setLocation.callCount,
-		1,
-		'... should call Util.setLocation once.'
-	);
-
-	assert.equal(
 		Util.setLocation.calledWith( $select.value ),
 		true,
-		'... SHOULD call Util.setLocation with the select value.'
+		'... SHOULD call Util.setLocation, and pass along the expected value.'
 	);
 
 	assert.end();

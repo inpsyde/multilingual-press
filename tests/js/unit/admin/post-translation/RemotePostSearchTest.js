@@ -28,12 +28,6 @@ test( 'constructor ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
-		testee.listenTo.callCount,
-		1,
-		'... SHOULD attach an event listener.'
-	);
-
-	assert.equal(
 		testee.listenTo.calledWith( testee.model, 'change', testee.render ),
 		true,
 		'... SHOULD attach the expected event listener.'
@@ -147,7 +141,7 @@ test( 'reactToInput (unchanged input value) ...', ( assert ) => {
 	assert.equal(
 		$input.data.callCount,
 		1,
-		'... SHOULD read input data.'
+		'... SHOULD (only) read input data.'
 	);
 
 	assert.equal(

@@ -1,4 +1,4 @@
-import "../../stubs/global";
+import globalStub from "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
 import * as _ from "lodash";
@@ -7,7 +7,7 @@ import Backbone from "../../stubs/Backbone";
 import jQueryObject from "../../stubs/jQueryObject";
 import CopyPost from "../../../../../resources/js/admin/post-translation/CopyPost";
 
-const { $ } = global;
+const { $, window } = global;
 
 /**
  * Returns a new instance of the class under test.
@@ -18,12 +18,6 @@ const createTestee = ( options ) => new CopyPost( _.extend( { settings: {} }, op
 
 test( 'constructor ...', ( assert ) => {
 	const testee = createTestee();
-
-	assert.equal(
-		testee.listenTo.callCount,
-		1,
-		'... SHOULD attach an event listener.'
-	);
 
 	assert.equal(
 		testee.listenTo.calledWith( testee.model, 'change', testee.updatePostData ),
@@ -62,8 +56,8 @@ test( 'content (element present) ...', ( assert ) => {
 		'... SHOULD have the value of the according element.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -96,8 +90,8 @@ test( 'excerpt (element present) ...', ( assert ) => {
 		'... SHOULD have the value of the according element.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -129,9 +123,6 @@ test( 'postID (element present) ...', ( assert ) => {
 		postID,
 		'... SHOULD have the value of the according element.'
 	);
-
-	// Restore jQuery.
-	$.reset();
 
 	assert.end();
 } );
@@ -180,8 +171,8 @@ test( 'slug (element present) ...', ( assert ) => {
 		'... SHOULD have the value of the according element.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -214,15 +205,124 @@ test( 'title (element present) ...', ( assert ) => {
 		'... SHOULD have the value of the according element.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
 
-// TODO: Test copyPostData
+test( 'copyPostData ...', ( assert ) => {
+	Backbone.Events.trigger.reset();
 
-test( 'getRemoteSiteID (no site ID)...', ( assert ) => {
+	const EventManager = Backbone.Events;
+
+	const model = new Backbone.Model();
+
+	const options = {
+		EventManager,
+		model,
+		settings: {
+			action: F.getRandomString(),
+			siteID: F.getRandomInteger( 1 )
+		}
+	};
+
+	const content = F.getRandomString();
+
+	const $content = new jQueryObject();
+	$content.val.returns( content );
+
+	const excerpt = F.getRandomString();
+
+	const $excerpt = new jQueryObject();
+	$excerpt.val.returns( excerpt );
+
+	const slug = F.getRandomString();
+
+	const $slug = new jQueryObject();
+	$slug.text.returns( slug );
+
+	const title = F.getRandomString();
+
+	const $title = new jQueryObject();
+	$title.val.returns( title );
+
+	const $copiedPostFlag = new jQueryObject();
+
+	const remoteSiteID = F.getRandomInteger( 1 );
+
+	$
+		.withArgs( '#content' ).returns( $content )
+		.withArgs( '#excerpt' ).returns( $excerpt )
+		.withArgs( '#editable-post-name-full' ).returns( $slug )
+		.withArgs( '#title' ).returns( $title )
+		.withArgs( '#mlp-translation-data-' + remoteSiteID + '-copied-post' ).returns( $copiedPostFlag );
+
+	const testee = createTestee( options );
+
+	// Turn method into stub.
+	testee.getRemoteSiteID = sinon.stub().returns( remoteSiteID );
+
+	// Turn method into spy.
+	testee.fadeOutMetaBox = sinon.spy();
+
+	const event = {
+		preventDefault: sinon.spy(),
+		target: 'target'
+	};
+
+	// Make _.extend() return the second argument (which is the default data).
+	global._.extend = sinon.stub().returnsArg( 1 );
+
+	testee.copyPostData( event );
+
+	assert.equal(
+		event.preventDefault.callCount,
+		1,
+		'... SHOULD prevent the event default.'
+	);
+
+	assert.equal(
+		$copiedPostFlag.val.calledWith( 1 ),
+		true,
+		'... SHOULD set the copied-post flag.'
+	);
+
+	assert.equal(
+		EventManager.trigger.calledWith( 'CopyPost:copyPostData', {}, options.settings.siteID, 0, remoteSiteID ),
+		true,
+		'... SHOULD trigger the expected event.'
+	);
+
+	const data = {
+		data: {
+			action: options.settings.action,
+			current_post_id: 0,
+			remote_site_id: remoteSiteID,
+			title,
+			slug,
+			content,
+			excerpt
+		},
+		processData: true
+	};
+
+	assert.equal(
+		model.fetch.calledWith( data ),
+		true,
+		'... SHOULD fetch new data.'
+	);
+
+	// Restore lodash.
+	global._ = sinon.stub();
+
+	// Restore global scope.
+	globalStub.restore();
+
+	assert.end();
+} );
+
+test( 'getRemoteSiteID (no site ID) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const $button = new jQueryObject();
@@ -236,7 +336,7 @@ test( 'getRemoteSiteID (no site ID)...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getRemoteSiteID (site ID specified)...', ( assert ) => {
+test( 'getRemoteSiteID (site ID specified) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const siteID = F.getRandomInteger();
@@ -270,8 +370,8 @@ test( 'fadeOutMetaBox ...', ( assert ) => {
 		'... SHOULD alter the CSS.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -324,8 +424,8 @@ test( 'updatePostData (unsuccessful AJAX request) ...', ( assert ) => {
 		'... SHOULD NOT trigger any events.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -382,21 +482,9 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		$title.val.callCount,
-		1,
-		'... SHOULD set the title.'
-	);
-
-	assert.equal(
 		$title.val.calledWith( data.title ),
 		true,
 		'... SHOULD set the expected title.'
-	);
-
-	assert.equal(
-		$slug.val.callCount,
-		1,
-		'... SHOULD set the slug.'
 	);
 
 	assert.equal(
@@ -406,9 +494,9 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		$content.val.callCount,
-		1,
-		'... SHOULD set the content.'
+		testee.setTinyMCEContent.calledWith( prefix + 'content', data.content ),
+		true,
+		'... SHOULD set the tinyMCE content to the expected value.'
 	);
 
 	assert.equal(
@@ -418,55 +506,19 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		$excerpt.val.callCount,
-		1,
-		'... SHOULD set the excerpt.'
-	);
-
-	assert.equal(
 		$excerpt.val.calledWith( data.excerpt ),
 		true,
 		'... SHOULD set the expected excerpt.'
 	);
 
 	assert.equal(
-		testee.setTinyMCEContent.calledWith( prefix + 'content', data.content ),
-		true,
-		'... SHOULD set the tinyMCE content to the expected value.'
-	);
-
-	assert.equal(
-		testee.setTinyMCEContent.callCount,
-		1,
-		'... SHOULD change the tinyMCE content.'
-	);
-
-	assert.equal(
-		testee.setTinyMCEContent.calledWith( prefix + 'content', data.content ),
-		true,
-		'... SHOULD set the tinyMCE content to the expected value.'
-	);
-
-	assert.equal(
-		options.EventManager.trigger.callCount,
-		1,
-		'... SHOULD trigger an event.'
-	);
-
-	assert.equal(
-		options.EventManager.trigger.calledWith( 'CopyPost:updatePostData' ),
+		options.EventManager.trigger.calledWith( 'CopyPost:updatePostData', data ),
 		true,
 		'... SHOULD trigger the expected event.'
 	);
 
-	assert.deepEqual(
-		options.EventManager.trigger.firstCall.args[ 1 ],
-		data,
-		'... SHOULD pass along the expected data.'
-	);
-
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
@@ -524,12 +576,6 @@ test( 'setTinyMCEContent (requested tinyMCE available) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		editor.setContent.callCount,
-		1,
-		'... SHOULD set the tinyMCE content.'
-	);
-
-	assert.equal(
 		editor.setContent.calledWith( content ),
 		true,
 		'... SHOULD set the expected tinyMCE content.'
@@ -558,8 +604,8 @@ test( 'fadeInMetaBox ...', ( assert ) => {
 		'... SHOULD alter the CSS.'
 	);
 
-	// Restore jQuery.
-	$.reset();
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );

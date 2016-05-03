@@ -108,19 +108,10 @@ test( 'toggleElementIfChecked...', ( assert ) => {
 
 		if ( targetID ) {
 			assert.equal(
-				$toggleStub.toggle.callCount,
-				1,
-				'... SHOULD call toggle() on the jQuery element if a targetID was found'
+				$toggleStub.toggle.calledWith( checked ),
+				true,
+				'... SHOULD toggle the element accoding to the checked state IF a target ID was found.'
 			);
-
-			const toggleCall = $toggleStub.toggle.getCall( 0 );
-
-			assert.equal(
-				toggleCall.args[ 0 ],
-				checked,
-				'... SHOULD call toggle() with the toggler\'s "checked" state'
-			);
-
 		}
 
 		assert.end();

@@ -187,15 +187,9 @@ test( 'selectTerm (matching relation) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		$select.val.callCount,
-		1,
-		'... SHOULD set a term value.'
-	);
-
-	assert.equal(
 		$select.val.calledWith( termID ),
 		true,
-		'... SHOULD set the expected term value.'
+		'... SHOULD set the expected value.'
 	);
 
 	assert.end();
@@ -226,15 +220,9 @@ test( 'selectTerm (no matching relation) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		$select.val.callCount,
-		1,
-		'... SHOULD set a term value.'
-	);
-
-	assert.equal(
 		$select.val.calledWith( termID ),
 		true,
-		'... SHOULD set the expected term value.'
+		'... SHOULD set the expected value.'
 	);
 
 	assert.end();

@@ -70,12 +70,6 @@ test( 'addEventListener (using an IE8+ browser) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		$element.addEventListener.callCount,
-		1,
-		'... SHOULD attach one event listener using IE8+ methods.'
-	);
-
-	assert.equal(
 		$element.addEventListener.calledWith( type, listener ),
 		true,
 		'... SHOULD attach the expected event listener using IE8+ methods.'
@@ -88,12 +82,6 @@ test( 'reloadLocation ...', ( assert ) => {
 	window.location.reload.reset();
 
 	Util.reloadLocation();
-
-	assert.equal(
-		window.location.reload.callCount,
-		1,
-		'... SHOULD reload the current page.'
-	);
 
 	assert.equal(
 		window.location.reload.calledWith( true ),
