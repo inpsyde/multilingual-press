@@ -22,15 +22,13 @@ test( 'settings ...', ( assert ) => {
 
 test( 'updateSiteLanguage ...', ( assert ) => {
 	const options = {
+		$el: new jQueryObject(),
 		settings: {
 			locale: F.getRandomString()
 		}
 	};
 
 	const testee = new UserBackEndLanguage( options );
-
-	// Assign fake jQuery object.
-	testee.$el = new jQueryObject();
 
 	testee.updateSiteLanguage();
 
