@@ -25,3 +25,9 @@ Object.keys( globalStub ).forEach( ( key ) => {
 Object.keys( window ).forEach( ( key ) => {
 	global[ key ] = globalStub[ key ] = window[ key ];
 } );
+
+globalStub.restore = () => {
+	jQuery._restore();
+};
+
+export default globalStub;
