@@ -14,7 +14,14 @@ const { $, window } = global;
  * @param {Object} [options] - Optional. The constructor options.
  * @returns {RelationshipControl} The instance of the class under test.
  */
-const createTestee = ( options ) => new RelationshipControl( _.extend( { settings: {} }, options ) );
+const createTestee = ( options ) => {
+	// Rewire internal data.
+	RelationshipControl.__Rewire__( '_this', {
+		unsavedRelationships: []
+	} );
+
+	return new RelationshipControl( _.extend( { settings: {} }, options ) );
+};
 
 test( 'settings ...', ( assert ) => {
 	const options = {
@@ -64,7 +71,137 @@ test( 'initializeEventHandlers ...', ( assert ) => {
 	assert.end();
 } );
 
-// TODO: updateUnsavedRelationships
+test( 'updateUnsavedRelationships ...', ( assert ) => {
+	const testee = createTestee();
+
+	const unsavedRelationships = [ 'metaBox' ];
+
+	// Rewire internal data.
+	RelationshipControl.__Rewire__( '_this', { unsavedRelationships } );
+
+	// Turn method into spy.
+	testee.findMetaBox = sinon.spy();
+
+	const event = {
+		target: F.getRandomString()
+	};
+
+	const $input = new jQueryObject();
+	$input.closest.returns( new jQueryObject() );
+
+	$.withArgs( event.target ).returns( $input );
+
+	assert.deepEqual(
+		testee.updateUnsavedRelationships( event ),
+		unsavedRelationships,
+		'... SHOULD return the unaltered unsaved relationships array.'
+	);
+
+	// Restore jQuery.
+	$.reset();
+
+	assert.end();
+} );
+
+test( 'updateUnsavedRelationships ...', ( assert ) => {
+	const testee = createTestee();
+
+	const unsavedRelationships = [ 'metaBox' ];
+
+	// Rewire internal data.
+	RelationshipControl.__Rewire__( '_this', { unsavedRelationships } );
+
+	// Turn method into stub.
+	testee.findMetaBox = sinon.stub().returns( -1 );
+
+	const event = {
+		target: F.getRandomString()
+	};
+
+	const $metaBox = new jQueryObject();
+	$metaBox.find.returns( new jQueryObject() );
+
+	const $input = new jQueryObject();
+	$input.closest.returns( $metaBox );
+	$input.val.returns( 'stay' );
+
+	$.withArgs( event.target ).returns( $input );
+
+	assert.deepEqual(
+		testee.updateUnsavedRelationships( event ),
+		unsavedRelationships,
+		'... SHOULD return the unaltered unsaved relationships array.'
+	);
+
+	// Restore jQuery.
+	$.reset();
+
+	assert.end();
+} );
+
+test( 'updateUnsavedRelationships ...', ( assert ) => {
+	const testee = createTestee();
+
+	// Rewire internal data.
+	RelationshipControl.__Rewire__( '_this', { unsavedRelationships: [ 'metaBox' ] } );
+
+	// Turn method into stub.
+	testee.findMetaBox = sinon.stub().returns( 0 );
+
+	const event = {
+		target: F.getRandomString()
+	};
+
+	const $metaBox = new jQueryObject();
+	$metaBox.find.returns( new jQueryObject() );
+
+	const $input = new jQueryObject();
+	$input.closest.returns( $metaBox );
+	$input.val.returns( 'stay' );
+
+	$.withArgs( event.target ).returns( $input );
+
+	assert.deepEqual(
+		testee.updateUnsavedRelationships( event ),
+		[],
+		'... SHOULD return an empty array (which prior to calling updateUnsavedRelationships held one meta box object.'
+	);
+
+	// Restore jQuery.
+	$.reset();
+
+	assert.end();
+} );
+
+test( 'updateUnsavedRelationships ...', ( assert ) => {
+	const testee = createTestee();
+
+	// Turn method into stub.
+	testee.findMetaBox = sinon.stub().returns( -1 );
+
+	const event = {
+		target: F.getRandomString()
+	};
+
+	const $metaBox = new jQueryObject();
+	$metaBox.find.returns( new jQueryObject() );
+
+	const $input = new jQueryObject();
+	$input.closest.returns( $metaBox );
+
+	$.withArgs( event.target ).returns( $input );
+
+	assert.deepEqual(
+		testee.updateUnsavedRelationships( event ),
+		[ $metaBox ],
+		'... SHOULD return the expected meta box object in the unsaved relationships array (which is empty by default).'
+	);
+
+	// Restore jQuery.
+	$.reset();
+
+	assert.end();
+} );
 
 test( 'findMetaBox ...', ( assert ) => {
 	const testee = createTestee();
@@ -97,9 +234,6 @@ test( 'findMetaBox ...', ( assert ) => {
 		index,
 		'... SHOULD return the expected index.'
 	);
-
-	// Restore internal data.
-	RelationshipControl.__ResetDependency__( '_this' );
 
 	assert.end();
 } );
@@ -153,9 +287,6 @@ test( 'confirmUnsavedRelationships ...', ( assert ) => {
 	// Reset window.
 	window.confirm.reset();
 
-	// Restore internal data.
-	RelationshipControl.__ResetDependency__( '_this' );
-
 	assert.end();
 } );
 
@@ -189,9 +320,6 @@ test( 'confirmUnsavedRelationships ...', ( assert ) => {
 
 	// Reset window.
 	window.confirm.reset();
-
-	// Restore internal data.
-	RelationshipControl.__ResetDependency__( '_this' );
 
 	assert.end();
 } );
