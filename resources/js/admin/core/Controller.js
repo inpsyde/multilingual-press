@@ -1,5 +1,3 @@
-const { _ } = window;
-
 // Internal pseudo-namespace for private data.
 // NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
 const _this = {};
@@ -79,7 +77,9 @@ class Controller {
 			callback
 		};
 
-		_.isArray( routes ) || ( routes = [ routes ] );
+		if ( 'string' === typeof routes ) {
+			routes = [ routes ];
+		}
 
 		routes.forEach( ( route ) => _this.registry.registerModuleForRoute( moduleData, route ) );
 	}

@@ -113,3 +113,101 @@ test( 'maybeStartHistory (history already started) ...', ( assert ) => {
 
 	assert.end();
 } );
+
+test( 'registerModule (no route) ...', ( assert ) => {
+	const registry = {
+		registerModuleForRoute: sinon.stub()
+	};
+
+	const testee = createTestee( registry );
+
+	const Constructor = F.getRandomString();
+
+	testee.registerModule( [], Constructor );
+
+	assert.equal(
+		registry.registerModuleForRoute.callCount,
+		0,
+		'... SHOULD NOT register any modules.'
+	);
+
+	assert.end();
+} );
+
+test( 'registerModule (one route) ...', ( assert ) => {
+	const registry = {
+		registerModuleForRoute: sinon.stub()
+	};
+
+	const testee = createTestee( registry );
+
+	const route = F.getRandomString();
+
+	const Constructor = F.getRandomString();
+
+	const options = F.getRandomString();
+
+	const callback = F.getRandomString();
+
+	testee.registerModule( route, Constructor, options, callback );
+
+	assert.equal(
+		registry.registerModuleForRoute.callCount,
+		1,
+		'... SHOULD register a module for one route.'
+	);
+
+	const moduleData = {
+		Constructor,
+		options,
+		callback
+	};
+
+	assert.equal(
+		registry.registerModuleForRoute.calledWith( moduleData, route ),
+		true,
+		'... SHOULD register the expected module.'
+	);
+
+	assert.end();
+} );
+
+test( 'registerModule (multiple routes) ...', ( assert ) => {
+	const registry = {
+		registerModuleForRoute: sinon.stub()
+	};
+
+	const testee = createTestee( registry );
+
+	const route = F.getRandomString();
+
+	const routes = F.getRandomArray( 1, 10, route );
+
+	const Constructor = F.getRandomString();
+
+	const options = F.getRandomString();
+
+	const callback = F.getRandomString();
+
+	testee.registerModule( routes, Constructor, options, callback );
+
+	assert.equal(
+		registry.registerModuleForRoute.callCount,
+		routes.length,
+		'... SHOULD register a module for each route.'
+	);
+
+	const moduleData = {
+		Constructor,
+		options,
+		callback
+	};
+
+	assert.equal(
+		registry.registerModuleForRoute.calledWith( moduleData, route ),
+		true,
+		'... SHOULD register the expected module.'
+	);
+
+	assert.end();
+} );
