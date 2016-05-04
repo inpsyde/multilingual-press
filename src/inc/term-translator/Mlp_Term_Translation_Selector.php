@@ -28,13 +28,29 @@ class Mlp_Term_Translation_Selector {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function get_fieldset_id() {
+
+		return 'mlp_term_translation';
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function print_fieldset_id() {
 
-		print 'mlp_term_translation';
+		echo $this->get_fieldset_id();
 
 		return TRUE;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_title() {
+
+		return empty( $this->related_sites ) ? '' : $this->presenter->get_group_title();
 	}
 
 	/**
@@ -42,10 +58,7 @@ class Mlp_Term_Translation_Selector {
 	 */
 	public function print_title() {
 
-		if ( empty ( $this->related_sites ) )
-			return FALSE;
-
-		print $this->presenter->get_group_title();
+		echo $this->get_title();
 
 		return TRUE;
 	}
@@ -170,12 +183,6 @@ class Mlp_Term_Translation_Selector {
 	private function print_style() {
 		?>
 		<style>
-			#<?php $this->print_fieldset_id(); ?> {
-				margin: 1em 0;
-			}
-			#<?php $this->print_fieldset_id(); ?> legend {
-				font-weight: bold;
-			}
 			#mlp-term-translations th {
 				text-align: right;
 			}
@@ -187,9 +194,9 @@ class Mlp_Term_Translation_Selector {
 			}
 			#mlp-term-translations th, #mlp-term-translations td {
 				padding: 0 5px;
+				width: auto;
 				vertical-align: middle;
 				font-weight: normal;
-				width: auto;
 			}
 		</style>
 	<?php

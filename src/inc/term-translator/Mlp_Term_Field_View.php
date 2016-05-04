@@ -79,7 +79,7 @@ class Mlp_Term_Field_View {
 		$title = $this->updatable->update( self::EDIT_TERM_TITLE );
 		?>
 		<tr class="form-field">
-			<th scope="row"><?php esc_html( $title ); ?></th>
+			<th scope="row"><?php echo esc_html( $title ); ?></th>
 			<td><?php $this->updatable->update( self::EDIT_TERM_FIELDS ); ?></td>
 		</tr>
 		<?php
@@ -99,8 +99,8 @@ class Mlp_Term_Field_View {
 
 		$title = $this->updatable->update( self::ADD_TERM_TITLE );
 		?>
-		<fieldset id="<?php esc_attr( $id ); ?>">
-			<legend><?php esc_html( $title ); ?></legend>
+		<fieldset class="form-field" id="<?php echo esc_attr( $id ); ?>">
+			<legend><?php echo esc_html( $title ); ?></legend>
 			<?php $this->updatable->update( self::ADD_TERM_FIELDS ); ?>
 		</fieldset>
 		<?php

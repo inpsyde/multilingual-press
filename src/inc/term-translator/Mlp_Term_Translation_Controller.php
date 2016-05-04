@@ -116,7 +116,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 		$view = $this->get_view();
 
 		if ( Mlp_Term_Field_View::ADD_TERM_FIELDSET_ID === $name ) {
-			return $view->print_fieldset_id();
+			return $view->get_fieldset_id();
 		}
 
 		$table_positions = array(
@@ -132,7 +132,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			Mlp_Term_Field_View::EDIT_TERM_TITLE,
 		);
 		if ( in_array( $name, $title_positions, true ) ) {
-			return $view->print_title();
+			return $view->get_title();
 		}
 
 		return FALSE;
