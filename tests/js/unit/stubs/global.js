@@ -29,6 +29,7 @@ Object.keys( window ).forEach( ( key ) => {
 
 globalStub.restore = () => {
 	_._restore();
+	Backbone._restore();
 	jQuery._restore();
 };
 

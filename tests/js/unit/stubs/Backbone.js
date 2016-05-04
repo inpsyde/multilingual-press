@@ -22,6 +22,13 @@ const Backbone = {
 	}
 };
 
+Backbone._restore = () => {
+	Backbone.Events.on.reset();
+	Backbone.Events.trigger.reset();
+	Backbone.history.start.reset();
+	Backbone.History.started = false;
+};
+
 Backbone.Model.prototype.fetch = sinon.spy();
 Backbone.Model.prototype.get = sinon.stub();
 
