@@ -3,11 +3,10 @@ import test from "tape";
 import sinon from "sinon";
 import * as _ from "lodash";
 import * as F from "../../functions";
-import Backbone from "../../stubs/Backbone";
 import jQueryObject from "../../stubs/jQueryObject";
 import NavMenus from "../../../../../resources/js/admin/nav-menus/NavMenus";
 
-const { $ } = global;
+const { $, Backbone } = global;
 
 /**
  * Returns a new instance of the class under test.

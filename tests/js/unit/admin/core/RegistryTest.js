@@ -76,7 +76,6 @@ test( 'createModules ...', ( assert ) => {
 	assert.end();
 } );
 
-// TODO: Check this!
 test( 'initializeRoute ...', ( assert ) => {
 	const router = {
 		route: sinon.spy()

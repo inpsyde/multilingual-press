@@ -2,8 +2,9 @@ import globalStub from "../../stubs/global";
 import test from "tape";
 import sinon from "sinon";
 import * as F from "../../functions";
-import Backbone from "../../stubs/Backbone";
 import Controller from "../../../../../resources/js/admin/core/Controller";
+
+const { Backbone } = global;
 
 /**
  * Returns a new instance of the class under test.
