@@ -1,12 +1,14 @@
 /* eslint-disable no-invalid-this */
 
-import * as _ from "lodash";
 import sinon from "sinon";
+import * as _ from "lodash";
 
 export default function jQueryObject( customMembers = {} ) {
 	const members = _.extend( {
 		_elements: [],
 
+		addClass: sinon.spy(),
+		append: sinon.spy(),
 		attr: sinon.stub(),
 		before: sinon.spy(),
 		closest: sinon.stub(),
@@ -17,6 +19,7 @@ export default function jQueryObject( customMembers = {} ) {
 				c( i, this._elements[ i ] );
 			}
 		},
+		filter: sinon.stub(),
 		find: sinon.stub(),
 		first: sinon.stub(),
 		html: sinon.stub(),
@@ -25,6 +28,7 @@ export default function jQueryObject( customMembers = {} ) {
 		on: sinon.stub(),
 		prop: sinon.stub(),
 		removeAttr: sinon.spy(),
+		removeClass: sinon.spy(),
 		text: sinon.stub().returns( '' ),
 		toggle: sinon.spy(),
 		val: sinon.stub()
