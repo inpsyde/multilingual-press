@@ -5,21 +5,24 @@ import * as F from "../../functions";
 import jQueryObject from "../../stubs/jQueryObject";
 import { Toggler } from "../../../../../resources/js/admin/core/common";
 
-test( 'initializeStateToggler...', ( assert ) => {
+const { $ } = global;
+
+test( 'initializeStateToggler ...', ( assert ) => {
 	const testee = new Toggler();
 
-	const element = F.getRandomString();
+	const $toggler = new jQueryObject();
+	$toggler.attr.returnsArg( 0 );
 
-	const $stub = new jQueryObject();
+	const $togglers = new jQueryObject();
 
-	$.returns( $stub );
+	$.withArgs( '[name="name"]' ).returns( $togglers );
 
-	testee.initializeStateToggler( element );
+	testee.initializeStateToggler( $toggler );
 
 	assert.equal(
-		$stub.on.callCount,
-		1,
-		'... SHOULD have added 1 event handler'
+		$togglers.on.calledWith( 'change', { $toggler }, testee.toggleElementIfChecked ),
+		true,
+		'... SHOULD register the expected event handler.'
 	);
 
 	// Restore global scope.
@@ -28,23 +31,34 @@ test( 'initializeStateToggler...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'initializeStateTogglers...', ( assert ) => {
+test( 'initializeStateTogglers ...', ( assert ) => {
 	const testee = new Toggler();
+
+	// Turn method into spy.
+	testee.initializeStateToggler = sinon.spy();
 
 	const element = F.getRandomString();
 
 	const _elements = F.getRandomArray( 1, 10, element );
 
-	$.withArgs( '.mlp-state-toggler' ).returns( new jQueryObject( { _elements } ) );
+	const $element = new jQueryObject();
 
-	testee.initializeStateToggler = sinon.spy();
+	$
+		.withArgs( '.mlp-state-toggler' ).returns( new jQueryObject( { _elements } ) )
+		.withArgs( element ).returns( $element );
 
 	testee.initializeStateTogglers();
 
 	assert.equal(
 		testee.initializeStateToggler.callCount,
 		_elements.length,
-		'... SHOULD call initializeStateToggler once for each jQuery element'
+		'... SHOULD initialize each state toggler.'
+	);
+
+	assert.equal(
+		testee.initializeStateToggler.alwaysCalledWith( $element ),
+		true,
+		'... SHOULD initialize the expected state togglers.'
 	);
 
 	// Restore global scope.
@@ -53,35 +67,28 @@ test( 'initializeStateTogglers...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'toggleElement...', ( assert ) => {
-	const testee = new Toggler(),
+test( 'toggleElement (invalid target) ...', ( assert ) => {
+	const testee = new Toggler();
 
-		target = F.getRandomString(),
+	const event = {
+		target: F.getRandomString()
+	};
 
-		event = { target },
-	// Create 2 jQuery stubs for different selector calls
-		$dataStub = new jQueryObject(),
+	const $toggler = new jQueryObject();
 
-		$toggleStub = new jQueryObject(),
+	const $target = new jQueryObject();
 
-		targetID = F.getRandomBool() ? F.getRandomString() : false;
-
-	$dataStub.data.returns( targetID );
-
-	// Wire up the jQuery stubs with the appropriate selectors
 	$
-		.withArgs( target ).returns( $dataStub )
-		.withArgs( targetID ).returns( $toggleStub );
+		.withArgs( event.target ).returns( $toggler )
+		.returns( $target );
 
 	testee.toggleElement( event );
 
-	if ( targetID ) {
-		assert.equal(
-			$toggleStub.toggle.callCount,
-			1,
-			'... SHOULD call toggle() on the jQuery element if a targetID was found'
-		);
-	}
+	assert.equal(
+		$target.toggle.callCount,
+		0,
+		'... SHOULD NOT toggle any elements.'
+	);
 
 	// Restore global scope.
 	globalStub.restore();
@@ -89,36 +96,93 @@ test( 'toggleElement...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'toggleElementIfChecked...', ( assert ) => {
-	const testee = new Toggler(),
+test( 'toggleElement (valid target) ...', ( assert ) => {
+	const testee = new Toggler();
 
-		$toggler = new jQueryObject(),
+	const event = {
+		target: F.getRandomString()
+	};
 
-		data = { $toggler },
+	const targetID = F.getRandomString();
 
-		event = { data },
+	const $toggler = new jQueryObject();
+	$toggler.data.withArgs( 'toggle-target' ).returns( targetID );
 
-		$toggleStub = new jQueryObject(),
+	const $target = new jQueryObject();
 
-		targetID = F.getRandomBool() ? F.getRandomString() : false,
+	$
+		.withArgs( event.target ).returns( $toggler )
+		.withArgs( targetID ).returns( $target );
 
-		checked = F.getRandomBool();
+	testee.toggleElement( event );
 
-	$toggler.data.returns( targetID );
+	assert.equal(
+		$target.toggle.callCount,
+		1,
+		'... SHOULD toggle the expected element.'
+	);
 
-	$toggler.is.returns( checked );
+	// Restore global scope.
+	globalStub.restore();
 
-	$.withArgs( targetID ).returns( $toggleStub );
+	assert.end();
+} );
+
+test( 'toggleElementIfChecked (unchecked) ...', ( assert ) => {
+	const testee = new Toggler();
+
+	const event = {
+		data: {
+			$toggler: new jQueryObject()
+		}
+	};
+
+	const $target = new jQueryObject();
+
+	$.returns( $target );
 
 	testee.toggleElementIfChecked( event );
 
-	if ( targetID ) {
-		assert.equal(
-			$toggleStub.toggle.calledWith( checked ),
-			true,
-			'... SHOULD toggle the element accoding to the checked state IF a target ID was found.'
-		);
-	}
+	assert.equal(
+		$target.toggle.callCount,
+		0,
+		'... SHOULD NOT toggle any elements.'
+	);
+
+	// Restore global scope.
+	globalStub.restore();
+
+	assert.end();
+} );
+
+test( 'toggleElementIfChecked (checked) ...', ( assert ) => {
+	const testee = new Toggler();
+
+	const targetID = F.getRandomString();
+
+	const isChecked = F.getRandomBool();
+
+	const $toggler = new jQueryObject();
+	$toggler.data.withArgs( 'toggle-target' ).returns( targetID );
+	$toggler.is.withArgs( ':checked' ).returns( isChecked );
+
+	const event = {
+		data: {
+			$toggler
+		}
+	};
+
+	const $target = new jQueryObject();
+
+	$.withArgs( targetID ).returns( $target );
+
+	testee.toggleElementIfChecked( event );
+
+	assert.equal(
+		$target.toggle.calledWith( isChecked ),
+		true,
+		'... SHOULD toggle the expected element according to the toggler state.'
+	);
 
 	// Restore global scope.
 	globalStub.restore();
