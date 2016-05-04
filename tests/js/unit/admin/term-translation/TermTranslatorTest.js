@@ -99,7 +99,7 @@ test( 'propagateSelectedTerm (not propagating, valid relation) ...', ( assert ) 
 	const _elements = F.getRandomArray();
 
 	const $selects = new jQueryObject( { _elements } );
-	$selects.not.returns( $selects );
+	$selects.not.returnsThis();
 
 	const $el = new jQueryObject();
 	$el.find.returns( $selects );
