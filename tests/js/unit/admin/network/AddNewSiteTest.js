@@ -31,7 +31,7 @@ test( 'constructor (template) ...', ( assert ) => {
 	const $el = new jQueryObject();
 	$el.find.returns( new jQueryObject() );
 
-	createTestee( { $el} );
+	createTestee( { $el } );
 
 	assert.equal(
 		global._.template.calledWith( markup ),
