@@ -92,8 +92,6 @@ test( 'adaptLanguage (language not found) ...', ( assert ) => {
 
 	const testee = createTestee();
 
-	const language = F.getRandomString();
-
 	// Make method return an empty string.
 	testee.getLanguage = F.returnEmptyString;
 
