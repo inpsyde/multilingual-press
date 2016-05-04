@@ -4,7 +4,7 @@ import * as Util from "./common/utils";
 import * as F from "./admin/core/functions";
 import { Toggler } from "./admin/core/common";
 import Controller from "./admin/core/Controller";
-import { EventManager } from "./admin/core/EventManager";
+import EventManager from "./admin/core/EventManager";
 import Model from "./admin/core/Model";
 import Registry from "./admin/core/Registry";
 import Router from "./admin/core/Router";
@@ -16,7 +16,7 @@ import RemotePostSearch from "./admin/post-translation/RemotePostSearch";
 import TermTranslator from "./admin/term-translation/TermTranslator";
 import UserBackEndLanguage from "./admin/user-settings/UserBackEndLanguage";
 
-const ajaxURL = window.ajaxurl;
+const { ajaxurl, jQuery } = window;
 
 /**
  * The MultilingualPress admin namespace.
@@ -73,8 +73,8 @@ controller.registerModule( 'nav-menus.php', NavMenus, {
 	events: {
 		'click #submit-mlp-language': 'sendRequest'
 	},
-	model: new Model( { urlRoot: ajaxURL } ),
-	moduleSettings: settings
+	model: new Model( { urlRoot: ajaxurl } ),
+	settings
 } );
 
 // Register the AddNewSite module for the Add New Site network admin page.
@@ -93,8 +93,8 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], CopyPost, {
 	events: {
 		'click .mlp-copy-post-button': 'copyPostData'
 	},
-	model: new Model( { urlRoot: ajaxURL } ),
-	moduleSettings: F.getSettings( CopyPost )
+	model: new Model( { urlRoot: ajaxurl } ),
+	settings: F.getSettings( CopyPost )
 } );
 
 // Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
@@ -106,7 +106,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, 
 		'click #publish': 'confirmUnsavedRelationships',
 		'click .mlp-save-relationship-button': 'saveRelationship'
 	},
-	moduleSettings: F.getSettings( RelationshipControl ),
+	settings: F.getSettings( RelationshipControl ),
 	Util
 }, ( module ) => module.initializeEventHandlers() );
 
@@ -117,8 +117,8 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
 		'keydown .mlp-search-field': 'preventFormSubmission',
 		'keyup .mlp-search-field': 'reactToInput'
 	},
-	model: new Model( { urlRoot: ajaxURL } ),
-	moduleSettings: F.getSettings( RemotePostSearch )
+	model: new Model( { urlRoot: ajaxurl } ),
+	settings: F.getSettings( RemotePostSearch )
 }, ( module ) => module.initializeResults() );
 
 // Register the TermTranslator module for the Tags and Edit Tag admin page.
@@ -132,7 +132,7 @@ controller.registerModule( [ 'edit-tags.php', 'term.php' ], TermTranslator, {
 // Register the UserBackEndLanguage module for the General Settings admin page.
 controller.registerModule( 'options-general.php', UserBackEndLanguage, {
 	el: '#WPLANG',
-	moduleSettings: F.getSettings( UserBackEndLanguage )
+	settings: F.getSettings( UserBackEndLanguage )
 }, ( module ) => module.updateSiteLanguage() );
 
 // Initialize the admin controller, and thus all modules registered for the current admin page.

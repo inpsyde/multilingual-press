@@ -1,5 +1,6 @@
-const $ = window.jQuery;
-const { _ } = window;
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+const _this = {};
 
 /**
  * The MultilingualPress admin controller.
@@ -15,13 +16,21 @@ class Controller {
 		 * The registry object.
 		 * @type {Registry}
 		 */
-		this.registry = registry;
+		_this.registry = registry;
 
 		/**
 		 * The controller settings.
 		 * @type {Object}
 		 */
-		this.settings = settings;
+		_this.settings = settings;
+	}
+
+	/**
+	 * Returns the settings object.
+	 * @returns {Object} The settings object.
+	 */
+	get settings() {
+		return _this.settings;
 	}
 
 	/**
@@ -29,7 +38,7 @@ class Controller {
 	 * @returns {Object} The module instances registered for the current admin page.
 	 */
 	initialize() {
-		const modules = this.registry.initializeRoutes();
+		const modules = _this.registry.initializeRoutes();
 
 		this.maybeStartHistory();
 
@@ -68,9 +77,11 @@ class Controller {
 			callback
 		};
 
-		_.isArray( routes ) || ( routes = [ routes ] );
+		if ( 'string' === typeof routes ) {
+			routes = [ routes ];
+		}
 
-		$.each( routes, ( index, route ) => this.registry.registerModuleForRoute( moduleData, route ) );
+		routes.forEach( ( route ) => _this.registry.registerModuleForRoute( moduleData, route ) );
 	}
 }
 

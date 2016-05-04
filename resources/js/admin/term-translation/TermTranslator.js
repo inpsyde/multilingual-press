@@ -1,5 +1,15 @@
 const $ = window.jQuery;
 
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+const _this = {
+	/**
+	 * Flag to indicate an ongoing term propagation.
+	 * @type {boolean}
+	 */
+	isPropagating: false
+};
+
 /**
  * MultilingualPress TermTranslator module.
  */
@@ -15,13 +25,15 @@ class TermTranslator extends Backbone.View {
 		 * The jQuery object representing the MultilingualPress term selects.
 		 * @type {jQuery}
 		 */
-		this.$selects = this.$el.find( 'select' );
+		_this.$selects = this.$el.find( 'select' );
+	}
 
-		/**
-		 * Flag to indicate an ongoing term propagation.
-		 * @type {boolean}
-		 */
-		this.isPropagating = false;
+	/**
+	 * Returns the jQuery object representing the MultilingualPress term selects.
+	 * @returns {jQuery}
+	 */
+	get $selects() {
+		return _this.$selects;
 	}
 
 	/**
@@ -32,11 +44,11 @@ class TermTranslator extends Backbone.View {
 		let $select,
 			relation;
 
-		if ( this.isPropagating ) {
+		if ( _this.isPropagating ) {
 			return;
 		}
 
-		this.isPropagating = true;
+		_this.isPropagating = true;
 
 		$select = $( event.target );
 
@@ -45,7 +57,7 @@ class TermTranslator extends Backbone.View {
 			this.$selects.not( $select ).each( ( index, element ) => this.selectTerm( $( element ), relation ) );
 		}
 
-		this.isPropagating = false;
+		_this.isPropagating = false;
 	}
 
 	/**
@@ -61,15 +73,22 @@ class TermTranslator extends Backbone.View {
 	 * Sets the given select element's value to that of the option with the given relation, or the first option.
 	 * @param {jQuery} $select - A select element.
 	 * @param {string} relation - The relation of a term.
+	 * @returns {boolean} Whether or not a term was selected.
 	 */
 	selectTerm( $select, relation ) {
 		const $option = $select.find( 'option[data-relation="' + relation + '"]' );
 
 		if ( $option.length ) {
 			$select.val( $option.val() );
+
+			return true;
 		} else if ( this.getSelectedRelation( $select ) ) {
 			$select.val( $select.find( 'option' ).first().val() );
+
+			return true;
 		}
+
+		return false;
 	}
 }
 

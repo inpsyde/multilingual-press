@@ -1,9 +1,6 @@
-import * as Util from "../../common/utils";
-
 // Internal pseudo-namespace for private data.
-const _this = {
-	Util
-};
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+const _this = {};
 
 /**
  * The MultilingualPress Quicklinks module.
@@ -12,14 +9,20 @@ class Quicklinks {
 	/**
 	 * Constructor. Sets up the properties.
 	 * @param {string} selector - The form element selector.
-	 * @param {Object} [Util=undefined] - Optional. The set of utility methods. Defaults to undefined.
+	 * @param {Object} Util - The set of utility methods.
 	 */
 	constructor( selector, Util ) {
+		/**
+		 * The form element selector.
+		 * @type {string}
+		 */
 		_this.selector = selector;
 
-		if ( Util ) {
-			_this.Util = Util;
-		}
+		/**
+		 * The set of utility methods.
+		 * @type {Object}
+		 */
+		_this.Util = Util;
 	}
 
 	/**
@@ -27,7 +30,7 @@ class Quicklinks {
 	 * @returns {string} The form element selector.
 	 */
 	get selector() {
-		return _this.selector || '';
+		return _this.selector;
 	}
 
 	/**
@@ -44,7 +47,7 @@ class Quicklinks {
 	attachSubmitHandler() {
 		const $form = document.querySelector( this.selector );
 
-		if ( null === $form ) {
+		if ( ! $form ) {
 			return false;
 		}
 
@@ -60,7 +63,7 @@ class Quicklinks {
 	submitForm( event ) {
 		const $select = event.target.querySelector( 'select' );
 
-		if ( null === $select ) {
+		if ( ! $select ) {
 			return;
 		}
 

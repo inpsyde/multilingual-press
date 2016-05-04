@@ -1,6 +1,10 @@
 const $ = window.jQuery;
 const { _ } = window;
 
+// Internal pseudo-namespace for private data.
+// NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
+const _this = {};
+
 /**
  * MultilingualPress AddNewSite module.
  */
@@ -19,45 +23,38 @@ class AddNewSite extends Backbone.View {
 		 */
 		const markup = $( '#mlp-add-new-site-template' ).html() || '';
 		if ( '' !== markup ) {
-			/**
-			 * The templating function.
-			 * @type {Function}
-			 */
-			this.template = _.template( markup );
-
 			// FIRST render the template, THEN set up the properties using elements that just got injected into the DOM.
-			this.$el.find( '.submit' ).before( this.template() );
+			this.$el.find( '.submit' ).before( _.template( markup )() );
 		}
 
 		/**
 		 * The jQuery object representing the MultilingualPress language select.
 		 * @type {jQuery}
 		 */
-		this.$language = $( '#mlp-site-language' );
+		_this.$language = $( '#mlp-site-language' );
 
 		/**
 		 * The jQuery object representing the table row that contains the plugin activation checkbox.
 		 * @type {jQuery}
 		 */
-		this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
+		_this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
 	}
 
 	/**
 	 * Sets MultilingualPress's language select to the currently selected site language.
 	 * @param {Event} event - The change event of the site language select element.
-	 * @returns {boolean} Whether or not the languages has been adapted.
 	 */
 	adaptLanguage( event ) {
 		const language = this.getLanguage( $( event.target ) );
 
-		if ( this.$language.find( '[value="' + language + '"]' ).length ) {
-			this.$language.val( language );
+		if ( _this.$language.find( '[value="' + language + '"]' ).length ) {
+			_this.$language.val( language );
 		}
 	}
 
 	/**
 	 * Returns the selected language of the given select element.
-	 * @param {HTMLElement} $select - A select element.
+	 * @param {jQuery} $select - A select element.
 	 * @returns {string} The selected language.
 	 */
 	getLanguage( $select ) {
@@ -75,7 +72,7 @@ class AddNewSite extends Backbone.View {
 	 * @param {Event} event - The change event of the source site ID select element.
 	 */
 	togglePluginsRow( event ) {
-		this.$pluginsRow.toggle( 0 < $( event.target ).val() );
+		_this.$pluginsRow.toggle( 0 < $( event.target ).val() );
 	}
 }
 

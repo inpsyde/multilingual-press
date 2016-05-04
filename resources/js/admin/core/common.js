@@ -14,11 +14,9 @@ export class Toggler extends Backbone.View {
 
 	/**
 	 * Initializes the given toggler that works by using its individual state.
-	 * @param {Element} element - The toggler element.
+	 * @param {jQuery} $toggler - The jQuery representation of a toggler element.
 	 */
-	initializeStateToggler( element ) {
-		const $toggler = $( element );
-
+	initializeStateToggler( $toggler ) {
 		$( '[name="' + $toggler.attr( 'name' ) + '"]' ).on( 'change', {
 			$toggler
 		}, this.toggleElementIfChecked );
@@ -28,7 +26,7 @@ export class Toggler extends Backbone.View {
 	 * Initializes the togglers that work by using their individual state.
 	 */
 	initializeStateTogglers() {
-		$( '.mlp-state-toggler' ).each( ( index, element ) => this.initializeStateToggler( element ) );
+		$( '.mlp-state-toggler' ).each( ( index, element ) => this.initializeStateToggler( $( element ) ) );
 	}
 
 	/**
