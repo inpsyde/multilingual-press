@@ -184,9 +184,9 @@ class Mlp_Translation_Metabox_View {
 			<label for="translate_this_post_<?php echo esc_attr( $id ); ?>">
 				<input
 					type="checkbox"
-					id="translate_this_post_<?php esc_attr( $id ); ?>"
+					id="translate_this_post_<?php echo esc_attr( $id ); ?>"
 					name="mlp_to_translate[]"
-					value="<?php esc_attr( $id ); ?>" />
+					value="<?php echo esc_attr( $id ); ?>" />
 				<?php esc_html_e( 'Translate this post', 'multilingual-press' ); ?>
 			</label>
 		</p>
