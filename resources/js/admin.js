@@ -16,7 +16,7 @@ import RemotePostSearch from "./admin/post-translation/RemotePostSearch";
 import TermTranslator from "./admin/term-translation/TermTranslator";
 import UserBackEndLanguage from "./admin/user-settings/UserBackEndLanguage";
 
-const { ajaxURL, jQuery } = window;
+const { ajaxurl, jQuery } = window;
 
 /**
  * The MultilingualPress admin namespace.
@@ -73,7 +73,7 @@ controller.registerModule( 'nav-menus.php', NavMenus, {
 	events: {
 		'click #submit-mlp-language': 'sendRequest'
 	},
-	model: new Model( { urlRoot: ajaxURL } ),
+	model: new Model( { urlRoot: ajaxurl } ),
 	settings
 } );
 
@@ -93,7 +93,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], CopyPost, {
 	events: {
 		'click .mlp-copy-post-button': 'copyPostData'
 	},
-	model: new Model( { urlRoot: ajaxURL } ),
+	model: new Model( { urlRoot: ajaxurl } ),
 	settings: F.getSettings( CopyPost )
 } );
 
@@ -117,7 +117,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
 		'keydown .mlp-search-field': 'preventFormSubmission',
 		'keyup .mlp-search-field': 'reactToInput'
 	},
-	model: new Model( { urlRoot: ajaxURL } ),
+	model: new Model( { urlRoot: ajaxurl } ),
 	settings: F.getSettings( RemotePostSearch )
 }, ( module ) => module.initializeResults() );
 
