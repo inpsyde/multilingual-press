@@ -11,7 +11,9 @@ export const returnArg = ( arg ) => arg;
 
 export const returnEmptyArray = () => [];
 
-export const returnEmptyObject = () => { return {}; };
+export const returnEmptyObject = () => {
+	return {};
+};
 
 export const returnEmptyString = () => '';
 
