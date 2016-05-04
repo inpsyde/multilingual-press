@@ -1,5 +1,5 @@
 import sinon from "sinon";
-import _ from "./lodash";
+import _ from "./underscore";
 import Backbone from "./Backbone";
 import jQuery from "./jQuery";
 
