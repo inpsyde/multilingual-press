@@ -6,11 +6,15 @@ import Registry from "../../../../../resources/js/admin/core/Registry";
 
 /**
  * Returns a new instance of the class under test.
+ * @param {Router} [router] - Optional The router object. Defaults to a Sinon.JS stub.
  * @returns {Registry} The instance of the class under test.
  */
-const createTestee = () => {
-	const router = sinon.stub();
-	router.route = sinon.spy();
+const createTestee = ( router = sinon.stub() ) => {
+	// Rewire internal data.
+	Registry.__Rewire__( '_this', {
+		data: {},
+		modules: {}
+	} );
 
 	return new Registry( router );
 };
@@ -33,21 +37,21 @@ test( 'createModule ...', ( assert ) => {
 	assert.equal(
 		data.Constructor.calledWith( data.options ),
 		true,
-		'... SHOULD create a module instance, and pass along the expected options.'
+		'... SHOULD create the expected module instance.'
 	);
 
 	if ( data.callback ) {
 		assert.equal(
 			data.callback.callCount,
 			1,
-			'... SHOULD fire a callback IF it was passed.'
+			'... SHOULD fire the expected callback IF it was passed.'
 		);
 	}
 
 	assert.equal(
 		module instanceof data.Constructor,
 		true,
-		'... SHOULD return the module instance.'
+		'... SHOULD return the expected module instance.'
 	);
 
 	assert.end();
@@ -66,21 +70,19 @@ test( 'createModules ...', ( assert ) => {
 	assert.equal(
 		testee.createModule.callCount,
 		modules.length,
-		'... SHOULD call createModule() for each module.'
+		'... SHOULD create an instance of each module.'
 	);
 
 	assert.end();
 } );
 
+// TODO: Check this!
 test( 'initializeRoute ...', ( assert ) => {
-	const testee = createTestee();
-
 	const router = {
 		route: sinon.spy()
 	};
 
-	// Rewire internal data.
-	Registry.__Rewire__( '_this', { router } );
+	const testee = createTestee( router );
 
 	// Turn method into spy.
 	testee.createModules = sinon.spy();
@@ -106,9 +108,6 @@ test( 'initializeRoute ...', ( assert ) => {
 		true,
 		'... SHOULD create the expected modules.'
 	);
-
-	// Restore internal data.
-	Registry.__ResetDependency__( '_this' );
 
 	assert.end();
 } );
@@ -141,9 +140,6 @@ test( 'initializeRoutes ...', ( assert ) => {
 		'... SHOULD initialize each passed route.'
 	);
 
-	// Restore internal data.
-	Registry.__ResetDependency__( '_this' );
-
 	assert.end();
 } );
 
@@ -165,9 +161,6 @@ test( 'registerModuleForRoute ...', ( assert ) => {
 		numRoutes + 1,
 		'... SHOULD return the expected result.'
 	);
-
-	// Restore internal data.
-	Registry.__ResetDependency__( '_this' );
 
 	assert.end();
 } );
