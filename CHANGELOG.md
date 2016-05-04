@@ -33,6 +33,7 @@ support for the Language Switcher widget.
 - Use the new `network_site_new_form` action hook (where available) instead of injecting markup with jQuery. Yay!
 - Delete the according Language nav menu items when a site is deleted.
 - Improve site language(s) on network settings pages.
+- Full JavaScript unit test coverage, see [pull request #201](https://github.com/inpsyde/multilingual-press/pull/201).
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
