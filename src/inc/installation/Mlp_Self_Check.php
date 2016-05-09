@@ -139,11 +139,13 @@ class Mlp_Self_Check {
 	/**
 	 * Removes MultilingualPress from updatable plugins.
 	 *
-	 * @param stdClass $plugins Plugins data.
+	 * @wp-hook site_transient_$transient
 	 *
-	 * @return stdClass
+	 * @param mixed $plugins Plugins data.
+	 *
+	 * @return mixed
 	 */
-	public function remove_mlp_from_update_plugins_transient( stdClass $plugins ) {
+	public function remove_mlp_from_update_plugins_transient( $plugins ) {
 
 		$file = defined( 'MLP_PLUGIN_FILE' ) ? MLP_PLUGIN_FILE : $this->plugin_file;
 		$file = plugin_basename( $file );
