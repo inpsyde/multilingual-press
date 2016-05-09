@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.1-alpha
+## 2.4.1
 - Fix potentially incorrect type hint, see [issue #204](https://github.com/inpsyde/multilingual-press/issues/204), props
 tyrann0us.
 - Fix MultilinguaPress JavaScript settings not being available when using minified JavaScript files, see
