@@ -113,7 +113,7 @@ toggler.initializeStateTogglers();
 var settings = void 0;
 
 // Register the NavMenus module for the Menus admin page.
-settings = F.getSettings(_NavMenus2.default);
+settings = F.getSettings('NavMenus');
 controller.registerModule('nav-menus.php', _NavMenus2.default, {
 	el: '#' + settings.metaBoxID,
 	events: {
@@ -140,7 +140,7 @@ controller.registerModule(['post.php', 'post-new.php'], _CopyPost2.default, {
 		'click .mlp-copy-post-button': 'copyPostData'
 	},
 	model: new _Model2.default({ urlRoot: ajaxurl }),
-	settings: F.getSettings(_CopyPost2.default)
+	settings: F.getSettings('CopyPost')
 });
 
 // Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
@@ -152,7 +152,7 @@ controller.registerModule(['post.php', 'post-new.php'], _RelationshipControl2.de
 		'click #publish': 'confirmUnsavedRelationships',
 		'click .mlp-save-relationship-button': 'saveRelationship'
 	},
-	settings: F.getSettings(_RelationshipControl2.default),
+	settings: F.getSettings('RelationshipControl'),
 	Util: Util
 }, function (module) {
 	return module.initializeEventHandlers();
@@ -166,7 +166,7 @@ controller.registerModule(['post.php', 'post-new.php'], _RemotePostSearch2.defau
 		'keyup .mlp-search-field': 'reactToInput'
 	},
 	model: new _Model2.default({ urlRoot: ajaxurl }),
-	settings: F.getSettings(_RemotePostSearch2.default)
+	settings: F.getSettings('RemotePostSearch')
 }, function (module) {
 	return module.initializeResults();
 });
@@ -182,7 +182,7 @@ controller.registerModule(['edit-tags.php', 'term.php'], _TermTranslator2.defaul
 // Register the UserBackEndLanguage module for the General Settings admin page.
 controller.registerModule('options-general.php', _UserBackEndLanguage2.default, {
 	el: '#WPLANG',
-	settings: F.getSettings(_UserBackEndLanguage2.default)
+	settings: F.getSettings('UserBackEndLanguage')
 }, function (module) {
 	return module.updateSiteLanguage();
 });

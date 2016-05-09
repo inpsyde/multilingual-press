@@ -67,7 +67,7 @@ toggler.initializeStateTogglers();
 let settings;
 
 // Register the NavMenus module for the Menus admin page.
-settings = F.getSettings( NavMenus );
+settings = F.getSettings( 'NavMenus' );
 controller.registerModule( 'nav-menus.php', NavMenus, {
 	el: '#' + settings.metaBoxID,
 	events: {
@@ -94,7 +94,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], CopyPost, {
 		'click .mlp-copy-post-button': 'copyPostData'
 	},
 	model: new Model( { urlRoot: ajaxurl } ),
-	settings: F.getSettings( CopyPost )
+	settings: F.getSettings( 'CopyPost' )
 } );
 
 // Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
@@ -106,7 +106,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, 
 		'click #publish': 'confirmUnsavedRelationships',
 		'click .mlp-save-relationship-button': 'saveRelationship'
 	},
-	settings: F.getSettings( RelationshipControl ),
+	settings: F.getSettings( 'RelationshipControl' ),
 	Util
 }, ( module ) => module.initializeEventHandlers() );
 
@@ -118,7 +118,7 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
 		'keyup .mlp-search-field': 'reactToInput'
 	},
 	model: new Model( { urlRoot: ajaxurl } ),
-	settings: F.getSettings( RemotePostSearch )
+	settings: F.getSettings( 'RemotePostSearch' )
 }, ( module ) => module.initializeResults() );
 
 // Register the TermTranslator module for the Tags and Edit Tag admin page.
@@ -132,7 +132,7 @@ controller.registerModule( [ 'edit-tags.php', 'term.php' ], TermTranslator, {
 // Register the UserBackEndLanguage module for the General Settings admin page.
 controller.registerModule( 'options-general.php', UserBackEndLanguage, {
 	el: '#WPLANG',
-	settings: F.getSettings( UserBackEndLanguage )
+	settings: F.getSettings( 'UserBackEndLanguage' )
 }, ( module ) => module.updateSiteLanguage() );
 
 // Initialize the admin controller, and thus all modules registered for the current admin page.
