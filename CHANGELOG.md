@@ -35,6 +35,8 @@ support for the Language Switcher widget.
 - Improve site language(s) on network settings pages.
 - Full JavaScript unit test coverage, see [pull request #201](https://github.com/inpsyde/multilingual-press/pull/201).
 - Add the MultilingualPress settings page link to the plugin list in the WordPress Network Admin.
+- Fix `hreflang` links and headers, see [issue #202](https://github.com/inpsyde/multilingual-press/issues/202), props
+jasuja.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see
