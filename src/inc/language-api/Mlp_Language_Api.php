@@ -341,6 +341,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				$arr[ 'icon' ] = '';
 			}
 
+			$arr['suppress_filters'] = $arguments['suppress_filters'];
+
 			$arr = new Mlp_Translation( $arr, new Mlp_Language( $data ) );
 		}
 
@@ -660,16 +662,17 @@ WHERE `http_name` IN( $values )";
 	 */
 	private function prepare_translation_arguments( Array $args ) {
 
-		$defaults = array (
+		$defaults = array(
 			// always greater than 0
-			'site_id'              => get_current_blog_id(),
+			'site_id'          => get_current_blog_id(),
 			// 0 if missing
-			'content_id'           => $this->get_query_id(),
-			'type'                 => $this->get_request_type(),
-			'strict'               => TRUE,
-			'search_term'          => get_search_query(),
-			'post_type'            => $this->get_request_post_type(),
-			'include_base'         => FALSE
+			'content_id'       => $this->get_query_id(),
+			'type'             => $this->get_request_type(),
+			'strict'           => true,
+			'search_term'      => get_search_query(),
+			'post_type'        => $this->get_request_post_type(),
+			'include_base'     => false,
+			'suppress_filters' => false,
 		);
 
 		$arguments = wp_parse_args( $args, $defaults );

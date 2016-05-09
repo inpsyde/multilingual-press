@@ -108,7 +108,10 @@ class Mlp_Hreflang_Header_Output {
 		$this->translations = array();
 
 		/** @var Mlp_Translation_Interface[] $translations */
-		$translations = $this->language_api->get_translations( array( 'include_base' => true ) );
+		$translations = $this->language_api->get_translations( array(
+			'include_base'     => true,
+			'suppress_filters' => true,
+		) );
 		if ( ! $translations ) {
 			return $this->translations;
 		}
