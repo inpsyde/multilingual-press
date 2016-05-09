@@ -49,6 +49,11 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 	private $target_title;
 
 	/**
+	 * @var bool
+	 */
+	private $suppress_filters = false;
+
+	/**
 	 * @param array        $params
 	 * @param Mlp_Language_Interface $language
 	 */
@@ -62,6 +67,10 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 		$this->page_type         = $params['type'];
 		$this->icon_url          = $params['icon'];
 		$this->language          = $language;
+
+		if ( isset( $params['suppress_filters'] ) ) {
+			$this->suppress_filters = (bool) $params['suppress_filters'];
+		}
 	}
 
 	/**
@@ -108,6 +117,10 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 	 * @return string
 	 */
 	public function get_remote_url() {
+
+		if ( $this->suppress_filters ) {
+			return (string) $this->remote_url;
+		}
 
 		/**
 		 * Filter the remote URL of the linked element.
