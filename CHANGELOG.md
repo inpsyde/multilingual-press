@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.1-alpha
+- Fix potentially incorrect type hint, see [issue #204](https://github.com/inpsyde/multilingual-press/issues/204), props
+tyrann0us.
+
 ## 2.4.0 Emil Krebs
 - Overall improvement of nonce usage.
 - Rename plugin text domain, and adapt gettext calls and translations files.
