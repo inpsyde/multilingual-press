@@ -34,6 +34,7 @@ support for the Language Switcher widget.
 - Delete the according Language nav menu items when a site is deleted.
 - Improve site language(s) on network settings pages.
 - Full JavaScript unit test coverage, see [pull request #201](https://github.com/inpsyde/multilingual-press/pull/201).
+- Add the MultilingualPress settings page link to the plugin list in the WordPress Network Admin.
 
 ## 2.3.2
 - Fix leftover entry from site option included in languages data, see

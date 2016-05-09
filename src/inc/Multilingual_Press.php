@@ -206,6 +206,17 @@ class Multilingual_Press {
 			$this->plugin_data->get( 'assets' )
 		);
 		add_action( 'plugins_loaded', array( $settings, 'setup' ), 8 );
+
+		$plugin_file = defined( 'MLP_PLUGIN_FILE' )
+			? plugin_basename( MLP_PLUGIN_FILE )
+			: $this->plugin_data->get( 'plugin_base_name' );
+
+		$url = network_admin_url( 'settings.php?page=mlp' );
+
+		$action_link = new Mlp_Network_Plugin_Action_Link( array(
+			'settings' => '<a href="' . esc_url( $url ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>',
+		) );
+		add_filter( "network_admin_plugin_action_links_$plugin_file", array( $action_link, 'add' ) );
 	}
 
 	/**
