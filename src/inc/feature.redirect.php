@@ -11,11 +11,7 @@ add_action( 'inpsyde_mlp_loaded', 'mlp_feature_redirect' );
  */
 function mlp_feature_redirect( Inpsyde_Property_List_Interface $data ) {
 
-	$redirect = new Mlp_Redirect(
-		$data->get( 'module_manager' ),
-		$data->get( 'language_api' ),
-		$data->get( 'image_url' ) . '/check.png'
-	);
+	$redirect = new Mlp_Redirect( $data->get( 'module_manager' ), $data->get( 'language_api' ), null );
 
 	if ( $redirect->setup() ) {
 		$user = new Mlp_Redirect_User_Settings();

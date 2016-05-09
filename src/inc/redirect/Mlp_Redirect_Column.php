@@ -1,39 +1,21 @@
-<?php
+<?php # -*- coding: utf-8 -*-
+
 /**
  * Show the redirect status in the sites list.
- *
- * @version 2014.04.27
- * @author  Inpsyde GmbH, toscho
- * @license GPL
- * @package    MultilingualPress
- * @subpackage Redirect
  */
 class Mlp_Redirect_Column {
 
 	/**
-	 * @var string
-	 */
-	private $option_name;
-
-	/**
-	 * @var string
-	 */
-	private $image_url;
-
-	/**
 	 * Constructor.
 	 *
-	 * @param string $option_name
-	 * @param string $image_url
+	 * @param $deprecated
+	 * @param $deprecated_url
 	 */
-	public function __construct( $option_name, $image_url ) {
-
-		$this->option_name = $option_name;
-		$this->image_url   = $image_url;
+	public function __construct( $deprecated, $deprecated_url ) {
 	}
 
 	/**
-	 * Initial set up.
+	 * Initial setup.
 	 *
 	 * @return void
 	 */
@@ -41,21 +23,16 @@ class Mlp_Redirect_Column {
 
 		$columns = $this->get_column_handler();
 
-		add_filter(
-			'wpmu_blogs_columns',
-			array ( $columns, 'add_header' )
-		);
-		add_action(
-			'manage_sites_custom_column',
-			array ( $columns, 'render_column' ), 10, 2
-		);
+		add_filter( 'wpmu_blogs_columns', array( $columns, 'add_header' ) );
+		add_action( 'manage_sites_custom_column', array( $columns, 'render_column' ), 10, 2 );
 	}
 
 	/**
-	 * Render cell content.
+	 * Renders cell content.
 	 *
-	 * @param  string $column_name Not used, but passed.
-	 * @param  int    $blog_id
+	 * @param string $column_name Not used, but passed.
+	 * @param int    $blog_id
+	 *
 	 * @return string
 	 */
 	public function render_cell(
@@ -67,7 +44,7 @@ class Mlp_Redirect_Column {
 			return '';
 		}
 
-		return '<img src="' . esc_url( $this->image_url ) . '" alt="x">';
+		return '<span class="dashicons dashicons-yes"></span>';
 	}
 
 	/**
@@ -77,10 +54,10 @@ class Mlp_Redirect_Column {
 	 */
 	private function get_column_handler() {
 
-		$data = array (
+		$data = array(
 			'id'               => 'mlp_redirect',
 			'header'           => __( 'Redirect', 'multilingual-press' ),
-			'content_callback' => array ( $this, 'render_cell' )
+			'content_callback' => array( $this, 'render_cell' ),
 		);
 
 		return new Mlp_Custom_Columns( $data );
