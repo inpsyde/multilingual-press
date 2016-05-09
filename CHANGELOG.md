@@ -3,6 +3,8 @@
 ## 2.4.1-alpha
 - Fix potentially incorrect type hint, see [issue #204](https://github.com/inpsyde/multilingual-press/issues/204), props
 tyrann0us.
+- Fix MultilinguaPress JavaScript settings not being available when using minified JavaScript files, see
+[issue #205](https://github.com/inpsyde/multilingual-press/issues/205), props kraftner.
 
 ## 2.4.0 Emil Krebs
 - Overall improvement of nonce usage.
