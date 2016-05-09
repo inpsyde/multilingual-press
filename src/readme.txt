@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.2
 Tested up to: 4.5
-Stable tag: 2.3.2
+Stable tag: 2.4.0
 
 Create a fast translation network on WordPress multisite.
 
@@ -113,6 +113,44 @@ tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.4.0 =
+- Overall improvement of nonce usage.
+- Rename plugin text domain, and adapt gettext calls and translations files.
+- When creating a new site, the language is set to the default site language.
+- When the site language is changed, the MultilingualPress language select adapts to this.
+- Improve _clearfix_ usage, props tiagoschenkel.
+- Complete JavaScript refactor, see [issue #168](https://github.com/inpsyde/multilingual-press/issues/168).
+- Refactor and improve the post translator's "Copy source post" functionality, see
+[issue #140](https://github.com/inpsyde/multilingual-press/issues/140).
+- Indicate if "Copy source post" button was used, see
+[issue #169](https://github.com/inpsyde/multilingual-press/issues/169).
+- Fire the `switch_theme` action when a site has been duplicated.
+- Fix term relation not being deleted when term is deleted.
+- Fix dynamic CPT permalinks (due to regression during merge).
+- Add filter for remote post search minimum input length, see
+[issue #193](https://github.com/inpsyde/multilingual-press/issues/193).
+- Sort remote post search results by relevance.
+- Improve CPT translator: allow translation for all editable post types, see
+[issue #184](https://github.com/inpsyde/multilingual-press/issues/184), props kraftner.
+- Use the full slug when copying post data, see [issue #195](https://github.com/inpsyde/multilingual-press/issues/195),
+props luisarn.
+- Improve (i.e., prepare/escape) several MySQL queries, props vaurdan.
+- Introduce `get_term_by_term_taxonomy_id` cache for term translator, props vaurdan.
+- Replace an uncached, direct MySQL query with a `get_posts()` call, props vaurdan.
+- Lots of
+[late](https://vip.wordpress.com/documentation/best-practices/security/validating-sanitizing-escaping/#always-escape-late)
+[escaping](https://vip.wordpress.com/2014/06/20/the-importance-of-escaping-all-the-things/).
+- [Implement](https://make.wordpress.org/core/?p=17066) [selective refresh](https://make.wordpress.org/core/?p=16546)
+support for the Language Switcher widget.
+- Adapt the Term Translator to the new Edit Tag admin page introduced in WordPress 4.5.0.
+- Use the new `network_site_new_form` action hook (where available) instead of injecting markup with jQuery. Yay!
+- Delete the according Language nav menu items when a site is deleted.
+- Improve site language(s) on network settings pages.
+- Full JavaScript unit test coverage, see [pull request #201](https://github.com/inpsyde/multilingual-press/pull/201).
+- Add the MultilingualPress settings page link to the plugin list in the WordPress Network Admin.
+- Fix `hreflang` links and headers, see [issue #202](https://github.com/inpsyde/multilingual-press/issues/202), props
+jasuja.
 
 = 2.3.2 =
 - Fix leftover entry from site option included in languages data, see

@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.0-alpha
+## 2.4.0 Emil Krebs
 - Overall improvement of nonce usage.
 - Rename plugin text domain, and adapt gettext calls and translations files.
 - When creating a new site, the language is set to the default site language.
