@@ -18,7 +18,7 @@ Our **Language Manager** offers 174 languages, and you can edit them.
 
 We cannot guarantee free ad hoc support. Please be patient, we are a small team.
 You can follow our progress and development notices on our
-[developer blog](http://make.marketpress.com/multilingualpress/).
+[developer blog](http://make.multilingualpress.pro).
 
 ## Features
 - Set up unlimited site relationships in the site manager.
@@ -44,7 +44,7 @@ without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
 
 ## Premium Support
-We also offer [premium support](http://marketpress.com/product/multilingual-press-pro/) to save your time.
+We also offer [premium support](http://marketpress.com/shop/plugins/multilingual-press-pro/) to save your time.
 You get direct help from the developers of the plugin-and support the development.
 
 ## WPML to MultilingualPress
@@ -54,7 +54,7 @@ an existing WPML multilingual site via XLIFF export/import for MultilingualPress
 
 ## Installation
 ### Requirements
-* WordPress multisite 4.0+.
+* WordPress multisite 4.2+.
 * PHP 5.2.4, newer PHP versions will work faster.
 
 If you're new to WordPress multisite, you might find our [WordPress multisite installation
@@ -126,8 +126,7 @@ have the translation files ready. In that case, please review the [guidelines fo
 to this repository.
 
 ## Crafted by Inpsyde
-The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006. And yes, we also run that
-[marketplace for premium WordPress plugins and themes](https://marketpress.com).
+The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006.
 
 ## License
 Good news, this plugin is free for everyone! Since it's released under [GPLv3](LICENSE), you can use it free of charge

@@ -263,7 +263,7 @@ language tag, `language_long` the complete language tag.
 - Improved German translation.
 - Made all text domain references static strings.
 - Unify hook names. **Developers: we will change our API completely in version 1.2.** If you have any questions, please
-[contact us](http://marketpress.com/contact/) before you write new code.
+[contact us](http://inpsyde.com/#contact) before you write new code.
 - Added a language list in `inc/language-list.php` to get languages in native and English writing by ISO codes.
 - Added a helper class `Mlp_Db_Replace` to update multiple tables and columns at once.
 - Many minor stability and performance improvements.
