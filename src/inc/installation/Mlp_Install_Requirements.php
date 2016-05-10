@@ -26,7 +26,7 @@ class Mlp_Install_Requirements implements Mlp_Requirements_Interface {
 	 */
 	public function get_min_wp_version() {
 
-		return Mlp_Semantic_Version_Number_Factory::create( '4.0.0' );
+		return Mlp_Semantic_Version_Number_Factory::create( '4.2.0' );
 	}
 
 	/**
