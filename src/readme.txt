@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.2
 Tested up to: 4.5
-Stable tag: 2.4.1
+Stable tag: 2.4.2
 
 Create a fast translation network on WordPress multisite.
 
@@ -113,6 +113,12 @@ tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.4.2 =
+- Fix incorrect styling due to a regression introduced in MultilingualPress 2.4.0, see
+[issue #208](https://github.com/inpsyde/multilingual-press/issues/208).
+- Fix incorrect Language Switcher form markup due to a regression introduced in MultilingualPress 2.4.0, see
+[issue #209](https://github.com/inpsyde/multilingual-press/issues/209), props MBD.berlin.
 
 = 2.4.1 =
 - Fix potentially incorrect type hint, see [issue #204](https://github.com/inpsyde/multilingual-press/issues/204), props

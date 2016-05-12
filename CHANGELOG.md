@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.2-alpha
+## 2.4.2
 - Fix incorrect styling due to a regression introduced in MultilingualPress 2.4.0, see
 [issue #208](https://github.com/inpsyde/multilingual-press/issues/208).
 - Fix incorrect Language Switcher form markup due to a regression introduced in MultilingualPress 2.4.0, see
