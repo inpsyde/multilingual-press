@@ -5,7 +5,7 @@
  * Description: Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites.
  * Author:      Inpsyde GmbH
  * Author URI:  http://inpsyde.com
- * Version:     2.4.2
+ * Version:     2.4.3-alpha
  * Text Domain: multilingual-press
  * Domain Path: /src/languages
  * License:     GPLv3
