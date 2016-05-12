@@ -81,11 +81,11 @@ class Mlp_Widget extends WP_Widget {
 
 		$link_type = isset( $instance['widget_link_type'] ) ? $instance['widget_link_type'] : '';
 
-		$display_flag = isset( $instance['widget_display_flag'] );
+		$display_flag = ! empty( $instance['widget_display_flag'] );
 
-		$show_current_blog = isset( $instance['widget_show_current_blog'] );
+		$show_current_blog = ! empty( $instance['widget_show_current_blog'] );
 
-		$show_widget = isset( $instance['widget_toggle_view_on_translated_posts'] );
+		$show_widget = ! empty( $instance['widget_toggle_view_on_translated_posts'] );
 		?>
 		<p>
 			<?php
