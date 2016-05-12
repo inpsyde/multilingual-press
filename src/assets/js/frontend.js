@@ -58,7 +58,7 @@ var MLP = {
   * The MultilingualPress Quicklinks instance.
   * @type {Quicklinks}
   */
-	quicklinks: new _Quicklinks2.default('#mlp-quicklink-form', Util),
+	quicklinks: new _Quicklinks2.default('.mlp-quicklink-form', Util),
 
 	/**
   * The set of utility methods.

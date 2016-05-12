@@ -1,10 +1,4 @@
-.mlp-language-box ul li {
-	display: inline;
-	margin: 0 5px 0 0;
-	list-style-type: none;
-}
-
-#mlp-quicklink-form {
+.mlp-quicklinks {
 	max-width: 10em;
 	padding: 10px;
 
@@ -24,8 +18,8 @@
 	&.br {
 		@include clearfix();
 	}
+}
 
-	input {
-		font-size: .9em;
-	}
+.mlp-quicklinks-form  input {
+	font-size: .9em;
 }

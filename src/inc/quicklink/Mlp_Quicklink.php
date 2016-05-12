@@ -346,7 +346,7 @@ ORDER BY domain DESC";
 
 		if ( 'links' === $type ) {
 			$html = <<<HTML
-<div class="$position mlp_quicklinks mlp_quicklinks_links">
+<div class="mlp-quicklinks mlp-quicklink-links $position mlp_quicklinks mlp_quicklinks_links">
 	<div class="$class_inner">
 		$label_text<br>
 		$selections
@@ -363,7 +363,7 @@ HTML;
 			$submit_text = esc_attr_x( 'Go', 'quicklink submit button', 'multilingual-press' );
 
 			$html = <<<HTML
-<form action="$home_url" method="post" class="$position mlp_quicklinks mlp_quicklinks_form" id="mlp-quicklink-form">
+<form action="$home_url" method="post" class="mlp-quicklinks mlp-quicklink-form $position mlp_quicklinks mlp_quicklinks_form">
 	<div class="$class_inner">
 		<label for="$select_id">
 			$label_text

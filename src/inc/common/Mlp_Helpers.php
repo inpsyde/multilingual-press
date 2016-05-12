@@ -443,7 +443,7 @@ class Mlp_Helpers {
 				break;
 		}
 
-		$output = '<div class="mlp-language-box"><ul>';
+		$output = '<div class="mlp-language-box mlp_language_box"><ul>';
 
 		foreach ( $items as $site_id => $item ) {
 			$text = $item[ 'name' ];

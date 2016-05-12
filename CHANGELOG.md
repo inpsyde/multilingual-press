@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.2-alpha
+- Fix incorrect styling due to a regression introduced in MultilingualPress 2.4.0, see
+[issue #208](https://github.com/inpsyde/multilingual-press/issues/208).
+
 ## 2.4.1
 - Fix potentially incorrect type hint, see [issue #204](https://github.com/inpsyde/multilingual-press/issues/204), props
 tyrann0us.
