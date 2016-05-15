@@ -453,7 +453,7 @@ class Mlp_Helpers {
 				: '';
 
 			if ( get_current_blog_id() === $site_id ) {
-				$output .= '<li><a class="current-language-item" href="">' . $text . '</a></li>';
+				$output .= '<li><a class="current-language-item" href="">' . $img . esc_html( $text ) . '</a></li>';
 			} else {
 				$output .= sprintf(
 					'<li><a rel="alternate" hreflang="%1$s" href="%2$s">%3$s%4$s</a></li>',
