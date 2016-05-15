@@ -23,7 +23,8 @@ class Mlp_Widget extends WP_Widget {
 
 		// Enqueue style if widget is active (appears in a sidebar) or if in Customizer preview.
 		if ( is_active_widget( false, false, $this->id_base ) || is_customize_preview() ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'require_style' ) );
+			// Do NOT use wp_enqueue_scripts here as require_style() implicitly hooks into this.
+			add_action( 'template_redirect', array( $this, 'require_style' ) );
 		}
 	}
 
