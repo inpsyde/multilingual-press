@@ -1,6 +1,6 @@
 {
   "name": "multilingualpress",
-  "version": "2.4.3-alpha",
+  "version": "2.4.3",
   "description": "Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites.",
   "keywords": [
     "bilingual",

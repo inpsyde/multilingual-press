@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.2
 Tested up to: 4.5
-Stable tag: 2.4.2
+Stable tag: 2.4.3
 
 Create a fast translation network on WordPress multisite.
 
@@ -113,6 +113,13 @@ tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.4.3 =
+- Fix missing flag for the current site in the Language Switcher widget due to a regression introduced in
+MultilingualPress 2.4.0, see [issue #212](https://github.com/inpsyde/multilingual-press/issues/212).
+- Fix stylesheet not being enqueued when using the Language Switcher widget only (i.e., no Quicklinks) due to a
+regression introduced in MultilingualPress 2.4.0, see
+[issue #213](https://github.com/inpsyde/multilingual-press/issues/213).
 
 = 2.4.2 =
 - Fix incorrect styling due to a regression introduced in MultilingualPress 2.4.0, see

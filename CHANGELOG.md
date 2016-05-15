@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.4.3
+- Fix missing flag for the current site in the Language Switcher widget due to a regression introduced in 
+MultilingualPress 2.4.0, see [issue #212](https://github.com/inpsyde/multilingual-press/issues/212).
+- Fix stylesheet not being enqueued when using the Language Switcher widget only (i.e., no Quicklinks) due to a
+regression introduced in MultilingualPress 2.4.0, see
+[issue #213](https://github.com/inpsyde/multilingual-press/issues/213).
+
 ## 2.4.2
 - Fix incorrect styling due to a regression introduced in MultilingualPress 2.4.0, see
 [issue #208](https://github.com/inpsyde/multilingual-press/issues/208).
