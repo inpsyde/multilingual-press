@@ -241,6 +241,23 @@ class Mlp_Advanced_Translator {
 		);
 		$slug = esc_attr( $slug );
 
+		$tmce_content = filter_input( INPUT_POST, 'tinyMCEContent' );
+		/**
+		 * Filters a post's TinyMCE content for a remote site.
+		 *
+		 * @param string $content         Post content.
+		 * @param int    $current_site_id Source site ID.
+		 * @param int    $current_post_id Source post ID.
+		 * @param int    $remote_site_id  Remote site ID.
+		 */
+		$tmce_content = (string) apply_filters(
+			'mlp_process_post_tmce_content_for_remote_site',
+			$tmce_content,
+			$current_site_id,
+			$current_post_id,
+			$remote_site_id
+		);
+
 		$content = filter_input( INPUT_POST, 'content' );
 		/**
 		 * Filters a post's content for a remote site.
@@ -286,11 +303,12 @@ class Mlp_Advanced_Translator {
 		$data = (array) apply_filters(
 			'mlp_process_post_data_for_remote_site',
 			array(
-				'siteID'  => $remote_site_id,
-				'title'   => $title,
-				'slug'    => $slug,
-				'content' => $content,
-				'excerpt' => $excerpt,
+				'siteID'         => $remote_site_id,
+				'title'          => $title,
+				'slug'           => $slug,
+				'tinyMCEContent' => $tmce_content,
+				'content'        => $content,
+				'excerpt'        => $excerpt,
 			),
 			$current_site_id,
 			$current_post_id,

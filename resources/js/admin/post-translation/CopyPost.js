@@ -52,7 +52,7 @@ class CopyPost extends Backbone.View {
 		 */
 		_this.settings = options.settings;
 
-		this.listenTo( this.model, 'change', this.updatePostData );
+		this.listenTo( this.model, 'change:data', this.updatePostData );
 	}
 
 	/**
@@ -97,6 +97,22 @@ class CopyPost extends Backbone.View {
 	}
 
 	/**
+	 * Returns the TinyMCE content of the original post.
+	 * @returns {string} The post content.
+	 */
+	get tinyMCEContent() {
+		if ( 'undefined' !== typeof window.tinyMCE ) {
+			/**
+			 * The TinyMCE instance of the currently edited post's visual editor.
+			 * @type {Object}
+			 */
+			_this.tinyMCE = window.tinyMCE.get( 'content' );
+		}
+
+		return _this.tinyMCE ? _this.tinyMCE.getContent() : '';
+	}
+
+	/**
 	 * Returns the title of the original post.
 	 * @returns {string} The post title.
 	 */
@@ -138,6 +154,7 @@ class CopyPost extends Backbone.View {
 			title: this.title,
 			slug: this.slug,
 			content: this.content,
+			tinyMCEContent: this.tinyMCEContent,
 			excerpt: this.excerpt
 		} );
 
@@ -184,7 +201,7 @@ class CopyPost extends Backbone.View {
 
 		$( '#' + prefix + 'name' ).val( data.slug );
 
-		this.setTinyMCEContent( prefix + 'content', data.content );
+		this.setTinyMCEContent( prefix + 'content', data.tinyMCEContent );
 
 		$( '#' + prefix + 'content' ).val( data.content );
 
