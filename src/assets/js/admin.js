@@ -1065,7 +1065,7 @@ var CopyPost = function (_Backbone$View) {
 			excerpt: this.excerpt
 		});
 
-		this.model.fetch({
+		this.model.save(data, {
 			data: data,
 			processData: true
 		});

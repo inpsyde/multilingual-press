@@ -141,7 +141,7 @@ class CopyPost extends Backbone.View {
 			excerpt: this.excerpt
 		} );
 
-		this.model.fetch( {
+		this.model.save( data, {
 			data,
 			processData: true
 		} );

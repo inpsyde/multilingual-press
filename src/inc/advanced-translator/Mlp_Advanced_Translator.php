@@ -197,15 +197,15 @@ class Mlp_Advanced_Translator {
 
 		$current_site_id = get_current_blog_id();
 
-		$current_post_id = (int) filter_input( INPUT_GET, 'current_post_id' );
+		$current_post_id = (int) filter_input( INPUT_POST, 'current_post_id' );
 
-		$remote_site_id = (int) filter_input( INPUT_GET, 'remote_site_id' );
+		$remote_site_id = (int) filter_input( INPUT_POST, 'remote_site_id' );
 
 		if ( ! ( $current_post_id && $remote_site_id ) ) {
 			wp_send_json_error();
 		}
 
-		$title = filter_input( INPUT_GET, 'title' );
+		$title = filter_input( INPUT_POST, 'title' );
 		/**
 		 * Filters a post's title for a remote site.
 		 *
@@ -223,7 +223,7 @@ class Mlp_Advanced_Translator {
 		);
 		$title = esc_attr( $title );
 
-		$slug = filter_input( INPUT_GET, 'slug' );
+		$slug = filter_input( INPUT_POST, 'slug' );
 		/**
 		 * Filters a post's slug for a remote site.
 		 *
@@ -241,7 +241,7 @@ class Mlp_Advanced_Translator {
 		);
 		$slug = esc_attr( $slug );
 
-		$content = filter_input( INPUT_GET, 'content' );
+		$content = filter_input( INPUT_POST, 'content' );
 		/**
 		 * Filters a post's content for a remote site.
 		 *
@@ -258,7 +258,7 @@ class Mlp_Advanced_Translator {
 			$remote_site_id
 		);
 
-		$excerpt = (string) filter_input( INPUT_GET, 'excerpt' );
+		$excerpt = (string) filter_input( INPUT_POST, 'excerpt' );
 		/**
 		 * Filters a post's excerpt for a remote site.
 		 *
