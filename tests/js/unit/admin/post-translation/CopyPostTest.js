@@ -266,7 +266,7 @@ test( 'title (element present) ...', ( assert ) => {
 	assert.end();
 } );
 
-test.only( 'copyPostData ...', ( assert ) => {
+test( 'copyPostData ...', ( assert ) => {
 	const tinyMCEContent = F.getRandomString();
 
 	// Prepare tinyMCE.
