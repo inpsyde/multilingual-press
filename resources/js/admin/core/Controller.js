@@ -77,7 +77,7 @@ class Controller {
 			callback
 		};
 
-		if ( 'string' === typeof routes ) {
+		if ( ! Array.isArray( routes ) ) {
 			routes = [ routes ];
 		}
 

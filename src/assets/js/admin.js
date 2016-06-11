@@ -200,7 +200,7 @@ jQuery(function () {
 window.MultilingualPressAdmin = MLP;
 
 },{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/RelationshipControl":12,"./admin/post-translation/RemotePostSearch":13,"./admin/term-translation/TermTranslator":14,"./admin/user-settings/UserBackEndLanguage":15,"./common/utils":16}],2:[function(require,module,exports){
-'use strict';
+"use strict";
 
 exports.__esModule = true;
 
@@ -297,7 +297,7 @@ var Controller = function () {
 			callback: callback
 		};
 
-		if ('string' === typeof routes) {
+		if (!Array.isArray(routes)) {
 			routes = [routes];
 		}
 
@@ -307,7 +307,7 @@ var Controller = function () {
 	};
 
 	_createClass(Controller, [{
-		key: 'settings',
+		key: "settings",
 		get: function get() {
 			return _this.settings;
 		}
