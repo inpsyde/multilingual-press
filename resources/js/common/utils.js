@@ -1,7 +1,7 @@
 /**
  * Attaches the given listener to the given DOM element for the event with the given type.
  * @param {Element} $element - The DOM element.
- * @param {string} type - The type of the event.
+ * @param {String} type - The type of the event.
  * @param {Function} listener - The event listener callback.
  */
 export const addEventListener = ( $element, type, listener ) => {
@@ -23,7 +23,7 @@ export const reloadLocation = () => {
 
 /**
  * Redirects the user to the given URL.
- * @param {string} url - The URL.
+ * @param {String} url - The URL.
  */
 export const setLocation = ( url ) => {
 	window.location.href = url;

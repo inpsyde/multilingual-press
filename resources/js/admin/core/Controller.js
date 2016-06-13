@@ -47,7 +47,7 @@ class Controller {
 
 	/**
 	 * Starts Backbone's history, unless it has been started already.
-	 * @returns {boolean} Whether or not the history has been started right now.
+	 * @returns {Boolean} Whether or not the history has been started right now.
 	 */
 	maybeStartHistory() {
 		if ( Backbone.History.started ) {
@@ -65,7 +65,7 @@ class Controller {
 
 	/**
 	 * Registers a new module with the given Module callback under the given name for the given routes.
-	 * @param {string|string[]} routes - One or more routes.
+	 * @param {String|String[]} routes - One or more routes.
 	 * @param {Function} Constructor - The constructor callback for the module.
 	 * @param {Object} [options={}] - Optional. The options for the module. Default to an empty object.
 	 * @param {Function} [callback=null] - Optional. The callback to execute after construction. Defaults to null.

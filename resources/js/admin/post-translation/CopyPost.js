@@ -42,7 +42,7 @@ class CopyPost extends Backbone.View {
 
 		/**
 		 * The currently edited post's ID.
-		 * @type {number}
+		 * @type {Number}
 		 */
 		_this.postID = Number( $( '#post_ID' ).val() || 0 );
 
@@ -57,7 +57,7 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Returns the content of the original post.
-	 * @returns {string} The post content.
+	 * @returns {String} The post content.
 	 */
 	get content() {
 		return _this.$content.val() || '';
@@ -65,7 +65,7 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Returns the excerpt of the original post.
-	 * @returns {string} The post excerpt.
+	 * @returns {String} The post excerpt.
 	 */
 	get excerpt() {
 		return _this.$excerpt.val() || '';
@@ -73,7 +73,7 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Returns the currently edited post's ID.
-	 * @returns {number} The currently edited post's ID.
+	 * @returns {Number} The currently edited post's ID.
 	 */
 	get postID() {
 		return _this.postID;
@@ -89,7 +89,7 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Returns the slug of the original post.
-	 * @returns {string} The post slug.
+	 * @returns {String} The post slug.
 	 */
 	get slug() {
 		// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
@@ -98,7 +98,7 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Returns the title of the original post.
-	 * @returns {string} The post title.
+	 * @returns {String} The post title.
 	 */
 	get title() {
 		return _this.$title.val() || '';
@@ -150,7 +150,7 @@ class CopyPost extends Backbone.View {
 	/**
 	 * Returns the site ID data attribute value of the given "Copy source post" button.
 	 * @param {jQuery} $button - A "Copy source post" button.
-	 * @returns {number} The site ID.
+	 * @returns {Number} The site ID.
 	 */
 	getRemoteSiteID( $button ) {
 		return Number( $button.data( 'site-id' ) || 0 );
@@ -158,7 +158,7 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Fades the meta box out.
-	 * @param {number} remoteSiteID - The remote site ID.
+	 * @param {Number} remoteSiteID - The remote site ID.
 	 */
 	fadeOutMetaBox( remoteSiteID ) {
 		$( '#inpsyde_multilingual_' + remoteSiteID ).css( 'opacity', .4 );
@@ -166,7 +166,7 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Updates the post data in the according meta box for the given site ID.
-	 * @returns {boolean} Whether or not the post data have been updated.
+	 * @returns {Boolean} Whether or not the post data have been updated.
 	 */
 	updatePostData() {
 		let data,
@@ -202,9 +202,9 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Sets the given content for the tinyMCE editor with the given ID.
-	 * @param {string} editorID - The tinyMCE editor's ID.
-	 * @param {string} content - The content.
-	 * @returns {boolean} Whether or not the post content has been updated.
+	 * @param {String} editorID - The tinyMCE editor's ID.
+	 * @param {String} content - The content.
+	 * @returns {Boolean} Whether or not the post content has been updated.
 	 */
 	setTinyMCEContent( editorID, content ) {
 		let editor;
@@ -225,7 +225,7 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Fades the meta box in.
-	 * @param {number} remoteSiteID - The remote site ID.
+	 * @param {Number} remoteSiteID - The remote site ID.
 	 */
 	fadeInMetaBox( remoteSiteID ) {
 		$( '#inpsyde_multilingual_' + remoteSiteID ).css( 'opacity', 1 );

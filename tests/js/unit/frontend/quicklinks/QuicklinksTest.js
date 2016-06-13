@@ -20,7 +20,7 @@ const resetUtil = () => {
 
 /**
  * Returns a new instance of the class under test.
- * @param {string} [selector] - Optional. The form element selector. Defaults to 'selector'.
+ * @param {String} [selector] - Optional. The form element selector. Defaults to 'selector'.
  * @returns {Quicklinks} The instance of the class under test.
  */
 const createTestee = ( selector ) => new Quicklinks( selector || 'selector', resetUtil() );

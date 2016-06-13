@@ -88,7 +88,7 @@ class NavMenus extends Backbone.View {
 
 	/**
 	 * Returns the site IDs for the checked languages in the Languages meta box.
-	 * @returns {number[]} The site IDs.
+	 * @returns {Number[]} The site IDs.
 	 */
 	getSiteIDs() {
 		const ids = [];
@@ -100,7 +100,7 @@ class NavMenus extends Backbone.View {
 
 	/**
 	 * Renders the nav menu item to the currently edited menu.
-	 * @returns {boolean} Whether or not the nav menu item was rendered.
+	 * @returns {Boolean} Whether or not the nav menu item was rendered.
 	 */
 	render() {
 		const success = this.model.get( 'success' );

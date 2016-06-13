@@ -11,7 +11,7 @@ class Model extends Backbone.Model {
 
 		/**
 		 * The URL root.
-		 * @type {string}
+		 * @type {String}
 		 */
 		this.urlRoot = options.urlRoot;
 	}

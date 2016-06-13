@@ -5,7 +5,7 @@ exports.__esModule = true;
 /**
  * Attaches the given listener to the given DOM element for the event with the given type.
  * @param {Element} $element - The DOM element.
- * @param {string} type - The type of the event.
+ * @param {String} type - The type of the event.
  * @param {Function} listener - The event listener callback.
  */
 var addEventListener = exports.addEventListener = function addEventListener($element, type, listener) {
@@ -27,7 +27,7 @@ var reloadLocation = exports.reloadLocation = function reloadLocation() {
 
 /**
  * Redirects the user to the given URL.
- * @param {string} url - The URL.
+ * @param {String} url - The URL.
  */
 var setLocation = exports.setLocation = function setLocation(url) {
   window.location.href = url;
@@ -96,7 +96,7 @@ var _this = {};
 var Quicklinks = function () {
 	/**
   * Constructor. Sets up the properties.
-  * @param {string} selector - The form element selector.
+  * @param {String} selector - The form element selector.
   * @param {Object} Util - The set of utility methods.
   */
 
@@ -105,7 +105,7 @@ var Quicklinks = function () {
 
 		/**
    * The form element selector.
-   * @type {string}
+   * @type {String}
    */
 		_this.selector = selector;
 
@@ -118,7 +118,7 @@ var Quicklinks = function () {
 
 	/**
   * Returns the form element selector.
-  * @returns {string} The form element selector.
+  * @returns {String} The form element selector.
   */
 
 
@@ -132,7 +132,7 @@ var Quicklinks = function () {
 
 	/**
   * Attaches the according handler to the form submit event.
-  * @returns {boolean} Whether or not the event handler has been attached.
+  * @returns {Boolean} Whether or not the event handler has been attached.
   */
 
 

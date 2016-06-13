@@ -55,7 +55,7 @@ class AddNewSite extends Backbone.View {
 	/**
 	 * Returns the selected language of the given select element.
 	 * @param {jQuery} $select - A select element.
-	 * @returns {string} The selected language.
+	 * @returns {String} The selected language.
 	 */
 	getLanguage( $select ) {
 		const language = $select.val();

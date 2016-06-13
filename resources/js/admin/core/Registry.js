@@ -60,7 +60,7 @@ class Registry {
 
 	/**
 	 * Initializes the given route.
-	 * @param {string} route - The route.
+	 * @param {String} route - The route.
 	 * @param {Object[]} modules - The modules data.
 	 */
 	initializeRoute( route, modules ) {
@@ -80,8 +80,8 @@ class Registry {
 	/**
 	 * Registers the module with the given data for the given route.
 	 * @param {Object} module - The module data.
-	 * @param {string} route - The route.
-	 * @returns {number} The number of the currently registered routes.
+	 * @param {String} route - The route.
+	 * @returns {Number} The number of the currently registered routes.
 	 */
 	registerModuleForRoute( module, route ) {
 		if ( ! _this.data[ route ] ) {

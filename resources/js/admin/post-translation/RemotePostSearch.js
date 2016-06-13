@@ -5,7 +5,7 @@ const $ = window.jQuery;
 const _this = {
 	/**
 	 * Array holding the default search result HTML strings.
-	 * @type {string[]}
+	 * @type {String[]}
 	 */
 	defaultResults: [],
 
@@ -35,7 +35,7 @@ class RemotePostSearch extends Backbone.View {
 
 		/**
 		 * Minimum number of characters required to fire the remote post search.
-		 * @type {number}
+		 * @type {Number}
 		 */
 		_this.threshold = parseInt( options.settings.threshold, 10 ) || 3;
 
@@ -121,7 +121,7 @@ class RemotePostSearch extends Backbone.View {
 
 	/**
 	 * Renders the found posts to the according results container.
-	 * @returns {boolean} Whether or not new data has been rendered.
+	 * @returns {Boolean} Whether or not new data has been rendered.
 	 */
 	render() {
 		let data;
