@@ -49,6 +49,8 @@ class Mlp_Redirect {
 			return false;
 		}
 
+		$this->user_settings();
+
 		if ( ! is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 			$this->frontend_redirect();
 
@@ -87,6 +89,17 @@ class Mlp_Redirect {
 	private function activation_column() {
 
 		$controller = new Mlp_Redirect_Column( null, null );
+		$controller->setup();
+	}
+
+	/**
+	 * Sets up user-specific settings.
+	 *
+	 * @return void
+	 */
+	private function user_settings() {
+
+		$controller = new Mlp_Redirect_User_Settings();
 		$controller->setup();
 	}
 
