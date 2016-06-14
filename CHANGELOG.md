@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.4-alpha
+- Fix HTTP redirection even though the user disabled it, see
+[issue #218](https://github.com/inpsyde/multilingual-press/issues/218).
+
 ## 2.4.3
 - Fix missing flag for the current site in the Language Switcher widget due to a regression introduced in 
 MultilingualPress 2.4.0, see [issue #212](https://github.com/inpsyde/multilingual-press/issues/212).
