@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4.5-dev
+
+
 ## 2.4.4
 - Fix HTTP redirection even though the user disabled it, see
 [issue #218](https://github.com/inpsyde/multilingual-press/issues/218).
