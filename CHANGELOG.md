@@ -1,7 +1,7 @@
 # Changelog
 
-## 2.4.5-dev
-
+## 2.4.5
+- Improve CopyPost script, see [issue #214](https://github.com/inpsyde/multilingual-press/issues/214).
 
 ## 2.4.4
 - Fix HTTP redirection even though the user disabled it, see
