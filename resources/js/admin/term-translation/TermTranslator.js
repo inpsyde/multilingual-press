@@ -5,7 +5,7 @@ const $ = window.jQuery;
 const _this = {
 	/**
 	 * Flag to indicate an ongoing term propagation.
-	 * @type {boolean}
+	 * @type {Boolean}
 	 */
 	isPropagating: false
 };
@@ -63,7 +63,7 @@ class TermTranslator extends Backbone.View {
 	/**
 	 * Returns the relation of the given select element (i.e., its currently selected option).
 	 * @param {jQuery} $select - A select element.
-	 * @returns {string} The relation of the selected term.
+	 * @returns {String} The relation of the selected term.
 	 */
 	getSelectedRelation( $select ) {
 		return $select.find( 'option:selected' ).data( 'relation' ) || '';
@@ -72,8 +72,8 @@ class TermTranslator extends Backbone.View {
 	/**
 	 * Sets the given select element's value to that of the option with the given relation, or the first option.
 	 * @param {jQuery} $select - A select element.
-	 * @param {string} relation - The relation of a term.
-	 * @returns {boolean} Whether or not a term was selected.
+	 * @param {String} relation - The relation of a term.
+	 * @returns {Boolean} Whether or not a term was selected.
 	 */
 	selectTerm( $select, relation ) {
 		const $option = $select.find( 'option[data-relation="' + relation + '"]' );

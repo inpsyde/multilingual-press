@@ -8,13 +8,13 @@ const _this = {};
 class Quicklinks {
 	/**
 	 * Constructor. Sets up the properties.
-	 * @param {string} selector - The form element selector.
+	 * @param {String} selector - The form element selector.
 	 * @param {Object} Util - The set of utility methods.
 	 */
 	constructor( selector, Util ) {
 		/**
 		 * The form element selector.
-		 * @type {string}
+		 * @type {String}
 		 */
 		_this.selector = selector;
 
@@ -27,7 +27,7 @@ class Quicklinks {
 
 	/**
 	 * Returns the form element selector.
-	 * @returns {string} The form element selector.
+	 * @returns {String} The form element selector.
 	 */
 	get selector() {
 		return _this.selector;
@@ -42,7 +42,7 @@ class Quicklinks {
 
 	/**
 	 * Attaches the according handler to the form submit event.
-	 * @returns {boolean} Whether or not the event handler has been attached.
+	 * @returns {Boolean} Whether or not the event handler has been attached.
 	 */
 	attachSubmitHandler() {
 		const $form = document.querySelector( this.selector );

@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import sinon from "sinon";
 import jQueryObject from "./jQueryObject";
 
@@ -18,7 +17,7 @@ const objectEach = ( o, c ) => {
 
 const jQuery = sinon.stub();
 jQuery.ajax = sinon.stub();
-jQuery.each = ( o = {}, c ) => _.isArray( o ) ? arrayEach( o, c ) : objectEach( o, c );
+jQuery.each = ( o = {}, c ) => Array.isArray( o ) ? arrayEach( o, c ) : objectEach( o, c );
 jQuery.trim = ( a ) => a;
 
 jQuery._restore = () => {

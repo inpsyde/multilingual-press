@@ -1,7 +1,7 @@
 /**
  * Returns the name of the given module.
- * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
- * @returns {string} The name of the module.
+ * @param {Function|String|Object} module - The instance or constructor or name of a MulitilingualPress module.
+ * @returns {String} The name of the module.
  */
 const getModuleName = ( module ) => {
 	switch ( typeof module ) {
@@ -20,7 +20,7 @@ const getModuleName = ( module ) => {
 
 /**
  * Returns the settings for the given module or settings name.
- * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
+ * @param {Function|String|Object} module - The instance or constructor or name of a MulitilingualPress module.
  * @returns {Object} The settings.
  */
 export const getSettings = ( module ) => {

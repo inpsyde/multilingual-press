@@ -200,7 +200,7 @@ jQuery(function () {
 window.MultilingualPressAdmin = MLP;
 
 },{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/RelationshipControl":12,"./admin/post-translation/RemotePostSearch":13,"./admin/term-translation/TermTranslator":14,"./admin/user-settings/UserBackEndLanguage":15,"./common/utils":16}],2:[function(require,module,exports){
-'use strict';
+"use strict";
 
 exports.__esModule = true;
 
@@ -260,7 +260,7 @@ var Controller = function () {
 
 	/**
   * Starts Backbone's history, unless it has been started already.
-  * @returns {boolean} Whether or not the history has been started right now.
+  * @returns {Boolean} Whether or not the history has been started right now.
   */
 
 
@@ -280,7 +280,7 @@ var Controller = function () {
 
 	/**
   * Registers a new module with the given Module callback under the given name for the given routes.
-  * @param {string|string[]} routes - One or more routes.
+  * @param {String|String[]} routes - One or more routes.
   * @param {Function} Constructor - The constructor callback for the module.
   * @param {Object} [options={}] - Optional. The options for the module. Default to an empty object.
   * @param {Function} [callback=null] - Optional. The callback to execute after construction. Defaults to null.
@@ -297,7 +297,7 @@ var Controller = function () {
 			callback: callback
 		};
 
-		if ('string' === typeof routes) {
+		if (!Array.isArray(routes)) {
 			routes = [routes];
 		}
 
@@ -307,7 +307,7 @@ var Controller = function () {
 	};
 
 	_createClass(Controller, [{
-		key: 'settings',
+		key: "settings",
 		get: function get() {
 			return _this.settings;
 		}
@@ -357,7 +357,7 @@ var Model = function (_Backbone$Model) {
 
 		/**
    * The URL root.
-   * @type {string}
+   * @type {String}
    */
 
 		var _this = _possibleConstructorReturn(this, _Backbone$Model.call(this, options));
@@ -452,7 +452,7 @@ var Registry = function () {
 
 	/**
   * Initializes the given route.
-  * @param {string} route - The route.
+  * @param {String} route - The route.
   * @param {Object[]} modules - The modules data.
   */
 
@@ -484,8 +484,8 @@ var Registry = function () {
 	/**
   * Registers the module with the given data for the given route.
   * @param {Object} module - The module data.
-  * @param {string} route - The route.
-  * @returns {number} The number of the currently registered routes.
+  * @param {String} route - The route.
+  * @returns {Number} The number of the currently registered routes.
   */
 
 
@@ -637,8 +637,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /**
  * Returns the name of the given module.
- * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
- * @returns {string} The name of the module.
+ * @param {Function|String|Object} module - The instance or constructor or name of a MulitilingualPress module.
+ * @returns {String} The name of the module.
  */
 var getModuleName = function getModuleName(module) {
 	switch (typeof module === 'undefined' ? 'undefined' : _typeof(module)) {
@@ -657,7 +657,7 @@ var getModuleName = function getModuleName(module) {
 
 /**
  * Returns the settings for the given module or settings name.
- * @param {Function|string|object} module - The instance or constructor or name of a MulitilingualPress module.
+ * @param {Function|String|Object} module - The instance or constructor or name of a MulitilingualPress module.
  * @returns {Object} The settings.
  */
 var getSettings = exports.getSettings = function getSettings(module) {
@@ -786,7 +786,7 @@ var NavMenus = function (_Backbone$View) {
 
 	/**
   * Returns the site IDs for the checked languages in the Languages meta box.
-  * @returns {number[]} The site IDs.
+  * @returns {Number[]} The site IDs.
   */
 
 
@@ -802,7 +802,7 @@ var NavMenus = function (_Backbone$View) {
 
 	/**
   * Renders the nav menu item to the currently edited menu.
-  * @returns {boolean} Whether or not the nav menu item was rendered.
+  * @returns {Boolean} Whether or not the nav menu item was rendered.
   */
 
 
@@ -916,7 +916,7 @@ var AddNewSite = function (_Backbone$View) {
 	/**
   * Returns the selected language of the given select element.
   * @param {jQuery} $select - A select element.
-  * @returns {string} The selected language.
+  * @returns {String} The selected language.
   */
 
 
@@ -1013,7 +1013,7 @@ var CopyPost = function (_Backbone$View) {
 
 		/**
    * The currently edited post's ID.
-   * @type {number}
+   * @type {Number}
    */
 		_this.postID = Number($('#post_ID').val() || 0);
 
@@ -1029,7 +1029,7 @@ var CopyPost = function (_Backbone$View) {
 
 	/**
   * Returns the content of the original post.
-  * @returns {string} The post content.
+  * @returns {String} The post content.
   */
 
 
@@ -1074,7 +1074,7 @@ var CopyPost = function (_Backbone$View) {
 	/**
   * Returns the site ID data attribute value of the given "Copy source post" button.
   * @param {jQuery} $button - A "Copy source post" button.
-  * @returns {number} The site ID.
+  * @returns {Number} The site ID.
   */
 
 
@@ -1084,7 +1084,7 @@ var CopyPost = function (_Backbone$View) {
 
 	/**
   * Fades the meta box out.
-  * @param {number} remoteSiteID - The remote site ID.
+  * @param {Number} remoteSiteID - The remote site ID.
   */
 
 
@@ -1094,7 +1094,7 @@ var CopyPost = function (_Backbone$View) {
 
 	/**
   * Updates the post data in the according meta box for the given site ID.
-  * @returns {boolean} Whether or not the post data have been updated.
+  * @returns {Boolean} Whether or not the post data have been updated.
   */
 
 
@@ -1132,9 +1132,9 @@ var CopyPost = function (_Backbone$View) {
 
 	/**
   * Sets the given content for the tinyMCE editor with the given ID.
-  * @param {string} editorID - The tinyMCE editor's ID.
-  * @param {string} content - The content.
-  * @returns {boolean} Whether or not the post content has been updated.
+  * @param {String} editorID - The tinyMCE editor's ID.
+  * @param {String} content - The content.
+  * @returns {Boolean} Whether or not the post content has been updated.
   */
 
 
@@ -1157,7 +1157,7 @@ var CopyPost = function (_Backbone$View) {
 
 	/**
   * Fades the meta box in.
-  * @param {number} remoteSiteID - The remote site ID.
+  * @param {Number} remoteSiteID - The remote site ID.
   */
 
 
@@ -1173,7 +1173,7 @@ var CopyPost = function (_Backbone$View) {
 
 		/**
    * Returns the excerpt of the original post.
-   * @returns {string} The post excerpt.
+   * @returns {String} The post excerpt.
    */
 
 	}, {
@@ -1184,7 +1184,7 @@ var CopyPost = function (_Backbone$View) {
 
 		/**
    * Returns the currently edited post's ID.
-   * @returns {number} The currently edited post's ID.
+   * @returns {Number} The currently edited post's ID.
    */
 
 	}, {
@@ -1206,7 +1206,7 @@ var CopyPost = function (_Backbone$View) {
 
 		/**
    * Returns the slug of the original post.
-   * @returns {string} The post slug.
+   * @returns {String} The post slug.
    */
 
 	}, {
@@ -1218,7 +1218,7 @@ var CopyPost = function (_Backbone$View) {
 
 		/**
    * Returns the title of the original post.
-   * @returns {string} The post title.
+   * @returns {String} The post title.
    */
 
 	}, {
@@ -1347,7 +1347,7 @@ var RelationshipControl = function (_Backbone$View) {
 	/**
   * Returns the index of the given meta box in the unsaved relationships array, and -1 if not found.
   * @param {jQuery} $metaBox - The meta box element.
-  * @returns {number} The index of the meta box.
+  * @returns {Number} The index of the meta box.
   */
 
 
@@ -1406,8 +1406,8 @@ var RelationshipControl = function (_Backbone$View) {
 
 	/**
   * Returns the according event name for the given relationship action.
-  * @param {string} action - The relationship action.
-  * @returns {string} The event name.
+  * @param {String} action - The relationship action.
+  * @returns {String} The event name.
   */
 
 
@@ -1451,7 +1451,7 @@ var RelationshipControl = function (_Backbone$View) {
 	/**
   * Handles changing a post's relationship by connecting an existing post.
   * @param {Object} data - The common data for all relationship requests.
-  * @returns {boolean} Whether or not the request has been sent.
+  * @returns {Boolean} Whether or not the request has been sent.
   */
 
 
@@ -1519,7 +1519,7 @@ var $ = window.jQuery;
 var _this = {
 	/**
   * Array holding the default search result HTML strings.
-  * @type {string[]}
+  * @type {String[]}
   */
 	defaultResults: [],
 
@@ -1558,7 +1558,7 @@ var RemotePostSearch = function (_Backbone$View) {
 
 		/**
    * Minimum number of characters required to fire the remote post search.
-   * @type {number}
+   * @type {Number}
    */
 		_this.threshold = parseInt(options.settings.threshold, 10) || 3;
 
@@ -1656,7 +1656,7 @@ var RemotePostSearch = function (_Backbone$View) {
 
 	/**
   * Renders the found posts to the according results container.
-  * @returns {boolean} Whether or not new data has been rendered.
+  * @returns {Boolean} Whether or not new data has been rendered.
   */
 
 
@@ -1708,7 +1708,7 @@ var $ = window.jQuery;
 var _this = {
 	/**
   * Flag to indicate an ongoing term propagation.
-  * @type {boolean}
+  * @type {Boolean}
   */
 	isPropagating: false
 };
@@ -1779,7 +1779,7 @@ var TermTranslator = function (_Backbone$View) {
 	/**
   * Returns the relation of the given select element (i.e., its currently selected option).
   * @param {jQuery} $select - A select element.
-  * @returns {string} The relation of the selected term.
+  * @returns {String} The relation of the selected term.
   */
 
 
@@ -1790,8 +1790,8 @@ var TermTranslator = function (_Backbone$View) {
 	/**
   * Sets the given select element's value to that of the option with the given relation, or the first option.
   * @param {jQuery} $select - A select element.
-  * @param {string} relation - The relation of a term.
-  * @returns {boolean} Whether or not a term was selected.
+  * @param {String} relation - The relation of a term.
+  * @returns {Boolean} Whether or not a term was selected.
   */
 
 
@@ -1901,7 +1901,7 @@ exports.__esModule = true;
 /**
  * Attaches the given listener to the given DOM element for the event with the given type.
  * @param {Element} $element - The DOM element.
- * @param {string} type - The type of the event.
+ * @param {String} type - The type of the event.
  * @param {Function} listener - The event listener callback.
  */
 var addEventListener = exports.addEventListener = function addEventListener($element, type, listener) {
@@ -1923,7 +1923,7 @@ var reloadLocation = exports.reloadLocation = function reloadLocation() {
 
 /**
  * Redirects the user to the given URL.
- * @param {string} url - The URL.
+ * @param {String} url - The URL.
  */
 var setLocation = exports.setLocation = function setLocation(url) {
   window.location.href = url;

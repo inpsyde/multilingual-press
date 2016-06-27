@@ -88,7 +88,7 @@ class RelationshipControl extends Backbone.View {
 	/**
 	 * Returns the index of the given meta box in the unsaved relationships array, and -1 if not found.
 	 * @param {jQuery} $metaBox - The meta box element.
-	 * @returns {number} The index of the meta box.
+	 * @returns {Number} The index of the meta box.
 	 */
 	findMetaBox( $metaBox ) {
 		// By using a for-loop here, one can return early.
@@ -141,8 +141,8 @@ class RelationshipControl extends Backbone.View {
 
 	/**
 	 * Returns the according event name for the given relationship action.
-	 * @param {string} action - The relationship action.
-	 * @returns {string} The event name.
+	 * @param {String} action - The relationship action.
+	 * @returns {String} The event name.
 	 */
 	getEventName( action ) {
 		switch ( action ) {
@@ -180,7 +180,7 @@ class RelationshipControl extends Backbone.View {
 	/**
 	 * Handles changing a post's relationship by connecting an existing post.
 	 * @param {Object} data - The common data for all relationship requests.
-	 * @returns {boolean} Whether or not the request has been sent.
+	 * @returns {Boolean} Whether or not the request has been sent.
 	 */
 	connectExistingPost( data ) {
 		const newPostID = Number( $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() || 0 );
