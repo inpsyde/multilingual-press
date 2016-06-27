@@ -19,7 +19,7 @@ test( 'constructor ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
-		testee.listenTo.calledWith( testee.model, 'change', testee.updatePostData ),
+		testee.listenTo.calledWith( testee.model, 'change:data', testee.updatePostData ),
 		true,
 		'... SHOULD attach the expected event listener.'
 	);
@@ -176,6 +176,62 @@ test( 'slug (element present) ...', ( assert ) => {
 	assert.end();
 } );
 
+test( 'tinyMCEContent (TinyMCE undefined) ...', ( assert ) => {
+	const testee = createTestee();
+
+	assert.equal(
+		testee.tinyMCEContent,
+		'',
+		'... SHOULD be empty.'
+	);
+
+	assert.end();
+} );
+
+test( 'tinyMCEContent (TinyMCE missing) ...', ( assert ) => {
+	// Prepare tinyMCE.
+	window.tinyMCE = {
+		get: F.returnNull
+	};
+
+	const testee = createTestee();
+
+	assert.equal(
+		testee.tinyMCEContent,
+		'',
+		'... SHOULD be empty.'
+	);
+
+	// Restore window.
+	delete window.tinyMCE;
+
+	assert.end();
+} );
+
+test( 'tinyMCEContent (TinyMCE present) ...', ( assert ) => {
+	const tinyMCEContent = F.getRandomString();
+
+	// Prepare tinyMCE.
+	window.tinyMCE = {
+		get: sinon.stub().withArgs( 'content' ).returns( {
+			getContent: () => tinyMCEContent
+		} )
+	};
+
+	const testee = createTestee();
+
+	assert.equal(
+		testee.tinyMCEContent,
+		tinyMCEContent,
+		'... SHOULD have the expected value.'
+	);
+
+	// Restore window.
+	delete window.tinyMCE;
+
+	assert.end();
+} );
+
 test( 'title (element missing) ...', ( assert ) => {
 	const testee = createTestee();
 
@@ -211,6 +267,15 @@ test( 'title (element present) ...', ( assert ) => {
 } );
 
 test( 'copyPostData ...', ( assert ) => {
+	const tinyMCEContent = F.getRandomString();
+
+	// Prepare tinyMCE.
+	window.tinyMCE = {
+		get: sinon.stub().withArgs( 'content' ).returns( {
+			getContent: () => tinyMCEContent
+		} )
+	};
+
 	Backbone.Events.trigger.reset();
 
 	const EventManager = Backbone.Events;
@@ -294,26 +359,27 @@ test( 'copyPostData ...', ( assert ) => {
 	);
 
 	const data = {
-		data: {
-			action: options.settings.action,
-			current_post_id: 0,
-			remote_site_id: remoteSiteID,
-			title,
-			slug,
-			content,
-			excerpt
-		},
-		processData: true
-	};
+		action: options.settings.action,
+		current_post_id: 0,
+		remote_site_id: remoteSiteID,
+		title,
+		slug,
+		tinyMCEContent,
+		content,
+		excerpt
+		};
 
-	assert.equal(
-		model.fetch.calledWith( data ),
+	assert.deepEqual(
+		model.save.calledWith( data, { data, processData: true } ),
 		true,
 		'... SHOULD fetch new data.'
 	);
 
 	// Restore lodash.
 	global._ = sinon.stub();
+
+	// Restore window.
+	delete window.tinyMCE;
 
 	// Restore global scope.
 	globalStub.restore();
@@ -437,6 +503,7 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 		excerpt: F.getRandomString(),
 		siteID: F.getRandomInteger( 1 ),
 		slug: F.getRandomString(),
+		tinyMCEContent: F.getRandomString(),
 		title: F.getRandomString()
 	};
 
@@ -493,7 +560,7 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		testee.setTinyMCEContent.calledWith( prefix + 'content', data.content ),
+		testee.setTinyMCEContent.calledWith( prefix + 'content', data.tinyMCEContent ),
 		true,
 		'... SHOULD set the tinyMCE content to the expected value.'
 	);

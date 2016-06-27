@@ -197,15 +197,15 @@ class Mlp_Advanced_Translator {
 
 		$current_site_id = get_current_blog_id();
 
-		$current_post_id = (int) filter_input( INPUT_GET, 'current_post_id' );
+		$current_post_id = (int) filter_input( INPUT_POST, 'current_post_id' );
 
-		$remote_site_id = (int) filter_input( INPUT_GET, 'remote_site_id' );
+		$remote_site_id = (int) filter_input( INPUT_POST, 'remote_site_id' );
 
 		if ( ! ( $current_post_id && $remote_site_id ) ) {
 			wp_send_json_error();
 		}
 
-		$title = filter_input( INPUT_GET, 'title' );
+		$title = filter_input( INPUT_POST, 'title' );
 		/**
 		 * Filters a post's title for a remote site.
 		 *
@@ -223,7 +223,7 @@ class Mlp_Advanced_Translator {
 		);
 		$title = esc_attr( $title );
 
-		$slug = filter_input( INPUT_GET, 'slug' );
+		$slug = filter_input( INPUT_POST, 'slug' );
 		/**
 		 * Filters a post's slug for a remote site.
 		 *
@@ -241,7 +241,24 @@ class Mlp_Advanced_Translator {
 		);
 		$slug = esc_attr( $slug );
 
-		$content = filter_input( INPUT_GET, 'content' );
+		$tmce_content = filter_input( INPUT_POST, 'tinyMCEContent' );
+		/**
+		 * Filters a post's TinyMCE content for a remote site.
+		 *
+		 * @param string $content         Post content.
+		 * @param int    $current_site_id Source site ID.
+		 * @param int    $current_post_id Source post ID.
+		 * @param int    $remote_site_id  Remote site ID.
+		 */
+		$tmce_content = (string) apply_filters(
+			'mlp_process_post_tmce_content_for_remote_site',
+			$tmce_content,
+			$current_site_id,
+			$current_post_id,
+			$remote_site_id
+		);
+
+		$content = filter_input( INPUT_POST, 'content' );
 		/**
 		 * Filters a post's content for a remote site.
 		 *
@@ -258,7 +275,7 @@ class Mlp_Advanced_Translator {
 			$remote_site_id
 		);
 
-		$excerpt = (string) filter_input( INPUT_GET, 'excerpt' );
+		$excerpt = (string) filter_input( INPUT_POST, 'excerpt' );
 		/**
 		 * Filters a post's excerpt for a remote site.
 		 *
@@ -286,11 +303,12 @@ class Mlp_Advanced_Translator {
 		$data = (array) apply_filters(
 			'mlp_process_post_data_for_remote_site',
 			array(
-				'siteID'  => $remote_site_id,
-				'title'   => $title,
-				'slug'    => $slug,
-				'content' => $content,
-				'excerpt' => $excerpt,
+				'siteID'         => $remote_site_id,
+				'title'          => $title,
+				'slug'           => $slug,
+				'tinyMCEContent' => $tmce_content,
+				'content'        => $content,
+				'excerpt'        => $excerpt,
 			),
 			$current_site_id,
 			$current_post_id,

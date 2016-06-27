@@ -1023,7 +1023,7 @@ var CopyPost = function (_Backbone$View) {
    */
 		_this.settings = options.settings;
 
-		_this2.listenTo(_this2.model, 'change', _this2.updatePostData);
+		_this2.listenTo(_this2.model, 'change:data', _this2.updatePostData);
 		return _this2;
 	}
 
@@ -1062,10 +1062,11 @@ var CopyPost = function (_Backbone$View) {
 			title: this.title,
 			slug: this.slug,
 			content: this.content,
+			tinyMCEContent: this.tinyMCEContent,
 			excerpt: this.excerpt
 		});
 
-		this.model.fetch({
+		this.model.save(data, {
 			data: data,
 			processData: true
 		});
@@ -1114,7 +1115,7 @@ var CopyPost = function (_Backbone$View) {
 
 		$('#' + prefix + 'name').val(data.slug);
 
-		this.setTinyMCEContent(prefix + 'content', data.content);
+		this.setTinyMCEContent(prefix + 'content', data.tinyMCEContent);
 
 		$('#' + prefix + 'content').val(data.content);
 
@@ -1214,6 +1215,25 @@ var CopyPost = function (_Backbone$View) {
 		get: function get() {
 			// Since editing the permalink replaces the "edit slug box" markup, the slug DOM element cannot be cached.
 			return $('#editable-post-name-full').text() || '';
+		}
+
+		/**
+   * Returns the TinyMCE content of the original post.
+   * @returns {string} The post content.
+   */
+
+	}, {
+		key: 'tinyMCEContent',
+		get: function get() {
+			if ('undefined' !== typeof window.tinyMCE) {
+				/**
+     * The TinyMCE instance of the currently edited post's visual editor.
+     * @type {Object}
+     */
+				_this.tinyMCE = window.tinyMCE.get('content');
+			}
+
+			return _this.tinyMCE ? _this.tinyMCE.getContent() : '';
 		}
 
 		/**

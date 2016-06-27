@@ -30,6 +30,7 @@ Backbone._restore = () => {
 };
 
 Backbone.Model.prototype.fetch = sinon.spy();
+Backbone.Model.prototype.save = sinon.spy();
 Backbone.Model.prototype.get = sinon.stub();
 
 Backbone.Router.prototype.route = sinon.spy();
