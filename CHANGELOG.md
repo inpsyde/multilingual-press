@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4.6-dev
+
+
 ## 2.4.5
 - Improve CopyPost script, see [issue #214](https://github.com/inpsyde/multilingual-press/issues/214).
 
