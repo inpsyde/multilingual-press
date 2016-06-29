@@ -96,19 +96,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 */
 	public function save( $post_id, WP_Post $post ) {
 
-		$nonce_validator = Mlp_Nonce_Validator_Factory::create(
-			"save_translation_of_post_{$post_id}_for_site_{$this->source_site_id}",
-			get_current_blog_id()
-		);
-
-		$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
-		if ( ! $request_validator->is_valid( $post ) ) {
-			return;
-		}
-
 		$post_type = $this->get_real_post_type( $post );
-		$post_id   = $this->get_real_post_id( $post_id );
-
 		if ( ! in_array( $post_type, $this->allowed_post_types, true ) ) {
 			return;
 		}
@@ -118,6 +106,8 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		}
 
 		$to_translate = $this->post_request_data['mlp_to_translate'];
+
+		$post_id = $this->get_real_post_id( $post_id );
 
 		$this->save_context = array(
 			'source_blog'    => get_current_blog_id(),
@@ -168,6 +158,16 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		// Create a copy of the item for every related blog
 		foreach ( $to_translate as $blog_id ) {
 			if ( $blog_id == get_current_blog_id() or ! blog_exists( $blog_id ) ) {
+				continue;
+			}
+
+			$nonce_validator = Mlp_Nonce_Validator_Factory::create(
+				"save_translation_of_post_{$post_id}_for_site_{$blog_id}",
+				$this->source_site_id
+			);
+
+			$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
+			if ( ! $request_validator->is_valid( $post ) ) {
 				continue;
 			}
 
