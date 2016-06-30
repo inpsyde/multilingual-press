@@ -73,9 +73,6 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 		if ( 'revision' !== $post->post_type )
 			return FALSE;
 
-		if ( empty ( $_POST[ 'original_post_status' ] ) )
-			return TRUE;
-
-		return 'auto-draft' !== $_POST[ 'original_post_status' ];
+		return 'auto-draft' !== filter_input( INPUT_POST, 'original_post_status' );
 	}
 }
