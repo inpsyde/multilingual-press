@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-	bootstrap="tests/php/bootstrap.php"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
 	backupGlobals="false"
+	backupStaticAttributes="false"
+	bootstrap="vendor/autoload.php"
 	colors="true"
 	convertErrorsToExceptions="true"
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
->
+	processIsolation="false"
+	stopOnFailure="false">
 	<testsuites>
 		<testsuite name="Unit">
 			<directory suffix="Test.php">tests/php/Unit</directory>
@@ -15,4 +19,12 @@
 			<directory suffix="Test.php">tests/php/Integration</directory>
 		</testsuite>
 	</testsuites>
+	<listeners>
+		<listener class="Listener" file="tests/php/Listener.php"/>
+	</listeners>
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">src</directory>
+		</whitelist>
+	</filter>
 </phpunit>
