@@ -6,26 +6,26 @@ module.exports = function( grunt ) {
 		config: {
 			assets: {
 				src: 'resources/assets/',
-				dest: 'assets/'
+				dest: 'svn-assets/'
 			},
 
 			images: {
 				src: 'resources/images/',
-				dest: 'src/assets/images/'
+				dest: 'assets/images/'
 			},
 
 			name: 'MultilingualPress',
 
 			scripts: {
 				src: 'resources/js/',
-				dest: 'src/assets/js/'
+				dest: 'assets/js/'
 			},
 
 			src: 'src/',
 
 			styles: {
 				src: 'resources/scss/',
-				dest: 'src/assets/css/'
+				dest: 'assets/css/'
 			},
 
 			tests: {
@@ -148,7 +148,6 @@ module.exports = function( grunt ) {
 		 */
 		jsonlint: {
 			options: {
-				format: true,
 				indent: 2
 			},
 
@@ -205,8 +204,7 @@ module.exports = function( grunt ) {
 
 			src: {
 				src: [
-					'<%= config.src %>*',
-					'<%= config.src %>inc/**/*'
+					'<%= config.src %>**/*.php'
 				]
 			},
 
@@ -404,11 +402,16 @@ module.exports = function( grunt ) {
 		 */
 		zip: {
 			release: {
-				src: '<%= config.src %>**/*',
+				src: [
+					'*.{php,txt}',
+					'assets/**',
+					'languages/**',
+					'<%= config.src %>**/*.php'
+				],
 				dest: '<%= config.name %>.zip',
 				router: function( filepath ) {
-					// Rename "src/" to "multilingual-press/".
-					return 'multilingual-press' + filepath.substr( filepath.indexOf( '/' ) );
+					// Put files into "multilingual-press/" folder.
+					return 'multilingual-press/' + filepath;
 				}
 			}
 		}
@@ -451,7 +454,7 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'ci', [
 		'common',
-		'jsvalidate',
+		'jsvalidate:gruntfile',
 		'sass:check'
 	] );
 
