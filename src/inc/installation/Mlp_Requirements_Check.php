@@ -50,27 +50,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		$this->current_wp_version = $current_wp_version;
 
 		$current_plugin_file = realpath( $current_plugin_file );
-		$this->current_plugin_file = $this->normalize_path( $current_plugin_file );
-	}
-
-	/**
-	 * Make all slashes unique.
-	 *
-	 * @param string $path
-	 *
-	 * @return string
-	 */
-	private function normalize_path( $path ) {
-
-		// WP 3.9 and newer.
-		if ( function_exists( 'wp_normalize_path' ) ) {
-			return wp_normalize_path( $path );
-		}
-
-		$path = str_replace( '\\', '/', $path );
-		$path = preg_replace( '|/+|', '/', $path );
-
-		return $path;
+		$this->current_plugin_file = wp_normalize_path( $current_plugin_file );
 	}
 
 	/**
@@ -175,7 +155,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 		foreach ( wp_get_active_network_plugins() as $plugin ) {
 			$plugin_file = realpath( $plugin );
 
-			if ( $this->current_plugin_file === $this->normalize_path( $plugin_file ) ) {
+			if ( $this->current_plugin_file === wp_normalize_path( $plugin_file ) ) {
 				return;
 			}
 		}
