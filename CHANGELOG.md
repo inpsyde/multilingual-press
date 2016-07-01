@@ -1,7 +1,10 @@
 # Changelog
 
-## 2.4.6-dev
-
+## 2.4.6
+- Post Translator: Fix translations not being saved, see
+[issue #219](https://github.com/inpsyde/multilingual-press/issues/219).
+- Advanced Translator: Fix just-in-place translation not working, see
+[issue #220](https://github.com/inpsyde/multilingual-press/issues/220).
 
 ## 2.4.5
 - Improve CopyPost script, see [issue #214](https://github.com/inpsyde/multilingual-press/issues/214).
