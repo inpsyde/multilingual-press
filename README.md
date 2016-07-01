@@ -1,8 +1,9 @@
 # MultilingualPress [![Latest Stable Version](https://poser.pugx.org/inpsyde/multilingual-press/v/stable)](https://packagist.org/packages/inpsyde/multilingual-press) [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges) [![Build Status](https://travis-ci.org/inpsyde/multilingual-press.svg?branch=master)](http://travis-ci.org/inpsyde/multilingual-press) [![License](https://poser.pugx.org/inpsyde/multilingual-press/license)](https://packagist.org/packages/inpsyde/multilingual-press)
 
-![MultilingualPress](assets/banner-1544x500.png)
+![MultilingualPress](resources/assets/banner-1544x500.png)
 
 ## Description
+
 Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
 to link to all sites.
 
@@ -18,9 +19,10 @@ Our **Language Manager** offers 174 languages, and you can edit them.
 
 We cannot guarantee free ad hoc support. Please be patient, we are a small team.
 You can follow our progress and development notices on our
-[developer blog](http://make.multilingualpress.pro).
+[developer blog](http://make.multilingualpress.org).
 
 ## Features
+
 - Set up unlimited site relationships in the site manager.
 - Language Manager with 174 editable languages.
 - Edit all translations for a post from the original post editor without the need to switch sites.
@@ -44,23 +46,28 @@ without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
 
 ## Premium Support
-We also offer [premium support](http://marketpress.com/shop/plugins/multilingual-press-pro/) to save your time.
+
+We also offer [premium support](https://multilingualpress.org) to save your time.
 You get direct help from the developers of the plugin-and support the development.
 
 ## WPML to MultilingualPress
+
 If you would like to switch from the WPML plugin to MultilingualPress, you can use the helping hands of
 [WPML to MultilingualPress](https://wordpress.org/plugins/wpml-to-multilingualpress/). This plugin converts posts from
 an existing WPML multilingual site via XLIFF export/import for MultilingualPress.
 
 ## Installation
+
 ### Requirements
+
 * WordPress multisite 4.2+.
-* PHP 5.2.4, newer PHP versions will work faster.
+* PHP 5.4.0, newer PHP versions will work faster.
 
 If you're new to WordPress multisite, you might find our [WordPress multisite installation
-tutorial](https://marketpress.com/2015/wordpress-multisite-installation/) helpful.
+tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/) helpful.
 
 ### Installation
+
 Use the installer via back-end of your install or ...
 
 1. Unpack the download-package.
@@ -70,63 +77,66 @@ Use the installer via back-end of your install or ...
 need at least two sites with an assigned language.
 
 ## Frequently Asked Questions
+
 ### Will MultilingualPress translate my content?
+
 No, it will not. It manages relationships between sites and translations, but it doesn't change the content.
 
 ### Can I use MultilingualPress on a single-site installation?
+
 That would require changes to the way WordPress stores post content. Other plugins do that; we think this is wrong,
 because it creates a lock-in: you would lose access to your content after the plugin deactivation.
 
 ### I'm new to WordPress multisite. Are there any tutorials to get me started?
+
 Yes, just have a look at our [WordPress multisite installation
-tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
+tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 
 ## Screenshots
-![Screenshot 1](assets/screenshot-1.png)  
+
+![Screenshot 1](resources/assets/screenshot-1.png)  
 New columns in the site list table for the _Relationships_ (i.e., connections with other sites) and the _Site Language_.
 
-![Screenshot 2](assets/screenshot-2.png)  
+![Screenshot 2](resources/assets/screenshot-2.png)  
 New settings tab on the _Edit Site_ page.
 
-![Screenshot 3](assets/screenshot-3.png)  
+![Screenshot 3](resources/assets/screenshot-3.png)  
 New settings tab on the _Add New Site_ page.
 
-![Screenshot 4](assets/screenshot-4.png)  
+![Screenshot 4](resources/assets/screenshot-4.png)  
 Plugin settings, including Custom Post Type translation.
 
-![Screenshot 5](assets/screenshot-5.png)  
+![Screenshot 5](resources/assets/screenshot-5.png)  
 The _Language Manager_.
 
-![Screenshot 6](assets/screenshot-6.png)  
+![Screenshot 6](resources/assets/screenshot-6.png)  
 Dashboard widget informing about currently untranslated posts.
 
-![Screenshot 7](assets/screenshot-7.png)  
+![Screenshot 7](resources/assets/screenshot-7.png)  
 Translate a post directly from the _Edit Post_ page, and set the translation status and _Trasher_ setting.
 
-![Screenshot 8](assets/screenshot-8.png)  
+![Screenshot 8](resources/assets/screenshot-8.png)  
 Translate a term directly from the _Add New Category_ page.
 
-![Screenshot 9](assets/screenshot-9.png)  
+![Screenshot 9](resources/assets/screenshot-9.png)  
 Edit term translations on the _Edit Category_ page.
 
-![Screenshot 10](assets/screenshot-10.png)  
+![Screenshot 10](resources/assets/screenshot-10.png)  
 New user settings for the sitewide _Backend Language_ and the _Language Redirect_.
 
-![Screenshot 11](assets/screenshot-11.png)  
+![Screenshot 11](resources/assets/screenshot-11.png)  
 New _Language Switcher_ widget.
 
-![Screenshot 12](assets/screenshot-12.png)  
+![Screenshot 12](resources/assets/screenshot-12.png)  
 Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 ## Translate MultilingualPress
+
 If you want to translate MultilingualPress, you best do so by means of the official
 [WordPress.org GlotPress](https://translate.wordpress.org/projects/wp-plugins/multilingual-press). You can, of course,
 just [create a pull request](https://github.com/inpsyde/multilingual-press/compare) to our repository if you already
 have the translation files ready. In that case, please review the [guidelines for contributing](.github/CONTRIBUTING.md)
 to this repository.
-
-## Crafted by Inpsyde
-The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006.
 
 ## License
 
