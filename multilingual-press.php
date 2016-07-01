@@ -14,8 +14,6 @@
 
 defined( 'ABSPATH' ) or die();
 
-// TODO: Remove all things related to the MLP_PLUGIN_FILE constant.
-
 if ( ! class_exists( 'Multilingual_Press' ) ) {
 	require plugin_dir_path( __FILE__ ) . 'src/inc/Multilingual_Press.php';
 }

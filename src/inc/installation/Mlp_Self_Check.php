@@ -147,8 +147,7 @@ class Mlp_Self_Check {
 	 */
 	public function remove_mlp_from_update_plugins_transient( $plugins ) {
 
-		$file = defined( 'MLP_PLUGIN_FILE' ) ? MLP_PLUGIN_FILE : $this->plugin_file;
-		$file = plugin_basename( $file );
+		$file = plugin_basename( $this->plugin_file );
 		if ( empty( $plugins->response[ $file ]->new_version ) ) {
 			return $plugins;
 		}

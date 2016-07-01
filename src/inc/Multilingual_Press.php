@@ -207,9 +207,7 @@ class Multilingual_Press {
 		);
 		add_action( 'plugins_loaded', array( $settings, 'setup' ), 8 );
 
-		$plugin_file = defined( 'MLP_PLUGIN_FILE' )
-			? plugin_basename( MLP_PLUGIN_FILE )
-			: $this->plugin_data->get( 'plugin_base_name' );
+		$plugin_file = $this->plugin_data->get( 'plugin_base_name' );
 
 		$url = network_admin_url( 'settings.php?page=mlp' );
 

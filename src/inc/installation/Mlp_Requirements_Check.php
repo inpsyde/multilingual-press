@@ -49,9 +49,6 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 
 		$this->current_wp_version = $current_wp_version;
 
-		if ( defined( 'MLP_PLUGIN_FILE' ) ) {
-			$current_plugin_file = MLP_PLUGIN_FILE;
-		}
 		$current_plugin_file = realpath( $current_plugin_file );
 		$this->current_plugin_file = $this->normalize_path( $current_plugin_file );
 	}
