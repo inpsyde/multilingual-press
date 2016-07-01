@@ -14,6 +14,13 @@
 
 defined( 'ABSPATH' ) or die();
 
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	/**
+	 * Composer-generated autoload file.
+	 */
+	require_once __DIR__ . '/vendor/autoload.php';
+}
+
 if ( ! class_exists( 'Multilingual_Press' ) ) {
 	require plugin_dir_path( __FILE__ ) . 'src/inc/Multilingual_Press.php';
 }
