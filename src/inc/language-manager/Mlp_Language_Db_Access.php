@@ -21,7 +21,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	/**
 	 * @var array
 	 */
-	private $fields = array(
+	private $fields = [ 
 		    'ID' => '%d',
             'english_name' => '%s',
             'native_name' =>  '%s',
@@ -32,12 +32,12 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
             'wp_locale' => '%s',
             'http_name' => '%s',
             'priority' => '%d',
-	);
+	 ];
 
 	/**
 	 * @var array
 	 */
-	private $compare_operators = array(
+	private $compare_operators = [ 
 		'=',
 		'<=>',
 		'>',
@@ -51,7 +51,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 		'NOT REGEXP',
 		'REGEXP',
 		'RLIKE',
-	);
+	 ];
 
 	/**
 	 * @param     $table_name
@@ -82,25 +82,25 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	 *
 	 * @return array
 	 */
-	public function get_items( array $params = array(), $type = OBJECT_K ) {
+	public function get_items( array $params = [], $type = OBJECT_K ) {
 
 		global $wpdb;
 
-		$default_params = array(
+		$default_params = [
 			'page'     => 1,
-			'fields'   => array(),
-			'where'    => array(),
-			'order_by' => array(
-				array(
+			'fields'   => [],
+			'where'    => [],
+			'order_by' => [
+				[
 					'field' => 'priority',
 					'order' => 'DESC',
-				),
-				array(
+				],
+				[
 					'field' => 'english_name',
 					'order' => 'ASC',
-				),
-			),
-		);
+				],
+			],
+		];
 		$params = wp_parse_args( $params, $default_params );
 
 		$select_fields = '';
@@ -173,7 +173,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 				$order .= ',' . $field;
 				if ( ! empty( $order_by['order'] ) ) {
 					$_order_by = strtoupper( $order_by['order'] );
-					if ( in_array( $_order_by, array( 'ASC', 'DESC' ), true ) ) {
+					if ( in_array( $_order_by, [ 'ASC', 'DESC' ], true ) ) {
 						$order .= ' ' . $_order_by;
 					}
 				}
@@ -190,7 +190,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 
 		$result = $wpdb->get_results( $query, $type );
 
-		return null === $result ? array() : $result;
+		return null === $result ? [] : $result;
 	}
 
 	/**
@@ -199,17 +199,17 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	 * @param string $where_format
 	 * @return array
 	 */
-	public function update_items_by_id( Array $items, $field_format = '%s', $where_format = '%d' ) {
+	public function update_items_by_id( array $items, $field_format = '%s', $where_format = '%d' ) {
 
 		global $wpdb;
 
-		$queries = array();
+		$queries = [];
 
 		foreach ( $items as $id => $values ) {
 			$wpdb->update(
 				$this->table_name,
 				(array) $values,
-				array( 'ID' => $id ),
+				[ 'ID' => $id ],
 				$field_format,
 				$where_format
 			);
@@ -224,7 +224,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	 * @param array $params
 	 * @return void
 	 */
-	public function insert_item( Array $params ) {}
+	public function insert_item( array $params ) {}
 
 	/**
 	 * @param $page_size

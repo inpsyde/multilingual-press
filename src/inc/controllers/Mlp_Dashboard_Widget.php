@@ -28,7 +28,7 @@ class Mlp_Dashboard_Widget {
 	public function initialize() {
 
 		// Register Translated post meta to the submit box.
-		add_action( 'post_submitbox_misc_actions', array( $this, 'post_submitbox_misc_actions' ) );
+		add_action( 'post_submitbox_misc_actions', [ $this, 'post_submitbox_misc_actions' ] );
 
 		/**
 		 * Filters the capability required to view the dashboard widget.
@@ -38,10 +38,10 @@ class Mlp_Dashboard_Widget {
 		$capability = apply_filters( 'mlp_dashboard_widget_access', 'edit_others_posts' );
 		if ( current_user_can( $capability ) ) {
 			// Register the dashboard widget.
-			add_action( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup' ) );
+			add_action( 'wp_dashboard_setup', [ $this, 'wp_dashboard_setup' ] );
 		}
 
-		add_action( 'save_post', array( $this, 'save_post' ) );
+		add_action( 'save_post', [ $this, 'save_post' ] );
 	}
 
 	/**
@@ -68,10 +68,10 @@ class Mlp_Dashboard_Widget {
 		 *                             'is_translated' => bool
 		 *                             }
 		 */
-		$show_checkbox = (bool) apply_filters( 'mlp_show_translation_completed_checkbox', true, array(
+		$show_checkbox = (bool) apply_filters( 'mlp_show_translation_completed_checkbox', true, [ 
 			'post_id'       => $post_id,
 			'is_translated' => $is_translated,
-		) );
+		 ] );
 		if ( ! $show_checkbox ) {
 			return;
 		}
@@ -102,7 +102,7 @@ class Mlp_Dashboard_Widget {
 		wp_add_dashboard_widget(
 			'multilingualpress-dashboard-widget',
 			__( 'Untranslated Posts', 'multilingual-press' ),
-			array( $this, 'dashboard_widget' )
+			[ $this, 'dashboard_widget' ]
 		);
 	}
 
@@ -142,21 +142,21 @@ class Mlp_Dashboard_Widget {
 				<?php
 				// Post status 'any' automatically excludes both 'auto-draft' and 'trash'.
 				// Not suppressing filters (which is done by default when using get_posts()) makes caching possible.
-				$posts_to_translate = get_posts( array(
+				$posts_to_translate = get_posts( [
 					'suppress_filters' => false,
 					'post_status'      => 'any',
-					'meta_query'       => array(
+					'meta_query'       => [
 						'relation' => 'OR',
-						array(
+						[
 							'key'   => '_post_is_translated',
 							'value' => '0',
-						),
-						array(
+						],
+						[
 							'key'   => 'post_is_translated',
 							'value' => '0',
-						),
-					),
-				) );
+						],
+					],
+				] );
 				?>
 				<?php if ( $posts_to_translate ) : ?>
 					<?php foreach ( $posts_to_translate as $post ) : ?>
@@ -197,7 +197,7 @@ class Mlp_Dashboard_Widget {
 
 		// We're only interested in published posts at this time.
 		$post_status = get_post_status( $post_id );
-		if ( ! in_array( $post_status, array( 'publish', 'draft' ), true ) ) {
+		if ( ! in_array( $post_status, [ 'publish', 'draft' ], true ) ) {
 			return;
 		}
 

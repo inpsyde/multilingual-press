@@ -78,7 +78,7 @@ class Multilingual_Press {
 			return;
 
 		// Hooks and filters
-		add_action( 'inpsyde_mlp_loaded', array ( $this, 'load_plugin_textdomain' ), 1 );
+		add_action( 'inpsyde_mlp_loaded', [ $this, 'load_plugin_textdomain' ], 1 );
 
 		// Load modules
 		$this->load_features();
@@ -92,12 +92,12 @@ class Multilingual_Press {
 		do_action( 'inpsyde_mlp_init', $this->plugin_data, $this->wpdb );
 
 		// Cleanup upon blog delete
-		add_filter( 'delete_blog', array ( $this, 'delete_blog' ), 10, 2 );
+		add_filter( 'delete_blog', [ $this, 'delete_blog' ], 10, 2 );
 
 		// Check for errors
-		add_filter( 'all_admin_notices', array ( $this, 'check_for_user_errors_admin_notice' ) );
+		add_filter( 'all_admin_notices', [ $this, 'check_for_user_errors_admin_notice' ] );
 
-		add_action( 'wp_loaded', array ( $this, 'late_load' ), 0 );
+		add_action( 'wp_loaded', [ $this, 'late_load' ], 0 );
 
 		/**
 		 * Runs after internal actions have been registered.
@@ -122,14 +122,14 @@ class Multilingual_Press {
 
 		global $pagenow;
 
-		if ( in_array( $pagenow, array( 'admin-post.php', 'admin-ajax.php' ), true ) ) {
+		if ( in_array( $pagenow, [ 'admin-post.php', 'admin-ajax.php' ], true ) ) {
 			return true;
 		}
 
 		if ( is_network_admin() )
 			return TRUE;
 
-		$relations = get_site_option( 'inpsyde_multilingual', array () );
+		$relations = get_site_option( 'inpsyde_multilingual', [] );
 
 		if ( array_key_exists( get_current_blog_id(), $relations ) )
 			return TRUE;
@@ -179,11 +179,9 @@ class Multilingual_Press {
 		$admin_url = parse_url( $admin_url, PHP_URL_PATH );
 		$admin_url = esc_url( $admin_url );
 
-		$assets->add( 'mlp-admin', 'admin.js', array( 'backbone' ), array(
-			'mlpSettings' => array(
-				'urlRoot' => $admin_url,
-			),
-		) );
+		$assets->add( 'mlp-admin', 'admin.js', [ 'backbone' ], [
+			'mlpSettings' => [ 'urlRoot' => $admin_url, ],
+		] );
 
 		$assets->add( 'mlp_admin_css', 'admin.css' );
 
@@ -191,7 +189,7 @@ class Multilingual_Press {
 
 		$assets->add( 'mlp_frontend_css', 'frontend.css' );
 
-		add_action( 'init', array( $assets, 'register' ), 0 );
+		add_action( 'init', [ $assets, 'register' ], 0 );
 	}
 
 	/**
@@ -205,16 +203,16 @@ class Multilingual_Press {
 			$this->plugin_data->get( 'module_manager' ),
 			$this->plugin_data->get( 'assets' )
 		);
-		add_action( 'plugins_loaded', array( $settings, 'setup' ), 8 );
+		add_action( 'plugins_loaded', [ $settings, 'setup' ], 8 );
 
 		$plugin_file = $this->plugin_data->get( 'plugin_base_name' );
 
 		$url = network_admin_url( 'settings.php?page=mlp' );
 
-		$action_link = new Mlp_Network_Plugin_Action_Link( array(
+		$action_link = new Mlp_Network_Plugin_Action_Link( [
 			'settings' => '<a href="' . esc_url( $url ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>',
-		) );
-		add_filter( "network_admin_plugin_action_links_$plugin_file", array( $action_link, 'add' ) );
+		] );
+		add_filter( "network_admin_plugin_action_links_$plugin_file", [ $action_link, 'add' ] );
 	}
 
 	/**
@@ -229,7 +227,7 @@ class Multilingual_Press {
 			$this->plugin_data->get( 'assets' )
 		);
 		$settings->setup();
-		add_action( 'plugins_loaded', array( $settings, 'setup' ), 8 );
+		add_action( 'plugins_loaded', [ $settings, 'setup' ], 8 );
 	}
 
 	/**
@@ -241,7 +239,7 @@ class Multilingual_Press {
 	 */
 	protected function load_features() {
 
-		$found = array ();
+		$found = [];
 
 		$path = $this->plugin_data->get( 'plugin_dir_path' ) . "/src/inc";
 
@@ -280,7 +278,7 @@ class Multilingual_Press {
 		$site_relations->delete_relation( $blog_id );
 
 		// Update site option
-		$blogs = (array) get_site_option( 'inpsyde_multilingual', array() );
+		$blogs = (array) get_site_option( 'inpsyde_multilingual', [] );
 		if ( isset( $blogs[ $blog_id ] ) ) {
 			unset( $blogs[ $blog_id ] );
 			update_site_option( 'inpsyde_multilingual', $blogs );
@@ -361,7 +359,7 @@ class Multilingual_Press {
 			return FALSE;
 
 		// Get blogs related to the current blog
-		$all_blogs = get_site_option( 'inpsyde_multilingual', array () );
+		$all_blogs = get_site_option( 'inpsyde_multilingual', [] );
 
 		if ( 1 > count( $all_blogs ) && is_super_admin() )
 			return TRUE;
@@ -398,24 +396,12 @@ class Multilingual_Press {
 	private function run_frontend_actions() {
 
 		// Use correct language for html element
-		add_filter( 'language_attributes', array( $this, 'language_attributes' ) );
+		add_filter( 'language_attributes', [ $this, 'language_attributes' ] );
 
 		// frontend-hooks
 		$hreflang = new Mlp_Hreflang_Header_Output( $this->plugin_data->get( 'language_api' ) );
-		add_action(
-			'template_redirect',
-			array (
-				$hreflang,
-				'http_header'
-			)
-		);
-		add_action(
-			'wp_head',
-			array (
-				$hreflang,
-				'wp_head'
-			)
-		);
+		add_action( 'template_redirect', [ $hreflang, 'http_header' ] );
+		add_action( 'wp_head', [ $hreflang, 'wp_head' ] );
 	}
 
 	/**

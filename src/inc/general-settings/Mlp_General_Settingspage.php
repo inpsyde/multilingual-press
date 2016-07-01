@@ -52,9 +52,9 @@ class Mlp_General_Settingspage {
 
 		$this->model = new Mlp_General_Settings_Module_Mapper( $this->modules );
 
-		add_filter( 'network_admin_menu', array( $this, 'register_settings_page' ) );
-		add_filter( 'admin_post_mlp_update_modules', array( $this->model, 'update_modules' ) );
-		add_action( 'network_admin_notices', array( $this, 'show_update_message' ) );
+		add_filter( 'network_admin_menu', [ $this, 'register_settings_page' ] );
+		add_filter( 'admin_post_mlp_update_modules', [ $this->model, 'update_modules' ] );
+		add_action( 'network_admin_notices', [ $this, 'show_update_message' ] );
 	}
 
 	/**
@@ -73,10 +73,10 @@ class Mlp_General_Settingspage {
 			__( 'MultilingualPress', 'multilingual-press' ),
 			'manage_network_options',
 			'mlp',
-			array( $view, 'render_page' )
+			[ $view, 'render_page' ]
 		);
 
-		$this->assets->provide( array( 'mlp-admin', 'mlp_admin_css' ) );
+		$this->assets->provide( [ 'mlp-admin', 'mlp_admin_css' ] );
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Mlp_General_Settingspage {
 		}
 
 		$msg = __( 'Settings saved.', 'multilingual-press' );
-		$notice = new Mlp_Admin_Notice( $msg, array( 'class' => 'updated' ) );
+		$notice = new Mlp_Admin_Notice( $msg, [ 'class' => 'updated' ] );
 		$notice->show();
 	}
 

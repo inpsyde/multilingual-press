@@ -28,7 +28,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	/**
 	 * @var Mlp_Translation[]
 	 */
-	private $translations = array();
+	private $translations = [];
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -65,18 +65,18 @@ class Mlp_Quicklink implements Mlp_Updatable {
 		}
 
 		if ( is_admin() ) {
-			add_action( 'mlp_modules_add_fields', array( $this, 'draw_options_page_form_fields' ) );
+			add_action( 'mlp_modules_add_fields', [ $this, 'draw_options_page_form_fields' ] );
 
 			// Use this hook to handle the user input of your modules' options page form fields
-			add_filter( 'mlp_modules_save_fields', array( $this, 'save_options_page_form_fields' ) );
+			add_filter( 'mlp_modules_save_fields', [ $this, 'save_options_page_form_fields' ] );
 		} else {
 			if ( ! empty( $_POST['mlp_quicklink_select'] ) ) {
 				$this->redirect_quick_link( (string) $_POST['mlp_quicklink_select'] );
 			}
 
-			add_action( 'wp_head', array( $this, 'load_style' ), 0 );
+			add_action( 'wp_head', [ $this, 'load_style' ], 0 );
 
-			add_filter( 'the_content', array( $this, 'frontend_tab' ) );
+			add_filter( 'the_content', [ $this, 'frontend_tab' ] );
 		}
 	}
 
@@ -117,12 +117,12 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 */
 	private function register_setting() {
 
-		return $this->module_manager->register( array(
+		return $this->module_manager->register( [
 			'description'  => __( 'Show link to translations in post content.', 'multilingual-press' ),
 			'display_name' => __( 'Quicklink', 'multilingual-press' ),
 			'slug'         => 'class-' . __CLASS__,
 			'state'        => 'off',
-		) );
+		] );
 	}
 
 	/**
@@ -136,7 +136,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 */
 	private function redirect_quick_link( $url ) {
 
-		$callback = array( $this, 'extend_allowed_hosts' );
+		$callback = [ $this, 'extend_allowed_hosts' ];
 		add_filter( 'allowed_redirect_hosts', $callback, 10, 2 );
 
 		$url = wp_validate_redirect( $url, false );
@@ -225,7 +225,7 @@ ORDER BY domain DESC";
 
 		$current_blog_id = get_current_blog_id();
 
-		$translated = array();
+		$translated = [];
 
 		foreach ( $translations as $site => $translation ) {
 			if ( $current_blog_id === $site ) {
@@ -259,14 +259,14 @@ ORDER BY domain DESC";
 	private function get_translations() {
 
 		if ( ! is_singular() ) {
-			return array();
+			return [];
 		}
 
 		if ( $this->translations ) {
 			return $this->translations;
 		}
 
-		$this->translations = $this->language_api->get_translations( array( 'type' => 'post' ) );
+		$this->translations = $this->language_api->get_translations( [ 'type' => 'post' ] );
 
 		return $this->translations;
 	}
@@ -293,19 +293,17 @@ ORDER BY domain DESC";
 			$container = 'form';
 		}
 
-		$elements = array();
+		$elements = [];
 
 		foreach ( $translated as $url => $language ) {
 			if ( 'links' === $type ) {
-				$attributes = array(
+				$attributes = [
 					'href'     => $url,
 					'hreflang' => $language->get_name( 'http' ),
 					'rel'      => 'alternate',
-				);
+				];
 			} else {
-				$attributes = array(
-					'value' => $url,
-				);
+				$attributes = [ 'value' => $url, ];
 			}
 
 			$attributes_html = '';

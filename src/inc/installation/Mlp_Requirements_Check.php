@@ -28,7 +28,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	/**
 	 * @var array
 	 */
-	private $errors = array();
+	private $errors = [];
 
 	/**
 	 * @param Mlp_Requirements_Interface   $requirements

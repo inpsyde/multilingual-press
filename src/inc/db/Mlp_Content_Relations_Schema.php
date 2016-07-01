@@ -43,14 +43,14 @@ class Mlp_Content_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 */
 	public function get_schema() {
 
-		return array(
+		return [
 			'ml_id'               => 'INT NOT NULL AUTO_INCREMENT',
 			'ml_source_blogid'    => 'bigint(20) NOT NULL',
 			'ml_source_elementid' => 'bigint(20) NOT NULL',
 			'ml_blogid'           => 'bigint(20) NOT NULL',
 			'ml_elementid'        => 'bigint(20) NOT NULL',
 			'ml_type'             => 'varchar(20) CHARACTER SET utf8 NOT NULL',
-		);
+		];
 	}
 
 	/**
@@ -70,9 +70,7 @@ class Mlp_Content_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 */
 	public function get_autofilled_keys() {
 
-		return array(
-			'ml_id',
-		);
+		return [ 'ml_id', ];
 	}
 
 	/**

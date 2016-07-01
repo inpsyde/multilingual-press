@@ -72,7 +72,7 @@ class Mlp_Language_Manager_Page_View {
 						'primary',
 						'save',
 						false,
-						array( 'style' => 'float:left')
+						[ 'style' => 'float:left' ]
 					);
 
 					$this->watcher->update( 'after_form_submit_button' );

@@ -15,7 +15,7 @@ class Mlp_Helpers {
 	 * @see Mlp_Helpers::insert_dependency()
 	 * @type array
 	 */
-	private static $dependencies = array ();
+	private static $dependencies = [];
 
 	/**
 	 * @var string
@@ -74,13 +74,13 @@ class Mlp_Helpers {
 	 */
 	public static function get_available_languages( $not_related = FALSE ) {
 
-		$related_blogs = array ();
+		$related_blogs = [];
 
 		// Get all registered blogs
 		$languages = get_site_option( 'inpsyde_multilingual' );
 
 		if ( empty ( $languages ) )
-			return array ();
+			return [];
 
 		/** @var Mlp_Site_Relations $site_relations */
 		$site_relations = self::$dependencies[ 'site_relations' ];
@@ -94,10 +94,10 @@ class Mlp_Helpers {
 
 			// No related blogs? Leave here.
 			if ( empty ( $related_blogs ) )
-				return array ();
+				return [];
 		}
 
-		$options = array ();
+		$options = [];
 
 		// Loop through blogs
 		foreach ( $languages as $language_blogid => $language_data ) {
@@ -166,7 +166,7 @@ class Mlp_Helpers {
 		$element_id = self::get_default_content_id( $element_id );
 
 		if ( ! $element_id )
-			return array();
+			return [];
 
 		// If no ID is provided, get current blogs' ID
 		if ( 0 === $blog_id )
@@ -192,18 +192,18 @@ class Mlp_Helpers {
 	public static function get_interlinked_permalinks( $element_id = 0, $type = '' ) {
 
 		if ( ! is_singular() && ! is_tag() && !is_category() && ! is_tax() )
-			return array();
+			return [];
 
-		$return     = array ();
+		$return     = [];
 		              /** @var Mlp_Language_Api $api */
 		$api        = self::$dependencies[ 'language_api' ];
 		$site_id    = get_current_blog_id();
 		$element_id = self::get_default_content_id( $element_id );
 
-		$args = array(
+		$args = [
 			'site_id'    => $site_id,
 			'content_id' => $element_id
-		);
+		 ];
 		if ( '' !== $type )
 			$args['type'] = $type;
 
@@ -224,7 +224,7 @@ class Mlp_Helpers {
 			if ( empty ( $url ) )
 				continue;
 
-			$return[ $remote_site_id ] = array (
+			$return[ $remote_site_id ] = [
 				'post_id'        => $translation->get_target_content_id(),
 				'post_title'     => $translation->get_target_title(),
 				'permalink'      => $url,
@@ -235,7 +235,7 @@ class Mlp_Helpers {
 				'lang'           => $translation->get_language()->get_name( 'lang' ),
 				'language_short' => $translation->get_language()->get_name( 'lang' ),
 				'language_long'  => $translation->get_language()->get_name( 'language_long' ),
-			);
+			];
 		}
 
 		return $return;
@@ -355,13 +355,13 @@ class Mlp_Helpers {
 	 */
 	public static function show_linked_elements( $args ) {
 
-		$defaults = array(
+		$defaults = [
 			'link_text'         => 'native',
 			'display_flag'      => FALSE,
 			'sort'              => 'priority',
 			'show_current_blog' => FALSE,
 			'strict'            => FALSE, // get exact translations only
-		);
+		 ];
 		$params = wp_parse_args( $args, $defaults );
 
 		// TODO: Eventually remove this, with version 2.2.0 + 4 at the earliest.
@@ -400,16 +400,16 @@ class Mlp_Helpers {
 			return '';
 		}
 
-		$translations_args = array(
+		$translations_args = [
 			'strict'       => $params[ 'strict' ],
 			'include_base' => $params[ 'show_current_blog' ],
-		);
+		 ];
 		$translations = $api->get_translations( $translations_args );
 		if ( empty( $translations ) ) {
 			return '';
 		}
 
-		$items = array();
+		$items = [];
 
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $translations as $site_id => $translation ) {
@@ -420,13 +420,13 @@ class Mlp_Helpers {
 
 			$language = $translation->get_language();
 
-			$items[ $site_id ] = array(
+			$items[ $site_id ] = [
 				'url'      => $url,
 				'http'     => $language->get_name( 'http' ),
 				'name'     => $language->get_name( $params[ 'link_text' ] ),
 				'priority' => $language->get_priority(),
 				'icon'     => (string) $translation->get_icon_url(),
-			);
+			];
 		}
 
 		switch ( $params[ 'sort' ] ) {
@@ -435,11 +435,11 @@ class Mlp_Helpers {
 				break;
 
 			case 'priority':
-				uasort( $items, array( __CLASS__, 'sort_priorities' ) );
+				uasort( $items, [ __CLASS__, 'sort_priorities' ] );
 				break;
 
 			case 'name':
-				uasort( $items, array( __CLASS__, 'strcasecmp_sort_names' ) );
+				uasort( $items, [ __CLASS__, 'strcasecmp_sort_names' ] );
 				break;
 		}
 
@@ -477,7 +477,7 @@ class Mlp_Helpers {
 	 * @param array $b
 	 * @return int
 	 */
-	private static function strcasecmp_sort_names( Array $a, Array $b ) {
+	private static function strcasecmp_sort_names( array $a, array $b ) {
 
 		return strcasecmp( $a['name'], $b['name'] );
 	}
@@ -489,7 +489,7 @@ class Mlp_Helpers {
 	 * @param array $b
 	 * @return int
 	 */
-	private static function sort_priorities( Array $a, Array $b ) {
+	private static function sort_priorities( array $a, array $b ) {
 
 		if ( $a['priority'] === $b['priority'] )
 			return 0;

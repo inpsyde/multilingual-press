@@ -58,8 +58,8 @@ class Mlp_Duplicate_Blogs {
 	 */
 	public function setup() {
 
-		add_filter( 'wpmu_new_blog', array ( $this, 'wpmu_new_blog' ), 10, 2 );
-		add_filter( 'mlp_after_new_blog_fields', array ( $this, 'display_fields' ) );
+		add_filter( 'wpmu_new_blog', [ $this, 'wpmu_new_blog' ], 10, 2 );
+		add_filter( 'mlp_after_new_blog_fields', [ $this, 'display_fields' ] );
 	}
 
 	/**
@@ -78,10 +78,10 @@ class Mlp_Duplicate_Blogs {
 		$source_blog_id = (int) $_POST[ 'blog' ][ 'basedon' ];
 
 		// Hook information
-		$context = array (
+		$context = [
 			'source_blog_id' => $source_blog_id,
 			'new_blog_id'    => $blog_id,
-		);
+		 ];
 
 		// Switch to the base blog
 		switch_to_blog( $source_blog_id );
@@ -133,8 +133,8 @@ class Mlp_Duplicate_Blogs {
 
 		$this->wpdb->update(
 			$this->wpdb->options,
-			array( 'option_name' => $this->wpdb->prefix . 'user_roles' ),
-			array( 'option_name' => $old_prefix . 'user_roles' )
+			[ 'option_name' => $this->wpdb->prefix . 'user_roles' ],
+			[ 'option_name' => $old_prefix . 'user_roles' ]
 		);
 
 		$this->insert_post_relations( $source_blog_id, $blog_id );
@@ -175,8 +175,8 @@ class Mlp_Duplicate_Blogs {
 
 		$this->wpdb->update(
 				   $this->wpdb->options,
-				   array( 'option_value' => $admin_email ),
-				   array( 'option_name'  => 'admin_email' )
+				   [ 'option_value' => $admin_email ],
+				   [ 'option_name'  => 'admin_email' ]
 		);
 	}
 
@@ -206,7 +206,7 @@ class Mlp_Duplicate_Blogs {
 	 * @param array $context
 	 * @return array
 	 */
-	private function get_table_names( Array $context ) {
+	private function get_table_names( array $context ) {
 
 		$tables = $this->table_names->get_site_core_tables(
 			$context[ 'source_blog_id' ]
@@ -292,7 +292,7 @@ SELECT %d, ID, %d, ID, 'post'
 FROM {$this->wpdb->posts}
 WHERE post_status IN ( 'publish', 'future', 'draft', 'pending', 'private' )";
 
-		foreach( array( $source_site_id, $target_site_id ) as $site_id ) {
+		foreach( [ $source_site_id, $target_site_id ] as $site_id ) {
 			$result += (int) $this->wpdb->query( $this->wpdb->prepare( $query, $source_site_id, $site_id ) );
 		}
 
@@ -361,7 +361,7 @@ LIMIT 2";
 	 */
 	private function deactivate_plugins() {
 
-		update_option( 'active_plugins', array() );
+		update_option( 'active_plugins', [] );
 	}
 
 	/**
@@ -372,20 +372,16 @@ LIMIT 2";
 	 */
 	private function update_file_urls( $copy_files ) {
 
-		$tables = array (
-			$this->wpdb->posts         => array (
+		$tables = [
+			$this->wpdb->posts         => [
 				'guid',
 				'post_content',
 				'post_excerpt',
 				'post_content_filtered',
-			),
-			$this->wpdb->term_taxonomy => array (
-				'description'
-			),
-			$this->wpdb->comments      => array (
-				'comment_content'
-			)
-		);
+			 ],
+			$this->wpdb->term_taxonomy => [ 'description' ],
+			$this->wpdb->comments      => [ 'comment_content' ]
+		];
 
 		$db_replace    = new Mlp_Db_Replace( $this->wpdb );
 		$replaced_rows = 0;

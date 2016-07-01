@@ -15,16 +15,14 @@ if ( is_admin() && ! empty( $GLOBALS[ 'pagenow' ] ) && 'sites.php' === $GLOBALS[
  */
 function mlp_feature_connection_column() {
 
-	$columns = new Mlp_Custom_Columns(
-		array(
-			'id'               => 'mlp_interlinked',
-			'header'           => esc_attr__( 'Relationships', 'multilingual-press' ),
-			'content_callback' => 'mlp_render_related_blog_column',
-		)
-	);
+	$columns = new Mlp_Custom_Columns( [
+		'id'               => 'mlp_interlinked',
+		'header'           => esc_attr__( 'Relationships', 'multilingual-press' ),
+		'content_callback' => 'mlp_render_related_blog_column',
+	] );
 
-	add_filter( 'wpmu_blogs_columns', array( $columns, 'add_header' ) );
-	add_action( 'manage_sites_custom_column', array( $columns, 'render_column' ), 10, 2 );
+	add_filter( 'wpmu_blogs_columns', [ $columns, 'add_header' ] );
+	add_action( 'manage_sites_custom_column', [ $columns, 'render_column' ], 10, 2 );
 }
 
 /**

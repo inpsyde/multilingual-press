@@ -35,16 +35,16 @@ class Mlp_Alternative_Language_Title {
 	 */
 	public function setup() {
 
-		add_action( 'mlp_blogs_save_fields', array( $this->customizer, 'update_cache' ) );
+		add_action( 'mlp_blogs_save_fields', [ $this->customizer, 'update_cache' ] );
 
 		if ( ! $this->module->setup() ) {
 			return false;
 		}
 
-		add_filter( 'admin_bar_menu', array( $this->customizer, 'replace_site_nodes' ), 11 );
+		add_filter( 'admin_bar_menu', [ $this->customizer, 'replace_site_nodes' ], 11 );
 
 		if ( ! is_network_admin() ) {
-			add_filter( 'admin_bar_menu', array( $this->customizer, 'replace_site_name' ), 31 );
+			add_filter( 'admin_bar_menu', [ $this->customizer, 'replace_site_name' ], 31 );
 		}
 
 		return true;

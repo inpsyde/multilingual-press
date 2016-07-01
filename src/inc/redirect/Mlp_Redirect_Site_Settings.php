@@ -33,8 +33,8 @@ class Mlp_Redirect_Site_Settings {
 
 		$view = new Mlp_Redirect_Site_Settings_Form( $nonce, $data );
 
-		add_filter( 'mlp_blogs_add_fields', array( $view, 'render' ) );
+		add_filter( 'mlp_blogs_add_fields', [ $view, 'render' ] );
 
-		add_filter( 'mlp_blogs_save_fields', array( $data, 'save' ) );
+		add_filter( 'mlp_blogs_save_fields', [ $data, 'save' ] );
 	}
 }

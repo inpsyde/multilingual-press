@@ -34,9 +34,9 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 		$accept_header = $this->remove_comment( $accept_header );
 
 		if ( '' === $accept_header )
-			return array();
+			return [];
 
-		$out   = array ();
+		$out   = [];
 		$parts = $this->separate_values( $accept_header );
 
 		foreach ( $parts as $part ) {
@@ -63,23 +63,23 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 		if ( FALSE === strpos( $part, ';' ) ) {
 
 			if ( ! $this->validator->is_valid( $part ) )
-				return array();
+				return [];
 
-			return array ( $part, 1 );
+			return [ $part, 1 ];
 		}
 
 		// string with quality value like 'en;q=0.8'
 		$key = strtok( $part, ';' );
 
 		if ( ! $this->validator->is_valid( $key ) )
-			return array ();
+			return [];
 
 		strtok( '=' );
 
 		$priority = strtok( ';' );
 		$priority = $this->sanitize_priority( $priority );
 
-		return array ( $key, $priority );
+		return [ $key, $priority ];
 	}
 
 	/**

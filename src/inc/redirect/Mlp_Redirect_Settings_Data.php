@@ -41,7 +41,7 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 	 * @param  array $data User input
 	 * @return bool
 	 */
-	public function save( Array $data ) {
+	public function save( array $data ) {
 
 		if ( ! $this->nonce->is_valid() )
 			return FALSE;
@@ -77,7 +77,7 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 	 * @param  int   $default
 	 * @return int
 	 */
-	private function get_current_blog_id( Array $data, $default = 0 ) {
+	private function get_current_blog_id( array $data, $default = 0 ) {
 
 		if ( isset ( $data[ 'id' ] ) )
 			return (int) $data[ 'id' ];
@@ -89,7 +89,7 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 	 * @param  array $data
 	 * @return int
 	 */
-	private function get_sent_value( Array $data ) {
+	private function get_sent_value( array $data ) {
 
 		if ( ! isset ( $data[ $this->option_name ] ) )
 			return 0;

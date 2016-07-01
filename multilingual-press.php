@@ -49,12 +49,12 @@ function mlp_init() {
 
 	$locations = new Mlp_Internal_Locations();
 	$locations->add_dir( $plugin_path, $plugin_url, 'plugin' );
-	$assets_locations = array(
+	$assets_locations = [
 		'css'    => 'css',
 		'js'     => 'js',
 		'images' => 'images',
 		'flags'  => 'images/flags',
-	);
+	];
 	foreach ( $assets_locations as $type => $dir ) {
 		$locations->add_dir(
 			$plugin_path . $assets_base . '/' . $dir,
@@ -67,15 +67,12 @@ function mlp_init() {
 	$data->set( 'plugin_file_path', __FILE__ );
 	$data->set( 'plugin_base_name', plugin_basename( __FILE__ ) );
 
-	$headers = get_file_data(
-		__FILE__,
-		array(
-			'text_domain_path' => 'Domain Path',
-			'plugin_uri'       => 'Plugin URI',
-			'plugin_name'      => 'Plugin Name',
-			'version'          => 'Version'
-		)
-	);
+	$headers = get_file_data( __FILE__, [
+		'text_domain_path' => 'Domain Path',
+		'plugin_uri'       => 'Plugin URI',
+		'plugin_name'      => 'Plugin Name',
+		'version'          => 'Version',
+	] );
 	foreach ( $headers as $name => $value ) {
 		$data->set( $name, $value );
 	}

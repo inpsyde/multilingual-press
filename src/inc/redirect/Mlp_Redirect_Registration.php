@@ -31,17 +31,10 @@ class Mlp_Redirect_Registration {
 	 */
 	public function setup() {
 
-		$desc = __(
-			'Redirect visitors according to browser language settings.',
-			'multilingual-press'
-		);
-
-		$settings = array (
+		return $this->modules->register( [
 			'display_name'	=> __( 'HTTP Redirect', 'multilingual-press' ),
 			'slug'			=> 'class-' . __CLASS__,
-			'description'   => $desc
-		);
-
-		return $this->modules->register( $settings );
+			'description'   => __( 'Redirect visitors according to browser language settings.', 'multilingual-press' ),
+		] );
 	}
 }

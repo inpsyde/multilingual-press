@@ -18,6 +18,6 @@ function mlp_nav_menu_init( Inpsyde_Property_List_Interface $data ) {
 	if ( is_admin() ) {
 		$controller->backend_setup();
 	} else {
-		add_action( 'template_redirect', array( $controller, 'frontend_setup' ) );
+		add_action( 'template_redirect', [ $controller, 'frontend_setup' ] );
 	}
 }

@@ -25,5 +25,5 @@ interface Mlp_Network_Plugin_Deactivation_Interface {
 	 * @param  array $plugins List of plugin base names. See plugin_basename().
 	 * @return array           All matches that were removed.
 	 */
-	public function deactivate( Array $plugins );
+	public function deactivate( array $plugins );
 }

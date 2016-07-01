@@ -57,7 +57,7 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 	 * @param array        $params
 	 * @param Mlp_Language_Interface $language
 	 */
-	public function __construct( Array $params, Mlp_Language_Interface $language ) {
+	public function __construct( array $params, Mlp_Language_Interface $language ) {
 
 		$this->source_site_id    = $params['source_site_id'];
 		$this->target_site_id    = $params['target_site_id'];

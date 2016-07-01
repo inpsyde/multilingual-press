@@ -47,7 +47,7 @@ interface Mlp_Language_Api_Interface {
 	 * @param  array $args Optional. If left out, some magic happens.
 	 * @return array Array of Mlp_Translation instances, site IDs are the keys
 	 */
-	public function get_translations( Array $args = array() );
+	public function get_translations( array $args = [] );
 
 	/**
 	 * @param  string $iso Something like de_AT

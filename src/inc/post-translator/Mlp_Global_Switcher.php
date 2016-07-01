@@ -26,7 +26,7 @@ class Mlp_Global_Switcher {
 	/**
 	 * @var array
 	 */
-	private $storage = array();
+	private $storage = [];
 
 	/**
 	 * Constructor.

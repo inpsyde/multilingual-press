@@ -66,14 +66,12 @@ class Mlp_Update_Plugin_Data {
 	 */
 	public function update( Mlp_Network_Plugin_Deactivation_Interface $deactivator ) {
 
-		$deactivator->deactivate(
-			array (
-				'disable-acf.php',
-				'mlp-wp-seo-compat.php'
-			)
-		);
+		$deactivator->deactivate( [
+			'disable-acf.php',
+			'mlp-wp-seo-compat.php'
+		] );
 		// add hook to import active languages when reset is done
-		add_action( 'mlp_reset_table_done', array ( $this, 'import_active_languages' ) );
+		add_action( 'mlp_reset_table_done', [ $this, 'import_active_languages' ] );
 
 		// The site option with the version number exists since 2.0. If the last
 		// version is a fallback, it is a version below 2.0.
@@ -126,7 +124,7 @@ class Mlp_Update_Plugin_Data {
 
 		foreach ( $this->all_sites as $site ) {
 
-			$linked = get_blog_option( $site[ 'blog_id' ], $option_name, array() );
+			$linked = get_blog_option( $site[ 'blog_id' ], $option_name, [] );
 
 			if ( ! empty( $linked ) ) {
 				$inserted += $relations->set_relation( $site[ 'blog_id' ], $linked );
@@ -177,21 +175,18 @@ class Mlp_Update_Plugin_Data {
 			// language not found -> insert
 			if ( empty ( $lang_id ) ) {
 				// @todo add custom name
-				$this->wpdb->insert(
-					$table,
-				   array (
-					   'english_name' => $text,
-					   'wp_locale'    => $mlp_site[ 'lang' ],
-					   'http_name'    => str_replace( '_', '-', $mlp_site[ 'lang' ] )
-				   )
-				);
+				$this->wpdb->insert( $table, [
+					'english_name' => $text,
+					'wp_locale'    => $mlp_site[ 'lang' ],
+					'http_name'    => str_replace( '_', '-', $mlp_site[ 'lang' ] ),
+				] );
 			}
 			// language found -> change priority
 			else {
 				$this->wpdb->update(
 					$table,
-					array ( 'priority' => 10 ),
-					array ( 'ID'       => $lang_id )
+					[ 'priority' => 10 ],
+					[ 'ID'       => $lang_id ]
 				);
 			}
 		}

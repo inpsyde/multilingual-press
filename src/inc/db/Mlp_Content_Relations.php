@@ -158,10 +158,10 @@ WHERE s.ml_blogid = %d
 
 		$results = $this->wpdb->get_results( $query, ARRAY_A );
 		if ( ! $results ) {
-			return array();
+			return [];
 		}
 
-		$output = array();
+		$output = [];
 
 		foreach ( $results as $set ) {
 			$output[ (int) $set[ 'site_id' ] ] = (int) $set[ 'content_id' ];
@@ -191,16 +191,16 @@ WHERE s.ml_blogid = %d
 		$type = 'post'
 	) {
 
-		$where = array(
+		$where = [ 
 			'ml_source_blogid'    => $source_site_id,
 			'ml_source_elementid' => $source_content_id,
 			'ml_type'             => $type,
-		);
-		$where_format = array(
+		 ];
+		$where_format = [ 
 			'%d',
 			'%d',
 			'%s',
-		);
+		 ];
 
 		if ( 0 < $target_site_id ) {
 			$where[ 'ml_blogid' ] = $target_site_id;
@@ -285,16 +285,13 @@ WHERE s.ml_blogid = %d
 		$type
 	) {
 
-		$result = (int) $this->wpdb->insert(
-			$this->link_table,
-			array(
-				'ml_source_blogid'    => $source_site_id,
-				'ml_source_elementid' => $source_content_id,
-				'ml_blogid'           => $target_site_id,
-				'ml_elementid'        => $target_content_id,
-				'ml_type'             => $type,
-			)
-		);
+		$result = (int) $this->wpdb->insert( $this->link_table, [
+			'ml_source_blogid'    => $source_site_id,
+			'ml_source_elementid' => $source_content_id,
+			'ml_blogid'           => $target_site_id,
+			'ml_elementid'        => $target_content_id,
+			'ml_type'             => $type,
+		] );
 
 		do_action(
 			'mlp_debug',
@@ -332,10 +329,10 @@ WHERE s.ml_blogid = %d
 			. " - {$this->wpdb->last_query}"
 		);
 
-		return array(
+		return [ 
 			'ml_source_blogid'    => $source_site_id,
 			'ml_source_elementid' => $source_content_id,
-		);
+		 ];
 	}
 
 	/**
@@ -350,24 +347,24 @@ WHERE s.ml_blogid = %d
 
 		$result = (int) $this->wpdb->update(
 			$this->link_table,
-			array(
+			[
 				'ml_source_blogid'    => $relations[ 0 ][ 'ml_source_blogid' ],
 				'ml_source_elementid' => $relations[ 0 ][ 'ml_source_elementid' ],
-			),
-			array(
+			],
+			[
 				'ml_source_blogid'    => $relations[ 1 ][ 'ml_source_blogid' ],
 				'ml_source_elementid' => $relations[ 1 ][ 'ml_source_elementid' ],
 				'ml_type'             => $type,
-			),
-			array(
+			],
+			[
 				'%d',
 				'%d',
-			),
-			array(
+			],
+			[
 				'%d',
 				'%d',
 				'%s',
-			)
+			]
 		);
 
 		do_action(
@@ -419,7 +416,7 @@ WHERE (
 
 		$result = $this->wpdb->get_results( $query, ARRAY_A );
 		if ( ! $result ) {
-			return array();
+			return [];
 		}
 
 		foreach ( $result as $key => $data ) {

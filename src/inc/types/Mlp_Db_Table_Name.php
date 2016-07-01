@@ -16,7 +16,7 @@ class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 	/**
 	 * @var array
 	 */
-	private $all_table_names = array();
+	private $all_table_names = [];
 
 	/**
 	 * Constructor. Set up the properties.

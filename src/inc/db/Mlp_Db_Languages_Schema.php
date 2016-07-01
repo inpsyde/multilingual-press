@@ -45,7 +45,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 	 */
 	public function get_schema() {
 
-		return array(
+		return [
 			'ID'           => 'bigint unsigned NOT NULL auto_increment',
 			'english_name' => 'tinytext',
 			'native_name'  => 'tinytext',
@@ -59,7 +59,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 			// Same as iso_639_1, but with '-', not '_'
 			'http_name'    => 'VARCHAR(20)',
 			'priority'     => 'tinyint(1) unsigned DEFAULT 10',
-		);
+		];
 	}
 
 	/**
@@ -79,10 +79,10 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 	 */
 	public function get_autofilled_keys() {
 
-		return array(
+		return [
 			'ID',
 			'custom_name',
-		);
+		];
 	}
 
 	/**
@@ -103,8 +103,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 	 */
 	public function get_default_content() {
 
-		$fields = array(
-			'aa'    => array(
+		$fields = [
+			'aa'    => [
 				'english_name' => 'Afar',
 				'native_name'  => 'Afaraf',
 				'is_rtl'       => 0,
@@ -113,8 +113,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'aa',
 				'priority'     => 1,
-			),
-			'ae'    => array(
+			],
+			'ae'    => [
 				'english_name' => 'Avestan',
 				'native_name'  => 'avesta',
 				'is_rtl'       => 0,
@@ -123,8 +123,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ae',
 				'priority'     => 1,
-			),
-			'af'    => array(
+			],
+			'af'    => [
 				'english_name' => 'Afrikaans',
 				'native_name'  => 'Afrikaans',
 				'is_rtl'       => 0,
@@ -133,8 +133,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'af',
 				'http_name'    => 'af-ZA',
 				'priority'     => 1,
-			),
-			'ak'    => array(
+			],
+			'ak'    => [
 				'english_name' => 'Akan',
 				'native_name'  => 'Akan',
 				'is_rtl'       => 0,
@@ -143,8 +143,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ak',
 				'http_name'    => 'ak',
 				'priority'     => 1,
-			),
-			'am'    => array(
+			],
+			'am'    => [
 				'english_name' => 'Amharic',
 				'native_name'  => 'አማርኛ',
 				'is_rtl'       => 0,
@@ -153,8 +153,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'am',
 				'priority'     => 1,
-			),
-			'an'    => array(
+			],
+			'an'    => [
 				'english_name' => 'Aragonese',
 				'native_name'  => 'Aragonés',
 				'is_rtl'       => 0,
@@ -163,8 +163,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'an',
 				'priority'     => 1,
-			),
-			'ar'    => array(
+			],
+			'ar'    => [
 				'english_name' => 'Arabic',
 				'native_name'  => 'العربية',
 				'is_rtl'       => 1,
@@ -173,8 +173,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ar',
 				'http_name'    => 'ar-AR',
 				'priority'     => 1,
-			),
-			'as'    => array(
+			],
+			'as'    => [
 				'english_name' => 'Assamese',
 				'native_name'  => 'অসমীয়া',
 				'is_rtl'       => 0,
@@ -183,8 +183,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'as',
 				'http_name'    => 'asm',
 				'priority'     => 1,
-			),
-			'ast'   => array(
+			],
+			'ast'   => [
 				'english_name' => 'Asturian',
 				'native_name'  => 'Asturianu',
 				'is_rtl'       => 0,
@@ -193,8 +193,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ast',
 				'http_name'    => 'ast',
 				'priority'     => 1,
-			),
-			'av'    => array(
+			],
+			'av'    => [
 				'english_name' => 'Avaric',
 				'native_name'  => 'авар мацӀ',
 				'is_rtl'       => 0,
@@ -203,8 +203,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'av',
 				'priority'     => 1,
-			),
-			'ay'    => array(
+			],
+			'ay'    => [
 				'english_name' => 'Aymara',
 				'native_name'  => 'aymar aru',
 				'is_rtl'       => 0,
@@ -213,8 +213,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ay',
 				'priority'     => 1,
-			),
-			'az'    => array(
+			],
+			'az'    => [
 				'english_name' => 'Azerbaijani',
 				'native_name'  => 'Azərbaycan dili',
 				'is_rtl'       => 0,
@@ -223,8 +223,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'az',
 				'http_name'    => 'az-AZ',
 				'priority'     => 1,
-			),
-			'azb'   => array(
+			],
+			'azb'   => [
 				'english_name' => 'South Azerbaijani',
 				'native_name'  => 'گؤنئی آذربایجان',
 				'is_rtl'       => 1,
@@ -233,8 +233,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'azb',
 				'http_name'    => 'az',
 				'priority'     => 1,
-			),
-			'az-tr' => array(
+			],
+			'az-tr' => [
 				'english_name' => 'Azerbaijani (Turkey)',
 				'native_name'  => 'Azərbaycan Türkcəsi',
 				'is_rtl'       => 1,
@@ -243,8 +243,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'az_TR',
 				'http_name'    => 'az-TR',
 				'priority'     => 1,
-			),
-			'ba'    => array(
+			],
+			'ba'    => [
 				'english_name' => 'Bashkir',
 				'native_name'  => 'башҡорт теле',
 				'is_rtl'       => 0,
@@ -253,8 +253,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ba',
 				'http_name'    => 'ba',
 				'priority'     => 1,
-			),
-			'bal'   => array(
+			],
+			'bal'   => [
 				'english_name' => 'Catalan (Balear)',
 				'native_name'  => 'Català (Balear)',
 				'is_rtl'       => 0,
@@ -263,8 +263,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'bal',
 				'http_name'    => 'ca',
 				'priority'     => 1,
-			),
-			'bel'   => array(
+			],
+			'bel'   => [
 				'english_name' => 'Belarusian',
 				'native_name'  => 'Беларуская мова',
 				'is_rtl'       => 0,
@@ -273,8 +273,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'bel',
 				'http_name'    => 'be-BY',
 				'priority'     => 1,
-			),
-			'bg'    => array(
+			],
+			'bg'    => [
 				'english_name' => 'Bulgarian',
 				'native_name'  => 'Български',
 				'is_rtl'       => 0,
@@ -283,8 +283,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'bg_BG',
 				'http_name'    => 'bg-BG',
 				'priority'     => 1,
-			),
-			'bh'    => array(
+			],
+			'bh'    => [
 				'english_name' => 'Bihari',
 				'native_name'  => 'भोजपुरी',
 				'is_rtl'       => 0,
@@ -293,8 +293,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'bh',
 				'priority'     => 1,
-			),
-			'bi'    => array(
+			],
+			'bi'    => [
 				'english_name' => 'Bislama',
 				'native_name'  => 'Bislama',
 				'is_rtl'       => 0,
@@ -303,8 +303,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'bi',
 				'priority'     => 1,
-			),
-			'bm'    => array(
+			],
+			'bm'    => [
 				'english_name' => 'Bambara',
 				'native_name'  => 'Bamanankan',
 				'is_rtl'       => 0,
@@ -313,8 +313,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'bm',
 				'priority'     => 1,
-			),
-			'bn'    => array(
+			],
+			'bn'    => [
 				'english_name' => 'Bengali',
 				'native_name'  => 'বাংলা',
 				'is_rtl'       => 0,
@@ -323,8 +323,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'bn_BD',
 				'http_name'    => 'bn-BD',
 				'priority'     => 1,
-			),
-			'bo'    => array(
+			],
+			'bo'    => [
 				'english_name' => 'Tibetan',
 				'native_name'  => 'བོད་སྐད',
 				'is_rtl'       => 0,
@@ -333,8 +333,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'bo',
 				'http_name'    => 'bo',
 				'priority'     => 1,
-			),
-			'br'    => array(
+			],
+			'br'    => [
 				'english_name' => 'Breton',
 				'native_name'  => 'brezhoneg',
 				'is_rtl'       => 0,
@@ -343,8 +343,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'br',
 				'priority'     => 1,
-			),
-			'bs'    => array(
+			],
+			'bs'    => [
 				'english_name' => 'Bosnian',
 				'native_name'  => 'Bosanski',
 				'is_rtl'       => 0,
@@ -353,8 +353,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'bs_BA',
 				'http_name'    => 'bs-BA',
 				'priority'     => 1,
-			),
-			'ca'    => array(
+			],
+			'ca'    => [
 				'english_name' => 'Catalan',
 				'native_name'  => 'Català',
 				'is_rtl'       => 0,
@@ -363,8 +363,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ca',
 				'http_name'    => 'ca-ES',
 				'priority'     => 1,
-			),
-			'ce'    => array(
+			],
+			'ce'    => [
 				'english_name' => 'Chechen',
 				'native_name'  => 'Нохчийн мотт',
 				'is_rtl'       => 0,
@@ -373,8 +373,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ce',
 				'priority'     => 1,
-			),
-			'ch'    => array(
+			],
+			'ch'    => [
 				'english_name' => 'Chamorro',
 				'native_name'  => 'Chamoru',
 				'is_rtl'       => 0,
@@ -383,8 +383,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ch',
 				'priority'     => 1,
-			),
-			'ckb'   => array(
+			],
+			'ckb'   => [
 				'english_name' => 'Kurdish (Sorani)',
 				'native_name'  => 'كوردی‎',
 				'is_rtl'       => 0,
@@ -393,8 +393,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ckb',
 				'http_name'    => 'ku',
 				'priority'     => 1,
-			),
-			'co'    => array(
+			],
+			'co'    => [
 				'english_name' => 'Corsican',
 				'native_name'  => 'corsu',
 				'is_rtl'       => 0,
@@ -403,8 +403,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'co',
 				'http_name'    => 'co',
 				'priority'     => 1,
-			),
-			'cr'    => array(
+			],
+			'cr'    => [
 				'english_name' => 'Cree',
 				'native_name'  => 'ᓀᐦᐃᔭᐍᐏᐣ',
 				'is_rtl'       => 0,
@@ -413,8 +413,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'cr',
 				'priority'     => 1,
-			),
-			'cs'    => array(
+			],
+			'cs'    => [
 				'english_name' => 'Czech',
 				'native_name'  => 'čeština‎',
 				'is_rtl'       => 0,
@@ -423,8 +423,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'cs_CZ',
 				'http_name'    => 'cs-CZ',
 				'priority'     => 1,
-			),
-			'csb'   => array(
+			],
+			'csb'   => [
 				'english_name' => 'Kashubian',
 				'native_name'  => 'Kaszëbsczi',
 				'is_rtl'       => 0,
@@ -433,8 +433,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'csb',
 				'priority'     => 1,
-			),
-			'cu'    => array(
+			],
+			'cu'    => [
 				'english_name' => 'Church Slavic',
 				'native_name'  => 'ѩзыкъ словѣньскъ',
 				'is_rtl'       => 0,
@@ -443,8 +443,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'cu',
 				'priority'     => 1,
-			),
-			'cv'    => array(
+			],
+			'cv'    => [
 				'english_name' => 'Chuvash',
 				'native_name'  => 'чӑваш чӗлхи',
 				'is_rtl'       => 0,
@@ -453,8 +453,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'cv',
 				'priority'     => 1,
-			),
-			'cy'    => array(
+			],
+			'cy'    => [
 				'english_name' => 'Welsh',
 				'native_name'  => 'Cymraeg',
 				'is_rtl'       => 0,
@@ -463,8 +463,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'cy',
 				'http_name'    => 'cy-GB',
 				'priority'     => 1,
-			),
-			'da'    => array(
+			],
+			'da'    => [
 				'english_name' => 'Danish',
 				'native_name'  => 'Dansk',
 				'is_rtl'       => 0,
@@ -473,8 +473,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'da_DK',
 				'http_name'    => 'da-DK',
 				'priority'     => 1,
-			),
-			'de'    => array(
+			],
+			'de'    => [
 				'english_name' => 'German',
 				'native_name'  => 'Deutsch',
 				'is_rtl'       => 0,
@@ -483,8 +483,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'de_DE',
 				'http_name'    => 'de-DE',
 				'priority'     => 1,
-			),
-			'dv'    => array(
+			],
+			'dv'    => [
 				'english_name' => 'Divehi',
 				'native_name'  => 'ދިވެހި',
 				'is_rtl'       => 1,
@@ -493,8 +493,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'dv',
 				'http_name'    => 'dv',
 				'priority'     => 1,
-			),
-			'dz'    => array(
+			],
+			'dz'    => [
 				'english_name' => 'Dzongkha',
 				'native_name'  => 'རྫོང་ཁ',
 				'is_rtl'       => 0,
@@ -503,8 +503,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'dz',
 				'priority'     => 1,
-			),
-			'ee'    => array(
+			],
+			'ee'    => [
 				'english_name' => 'Ewe',
 				'native_name'  => 'Eʋegbe',
 				'is_rtl'       => 0,
@@ -513,8 +513,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ee',
 				'priority'     => 1,
-			),
-			'el-po' => array(
+			],
+			'el-po' => [
 				'english_name' => 'Greek (Polytonic)',
 				'native_name'  => 'Greek (Polytonic)',
 				'is_rtl'       => 0,
@@ -523,8 +523,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'grc',
 				'priority'     => 1,
-			),
-			'el'    => array(
+			],
+			'el'    => [
 				'english_name' => 'Greek',
 				'native_name'  => 'Ελληνικά',
 				'is_rtl'       => 0,
@@ -533,8 +533,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'el',
 				'http_name'    => 'el-GR',
 				'priority'     => 1,
-			),
-			'en'    => array(
+			],
+			'en'    => [
 				'english_name' => 'English',
 				'native_name'  => 'English',
 				'is_rtl'       => 0,
@@ -543,8 +543,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'en_US',
 				'http_name'    => 'en-US',
 				'priority'     => 1,
-			),
-			'en-au' => array(
+			],
+			'en-au' => [
 				'english_name' => 'English (Australia)',
 				'native_name'  => 'English (Australia)',
 				'is_rtl'       => 0,
@@ -553,8 +553,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'en_AU',
 				'http_name'    => 'en-AU',
 				'priority'     => 1,
-			),
-			'en-ca' => array(
+			],
+			'en-ca' => [
 				'english_name' => 'English (Canada)',
 				'native_name'  => 'English (Canada)',
 				'is_rtl'       => 0,
@@ -563,8 +563,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'en_CA',
 				'http_name'    => 'en-CA',
 				'priority'     => 1,
-			),
-			'en-gb' => array(
+			],
+			'en-gb' => [
 				'english_name' => 'English (UK)',
 				'native_name'  => 'English (UK)',
 				'is_rtl'       => 0,
@@ -573,8 +573,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'en_GB',
 				'http_name'    => 'en-GB',
 				'priority'     => 1,
-			),
-			'eo'    => array(
+			],
+			'eo'    => [
 				'english_name' => 'Esperanto',
 				'native_name'  => 'Esperanto',
 				'is_rtl'       => 0,
@@ -583,8 +583,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'eo',
 				'http_name'    => 'eo-EO',
 				'priority'     => 1,
-			),
-			'es-cl' => array(
+			],
+			'es-cl' => [
 				'english_name' => 'Spanish (Chile)',
 				'native_name'  => 'Español de Chile',
 				'is_rtl'       => 0,
@@ -593,8 +593,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'es_CL',
 				'http_name'    => 'es-CL',
 				'priority'     => 1,
-			),
-			'es-mx' => array(
+			],
+			'es-mx' => [
 				'english_name' => 'Spanish (Mexico)',
 				'native_name'  => 'Español de México',
 				'is_rtl'       => 0,
@@ -603,8 +603,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'es_MX',
 				'http_name'    => 'es-MX',
 				'priority'     => 1,
-			),
-			'es-pe' => array(
+			],
+			'es-pe' => [
 				'english_name' => 'Spanish (Peru)',
 				'native_name'  => 'Español de Perú',
 				'is_rtl'       => 0,
@@ -613,8 +613,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'es_PE',
 				'http_name'    => 'es-PE',
 				'priority'     => 1,
-			),
-			'es-pr' => array(
+			],
+			'es-pr' => [
 				'english_name' => 'Spanish (Puerto Rico)',
 				'native_name'  => 'Español de Puerto Rico',
 				'is_rtl'       => 0,
@@ -623,8 +623,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'es_PR',
 				'http_name'    => 'es-PR',
 				'priority'     => 1,
-			),
-			'es-ve' => array(
+			],
+			'es-ve' => [
 				'english_name' => 'Spanish (Venezuela)',
 				'native_name'  => 'Español de Venezuela',
 				'is_rtl'       => 0,
@@ -633,8 +633,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'es_VE',
 				'http_name'    => 'es-VE',
 				'priority'     => 1,
-			),
-			'es-co' => array(
+			],
+			'es-co' => [
 				'english_name' => 'Spanish (Colombia)',
 				'native_name'  => 'Español de Colombia',
 				'is_rtl'       => 0,
@@ -643,8 +643,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'es_CO',
 				'http_name'    => 'es-CO',
 				'priority'     => 1,
-			),
-			'es'    => array(
+			],
+			'es'    => [
 				'english_name' => 'Spanish (Spain)',
 				'native_name'  => 'Español',
 				'is_rtl'       => 0,
@@ -653,8 +653,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'es_ES',
 				'http_name'    => 'es-ES',
 				'priority'     => 1,
-			),
-			'et'    => array(
+			],
+			'et'    => [
 				'english_name' => 'Estonian',
 				'native_name'  => 'Eesti',
 				'is_rtl'       => 0,
@@ -663,8 +663,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'et',
 				'http_name'    => 'et-EE',
 				'priority'     => 1,
-			),
-			'eu'    => array(
+			],
+			'eu'    => [
 				'english_name' => 'Basque',
 				'native_name'  => 'Euskara',
 				'is_rtl'       => 0,
@@ -673,8 +673,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'eu',
 				'http_name'    => 'eu-ES',
 				'priority'     => 1,
-			),
-			'fa'    => array(
+			],
+			'fa'    => [
 				'english_name' => 'Persian',
 				'native_name'  => 'فارسی',
 				'is_rtl'       => 1,
@@ -683,8 +683,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'fa_IR',
 				'http_name'    => 'fa-IR',
 				'priority'     => 1,
-			),
-			'fa-af' => array(
+			],
+			'fa-af' => [
 				'english_name' => 'Persian (Afghanistan)',
 				'native_name'  => '(فارسی (افغانستان',
 				'is_rtl'       => 1,
@@ -693,8 +693,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'fa_AF',
 				'http_name'    => 'fa-AF',
 				'priority'     => 1,
-			),
-			'fi'    => array(
+			],
+			'fi'    => [
 				'english_name' => 'Finnish',
 				'native_name'  => 'Suomi',
 				'is_rtl'       => 0,
@@ -703,8 +703,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'fi',
 				'http_name'    => 'fi-FI',
 				'priority'     => 1,
-			),
-			'fj'    => array(
+			],
+			'fj'    => [
 				'english_name' => 'Fijian',
 				'native_name'  => 'vosa Vakaviti',
 				'is_rtl'       => 0,
@@ -713,8 +713,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'fj',
 				'priority'     => 1,
-			),
-			'fo'    => array(
+			],
+			'fo'    => [
 				'english_name' => 'Faroese',
 				'native_name'  => 'føroyskt',
 				'is_rtl'       => 0,
@@ -723,8 +723,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'fo',
 				'http_name'    => 'fo-FO',
 				'priority'     => 1,
-			),
-			'fr'    => array(
+			],
+			'fr'    => [
 				'english_name' => 'French (France)',
 				'native_name'  => 'Français',
 				'is_rtl'       => 0,
@@ -733,8 +733,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'fr_FR',
 				'http_name'    => 'fr-FR',
 				'priority'     => 1,
-			),
-			'fr-be' => array(
+			],
+			'fr-be' => [
 				'english_name' => 'French (Belgium)',
 				'native_name'  => 'Français de Belgique',
 				'is_rtl'       => 0,
@@ -743,8 +743,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'fr_BE',
 				'http_name'    => 'fr-BE',
 				'priority'     => 1,
-			),
-			'fr-ca' => array(
+			],
+			'fr-ca' => [
 				'english_name' => 'French (Canada)',
 				'native_name'  => 'Français du Canada',
 				'is_rtl'       => 0,
@@ -753,8 +753,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'fr-CA',
 				'priority'     => 1,
-			),
-			'fr-ch' => array(
+			],
+			'fr-ch' => [
 				'english_name' => 'French (Switzerland)',
 				'native_name'  => 'Français de Suisse',
 				'is_rtl'       => 0,
@@ -763,8 +763,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'fr',
 				'priority'     => 1,
-			),
-			'fy'    => array(
+			],
+			'fy'    => [
 				'english_name' => 'Frisian',
 				'native_name'  => 'Frysk',
 				'is_rtl'       => 0,
@@ -773,8 +773,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'fy',
 				'http_name'    => 'fy-NL',
 				'priority'     => 1,
-			),
-			'ga'    => array(
+			],
+			'ga'    => [
 				'english_name' => 'Irish',
 				'native_name'  => 'Gaelige',
 				'is_rtl'       => 0,
@@ -783,8 +783,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ga-IE',
 				'priority'     => 1,
-			),
-			'gd'    => array(
+			],
+			'gd'    => [
 				'english_name' => 'Scottish Gaelic',
 				'native_name'  => 'Gàidhlig',
 				'is_rtl'       => 0,
@@ -793,8 +793,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'gd',
 				'http_name'    => 'gd',
 				'priority'     => 1,
-			),
-			'gl'    => array(
+			],
+			'gl'    => [
 				'english_name' => 'Galician',
 				'native_name'  => 'Galego',
 				'is_rtl'       => 0,
@@ -803,8 +803,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'gl_ES',
 				'http_name'    => 'gl-ES',
 				'priority'     => 1,
-			),
-			'gn'    => array(
+			],
+			'gn'    => [
 				'english_name' => 'Guaraní',
 				'native_name'  => 'Avañe’ẽ',
 				'is_rtl'       => 0,
@@ -813,8 +813,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'gn',
 				'http_name'    => 'gn',
 				'priority'     => 1,
-			),
-			'gsw'   => array(
+			],
+			'gsw'   => [
 				'english_name' => 'Swiss German',
 				'native_name'  => 'Schwyzerdütsch',
 				'is_rtl'       => 0,
@@ -823,8 +823,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'gsw',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'gu'    => array(
+			],
+			'gu'    => [
 				'english_name' => 'Gujarati',
 				'native_name'  => 'ગુજરાતી',
 				'is_rtl'       => 0,
@@ -833,8 +833,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'gu',
 				'priority'     => 1,
-			),
-			'ha'    => array(
+			],
+			'ha'    => [
 				'english_name' => 'Hausa',
 				'native_name'  => 'هَوُسَ',
 				'is_rtl'       => 1,
@@ -843,8 +843,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ha',
 				'priority'     => 1,
-			),
-			'haw'   => array(
+			],
+			'haw'   => [
 				'english_name' => 'Hawaiian',
 				'native_name'  => 'Ōlelo Hawaiʻi',
 				'is_rtl'       => 0,
@@ -853,8 +853,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'haw_US',
 				'http_name'    => 'haw-US',
 				'priority'     => 1,
-			),
-			'haz'   => array(
+			],
+			'haz'   => [
 				'english_name' => 'Hazaragi',
 				'native_name'  => 'هزاره گی',
 				'is_rtl'       => 1,
@@ -863,8 +863,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'haz',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'he'    => array(
+			],
+			'he'    => [
 				'english_name' => 'Hebrew',
 				'native_name'  => 'עִבְרִית',
 				'is_rtl'       => 1,
@@ -873,8 +873,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'he_IL',
 				'http_name'    => 'he-IL',
 				'priority'     => 1,
-			),
-			'hi'    => array(
+			],
+			'hi'    => [
 				'english_name' => 'Hindi',
 				'native_name'  => 'हिन्दी',
 				'is_rtl'       => 0,
@@ -883,8 +883,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'hi_IN',
 				'http_name'    => 'hi-IN',
 				'priority'     => 1,
-			),
-			'hr'    => array(
+			],
+			'hr'    => [
 				'english_name' => 'Croatian',
 				'native_name'  => 'Hrvatski',
 				'is_rtl'       => 0,
@@ -893,8 +893,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'hr',
 				'http_name'    => 'hr-HR',
 				'priority'     => 1,
-			),
-			'hu'    => array(
+			],
+			'hu'    => [
 				'english_name' => 'Hungarian',
 				'native_name'  => 'Magyar',
 				'is_rtl'       => 0,
@@ -903,8 +903,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'hu_HU',
 				'http_name'    => 'hu-HU',
 				'priority'     => 1,
-			),
-			'hy'    => array(
+			],
+			'hy'    => [
 				'english_name' => 'Armenian',
 				'native_name'  => 'Հայերեն',
 				'is_rtl'       => 0,
@@ -913,8 +913,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'hy',
 				'http_name'    => 'hy-AM',
 				'priority'     => 1,
-			),
-			'ia'    => array(
+			],
+			'ia'    => [
 				'english_name' => 'Interlingua',
 				'native_name'  => 'Interlingua',
 				'is_rtl'       => 0,
@@ -923,8 +923,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ia',
 				'priority'     => 1,
-			),
-			'id'    => array(
+			],
+			'id'    => [
 				'english_name' => 'Indonesian',
 				'native_name'  => 'Bahasa Indonesia',
 				'is_rtl'       => 0,
@@ -933,8 +933,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'id_ID',
 				'http_name'    => 'id-ID',
 				'priority'     => 1,
-			),
-			'ike'   => array(
+			],
+			'ike'   => [
 				'english_name' => 'Inuktitut',
 				'native_name'  => 'ᐃᓄᒃᑎᑐᑦ',
 				'is_rtl'       => 0,
@@ -943,8 +943,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'iu',
 				'priority'     => 1,
-			),
-			'ilo'   => array(
+			],
+			'ilo'   => [
 				'english_name' => 'Iloko',
 				'native_name'  => 'Pagsasao nga Iloko',
 				'is_rtl'       => 0,
@@ -953,8 +953,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'is'    => array(
+			],
+			'is'    => [
 				'english_name' => 'Icelandic',
 				'native_name'  => 'Íslenska',
 				'is_rtl'       => 0,
@@ -963,8 +963,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'is_IS',
 				'http_name'    => 'is-IS',
 				'priority'     => 1,
-			),
-			'it'    => array(
+			],
+			'it'    => [
 				'english_name' => 'Italian',
 				'native_name'  => 'Italiano',
 				'is_rtl'       => 0,
@@ -973,8 +973,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'it_IT',
 				'http_name'    => 'it-IT',
 				'priority'     => 1,
-			),
-			'ja'    => array(
+			],
+			'ja'    => [
 				'english_name' => 'Japanese',
 				'native_name'  => '日本語',
 				'is_rtl'       => 0,
@@ -983,8 +983,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ja',
 				'http_name'    => 'ja-JP',
 				'priority'     => 1,
-			),
-			'jv'    => array(
+			],
+			'jv'    => [
 				'english_name' => 'Javanese',
 				'native_name'  => 'Basa Jawa',
 				'is_rtl'       => 0,
@@ -993,8 +993,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'jv_ID',
 				'http_name'    => 'jv-ID',
 				'priority'     => 1,
-			),
-			'ka'    => array(
+			],
+			'ka'    => [
 				'english_name' => 'Georgian',
 				'native_name'  => 'ქართული',
 				'is_rtl'       => 0,
@@ -1003,8 +1003,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ka_GE',
 				'http_name'    => 'ka-GE',
 				'priority'     => 1,
-			),
-			'rw'    => array(
+			],
+			'rw'    => [
 				'english_name' => 'Kinyarwanda',
 				'native_name'  => 'Kinyarwanda',
 				'is_rtl'       => 0,
@@ -1013,8 +1013,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'kin',
 				'http_name'    => 'rw',
 				'priority'     => 1,
-			),
-			'kk'    => array(
+			],
+			'kk'    => [
 				'english_name' => 'Kazakh',
 				'native_name'  => 'Қазақ тілі',
 				'is_rtl'       => 0,
@@ -1023,8 +1023,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'kk',
 				'http_name'    => 'kk',
 				'priority'     => 1,
-			),
-			'km'    => array(
+			],
+			'km'    => [
 				'english_name' => 'Khmer',
 				'native_name'  => 'ភាសាខ្មែរ',
 				'is_rtl'       => 0,
@@ -1033,8 +1033,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'km-KH',
 				'priority'     => 1,
-			),
-			'kn'    => array(
+			],
+			'kn'    => [
 				'english_name' => 'Kannada',
 				'native_name'  => 'ಕನ್ನಡ',
 				'is_rtl'       => 0,
@@ -1043,8 +1043,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'kn',
 				'http_name'    => 'kn',
 				'priority'     => 1,
-			),
-			'ko'    => array(
+			],
+			'ko'    => [
 				'english_name' => 'Korean',
 				'native_name'  => '한국어',
 				'is_rtl'       => 0,
@@ -1053,8 +1053,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ko_KR',
 				'http_name'    => 'ko-KR',
 				'priority'     => 1,
-			),
-			'ks'    => array(
+			],
+			'ks'    => [
 				'english_name' => 'Kashmiri',
 				'native_name'  => 'कश्मीरी',
 				'is_rtl'       => 0,
@@ -1063,8 +1063,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ks',
 				'priority'     => 1,
-			),
-			'ku'    => array(
+			],
+			'ku'    => [
 				'english_name' => 'Kurdish (Kurmanji)',
 				'native_name'  => 'Kurdî',
 				'is_rtl'       => 0,
@@ -1073,8 +1073,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'ku-TR',
 				'priority'     => 1,
-			),
-			'ky'    => array(
+			],
+			'ky'    => [
 				'english_name' => 'Kyrgyz',
 				'native_name'  => 'кыргыз тили',
 				'is_rtl'       => 0,
@@ -1083,8 +1083,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ky_KY',
 				'http_name'    => 'ky-KY',
 				'priority'     => 1,
-			),
-			'la'    => array(
+			],
+			'la'    => [
 				'english_name' => 'Latin',
 				'native_name'  => 'latine',
 				'is_rtl'       => 0,
@@ -1093,8 +1093,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'la-VA',
 				'priority'     => 1,
-			),
-			'lb'    => array(
+			],
+			'lb'    => [
 				'english_name' => 'Luxembourgish',
 				'native_name'  => 'Lëtzebuergesch',
 				'is_rtl'       => 0,
@@ -1103,8 +1103,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'lb_LU',
 				'http_name'    => 'lb-LU',
 				'priority'     => 1,
-			),
-			'li'    => array(
+			],
+			'li'    => [
 				'english_name' => 'Limburgish',
 				'native_name'  => 'Limburgs',
 				'is_rtl'       => 0,
@@ -1113,8 +1113,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'li',
 				'http_name'    => 'li',
 				'priority'     => 1,
-			),
-			'lo'    => array(
+			],
+			'lo'    => [
 				'english_name' => 'Lao',
 				'native_name'  => 'ພາສາລາວ',
 				'is_rtl'       => 0,
@@ -1123,8 +1123,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'lo',
 				'http_name'    => 'lo',
 				'priority'     => 1,
-			),
-			'lt'    => array(
+			],
+			'lt'    => [
 				'english_name' => 'Lithuanian',
 				'native_name'  => 'lietuvių kalba',
 				'is_rtl'       => 0,
@@ -1133,8 +1133,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'lt_LT',
 				'http_name'    => 'lt-LT',
 				'priority'     => 1,
-			),
-			'lv'    => array(
+			],
+			'lv'    => [
 				'english_name' => 'Latvian',
 				'native_name'  => 'latviešu valoda',
 				'is_rtl'       => 0,
@@ -1143,8 +1143,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'lv',
 				'http_name'    => 'lv-LV',
 				'priority'     => 1,
-			),
-			'me'    => array(
+			],
+			'me'    => [
 				'english_name' => 'Montenegrin',
 				'native_name'  => 'Crnogorski jezik',
 				'is_rtl'       => 0,
@@ -1153,8 +1153,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'me_ME',
 				'http_name'    => 'me-ME',
 				'priority'     => 1,
-			),
-			'mg'    => array(
+			],
+			'mg'    => [
 				'english_name' => 'Malagasy',
 				'native_name'  => 'Malagasy',
 				'is_rtl'       => 0,
@@ -1163,8 +1163,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'mg_MG',
 				'http_name'    => 'mg-MG',
 				'priority'     => 1,
-			),
-			'mhr'   => array(
+			],
+			'mhr'   => [
 				'english_name' => 'Mari (Meadow)',
 				'native_name'  => 'олык марий',
 				'is_rtl'       => 0,
@@ -1173,8 +1173,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'mk'    => array(
+			],
+			'mk'    => [
 				'english_name' => 'Macedonian',
 				'native_name'  => 'македонски јазик',
 				'is_rtl'       => 0,
@@ -1183,8 +1183,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'mk_MK',
 				'http_name'    => 'mk-MK',
 				'priority'     => 1,
-			),
-			'ml'    => array(
+			],
+			'ml'    => [
 				'english_name' => 'Malayalam',
 				'native_name'  => 'മലയാളം',
 				'is_rtl'       => 0,
@@ -1193,8 +1193,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ml_IN',
 				'http_name'    => 'ml-IN',
 				'priority'     => 1,
-			),
-			'mn'    => array(
+			],
+			'mn'    => [
 				'english_name' => 'Mongolian',
 				'native_name'  => 'Монгол',
 				'is_rtl'       => 0,
@@ -1203,8 +1203,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'mn',
 				'priority'     => 1,
-			),
-			'mr'    => array(
+			],
+			'mr'    => [
 				'english_name' => 'Marathi',
 				'native_name'  => 'मराठी',
 				'is_rtl'       => 0,
@@ -1213,8 +1213,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'mr',
 				'priority'     => 1,
-			),
-			'mri'   => array(
+			],
+			'mri'   => [
 				'english_name' => 'Maori',
 				'native_name'  => 'te reo Māori',
 				'is_rtl'       => 0,
@@ -1223,8 +1223,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'mi',
 				'priority'     => 1,
-			),
-			'mrj'   => array(
+			],
+			'mrj'   => [
 				'english_name' => 'Mari (Hill)',
 				'native_name'  => 'кырык мары',
 				'is_rtl'       => 0,
@@ -1233,8 +1233,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'ms'    => array(
+			],
+			'ms'    => [
 				'english_name' => 'Malay',
 				'native_name'  => 'bahasa Melayu',
 				'is_rtl'       => 0,
@@ -1243,8 +1243,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ms_MY',
 				'http_name'    => 'ms-MY',
 				'priority'     => 1,
-			),
-			'mwl'   => array(
+			],
+			'mwl'   => [
 				'english_name' => 'Mirandese',
 				'native_name'  => 'Mirandés',
 				'is_rtl'       => 0,
@@ -1253,8 +1253,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'mya'   => array(
+			],
+			'mya'   => [
 				'english_name' => 'Burmese',
 				'native_name'  => 'ဗမာစာ',
 				'is_rtl'       => 0,
@@ -1263,8 +1263,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'my_MM',
 				'http_name'    => 'my-MM',
 				'priority'     => 1,
-			),
-			'ne'    => array(
+			],
+			'ne'    => [
 				'english_name' => 'Nepali',
 				'native_name'  => 'नेपाली',
 				'is_rtl'       => 0,
@@ -1273,8 +1273,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ne_NP',
 				'http_name'    => 'ne-NP',
 				'priority'     => 1,
-			),
-			'nb'    => array(
+			],
+			'nb'    => [
 				'english_name' => 'Norwegian (Bokmål)',
 				'native_name'  => 'Norsk bokmål',
 				'is_rtl'       => 0,
@@ -1283,8 +1283,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'nb_NO',
 				'http_name'    => 'nb-NO',
 				'priority'     => 1,
-			),
-			'nl'    => array(
+			],
+			'nl'    => [
 				'english_name' => 'Dutch',
 				'native_name'  => 'Nederlands',
 				'is_rtl'       => 0,
@@ -1293,8 +1293,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'nl_NL',
 				'http_name'    => 'nl-NL',
 				'priority'     => 1,
-			),
-			'nl-be' => array(
+			],
+			'nl-be' => [
 				'english_name' => 'Dutch (Belgium)',
 				'native_name'  => 'Nederlands (België)',
 				'is_rtl'       => 0,
@@ -1303,8 +1303,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'nl_BE',
 				'http_name'    => 'nl-BE',
 				'priority'     => 1,
-			),
-			'nn'    => array(
+			],
+			'nn'    => [
 				'english_name' => 'Norwegian (Nynorsk)',
 				'native_name'  => 'Norsk nynorsk',
 				'is_rtl'       => 0,
@@ -1313,8 +1313,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'nn_NO',
 				'http_name'    => 'nn-NO',
 				'priority'     => 1,
-			),
-			'no'    => array(
+			],
+			'no'    => [
 				'english_name' => 'Norwegian',
 				'native_name'  => 'Norsk',
 				'is_rtl'       => 0,
@@ -1323,8 +1323,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'no',
 				'priority'     => 1,
-			),
-			'oc'    => array(
+			],
+			'oc'    => [
 				'english_name' => 'Occitan',
 				'native_name'  => 'Occitan',
 				'is_rtl'       => 0,
@@ -1333,8 +1333,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'oc',
 				'priority'     => 1,
-			),
-			'os'    => array(
+			],
+			'os'    => [
 				'english_name' => 'Ossetic',
 				'native_name'  => 'Ирон',
 				'is_rtl'       => 0,
@@ -1343,8 +1343,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'os',
 				'http_name'    => 'os',
 				'priority'     => 1,
-			),
-			'pa'    => array(
+			],
+			'pa'    => [
 				'english_name' => 'Panjabi',
 				'native_name'  => 'ਪੰਜਾਬੀ',
 				'is_rtl'       => 0,
@@ -1353,8 +1353,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'pa_IN',
 				'http_name'    => 'pa-IN',
 				'priority'     => 1,
-			),
-			'pl'    => array(
+			],
+			'pl'    => [
 				'english_name' => 'Polish',
 				'native_name'  => 'Polski',
 				'is_rtl'       => 0,
@@ -1363,8 +1363,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'pl_PL',
 				'http_name'    => 'pl-PL',
 				'priority'     => 1,
-			),
-			'pt-br' => array(
+			],
+			'pt-br' => [
 				'english_name' => 'Portuguese (Brazil)',
 				'native_name'  => 'Português do Brasil',
 				'is_rtl'       => 0,
@@ -1373,8 +1373,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'pt_BR',
 				'http_name'    => 'pt-BR',
 				'priority'     => 1,
-			),
-			'pt'    => array(
+			],
+			'pt'    => [
 				'english_name' => 'Portuguese (Portugal)',
 				'native_name'  => 'Português',
 				'is_rtl'       => 0,
@@ -1383,8 +1383,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'pt_PT',
 				'http_name'    => 'pt-PT',
 				'priority'     => 1,
-			),
-			'ps'    => array(
+			],
+			'ps'    => [
 				'english_name' => 'Pashto',
 				'native_name'  => 'پښتو',
 				'is_rtl'       => 1,
@@ -1393,8 +1393,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ps',
 				'http_name'    => 'ps-AF',
 				'priority'     => 1,
-			),
-			'ro'    => array(
+			],
+			'ro'    => [
 				'english_name' => 'Romanian',
 				'native_name'  => 'Română',
 				'is_rtl'       => 0,
@@ -1403,8 +1403,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ro_RO',
 				'http_name'    => 'ro-RO',
 				'priority'     => 1,
-			),
-			'ru'    => array(
+			],
+			'ru'    => [
 				'english_name' => 'Russian',
 				'native_name'  => 'Русский',
 				'is_rtl'       => 0,
@@ -1413,8 +1413,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ru_RU',
 				'http_name'    => 'ru-RU',
 				'priority'     => 1,
-			),
-			'ru-ua' => array(
+			],
+			'ru-ua' => [
 				'english_name' => 'Russian (Ukraine)',
 				'native_name'  => 'украї́нська мо́ва',
 				'is_rtl'       => 0,
@@ -1423,8 +1423,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ru_UA',
 				'http_name'    => 'ru-UA',
 				'priority'     => 1,
-			),
-			'rue'   => array(
+			],
+			'rue'   => [
 				'english_name' => 'Rusyn',
 				'native_name'  => 'Русиньскый',
 				'is_rtl'       => 0,
@@ -1433,8 +1433,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'rue',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'rup'   => array(
+			],
+			'rup'   => [
 				'english_name' => 'Aromanian',
 				'native_name'  => 'Armãneashce',
 				'is_rtl'       => 0,
@@ -1443,8 +1443,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'rup_MK',
 				'http_name'    => 'rup-MK',
 				'priority'     => 1,
-			),
-			'sah'   => array(
+			],
+			'sah'   => [
 				'english_name' => 'Yakut',
 				'native_name'  => 'Sakha',
 				'is_rtl'       => 0,
@@ -1453,8 +1453,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'sah',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'sa-in' => array(
+			],
+			'sa-in' => [
 				'english_name' => 'Sanskrit',
 				'native_name'  => 'भारतम्',
 				'is_rtl'       => 0,
@@ -1463,8 +1463,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'sa_IN',
 				'http_name'    => 'sa-IN',
 				'priority'     => 1,
-			),
-			'sd'    => array(
+			],
+			'sd'    => [
 				'english_name' => 'Sindhi',
 				'native_name'  => 'سندھ',
 				'is_rtl'       => 0,
@@ -1473,8 +1473,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'sd_PK',
 				'http_name'    => 'sd-PK',
 				'priority'     => 1,
-			),
-			'si'    => array(
+			],
+			'si'    => [
 				'english_name' => 'Sinhala',
 				'native_name'  => 'සිංහල',
 				'is_rtl'       => 0,
@@ -1483,8 +1483,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'si_LK',
 				'http_name'    => 'si-LK',
 				'priority'     => 1,
-			),
-			'sk'    => array(
+			],
+			'sk'    => [
 				'english_name' => 'Slovak',
 				'native_name'  => 'Slovenčina',
 				'is_rtl'       => 0,
@@ -1493,8 +1493,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'sk_SK',
 				'http_name'    => 'sk-SK',
 				'priority'     => 1,
-			),
-			'sl'    => array(
+			],
+			'sl'    => [
 				'english_name' => 'Slovenian',
 				'native_name'  => 'slovenščina',
 				'is_rtl'       => 0,
@@ -1503,8 +1503,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'sl_SI',
 				'http_name'    => 'sl-SI',
 				'priority'     => 1,
-			),
-			'so'    => array(
+			],
+			'so'    => [
 				'english_name' => 'Somali',
 				'native_name'  => 'Afsoomaali',
 				'is_rtl'       => 0,
@@ -1513,8 +1513,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'so_SO',
 				'http_name'    => 'so-SO',
 				'priority'     => 1,
-			),
-			'sq'    => array(
+			],
+			'sq'    => [
 				'english_name' => 'Albanian',
 				'native_name'  => 'Shqip',
 				'is_rtl'       => 0,
@@ -1523,8 +1523,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'sq',
 				'http_name'    => 'sq-AL',
 				'priority'     => 1,
-			),
-			'sr'    => array(
+			],
+			'sr'    => [
 				'english_name' => 'Serbian',
 				'native_name'  => 'Српски језик',
 				'is_rtl'       => 0,
@@ -1533,8 +1533,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'sr_RS',
 				'http_name'    => 'sr-RS',
 				'priority'     => 1,
-			),
-			'srd'   => array(
+			],
+			'srd'   => [
 				'english_name' => 'Sardinian',
 				'native_name'  => 'sardu',
 				'is_rtl'       => 0,
@@ -1543,8 +1543,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'srd',
 				'http_name'    => 'sc',
 				'priority'     => 1,
-			),
-			'su'    => array(
+			],
+			'su'    => [
 				'english_name' => 'Sundanese',
 				'native_name'  => 'Basa Sunda',
 				'is_rtl'       => 0,
@@ -1553,8 +1553,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'su_ID',
 				'http_name'    => 'su-ID',
 				'priority'     => 1,
-			),
-			'sv'    => array(
+			],
+			'sv'    => [
 				'english_name' => 'Swedish',
 				'native_name'  => 'Svenska',
 				'is_rtl'       => 0,
@@ -1563,8 +1563,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'sv_SE',
 				'http_name'    => 'sv-SE',
 				'priority'     => 1,
-			),
-			'sw'    => array(
+			],
+			'sw'    => [
 				'english_name' => 'Swahili',
 				'native_name'  => 'Kiswahili',
 				'is_rtl'       => 0,
@@ -1573,8 +1573,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'sw',
 				'http_name'    => 'sw-KE',
 				'priority'     => 1,
-			),
-			'ta'    => array(
+			],
+			'ta'    => [
 				'english_name' => 'Tamil',
 				'native_name'  => 'தமிழ்',
 				'is_rtl'       => 0,
@@ -1583,8 +1583,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ta_IN',
 				'http_name'    => 'ta-IN',
 				'priority'     => 1,
-			),
-			'ta-lk' => array(
+			],
+			'ta-lk' => [
 				'english_name' => 'Tamil (Sri Lanka)',
 				'native_name'  => 'தமிழ்',
 				'is_rtl'       => 0,
@@ -1593,8 +1593,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ta_LK',
 				'http_name'    => 'ta-LK',
 				'priority'     => 1,
-			),
-			'te'    => array(
+			],
+			'te'    => [
 				'english_name' => 'Telugu',
 				'native_name'  => 'తెలుగు',
 				'is_rtl'       => 0,
@@ -1603,8 +1603,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'te',
 				'http_name'    => 'te-IN',
 				'priority'     => 1,
-			),
-			'tg'    => array(
+			],
+			'tg'    => [
 				'english_name' => 'Tajik',
 				'native_name'  => 'тоҷикӣ',
 				'is_rtl'       => 0,
@@ -1613,8 +1613,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'tg',
 				'http_name'    => 'tg',
 				'priority'     => 1,
-			),
-			'th'    => array(
+			],
+			'th'    => [
 				'english_name' => 'Thai',
 				'native_name'  => 'ไทย',
 				'is_rtl'       => 0,
@@ -1623,8 +1623,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'th',
 				'http_name'    => 'th-TH',
 				'priority'     => 1,
-			),
-			'tlh'   => array(
+			],
+			'tlh'   => [
 				'english_name' => 'Klingon',
 				'native_name'  => 'TlhIngan',
 				'is_rtl'       => 0,
@@ -1633,8 +1633,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'tlh',
 				'http_name'    => 'tlh',
 				'priority'     => 1,
-			),
-			'tl'    => array(
+			],
+			'tl'    => [
 				'english_name' => 'Tagalog',
 				'native_name'  => 'Tagalog',
 				'is_rtl'       => 0,
@@ -1643,8 +1643,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'tl',
 				'http_name'    => 'tl-PH',
 				'priority'     => 1,
-			),
-			'tr'    => array(
+			],
+			'tr'    => [
 				'english_name' => 'Turkish',
 				'native_name'  => 'Türkçe',
 				'is_rtl'       => 0,
@@ -1653,8 +1653,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'tr_TR',
 				'http_name'    => 'tr-TR',
 				'priority'     => 1,
-			),
-			'tt'    => array(
+			],
+			'tt'    => [
 				'english_name' => 'Tatar',
 				'native_name'  => 'Татар теле',
 				'is_rtl'       => 0,
@@ -1663,8 +1663,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'tt_RU',
 				'http_name'    => 'tt-RU',
 				'priority'     => 1,
-			),
-			'tuk'   => array(
+			],
+			'tuk'   => [
 				'english_name' => 'Turkmen',
 				'native_name'  => 'Türkmençe',
 				'is_rtl'       => 0,
@@ -1673,8 +1673,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'tuk',
 				'http_name'    => 'tk',
 				'priority'     => 1,
-			),
-			'tzm'   => array(
+			],
+			'tzm'   => [
 				'english_name' => 'Tamazight (Central Atlas)',
 				'native_name'  => 'ⵜⴰⵎⴰⵣⵉⵖⵜ',
 				'is_rtl'       => 0,
@@ -1683,8 +1683,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'tzm',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'udm'   => array(
+			],
+			'udm'   => [
 				'english_name' => 'Udmurt',
 				'native_name'  => 'удмурт кыл',
 				'is_rtl'       => 0,
@@ -1693,8 +1693,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'ug'    => array(
+			],
+			'ug'    => [
 				'english_name' => 'Uyghur',
 				'native_name'  => 'Uyƣurqə',
 				'is_rtl'       => 0,
@@ -1703,8 +1703,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ug_CN',
 				'http_name'    => 'ug-CN',
 				'priority'     => 1,
-			),
-			'uk'    => array(
+			],
+			'uk'    => [
 				'english_name' => 'Ukrainian',
 				'native_name'  => 'Українська',
 				'is_rtl'       => 0,
@@ -1713,8 +1713,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'uk',
 				'http_name'    => 'uk-UA',
 				'priority'     => 1,
-			),
-			'ur'    => array(
+			],
+			'ur'    => [
 				'english_name' => 'Urdu',
 				'native_name'  => 'اردو',
 				'is_rtl'       => 0,
@@ -1723,8 +1723,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'ur',
 				'http_name'    => 'ur',
 				'priority'     => 1,
-			),
-			'uz'    => array(
+			],
+			'uz'    => [
 				'english_name' => 'Uzbek',
 				'native_name'  => 'O‘zbekcha',
 				'is_rtl'       => 0,
@@ -1733,8 +1733,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'uz_UZ',
 				'http_name'    => 'uz-UZ',
 				'priority'     => 1,
-			),
-			'vec'   => array(
+			],
+			'vec'   => [
 				'english_name' => 'Venetian',
 				'native_name'  => 'vèneta',
 				'is_rtl'       => 0,
@@ -1743,8 +1743,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'vi'    => array(
+			],
+			'vi'    => [
 				'english_name' => 'Vietnamese',
 				'native_name'  => 'Tiếng Việt',
 				'is_rtl'       => 0,
@@ -1753,8 +1753,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'vi',
 				'http_name'    => 'vi-VN',
 				'priority'     => 1,
-			),
-			'wa'    => array(
+			],
+			'wa'    => [
 				'english_name' => 'Walloon',
 				'native_name'  => 'Walon',
 				'is_rtl'       => 0,
@@ -1763,8 +1763,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'wa',
 				'http_name'    => 'wa',
 				'priority'     => 1,
-			),
-			'xmf'   => array(
+			],
+			'xmf'   => [
 				'english_name' => 'Mingrelian',
 				'native_name'  => 'მარგალური ნინა',
 				'is_rtl'       => 0,
@@ -1773,8 +1773,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'xmf',
 				'http_name'    => '',
 				'priority'     => 1,
-			),
-			'yi'    => array(
+			],
+			'yi'    => [
 				'english_name' => 'Yiddish',
 				'native_name'  => 'ייִדיש',
 				'is_rtl'       => 1,
@@ -1783,8 +1783,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'yi',
 				'priority'     => 1,
-			),
-			'yo'    => array(
+			],
+			'yo'    => [
 				'english_name' => 'Yorùbá',
 				'native_name'  => 'èdè Yorùbá',
 				'is_rtl'       => 0,
@@ -1793,8 +1793,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'yo',
 				'priority'     => 1,
-			),
-			'zh-cn' => array(
+			],
+			'zh-cn' => [
 				'english_name' => 'Chinese (China)',
 				'native_name'  => '中文',
 				'is_rtl'       => 0,
@@ -1803,8 +1803,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'zh_CN',
 				'http_name'    => 'zh-CN',
 				'priority'     => 1,
-			),
-			'zh-hk' => array(
+			],
+			'zh-hk' => [
 				'english_name' => 'Chinese (Hong Kong)',
 				'native_name'  => '香港中文版	',
 				'is_rtl'       => 0,
@@ -1813,8 +1813,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'zh_HK',
 				'http_name'    => 'zh-HK',
 				'priority'     => 1,
-			),
-			'zh-sg' => array(
+			],
+			'zh-sg' => [
 				'english_name' => 'Chinese (Singapore)',
 				'native_name'  => '中文',
 				'is_rtl'       => 0,
@@ -1823,8 +1823,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'zh',
 				'priority'     => 1,
-			),
-			'zh-tw' => array(
+			],
+			'zh-tw' => [
 				'english_name' => 'Chinese (Taiwan)',
 				'native_name'  => '中文',
 				'is_rtl'       => 0,
@@ -1833,8 +1833,8 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => 'zh_TW',
 				'http_name'    => 'zh-TW',
 				'priority'     => 1,
-			),
-			'zh'    => array(
+			],
+			'zh'    => [
 				'english_name' => 'Chinese',
 				'native_name'  => '中文',
 				'is_rtl'       => 0,
@@ -1843,10 +1843,10 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'wp_locale'    => '',
 				'http_name'    => 'zh',
 				'priority'     => 1,
-			),
-		);
+			],
+		];
 
-		$out = array();
+		$out = [];
 
 		foreach ( $fields as $field ) {
 			$out[ ] = "( '" . join( "', '", array_values( $field ) ) . "' )";

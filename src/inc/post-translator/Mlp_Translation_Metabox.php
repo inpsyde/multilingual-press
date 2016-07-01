@@ -8,10 +8,10 @@ class Mlp_Translation_Metabox {
 	/**
 	 * @var string[]
 	 */
-	private $allowed_post_types = array(
+	private $allowed_post_types = [ 
 		'post',
 		'page',
-	);
+	 ];
 
 	/**
 	 * @var Mlp_Translatable_Post_Data
@@ -55,7 +55,7 @@ class Mlp_Translation_Metabox {
 			$this->plugin_data->get( 'content_relations' )
 		);
 
-		add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ), 10, 2 );
+		add_action( 'add_meta_boxes', [ $this, 'register_meta_boxes' ], 10, 2 );
 
 		/**
 		 * Filter whether to use an external save method instead of the built-in method.
@@ -65,20 +65,20 @@ class Mlp_Translation_Metabox {
 		$mlp_external_save_method = (bool) apply_filters( 'mlp_external_save_method', false );
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] && ! $mlp_external_save_method ) {
-			add_action( 'save_post', array( $this->data, 'save' ), 10, 2 );
+			add_action( 'save_post', [ $this->data, 'save' ], 10, 2 );
 		}
 
 		// Both the generic nonce and request validator are kept for backwards compatibility reasons only.
 		$nonce_validator   = Mlp_Nonce_Validator_Factory::create( 'mlp_post_translator_bc', get_current_blog_id() );
 		$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
 
-		$translator_init_args = array(
+		$translator_init_args = [ 
 			'nonce'              => $nonce_validator,
 			'request_validator'  => $request_validator,
 			'allowed_post_types' => $this->allowed_post_types,
 			'basic_data'         => $this->data,
 			'instance'           => $this,
-		);
+		 ];
 		/**
 		 * Runs before internal actions are registered.
 		 *
@@ -127,7 +127,7 @@ class Mlp_Translation_Metabox {
 		}
 
 		$assets = $this->plugin_data->get( 'assets' );
-		$assets->provide( array( 'mlp-admin', 'mlp_admin_css' ) );
+		$assets->provide( [ 'mlp-admin', 'mlp_admin_css' ] );
 	}
 
 	/**
@@ -152,7 +152,7 @@ class Mlp_Translation_Metabox {
 			$translated_status = ucfirst( $status );
 		}
 
-		if ( in_array( $status, array( 'publish', 'private' ), true ) ) {
+		if ( in_array( $status, [ 'publish', 'private' ], true ) ) {
 			$template = esc_html_x(
 				'%1$s (%2$s)',
 				'No HTML; 1 = post status, 2 = publish time',
@@ -206,11 +206,11 @@ class Mlp_Translation_Metabox {
 
 		$title = $this->get_metabox_title( $blog_id, $remote_post, $lang );
 
-		$metabox_data = array(
+		$metabox_data = [ 
 			'remote_blog_id' => $blog_id,
 			'remote_post'    => $remote_post,
 			'language'       => $lang,
-		);
+		 ];
 
 		$nonce_validator = Mlp_Nonce_Validator_Factory::create(
 			"save_translation_of_post_{$post->ID}_for_site_$blog_id",
@@ -222,7 +222,7 @@ class Mlp_Translation_Metabox {
 		add_meta_box(
 			"inpsyde_multilingual_$blog_id",
 			$title,
-			array( $view, 'render' ),
+			[ $view, 'render' ],
 			null,
 			'advanced',
 			'default',
@@ -232,7 +232,7 @@ class Mlp_Translation_Metabox {
 		if ( empty( $remote_post->dummy ) ) {
 			$this->register_metabox_view_details( $view, $post, $blog_id );
 		} else {
-			$callback = array( $view, 'show_translation_checkbox' );
+			$callback = [ $view, 'show_translation_checkbox' ];
 			/**
 			 * Filter the post translator activation checkbox callback.
 			 *
@@ -293,10 +293,10 @@ class Mlp_Translation_Metabox {
 	 */
 	private function register_metabox_view_details( Mlp_Translation_Metabox_View $view, WP_Post $post, $blog_id ) {
 
-		$callbacks = array(
-			'title'  => array( $view, 'show_title' ),
-			'editor' => array( $view, 'show_editor' ),
-		);
+		$callbacks = [ 
+			'title'  => [ $view, 'show_title' ],
+			'editor' => [ $view, 'show_editor' ],
+		 ];
 
 		/**
 		 * Filter the meta box view callbacks.
@@ -333,7 +333,7 @@ class Mlp_Translation_Metabox {
 			return false;
 		}
 
-		return in_array( $pagenow, array( 'post-new.php', 'post.php' ), true );
+		return in_array( $pagenow, [ 'post-new.php', 'post.php' ], true );
 	}
 
 	/**

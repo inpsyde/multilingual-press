@@ -23,12 +23,12 @@ class Mlp_Network_Site_Settings {
 	/**
 	 * @var string[]
 	 */
-	private $targets = array(
+	private $targets = [ 
 		'site-info.php',
 		'site-users.php',
 		'site-themes.php',
 		'site-settings.php',
-	);
+	 ];
 
 	/**
 	 * Updatable object. Currently used for tab content only.
@@ -58,7 +58,7 @@ class Mlp_Network_Site_Settings {
 		$this->set_pagenow();
 
 		if ( ! empty( $pagenow ) && in_array( $pagenow, $this->targets, true ) ) {
-			add_action( 'network_admin_notices', array( $this, 'start_buffer' ) );
+			add_action( 'network_admin_notices', [ $this, 'start_buffer' ] );
 		}
 	}
 
@@ -69,7 +69,7 @@ class Mlp_Network_Site_Settings {
 	 */
 	public function start_buffer() {
 
-		ob_start( array( $this, 'reorder_output' ) );
+		ob_start( [ $this, 'reorder_output' ] );
 
 		if ( ! $this->is_active_page() ) {
 			return;

@@ -58,7 +58,7 @@ class Mlp_Load_Controller {
 		if ( ! interface_exists( 'Inpsyde_Autoload_Rule_Interface' ) )
 			require __DIR__ . '/Inpsyde_Autoload_Rule_Interface.php';
 
-		foreach ( array ( 'Directory_Load', 'Autoload' ) as $class ) {
+		foreach ( [ 'Directory_Load', 'Autoload' ] as $class ) {
 			if ( ! class_exists( "Inpsyde_$class" ) )
 				require __DIR__ . "/Inpsyde_$class.php";
 		}

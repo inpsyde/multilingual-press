@@ -19,17 +19,17 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	 *
 	 * @var array
 	 */
-	private $registered = array();
+	private $registered = [];
 
 	/**
 	 * @var array
 	 */
-	private $assets = array();
+	private $assets = [];
 
 	/**
 	 * @var array
 	 */
-	private $l10n = array();
+	private $l10n = [];
 
 	/**
 	 * Constructor. Set up the properties.
@@ -46,12 +46,12 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	 *
 	 * @param string $handle       Unique handle.
 	 * @param string $file         File.
-	 * @param array  $dependencies Optional. Dependencies. Defaults to array().
-	 * @param array  $l10n         Optional. Localized data. Defaults to array().
+	 * @param array  $dependencies Optional. Dependencies. Defaults to [].
+	 * @param array  $l10n         Optional. Localized data. Defaults to [].
 	 *
 	 * @return bool
 	 */
-	public function add( $handle, $file, $dependencies = array(), $l10n = array() ) {
+	public function add( $handle, $file, $dependencies = [], $l10n = [] ) {
 
 		$ext = $this->get_extension( $file );
 
@@ -65,11 +65,11 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 			$this->locations->get_dir( $ext, 'url' )
 		);
 
-		$this->assets[ $handle ] = array(
+		$this->assets[ $handle ] = [ 
 			'url'          => $url,
 			'ext'          => $ext,
 			'dependencies' => $dependencies,
-		);
+		 ];
 
 		if ( $l10n ) {
 			$this->l10n[ $handle ] = $l10n;
@@ -88,7 +88,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	public function register() {
 
 		foreach ( $this->assets as $handle => $properties ) {
-			if ( ! in_array( $properties['ext'], array( 'js', 'css' ), true ) ) {
+			if ( ! in_array( $properties['ext'], [ 'js', 'css' ], true ) ) {
 				continue;
 			}
 
@@ -141,7 +141,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 
 		$loader = new Mlp_Asset_Loader( $to_load, $this->l10n );
 
-		add_action( $action, array( $loader, 'enqueue' ) );
+		add_action( $action, [ $loader, 'enqueue' ] );
 
 		return TRUE;
 	}
@@ -151,9 +151,9 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	 *
 	 * @return array
 	 */
-	private function get_valid_handles( Array $handles ) {
+	private function get_valid_handles( array $handles ) {
 
-		$to_load = array();
+		$to_load = [];
 
 		foreach ( $handles as $handle ) {
 			if ( ! empty ( $this->registered[ $handle ] ) ) {

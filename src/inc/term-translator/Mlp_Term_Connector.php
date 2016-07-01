@@ -89,7 +89,7 @@ class Mlp_Term_Connector {
 
 		$current_filter = current_filter();
 
-		if ( is_callable( array( $this, $current_filter ) ) ) {
+		if ( is_callable( [ $this, $current_filter ] ) ) {
 			/**
 			 * Runs before the terms are changed.
 			 *
@@ -104,7 +104,7 @@ class Mlp_Term_Connector {
 				$current_filter
 			);
 
-			$success = call_user_func( array( $this, $current_filter ), $term_taxonomy_id );
+			$success = call_user_func( [ $this, $current_filter ], $term_taxonomy_id );
 
 			/**
 			 * Runs after the terms have been changed.

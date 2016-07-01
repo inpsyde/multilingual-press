@@ -104,11 +104,9 @@ class Mlp_Language_Updater {
 	private function get_existing_items() {
 
 		$page   = $this->pagination_data->get_current_page();
-		$params = array(
-			'page' => $page
-		);
+		$params = [ 'page' => $page ];
 		$before = $this->db->get_items( $params );
-		$return = array();
+		$return = [];
 
 		foreach ( $before as $id => $data )
 			$return[ $id ] = (array) $data;
@@ -122,7 +120,7 @@ class Mlp_Language_Updater {
 	 * @param  array   $diff
 	 * @return integer Number of changed items.
 	 */
-	private function update_changed_items( Array $diff ) {
+	private function update_changed_items( array $diff ) {
 
 		$amount = count( $diff );
 
@@ -131,9 +129,7 @@ class Mlp_Language_Updater {
 
 		$this->db->update_items_by_id(
 			$diff,
-			array (
-				'%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d'
-			)
+			[ '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d' ]
 		);
 
 		return $amount;

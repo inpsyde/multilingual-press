@@ -45,7 +45,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	/**
 	 * @var array
 	 */
-	private $language_data_from_db = array();
+	private $language_data_from_db = [];
 
 	/**
 	 * Constructor.
@@ -71,8 +71,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$this->site_relations    = $site_relations;
 		$this->content_relations = $content_relations;
 
-		add_action( 'wp_loaded', array ( $this, 'load_language_manager' ) );
-		add_filter( 'mlp_language_api', array ( $this, 'get_instance' ) );
+		add_action( 'wp_loaded', [ $this, 'load_language_manager' ] );
+		add_filter( 'mlp_language_api', [ $this, 'get_instance' ] );
 	}
 
 	/**
@@ -116,7 +116,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 */
 	public function get_site_languages( $base_site = 0 ) {
 
-		$related_blogs = $options = array();
+		$related_blogs = $options = [];
 		$languages     = get_site_option( 'inpsyde_multilingual' );
 
 		if ( 0 !== $base_site ) {
@@ -124,11 +124,11 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			$related_blogs = $this->get_related_sites( $base_site, TRUE );
 
 			if ( empty ( $related_blogs ) )
-				return array();
+				return [];
 		}
 
 		if ( ! is_array( $languages ) )
-			return array ();
+			return [];
 
 		foreach ( $languages as $site_id => $language_data ) {
 
@@ -197,14 +197,14 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 * }
 	 * @return array Array of Mlp_Translation instances, site IDs are the keys
 	 */
-	public function get_translations( Array $args = array() ) {
+	public function get_translations( array $args = [] ) {
 
 		/** @type WP_Rewrite $wp_rewrite */
 		global $wp_rewrite;
 
 		$arguments         = $this->prepare_translation_arguments( $args );
 		$key               = md5( serialize( $arguments ) );
-		$content_relations = array();
+		$content_relations = [];
 		$cached            = wp_cache_get( $key, 'mlp' );
 
 		if ( is_array( $cached ) )
@@ -216,7 +216,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		);
 
 		if ( empty ( $sites ) )
-			return array ();
+			return [];
 
 		if ( ! empty ( $arguments[ 'content_id' ] ) ) {
 
@@ -228,10 +228,10 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			);
 
 			if ( empty ( $content_relations ) && $arguments[ 'strict' ] )
-				return array ();
+				return [];
 		}
 
-		$translations      = array();
+		$translations      = [];
 		$languages         = $this->get_all_language_data();
 
 		foreach ( $sites as $site_id ) {
@@ -239,13 +239,13 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			if ( ! isset ( $languages[ $site_id ] ) )
 				continue;
 
-			$translations[ $site_id ] = array (
+			$translations[ $site_id ] = [
 				'source_site_id'    => $arguments[ 'site_id' ],
 				'target_site_id'    => $site_id,
 				'type'              => $arguments[ 'type' ],
 				'target_content_id' => 0,
 				'target_title'      => ''
-			);
+			 ];
 		}
 
 		reset( $translations );
@@ -366,7 +366,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 */
 	public function get_post_type_archive_translation( $post_type ) {
 
-		$return = array ();
+		$return = [];
 
 		$url                    = get_post_type_archive_link( $post_type );
 		$return[ 'target_url' ] = Mlp_Url_Factory::create( $url );
@@ -401,10 +401,10 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			if ( ! $editable )
 				return FALSE;
 
-			return array (
+			return [
 				'target_title' => $title,
 				'target_url'   => Mlp_Url_Factory::create( get_edit_post_link( $content_id ) )
-			);
+			];
 		}
 
 		// frontend
@@ -413,19 +413,19 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		do_action( 'mlp_after_link' );
 
 		if ( 'publish' === $post->post_status || $editable )
-			return array (
+			return [
 				'target_title' => $title,
 				'target_url'   => empty ( $url ) ? '' : Mlp_Url_Factory::create( $url )
-			);
+			];
 
 		// unpublished post, not editable
 		if ( $strict )
 			return FALSE;
 
-		return array (
+		return [
 			'target_title' => $title,
 			'target_url'   => ''
-		);
+		 ];
 	}
 
 	/**
@@ -464,13 +464,13 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		if ( ! empty ( $this->language_data_from_db ) )
 			return $this->language_data_from_db;
 
-		$languages = (array) get_site_option( 'inpsyde_multilingual', array() );
+		$languages = (array) get_site_option( 'inpsyde_multilingual', [] );
 
 		if ( empty ( $languages ) )
-			return array();
+			return [];
 
-		$tags     = array ();
-		$add_like = array ();
+		$tags     = [];
+		$add_like = [];
 
 		foreach ( $languages as $site_id => $data ) {
 			if ( ! empty ( $data[ 'lang' ] ) )
@@ -544,7 +544,7 @@ WHERE `http_name` IN( $values )";
 			$like = $tag;
 		}
 
-		return array( $tag, $like );
+		return [ $tag, $like ];
 	}
 
 	/**
@@ -553,18 +553,17 @@ WHERE `http_name` IN( $values )";
 	 */
 	private function get_request_type() {
 
-		$checks = array (
+		$checks = [
 			'admin'             => 'is_admin',
-			'post'              => array ( $this, 'is_singular' ),
-			'term'              => array (
+			'post'              => [ $this, 'is_singular' ],
+			'term'              => [
 				$this,
 				'is_term_archive_request'
-			),
+			 ],
 			'post_type_archive' => 'is_post_type_archive',
 			'search'            => 'is_search',
 			'front_page'        => 'is_front_page',
-		);
-
+		];
 		foreach ( $checks as $type => $callback ) {
 
 			if ( call_user_func( $callback ) ) {
@@ -629,7 +628,7 @@ WHERE `http_name` IN( $values )";
 		$sites = $this->site_relations->get_related_sites( $site_id );
 
 		if ( empty ( $sites ) )
-			return array();
+			return [];
 
 		if ( $include_base )
 			$sites[] = $site_id;
@@ -660,9 +659,9 @@ WHERE `http_name` IN( $values )";
 	 * @param array $args
 	 * @return array
 	 */
-	private function prepare_translation_arguments( Array $args ) {
+	private function prepare_translation_arguments( array $args ) {
 
-		$defaults = array(
+		$arguments = wp_parse_args( $args, [
 			// always greater than 0
 			'site_id'          => get_current_blog_id(),
 			// 0 if missing
@@ -673,9 +672,7 @@ WHERE `http_name` IN( $values )";
 			'post_type'        => $this->get_request_post_type(),
 			'include_base'     => false,
 			'suppress_filters' => false,
-		);
-
-		$arguments = wp_parse_args( $args, $defaults );
+		] );
 
 		/**
 		 * Filter the translation arguments.
@@ -707,10 +704,10 @@ WHERE `http_name` IN( $values )";
 	 * @param  array $arguments
 	 * @return array
 	 */
-	private function prepare_translation_relations( Array $arguments ) {
+	private function prepare_translation_relations( array $arguments ) {
 
 		if ( ! $this->can_have_relations( $arguments ) )
-			return array();
+			return [];
 
 		$relations = $this->get_related_content_ids(
 			$arguments[ 'site_id' ],
@@ -730,19 +727,19 @@ WHERE `http_name` IN( $values )";
 	 * @param array $arguments
 	 * @return bool
 	 */
-	private function can_have_relations( Array $arguments ) {
+	private function can_have_relations( array $arguments ) {
 
 		if ( empty ( $arguments[ 'content_id' ] ) )
 			return FALSE;
 
-		return in_array( $arguments['type'], array( 'post', 'term' ), true );
+		return in_array( $arguments['type'], [ 'post', 'term' ], true );
 	}
 
 	/**
 	 * @param  array $relations
 	 * @return array
 	 */
-	private function remove_unpublished_posts( Array $relations ) {
+	private function remove_unpublished_posts( array $relations ) {
 
 		foreach ( $relations as $site_id => $content_id ) {
 

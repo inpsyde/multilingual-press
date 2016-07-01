@@ -15,7 +15,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 *
 	 * @type array
 	 */
-	private $properties = array ();
+	private $properties = [];
 
 	/**
 	 * Parent object.
@@ -35,7 +35,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 * @see  get()
 	 * @type array
 	 */
-	private $deleted = array ();
+	private $deleted = [];
 
 	/**
 	 * Write and delete protection.

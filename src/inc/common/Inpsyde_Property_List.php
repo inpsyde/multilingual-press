@@ -52,7 +52,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 *
 	 * @type array
 	 */
-	protected $properties = array ();
+	protected $properties = [];
 
 	/**
 	 * Parent object.
@@ -72,7 +72,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 * @see  get()
 	 * @type array
 	 */
-	protected $deleted = array ();
+	protected $deleted = [];
 
 	/**
 	 * Write and delete protection.

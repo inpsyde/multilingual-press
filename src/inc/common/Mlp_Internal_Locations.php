@@ -12,7 +12,7 @@ class Mlp_Internal_Locations implements Mlp_Locations_Interface {
 	/**
 	 * @type array
 	 */
-	private $directories = array();
+	private $directories = [];
 
 	/**
 	 * @param  string $path

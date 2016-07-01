@@ -23,8 +23,8 @@ class Mlp_Redirect_Column {
 
 		$columns = $this->get_column_handler();
 
-		add_filter( 'wpmu_blogs_columns', array( $columns, 'add_header' ) );
-		add_action( 'manage_sites_custom_column', array( $columns, 'render_column' ), 10, 2 );
+		add_filter( 'wpmu_blogs_columns', [ $columns, 'add_header' ] );
+		add_action( 'manage_sites_custom_column', [ $columns, 'render_column' ], 10, 2 );
 	}
 
 	/**
@@ -54,12 +54,10 @@ class Mlp_Redirect_Column {
 	 */
 	private function get_column_handler() {
 
-		$data = array(
+		return new Mlp_Custom_Columns( [
 			'id'               => 'mlp_redirect',
 			'header'           => __( 'Redirect', 'multilingual-press' ),
-			'content_callback' => array( $this, 'render_cell' ),
-		);
-
-		return new Mlp_Custom_Columns( $data );
+			'content_callback' => [ $this, 'render_cell' ],
+		] );
 	}
 }

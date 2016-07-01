@@ -32,7 +32,7 @@ class Mlp_Term_Translation_Presenter {
 	/**
 	 * @var array
 	 */
-	private $site_terms = array();
+	private $site_terms = [];
 
 	/**
 	 * Constructor. Set up the properties.
@@ -78,16 +78,16 @@ class Mlp_Term_Translation_Presenter {
 	 */
 	public function get_terms_for_site( $site_id ) {
 
-		$out = array();
+		$out = [];
 
 		switch_to_blog( $site_id );
 
 		$taxonomy_object = get_taxonomy( $this->taxonomy_name );
 
 		if ( ! current_user_can( $taxonomy_object->cap->edit_terms ) ) {
-			$terms = array();
+			$terms = [];
 		} else {
-			$terms = get_terms( $this->taxonomy_name, array( 'hide_empty' => FALSE ) );
+			$terms = get_terms( $this->taxonomy_name, [ 'hide_empty' => FALSE ] );
 		}
 
 		foreach ( $terms as $term ) {

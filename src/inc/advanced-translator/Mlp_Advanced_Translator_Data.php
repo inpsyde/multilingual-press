@@ -28,7 +28,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	/**
 	 * @var array
 	 */
-	private $post_request_data = array();
+	private $post_request_data = [];
 
 	/**
 	 * @var Mlp_Site_Relations_Interface
@@ -40,7 +40,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 *
 	 * @var array
 	 */
-	private $save_context = array();
+	private $save_context = [];
 
 	/**
 	 * @param                                      $deprecated
@@ -123,12 +123,12 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 			return;
 		}
 
-		$this->save_context = array(
+		$this->save_context = [
 			'source_blog'    => get_current_blog_id(),
 			'source_post'    => $post,
 			'real_post_type' => $post_type,
 			'real_post_id'   => $post_id,
-		);
+		];
 
 		$this->basic_data->set_save_context( $this->save_context );
 
@@ -164,7 +164,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 
 			$new_post = $this->create_post_to_send( $post_data, $post_type, $remote_blog_id );
 
-			if ( array() !== $new_post ) {
+			if ( [] !== $new_post ) {
 				$sync_thumb = ! empty( $post_data['thumbnail'] );
 				$update     = ! empty( $post_data['remote_post_id'] ) && 0 < $post_data['remote_post_id'];
 				$new_id     = $this->sync_post( $new_post, $post_id, $remote_blog_id, $update );
@@ -177,7 +177,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 					$this->copy_thumb( $new_id, $thumb_data );
 				}
 
-				$tax_data = empty( $post_data['tax'] ) ? array() : (array) $post_data['tax'];
+				$tax_data = empty( $post_data['tax'] ) ? [] : (array) $post_data['tax'];
 				$this->set_remote_tax_terms( $new_id, $tax_data );
 			}
 
@@ -267,7 +267,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		}
 
 		$wp_filetype = wp_check_filetype( $filedir['url'] . '/' . $filename );
-		$attachment  = array(
+		$attachment  = [
 			'post_mime_type' => $wp_filetype['type'],
 			'guid'           => $filedir['url'] . '/' . $filename,
 			'post_parent'    => $new_id,
@@ -275,7 +275,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 			'post_excerpt'   => '',
 			'post_author'    => get_current_user_id(),
 			'post_content'   => '',
-		);
+		];
 
 		$full_path = $filedir['path'] . '/' . $filename;
 		$attach_id = wp_insert_attachment( $attachment, $full_path );
@@ -344,17 +344,17 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		$excerpt = $this->get_remote_post_excerpt( $post_data );
 
 		if ( $this->is_empty_remote_post( $title, $content, $post_type ) ) {
-			return array();
+			return [];
 		}
 
-		$new_post_data = array(
+		$new_post_data = [
 			'post_type'    => $post_type,
 			'post_title'   => $title,
 			'post_name'    => $name,
 			'post_content' => $content,
 			'post_excerpt' => $excerpt,
 			'post_parent'  => $this->basic_data->get_post_parent( $blog_id ),
-		);
+		];
 
 		if ( ! empty( $post_data['remote_post_id'] ) ) {
 			$new_post_data['ID'] = $post_data['remote_post_id'];
@@ -433,7 +433,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function get_taxonomies_with_terms( WP_Post $post ) {
 
-		$out = array();
+		$out = [];
 
 		$taxonomies = get_object_taxonomies( $post, 'objects' );
 
@@ -444,7 +444,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 				continue;
 			}
 
-			$terms = get_terms( $taxonomy, array( 'hide_empty' => false ) );
+			$terms = get_terms( $taxonomy, [ 'hide_empty' => false ] );
 
 			// we do not allow creating new terms
 			if ( empty( $terms ) ) {
@@ -454,15 +454,15 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 			$terms = $this->set_active_terms( $terms, $taxonomy, $post );
 
 			if ( $this->taxonomy_is_mutually_exclusive( $taxonomy ) ) {
-				$out['exclusive'][ $taxonomy ] = array(
+				$out['exclusive'][ $taxonomy ] = [
 					'properties' => $properties,
 					'terms'      => $terms,
-				);
+				 ];
 			} else {
-				$out['inclusive'][ $taxonomy ] = array(
+				$out['inclusive'][ $taxonomy ] = [
 					'properties' => $properties,
 					'terms'      => $terms,
-				);
+				 ];
 			}
 		}
 
@@ -481,7 +481,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function set_remote_tax_terms( $new_id, array $tax_data ) {
 
-		$errors = array();
+		$errors = [];
 
 		$post = get_post( $new_id );
 
@@ -491,9 +491,9 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 				continue;
 			}
 
-			$terms = array();
+			$terms = [];
 
-			$term_ids = empty( $tax_data[ $taxonomy ] ) ? array() : (array) $tax_data[ $taxonomy ];
+			$term_ids = empty( $tax_data[ $taxonomy ] ) ? [] : (array) $tax_data[ $taxonomy ];
 			foreach ( $term_ids as $term_id ) {
 				$term = get_term_by( 'id', (int) $term_id, $taxonomy );
 				if ( $term ) {
@@ -642,7 +642,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function is_connectable_status( WP_Post $post ) {
 
-		if ( in_array( $post->post_status, array( 'publish', 'draft', 'private', 'auto-draft' ), true ) ) {
+		if ( in_array( $post->post_status, [ 'publish', 'draft', 'private', 'auto-draft' ], true ) ) {
 			return true;
 		}
 
@@ -653,7 +653,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 * Check for hidden auto-draft
 	 *
 	 * Auto-drafts are sent as revision with a status 'inherit'.
-	 * We have to inspect the $_POST array ($request) to distinguish them from
+	 * We have to inspect the $_POST [ $request ] to distinguish them from
 	 * real revisions and attachments (which have the same status)
 	 *
 	 * @param  WP_Post $post
@@ -692,7 +692,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		 *
 		 * @param string[] $taxonomies Mutually exclusive taxonomy names.
 		 */
-		$exclusive = apply_filters( 'mlp_mutually_exclusive_taxonomies', array( 'post_format' ) );
+		$exclusive = apply_filters( 'mlp_mutually_exclusive_taxonomies', [ 'post_format' ] );
 
 		return in_array( $taxonomy, $exclusive, true );
 	}
@@ -708,7 +708,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function set_active_terms( array $terms, $taxonomy, WP_Post $post ) {
 
-		$out = array();
+		$out = [];
 
 		foreach ( $terms as $term ) {
 			$term->active = has_term( $term->term_id, $taxonomy, $post );

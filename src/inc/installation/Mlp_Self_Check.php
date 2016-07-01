@@ -99,8 +99,8 @@ class Mlp_Self_Check {
 		$errors = $check->get_error_messages();
 		$deactivate = new Mlp_Plugin_Deactivation( $errors, $name, $base_name );
 
-		add_action( 'admin_notices', array( $deactivate, 'deactivate' ), 0 );
-		add_action( 'network_admin_notices', array( $deactivate, 'deactivate' ), 0 );
+		add_action( 'admin_notices', [ $deactivate, 'deactivate' ], 0 );
+		add_action( 'network_admin_notices', [ $deactivate, 'deactivate' ], 0 );
 
 		return self::PLUGIN_DEACTIVATED;
 	}
@@ -124,14 +124,14 @@ class Mlp_Self_Check {
 			return;
 		}
 
-		add_filter( 'site_transient_update_plugins', array( $this, 'remove_mlp_from_update_plugins_transient' ) );
+		add_filter( 'site_transient_update_plugins', [ $this, 'remove_mlp_from_update_plugins_transient' ] );
 
 		global $pagenow;
-		if ( ! in_array( $pagenow, array( 'index.php', 'plugins.php' ), true ) ) {
+		if ( ! in_array( $pagenow, [ 'index.php', 'plugins.php' ], true ) ) {
 			return;
 		}
 
-		$callback = array( $this, 'render_php_version_admin_notice' );
+		$callback = [ $this, 'render_php_version_admin_notice' ];
 		add_action( 'admin_notices', $callback );
 		add_action( 'network_admin_notices', $callback );
 	}
@@ -157,11 +157,11 @@ class Mlp_Self_Check {
 			return $plugins;
 		}
 
-		remove_action( 'network_admin_notices', array( $this, 'render_php_version_admin_notice' ) );
+		remove_action( 'network_admin_notices', [ $this, 'render_php_version_admin_notice' ] );
 
-		add_action( 'network_admin_notices', array( $this, 'render_mlp_3_admin_notice' ) );
+		add_action( 'network_admin_notices', [ $this, 'render_mlp_3_admin_notice' ] );
 
-		add_action( "after_plugin_row_$file", array( $this, 'render_mlp_3_update_message' ) );
+		add_action( "after_plugin_row_$file", [ $this, 'render_mlp_3_update_message' ] );
 
 		unset( $plugins->response[ $file ] );
 

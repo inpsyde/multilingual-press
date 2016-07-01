@@ -72,8 +72,8 @@ class Mlp_Network_Site_Settings_Tab_Content {
 				$this->page_data->get_nonce_name()
 			);
 
-			$siteoption = get_site_option( 'inpsyde_multilingual', array() );
-			$languages  = $this->language_api->get_db()->get_items( array( 'page' => -1 )  );
+			$siteoption = get_site_option( 'inpsyde_multilingual', [] );
+			$languages  = $this->language_api->get_db()->get_items( [ 'page' => -1 ]  );
 
 			echo '<table class="form-table mlp-admin-settings-table">';
 			$this->show_language_options( $siteoption, $languages );
@@ -196,7 +196,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	 */
 	private function get_language_name( $language ) {
 
-		$parts = array();
+		$parts = [];
 
 		if ( ! empty ( $language->english_name ) )
 			$parts[] = $language->english_name;

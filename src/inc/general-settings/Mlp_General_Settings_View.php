@@ -133,7 +133,7 @@ class Mlp_General_Settings_View {
 	 * @param $module
 	 * @return string
 	 */
-	private function get_module_title( Array $module ) {
+	private function get_module_title( array $module ) {
 
 		if ( isset ( $module[ 'display_name_callback' ] ) )
 			return call_user_func( $module[ 'display_name_callback' ] );
@@ -147,7 +147,7 @@ class Mlp_General_Settings_View {
 	 * @param array $module
 	 * @return string
 	 */
-	private function get_module_description( Array $module ) {
+	private function get_module_description( array $module ) {
 
 		if ( isset ( $module[ 'description_callback' ] ) )
 			return call_user_func( $module[ 'description_callback' ] );

@@ -38,7 +38,7 @@ class Mlp_Advanced_Translator_View {
 	 */
 	public function show_copy_button( $editor_id, $remote_site_id ) {
 
-		$matches = array();
+		$matches = [];
 
 		preg_match( '~mlp-translation-data-(\d+)-content~', $editor_id, $matches );
 		if ( empty( $matches[1] ) ) {
@@ -168,16 +168,14 @@ class Mlp_Advanced_Translator_View {
 
 		$this->show_copy_button( $editor_id, $remote_blog_id );
 
-		wp_editor( $remote_post->post_content, $editor_id, array(
+		wp_editor( $remote_post->post_content, $editor_id, [
 			'tabindex'      => false,
 			'editor_height' => 150,
 			'resize'        => true,
 			'textarea_name' => $this->get_name( $remote_blog_id, 'content' ),
 			'media_buttons' => false,
-			'tinymce'       => array(
-				'resize' => true,
-			),
-		) );
+			'tinymce'       => [ 'resize' => true, ],
+		] );
 	}
 
 	/**
@@ -321,7 +319,7 @@ class Mlp_Advanced_Translator_View {
 	 *
 	 * @return void
 	 */
-	private function list_terms( $taxonomy, Array $data, $remote_blog_id, $input_type ) {
+	private function list_terms( $taxonomy, array $data, $remote_blog_id, $input_type ) {
 
 		$name = $this->get_name( $remote_blog_id, 'tax' ) . '[' . $taxonomy . ']';
 

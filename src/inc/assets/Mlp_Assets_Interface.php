@@ -14,12 +14,12 @@ interface Mlp_Assets_Interface {
 	 *
 	 * @param string $handle       Unique handle.
 	 * @param string $file         File.
-	 * @param array  $dependencies Optional. Dependencies. Defaults to array().
-	 * @param array  $l10n         Optional. Localized data. Defaults to array().
+	 * @param array  $dependencies Optional. Dependencies. Defaults to [].
+	 * @param array  $l10n         Optional. Localized data. Defaults to [].
 	 *
 	 * @return bool
 	 */
-	public function add( $handle, $file, $dependencies = array(), $l10n = array() );
+	public function add( $handle, $file, $dependencies = [], $l10n = [] );
 
 	/**
 	 * Provide assets for the given handles.

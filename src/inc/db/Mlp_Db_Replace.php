@@ -17,7 +17,7 @@ class Mlp_Db_Replace {
 	 *
 	 * @type array
 	 */
-	private $invalid_columns = array();
+	private $invalid_columns = [];
 
 	/**
 	 * Constructor
@@ -40,7 +40,7 @@ class Mlp_Db_Replace {
 	 */
 	public function replace_string(
 		Mlp_Db_Table_Name_Interface $table,
-		Array                       $columns,
+		array                       $columns,
 		                            $search,
 		                            $replacement
 	) {
@@ -79,9 +79,9 @@ class Mlp_Db_Replace {
 	 * @param  string $replacement
 	 * @return string
 	 */
-	private function get_replacement_sql( Array $columns, $search, $replacement ) {
+	private function get_replacement_sql( array $columns, $search, $replacement ) {
 
-		$rows = array ();
+		$rows = [];
 
 		foreach ( $columns as $column ) {
 			if ( ! $this->is_valid_column_name( $column ) ) {

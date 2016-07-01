@@ -26,9 +26,9 @@ class Mlp_Network_Plugin_Deactivation implements Mlp_Network_Plugin_Deactivation
 	 * @param  array $plugins  List of plugin base names. See plugin_basename().
 	 * @return array           All matches that were removed.
 	 */
-	public function deactivate( Array $plugins ) {
+	public function deactivate( array $plugins ) {
 
-		$active_plugins = get_site_option( $this->option_name, array() );
+		$active_plugins = get_site_option( $this->option_name, [] );
 		$files          = array_keys( $active_plugins );
 		$remove         = $this->get_plugins_to_deactivate( $files, $plugins );
 
@@ -48,9 +48,9 @@ class Mlp_Network_Plugin_Deactivation implements Mlp_Network_Plugin_Deactivation
 	 * @return array          List of base names to remove.
 	 *                        The name is the key, the value is always 1.
 	 */
-	private function get_plugins_to_deactivate( Array $files, Array $plugins ) {
+	private function get_plugins_to_deactivate( array $files, array $plugins ) {
 
-		$return = array();
+		$return = [];
 
 		foreach ( $files as $file ) {
 
@@ -71,7 +71,7 @@ class Mlp_Network_Plugin_Deactivation implements Mlp_Network_Plugin_Deactivation
 	 * @param  array $to_remove
 	 * @return array
 	 */
-	private function remove_plugins( Array $active_plugins, Array $to_remove ) {
+	private function remove_plugins( array $active_plugins, array $to_remove ) {
 
 		$files = array_keys( $active_plugins );
 

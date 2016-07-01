@@ -22,14 +22,14 @@ class Mlp_Language implements Mlp_Language_Interface {
 	/**
 	 * @var array
 	 */
-	private $names = array();
+	private $names = [];
 
 	/**
 	 * Constructor. Set up the properies.
 	 *
 	 * @param array $raw_data
 	 */
-	public function __construct( Array $raw_data ) {
+	public function __construct( array $raw_data ) {
 
 		$data = $this->prepare_raw_data( $raw_data );
 
@@ -79,7 +79,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 			return $this->names[ $name . '_name' ];
 		}
 
-		if ( in_array( $name, array( 'language_short', 'lang' ), true ) ) {
+		if ( in_array( $name, [ 'language_short', 'lang' ], true ) ) {
 			return strtok( $this->names['http_name'], '-' );
 		}
 
@@ -92,7 +92,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 		}
 
 		// $name is empty or invalid, so ...
-		foreach ( array( 'native_name', 'english_name' ) as $match ) {
+		foreach ( [ 'native_name', 'english_name' ] as $match ) {
 			if ( ! empty( $this->names[ $match ] ) ) {
 				return $this->names[ $match ];
 			}
@@ -120,7 +120,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 	 */
 	private function prepare_raw_data( array $raw_data ) {
 
-		$default = array(
+		$default = [ 
 			'english_name' => '',
 			'native_name'  => '',
 			'custom_name'  => '',
@@ -129,7 +129,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 			'priority'     => 1,
 			'wp_locale'    => '',
 			'text'         => '',
-		);
+		 ];
 
 		if ( isset( $raw_data[ 'text' ] ) ) {
 			$default[ 'custom_name' ] = $raw_data[ 'text' ];

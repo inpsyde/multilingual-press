@@ -40,23 +40,23 @@ class Mlp_User_Backend_Language {
 	 */
 	public function setup() {
 
-		$is_active = $this->module_manager->register( array(
-			'display_name_callback' => array( $this, 'get_module_title' ),
+		$is_active = $this->module_manager->register( [
+			'display_name_callback' => [ $this, 'get_module_title' ],
 			'slug'                  => 'class-' . __CLASS__,
-			'description_callback'  => array( $this, 'get_module_description' ),
-		) );
+			'description_callback'  => [ $this, 'get_module_description' ],
+		 ] );
 		if ( ! $is_active ) {
 			return;
 		}
 
 		// Load user specific language in the backend
-		add_filter( 'locale', array( $this, 'locale' ) );
+		add_filter( 'locale', [ $this, 'locale' ] );
 
 		// Add User Field for own blog language
-		add_filter( 'personal_options', array( $this, 'edit_user_profile' ) );
-		add_filter( 'profile_update', array( $this, 'profile_update' ) );
+		add_filter( 'personal_options', [ $this, 'edit_user_profile' ] );
+		add_filter( 'profile_update', [ $this, 'profile_update' ] );
 
-		add_action( 'admin_head-options-general.php', array( $this, 'enqueue_script' ) );
+		add_action( 'admin_head-options-general.php', [ $this, 'enqueue_script' ] );
 	}
 
 	/**
@@ -180,14 +180,14 @@ class Mlp_User_Backend_Language {
 	/**
 	 * Show language selector.
 	 *
-	 * @param array  $lang_files Optional. Language file names. Defaults to array().
+	 * @param array  $lang_files Optional. Language file names. Defaults to [].
 	 * @param string $current    Optional. Current language code. Defaults to ''.
 	 *
 	 * @return void
 	 */
-	private function dropdown_languages( array $lang_files = array(), $current = '' ) {
+	private function dropdown_languages( array $lang_files = [], $current = '' ) {
 
-		$output = array();
+		$output = [];
 
 		// Inherit site specific language
 		$output[ ] = '<option value=""' . selected( $current, '', FALSE ) . '>'
@@ -231,15 +231,15 @@ class Mlp_User_Backend_Language {
 
 		unset( $GLOBALS['locale'] );
 
-		remove_filter( 'locale', array( $this, 'locale' ) );
+		remove_filter( 'locale', [ $this, 'locale' ] );
 
 		$unfiltered_locale = get_locale();
 
-		wp_localize_script( 'mlp-admin', 'mlpUserBackEndLanguageSettings', array(
+		wp_localize_script( 'mlp-admin', 'mlpUserBackEndLanguageSettings', [
 			'locale' => 'en_US' === $unfiltered_locale ? '' : esc_js( $unfiltered_locale ),
-		) );
+		] );
 		wp_enqueue_script( 'mlp-admin' );
 
-		add_filter( 'locale', array( $this, 'locale' ) );
+		add_filter( 'locale', [ $this, 'locale' ] );
 	}
 }

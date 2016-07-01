@@ -80,7 +80,7 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 		}
 
 		if ( ! isset( $_SESSION['noredirect'] ) ) {
-			$_SESSION['noredirect'] = array();
+			$_SESSION['noredirect'] = [];
 		} else {
 			$_SESSION['noredirect'] = (array) $_SESSION['noredirect'];
 

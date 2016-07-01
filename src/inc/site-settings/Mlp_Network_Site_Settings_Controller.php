@@ -44,12 +44,12 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 
 		add_action(
 			'admin_post_' . $this->tab_page_data->get_action_name(),
-			array( $this, 'update_settings' )
+			[ $this, 'update_settings' ]
 		);
 
 		add_action(
 			'admin_print_styles-' . $this->page_properties->get_param_value(),
-			array( $this, 'enqueue_stylesheet' )
+			[ $this, 'enqueue_stylesheet' ]
 		);
 	}
 
@@ -85,7 +85,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 			$this->tab_page_data->get_nonce_action(),
 			$this->tab_page_data->get_nonce_name()
 			) )
-			wp_die( 'Invalid', 'Invalid', array ( 'response' => 403 ) );
+			wp_die( 'Invalid', 'Invalid', [ 'response' => 403 ] );
 
 		$blog_id = $this->get_blog_id();
 
@@ -111,10 +111,10 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function update_language( $blog_id ) {
 
-		$languages = (array) get_site_option( 'inpsyde_multilingual', array() );
+		$languages = (array) get_site_option( 'inpsyde_multilingual', [] );
 
 		if ( empty ( $languages[ $blog_id ] ) )
-			$languages[ $blog_id ] = array ();
+			$languages[ $blog_id ] = [];
 
 		if ( ! isset ( $_POST[ 'inpsyde_multilingual_lang' ] )
 			or '-1' === $_POST[ 'inpsyde_multilingual_lang' ]
@@ -214,7 +214,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 			return;
 
 		$msg    = esc_html__( 'Settings saved.', 'multilingual-press' );
-		$notice = new Mlp_Admin_Notice( $msg, array( 'class' => 'updated' ) );
+		$notice = new Mlp_Admin_Notice( $msg, [ 'class' => 'updated' ] );
 		$notice->show();
 	}
 
@@ -224,7 +224,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	private function get_new_related_blogs() {
 
 		if ( ! isset ( $_POST[ 'related_blogs' ] ) )
-			return array();
+			return [];
 
 		$new_related = (array) $_POST[ 'related_blogs' ];
 		return array_map( 'intval', $new_related );
@@ -237,7 +237,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function get_new_relations( $new_related, $old_related ) {
 
-		$add_ids = array ();
+		$add_ids = [];
 
 		// Set new relations.
 		foreach ( $new_related as $new_blog_id ) {

@@ -15,16 +15,16 @@ class Mlp_Widget extends WP_Widget {
 	 */
 	public function __construct() {
 
-		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingual-press' ), array(
+		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingual-press' ), [
 			'classname'                   => 'mlp_widget',
 			'description'                 => __( 'MultilingualPress Translations', 'multilingual-press' ),
 			'customize_selective_refresh' => true,
-		) );
+		] );
 
 		// Enqueue style if widget is active (appears in a sidebar) or if in Customizer preview.
 		if ( is_active_widget( false, false, $this->id_base ) || is_customize_preview() ) {
 			// Do NOT use wp_enqueue_scripts here as require_style() implicitly hooks into this.
-			add_action( 'template_redirect', array( $this, 'require_style' ) );
+			add_action( 'template_redirect', [ $this, 'require_style' ] );
 		}
 	}
 
@@ -104,14 +104,14 @@ class Mlp_Widget extends WP_Widget {
 
 			$name = $this->get_field_name( 'mlp_widget_link_type' );
 
-			$options = array(
+			$options = [
 				'none'           => __( 'None', 'multilingual-press' ),
 				'native'         => __( 'Native name', 'multilingual-press' ),
 				'text'           => __( 'Custom name', 'multilingual-press' ),
 				'english'        => __( 'English name', 'multilingual-press' ),
 				'http'           => __( 'Language code', 'multilingual-press' ),
 				'language_short' => __( 'Language code (short)', 'multilingual-press' ),
-			);
+			];
 			?>
 			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Link text', 'multilingual-press' ); ?></label>
 			<select name="<?php echo esc_attr( $name ); ?>" class="widefat" id="<?php echo esc_attr( $id ); ?>"
@@ -220,11 +220,11 @@ class Mlp_Widget extends WP_Widget {
 
 		$instance = $this->adapt_settings( $instance );
 
-		$output = Mlp_Helpers::show_linked_elements( array(
+		$output = Mlp_Helpers::show_linked_elements( [
 			'link_text'         => empty( $instance['widget_link_type'] ) ? 'text' : $instance['widget_link_type'],
 			'show_current_blog' => ! empty( $instance['widget_show_current_blog'] ),
 			'display_flag'      => ! empty( $instance['widget_display_flag'] ),
-		) );
+		] );
 		if ( ! $output ) {
 			return;
 		}

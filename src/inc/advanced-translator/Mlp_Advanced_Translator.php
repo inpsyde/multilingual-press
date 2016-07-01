@@ -49,14 +49,14 @@ class Mlp_Advanced_Translator {
 		}
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			add_action( "wp_ajax_{$this->ajax_action}", array( $this, 'process_post_data' ) );
+			add_action( "wp_ajax_{$this->ajax_action}", [ $this, 'process_post_data' ] );
 		}
 
-		add_action( 'mlp_post_translator_init', array( $this, 'setup' ) );
+		add_action( 'mlp_post_translator_init', [ $this, 'setup' ] );
 		add_filter( 'mlp_external_save_method', '__return_true' );
 
 		// Disable default actions
-		add_action( 'mlp_translation_meta_box_registered', array( $this, 'register_metabox_view_details' ), 10, 2 );
+		add_action( 'mlp_translation_meta_box_registered', [ $this, 'register_metabox_view_details' ], 10, 2 );
 	}
 
 	/**
@@ -82,7 +82,7 @@ class Mlp_Advanced_Translator {
 		$this->view = new Mlp_Advanced_Translator_View( $this->translation_data );
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-			add_action( 'save_post', array( $this->translation_data, 'save' ), 10, 2 );
+			add_action( 'save_post', [ $this->translation_data, 'save' ], 10, 2 );
 		}
 
 		// Disable the checkbox, we can translate auto-drafts.
@@ -111,39 +111,39 @@ class Mlp_Advanced_Translator {
 		// check if the remote post is trashed
 		// if it is so, show the warning
 		if ( $is_trashed ) {
-			add_action( $base . 'top_' . $blog_id, array( $this->view, 'show_trashed_message' ), 10, 3 );
+			add_action( $base . 'top_' . $blog_id, [ $this->view, 'show_trashed_message' ], 10, 3 );
 
 			return;
 		}
 
 		// add the actions if the remote is not trashed
-		add_action( $base . 'top_' . $blog_id, array( $this, 'localize_script' ) );
+		add_action( $base . 'top_' . $blog_id, [ $this, 'localize_script' ] );
 
-		add_action( $base . 'top_' . $blog_id, array( $this->view, 'blog_id_input' ), 10, 3 );
+		add_action( $base . 'top_' . $blog_id, [ $this->view, 'blog_id_input' ], 10, 3 );
 
 		if ( post_type_supports( $post->post_type, 'title' ) ) {
-			add_action( $base . 'top_' . $blog_id, array( $this->view, 'show_title' ), 10, 3 );
+			add_action( $base . 'top_' . $blog_id, [ $this->view, 'show_title' ], 10, 3 );
 		}
 
-		add_action( $base . 'top_' . $blog_id, array( $this->view, 'show_name' ), 10, 3 );
+		add_action( $base . 'top_' . $blog_id, [ $this->view, 'show_name' ], 10, 3 );
 
 		if ( post_type_supports( $post->post_type, 'editor' ) ) {
-			add_action( $base . 'main_' . $blog_id, array( $this->view, 'show_editor' ), 10, 3 );
+			add_action( $base . 'main_' . $blog_id, [ $this->view, 'show_editor' ], 10, 3 );
 		} else {
-			remove_action( 'media_buttons', array( $this->view, 'show_copy_button' ), 20 );
+			remove_action( 'media_buttons', [ $this->view, 'show_copy_button' ], 20 );
 		}
 
 		if ( post_type_supports( $post->post_type, 'excerpt' ) ) {
-			add_action( $base . 'main_' . $blog_id, array( $this->view, 'show_excerpt' ), 10, 3 );
+			add_action( $base . 'main_' . $blog_id, [ $this->view, 'show_excerpt' ], 10, 3 );
 		}
 
 		if ( post_type_supports( $post->post_type, 'thumbnail' ) ) {
-			add_action( $base . 'main_' . $blog_id, array( $this->view, 'show_thumbnail_checkbox' ), 11, 3 );
+			add_action( $base . 'main_' . $blog_id, [ $this->view, 'show_thumbnail_checkbox' ], 11, 3 );
 		}
 
 		$taxonomies = get_object_taxonomies( $post, 'objects' );
 		if ( ! empty( $taxonomies ) ) {
-			add_action( $base . 'bottom_' . $blog_id, array( $this->view, 'show_taxonomies' ), 10, 3 );
+			add_action( $base . 'bottom_' . $blog_id, [ $this->view, 'show_taxonomies' ], 10, 3 );
 		}
 	}
 
@@ -164,11 +164,11 @@ class Mlp_Advanced_Translator {
 			'multilingual-press'
 		);
 
-		return $module_manager->register( array(
+		return $module_manager->register( [
 			'display_name' => $display_name,
 			'slug'         => 'class-' . __CLASS__,
 			'description'  => $description,
-		) );
+		 ] );
 	}
 
 	/**
@@ -180,10 +180,10 @@ class Mlp_Advanced_Translator {
 	 */
 	public function localize_script() {
 
-		wp_localize_script( 'mlp-admin', 'mlpCopyPostSettings', array(
+		wp_localize_script( 'mlp-admin', 'mlpCopyPostSettings', [
 			'action' => $this->ajax_action,
 			'siteID' => get_current_blog_id(),
-		) );
+		] );
 	}
 
 	/**
@@ -302,14 +302,14 @@ class Mlp_Advanced_Translator {
 		 */
 		$data = (array) apply_filters(
 			'mlp_process_post_data_for_remote_site',
-			array(
+			[
 				'siteID'         => $remote_site_id,
 				'title'          => $title,
 				'slug'           => $slug,
 				'tinyMCEContent' => $tmce_content,
 				'content'        => $content,
 				'excerpt'        => $excerpt,
-			),
+			],
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id

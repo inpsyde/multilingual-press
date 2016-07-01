@@ -56,7 +56,7 @@ class Mlp_Admin_Table_View {
 		Mlp_Data_Access    $data,
 		Mlp_Html_Interface $html,
 		Mlp_Browsable      $pagination_data,
-		Array              $columns,
+		array              $columns,
 		$id,
 		$name
 	) {
@@ -89,11 +89,9 @@ class Mlp_Admin_Table_View {
 	 */
 	private function print_tbody() {
 
-		$params = array(
-			'page' => $this->pagination_data->get_current_page()
-		);
-		$rows = $this->data->get_items( $params );
-
+		$rows = $this->data->get_items( [
+			'page' => $this->pagination_data->get_current_page(),
+		] );
 		if ( ! $rows ) {
 			?>
 			<tr>
@@ -127,7 +125,7 @@ class Mlp_Admin_Table_View {
 					<?php
 					$content = empty( $row->$col ) ? '' : $row->$col;
 
-					$attrs = empty( $data['attributes'] ) ? array() : $data['attributes'];
+					$attrs = empty( $data['attributes'] ) ? [] : $data['attributes'];
 
 					if ( empty( $data['type'] ) ) {
 						$data['type'] = 'text';
@@ -163,7 +161,7 @@ class Mlp_Admin_Table_View {
 	 * @param array $attributes
 	 * @return string
 	 */
-	private function get_checkbox_input( $id, $col, $value, Array $attributes = array() ) {
+	private function get_checkbox_input( $id, $col, $value, array $attributes = [] ) {
 
 		list( $name, $attrs ) = $this->prepare_input_data( $id, $col, $value, $attributes );
 
@@ -182,7 +180,7 @@ class Mlp_Admin_Table_View {
 	 * @param array $attributes
 	 * @return string
 	 */
-	private function get_number_input( $id, $col, $value, Array $attributes = array() ) {
+	private function get_number_input( $id, $col, $value, array $attributes = [] ) {
 
 		list( $name, $attrs, $value ) = $this->prepare_input_data( $id, $col, $value, $attributes );
 
@@ -201,7 +199,7 @@ class Mlp_Admin_Table_View {
 	 * @param array $attributes
 	 * @return string
 	 */
-	private function get_text_input( $id, $col, $value, Array $attributes = array() ) {
+	private function get_text_input( $id, $col, $value, array $attributes = [] ) {
 
 		list( $name, $attrs, $value ) = $this->prepare_input_data( $id, $col, $value, $attributes );
 
@@ -222,11 +220,11 @@ class Mlp_Admin_Table_View {
 	 */
 	private function prepare_input_data( $id, $col, $value, $attributes ) {
 
-		return array (
+		return [
 			$this->get_input_name( $id, $col ),
 			$this->html->array_to_attrs( $attributes ),
-			$value
-		);
+			$value,
+		];
 	}
 
 	/**

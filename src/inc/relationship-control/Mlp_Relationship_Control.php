@@ -42,7 +42,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 		if ( $this->is_ajax() ) {
 			$this->set_up_ajax();
 		} else {
-			add_action( 'mlp_translation_meta_box_bottom', array ( $this, 'set_up_meta_box_handlers' ), 200, 3 );
+			add_action( 'mlp_translation_meta_box_bottom', [ $this, 'set_up_meta_box_handlers' ], 200, 3 );
 		}
 	}
 
@@ -55,7 +55,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 
 		$callback_type = "{$this->prefix}_remote_post_search" === $_REQUEST['action'] ? 'search' : 'reconnect';
 
-		add_action( "wp_ajax_{$_REQUEST['action']}", array( $this, "ajax_{$callback_type}_callback" ) );
+		add_action( "wp_ajax_{$_REQUEST['action']}", [ $this, "ajax_{$callback_type}_callback" ] );
 	}
 
 	/**
@@ -116,14 +116,12 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 		if ( 'post-new.php' === $pagenow )
 			return; // maybe later, for now, we work on existing posts only
 
-		$this->data->set_ids(
-		   array (
-			   'source_post_id' => $post->ID,
-			   'source_site_id' => get_current_blog_id(),
-			   'remote_site_id' => $remote_site_id,
-			   'remote_post_id' => $remote_post->ID
-		   )
-		);
+		$this->data->set_ids( [
+			'source_post_id' => $post->ID,
+			'source_site_id' => get_current_blog_id(),
+			'remote_site_id' => $remote_site_id,
+			'remote_post_id' => $remote_post->ID,
+		] );
 		$view = new Mlp_Relationship_Control_Meta_Box_View( $this->data, $this );
 		$view->render();
 	}

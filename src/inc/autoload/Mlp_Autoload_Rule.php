@@ -38,12 +38,12 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 		if ( ! $name = $this->prepare_name( $name ) )
 			return FALSE;
 
-		foreach ( array ( 'core', 'pro' ) as $main_dir ) {
+		foreach ( [ 'core', 'pro' ] as $main_dir ) {
 
 			if ( ! is_dir( "$this->dir/$main_dir" ) )
 				continue;
 
-			foreach ( array ( 'controllers', 'models', 'views' ) as $sub_dir ) {
+			foreach ( [ 'controllers', 'models', 'views' ] as $sub_dir ) {
 
 				if ( ! is_dir( "$this->dir/$main_dir/$sub_dir" ) )
 					continue;

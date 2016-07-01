@@ -117,17 +117,17 @@ function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecate
 
 	$args = is_array( $args_or_deprecated_text )
 		? $args_or_deprecated_text
-		: array(
+		: [ 
 			'link_text' => $args_or_deprecated_text,
 			'sort'      => $deprecated_sort,
-		);
-	$defaults = array(
+		 ];
+	$defaults = [ 
 		'link_text'         => 'text',
 		'sort'              => 'priority',
 		'show_current_blog' => FALSE,
 		'display_flag'      => FALSE,
 		'strict'            => FALSE, // get exact translations only
-	);
+	 ];
 	$params = wp_parse_args( $args, $defaults );
 	$output = Mlp_Helpers::show_linked_elements( $params );
 
@@ -212,7 +212,7 @@ if ( ! function_exists( 'blog_exists' ) ) {
 
 		/** @type wpdb $wpdb */
 		global $wpdb;
-		static $cache = array ();
+		static $cache = [];
 
 		$site_id = (int) $site_id;
 
@@ -231,7 +231,7 @@ if ( ! function_exists( 'blog_exists' ) ) {
 
 			// Make sure the array is always filled with something.
 			if ( empty ( $result ) )
-				$cache[ $site_id ] = array ( 'do not check again' );
+				$cache[ $site_id ] = [ 'do not check again' ];
 			else
 				$cache[ $site_id ] = $result;
 		}

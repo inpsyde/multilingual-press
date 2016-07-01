@@ -16,7 +16,7 @@ class Mlp_Term_Translation_Selector {
 	/**
 	 * @type array
 	 */
-	private $related_sites = array();
+	private $related_sites = [];
 
 	/**
 	 * @param Mlp_Term_Translation_Presenter $presenter
@@ -233,7 +233,7 @@ class Mlp_Term_Translation_Selector {
 	 */
 	private function get_label_id( $key ) {
 
-		return str_replace( array( '[', ']' ), '', $key );
+		return str_replace( [ '[', ']' ], '', $key );
 	}
 
 }

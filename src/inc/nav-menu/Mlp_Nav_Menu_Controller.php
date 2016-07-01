@@ -72,7 +72,7 @@ class Mlp_Nav_Menu_Controller {
 
 		$deletor = new Mlp_Nav_Menu_Item_Deletor( $wpdb, $this->meta_key );
 
-		add_action( 'delete_blog', array( $deletor, 'delete_items_for_deleted_site' ) );
+		add_action( 'delete_blog', [ $deletor, 'delete_items_for_deleted_site' ] );
 	}
 
 	/**
@@ -88,7 +88,7 @@ class Mlp_Nav_Menu_Controller {
 			$this->language_api
 		);
 
-		add_filter( 'wp_nav_menu_objects', array ( $frontend, 'filter_items' ) );
+		add_filter( 'wp_nav_menu_objects', [ $frontend, 'filter_items' ] );
 	}
 
 	/**
@@ -117,7 +117,7 @@ class Mlp_Nav_Menu_Controller {
 		add_meta_box(
 			$this->handle,
 			$title,
-			array ( $this->view, 'show_available_languages' ),
+			[ $this->view, 'show_available_languages' ],
 			'nav-menus',
 			'side',
 			'low'
@@ -153,22 +153,22 @@ class Mlp_Nav_Menu_Controller {
 
 		add_action(
 			'wp_loaded',
-			array ( $this->data, 'register_script' )
+			[ $this->data, 'register_script' ]
 		);
 
 		add_action(
 			'admin_enqueue_scripts',
-			array ( $this->data, 'load_script' )
+			[ $this->data, 'load_script' ]
 		);
 
 		add_action(
 			"wp_ajax_$this->handle",
-			array ( $this->view, 'show_selected_languages' )
+			[ $this->view, 'show_selected_languages' ]
 		);
 
 		add_action(
 			'admin_init',
-			array( $this, 'add_meta_box' )
+			[ $this, 'add_meta_box' ]
 		);
 	}
 }

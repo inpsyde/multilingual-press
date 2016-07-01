@@ -71,7 +71,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 		}
 
 		$fields = new Mlp_Term_Fields( $taxonomies, $this );
-		add_action( 'load-edit-tags.php', array( $fields, 'setup' ) );
+		add_action( 'load-edit-tags.php', [ $fields, 'setup' ] );
 
 		$post_data = $this->get_post_data();
 
@@ -96,11 +96,11 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	private function get_post_data() {
 
 		if ( 'POST' !== $_SERVER[ 'REQUEST_METHOD' ] ) {
-			return array();
+			return [];
 		}
 
 		if ( empty( $_POST[ 'mlp' ][ 'term_translation' ] ) ) {
-			return array();
+			return [];
 		}
 
 		return (array) $_POST[ 'mlp' ][ 'term_translation' ];
@@ -119,18 +119,18 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			return $view->get_fieldset_id();
 		}
 
-		$table_positions = array(
+		$table_positions = [ 
 			Mlp_Term_Field_View::ADD_TERM_FIELDS,
 			Mlp_Term_Field_View::EDIT_TERM_FIELDS,
-		);
+		 ];
 		if ( in_array( $name, $table_positions, true ) ) {
 			return $view->print_table();
 		}
 
-		$title_positions = array(
+		$title_positions = [ 
 			Mlp_Term_Field_View::ADD_TERM_TITLE,
 			Mlp_Term_Field_View::EDIT_TERM_TITLE,
-		);
+		 ];
 		if ( in_array( $name, $title_positions, true ) ) {
 			return $view->get_title();
 		}
@@ -164,9 +164,9 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	private function get_valid_taxonomies() {
 
 		/** This filter is documented in inc/post-translator/Mlp_Translation_Metabox.php */
-		$post_types = (array) apply_filters( 'mlp_allowed_post_types', array( 'post', 'page' ) );
+		$post_types = (array) apply_filters( 'mlp_allowed_post_types', [ 'post', 'page' ] );
 		if ( empty( $post_types ) ) {
-			return array();
+			return [];
 		}
 
 		return get_object_taxonomies( $post_types );
@@ -181,11 +181,11 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		add_action(
 			'mlp_before_term_synchronization',
-			array( $switcher, 'strip' )
+			[ $switcher, 'strip' ]
 		);
 		add_action(
 			'mlp_after_term_synchronization',
-			array( $switcher, 'fill' )
+			[ $switcher, 'fill' ]
 		);
 	}
 
@@ -205,12 +205,12 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			$post_data
 		);
 
-		$actions = $delete ? array( 'delete' ) : array( 'create', 'edit' );
+		$actions = $delete ? [ 'delete' ] : [ 'create', 'edit' ];
 
 		foreach ( $actions as $action ) {
 			add_action(
 				"{$action}_term",
-				array( $connector, 'change_term_relationships' ),
+				[ $connector, 'change_term_relationships' ],
 				10,
 				3
 			);

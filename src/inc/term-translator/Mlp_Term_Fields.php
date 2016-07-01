@@ -41,8 +41,8 @@ class Mlp_Term_Fields {
 
 		$view = new Mlp_Term_Field_View( $this->updatable );
 
-		add_action( "{$taxonomy}_add_form_fields", array( $view, 'add_term' ) );
-		add_action( "{$taxonomy}_edit_form_fields", array( $view, 'edit_term' ) );
+		add_action( "{$taxonomy}_add_form_fields", [ $view, 'add_term' ] );
+		add_action( "{$taxonomy}_edit_form_fields", [ $view, 'edit_term' ] );
 
 		return TRUE;
 	}

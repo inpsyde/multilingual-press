@@ -20,7 +20,7 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 	 *
 	 * @var array
 	 */
-	private $found = array ();
+	private $found = [];
 
 	/**
 	 * Constructor.
@@ -57,15 +57,15 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 	 */
 	private function read_files() {
 
-		$return = array();
+		$return = [];
 		$files  = glob( $this->dir . '/*.php' );
 
 		// Catch empty values to prevent multiple attempts to read the directory.
 		if ( FALSE === $files )
-			return array ( 'error' );
+			return [ 'error' ];
 
-		if ( array () === $files )
-			return array ( 'empty' );
+		if ( [] === $files )
+			return [ 'empty' ];
 
 		foreach ( $files as $file )
 			$return[ basename( $file, '.php' ) ] = 1;

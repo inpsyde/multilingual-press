@@ -37,10 +37,10 @@ class Mlp_Relationship_Control_Ajax_Search {
 
 	public function send_response() {
 
-		wp_send_json_success( array(
+		wp_send_json_success( [
 			'html'         => $this->get_formatted_results(),
 			'remoteSiteID' => $this->data->get_remote_site_id(),
-		) );
+		] );
 	}
 
 	public function show_search_results() {
@@ -56,7 +56,7 @@ class Mlp_Relationship_Control_Ajax_Search {
 	 * @param array $results
 	 * @return string
 	 */
-	private function format_results( Array $results ) {
+	private function format_results( array $results ) {
 
 		if ( empty ( $results ) )
 			return '<li>'
@@ -108,9 +108,9 @@ class Mlp_Relationship_Control_Ajax_Search {
 	 * @param  array $posts
 	 * @return array
 	 */
-	private function prepare_titles( Array $posts ) {
+	private function prepare_titles( array $posts ) {
 
-		$out = $titles = $duplicates = array ();
+		$out = $titles = $duplicates = [];
 
 		/** @var WP_Post $post */
 		foreach ( $posts as $post ) {

@@ -18,7 +18,7 @@ class Mlp_Array_Diff {
 	 *
 	 * @param array $columns
 	 */
-	public function __construct( Array $columns ) {
+	public function __construct( array $columns ) {
 		$this->columns = $columns;
 	}
 
@@ -27,9 +27,9 @@ class Mlp_Array_Diff {
 	 * @param array $new
 	 * @return array
 	 */
-	public function get_difference( Array $old, Array $new ) {
+	public function get_difference( array $old, array $new ) {
 
-		$diff = array ();
+		$diff = [];
 		$new  = $this->normalize_new_array( $new, $old );
 
 		foreach ( $old as $old_id => $old_data_array ) {
@@ -54,13 +54,13 @@ class Mlp_Array_Diff {
 	 * @param array $old
 	 * @return array
 	 */
-	private function normalize_new_array( Array $new, Array $old ) {
+	private function normalize_new_array( array $new, array $old ) {
 
-		$out = array();
+		$out = [];
 
 		foreach ( $new as $new_id => $new_data ) {
 
-			$out[ $new_id ] = array();
+			$out[ $new_id ] = [];
 
 			foreach ( $this->columns as $col_name => $col_params ) {
 
@@ -134,21 +134,17 @@ class Mlp_Array_Diff {
 
 
 			if ( isset ( $col_params[ 'attributes' ][ 'min' ] ) ) {
-				$return = max(
-					array (
-						(int) $new_data[ $col_name ],
-						(int) $col_params[ 'attributes' ][ 'min' ]
-					)
-				);
+				$return = max( [
+					(int) $new_data[ $col_name ],
+					(int) $col_params[ 'attributes' ][ 'min' ]
+				] );
 			}
 
 			if ( isset ( $col_params[ 'attributes' ][ 'max' ] ) ) {
-				$return = min(
-					array (
-						(int) $new_data[ $col_name ],
-						(int) $col_params[ 'attributes' ][ 'max' ]
-					)
-				);
+				$return = min( [
+					(int) $new_data[ $col_name ],
+					(int) $col_params[ 'attributes' ][ 'max' ]
+				] );
 			}
 
 			return $return;
@@ -157,31 +153,3 @@ class Mlp_Array_Diff {
 		return $return;
 	}
 }
-
-/* $columns format:
-array (
-	'native_name' => array (
-		'header'     => esc_html__( 'Native name', 'multilingual-press' ),
-		'type'       => 'input_text',
-		'attributes' => array (
-			'size' => 20
-		)
-	),
-	'is_rtl' => array (
-		'header'     => esc_html__( 'RTL', 'multilingual-press' ),
-		'type'       => 'input_checkbox',
-		'attributes' => array (
-			'size' => 20
-		)
-	),
-	'priority' => array (
-		'header'     => esc_html__( 'Priority', 'multilingual-press' ),
-		'type'       => 'input_number',
-		'attributes' => array (
-			'min'  => 1,
-			'max'  => 10,
-			'size' => 3
-		)
-	),
-)
- */

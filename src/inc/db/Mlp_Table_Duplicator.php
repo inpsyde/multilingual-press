@@ -18,7 +18,7 @@ class Mlp_Table_Duplicator implements Mlp_Table_Duplicator_Interface {
 	 *
 	 * @var array
 	 */
-	private $primary_keys = array();
+	private $primary_keys = [];
 
 	/**
 	 * @param wpdb $wpdb

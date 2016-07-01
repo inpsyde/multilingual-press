@@ -23,6 +23,6 @@ class Mlp_Redirect_User_Settings {
 		$user_settings_controller->setup();
 
 		$redirect_filter = new Mlp_Redirect_Filter( $meta_key );
-		add_filter( 'mlp_do_redirect', array( $redirect_filter, 'filter_redirect' ) );
+		add_filter( 'mlp_do_redirect', [ $redirect_filter, 'filter_redirect' ] );
 	}
 }

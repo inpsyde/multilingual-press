@@ -50,13 +50,13 @@ class Mlp_Simple_Nav_Menu_Selectors {
 		// Needed for the walker.
 		require_once ABSPATH . 'wp-admin/includes/nav-menu.php';
 
-		$data = walk_nav_menu_tree( $menu_items, 0, (object) array(
+		$data = walk_nav_menu_tree( $menu_items, 0, (object) [
 			'after'       => '',
 			'before'      => '',
 			'link_after'  => '',
 			'link_before' => '',
 			'walker'      => new Walker_Nav_Menu_Edit(),
-		) );
+		] );
 		wp_send_json_success( $data );
 	}
 
@@ -137,9 +137,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 	private function print_add_button() {
 
 		$button_id         = $this->data->get_button_id();
-		$button_attributes = array (
-			'id' => "submit-$button_id"
-		);
+		$button_attributes = [ 'id' => "submit-$button_id" ];
 
 		if ( ! $this->data->has_menu() )
 			$button_attributes[ 'disabled' ] = 'disabled';
@@ -168,23 +166,20 @@ class Mlp_Simple_Nav_Menu_Selectors {
 	 */
 	private function get_select_all_url( $list_id ) {
 
-		$removed_args = array(
+		$removed_args = [
 			'action',
 			'customlink-tab',
 			'edit-menu-item',
 			'menu-item',
 			'page-tab',
 			'_wpnonce',
-		);
+		 ];
 
 		$base = remove_query_arg( $removed_args );
-		$url  = add_query_arg(
-			array(
-				'languages-tab' => 'all',
-				'selectall'     => 1,
-			),
-			$base
-		);
+		$url  = add_query_arg( [
+			'languages-tab' => 'all',
+			'selectall'     => 1,
+		], $base );
 
 		return esc_url( $url ) . "#mlp-$list_id";
 	}

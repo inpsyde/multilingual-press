@@ -78,10 +78,10 @@ class Mlp_Term_Translation {
 
 		$url = $this->get_public_url( (int) $term[ 'term_id'], $term[ 'taxonomy'] );
 
-		return array (
+		return [
 			'target_url'   => Mlp_Url_Factory::create( $url ),
-			'target_title' => $term[ 'name' ]
-		);
+			'target_title' => $term[ 'name' ],
+		];
 	}
 
 	/**
@@ -91,7 +91,7 @@ class Mlp_Term_Translation {
 	 * @param  string $taxonomy
 	 * @return array|bool
 	 */
-	private function get_admin_translation( Array $term, $taxonomy ) {
+	private function get_admin_translation( array $term, $taxonomy ) {
 
 		if ( ! current_user_can( 'edit_terms', $taxonomy ) ) {
 			return FALSE;
@@ -99,10 +99,10 @@ class Mlp_Term_Translation {
 
 		$url = get_edit_term_link( (int) $term[ 'term_id' ], $taxonomy );
 
-		return array (
+		return [
 			'target_url'   => Mlp_Url_Factory::create( $url ),
-			'target_title' => $term[ 'name' ]
-		);
+			'target_title' => $term[ 'name' ],
+		];
 	}
 
 	/**
@@ -171,10 +171,10 @@ class Mlp_Term_Translation {
 	 */
 	private function get_expected_base( $taxonomy ) {
 
-		$taxonomies = array (
+		$taxonomies = [
 			'category' => 'category_base',
 			'post_tag' => 'tag_base'
-		);
+		 ];
 		if ( ! isset ( $taxonomies[ $taxonomy ] ) )
 			return FALSE;
 
@@ -223,7 +223,7 @@ LIMIT 1";
 
 		$term = $this->wpdb->get_row( $query, ARRAY_A );
 		if ( ! $term ) {
-			$term = array();
+			$term = [];
 		}
 
 		wp_cache_set( $cache_key, $term, 'mlp' );

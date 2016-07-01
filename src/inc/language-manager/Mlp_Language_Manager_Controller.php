@@ -89,15 +89,15 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		add_action(
 			'admin_post_mlp_update_languages',
-			array ( $updater, 'update_languages' )
+			[ $updater, 'update_languages' ]
 		);
 		add_action(
 			'network_admin_menu',
-			array( $this, 'register_page' ), 50
+			[ $this, 'register_page' ], 50
 		);
 		add_action(
 			"admin_post_{$this->reset_action}",
-			array ( $this, 'reset_table' )
+			[ $this, 'reset_table' ]
 		);
 	}
 
@@ -112,10 +112,10 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			$this->page_title,
 			'manage_network_options',
 			'language-manager',
-			array( $this->view, 'render' )
+			[ $this->view, 'render' ]
 		);
 
-		add_action( "load-$page_id", array ( $this, 'enqueue_style' ) );
+		add_action( "load-$page_id", [ $this, 'enqueue_style' ] );
 	}
 
 	/**
@@ -174,14 +174,11 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		$request = remove_query_arg( 'msg', wp_unslash( $_SERVER['REQUEST_URI'] ) );
 		$nonce   = wp_create_nonce( $this->page_data->get_nonce_action() );
-		$url     = add_query_arg(
-			array (
-				'action'                           => $this->reset_action,
-				$this->page_data->get_nonce_name() => $nonce,
-				'_wp_http_referer'                 => esc_attr( $request )
-			),
-			$this->page_data->get_form_action()
-		);
+		$url     = add_query_arg( [
+			'action'                           => $this->reset_action,
+			$this->page_data->get_nonce_name() => $nonce,
+			'_wp_http_referer'                 => esc_attr( $request )
+		], $this->page_data->get_form_action() );
 		?>
 		<p>
 			<a href="<?php echo esc_url( $url ); ?>" class="delete submitdelete" style="color:red">
@@ -350,65 +347,51 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 * @return array
 	 */
 	private function get_columns() {
-		return array (
-			'native_name' => array (
+		return [
+			'native_name' => [
 				'header'     => __( 'Native name', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 20
-				)
-			),
-			'english_name' => array (
+				'attributes' => [ 'size' => 20 ],
+			],
+			'english_name' => [
 				'header'     => __( 'English name', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 20
-				)
-			),
-			'is_rtl' => array (
+				'attributes' => [ 'size' => 20 ],
+			],
+			'is_rtl' => [
 				'header'     => __( 'RTL', 'multilingual-press' ),
 				'type'       => 'input_checkbox',
-				'attributes' => array (
-					'size' => 20
-				)
-			),
-			'http_name' => array (
+				'attributes' => [ 'size' => 20 ],
+			],
+			'http_name' => [
 				'header'     => __( 'HTTP', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 5
-				)
-			),
-			'iso_639_1' => array (
+				'attributes' => [ 'size' => 5 ],
+			],
+			'iso_639_1' => [
 				'header'     => __( 'ISO&#160;639-1', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 5
-				)
-			),
-			'iso_639_2' => array (
+				'attributes' => [ 'size' => 5 ],
+			],
+			'iso_639_2' => [
 				'header'     => __( 'ISO&#160;639-2', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 5
-				)
-			),
-			'wp_locale' => array (
+				'attributes' => [ 'size' => 5 ],
+			],
+			'wp_locale' => [
 				'header'     => __( 'wp_locale', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 5
-				)
-			),
-			'priority' => array (
+				'attributes' => [ 'size' => 5 ],
+			],
+			'priority' => [
 				'header'     => __( 'Priority', 'multilingual-press' ),
 				'type'       => 'input_number',
-				'attributes' => array (
+				'attributes' => [
 					'min'  => 1,
 					'max'  => 10,
-					'size' => 3
-				)
-			),
-		);
+					'size' => 3,
+				 ],
+			],
+		];
 	}
 }

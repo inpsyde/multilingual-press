@@ -58,7 +58,7 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 
 		$post = get_post( $post_id );
 
-		if ( in_array( $post->post_status, array( 'publish', 'draft', 'private', 'auto-draft' ), true ) ) {
+		if ( in_array( $post->post_status, [ 'publish', 'draft', 'private', 'auto-draft' ], true ) ) {
 			return false;
 		}
 

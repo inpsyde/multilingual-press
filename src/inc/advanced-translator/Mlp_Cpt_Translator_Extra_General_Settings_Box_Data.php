@@ -17,7 +17,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	/**
 	 * @var array
 	 */
-	private $post_types = array ();
+	private $post_types = [];
 
 	/**
 	 * Prefix for 'name' attribute in form fields.
@@ -144,7 +144,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	 * @param string   $s_label
 	 * @return string
 	 */
-	private function get_row( $cpt, $cpt_params, Array $options, $s_label ) {
+	private function get_row( $cpt, $cpt_params, array $options, $s_label ) {
 
 		$id = 'mlp_cpt_' . $cpt;
 

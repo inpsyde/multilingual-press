@@ -18,7 +18,7 @@ class Mlp_Nav_Menu_Frontend {
 	/**
 	 * @var int[]
 	 */
-	private $site_ids = array();
+	private $site_ids = [];
 
 	/**
 	 * Constructor.
@@ -44,10 +44,10 @@ class Mlp_Nav_Menu_Frontend {
 	 */
 	public function filter_items( array $items ) {
 
-		$translations = $this->language_api->get_translations( array(
+		$translations = $this->language_api->get_translations( [ 
 			'strict'       => false,
 			'include_base' => true,
-		) );
+		 ] );
 
 		foreach ( $items as $key => $item ) {
 			if ( $this->maybe_delete_obsolete_item( $item ) ) {
@@ -129,7 +129,7 @@ class Mlp_Nav_Menu_Frontend {
 		$site_url = get_site_url( $site_id, '/' );
 
 		if ( empty( $translations[ $site_id ] ) ) {
-			return array( $site_url, null );
+			return [ $site_url, null ];
 		}
 
 		$translation = $translations[ $site_id ];
@@ -139,7 +139,7 @@ class Mlp_Nav_Menu_Frontend {
 			$url = $site_url;
 		}
 
-		return array( $url, $translation );
+		return [ $url, $translation ];
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Mlp_Nav_Menu_Frontend {
 			return $this->site_ids[ $item->ID ];
 		}
 
-		$site_id = in_array( $item->type, array( 'language', 'custom' ), true )
+		$site_id = in_array( $item->type, [ 'language', 'custom' ], true )
 			? (int) get_post_meta( $item->ID, $this->meta_key, true )
 			: 0;
 

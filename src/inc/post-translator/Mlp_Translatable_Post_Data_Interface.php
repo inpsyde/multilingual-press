@@ -64,7 +64,7 @@ interface Mlp_Translatable_Post_Data_Interface {
 	 *
 	 * @return void
 	 */
-	public function update_remote_post_meta( $remote_post_id, $post_meta = array() );
+	public function update_remote_post_meta( $remote_post_id, $post_meta = [] );
 
 	/**
 	 * @param string $post_type
@@ -99,6 +99,6 @@ interface Mlp_Translatable_Post_Data_Interface {
 	 *
 	 * @return void
 	 */
-	public function set_save_context( array $save_context = array() );
+	public function set_save_context( array $save_context = [] );
 
 }

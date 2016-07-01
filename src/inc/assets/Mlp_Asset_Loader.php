@@ -23,9 +23,9 @@ class Mlp_Asset_Loader {
 	 * Constructor. Set up the properties.
 	 *
 	 * @param array $handles One or more asset handles.
-	 * @param array $l10n    Optional. Localized data. Defaults to array().
+	 * @param array $l10n    Optional. Localized data. Defaults to [].
 	 */
-	public function __construct( array $handles, array $l10n = array() ) {
+	public function __construct( array $handles, array $l10n = [] ) {
 
 		$this->handles = $handles;
 		$this->l10n = $l10n;

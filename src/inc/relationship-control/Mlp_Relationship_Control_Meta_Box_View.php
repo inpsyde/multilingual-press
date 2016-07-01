@@ -82,10 +82,10 @@ class Mlp_Relationship_Control_Meta_Box_View {
 				<div class="mlp-rc-settings">
 					<div class="mlp-rc-actions" style="float: left; width: 20em;">
 						<?php
-						$actions = array (
+						$actions = [
 							'stay' => esc_html__( 'Leave as is', 'multilingual-press' ),
 							'new'  => esc_html__( 'Create new post', 'multilingual-press' ),
-						);
+						];
 
 						if ( $this->remote_post_id )
 							$actions[ 'disconnect' ] = esc_html__( 'Remove relationship', 'multilingual-press' );
@@ -161,15 +161,15 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	 */
 	private function localize_script() {
 
-		wp_localize_script( 'mlp-admin', 'mlpRelationshipControlSettings', array(
-			'L10n' => array(
+		wp_localize_script( 'mlp-admin', 'mlpRelationshipControlSettings', [
+			'L10n' => [
 				'noPostSelected'       => __( 'Please select a post.', 'multilingual-press' ),
 				'unsavedRelationships' => __(
 					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
 					'multilingual-press'
 				),
-			),
-		) );
+			],
+		] );
 
 		/**
 		 * Filters the minimum number of characters required to fire the remote post search.
@@ -179,9 +179,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 		$threshold = (int) apply_filters( 'mlp_remote_post_search_threshold', 3 );
 		$threshold = max( 1, $threshold );
 
-		wp_localize_script( 'mlp-admin', 'mlpRemotePostSearchSettings', array(
-			'threshold' => $threshold,
-		) );
+		wp_localize_script( 'mlp-admin', 'mlpRemotePostSearchSettings', [ 'threshold' => $threshold, ] );
 	}
 
 	/**
@@ -204,13 +202,13 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	 */
 	private function add_id_values( $str ) {
 
-		$data = array (
+		$data = [
 			'results-container-id' => "mlp-search-results-{$this->remote_site_id}",
 			'source-site-id'       => $this->site_id,
 			'source-post-id'       => $this->post->ID,
 			'remote-site-id'       => $this->remote_site_id,
 			'remote-post-id'       => $this->remote_post_id,
-		);
+		 ];
 
 		foreach ( $data as $key => $value )
 			$str .= " data-$key='$value'";

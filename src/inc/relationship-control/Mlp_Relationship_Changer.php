@@ -69,26 +69,23 @@ class Mlp_Relationship_Changer {
 		if ( ! $source_post )
 			return 'source not found';
 
-		$save_context = array(
+		$save_context = [
 			'source_blog'    => $this->source_site_id,
 			'source_post'    => $source_post,
 			'real_post_type' => $this->get_real_post_type( $source_post ),
 			'real_post_id'   => $this->get_real_post_id( $this->source_post_id ),
-		);
+		];
 
 		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_before_post_synchronization', $save_context );
 
 		switch_to_blog( $this->remote_site_id );
 
-		$post_id = wp_insert_post(
-			array (
-				'post_type'   => $source_post->post_type,
-				'post_status' => 'draft',
-				'post_title'  => $this->new_post_title
-			),
-			TRUE
-		);
+		$post_id = wp_insert_post( [
+			'post_type'   => $source_post->post_type,
+			'post_status' => 'draft',
+			'post_title'  => $this->new_post_title
+		], TRUE );
 
 		restore_current_blog();
 
@@ -244,14 +241,14 @@ class Mlp_Relationship_Changer {
 	 */
 	private function prepare_values() {
 
-		$find = array (
+		$find = [
 			'source_post_id',
 			'source_site_id',
 			'remote_post_id',
 			'remote_site_id',
 			'new_post_id',
 			'new_post_title',
-		);
+		 ];
 
 		foreach ( $find as $value ) {
 			if ( ! empty ( $_REQUEST[ $value ] ) ) {

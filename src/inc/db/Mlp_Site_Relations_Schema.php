@@ -43,11 +43,11 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 */
 	public function get_schema() {
 
-		return array(
+		return [
 			'ID'     => 'INT NOT NULL AUTO_INCREMENT',
 			'site_1' => 'bigint(20) NOT NULL',
 			'site_2' => 'bigint(20) NOT NULL',
-		);
+		];
 	}
 
 	/**
@@ -67,9 +67,7 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 */
 	public function get_autofilled_keys() {
 
-		return array(
-			'ID',
-		);
+		return [ 'ID', ];
 	}
 
 	/**
