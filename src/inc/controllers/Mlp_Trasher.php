@@ -40,10 +40,6 @@ class Mlp_Trasher {
 		// Register Trasher post meta to the submit box.
 		add_action( 'post_submitbox_misc_actions', array( $this, 'post_submitbox_misc_actions' ) );
 
-		// Trash and delete the post method before WordPress 3.2.0.
-		add_action( 'trash_post', array( $this, 'trash_post' ) );
-
-		// Trash and delete the post method after WordPress 3.2.0.
 		add_action( 'wp_trash_post', array( $this, 'trash_post' ) );
 
 		add_action( 'save_post', array( $this, 'save_post' ) );
