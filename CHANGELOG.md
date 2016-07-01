@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.0-dev
+
+
 ## 2.4.6
 - Post Translator: Fix translations not being saved, see
 [issue #219](https://github.com/inpsyde/multilingual-press/issues/219).
