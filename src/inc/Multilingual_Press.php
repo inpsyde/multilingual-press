@@ -245,7 +245,7 @@ class Multilingual_Press {
 
 		$found = array ();
 
-		$path = $this->plugin_data->get( 'plugin_dir_path' ) . "/inc";
+		$path = $this->plugin_data->get( 'plugin_dir_path' ) . "/src/inc";
 
 		if ( ! is_readable( $path ) )
 			return $found;
