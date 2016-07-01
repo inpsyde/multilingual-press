@@ -23,8 +23,8 @@ before_install:
 install:
   - composer install --no-interaction --prefer-source
   - gem install sass
-  - npm install -g npm
-  - npm install -g grunt-cli
+  - npm install --global npm
+  - npm install --global grunt-cli
   - npm install
 
 script:
