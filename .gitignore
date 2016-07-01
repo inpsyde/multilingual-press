@@ -1,21 +1,21 @@
-# General backup/log/swap files
+# Backups
 *~
 *.DS_Store
-*.log
 *.out
 *.so
 *.swp
 
-# Custom files
-*.map
-*.sass-cache*
+# Logs
+logs
+*.log
 
 # Composer
 vendor
-composer.lock
 
 # Node
+.npm
 node_modules
+npm-debug.log*
 
 # PhpStorm
 .idea
@@ -23,8 +23,16 @@ node_modules
 # PHPUnit
 phpunit.xml
 
-# GitHub release archive
-/*.zip
+# Sass
+.sass-cache
+*.css.map
 
-# This should stay at the bottom
+
+# Generated files
+/assets
+/svn-assets
+/MultilingualPress.zip
+
+
+# Git
 !.gitkeep
