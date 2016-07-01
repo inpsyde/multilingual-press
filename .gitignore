@@ -10,6 +10,7 @@ logs
 *.log
 
 # Composer
+composer.lock
 vendor
 
 # Node
