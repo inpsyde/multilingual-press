@@ -41,9 +41,25 @@
   "require-dev": {
     "phpunit/phpunit": "~4.8|~5.1"
   },
+  "autoload": {
+    "psr-4": {
+      "Inpsyde\\MultilingualPress\\": "src"
+    },
+    "classmap": [
+      "src/_deprecated"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Inpsyde\\MultilingualPress\\Test\\": "tests/php"
+    }
+  },
   "config": {
-    "platform": {
-      "php": "5.4"
+    "optimize-autoloader": true
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.0.x-dev"
     }
   }
 }
