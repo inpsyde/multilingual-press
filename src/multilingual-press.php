@@ -8,7 +8,7 @@
  * Version:     2.4.6
  * Text Domain: multilingual-press
  * Domain Path: /languages
- * License:     GPLv3
+ * License:     MIT
  * Network:     true
  */
 

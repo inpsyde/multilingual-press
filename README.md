@@ -129,8 +129,7 @@ to this repository.
 The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006.
 
 ## License
-Good news, this plugin is free for everyone! Since it's released under [GPLv3](LICENSE), you can use it free of charge
-on your personal or commercial website.
 
-## Changelog
-[Changelog](CHANGELOG.md)
+Copyright (c) 2016 Inpsyde GmbH
+
+This code is licensed under the [MIT License](LICENSE).

@@ -20,7 +20,7 @@
   ],
   "homepage": "https://github.com/inpsyde/multilingual-press",
   "bugs": "https://github.com/inpsyde/multilingual-press/issues",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "author": {
     "name": "Inpsyde GmbH",
     "email": "hello@inpsyde.com",
