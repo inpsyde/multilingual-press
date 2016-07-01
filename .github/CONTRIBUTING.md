@@ -1,7 +1,7 @@
 Thanks for contributing to MultilingualPress (MLP)&mdash;you rock!
 
 # MultilingualPress
-* For **general information** please refer to the [MultilingualPress website](http://multilingualpress.pro/).
+* For **general information** please refer to the [MultilingualPress website](http://multilingualpress.org/).
 * MLP should be backwards compatible with the two versions prior to the current stable version of WordPress.
 * MLP respects the [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/) and follows additional [conventions and best practices](https://github.com/inpsyde/Codex/blob/master/accepted/styleguide_conventions_bestpractices_EN.md). 
 * If you want to **translate MultilingualPress**, you best do so by means of the official [WordPress.org GlotPress](https://translate.wordpress.org/projects/wp-plugins/multilingual-press).
