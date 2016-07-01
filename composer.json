@@ -32,7 +32,7 @@
     "forum": "https://wordpress.org/support/plugin/multilingual-press",
     "wiki": "https://github.com/inpsyde/multilingual-press/wiki",
     "source": "https://github.com/inpsyde/multilingual-press",
-    "docs": "https://marketpress.com/documentation/multilingual-press/"
+    "docs": "http://docs.multilingualpress.org"
   },
   "require": {
     "php": ">=5.4",
