@@ -1,5 +1,8 @@
 <?php
 
+use Inpsyde\MultilingualPress\Assets\DebugAwareURL;
+use Inpsyde\MultilingualPress\Assets\URL;
+
 /**
  * Handle scripts and stylesheets
  *
@@ -59,13 +62,13 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 			return FALSE;
 		}
 
-		$url = new Mlp_Asset_Url(
+		$url = DebugAwareURL::create(
 			$file,
 			$this->locations->get_dir( $ext, 'path' ),
 			$this->locations->get_dir( $ext, 'url' )
 		);
 
-		$this->assets[ $handle ] = [ 
+		$this->assets[ $handle ] = [
 			'url'          => $url,
 			'ext'          => $ext,
 			'dependencies' => $dependencies,
@@ -92,7 +95,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 				continue;
 			}
 
-			/** @var Mlp_Asset_Url_Interface $url_object */
+			/** @var URL $url_object */
 			$url_object = $properties[ 'url' ];
 			$url = $url_object->__toString();
 			$version = $url_object->get_version();
