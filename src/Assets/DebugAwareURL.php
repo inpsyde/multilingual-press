@@ -44,6 +44,22 @@ class DebugAwareURL implements URL {
 	}
 
 	/**
+	 * Returns a new asset URL instance according to the given arguments.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $file     Normal file name (e.g., admin.css).
+	 * @param string $dir_path Local path to the directory containing the file.
+	 * @param string $dir_url  Public URL for the directory containing the file.
+	 *
+	 * @return DebugAwareURL Asset URL instance.
+	 */
+	public static function create( $file, $dir_path, $dir_url ) {
+
+		return new self( $file, $dir_path, $dir_url );
+	}
+
+	/**
 	 * Returns the URL string.
 	 *
 	 * @since 3.0.0
