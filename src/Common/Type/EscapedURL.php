@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Common\Type;
  * @package Inpsyde\MultilingualPress\Common\Type
  * @since   3.0.0
  */
-class Mlp_Url implements URL {
+class EscapedURL implements URL {
 
 	/**
 	 * @var string
