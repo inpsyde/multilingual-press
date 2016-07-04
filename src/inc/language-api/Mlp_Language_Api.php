@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 
 /**
@@ -296,7 +297,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				if ( 'search' === $arguments[ 'type' ] ) {
 
 					$url                 = get_search_link( $arguments[ 'search_term' ] );
-					$arr[ 'target_url' ] = Mlp_Url_Factory::create( $url );
+					$arr[ 'target_url' ] = EscapedURL::create( $url );
 				}
 				elseif ( 'post_type_archive' === $arguments[ 'type' ]
 					&& ! empty ( $arguments[ 'post_type' ] )
@@ -372,7 +373,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$return = [];
 
 		$url                    = get_post_type_archive_link( $post_type );
-		$return[ 'target_url' ] = Mlp_Url_Factory::create( $url );
+		$return[ 'target_url' ] = EscapedURL::create( $url );
 		$obj                    = get_post_type_object( $post_type );
 
 		if ( $obj )
@@ -406,7 +407,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 			return [
 				'target_title' => $title,
-				'target_url'   => Mlp_Url_Factory::create( get_edit_post_link( $content_id ) )
+				'target_url'   => EscapedURL::create( get_edit_post_link( $content_id ) )
 			];
 		}
 
@@ -418,7 +419,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		if ( 'publish' === $post->post_status || $editable )
 			return [
 				'target_title' => $title,
-				'target_url'   => empty ( $url ) ? '' : Mlp_Url_Factory::create( $url )
+				'target_url'   => empty ( $url ) ? '' : EscapedURL::create( $url )
 			];
 
 		// unpublished post, not editable
@@ -443,7 +444,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		$custom_flag = get_blog_option( $site_id, 'inpsyde_multilingual_flag_url' );
 		if ( $custom_flag ) {
-			return Mlp_Url_Factory::create( $custom_flag );
+			return EscapedURL::create( $custom_flag );
 		}
 
 		$flag_path = $this->data->get( 'flag_path' );
@@ -453,10 +454,10 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$file_name = $sub . '.gif';
 
 		if ( is_readable( "$flag_path/$file_name" ) ) {
-			return Mlp_Url_Factory::create( $this->data->get( 'flag_url' ) . $file_name );
+			return EscapedURL::create( $this->data->get( 'flag_url' ) . $file_name );
 		}
 
-		return Mlp_Url_Factory::create( '' );
+		return EscapedURL::create( '' );
 	}
 
 	/**

@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
+
 /**
  * Fetch and set term translations
  *
@@ -79,7 +82,7 @@ class Mlp_Term_Translation {
 		$url = $this->get_public_url( (int) $term[ 'term_id'], $term[ 'taxonomy'] );
 
 		return [
-			'target_url'   => Mlp_Url_Factory::create( $url ),
+			'target_url'   => EscapedURL::create( $url ),
 			'target_title' => $term[ 'name' ],
 		];
 	}
@@ -100,7 +103,7 @@ class Mlp_Term_Translation {
 		$url = get_edit_term_link( (int) $term[ 'term_id' ], $taxonomy );
 
 		return [
-			'target_url'   => Mlp_Url_Factory::create( $url ),
+			'target_url'   => EscapedURL::create( $url ),
 			'target_title' => $term[ 'name' ],
 		];
 	}
