@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+
 /**
  * Currently required PHP and WordPress versions.
  *
@@ -9,12 +12,12 @@
 interface Mlp_Requirements_Interface {
 
 	/**
-	 * @return Mlp_Semantic_Version_Number
+	 * @return VersionNumber
 	 */
 	public function get_min_php_version();
 
 	/**
-	 * @return Mlp_Semantic_Version_Number
+	 * @return VersionNumber
 	 */
 	public function get_min_wp_version();
 

@@ -12,6 +12,8 @@
  * Network:     true
  */
 
+use Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber;
+
 defined( 'ABSPATH' ) or die();
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
@@ -122,8 +124,8 @@ function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_
 		$deactivator = new Mlp_Network_Plugin_Deactivation();
 
 		$last_version_option = get_site_option( 'mlp_version' );
-		$last_version = Mlp_Semantic_Version_Number_Factory::create( $last_version_option );
-		$current_version = Mlp_Semantic_Version_Number_Factory::create( $data->get( 'version' ) );
+		$last_version = SemanticVersionNumber::create( $last_version_option );
+		$current_version = SemanticVersionNumber::create( $data->get( 'version' ) );
 		$upgrade_check = $self_check->is_current_version( $current_version, $last_version );
 		$updater = new Mlp_Update_Plugin_Data( $data, $wpdb, $current_version, $last_version );
 

@@ -1,5 +1,6 @@
 <?php
 
+use Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 
 /**
@@ -89,8 +90,8 @@ class Mlp_Self_Check {
 
 		$check = new Mlp_Requirements_Check(
 			new Mlp_Install_Requirements(),
-			Mlp_Semantic_Version_Number_Factory::create( $php_version ),
-			Mlp_Semantic_Version_Number_Factory::create( $wp_version ),
+			SemanticVersionNumber::create( $php_version ),
+			SemanticVersionNumber::create( $wp_version ),
 			$this->plugin_file
 		);
 
@@ -154,7 +155,7 @@ class Mlp_Self_Check {
 			return $plugins;
 		}
 
-		$new_version = Mlp_Semantic_Version_Number_Factory::create( $plugins->response[ $file ]->new_version );
+		$new_version = SemanticVersionNumber::create( $plugins->response[ $file ]->new_version );
 		if ( version_compare( $new_version, '3.0.0-alpha', '<' ) ) {
 			return $plugins;
 		}
