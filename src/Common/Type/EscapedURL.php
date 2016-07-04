@@ -33,6 +33,20 @@ class EscapedURL implements URL {
 	}
 
 	/**
+	 * Returns a new URL instance for the given URL source.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param mixed $url URL source.
+	 *
+	 * @return EscapedURL URL instance.
+	 */
+	public static function create( $url ) {
+
+		return new self( $url );
+	}
+
+	/**
 	 * Returns the URL string.
 	 *
 	 * @since 3.0.0
