@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Common\Type\Language;
+
 /**
  * Find best alternative for given content
  *
@@ -138,11 +141,11 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	}
 
 	/**
-	 * @param Mlp_Language_Interface $language
-	 * @param array                  $user
+	 * @param Language $language
+	 * @param array    $user
 	 * @return float The user priority
 	 */
-	private function get_user_priority( Mlp_Language_Interface $language, array $user ) {
+	private function get_user_priority( Language $language, array $user ) {
 
 		$lang_http = $language->get_name( 'http_name' );
 

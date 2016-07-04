@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 
 /**
@@ -12,7 +13,7 @@ use Inpsyde\MultilingualPress\Common\Type\URL;
 class Mlp_Translation implements Mlp_Translation_Interface {
 
 	/**
-	 * @type Mlp_Language_Interface
+	 * @type Language
 	 */
 	private $language;
 
@@ -57,10 +58,10 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 	private $suppress_filters = false;
 
 	/**
-	 * @param array        $params
-	 * @param Mlp_Language_Interface $language
+	 * @param array    $params
+	 * @param Language $language
 	 */
-	public function __construct( array $params, Mlp_Language_Interface $language ) {
+	public function __construct( array $params, Language $language ) {
 
 		$this->source_site_id    = $params['source_site_id'];
 		$this->target_site_id    = $params['target_site_id'];
@@ -77,7 +78,7 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 	}
 
 	/**
-	 * @return Mlp_Language_Interface
+	 * @return Language
 	 */
 	public function get_language() {
 

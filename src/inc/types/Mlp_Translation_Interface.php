@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 
 /**
@@ -37,7 +38,7 @@ interface Mlp_Translation_Interface {
 	public function get_target_title();
 
 	/**
-	 * @return Mlp_Language_Interface
+	 * @return Language
 	 */
 	public function get_language();
 

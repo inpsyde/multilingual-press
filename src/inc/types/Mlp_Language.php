@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\Language;
+
 /**
  * Language object
  *
@@ -7,7 +9,7 @@
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-class Mlp_Language implements Mlp_Language_Interface {
+class Mlp_Language implements Language {
 
 	/**
 	 * @var int
@@ -120,7 +122,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 	 */
 	private function prepare_raw_data( array $raw_data ) {
 
-		$default = [ 
+		$default = [
 			'english_name' => '',
 			'native_name'  => '',
 			'custom_name'  => '',
