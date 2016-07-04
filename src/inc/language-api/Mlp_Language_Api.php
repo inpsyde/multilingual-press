@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage;
 use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 
@@ -347,7 +348,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 			$arr['suppress_filters'] = $arguments['suppress_filters'];
 
-			$arr = new Mlp_Translation( $arr, new Mlp_Language( $data ) );
+			$arr = new Mlp_Translation( $arr, AliasAwareLanguage::create( $data ) );
 		}
 
 		/**
