@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+
 /**
  * Check whether or not the current system matches the minimum requirements.
  */
@@ -11,12 +13,12 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	private $requirements;
 
 	/**
-	 * @var Mlp_Version_Number_Interface
+	 * @var VersionNumber
 	 */
 	private $current_php_version;
 
 	/**
-	 * @var Mlp_Version_Number_Interface
+	 * @var VersionNumber
 	 */
 	private $current_wp_version;
 
@@ -31,15 +33,15 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 	private $errors = [];
 
 	/**
-	 * @param Mlp_Requirements_Interface   $requirements
-	 * @param Mlp_Version_Number_Interface $current_php_version
-	 * @param Mlp_Version_Number_Interface $current_wp_version
-	 * @param string                       $current_plugin_file
+	 * @param Mlp_Requirements_Interface $requirements
+	 * @param VersionNumber              $current_php_version
+	 * @param VersionNumber              $current_wp_version
+	 * @param string                     $current_plugin_file
 	 */
 	public function __construct(
 		Mlp_Requirements_Interface $requirements,
-		Mlp_Version_Number_Interface $current_php_version,
-		Mlp_Version_Number_Interface $current_wp_version,
+		VersionNumber $current_php_version,
+		VersionNumber $current_wp_version,
 		$current_plugin_file
 	) {
 

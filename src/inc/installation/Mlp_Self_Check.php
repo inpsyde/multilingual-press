@@ -1,5 +1,7 @@
 <?php
 
+use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+
 /**
  * Applies some checks before the main code can run.
  *
@@ -264,12 +266,12 @@ class Mlp_Self_Check {
 	/**
 	 * Check if we need an upgrade for our tables.
 	 *
-	 * @param  Mlp_Version_Number_Interface $current_version
-	 * @param  Mlp_Version_Number_Interface $last_version
+	 * @param  VersionNumber $current_version
+	 * @param  VersionNumber $last_version
 	 *
 	 * @return int
 	 */
-	public function is_current_version( Mlp_Version_Number_Interface $current_version, Mlp_Version_Number_Interface $last_version ) {
+	public function is_current_version( VersionNumber $current_version, VersionNumber $last_version ) {
 
 		if ( version_compare( $current_version, $last_version, '=<' ) ) {
 			return self::NO_UPGRADE_NEEDED;

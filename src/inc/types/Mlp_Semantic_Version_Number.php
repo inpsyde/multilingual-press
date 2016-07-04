@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+
 /**
  * version_compare() compatible type.
  *
@@ -6,7 +9,7 @@
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
+class Mlp_Semantic_Version_Number implements VersionNumber {
 
 	/**
 	 * @type string

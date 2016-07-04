@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+
 /**
  * MultilingualPress Installation
  *
@@ -16,12 +19,12 @@ class Mlp_Update_Plugin_Data {
 	private $plugin_data;
 
 	/**
-	 * @var Mlp_Version_Number_Interface
+	 * @var VersionNumber
 	 */
 	private $last_version;
 
 	/**
-	 * @var Mlp_Version_Number_Interface
+	 * @var VersionNumber
 	 */
 	private $current_version;
 
@@ -40,15 +43,15 @@ class Mlp_Update_Plugin_Data {
 	 *
 	 * @param   Inpsyde_Property_List_Interface $plugin_data
 	 * @param   wpdb                            $wpdb
-	 * @param   Mlp_Version_Number_Interface    $current_version
-	 * @param   Mlp_Version_Number_Interface    $last_version
+	 * @param   VersionNumber                   $current_version
+	 * @param   VersionNumber                   $last_version
 	 * @return  Mlp_Update_Plugin_Data
 	 */
 	public function __construct(
 		Inpsyde_Property_List_Interface $plugin_data,
 		wpdb                            $wpdb,
-		Mlp_Version_Number_Interface    $current_version,
-		Mlp_Version_Number_Interface    $last_version
+		VersionNumber    $current_version,
+		VersionNumber    $last_version
 	) {
 
 		$this->plugin_data     = $plugin_data;
@@ -75,7 +78,7 @@ class Mlp_Update_Plugin_Data {
 
 		// The site option with the version number exists since 2.0. If the last
 		// version is a fallback, it is a version below 2.0.
-		if ( Mlp_Version_Number_Interface::FALLBACK_VERSION === $this->last_version )
+		if ( VersionNumber::FALLBACK_VERSION === $this->last_version )
 			$this->update_plugin_data( 1 );
 		else
 			$this->update_plugin_data( $this->last_version );
