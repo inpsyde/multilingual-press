@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Common\Type\URL;
+
 /**
  * Translation object
  *
@@ -14,12 +17,12 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 	private $language;
 
 	/**
-	 * @type Mlp_Url_Interface
+	 * @type URL
 	 */
 	private $remote_url = '';
 
 	/**
-	 * @type Mlp_Url_Interface
+	 * @type URL
 	 */
 	private $icon_url = '';
 
@@ -98,7 +101,7 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 	}
 
 	/**
-	 * @return Mlp_Url_Interface
+	 * @return URL URL instance.
 	 */
 	public function get_icon_url() {
 

@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Common\Type\URL;
+
 /**
  * Interface for URLs with a file version.
  *
@@ -6,9 +9,7 @@
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-
-
-interface Mlp_Asset_Url_Interface extends Mlp_Url_Interface {
+interface Mlp_Asset_Url_Interface extends URL {
 
 	/**
 	 * @return string

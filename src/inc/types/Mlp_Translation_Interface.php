@@ -1,11 +1,6 @@
 <?php # -*- coding: utf-8 -*-
-/**
- * ${CARET}
- *
- * @version 2014.09.22
- * @author  Inpsyde GmbH, toscho
- * @license GPL
- */
+
+use Inpsyde\MultilingualPress\Common\Type\URL;
 
 /**
  * Translation object
@@ -27,7 +22,7 @@ interface Mlp_Translation_Interface {
 	public function get_page_type();
 
 	/**
-	 * @return Mlp_Url_Interface
+	 * @return URL URL instance.
 	 */
 	public function get_icon_url();
 

@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Common\Type\URL;
+
 /**
  * Class Mlp_Language_Api
  *
@@ -434,7 +437,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 * @param string $language Formatted like en_GB
 	 * @param int    $site_id  Site ID.
 	 *
-	 * @return Mlp_Url_Interface
+	 * @return URL URL instance.
 	 */
 	public function get_flag_by_language( $language, $site_id = 0 ) {
 
