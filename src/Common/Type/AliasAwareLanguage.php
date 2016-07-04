@@ -44,6 +44,20 @@ class AliasAwareLanguage implements Language {
 	}
 
 	/**
+	 * Returns a new language instance for the given language source.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $data Language data.
+	 *
+	 * @return AliasAwareLanguage Language instance.
+	 */
+	public static function create( $data ) {
+
+		return new self( $data );
+	}
+
+	/**
 	 * Returns the language name (or code) according to the given argument.
 	 *
 	 * @since 3.0.0
