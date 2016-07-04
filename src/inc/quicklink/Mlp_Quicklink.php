@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\Language;
+
 /**
  * Displays an element link flyout tab in the frontend.
  */
@@ -274,8 +276,8 @@ ORDER BY domain DESC";
 	/**
 	 * Converts the list of translated posts into HTML.
 	 *
-	 * @param Mlp_Language[] $translated Translated posts.
-	 * @param string         $position   Position of the quicklinks tab.
+	 * @param Language[] $translated Translated posts.
+	 * @param string     $position   Position of the quicklinks tab.
 	 *
 	 * @return string
 	 */
