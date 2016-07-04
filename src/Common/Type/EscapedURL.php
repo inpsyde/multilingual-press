@@ -37,7 +37,7 @@ class EscapedURL implements URL {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string
+	 * @return string URL string.
 	 */
 	public function __toString() {
 
