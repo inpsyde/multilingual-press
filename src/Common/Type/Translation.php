@@ -29,13 +29,13 @@ interface Translation {
 	public function get_language();
 
 	/**
-	 * Returns the page type.
+	 * Returns the remote title.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string Page type.
+	 * @return string Remote title.
 	 */
-	public function get_page_type();
+	public function get_remote_title();
 
 	/**
 	 * Returns the remote URL.
@@ -51,16 +51,16 @@ interface Translation {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return int Source site ID
+	 * @return int Source site ID.
 	 */
 	public function get_source_site_id();
 
 	/**
-	 * Returns the target content element ID.
+	 * Returns the target content ID.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return int Target content element ID
+	 * @return int Target content ID.
 	 */
 	public function get_target_content_id();
 
@@ -74,11 +74,11 @@ interface Translation {
 	public function get_target_site_id();
 
 	/**
-	 * Returns the target content element title.
+	 * Returns the content type.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string Target content element title.
+	 * @return string Content type.
 	 */
-	public function get_target_title();
+	public function get_type();
 }
