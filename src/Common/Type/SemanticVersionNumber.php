@@ -52,7 +52,7 @@ class SemanticVersionNumber implements VersionNumber {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string
+	 * @return string Version string.
 	 */
 	public function __toString() {
 
@@ -125,7 +125,7 @@ class SemanticVersionNumber implements VersionNumber {
 			return $version;
 		}
 
-		// Semantic Versioning at least requires the format X.Y.Z. with X, Y, and Z being non-negative integers.
+		// Semantic Versioning at least requires the format "X.Y.Z" with X, Y and Z being non-negative integers.
 		$parts = [ 0, 0, 0 ];
 
 		$replace = true;
