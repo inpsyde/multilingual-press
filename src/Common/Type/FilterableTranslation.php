@@ -65,7 +65,7 @@ class FilterableTranslation implements Translation {
 	 */
 	public function __construct( array $args, Language $language ) {
 
-		// TODO: Passing all the (different) stuff via an array really should be improved!
+		// TODO: Passing all the (different) stuff via an array really should be improved! Use fluent setters instead?!
 
 		$this->icon_url = ( $args['icon'] instanceof URL )
 			? $args['icon']

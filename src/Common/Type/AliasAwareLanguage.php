@@ -137,7 +137,7 @@ class AliasAwareLanguage implements Language {
 	}
 
 	/**
-	 * Prepares data passed by a DB query for example.
+	 * Returns the complete set of language names and codes for the given language data.
 	 *
 	 * @param array $data Language data.
 	 *
