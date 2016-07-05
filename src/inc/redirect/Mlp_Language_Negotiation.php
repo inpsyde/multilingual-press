@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Common\Type\Language;
+use Inpsyde\MultilingualPress\Common\Type\Translation;
 
 /**
  * Find best alternative for given content
@@ -71,7 +72,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		if ( empty ( $user ) )
 			return $possible;
 
-		/** @type Mlp_Translation $translation */
+		/** @type Translation $translation */
 		foreach ( $translations as $site_id => $translation )
 			$this->collect_matches( $possible, $site_id, $translation, $user );
 
@@ -92,17 +93,17 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	}
 
 	/**
-	 * @param  array           $possible
-	 * @param  int             $site_id
-	 * @param  Mlp_Translation $translation
-	 * @param  array           $user
+	 * @param  array       $possible
+	 * @param  int         $site_id
+	 * @param  Translation $translation
+	 * @param  array       $user
 	 * @return void
 	 */
 	private function collect_matches(
-		array           &$possible,
-		                $site_id,
-		Mlp_Translation $translation,
-		array           $user
+		array &$possible,
+		$site_id,
+		Translation $translation,
+		array $user
 	) {
 
 		$language      = $translation->get_language();
