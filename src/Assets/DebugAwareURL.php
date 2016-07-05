@@ -44,7 +44,7 @@ class DebugAwareURL implements URL {
 	}
 
 	/**
-	 * Returns a new asset URL instance according to the given arguments.
+	 * Returns a new asset URL object according to the given arguments.
 	 *
 	 * @since 3.0.0
 	 *
@@ -52,7 +52,7 @@ class DebugAwareURL implements URL {
 	 * @param string $dir_path Local path to the directory containing the file.
 	 * @param string $dir_url  Public URL for the directory containing the file.
 	 *
-	 * @return DebugAwareURL Asset URL instance.
+	 * @return DebugAwareURL Asset URL object.
 	 */
 	public static function create( $file, $dir_path, $dir_url ) {
 

@@ -34,13 +34,13 @@ class SemanticVersionNumber implements VersionNumber {
 	}
 
 	/**
-	 * Returns a new version number instance for the given version source.
+	 * Returns a new version number object for the given version source.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param mixed $version Version source.
 	 *
-	 * @return SemanticVersionNumber Version number instance.
+	 * @return SemanticVersionNumber Version number object.
 	 */
 	public static function create( $version ) {
 
