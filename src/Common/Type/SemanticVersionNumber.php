@@ -128,11 +128,18 @@ class SemanticVersionNumber implements VersionNumber {
 		// Semantic Versioning at least requires the format X.Y.Z. with X, Y, and Z being non-negative integers.
 		$parts = [ 0, 0, 0 ];
 
-		foreach ( explode( '.', $version ) as $index => $level ) {
-			if ( $index < 3 && is_numeric( $level ) ) {
-				$parts[ $index ] = (int) $level;
+		$replace = true;
 
-				continue;
+		foreach ( explode( '.', $version ) as $index => $level ) {
+			if ( $index < 3 && $replace ) {
+				if ( is_numeric( $level ) ) {
+					$parts[ $index ] = (int) $level;
+
+					continue;
+				}
+
+				// Since this is a non-numeric part, all other parts will be appended (and not update existing levels).
+				$replace = false;
 			}
 
 			$parts[] = $level;
