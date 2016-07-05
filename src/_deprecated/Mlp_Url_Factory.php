@@ -14,13 +14,11 @@ _deprecated_file(
 class Mlp_Url_Factory {
 
 	/**
-	 * Creates a new URL object.
-	 *
 	 * @deprecated 3.0.0 Deprecated in favor of {@see EscapedURL::create}.
 	 *
 	 * @param mixed $url URL source.
 	 *
-	 * @return EscapedURL
+	 * @return EscapedURL URL object.
 	 */
 	public static function create( $url ) {
 

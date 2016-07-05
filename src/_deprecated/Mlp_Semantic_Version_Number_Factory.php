@@ -14,13 +14,11 @@ _deprecated_file(
 class Mlp_Semantic_Version_Number_Factory {
 
 	/**
-	 * Creates a new URL object.
-	 *
 	 * @deprecated 3.0.0 Deprecated in favor of {@see SemanticVersionNumber::create}.
 	 *
 	 * @param mixed $version Version source.
 	 *
-	 * @return SemanticVersionNumber
+	 * @return SemanticVersionNumber Version number object.
 	 */
 	public static function create( $version ) {
 
