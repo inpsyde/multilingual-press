@@ -112,7 +112,7 @@ class DebugAwareURL implements URL {
 	}
 
 	/**
-	 * Returns if (script) debug mode is on.
+	 * Checks if (script) debug mode is on.
 	 *
 	 * @return bool Whether or not (script) debug mode is on.
 	 */
@@ -125,7 +125,7 @@ class DebugAwareURL implements URL {
 	}
 
 	/**
-	 * Return given file with '.min' infix, if not already minified file.
+	 * Returns the given file with inserted ".min" infix, if not already minified file.
 	 *
 	 * @param string $file Normal file name (e.g., admin.css).
 	 *
