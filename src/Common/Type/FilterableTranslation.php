@@ -23,7 +23,7 @@ class FilterableTranslation implements Translation {
 	/**
 	 * @var string
 	 */
-	private $page_type;
+	private $remote_title;
 
 	/**
 	 * @var URL
@@ -53,10 +53,10 @@ class FilterableTranslation implements Translation {
 	/**
 	 * @var string
 	 */
-	private $target_title;
+	private $type;
 
 	/**
-	 * Constructor. Sets the properties.
+	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
@@ -67,14 +67,14 @@ class FilterableTranslation implements Translation {
 
 		// TODO: Passing all the (different) stuff via an array really should be improved! Use fluent setters instead?!
 
-		$this->icon_url = ( $args['icon'] instanceof URL )
-			? $args['icon']
+		$this->icon_url = ( $args['icon_url'] instanceof URL )
+			? $args['icon_url']
 			: EscapedURL::create( '' );
 
-		$this->page_type = (string) $args['type'];
+		$this->remote_title = (string) $args['remote_title'];
 
-		$this->remote_url = ( $args['target_url'] instanceof URL )
-			? $args['target_url']
+		$this->remote_url = ( $args['remote_url'] instanceof URL )
+			? $args['remote_url']
 			: EscapedURL::create( '' );
 
 		$this->source_site_id = (int) $args['source_site_id'];
@@ -85,7 +85,7 @@ class FilterableTranslation implements Translation {
 
 		$this->target_site_id = (int) $args['target_site_id'];
 
-		$this->target_title = (string) $args['target_title'];
+		$this->type = (string) $args['type'];
 
 		$this->language = $language;
 	}
@@ -115,15 +115,27 @@ class FilterableTranslation implements Translation {
 	}
 
 	/**
-	 * Returns the page type.
+	 * Returns the content type.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string Page type.
+	 * @return string Content type.
 	 */
-	public function get_page_type() {
+	public function get_type() {
 
-		return $this->page_type;
+		return $this->type;
+	}
+
+	/**
+	 * Returns the remote title.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string Remote title.
+	 */
+	public function get_remote_title() {
+
+		return $this->remote_title;
 	}
 
 	/**
@@ -166,7 +178,7 @@ class FilterableTranslation implements Translation {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return int Source site ID
+	 * @return int Source site ID.
 	 */
 	public function get_source_site_id() {
 
@@ -174,11 +186,11 @@ class FilterableTranslation implements Translation {
 	}
 
 	/**
-	 * Returns the target content element ID.
+	 * Returns the target content ID.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return int Target content element ID
+	 * @return int Target content ID.
 	 */
 	public function get_target_content_id() {
 
@@ -195,17 +207,5 @@ class FilterableTranslation implements Translation {
 	public function get_target_site_id() {
 
 		return $this->target_site_id;
-	}
-
-	/**
-	 * Returns the target content element title.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return string Target content element title.
-	 */
-	public function get_target_title() {
-
-		return $this->target_title;
 	}
 }
