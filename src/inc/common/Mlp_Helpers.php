@@ -1,5 +1,7 @@
 <?php
 
+use Inpsyde\MultilingualPress\Common\Type\Translation;
+
 /**
  * Various global helper methods
  *
@@ -213,7 +215,7 @@ class Mlp_Helpers {
 		if ( empty ( $related ) )
 			return $return;
 
-		/** @var Mlp_Translation_Interface $translation */
+		/** @var Translation $translation */
 		foreach ( $related as $remote_site_id => $translation ) {
 
 			if ( $site_id === (int) $remote_site_id )
@@ -411,7 +413,7 @@ class Mlp_Helpers {
 
 		$items = [];
 
-		/** @var Mlp_Translation_Interface $translation */
+		/** @var Translation $translation */
 		foreach ( $translations as $site_id => $translation ) {
 			$url = $translation->get_remote_url();
 			if ( empty( $url ) ) {

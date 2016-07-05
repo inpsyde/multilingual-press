@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Common\Type\Language;
+use Inpsyde\MultilingualPress\Common\Type\Translation;
 
 /**
  * Displays an element link flyout tab in the frontend.
@@ -28,7 +29,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	private $nonce_validator;
 
 	/**
-	 * @var Mlp_Translation[]
+	 * @var Translation[]
 	 */
 	private $translations = [];
 
@@ -219,7 +220,7 @@ ORDER BY domain DESC";
 	 */
 	public function frontend_tab( $content ) {
 
-		/** @var Mlp_Translation_Interface[] $translations */
+		/** @var Translation[] $translations */
 		$translations = $this->get_translations();
 		if ( ! $translations ) {
 			return $content;
@@ -256,7 +257,7 @@ ORDER BY domain DESC";
 	/**
 	 * Returns the translations.
 	 *
-	 * @return Mlp_Translation_Interface[]
+	 * @return Translation[]
 	 */
 	private function get_translations() {
 

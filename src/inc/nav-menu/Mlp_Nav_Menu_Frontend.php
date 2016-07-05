@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\Translation;
+
 /**
  * Filters nav menu items and passes the proper URL.
  */
@@ -44,7 +46,7 @@ class Mlp_Nav_Menu_Frontend {
 	 */
 	public function filter_items( array $items ) {
 
-		$translations = $this->language_api->get_translations( [ 
+		$translations = $this->language_api->get_translations( [
 			'strict'       => false,
 			'include_base' => true,
 		 ] );
@@ -90,8 +92,8 @@ class Mlp_Nav_Menu_Frontend {
 	/**
 	 * Assigns the remote URL and fires an action hook.
 	 *
-	 * @param WP_Post                     $item         Nav menu item object.
-	 * @param Mlp_Translation_Interface[] $translations Translation objects.
+	 * @param WP_Post       $item         Nav menu item object.
+	 * @param Translation[] $translations Translation objects.
 	 *
 	 * @return void
 	 */
@@ -110,8 +112,8 @@ class Mlp_Nav_Menu_Frontend {
 		/**
 		 * Runs before a nav menu item is sent to the walker.
 		 *
-		 * @param WP_Post                   $item        Nav menu item object.
-		 * @param Mlp_Translation_Interface $translation Translation object.
+		 * @param WP_Post     $item        Nav menu item object.
+		 * @param Translation $translation Translation object.
 		 */
 		do_action( 'mlp_prepare_nav_menu_item_output', $item, $translation );
 	}
@@ -119,7 +121,7 @@ class Mlp_Nav_Menu_Frontend {
 	/**
 	 * Returns the remote URL and the translation object for the according item.
 	 *
-	 * @param Mlp_Translation_Interface[] $translations Translation objects.
+	 * @param Translation[] $translations Translation objects.
 	 * @param int                         $site_id      Site ID.
 	 *
 	 * @return array
