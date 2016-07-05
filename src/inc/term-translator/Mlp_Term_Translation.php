@@ -53,6 +53,8 @@ class Mlp_Term_Translation {
 
 		$result = $this->get_translation_in_target_site( $term_taxonomy_id );
 
+		// TODO: In deprecated class, add "target_*" aliases for elements in $result with "remote_*" keys.
+
 		restore_current_blog();
 
 		$cache[ $target_site_id ][ $term_taxonomy_id ] = $result;
@@ -82,8 +84,8 @@ class Mlp_Term_Translation {
 		$url = $this->get_public_url( (int) $term[ 'term_id'], $term[ 'taxonomy'] );
 
 		return [
-			'target_url'   => EscapedURL::create( $url ),
-			'target_title' => $term[ 'name' ],
+			'remote_url'   => EscapedURL::create( $url ),
+			'remote_title' => $term[ 'name' ],
 		];
 	}
 
@@ -103,8 +105,8 @@ class Mlp_Term_Translation {
 		$url = get_edit_term_link( (int) $term[ 'term_id' ], $taxonomy );
 
 		return [
-			'target_url'   => EscapedURL::create( $url ),
-			'target_title' => $term[ 'name' ],
+			'remote_url'   => EscapedURL::create( $url ),
+			'remote_title' => $term[ 'name' ],
 		];
 	}
 

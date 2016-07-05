@@ -2,6 +2,8 @@
 
 use Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage;
 use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
+use Inpsyde\MultilingualPress\Common\Type\FilterableTranslation;
+use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 
 /**
@@ -186,7 +188,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 *
 	 *
 	 * @see prepare_translation_arguments()
-	 * @param array $args {
+	 *
+*@param array $args {
 	 *
 	 *     Optional. If left out, some magic happens.
 	 *
@@ -200,7 +203,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 *     @type bool   $include_base  Include the base site in returned list
 	 *
 	 * }
-	 * @return array Array of Mlp_Translation instances, site IDs are the keys
+	 * @return Translation[] Array of Mlp_Translation instances, site IDs are the keys
 	 */
 	public function get_translations( array $args = [] ) {
 
@@ -245,11 +248,11 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				continue;
 
 			$translations[ $site_id ] = [
-				'source_site_id'    => $arguments[ 'site_id' ],
+				'remote_title'      => '',
+				'source_site_id'    => $arguments['site_id'],
 				'target_site_id'    => $site_id,
-				'type'              => $arguments[ 'type' ],
 				'target_content_id' => 0,
-				'target_title'      => ''
+				'type'              => $arguments['type'],
 			 ];
 		}
 
@@ -296,9 +299,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				switch_to_blog( $site_id );
 
 				if ( 'search' === $arguments[ 'type' ] ) {
-
-					$url                 = get_search_link( $arguments[ 'search_term' ] );
-					$arr[ 'target_url' ] = EscapedURL::create( $url );
+					$arr['remote_url'] = EscapedURL::create( get_search_link( $arguments['search_term'] ) );
 				}
 				elseif ( 'post_type_archive' === $arguments[ 'type' ]
 					&& ! empty ( $arguments[ 'post_type' ] )
@@ -311,13 +312,13 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				}
 
 				// Nothing found, use fallback if allowed
-				if ( ( empty ( $arr[ 'target_url' ] ) && ! $arguments[ 'strict' ] )
+				if ( ( empty ( $arr[ 'remote_url' ] ) && ! $arguments[ 'strict' ] )
 					|| 'front_page' === $arguments[ 'type' ]
 				) {
-					$arr[ 'target_url' ] = get_site_url( $site_id, '/' );
+					$arr[ 'remote_url' ] = get_site_url( $site_id, '/' );
 				}
 
-				if ( empty ( $arr[ 'target_url' ] ) )
+				if ( empty ( $arr[ 'remote_url' ] ) )
 					$valid = FALSE;
 
 				restore_current_blog();
@@ -338,27 +339,29 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			}
 
 			if ( '' !== $data[ 'http_name' ] ) {
-				$arr[ 'icon' ] = $this->get_flag_by_language(
+				$arr[ 'icon_url' ] = $this->get_flag_by_language(
 					$data[ 'http_name' ],
 					$site_id
 				);
 			} else {
-				$arr[ 'icon' ] = '';
+				$arr[ 'icon_url' ] = EscapedURL::create( '' );
 			}
 
 			$arr['suppress_filters'] = $arguments['suppress_filters'];
 
-			$arr = new Mlp_Translation( $arr, AliasAwareLanguage::create( $data ) );
+			$arr = new FilterableTranslation( $arr, AliasAwareLanguage::create( $data ) );
 		}
 
 		/**
 		 * Filter the translations before they are used.
 		 *
-		 * @param array $translations Translations.
-		 * @param array $arguments    Translation arguments.
+		 * @param Translation[] $translations Translations.
+		 * @param array         $arguments    Translation arguments.
 		 */
 		$translations = apply_filters( 'mlp_translations', $translations, $arguments );
 		wp_cache_set( $key, $translations, 'mlp' );
+
+		// TODO: In deprecated class, add "target_*" aliases for elements in $translations with "remote_*" keys.
 
 		return $translations;
 	}
@@ -374,11 +377,11 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$return = [];
 
 		$url                    = get_post_type_archive_link( $post_type );
-		$return[ 'target_url' ] = EscapedURL::create( $url );
+		$return[ 'remote_url' ] = EscapedURL::create( $url );
 		$obj                    = get_post_type_object( $post_type );
 
 		if ( $obj )
-			$return[ 'target_title' ] = $obj->labels->name;
+			$return[ 'remote_title' ] = $obj->labels->name;
 
 		return $return;
 	}
@@ -407,8 +410,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				return FALSE;
 
 			return [
-				'target_title' => $title,
-				'target_url'   => EscapedURL::create( get_edit_post_link( $content_id ) )
+				'remote_title' => $title,
+				'remote_url'   => EscapedURL::create( get_edit_post_link( $content_id ) )
 			];
 		}
 
@@ -419,8 +422,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		if ( 'publish' === $post->post_status || $editable )
 			return [
-				'target_title' => $title,
-				'target_url'   => empty ( $url ) ? '' : EscapedURL::create( $url )
+				'remote_title' => $title,
+				'remote_url'   => empty ( $url ) ? '' : EscapedURL::create( $url )
 			];
 
 		// unpublished post, not editable
@@ -428,8 +431,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			return FALSE;
 
 		return [
-			'target_title' => $title,
-			'target_url'   => ''
+			'remote_title' => $title,
+			'remote_url'   => ''
 		 ];
 	}
 
