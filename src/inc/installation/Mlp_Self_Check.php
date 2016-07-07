@@ -188,7 +188,7 @@ class Mlp_Self_Check {
 				<?php
 				/* translators: %s: current PHP version */
 				$message = __(
-					'With the upcoming major release, MultilingualPress will be requiring <strong>PHP version 5.4.0</strong> or higher. Currently, you are running <strong>PHP version %s</strong>. Please contact your hoster and update PHP to version 5.4.0 or higher.',
+					'With the upcoming major release, MultilingualPress will be requiring <strong>PHP version 5.4.0</strong> or higher. Currently, you are running <strong>PHP version %s</strong>. Please contact your host and update PHP to version 5.4.0 or higher.',
 					'multilingual-press'
 				);
 				printf( $message, PHP_VERSION );
