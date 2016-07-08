@@ -34,17 +34,21 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	 *
 	 * @param wpdb                         $wpdb           Database object.
 	 * @param Mlp_Site_Relations_Interface $site_relations Site relations object.
-	 * @param Mlp_Db_Table_Name_Interface  $link_table     Link table object.
+	 * @param                              $deprecated
+	 * @param string                       $link_table     Link table name.
 	 */
 	public function __construct(
 		wpdb $wpdb,
 		Mlp_Site_Relations_Interface $site_relations,
+		$deprecated,
 		$link_table
 	) {
 
 		$this->wpdb = $wpdb;
+
 		$this->site_relations = $site_relations;
-		$this->link_table = $link_table->get_name();
+
+		$this->link_table = (string) $link_table;
 	}
 
 	/**
@@ -191,12 +195,12 @@ WHERE s.ml_blogid = %d
 		$type = 'post'
 	) {
 
-		$where = [ 
+		$where = [
 			'ml_source_blogid'    => $source_site_id,
 			'ml_source_elementid' => $source_content_id,
 			'ml_type'             => $type,
 		 ];
-		$where_format = [ 
+		$where_format = [
 			'%d',
 			'%d',
 			'%s',
@@ -329,7 +333,7 @@ WHERE s.ml_blogid = %d
 			. " - {$this->wpdb->last_query}"
 		);
 
-		return [ 
+		return [
 			'ml_source_blogid'    => $source_site_id,
 			'ml_source_elementid' => $source_content_id,
 		 ];

@@ -423,7 +423,8 @@ class Multilingual_Press {
 			new Mlp_Content_Relations(
 				$this->wpdb,
 				$site_relations,
-				new Mlp_Db_Table_Name( $this->link_table, $table_list )
+				null,
+				$this->link_table
 			)
 		);
 		$this->plugin_data->set(
