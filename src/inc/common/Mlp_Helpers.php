@@ -1,5 +1,6 @@
 <?php
 
+use Inpsyde\MultilingualPress\Common\Factory\Error;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 
 /**
@@ -259,16 +260,16 @@ class Mlp_Helpers {
 	) {
 
 		if ( empty( $element_id ) )
-			return Mlp_WP_Error_Factory::create(
+			return Error::create(
 				'mlp_empty_custom_element',
 				__( 'Empty Element', 'multilingual-press' )
 			);
 
 		if ( empty( $type ) )
-			return Mlp_WP_Error_Factory::create( 'mlp_empty_custom_type', __( 'Empty Type', 'multilingual-press' ) );
+			return Error::create( 'mlp_empty_custom_type', __( 'Empty Type', 'multilingual-press' ) );
 
 		if ( empty ( $hook ) || ! is_callable( $hook ) )
-			return Mlp_WP_Error_Factory::create( 'mlp_empty_custom_hook', __( 'Invalid Hook', 'multilingual-press' ) );
+			return Error::create( 'mlp_empty_custom_hook', __( 'Invalid Hook', 'multilingual-press' ) );
 
 		// set the current element in the mlp class
 		$languages    = mlp_get_available_languages();

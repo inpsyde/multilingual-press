@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Common\Factory\Error;
+
 /**
  * Holds data about the plugin MultilingualPress
  *
@@ -6,8 +9,6 @@
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-
-
 class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 
 	/**
@@ -269,7 +270,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 			$code = __CLASS__;
 
 		if ( class_exists( 'WP_Error' ) )
-			return Mlp_WP_Error_Factory::create( $code, $msg );
+			return Error::create( $code, $msg );
 
 		throw new Exception( $msg, $code );
 	}
