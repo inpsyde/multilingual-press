@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Core;
+
 /**
  * Class Multilingual_Press
  *
@@ -398,10 +401,17 @@ class Multilingual_Press {
 		// Use correct language for html element
 		add_filter( 'language_attributes', [ $this, 'language_attributes' ] );
 
-		// frontend-hooks
-		$hreflang = new Mlp_Hreflang_Header_Output( $this->plugin_data->get( 'language_api' ) );
-		add_action( 'template_redirect', [ $hreflang, 'http_header' ] );
-		add_action( 'wp_head', [ $hreflang, 'wp_head' ] );
+		$translations = new Core\FrontEnd\AlternateLanguages\UnfilteredTranslations(
+			$this->plugin_data->get( 'language_api' )
+		);
+		add_action( 'template_redirect', function () use ( $translations ) {
+
+			( new Core\FrontEnd\AlternateLanguages\HTTPHeaders( $translations ) )->send();
+		} );
+		add_action( 'wp_head', function () use ( $translations ) {
+
+			( new Core\FrontEnd\AlternateLanguages\HTMLLinkTags( $translations ) )->render();
+		} );
 	}
 
 	/**

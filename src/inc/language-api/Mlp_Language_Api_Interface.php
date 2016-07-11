@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 
 /**
@@ -48,7 +49,8 @@ interface Mlp_Language_Api_Interface {
 	 *     - 'include_base'         bool. Include the base site in returned list
 	 *
 	 * @param  array $args Optional. If left out, some magic happens.
-	 * @return array Array of Mlp_Translation instances, site IDs are the keys
+	 *
+	 * @return Translation[] Array of Mlp_Translation instances, site IDs are the keys
 	 */
 	public function get_translations( array $args = [] );
 
