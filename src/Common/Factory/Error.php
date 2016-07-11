@@ -1,18 +1,27 @@
 <?php # -*- coding: utf-8 -*-
 
+namespace Inpsyde\MultilingualPress\Common\Factory;
+
+use WP_Error;
+
 /**
- * Static factory for WordPress Error objects.
+ * Static factory for error objects.
+ *
+ * @package Inpsyde\MultilingualPress\Common\Factory
+ * @since   3.0.0
  */
-class Mlp_WP_Error_Factory {
+class Error {
 
 	/**
-	 * Creates a new WordPress Error object.
+	 * Creates a new error object for the given arguments.
+	 *
+	 * @since 3.0.0
 	 *
 	 * @param string|int $code    Optional. Error code. Defaults to ''.
 	 * @param string     $message Optional. Error message. Defaults to ''.
 	 * @param mixed      $data    Optional. Error data. Defaults to ''.
 	 *
-	 * @return WP_Error
+	 * @return WP_Error Error object.
 	 */
 	public static function create( $code = '', $message = '', $data = '' ) {
 
