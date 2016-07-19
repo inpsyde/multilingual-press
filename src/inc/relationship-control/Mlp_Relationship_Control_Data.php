@@ -12,7 +12,7 @@ class Mlp_Relationship_Control_Data {
 	/**
 	 * @var array
 	 */
-	private $ids = [ 
+	private $ids = [
 		'source_post_id' => 0,
 		'source_site_id' => 0,
 		'remote_site_id' => 0,
@@ -98,10 +98,15 @@ class Mlp_Relationship_Control_Data {
 		if ( ! $source_post )
 			return [];
 
-		$args = [ 
+		$args = [
 			'numberposts' => 10,
 			'post_type'   => $source_post->post_type,
-			'post_status' => [ 'draft', 'publish', 'private' ]
+			'post_status' => [
+				'draft',
+				'future',
+				'private',
+				'publish',
+			],
 		 ];
 
 		if ( ! empty ( $this->ids[ 'remote_post_id' ] ) )
