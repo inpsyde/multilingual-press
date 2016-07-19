@@ -1,7 +1,8 @@
 # Changelog
 
 ## 3.0.0-dev
-
+- Post Translation: List scheduled posts in the Translation meta box, see
+[issue #222](https://github.com/inpsyde/multilingual-press/issues/222).
 
 ## 2.4.6
 - Post Translator: Fix translations not being saved, see
