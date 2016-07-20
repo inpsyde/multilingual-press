@@ -315,7 +315,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				if ( ( empty ( $arr[ 'remote_url' ] ) && ! $arguments[ 'strict' ] )
 					|| 'front_page' === $arguments[ 'type' ]
 				) {
-					$arr[ 'remote_url' ] = get_site_url( $site_id, '/' );
+					$arr[ 'remote_url' ] = EscapedURL::create( get_site_url( $site_id, '/' ) );
 				}
 
 				if ( empty ( $arr[ 'remote_url' ] ) )
