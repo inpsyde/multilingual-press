@@ -224,6 +224,7 @@ class Mlp_Widget extends WP_Widget {
 			'link_text'         => empty( $instance['widget_link_type'] ) ? 'text' : $instance['widget_link_type'],
 			'show_current_blog' => ! empty( $instance['widget_show_current_blog'] ),
 			'display_flag'      => ! empty( $instance['widget_display_flag'] ),
+			'strict'            => ! empty( $instance['widget_toggle_view_on_translated_posts'] ),
 		] );
 		if ( ! $output ) {
 			return;
