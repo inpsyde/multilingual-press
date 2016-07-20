@@ -5,6 +5,8 @@
 [issue #222](https://github.com/inpsyde/multilingual-press/issues/222).
 - Language Switcher Widget: Use the _Show links for translated content only_ setting to fetch the translations, see
 [issue #223](https://github.com/inpsyde/multilingual-press/issues/223).
+- Language API: Use fallback names for languages, see
+[issue #224](https://github.com/inpsyde/multilingual-press/issues/224).
 
 ## 2.4.6
 - Post Translator: Fix translations not being saved, see
