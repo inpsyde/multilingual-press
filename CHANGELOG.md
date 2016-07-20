@@ -3,6 +3,8 @@
 ## 3.0.0-dev
 - Post Translation: List scheduled posts in the Translation meta box, see
 [issue #222](https://github.com/inpsyde/multilingual-press/issues/222).
+- Language Switcher Widget: Use the _Show links for translated content only_ setting to fetch the translations, see
+[issue #223](https://github.com/inpsyde/multilingual-press/issues/223).
 
 ## 2.4.6
 - Post Translator: Fix translations not being saved, see
