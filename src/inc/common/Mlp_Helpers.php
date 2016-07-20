@@ -144,16 +144,25 @@ class Mlp_Helpers {
 	/**
 	 * Get native name by ISO-639-1 code.
 	 *
-	 * @param string $iso Language code like "en" or "de"
-	 * @param string $field the field which should be queried
+	 * @param string          $iso       Language code like "en" or "de"
+	 * @param string          $field     Optional. The field which should be queried. Defaults to 'native_name'.
+	 * @param string|string[] $fallbacks Optional. Falback language fields. Defaults to English and native name.
 	 *
 	 * @return mixed
 	 */
-	public static function get_lang_by_iso( $iso, $field = 'native_name' ) {
+	public static function get_lang_by_iso(
+		$iso,
+		$field = 'native_name',
+		$fallbacks = [
+			'native_name',
+			'english_name',
+		]
+	) {
 
 		/** @var Mlp_Language_Api $api */
 		$api  = self::$dependencies['language_api'];
-		return $api->get_lang_data_by_iso( $iso, $field );
+
+		return $api->get_lang_data_by_iso( $iso, $field, $fallbacks );
 	}
 
 	/**

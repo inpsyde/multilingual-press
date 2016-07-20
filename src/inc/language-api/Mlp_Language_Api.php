@@ -152,7 +152,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				continue;
 
 			if ( '' === $lang )
-				$lang = $this->get_lang_data_by_iso( $language_data[ 'lang' ] );
+				$lang = $this->get_lang_data_by_iso( $language_data[ 'lang' ], 'native_name', 'english_name' );
 
 			$options[ $site_id ] = $lang;
 		}
@@ -163,24 +163,39 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	/**
 	 * @param  string $iso Something like de_AT
 	 *
-	 * @param string $field the field which should be queried
-	 * @return mixed
+	 * @param string          $field     Optional. The field which should be queried. Defaults to 'native_name'.
+	 * @param string|string[] $fallbacks Optional. Falback language fields. Defaults to English and native name.
+	 *
+	 * @return string
 	 */
-	public function get_lang_data_by_iso( $iso, $field = 'native_name' ) {
+	public function get_lang_data_by_iso(
+		$iso,
+		$field = 'native_name',
+		$fallbacks = [
+			'native_name',
+			'english_name',
+		]
+	) {
 
 		$iso = str_replace( '_', '-', $iso );
 
-		$query  = $this->wpdb->prepare(
-			"SELECT `{$field}`
-			FROM `{$this->table_name}`
-			WHERE `http_name` = " . "%s LIMIT 1",
-						   $iso
-		);
-		$result = $this->wpdb->get_var( $query );
+		$query = "
+SELECT *
+FROM {$this->table_name}
+WHERE http_name = %s
+LIMIT 1";
+		$query = $this->wpdb->prepare( $query, $iso );
 
-		$return = NULL === $result ? '' : $result;
+		$results = $this->wpdb->get_row( $query, ARRAY_A );
 
-		return $return;
+		$fallbacks = array_unique( array_merge( [ $field ], (array) $fallbacks ) );
+		foreach ( $fallbacks as $key ) {
+			if ( ! empty( $results[ $key ] ) ) {
+				return $results[ $key ];
+			}
+		}
+
+		return '';
 	}
 
 	/**
