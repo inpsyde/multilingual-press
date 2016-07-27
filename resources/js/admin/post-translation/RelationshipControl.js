@@ -68,7 +68,7 @@ class RelationshipControl extends Backbone.View {
 		const $input = $( event.target ),
 			$metaBox = $input.closest( '.mlp-translation-meta-box' ),
 			$button = $metaBox.find( '.mlp-save-relationship-button' ),
-			index = this.findMetaBox( $metaBox );
+			index = _this.unsavedRelationships.findIndex( e => e === $metaBox );
 
 		if ( 'stay' === $input.val() ) {
 			$button.prop( 'disabled', 'disabled' );
@@ -83,22 +83,6 @@ class RelationshipControl extends Backbone.View {
 		}
 
 		return _this.unsavedRelationships;
-	}
-
-	/**
-	 * Returns the index of the given meta box in the unsaved relationships array, and -1 if not found.
-	 * @param {jQuery} $metaBox - The meta box element.
-	 * @returns {Number} The index of the meta box.
-	 */
-	findMetaBox( $metaBox ) {
-		// By using a for-loop here, one can return early. A for-of-loop would require too much polyfilling.
-		for ( let i = 0; i < _this.unsavedRelationships.length; i++ ) {
-			if ( _this.unsavedRelationships[ i ] === $metaBox ) {
-				return i;
-			}
-		}
-
-		return -1;
 	}
 
 	/**
