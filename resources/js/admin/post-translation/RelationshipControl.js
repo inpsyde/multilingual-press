@@ -91,7 +91,7 @@ class RelationshipControl extends Backbone.View {
 	 * @returns {Number} The index of the meta box.
 	 */
 	findMetaBox( $metaBox ) {
-		// By using a for-loop here, one can return early.
+		// By using a for-loop here, one can return early. A for-of-loop would require too much polyfilling.
 		for ( let i = 0; i < _this.unsavedRelationships.length; i++ ) {
 			if ( _this.unsavedRelationships[ i ] === $metaBox ) {
 				return i;
