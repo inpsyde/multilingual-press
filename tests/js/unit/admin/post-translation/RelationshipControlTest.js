@@ -67,20 +67,19 @@ test( 'initializeEventHandlers ...', ( assert ) => {
 test( 'updateUnsavedRelationships (changed input, meta box already stored) ...', ( assert ) => {
 	const testee = createTestee();
 
-	const unsavedRelationships = [ 'metaBox' ];
+	const $metaBox = new jQueryObject();
+
+	const unsavedRelationships = [ $metaBox ];
 
 	// Rewire internal data.
 	RelationshipControl.__Rewire__( '_this', { unsavedRelationships } );
-
-	// Turn method into spy.
-	testee.findMetaBox = sinon.spy();
 
 	const event = {
 		target: F.getRandomString()
 	};
 
 	const $input = new jQueryObject();
-	$input.closest.returns( new jQueryObject() );
+	$input.closest.returns( $metaBox );
 
 	$.withArgs( event.target ).returns( $input );
 
@@ -99,13 +98,10 @@ test( 'updateUnsavedRelationships (changed input, meta box already stored) ...',
 test( 'updateUnsavedRelationships (unchanged input, meta box not stored) ...', ( assert ) => {
 	const testee = createTestee();
 
-	const unsavedRelationships = [ 'metaBox' ];
+	const unsavedRelationships = [ new jQueryObject() ];
 
 	// Rewire internal data.
 	RelationshipControl.__Rewire__( '_this', { unsavedRelationships } );
-
-	// Turn method into stub.
-	testee.findMetaBox = sinon.stub().returns( -1 );
 
 	const event = {
 		target: F.getRandomString()
@@ -135,17 +131,17 @@ test( 'updateUnsavedRelationships (unchanged input, meta box not stored) ...', (
 test( 'updateUnsavedRelationships (unchanged input, meta box stored) ...', ( assert ) => {
 	const testee = createTestee();
 
-	// Rewire internal data.
-	RelationshipControl.__Rewire__( '_this', { unsavedRelationships: [ 'metaBox' ] } );
+	const $metaBox = new jQueryObject();
 
-	// Turn method into stub.
-	testee.findMetaBox = sinon.stub().returns( 0 );
+	const unsavedRelationships = [ $metaBox ];
+
+	// Rewire internal data.
+	RelationshipControl.__Rewire__( '_this', { unsavedRelationships } );
 
 	const event = {
 		target: F.getRandomString()
 	};
 
-	const $metaBox = new jQueryObject();
 	$metaBox.find.returns( new jQueryObject() );
 
 	const $input = new jQueryObject();
@@ -169,9 +165,6 @@ test( 'updateUnsavedRelationships (unchanged input, meta box stored) ...', ( ass
 test( 'updateUnsavedRelationships (changed input, meta box not stored) ...', ( assert ) => {
 	const testee = createTestee();
 
-	// Turn method into stub.
-	testee.findMetaBox = sinon.stub().returns( -1 );
-
 	const event = {
 		target: F.getRandomString()
 	};
@@ -192,41 +185,6 @@ test( 'updateUnsavedRelationships (changed input, meta box not stored) ...', ( a
 
 	// Restore global scope.
 	globalStub.restore();
-
-	assert.end();
-} );
-
-test( 'findMetaBox (meta box not found) ...', ( assert ) => {
-	const testee = createTestee();
-
-	assert.equal(
-		testee.findMetaBox( 'metaBox' ),
-		-1,
-		'... SHOULD return -1.'
-	);
-
-	assert.end();
-} );
-
-test( 'findMetaBox (meta box found) ...', ( assert ) => {
-	const testee = createTestee();
-
-	const $metaBox = 'metaBox';
-
-	const unsavedRelationships = F.getRandomArray();
-
-	const index = F.getRandomInteger( 0, unsavedRelationships.length );
-
-	unsavedRelationships[ index ] = $metaBox;
-
-	// Rewire internal data.
-	RelationshipControl.__Rewire__( '_this', { unsavedRelationships } );
-
-	assert.equal(
-		testee.findMetaBox( $metaBox ),
-		index,
-		'... SHOULD return the expected index.'
-	);
 
 	assert.end();
 } );
