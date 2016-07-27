@@ -2,17 +2,13 @@ import sinon from "sinon";
 import jQueryObject from "./jQueryObject";
 
 const arrayEach = ( a, c ) => {
-	for ( let i = 0; i < a.length; i++ ) {
-		c( i, a[ i ] );
-	}
+	a.forEach( ( e, i ) => {
+		c( i, e );
+	} );
 };
 
 const objectEach = ( o, c ) => {
-	for ( let k in o ) {
-		if ( o.hasOwnProperty( k ) ) {
-			c( k, o[ k ] );
-		}
-	}
+	arrayEach( Object.keys( o ), c );
 };
 
 const jQuery = sinon.stub();

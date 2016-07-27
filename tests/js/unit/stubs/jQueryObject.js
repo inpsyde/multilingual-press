@@ -15,9 +15,9 @@ export default function jQueryObject( customMembers = {} ) {
 		css: sinon.spy(),
 		data: sinon.stub(),
 		each: ( c ) => {
-			for ( let i = 0; i < this._elements.length; i++ ) {
-				c( i, this._elements[ i ] );
-			}
+			this._elements.forEach( ( e, i ) => {
+				c( i, e );
+			} );
 		},
 		filter: sinon.stub(),
 		find: sinon.stub(),
