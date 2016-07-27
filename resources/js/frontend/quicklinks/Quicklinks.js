@@ -51,7 +51,7 @@ class Quicklinks {
 			return false;
 		}
 
-		_this.Util.addEventListener( $form, 'submit', this.submitForm.bind( this ) );
+		_this.Util.addEventListener( $form, 'submit', this.submitForm );
 
 		return true;
 	}
