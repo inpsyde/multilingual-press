@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+// TODO: With WordPress 4.6 + 2, use the `network_edit_site_nav_links` hook to add the tab.
+
 /**
  * Class Mlp_Network_Site_Settings
  */
