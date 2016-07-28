@@ -1,4 +1,4 @@
-const $ = window.jQuery;
+const { ajaxurl: ajaxUrl, jQuery: $ } = window;
 
 // Internal pseudo-namespace for private data.
 // NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
@@ -189,7 +189,7 @@ class RelationshipControl extends Backbone.View {
 	sendRequest( data ) {
 		$.ajax( {
 			type: 'POST',
-			url: window.ajaxurl,
+			url: ajaxUrl,
 			data,
 			success: _this.Util.reloadLocation,
 			async: false

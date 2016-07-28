@@ -1,4 +1,4 @@
-const $ = window.jQuery;
+const { jQuery: $ } = window;
 
 /**
  * The MultilingualPress Toggler module.

@@ -1,4 +1,4 @@
-const $ = window.jQuery;
+const { jQuery: $ } = window;
 
 // Internal pseudo-namespace for private data.
 // NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
