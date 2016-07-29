@@ -34,7 +34,7 @@ class AliasAwareLanguage implements Language {
 	 */
 	public function __construct( array $data ) {
 
-		$this->is_rtl = empty( $data['is_rtl'] );
+		$this->is_rtl = ! empty( $data['is_rtl'] );
 
 		$this->names = $this->get_names( $data );
 
