@@ -22,6 +22,8 @@ class Mlp_Redirect_Filter {
 	 */
 	public function __construct( $meta_key ) {
 
+		$this->meta_key = (string) $meta_key;
+
 		$this->current_user_id = get_current_user_id();
 	}
 
