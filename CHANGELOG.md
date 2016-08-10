@@ -8,6 +8,12 @@
 - Language API: Use fallback names for languages, see
 [issue #224](https://github.com/inpsyde/multilingual-press/issues/224).
 
+## 2.4.7
+- CSS: Use font weight "600" instead of "bold", see
+[Native Fonts in 4.6](https://make.wordpress.org/core/2016/07/07/native-fonts-in-4-6/).
+- Redirect: Fix user setting not being respected, see
+[issue #227](https://github.com/inpsyde/multilingual-press/issues/227).
+
 ## 2.4.6
 - Post Translator: Fix translations not being saved, see
 [issue #219](https://github.com/inpsyde/multilingual-press/issues/219).
