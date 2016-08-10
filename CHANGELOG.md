@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.7-dev
+## 2.4.7
 - CSS: Use font weight "600" instead of "bold", see
 [Native Fonts in 4.6](https://make.wordpress.org/core/2016/07/07/native-fonts-in-4-6/).
 - Redirect: Fix user setting not being respected, see

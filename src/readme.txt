@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.2
 Tested up to: 4.6
-Stable tag: 2.4.6
+Stable tag: 2.4.7
 
 Create a fast translation network on WordPress multisite.
 
@@ -113,6 +113,12 @@ tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.4.7 =
+- CSS: Use font weight "600" instead of "bold", see
+[Native Fonts in 4.6](https://make.wordpress.org/core/2016/07/07/native-fonts-in-4-6/).
+- Redirect: Fix user setting not being respected, see
+[issue #227](https://github.com/inpsyde/multilingual-press/issues/227).
 
 = 2.4.6 =
 - Post Translator: Fix translations not being saved, see
