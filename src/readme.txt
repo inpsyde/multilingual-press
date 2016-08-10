@@ -24,7 +24,7 @@ Our **Language Manager** offers 174 languages, and you can edit them.
 
 We cannot guarantee free ad hoc support. Please be patient, we are a small team.
 You can follow our progress and development notices on our
-[developer blog](http://make.multilingualpress.pro).
+[developer blog](http://make.multilingualpress.org).
 
 = Features =
 
@@ -52,7 +52,7 @@ without affecting the output of the front-end.
 
 = Premium Support =
 
-We also offer [premium support](http://multilingualpress.pro/#pricing) to save your time.
+We also offer [premium support](https://multilingualpress.org) to save your time.
 You get direct help from the developers of the plugin-and support the development.
 
 = WPML to MultilingualPress =
@@ -71,7 +71,7 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006.
 - PHP 5.2.4, newer PHP versions will work faster.
 
 If you're new to WordPress multisite, you might find our [WordPress multisite installation
-tutorial](https://marketpress.com/2015/wordpress-multisite-installation/) helpful.
+tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/) helpful.
 
 Use the installer via back-end of your install or ...
 
@@ -95,7 +95,7 @@ because it creates a lock-in: you would lose access to your content after the pl
 = I'm new to WordPress multisite. Are there any tutorials to get me started? =
 
 Yes, just have a look at our [WordPress multisite installation
-tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
+tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 
 == Screenshots ==
 
