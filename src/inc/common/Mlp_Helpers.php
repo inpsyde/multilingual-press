@@ -479,7 +479,7 @@ class Mlp_Helpers {
 
 		$output .= '</ul></div>';
 
-		return $output;
+		return apply_filters( 'show_linked_elements', $output, $items, $params );
 	}
 
 	/**
