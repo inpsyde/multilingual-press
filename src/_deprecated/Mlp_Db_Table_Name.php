@@ -44,6 +44,11 @@ class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 	 */
 	public function get_name() {
 
+		_deprecated_function(
+			__METHOD__,
+			'3.0.0'
+		);
+
 		return $this->table_name;
 	}
 
@@ -53,6 +58,11 @@ class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 	 * @return bool
 	 */
 	public function exists() {
+
+		_deprecated_function(
+			__METHOD__,
+			'3.0.0'
+		);
 
 		return in_array( $this->table_name, $this->all_table_names, true );
 	}

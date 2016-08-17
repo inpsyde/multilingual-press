@@ -44,6 +44,12 @@ class Mlp_Hreflang_Header_Output {
 	 */
 	public function http_header() {
 
+		_deprecated_function(
+			__METHOD__,
+			'3.0.0',
+			'Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguages\HTTPHeaders::send'
+		);
+
 		( new HTTPHeaders( $this->translations ) )->send();
 	}
 
@@ -53,6 +59,12 @@ class Mlp_Hreflang_Header_Output {
 	 * @return void
 	 */
 	public function wp_head() {
+
+		_deprecated_function(
+			__METHOD__,
+			'3.0.0',
+			'Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguages\HTMLLinkTags::render'
+		);
 
 		( new HTMLLinkTags( $this->translations ) )->render();
 	}
