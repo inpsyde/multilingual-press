@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\Setting;
+
 /**
  * Content of the per-site settings tab
  *
@@ -10,45 +12,46 @@
 class Mlp_Network_Site_Settings_Tab_Content {
 
 	/**
-	 * @var Mlp_Language_Api_Interface
-	 */
-	private $language_api;
-
-	/**
-	 * @var Mlp_Options_Page_Data
-	 */
-	private $page_data;
-
-	/**
 	 * @var int
 	 */
 	private $blog_id;
 
 	/**
-	 *
-	 *
+	 * @var Mlp_Language_Api_Interface
+	 */
+	private $language_api;
+
+	/**
 	 * @var Mlp_Site_Relations_Interface
 	 */
 	private $relations;
 
 	/**
+	 * @var Setting
+	 */
+	private $setting;
+
+	/**
 	 * Constructor. Set up the properties.
 	 *
 	 * @param Mlp_Language_Api_Interface   $language_api Language API.
-	 * @param Mlp_Options_Page_Data        $page_data    Options page data.
+	 * @param Setting                      $setting      Options page data.
 	 * @param int                          $blog_id      Blog ID
 	 * @param Mlp_Site_Relations_Interface $relations    Site relations.
 	 */
 	public function __construct(
 		Mlp_Language_Api_Interface $language_api,
-		Mlp_Options_Page_Data $page_data,
+		Setting $setting,
 		$blog_id,
 		Mlp_Site_Relations_Interface $relations
 	) {
 
 		$this->language_api = $language_api;
-		$this->page_data = $page_data;
+
+		$this->setting = $setting;
+
 		$this->blog_id = $blog_id;
+
 		$this->relations = $relations;
 	}
 
@@ -59,18 +62,13 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	 */
 	public function render_content() {
 
-		$action = $this->page_data->get_form_action();
-
-		$name = $this->page_data->get_action_name();
+		$action = $this->setting->get_action();
 		?>
-		<form action="<?php echo esc_attr( $action ); ?>" method="post">
-			<input type="hidden" name="action" value="<?php echo esc_attr( $name ); ?>" />
+		<form action="<?php echo $this->setting->get_url(); ?>" method="post">
+			<input type="hidden" name="action" value="<?php echo esc_attr( $action ); ?>" />
 			<input type="hidden" name="id" value="<?php echo esc_attr($this->blog_id); ?>" />
 			<?php
-			wp_nonce_field(
-				$this->page_data->get_nonce_action(),
-				$this->page_data->get_nonce_name()
-			);
+			wp_nonce_field( $action, $this->setting->get_nonce_name() );
 
 			$siteoption = get_site_option( 'inpsyde_multilingual', [] );
 			$languages  = $this->language_api->get_db()->get_items( [ 'page' => -1 ]  );

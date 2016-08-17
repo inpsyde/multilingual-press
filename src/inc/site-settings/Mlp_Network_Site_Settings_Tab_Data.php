@@ -1,5 +1,9 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
+use Inpsyde\MultilingualPress\Common\Type\Setting;
+use Inpsyde\MultilingualPress\Common\Type\URL;
+
 /**
  * Class Mlp_Network_Site_Settings_Tab_Data
  *
@@ -7,36 +11,26 @@
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-class Mlp_Network_Site_Settings_Tab_Data implements Mlp_Options_Page_Data {
+class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 
 	/**
-	 * @return string
+	 * Returns the action name for the setting.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string Action name.
 	 */
-	public function get_title() {
-
-		return '';
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_form_action() {
-
-		$admin_url = admin_url( 'admin-post.php' );
-
-		return esc_url( $admin_url );
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_nonce_action() {
+	public function get_action() {
 
 		return 'mlp_network_site_settings';
 	}
 
 	/**
-	 * @return string
+	 * Returns the nonce name for the setting.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string Nonce name.
 	 */
 	public function get_nonce_name() {
 
@@ -44,11 +38,26 @@ class Mlp_Network_Site_Settings_Tab_Data implements Mlp_Options_Page_Data {
 	}
 
 	/**
-	 * @return string
+	 * Returns the title of the setting.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string Setting title.
 	 */
-	public function get_action_name() {
+	public function get_title() {
 
-		return 'mlp_network_site_settings';
+		return '';
 	}
 
+	/**
+	 * Returns the URL to be used in the according form.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return URL URL to submit updates to.
+	 */
+	public function get_url() {
+
+		return EscapedURL::create( admin_url( 'admin-post.php' ) );
+	}
 }

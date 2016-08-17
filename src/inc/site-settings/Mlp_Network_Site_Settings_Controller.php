@@ -20,7 +20,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	/**
 	 * @var Mlp_Network_Site_Settings_Tab_Data
 	 */
-	private $tab_page_data;
+	private $setting;
 
 	/**
 	 * @var Mlp_Network_Site_Settings_Properties
@@ -37,13 +37,13 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	public function __construct( Inpsyde_Property_List_Interface $plugin_data ) {
 
 		$this->plugin_data = $plugin_data;
-		$this->tab_page_data = new Mlp_Network_Site_Settings_Tab_Data;
+		$this->setting = new Mlp_Network_Site_Settings_Tab_Data;
 		$this->page_properties = new Mlp_Network_Site_Settings_Properties( $plugin_data );
 
 		new Mlp_Network_Site_Settings( $this->page_properties, $this );
 
 		add_action(
-			'admin_post_' . $this->tab_page_data->get_action_name(),
+			'admin_post_' . $this->setting->get_action(),
 			[ $this, 'update_settings' ]
 		);
 
@@ -81,10 +81,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	public function update_settings() {
 
-		if ( ! check_admin_referer(
-			$this->tab_page_data->get_nonce_action(),
-			$this->tab_page_data->get_nonce_name()
-			) )
+		if ( ! check_admin_referer( $this->setting->get_action(), $this->setting->get_nonce_name() ) )
 			wp_die( 'Invalid', 'Invalid', [ 'response' => 403 ] );
 
 		$blog_id = $this->get_blog_id();
@@ -185,7 +182,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 
 		$view = new Mlp_Network_Site_Settings_Tab_Content(
 			$this->plugin_data->get( 'language_api' ),
-			$this->tab_page_data,
+			$this->setting,
 			$this->get_blog_id(),
 			$this->plugin_data->get( 'site_relations' )
 		);

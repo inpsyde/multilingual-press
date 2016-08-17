@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Common\Type\Setting;
+
 /**
  * Class Mlp_Language_Manager_Page_View
  *
@@ -9,14 +12,14 @@
 class Mlp_Language_Manager_Page_View {
 
 	/**
-	 * @var Mlp_Options_Page_Data
-	 */
-	private $page_data;
-
-	/**
 	 * @var Mlp_Browsable
 	 */
 	private $pagination_data;
+
+	/**
+	 * @var Setting
+	 */
+	private $setting;
 
 	/**
 	 * @var Mlp_Updatable
@@ -24,17 +27,16 @@ class Mlp_Language_Manager_Page_View {
 	private $watcher;
 
 	/**
-	 * @param Mlp_Options_Page_Data $page_data
-	 * @param Mlp_Updatable         $watcher
-	 * @param Mlp_Browsable         $pagination_data
+	 * @param Setting       $setting
+	 * @param Mlp_Updatable $watcher
+	 * @param Mlp_Browsable $pagination_data
 	 */
-	public function __construct(
-		Mlp_Options_Page_Data $page_data,
-		Mlp_Updatable         $watcher,
-		Mlp_Browsable         $pagination_data
-	) {
-		$this->watcher         = $watcher;
-		$this->page_data       = $page_data;
+	public function __construct( Setting $setting, Mlp_Updatable $watcher, Mlp_Browsable $pagination_data ) {
+
+		$this->setting = $setting;
+
+		$this->watcher = $watcher;
+
 		$this->pagination_data = $pagination_data;
 	}
 
@@ -44,39 +46,28 @@ class Mlp_Language_Manager_Page_View {
 	 */
 	public function render() {
 
-		$title = $this->page_data->get_title();
+		$action = $this->setting->get_action();
 
-		$action = $this->page_data->get_form_action();
-
-		$action_name = $this->page_data->get_action_name();
-
-		$paged = $this->pagination_data->get_current_page();
+		$current_page = $this->pagination_data->get_current_page();
 		?>
 		<div class="wrap">
-			<h1><?php echo esc_html( $title ); ?></h1>
+			<h1><?php echo esc_html( $this->setting->get_title() ); ?></h1>
 			<?php $this->watcher->update( 'before_form' ); ?>
-			<form action="<?php echo esc_attr( $action ) ?>" method="post">
-				<input type="hidden" name="action" value="<?php echo esc_attr( $action_name ); ?>">
-				<input type="hidden" name="paged" value="<?php echo esc_attr( $paged ); ?>">
-				<?php
-					wp_nonce_field( $this->page_data->get_nonce_action(), $this->page_data->get_nonce_name() );
-
-					$this->watcher->update( 'before_table' );
-
-					$this->watcher->update( 'show_table' );
-
-					$this->watcher->update( 'after_table' );
-
-					submit_button(
-						esc_attr__( 'Save changes', 'multilingual-press' ),
-						'primary',
-						'save',
-						false,
-						[ 'style' => 'float:left' ]
-					);
-
-					$this->watcher->update( 'after_form_submit_button' );
-				?>
+			<form action="<?php echo esc_url( $this->setting->get_url() ); ?>" method="post">
+				<input type="hidden" name="action" value="<?php echo esc_attr( $action ); ?>">
+				<input type="hidden" name="paged" value="<?php echo esc_attr( $current_page ); ?>">
+				<?php wp_nonce_field( $action, $this->setting->get_nonce_name() ); ?>
+				<?php $this->watcher->update( 'before_table' ); ?>
+				<?php $this->watcher->update( 'show_table' ); ?>
+				<?php $this->watcher->update( 'after_table' ); ?>
+				<?php submit_button(
+					esc_attr__( 'Save changes', 'multilingual-press' ),
+					'primary',
+					'save',
+					false,
+					[ 'style' => 'float:left' ]
+				); ?>
+				<?php $this->watcher->update( 'after_form_submit_button' ); ?>
 			</form>
 			<?php $this->watcher->update( 'after_form' ); ?>
 		</div>

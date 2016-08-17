@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Common\Type\Setting;
+
 /**
  * Update changed languages for the language manager.
  *
@@ -12,20 +15,6 @@
  * @package MultilingualPress\Models\LanguageManager
  */
 class Mlp_Language_Updater {
-
-	/**
-	 * Used to verify the request by its nonce.
-	 *
-	 * @type Mlp_Options_Page_Data
-	 */
-	private $page_data;
-
-	/**
-	 * Used to get the current page to limit the items to compare.
-	 *
-	 * @type Mlp_Browsable
-	 */
-	private $pagination_data;
 
 	/**
 	 * Compares the difference between exiting and changed items.
@@ -42,21 +31,33 @@ class Mlp_Language_Updater {
 	private $db;
 
 	/**
+	 * Used to get the current page to limit the items to compare.
+	 *
+	 * @type Mlp_Browsable
+	 */
+	private $pagination_data;
+
+	/**
+	 * @var Setting
+	 */
+	private $setting;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param Mlp_Options_Page_Data $page_data
+	 * @param Setting $setting
 	 * @param Mlp_Browsable         $pagination_data
 	 * @param Mlp_Array_Diff        $array_diff
 	 * @param Mlp_Data_Access       $db
 	 */
 	public function __construct(
-		Mlp_Options_Page_Data $page_data,
+		Setting $setting,
 		Mlp_Browsable         $pagination_data,
 		Mlp_Array_Diff        $array_diff,
 		Mlp_Data_Access       $db
 	) {
 
-		$this->page_data       = $page_data;
+		$this->setting       = $setting;
 		$this->pagination_data = $pagination_data;
 		$this->array_diff      = $array_diff;
 		$this->db              = $db;
@@ -85,10 +86,7 @@ class Mlp_Language_Updater {
 	 */
 	private function validate_request() {
 
-		check_admin_referer(
-			$this->page_data->get_nonce_action(),
-			$this->page_data->get_nonce_name()
-		);
+		check_admin_referer( $this->setting->get_action(), $this->setting->get_nonce_name() );
 
 		if ( empty ( $_POST[ 'languages' ] ) )
 			mlp_exit( 'invalid request' );

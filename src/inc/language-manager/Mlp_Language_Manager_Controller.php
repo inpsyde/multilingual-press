@@ -23,7 +23,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	/**
 	 * @var Mlp_Language_Manager_Options_Page_Data
 	 */
-	private $page_data;
+	private $setting;
 
 	/**
 	 * @var Mlp_Language_Manager_Page_View
@@ -73,15 +73,15 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		$this->page_title      = __( 'Language Manager', 'multilingual-press' );
 		$this->db              = $database;
 		$this->pagination_data = new Mlp_Language_Manager_Pagination_Data( $database );
-		$this->page_data       = new Mlp_Language_Manager_Options_Page_Data( $this->page_title );
+		$this->setting       = new Mlp_Language_Manager_Options_Page_Data( $this->page_title );
 		$this->view            = new Mlp_Language_Manager_Page_View(
-			$this->page_data,
+			$this->setting,
 			$this,
 			$this->pagination_data
 			);
 
 		$updater = new Mlp_Language_Updater(
-			$this->page_data,
+			$this->setting,
 			$this->pagination_data,
 			new Mlp_Array_Diff( $this->get_columns() ),
 			$database
@@ -173,12 +173,12 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	private function get_reset_table_link() {
 
 		$request = remove_query_arg( 'msg', wp_unslash( $_SERVER['REQUEST_URI'] ) );
-		$nonce   = wp_create_nonce( $this->page_data->get_nonce_action() );
+		$nonce   = wp_create_nonce( $this->setting->get_action() );
 		$url     = add_query_arg( [
 			'action'                           => $this->reset_action,
-			$this->page_data->get_nonce_name() => $nonce,
+			$this->setting->get_nonce_name() => $nonce,
 			'_wp_http_referer'                 => esc_attr( $request )
-		], $this->page_data->get_form_action() );
+		], (string) $this->setting->get_url() );
 		?>
 		<p>
 			<a href="<?php echo esc_url( $url ); ?>" class="delete submitdelete" style="color:red">
@@ -193,10 +193,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	public function reset_table() {
 
-		check_admin_referer(
-			$this->page_data->get_nonce_action(),
-			$this->page_data->get_nonce_name()
-		);
+		check_admin_referer( $this->setting->get_action(), $this->setting->get_nonce_name() );
 
 		$table_schema = new Mlp_Db_Languages_Schema( $this->wpdb );
 		$installer    = new Mlp_Db_Installer( $table_schema );
