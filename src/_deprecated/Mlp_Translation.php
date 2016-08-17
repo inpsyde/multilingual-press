@@ -72,36 +72,4 @@ class Mlp_Translation extends FilterableTranslation {
 
 		parent::__construct( $args, $language );
 	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see Translation::get_type}.
-	 *
-	 * @return string
-	 */
-	public function get_page_type() {
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'Inpsyde\MultilingualPress\Common\Type\FilterableTranslation::get_type'
-		);
-
-		return parent::get_type();
-	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see Translation::get_remote_title}.
-	 *
-	 * @return string
-	 */
-	public function get_target_title() {
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'Inpsyde\MultilingualPress\Common\Type\FilterableTranslation::get_remote_title'
-		);
-
-		return parent::get_remote_title();
-	}
 }
