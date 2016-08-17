@@ -73,7 +73,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 		_deprecated_function(
 			__METHOD__,
 			'3.0.0',
-			'Inpsyde\MultilingualPress\Common\Type\Mlp_Network_Site_Settings_Tab_Data::get_action'
+			'Mlp_Network_Site_Settings_Tab_Data::get_action'
 		);
 
 		return $this->get_action();
@@ -91,7 +91,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 		_deprecated_function(
 			__METHOD__,
 			'3.0.0',
-			'(string) Inpsyde\MultilingualPress\Common\Type\Mlp_Network_Site_Settings_Tab_Data::get_url'
+			'(string) Mlp_Network_Site_Settings_Tab_Data::get_url'
 		);
 
 		return (string) $this->get_url();
@@ -109,7 +109,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 		_deprecated_function(
 			__METHOD__,
 			'3.0.0',
-			'Inpsyde\MultilingualPress\Common\Type\Mlp_Network_Site_Settings_Tab_Data::get_action'
+			'Mlp_Network_Site_Settings_Tab_Data::get_action'
 		);
 
 		return $this->get_action();
