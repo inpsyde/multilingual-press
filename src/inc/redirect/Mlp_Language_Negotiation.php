@@ -1,7 +1,9 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\AcceptHeader\Parser;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
+use Inpsyde\MultilingualPress\Redirect\LanguageNegotiation\AcceptLanguageParser;
 
 /**
  * Find best alternative for given content
@@ -20,21 +22,19 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	private $language_api;
 
 	/**
-	 * @type Mlp_Accept_Header_Parser_Interface
+	 * @var Parser
 	 */
 	private $parser;
 
 	/**
-	 * @param Mlp_Language_Api_Interface         $language_api
-	 * @param Mlp_Accept_Header_Parser_Interface $parser
+	 * @param Mlp_Language_Api_Interface $language_api Language API object.
+	 * @param Parser                     $parser       Optional. Accept-Language parser object. Defaults to null.
 	 */
-	public function __construct(
-		Mlp_Language_Api_Interface         $language_api,
-		Mlp_Accept_Header_Parser_Interface $parser
-	) {
+	public function __construct( Mlp_Language_Api_Interface $language_api, Parser $parser = null ) {
 
 		$this->language_api = $language_api;
-		$this->parser = $parser;
+
+		$this->parser = $parser ?: new AcceptLanguageParser();
 	}
 
 	/**
@@ -169,7 +169,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	private function parse_accept_header( $accept_header ) {
 
-		$fields = $this->parser->parse( $accept_header );
+		$fields = $this->parser->parse_header( $accept_header );
 
 		if ( empty ( $fields ) )
 			return $fields;

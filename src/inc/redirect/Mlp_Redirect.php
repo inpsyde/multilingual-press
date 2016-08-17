@@ -73,9 +73,7 @@ class Mlp_Redirect {
 	 */
 	private function frontend_redirect() {
 
-		$validator   = new Mlp_Language_Header_Validator();
-		$parser      = new Mlp_Accept_Header_Parser( $validator );
-		$negotiation = new Mlp_Language_Negotiation( $this->language_api, $parser );
+		$negotiation = new Mlp_Language_Negotiation( $this->language_api );
 		$response    = new Mlp_Redirect_Response( $negotiation );
 		$controller  = new Mlp_Redirect_Frontend( $response, $this->option );
 		$controller->setup();
