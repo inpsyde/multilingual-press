@@ -1,13 +1,13 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Redirect\LanguageNegotiation;
+namespace Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation;
 
 use Inpsyde\MultilingualPress\Common\AcceptHeader\Parser;
 
 /**
  * Parser for Accept-Language headers, sorting by priority.
  *
- * @package Inpsyde\MultilingualPress\Redirect\LanguageNegotiation
+ * @package Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation
  * @since   3.0.0
  */
 class AcceptLanguageParser implements Parser {
@@ -57,7 +57,7 @@ class AcceptLanguageParser implements Parser {
 		_deprecated_function(
 			__METHOD__,
 			'3.0.0',
-			'Inpsyde\MultilingualPress\Redirect\LanguageNegotiation\AcceptLanguageParser::parse_header'
+			'Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation\AcceptLanguageParser::parse_header'
 		);
 
 		return $this->parse_header( $header );

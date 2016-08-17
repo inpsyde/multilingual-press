@@ -3,7 +3,7 @@
 use Inpsyde\MultilingualPress\Common\AcceptHeader\Parser;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
-use Inpsyde\MultilingualPress\Redirect\LanguageNegotiation\AcceptLanguageParser;
+use Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation\AcceptLanguageParser;
 
 /**
  * Find best alternative for given content
