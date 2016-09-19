@@ -35,31 +35,21 @@
     "docs": "http://docs.multilingualpress.org"
   },
   "require": {
-    "php": ">=5.4",
-    "composer/installers": "~1.0"
+    "php": ">=5.4.0"
   },
   "require-dev": {
+    "brain/monkey": "^1.4.0",
+    "mockery/mockery": "0.9.*",
     "phpunit/phpunit": "~4.8|~5.1"
   },
   "autoload": {
     "psr-4": {
       "Inpsyde\\MultilingualPress\\": "src"
-    },
-    "classmap": [
-      "src/_deprecated"
-    ]
+    }
   },
   "autoload-dev": {
     "psr-4": {
       "Inpsyde\\MultilingualPress\\Test\\": "tests/php"
-    }
-  },
-  "config": {
-    "optimize-autoloader": true
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "3.0.x-dev"
     }
   }
 }
