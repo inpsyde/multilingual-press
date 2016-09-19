@@ -84,7 +84,8 @@ final class DebugAwareURL implements URL {
 	}
 
 	/**
-	 * Returns the name of the minified version of the given file if it exists and not debugging, otherwise the unmodified file.
+	 * Returns the name of the minified version of the given file if it exists and not debugging, otherwise the
+	 * unmodified file.
 	 *
 	 * @param string $file     File name (e.g., admin.css).
 	 * @param string $dir_path Local path to the directory containing the file.
