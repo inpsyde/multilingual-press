@@ -86,7 +86,7 @@ class Mlp_Language_Updater {
 	 */
 	private function validate_request() {
 
-		check_admin_referer( $this->setting->get_action(), $this->setting->get_nonce_name() );
+		check_admin_referer( $this->setting->action(), $this->setting->nonce_name() );
 
 		if ( empty ( $_POST[ 'languages' ] ) )
 			mlp_exit( 'invalid request' );

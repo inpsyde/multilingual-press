@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Common\Type;
  * @package Inpsyde\MultilingualPress\Common\Type
  * @since   3.0.0
  */
-class FilterableTranslation implements Translation {
+final class FilterableTranslation implements Translation {
 
 	/**
 	 * @var URL
@@ -97,7 +97,7 @@ class FilterableTranslation implements Translation {
 	 *
 	 * @return URL Icon URL object.
 	 */
-	public function get_icon_url() {
+	public function icon_url() {
 
 		return $this->icon_url;
 	}
@@ -109,21 +109,9 @@ class FilterableTranslation implements Translation {
 	 *
 	 * @return Language Language object.
 	 */
-	public function get_language() {
+	public function language() {
 
 		return $this->language;
-	}
-
-	/**
-	 * Returns the content type.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return string Content type.
-	 */
-	public function get_type() {
-
-		return $this->type;
 	}
 
 	/**
@@ -133,7 +121,7 @@ class FilterableTranslation implements Translation {
 	 *
 	 * @return string Remote title.
 	 */
-	public function get_remote_title() {
+	public function remote_title() {
 
 		return $this->remote_title;
 	}
@@ -145,7 +133,7 @@ class FilterableTranslation implements Translation {
 	 *
 	 * @return string Remote URL.
 	 */
-	public function get_remote_url() {
+	public function remote_url() {
 
 		if ( $this->suppress_filters ) {
 			return (string) $this->remote_url;
@@ -165,8 +153,8 @@ class FilterableTranslation implements Translation {
 		$remote_url = (string) apply_filters(
 			'mlp_linked_element_link',
 			(string) $this->remote_url,
-			$this->get_target_site_id(),
-			$this->get_target_content_id(),
+			$this->target_site_id(),
+			$this->target_content_id(),
 			$this
 		);
 
@@ -180,7 +168,7 @@ class FilterableTranslation implements Translation {
 	 *
 	 * @return int Source site ID.
 	 */
-	public function get_source_site_id() {
+	public function source_site_id() {
 
 		return $this->source_site_id;
 	}
@@ -192,7 +180,7 @@ class FilterableTranslation implements Translation {
 	 *
 	 * @return int Target content ID.
 	 */
-	public function get_target_content_id() {
+	public function target_content_id() {
 
 		return $this->target_content_id;
 	}
@@ -204,40 +192,20 @@ class FilterableTranslation implements Translation {
 	 *
 	 * @return int Target site ID.
 	 */
-	public function get_target_site_id() {
+	public function target_site_id() {
 
 		return $this->target_site_id;
 	}
 
 	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see FilterableTranslation::get_type}.
+	 * Returns the content type.
 	 *
-	 * @return string
-	 */
-	public function get_page_type() {
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'Inpsyde\MultilingualPress\Common\Type\FilterableTranslation::get_type'
-		);
-
-		return $this->get_type();
-	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see FilterableTranslation::get_remote_title}.
+	 * @since 3.0.0
 	 *
-	 * @return string
+	 * @return string Content type.
 	 */
-	public function get_target_title() {
+	public function type() {
 
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'Inpsyde\MultilingualPress\Common\Type\FilterableTranslation::get_remote_title'
-		);
-
-		return $this->get_remote_title();
+		return $this->type;
 	}
 }

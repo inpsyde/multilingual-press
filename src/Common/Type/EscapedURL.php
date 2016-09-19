@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Common\Type;
  * @package Inpsyde\MultilingualPress\Common\Type
  * @since   3.0.0
  */
-class EscapedURL implements URL {
+final class EscapedURL implements URL {
 
 	/**
 	 * @var string
@@ -39,11 +39,11 @@ class EscapedURL implements URL {
 	 *
 	 * @param mixed $url URL source.
 	 *
-	 * @return EscapedURL URL object.
+	 * @return static URL object.
 	 */
 	public static function create( $url ) {
 
-		return new self( $url );
+		return new static( $url );
 	}
 
 	/**

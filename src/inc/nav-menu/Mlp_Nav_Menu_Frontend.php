@@ -136,7 +136,7 @@ class Mlp_Nav_Menu_Frontend {
 
 		$translation = $translations[ $site_id ];
 
-		$url = $translation->get_remote_url();
+		$url = $translation->remote_url();
 		if ( empty( $url ) ) {
 			$url = $site_url;
 		}

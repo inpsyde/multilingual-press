@@ -597,12 +597,11 @@ WHERE `http_name` IN( $values )";
 		return '';
 	}
 
-	/**
+	/** @noinspection PhpUnusedPrivateMethodInspection
 	 * Check for regular singular pages and separate page for posts
 	 *
 	 * @return bool
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function is_singular() {
 
 		if ( is_singular() ) {
@@ -622,12 +621,9 @@ WHERE `http_name` IN( $values )";
 		return is_home() && ! is_front_page();
 	}
 
-	/**
-	 * @used-by get_request_type()
-	 * @see     get_request_type()
+	/** @noinspection PhpUnusedPrivateMethodInspection
 	 * @return  bool
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function is_term_archive_request() {
 
 		$queried_object = get_queried_object();

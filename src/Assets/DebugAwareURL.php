@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Assets;
  * @package Inpsyde\MultilingualPress\Assets
  * @since   3.0.0
  */
-class DebugAwareURL implements URL {
+final class DebugAwareURL implements URL {
 
 	/**
 	 * @var string
@@ -25,7 +25,7 @@ class DebugAwareURL implements URL {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $file     Normal file name (e.g., admin.css).
+	 * @param string $file     File name (e.g., admin.css).
 	 * @param string $dir_path Local path to the directory containing the file.
 	 * @param string $dir_url  Public URL for the directory containing the file.
 	 */
@@ -48,15 +48,15 @@ class DebugAwareURL implements URL {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $file     Normal file name (e.g., admin.css).
+	 * @param string $file     File name (e.g., admin.css).
 	 * @param string $dir_path Local path to the directory containing the file.
-	 * @param string $dir_url  Public URL for the directory containing the file.
+	 * @param string $dir_url  Public URL of the directory containing the file.
 	 *
-	 * @return DebugAwareURL Asset URL object.
+	 * @return static Asset URL object.
 	 */
 	public static function create( $file, $dir_path, $dir_url ) {
 
-		return new self( $file, $dir_path, $dir_url );
+		return new static( $file, $dir_path, $dir_url );
 	}
 
 	/**
@@ -78,23 +78,22 @@ class DebugAwareURL implements URL {
 	 *
 	 * @return string File version.
 	 */
-	public function get_version() {
+	public function version() {
 
 		return $this->version;
 	}
 
 	/**
-	 * Returns the minified version of the given file if it exists and not debugging, otherwise the unmodified file.
+	 * Returns the name of the minified version of the given file if it exists and not debugging, otherwise the unmodified file.
 	 *
-	 * @param string $file     Normal file name (e.g., admin.css).
+	 * @param string $file     File name (e.g., admin.css).
 	 * @param string $dir_path Local path to the directory containing the file.
 	 *
-	 * @return string Minified or unmodified file, depending on debugging settings.
+	 * @return string Name of the minified or unmodified file, depending on debugging settings.
 	 */
 	private function get_file( $file, $dir_path ) {
 
-		// When debugging, don't use minified files.
-		if ( $this->is_debug_mode() ) {
+		if ( mlp_is_script_debug_mode() ) {
 			return $file;
 		}
 
@@ -109,19 +108,6 @@ class DebugAwareURL implements URL {
 		};
 
 		return $file;
-	}
-
-	/**
-	 * Checks if (script) debug mode is on.
-	 *
-	 * @return bool Whether or not (script) debug mode is on.
-	 */
-	private function is_debug_mode() {
-
-		return (
-			( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
-			|| ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG )
-		);
 	}
 
 	/**

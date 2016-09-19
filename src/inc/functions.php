@@ -15,6 +15,42 @@ function mlp_exit( $status = '' ) {
 }
 
 /**
+ * Checks if MultilingualPress debug mode is on.
+ *
+ * @since 3.0.0
+ *
+ * @return bool Whether or not MultilingualPress debug mode is on.
+ */
+function mlp_is_debug_mode() {
+
+	return ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG );
+}
+
+/**
+ * Checks if either MultilingualPress or WordPress debug mode is on.
+ *
+ * @since 3.0.0
+ *
+ * @return bool Whether or not MultilingualPress or WordPress debug mode is on.
+ */
+function mlp_is_wp_debug_mode() {
+
+	return mlp_is_debug_mode() || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
+}
+
+/**
+ * Checks if either MultilingualPress or script debug mode is on.
+ *
+ * @since 3.0.0
+ *
+ * @return bool Whether or not MultilingualPress or script debug mode is on.
+ */
+function mlp_is_script_debug_mode() {
+
+	return mlp_is_debug_mode() || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
+}
+
+/**
  * Wrapper for Mlp_Helpers:is_redirect, which returns
  * a blog's redirect setting
  *

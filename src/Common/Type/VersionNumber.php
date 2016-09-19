@@ -11,9 +11,11 @@ namespace Inpsyde\MultilingualPress\Common\Type;
 interface VersionNumber {
 
 	/**
+	 * Fallback version to be used in case validation failed.
+	 *
 	 * @since 3.0.0
 	 *
-	 * @var string Fallback version to be used in case validation failed.
+	 * @var string
 	 */
 	const FALLBACK_VERSION = '0.0.0';
 

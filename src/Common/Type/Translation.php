@@ -17,7 +17,7 @@ interface Translation {
 	 *
 	 * @return URL Icon URL object.
 	 */
-	public function get_icon_url();
+	public function icon_url();
 
 	/**
 	 * Returns the language object.
@@ -26,7 +26,7 @@ interface Translation {
 	 *
 	 * @return Language Language object.
 	 */
-	public function get_language();
+	public function language();
 
 	/**
 	 * Returns the remote title.
@@ -35,7 +35,7 @@ interface Translation {
 	 *
 	 * @return string Remote title.
 	 */
-	public function get_remote_title();
+	public function remote_title();
 
 	/**
 	 * Returns the remote URL.
@@ -44,7 +44,7 @@ interface Translation {
 	 *
 	 * @return string Remote URL.
 	 */
-	public function get_remote_url();
+	public function remote_url();
 
 	/**
 	 * Returns the source site ID.
@@ -53,7 +53,7 @@ interface Translation {
 	 *
 	 * @return int Source site ID.
 	 */
-	public function get_source_site_id();
+	public function source_site_id();
 
 	/**
 	 * Returns the target content ID.
@@ -62,7 +62,7 @@ interface Translation {
 	 *
 	 * @return int Target content ID.
 	 */
-	public function get_target_content_id();
+	public function target_content_id();
 
 	/**
 	 * Returns the target site ID.
@@ -71,7 +71,7 @@ interface Translation {
 	 *
 	 * @return int Target site ID.
 	 */
-	public function get_target_site_id();
+	public function target_site_id();
 
 	/**
 	 * Returns the content type.
@@ -80,5 +80,5 @@ interface Translation {
 	 *
 	 * @return string Content type.
 	 */
-	public function get_type();
+	public function type();
 }

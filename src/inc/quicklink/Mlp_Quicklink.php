@@ -235,7 +235,7 @@ ORDER BY domain DESC";
 				continue;
 			}
 
-			$translated[ $translation->get_remote_url() ] = $translation->get_language();
+			$translated[ $translation->remote_url() ] = $translation->language();
 		}
 
 		// Get post link option.
@@ -302,7 +302,7 @@ ORDER BY domain DESC";
 			if ( 'links' === $type ) {
 				$attributes = [
 					'href'     => $url,
-					'hreflang' => $language->get_name( 'http' ),
+					'hreflang' => $language->name( 'http' ),
 					'rel'      => 'alternate',
 				];
 			} else {
@@ -319,7 +319,7 @@ ORDER BY domain DESC";
 				'<%1$s%2$s>%3$s</%1$s>',
 				$element,
 				$attributes_html,
-				$language->get_name( 'native' )
+				$language->name( 'native' )
 			);
 		}
 

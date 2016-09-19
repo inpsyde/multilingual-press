@@ -17,7 +17,7 @@ interface Setting {
 	 *
 	 * @return string Action name.
 	 */
-	public function get_action();
+	public function action();
 
 	/**
 	 * Returns the nonce name for the setting.
@@ -26,7 +26,7 @@ interface Setting {
 	 *
 	 * @return string Nonce name.
 	 */
-	public function get_nonce_name();
+	public function nonce_name();
 
 	/**
 	 * Returns the title of the setting.
@@ -35,7 +35,7 @@ interface Setting {
 	 *
 	 * @return string Setting title.
 	 */
-	public function get_title();
+	public function title();
 
 	/**
 	 * Returns the URL to be used in the according form.
@@ -44,5 +44,5 @@ interface Setting {
 	 *
 	 * @return URL URL to submit updates to.
 	 */
-	public function get_url();
+	public function url();
 }

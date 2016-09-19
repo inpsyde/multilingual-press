@@ -25,42 +25,10 @@ class AcceptLanguageParser implements Parser {
 
 		$header = $this->remove_comment( $header );
 		if ( '' === $header ) {
-			return [];
+			return [ ];
 		}
 
-		$data = [];
-
-		$values = $this->get_values( $header );
-		foreach ( $values as $value ) {
-			$split_values = $this->split_value( $value );
-			if ( ! $split_values ) {
-				continue;
-			}
-
-			list( $language, $priority ) = $split_values;
-
-			$data[ $language ] = $priority;
-		}
-
-		return $data;
-	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see AcceptLanguageParser::parse_header}.
-	 *
-	 * @param string $header
-	 *
-	 * @return array
-	 */
-	public function parse( $header ) {
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation\AcceptLanguageParser::parse_header'
-		);
-
-		return $this->parse_header( $header );
+		return array_reduce( $this->get_values( $header ), [ $this, 'add_value' ], [ ] );
 	}
 
 	/**
@@ -116,7 +84,7 @@ class AcceptLanguageParser implements Parser {
 
 		$language = strtok( $value, ';' );
 		if ( ! $this->validate_language( $language ) ) {
-			return [];
+			return [ ];
 		}
 
 		if ( $language === $value ) {
@@ -157,5 +125,25 @@ class AcceptLanguageParser implements Parser {
 		$priority = min( 1, $priority );
 
 		return $priority;
+	}
+
+	/**
+	 * Returns the passed array, extended with the passed value.
+	 *
+	 * @param float[] $values Array of priorities.
+	 * @param float   $value  Priority.
+	 *
+	 * @return float[] Array with languages as keys and priorities as values.
+	 */
+	private function add_value( array $values, $value ) {
+
+		$split_values = $this->split_value( $value );
+		if ( $split_values ) {
+			list( $language, $priority ) = $split_values;
+
+			$values[ $language ] = $priority;
+		}
+
+		return $values;
 	}
 }

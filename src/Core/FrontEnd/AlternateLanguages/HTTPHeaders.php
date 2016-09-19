@@ -30,18 +30,20 @@ class HTTPHeaders {
 	/**
 	 * Sends an alternate language HTTP header for each available translation.
 	 *
+	 * @since   3.0.0
 	 * @wp-hook template_redirect
 	 *
 	 * @return bool Whether or not headers have been sent.
 	 */
 	public function send() {
 
-		$translations = $this->translations->get();
+		$translations = $this->translations->to_array();
 		if ( ! $translations ) {
 			return false;
 		}
 
-		foreach ( $translations as $language => $url ) {
+		array_walk( $translations, function ( $url, $language ) {
+
 			$header = sprintf(
 				'Link: <%1$s>; rel="alternate"; hreflang="%2$s"',
 				esc_url( $url ),
@@ -61,7 +63,7 @@ class HTTPHeaders {
 			if ( $header ) {
 				header( $header, false );
 			}
-		}
+		} );
 
 		return true;
 	}

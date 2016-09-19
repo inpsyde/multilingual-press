@@ -70,12 +70,12 @@ class Multilingual_Press {
 	 */
 	public function setup() {
 
+		require 'functions.php';
+
 		$this->prepare_plugin_data();
 		$this->load_assets();
 		$this->prepare_helpers();
 		$this->plugin_data->freeze(); // no changes allowed anymore
-
-		require 'functions.php';
 
 		if ( ! $this->is_active_site() )
 			return;

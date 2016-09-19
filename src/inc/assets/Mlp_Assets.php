@@ -98,7 +98,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 			/** @var URL $url_object */
 			$url_object = $properties[ 'url' ];
 			$url = $url_object->__toString();
-			$version = $url_object->get_version();
+			$version = $url_object->version();
 
 			if ( 'js' === $properties[ 'ext' ] ) {
 				wp_register_script(

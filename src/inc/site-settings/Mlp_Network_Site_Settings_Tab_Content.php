@@ -62,13 +62,13 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	 */
 	public function render_content() {
 
-		$action = $this->setting->get_action();
+		$action = $this->setting->action();
 		?>
-		<form action="<?php echo $this->setting->get_url(); ?>" method="post">
+		<form action="<?php echo $this->setting->url(); ?>" method="post">
 			<input type="hidden" name="action" value="<?php echo esc_attr( $action ); ?>" />
 			<input type="hidden" name="id" value="<?php echo esc_attr($this->blog_id); ?>" />
 			<?php
-			wp_nonce_field( $action, $this->setting->get_nonce_name() );
+			wp_nonce_field( $action, $this->setting->nonce_name() );
 
 			$siteoption = get_site_option( 'inpsyde_multilingual', [] );
 			$languages  = $this->language_api->get_db()->get_items( [ 'page' => -1 ]  );

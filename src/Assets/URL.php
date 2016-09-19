@@ -19,5 +19,5 @@ interface URL extends Type\URL {
 	 *
 	 * @return string File version.
 	 */
-	public function get_version();
+	public function version();
 }

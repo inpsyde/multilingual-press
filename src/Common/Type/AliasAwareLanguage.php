@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Common\Type;
  * @package Inpsyde\MultilingualPress\Common\Type
  * @since   3.0.0
  */
-class AliasAwareLanguage implements Language {
+final class AliasAwareLanguage implements Language {
 
 	/**
 	 * @var bool
@@ -50,11 +50,23 @@ class AliasAwareLanguage implements Language {
 	 *
 	 * @param array $data Language data.
 	 *
-	 * @return AliasAwareLanguage Language object.
+	 * @return static Language object.
 	 */
-	public static function create( $data ) {
+	public static function create( array $data ) {
 
-		return new self( $data );
+		return new static( $data );
+	}
+
+	/**
+	 * Checks if the language is written right-to-left (RTL).
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool Whether or not the language is written right-to-left (RTL).
+	 */
+	public function is_rtl() {
+
+		return $this->is_rtl;
 	}
 
 	/**
@@ -80,7 +92,7 @@ class AliasAwareLanguage implements Language {
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
-	public function get_name( $output = 'native' ) {
+	public function name( $output = 'native' ) {
 
 		if ( ! empty( $this->names[ $output ] ) ) {
 			return (string) $this->names[ $output ];
@@ -119,21 +131,9 @@ class AliasAwareLanguage implements Language {
 	 *
 	 * @return int Language priority.
 	 */
-	public function get_priority() {
+	public function priority() {
 
 		return $this->priority;
-	}
-
-	/**
-	 * Checks if the language is written right-to-left (RTL).
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not the language is written right-to-left (RTL).
-	 */
-	public function is_rtl() {
-
-		return $this->is_rtl;
 	}
 
 	/**

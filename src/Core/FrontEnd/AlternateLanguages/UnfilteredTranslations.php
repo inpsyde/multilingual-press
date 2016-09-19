@@ -2,6 +2,7 @@
 
 namespace Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguages;
 
+use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Mlp_Language_Api_Interface;
 
 /**
@@ -10,7 +11,7 @@ use Mlp_Language_Api_Interface;
  * @package Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguages
  * @since   3.0.0
  */
-class UnfilteredTranslations implements Translations {
+final class UnfilteredTranslations implements Translations {
 
 	/**
 	 * @var Mlp_Language_Api_Interface
@@ -41,7 +42,7 @@ class UnfilteredTranslations implements Translations {
 	 *
 	 * @return string[] Array with HTTP language codes as keys and URLs as values.
 	 */
-	public function get() {
+	public function to_array() {
 
 		if ( isset( $this->translations ) ) {
 			return $this->translations;
@@ -57,14 +58,13 @@ class UnfilteredTranslations implements Translations {
 			return $this->translations;
 		}
 
-		foreach ( $translations as $translation ) {
-			$url = $translation->get_remote_url();
-			if ( ! $url ) {
-				continue;
-			}
+		array_walk( $translations, function ( Translation $translation ) {
 
-			$this->translations[ $translation->get_language()->get_name( 'http' ) ] = $url;
-		}
+			$url = $translation->remote_url();
+			if ( $url ) {
+				$this->translations[ $translation->language()->name( 'http' ) ] = $url;
+			}
+		} );
 
 		return $this->translations;
 	}

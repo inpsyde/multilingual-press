@@ -43,7 +43,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		new Mlp_Network_Site_Settings( $this->page_properties, $this );
 
 		add_action(
-			'admin_post_' . $this->setting->get_action(),
+			'admin_post_' . $this->setting->action(),
 			[ $this, 'update_settings' ]
 		);
 
@@ -81,7 +81,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	public function update_settings() {
 
-		if ( ! check_admin_referer( $this->setting->get_action(), $this->setting->get_nonce_name() ) )
+		if ( ! check_admin_referer( $this->setting->action(), $this->setting->nonce_name() ) )
 			wp_die( 'Invalid', 'Invalid', [ 'response' => 403 ] );
 
 		$blog_id = $this->get_blog_id();

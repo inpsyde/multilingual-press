@@ -231,22 +231,24 @@ class Mlp_Helpers {
 			if ( $site_id === (int) $remote_site_id )
 				continue;
 
-			$url = $translation->get_remote_url();
+			$url = $translation->remote_url();
 
 			if ( empty ( $url ) )
 				continue;
 
+			$language = $translation->language();
+
 			$return[ $remote_site_id ] = [
-				'post_id'        => $translation->get_target_content_id(),
-				'post_title'     => $translation->get_target_title(),
+				'post_id'        => $translation->target_content_id(),
+				'post_title'     => $translation->remote_title(),
 				'permalink'      => $url,
-				'flag'           => $translation->get_icon_url(),
+				'flag'           => $translation->icon_url(),
 				/* 'lang' is the old entry, language_short the first part
 				 * until the '_', long the complete language tag.
 				 */
-				'lang'           => $translation->get_language()->get_name( 'lang' ),
-				'language_short' => $translation->get_language()->get_name( 'lang' ),
-				'language_long'  => $translation->get_language()->get_name( 'language_long' ),
+				'lang'           => $language->name( 'lang' ),
+				'language_short' => $language->name( 'lang' ),
+				'language_long'  => $language->name( 'language_long' ),
 			];
 		}
 
@@ -425,19 +427,19 @@ class Mlp_Helpers {
 
 		/** @var Translation $translation */
 		foreach ( $translations as $site_id => $translation ) {
-			$url = $translation->get_remote_url();
+			$url = $translation->remote_url();
 			if ( empty( $url ) ) {
 				continue;
 			}
 
-			$language = $translation->get_language();
+			$language = $translation->language();
 
 			$items[ $site_id ] = [
 				'url'      => $url,
-				'http'     => $language->get_name( 'http' ),
-				'name'     => $language->get_name( $params[ 'link_text' ] ),
-				'priority' => $language->get_priority(),
-				'icon'     => (string) $translation->get_icon_url(),
+				'http'     => $language->name( 'http' ),
+				'name'     => $language->name( $params[ 'link_text' ] ),
+				'priority' => $language->priority(),
+				'icon'     => (string) $translation->icon_url(),
 			];
 		}
 

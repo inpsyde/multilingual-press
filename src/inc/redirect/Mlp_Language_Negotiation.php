@@ -106,22 +106,22 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		array $user
 	) {
 
-		$language      = $translation->get_language();
+		$language      = $translation->language();
 		$user_priority = $this->get_user_priority( $language, $user );
 
 		if ( 0 === $user_priority )
 			return;
 
-		$url = $translation->get_remote_url();
+		$url = $translation->remote_url();
 
 		if ( empty ( $url ) )
 			return;
 
-		$combined_value   = $language->get_priority() * $user_priority;
+		$combined_value   = $language->priority() * $user_priority;
 		$possible[]       = [
 			'priority' => $combined_value,
 			'url'      => $url,
-			'language' => $language->get_name( 'http' ),
+			'language' => $language->name( 'http' ),
 			'site_id'  => $site_id,
 		];
 	}
@@ -148,12 +148,12 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	private function get_user_priority( Language $language, array $user ) {
 
-		$lang_http = $language->get_name( 'http_name' );
+		$lang_http = $language->name( 'http_name' );
 
 		if ( isset ( $user[ $lang_http ] ) )
 			return $user[ $lang_http ];
 
-		$lang_short = $language->get_name( 'language_short' );
+		$lang_short = $language->name( 'language_short' );
 
 		if ( isset ( $user[ $lang_short ] ) )
 			return $user[ $lang_short ];

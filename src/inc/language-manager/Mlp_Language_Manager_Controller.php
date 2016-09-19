@@ -173,12 +173,12 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	private function get_reset_table_link() {
 
 		$request = remove_query_arg( 'msg', wp_unslash( $_SERVER['REQUEST_URI'] ) );
-		$nonce   = wp_create_nonce( $this->setting->get_action() );
+		$nonce   = wp_create_nonce( $this->setting->action() );
 		$url     = add_query_arg( [
-			'action'                           => $this->reset_action,
-			$this->setting->get_nonce_name() => $nonce,
-			'_wp_http_referer'                 => esc_attr( $request )
-		], (string) $this->setting->get_url() );
+			'action'                     => $this->reset_action,
+			$this->setting->nonce_name() => $nonce,
+			'_wp_http_referer'           => esc_attr( $request )
+		], (string) $this->setting->url() );
 		?>
 		<p>
 			<a href="<?php echo esc_url( $url ); ?>" class="delete submitdelete" style="color:red">
@@ -193,7 +193,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	public function reset_table() {
 
-		check_admin_referer( $this->setting->get_action(), $this->setting->get_nonce_name() );
+		check_admin_referer( $this->setting->action(), $this->setting->nonce_name() );
 
 		$table_schema = new Mlp_Db_Languages_Schema( $this->wpdb );
 		$installer    = new Mlp_Db_Installer( $table_schema );

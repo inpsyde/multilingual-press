@@ -11,6 +11,15 @@ namespace Inpsyde\MultilingualPress\Common\Type;
 interface Language {
 
 	/**
+	 * Checks if the language is written right-to-left (RTL).
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool Whether or not the language is written right-to-left (RTL).
+	 */
+	public function is_rtl();
+
+	/**
 	 * Returns the language name (or code) according to the given argument.
 	 *
 	 * @since 3.0.0
@@ -19,7 +28,7 @@ interface Language {
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
-	public function get_name( $output = 'native' );
+	public function name( $output = 'native' );
 
 	/**
 	 * Returns the language priority.
@@ -28,14 +37,5 @@ interface Language {
 	 *
 	 * @return int Language priority.
 	 */
-	public function get_priority();
-
-	/**
-	 * Checks if the language is written right-to-left (RTL).
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not the language is written right-to-left (RTL).
-	 */
-	public function is_rtl();
+	public function priority();
 }

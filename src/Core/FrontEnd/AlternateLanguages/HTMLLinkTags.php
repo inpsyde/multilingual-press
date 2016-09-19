@@ -30,18 +30,20 @@ class HTMLLinkTags {
 	/**
 	 * Renders an alternate language HTML link tag for each available translation into the HTML head.
 	 *
+	 * @since   3.0.0
 	 * @wp-hook wp_head
 	 *
 	 * @return bool Whether or not headers have been sent.
 	 */
 	public function render() {
 
-		$translations = $this->translations->get();
+		$translations = $this->translations->to_array();
 		if ( ! $translations ) {
 			return false;
 		}
 
-		foreach ( $translations as $language => $url ) {
+		array_walk( $translations, function ( $url, $language ) {
+
 			$html = sprintf(
 				'<link rel="alternate" hreflang="%1$s" href="%2$s">',
 				esc_attr( $language ),
@@ -58,7 +60,7 @@ class HTMLLinkTags {
 			 * @param string $url      Target URL.
 			 */
 			echo apply_filters( 'mlp_hreflang_html', $html, $language, $url );
-		}
+		} );
 
 		return true;
 	}

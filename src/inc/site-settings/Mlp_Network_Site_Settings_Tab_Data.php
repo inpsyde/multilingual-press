@@ -20,7 +20,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 	 *
 	 * @return string Action name.
 	 */
-	public function get_action() {
+	public function action() {
 
 		return 'mlp_network_site_settings';
 	}
@@ -32,7 +32,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 	 *
 	 * @return string Nonce name.
 	 */
-	public function get_nonce_name() {
+	public function nonce_name() {
 
 		return 'mlp_network_site_settings_nonce';
 	}
@@ -44,7 +44,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 	 *
 	 * @return string Setting title.
 	 */
-	public function get_title() {
+	public function title() {
 
 		return '';
 	}
@@ -56,7 +56,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 	 *
 	 * @return URL URL to submit updates to.
 	 */
-	public function get_url() {
+	public function url() {
 
 		return EscapedURL::create( admin_url( 'admin-post.php' ) );
 	}
@@ -76,7 +76,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 			'Mlp_Network_Site_Settings_Tab_Data::get_action'
 		);
 
-		return $this->get_action();
+		return $this->action();
 	}
 
 	/**
@@ -94,7 +94,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 			'(string) Mlp_Network_Site_Settings_Tab_Data::get_url'
 		);
 
-		return (string) $this->get_url();
+		return (string) $this->url();
 	}
 
 	/**
@@ -112,6 +112,6 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 			'Mlp_Network_Site_Settings_Tab_Data::get_action'
 		);
 
-		return $this->get_action();
+		return $this->action();
 	}
 }

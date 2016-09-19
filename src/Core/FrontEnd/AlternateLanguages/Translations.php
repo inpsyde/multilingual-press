@@ -17,5 +17,5 @@ interface Translations {
 	 *
 	 * @return string[] Array with HTTP language codes as keys and URLs as values.
 	 */
-	public function get();
+	public function to_array();
 }
