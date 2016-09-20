@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
+use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
 use Inpsyde\MultilingualPress\Common\Type\Setting;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 
@@ -19,11 +19,19 @@ class Mlp_Language_Manager_Options_Page_Data implements Setting {
 	private $page_title;
 
 	/**
-	 * @param string $page_title
+	 * @var TypeFactory
 	 */
-	public function __construct( $page_title ) {
+	private $type_factory;
+
+	/**
+	 * @param string      $page_title
+	 * @param TypeFactory $type_factory Type factory object.
+	 */
+	public function __construct( $page_title, TypeFactory $type_factory ) {
 
 		$this->page_title = (string) $page_title;
+
+		$this->type_factory = $type_factory;
 	}
 
 	/**
@@ -71,7 +79,9 @@ class Mlp_Language_Manager_Options_Page_Data implements Setting {
 	 */
 	public function url() {
 
-		return EscapedURL::create( admin_url( 'admin-post.php' ) );
+		return $this->type_factory->create_url( [
+			admin_url( 'admin-post.php' ),
+		] );
 	}
 
 	/**

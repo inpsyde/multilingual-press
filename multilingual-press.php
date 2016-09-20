@@ -12,7 +12,7 @@
  * Network:     true
  */
 
-use Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber;
+use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
 
 defined( 'ABSPATH' ) or die();
 
@@ -106,7 +106,9 @@ function mlp_init() {
  */
 function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_version, wpdb $wpdb ) {
 
-	$self_check = new Mlp_Self_Check( __FILE__, $pagenow );
+	$type_factory = new TypeFactory();
+
+	$self_check = new Mlp_Self_Check( __FILE__, $pagenow, $type_factory );
 	$requirements_check = $self_check->pre_install_check(
 		$data->get( 'plugin_name' ),
 		$data->get( 'plugin_base_name' ),
@@ -117,6 +119,7 @@ function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_
 		return FALSE;
 	}
 
+	$data->set( 'type_factory', $type_factory );
 	$data->set( 'site_relations', new Mlp_Site_Relations( $wpdb, 'mlp_site_relations' ) );
 
 	if ( Mlp_Self_Check::INSTALLATION_CONTEXT_OK === $requirements_check ) {
@@ -124,8 +127,12 @@ function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_
 		$deactivator = new Mlp_Network_Plugin_Deactivation();
 
 		$last_version_option = get_site_option( 'mlp_version' );
-		$last_version = SemanticVersionNumber::create( $last_version_option );
-		$current_version = SemanticVersionNumber::create( $data->get( 'version' ) );
+		$last_version = $type_factory->create_version_number( [
+			$last_version_option,
+		] );
+		$current_version = $type_factory->create_version_number( [
+			$data->get( 'version' ),
+		] );
 		$upgrade_check = $self_check->is_current_version( $current_version, $last_version );
 		$updater = new Mlp_Update_Plugin_Data( $data, $wpdb, $current_version, $last_version );
 

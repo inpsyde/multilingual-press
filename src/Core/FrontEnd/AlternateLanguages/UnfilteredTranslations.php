@@ -58,14 +58,23 @@ final class UnfilteredTranslations implements Translations {
 			return $this->translations;
 		}
 
-		array_walk( $translations, function ( Translation $translation ) {
-
-			$url = $translation->remote_url();
-			if ( $url ) {
-				$this->translations[ $translation->language()->name( 'http' ) ] = $url;
-			}
-		} );
+		array_walk( $translations, [ $this, 'add_translation' ] );
 
 		return $this->translations;
+	}
+
+	/**
+	 * Adds the given translation to the internal storage, if the remote URL is not empty.
+	 *
+	 * @param Translation $translation Translation object.
+	 *
+	 * @return void
+	 */
+	private function add_translation( Translation $translation ) {
+
+		$url = $translation->remote_url();
+		if ( $url ) {
+			$this->translations[ $translation->language()->name( 'http' ) ] = $url;
+		}
 	}
 }

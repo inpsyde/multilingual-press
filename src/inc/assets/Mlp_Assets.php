@@ -1,7 +1,7 @@
 <?php
 
-use Inpsyde\MultilingualPress\Assets\DebugAwareURL;
-use Inpsyde\MultilingualPress\Assets\URL;
+use Inpsyde\MultilingualPress\Assets\AssetURL;
+use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
 
 /**
  * Handle scripts and stylesheets
@@ -35,13 +35,21 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	private $l10n = [];
 
 	/**
+	 * @var TypeFactory
+	 */
+	private $type_factory;
+
+	/**
 	 * Constructor. Set up the properties.
 	 *
-	 * @param Mlp_Locations_Interface $locations Asset locations object.
+	 * @param Mlp_Locations_Interface $locations    Asset locations object.
+	 * @param TypeFactory             $type_factory Type factory object.
 	 */
-	public function __construct( Mlp_Locations_Interface $locations ) {
+	public function __construct( Mlp_Locations_Interface $locations, TypeFactory $type_factory ) {
 
 		$this->locations = $locations;
+
+		$this->type_factory = $type_factory;
 	}
 
 	/**
@@ -62,17 +70,17 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 			return FALSE;
 		}
 
-		$url = DebugAwareURL::create(
+		$url = $this->type_factory->create_url( [
 			$file,
 			$this->locations->get_dir( $ext, 'path' ),
-			$this->locations->get_dir( $ext, 'url' )
-		);
+			$this->locations->get_dir( $ext, 'url' ),
+		], '\Inpsyde\MultilingualPress\Assets\DebugAwareAssetURL' );
 
 		$this->assets[ $handle ] = [
 			'url'          => $url,
 			'ext'          => $ext,
 			'dependencies' => $dependencies,
-		 ];
+		];
 
 		if ( $l10n ) {
 			$this->l10n[ $handle ] = $l10n;
@@ -95,7 +103,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 				continue;
 			}
 
-			/** @var URL $url_object */
+			/** @var AssetURL $url_object */
 			$url_object = $properties[ 'url' ];
 			$url = $url_object->__toString();
 			$version = $url_object->version();

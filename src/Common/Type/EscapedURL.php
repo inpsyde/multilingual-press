@@ -33,20 +33,6 @@ final class EscapedURL implements URL {
 	}
 
 	/**
-	 * Returns a new URL object for the given URL source.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param mixed $url URL source.
-	 *
-	 * @return static URL object.
-	 */
-	public static function create( $url ) {
-
-		return new static( $url );
-	}
-
-	/**
 	 * Returns the URL string.
 	 *
 	 * @since 3.0.0

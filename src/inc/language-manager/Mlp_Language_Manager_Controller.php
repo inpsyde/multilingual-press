@@ -73,7 +73,10 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		$this->page_title      = __( 'Language Manager', 'multilingual-press' );
 		$this->db              = $database;
 		$this->pagination_data = new Mlp_Language_Manager_Pagination_Data( $database );
-		$this->setting       = new Mlp_Language_Manager_Options_Page_Data( $this->page_title );
+		$this->setting       = new Mlp_Language_Manager_Options_Page_Data(
+			$this->page_title,
+			$this->plugin_data->get( 'type_factory' )
+		);
 		$this->view            = new Mlp_Language_Manager_Page_View(
 			$this->setting,
 			$this,

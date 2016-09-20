@@ -37,7 +37,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	public function __construct( Inpsyde_Property_List_Interface $plugin_data ) {
 
 		$this->plugin_data = $plugin_data;
-		$this->setting = new Mlp_Network_Site_Settings_Tab_Data;
+		$this->setting = new Mlp_Network_Site_Settings_Tab_Data( $plugin_data->get( 'type_factory' ) );
 		$this->page_properties = new Mlp_Network_Site_Settings_Properties( $plugin_data );
 
 		new Mlp_Network_Site_Settings( $this->page_properties, $this );

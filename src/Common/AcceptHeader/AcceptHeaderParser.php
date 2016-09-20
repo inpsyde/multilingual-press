@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Common\AcceptHeader;
  * @package Inpsyde\MultilingualPress\Common\AcceptHeader
  * @since   3.0.0
  */
-interface Parser {
+interface AcceptHeaderParser {
 
 	/**
 	 * Parses the given Accept header and returns the according data in array form.

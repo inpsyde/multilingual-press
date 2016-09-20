@@ -2,7 +2,7 @@
 
 namespace Inpsyde\MultilingualPress\Assets;
 
-use Inpsyde\MultilingualPress\Common\Type;
+use Inpsyde\MultilingualPress\Common\Type\URL;
 
 /**
  * Interface for all asset URL data type implementations, providing a file version.
@@ -10,7 +10,7 @@ use Inpsyde\MultilingualPress\Common\Type;
  * @package Inpsyde\MultilingualPress\Assets
  * @since   3.0.0
  */
-interface URL extends Type\URL {
+interface AssetURL extends URL {
 
 	/**
 	 * Returns the file version.

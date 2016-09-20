@@ -4,6 +4,8 @@ namespace Inpsyde\MultilingualPress\Common\Factory;
 
 use WP_Error;
 
+// TODO: Adapt this class to use ~\Common\Factory.
+
 /**
  * Static factory for error objects.
  *

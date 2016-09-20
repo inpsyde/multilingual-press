@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\AcceptHeader\Parser;
+use Inpsyde\MultilingualPress\Common\AcceptHeader\AcceptHeaderParser;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation\AcceptLanguageParser;
@@ -22,15 +22,15 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	private $language_api;
 
 	/**
-	 * @var Parser
+	 * @var AcceptHeaderParser
 	 */
 	private $parser;
 
 	/**
 	 * @param Mlp_Language_Api_Interface $language_api Language API object.
-	 * @param Parser                     $parser       Optional. Accept-Language parser object. Defaults to null.
+	 * @param AcceptHeaderParser         $parser       Optional. Accept-Language parser object. Defaults to null.
 	 */
-	public function __construct( Mlp_Language_Api_Interface $language_api, Parser $parser = null ) {
+	public function __construct( Mlp_Language_Api_Interface $language_api, AcceptHeaderParser $parser = null ) {
 
 		$this->language_api = $language_api;
 

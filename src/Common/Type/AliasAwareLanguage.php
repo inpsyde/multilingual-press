@@ -44,20 +44,6 @@ final class AliasAwareLanguage implements Language {
 	}
 
 	/**
-	 * Returns a new language object for the given language source.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param array $data Language data.
-	 *
-	 * @return static Language object.
-	 */
-	public static function create( array $data ) {
-
-		return new static( $data );
-	}
-
-	/**
 	 * Checks if the language is written right-to-left (RTL).
 	 *
 	 * @since 3.0.0

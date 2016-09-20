@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Assets;
  * @package Inpsyde\MultilingualPress\Assets
  * @since   3.0.0
  */
-final class DebugAwareURL implements URL {
+final class DebugAwareAssetURL implements AssetURL {
 
 	/**
 	 * @var string
@@ -41,22 +41,6 @@ final class DebugAwareURL implements URL {
 
 			$this->version = filemtime( $file_path );
 		}
-	}
-
-	/**
-	 * Returns a new asset URL object according to the given arguments.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param string $file     File name (e.g., admin.css).
-	 * @param string $dir_path Local path to the directory containing the file.
-	 * @param string $dir_url  Public URL of the directory containing the file.
-	 *
-	 * @return static Asset URL object.
-	 */
-	public static function create( $file, $dir_path, $dir_url ) {
-
-		return new static( $file, $dir_path, $dir_url );
 	}
 
 	/**

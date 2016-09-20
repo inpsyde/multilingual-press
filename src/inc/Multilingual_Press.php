@@ -444,10 +444,14 @@ class Multilingual_Press {
 				'mlp_languages',
 				$site_relations,
 				$this->plugin_data->get( 'content_relations' ),
-				$this->wpdb
+				$this->wpdb,
+				$this->plugin_data->get( 'type_factory' )
 			)
 		);
-		$this->plugin_data->set( 'assets', new Mlp_Assets( $this->plugin_data->get( 'locations' ) ) );
+		$this->plugin_data->set( 'assets', new Mlp_Assets(
+			$this->plugin_data->get( 'locations' ),
+			$this->plugin_data->get( 'type_factory' )
+		) );
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
+use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
 use Inpsyde\MultilingualPress\Common\Type\Setting;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 
@@ -12,6 +12,19 @@ use Inpsyde\MultilingualPress\Common\Type\URL;
  * @license GPL
  */
 class Mlp_Network_Site_Settings_Tab_Data implements Setting {
+
+	/**
+	 * @var TypeFactory
+	 */
+	private $type_factory;
+
+	/**
+	 * @param TypeFactory $type_factory Type factory object.
+	 */
+	public function __construct( TypeFactory $type_factory ) {
+
+		$this->type_factory = $type_factory;
+	}
 
 	/**
 	 * Returns the action name for the setting.
@@ -58,7 +71,9 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 	 */
 	public function url() {
 
-		return EscapedURL::create( admin_url( 'admin-post.php' ) );
+		return $this->type_factory->create_url( [
+			admin_url( 'admin-post.php' ),
+		] );
 	}
 
 	/**

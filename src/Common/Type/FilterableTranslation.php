@@ -67,15 +67,11 @@ final class FilterableTranslation implements Translation {
 
 		// TODO: Passing all the (different) stuff via an array really should be improved! Use fluent setters instead?!
 
-		$this->icon_url = ( $args['icon_url'] instanceof URL )
-			? $args['icon_url']
-			: EscapedURL::create( '' );
+		$this->icon_url = $args['icon_url'];
 
 		$this->remote_title = (string) $args['remote_title'];
 
-		$this->remote_url = ( $args['remote_url'] instanceof URL )
-			? $args['remote_url']
-			: EscapedURL::create( '' );
+		$this->remote_url = $args['remote_url'];
 
 		$this->source_site_id = (int) $args['source_site_id'];
 

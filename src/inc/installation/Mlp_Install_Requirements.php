@@ -1,6 +1,7 @@
 <?php
 
-use Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber;
+use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
+use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 
 /**
  * Details of the currently required PHP and WordPress versions.
@@ -12,23 +13,40 @@ use Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber;
 class Mlp_Install_Requirements implements Mlp_Requirements_Interface {
 
 	/**
+	 * @var TypeFactory
+	 */
+	private $type_factory;
+
+	/**
+	 * @param TypeFactory $type_factory Type factory object.
+	 */
+	public function __construct( TypeFactory $type_factory ) {
+
+		$this->type_factory = $type_factory;
+	}
+
+	/**
 	 * Return the currently required PHP version.
 	 *
-	 * @return SemanticVersionNumber
+	 * @return VersionNumber
 	 */
 	public function get_min_php_version() {
 
-		return SemanticVersionNumber::create( '5.4.0' );
+		return $this->type_factory->create_version_number( [
+			'5.4.0',
+		] );
 	}
 
 	/**
 	 * Return the currently required WordPress version.
 	 *
-	 * @return SemanticVersionNumber
+	 * @return VersionNumber
 	 */
 	public function get_min_wp_version() {
 
-		return SemanticVersionNumber::create( '4.2.0' );
+		return $this->type_factory->create_version_number( [
+			'4.2.0',
+		] );
 	}
 
 	/**

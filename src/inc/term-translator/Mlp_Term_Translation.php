@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
+use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
 
 /**
  * Fetch and set term translations
@@ -23,13 +23,21 @@ class Mlp_Term_Translation {
 	private $wp_rewrite;
 
 	/**
-	 * @param wpdb       $wpdb
-	 * @param WP_Rewrite $wp_rewrite
+	 * @var TypeFactory
 	 */
-	public function __construct( wpdb $wpdb, WP_Rewrite $wp_rewrite ) {
+	private $type_factory;
+
+	/**
+	 * @param wpdb        $wpdb
+	 * @param WP_Rewrite  $wp_rewrite
+	 * @param TypeFactory $type_factory Type factory object.
+	 */
+	public function __construct( wpdb $wpdb, WP_Rewrite $wp_rewrite, TypeFactory $type_factory ) {
 
 		$this->wpdb       = $wpdb;
 		$this->wp_rewrite = $wp_rewrite;
+
+		$this->type_factory = $type_factory;
 	}
 
 	/**
@@ -81,11 +89,11 @@ class Mlp_Term_Translation {
 		if ( is_admin() )
 			return $this->get_admin_translation( $term, $term[ 'taxonomy'] );
 
-		$url = $this->get_public_url( (int) $term[ 'term_id'], $term[ 'taxonomy'] );
-
 		return [
-			'remote_url'   => EscapedURL::create( $url ),
-			'remote_title' => $term[ 'name' ],
+			'remote_url'   => $this->type_factory->create_url( [
+				$this->get_public_url( (int) $term[ 'term_id'], $term[ 'taxonomy'] ),
+			] ),
+			'remote_title' => $term['name'],
 		];
 	}
 
@@ -102,11 +110,11 @@ class Mlp_Term_Translation {
 			return FALSE;
 		}
 
-		$url = get_edit_term_link( (int) $term[ 'term_id' ], $taxonomy );
-
 		return [
-			'remote_url'   => EscapedURL::create( $url ),
-			'remote_title' => $term[ 'name' ],
+			'remote_url'   => $this->type_factory->create_url( [
+				get_edit_term_link( (int) $term[ 'term_id' ], $taxonomy ),
+			] ),
+			'remote_title' => $term['name'],
 		];
 	}
 

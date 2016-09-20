@@ -1,6 +1,6 @@
 <?php
 
-use Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber;
+use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 
 /**
@@ -59,13 +59,21 @@ class Mlp_Self_Check {
 	private $pagenow;
 
 	/**
-	 * @param string $plugin_file
-	 * @param string $pagenow
+	 * @var TypeFactory
 	 */
-	public function __construct( $plugin_file, $pagenow ) {
+	private $type_factory;
+
+	/**
+	 * @param string      $plugin_file
+	 * @param string      $pagenow
+	 * @param TypeFactory $type_factory Type factory object.
+	 */
+	public function __construct( $plugin_file, $pagenow, TypeFactory $type_factory ) {
 
 		$this->plugin_file = $plugin_file;
 		$this->pagenow = $pagenow;
+
+		$this->type_factory = $type_factory;
 	}
 
 	/**
@@ -86,12 +94,14 @@ class Mlp_Self_Check {
 			return self::WRONG_PAGE_FOR_CHECK;
 		}
 
-		$php_version = phpversion();
-
 		$check = new Mlp_Requirements_Check(
-			new Mlp_Install_Requirements(),
-			SemanticVersionNumber::create( $php_version ),
-			SemanticVersionNumber::create( $wp_version ),
+			new Mlp_Install_Requirements( $this->type_factory ),
+			$this->type_factory->create_version_number( [
+				phpversion(),
+			] ),
+			$this->type_factory->create_version_number( [
+				$wp_version,
+			] ),
 			$this->plugin_file
 		);
 
@@ -155,7 +165,9 @@ class Mlp_Self_Check {
 			return $plugins;
 		}
 
-		$new_version = SemanticVersionNumber::create( $plugins->response[ $file ]->new_version );
+		$new_version = $this->type_factory->create_version_number( [
+			$plugins->response[ $file ]->new_version,
+		] );
 		if ( version_compare( $new_version, '3.0.0-alpha', '<' ) ) {
 			return $plugins;
 		}
