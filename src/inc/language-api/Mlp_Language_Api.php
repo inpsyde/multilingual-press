@@ -379,7 +379,7 @@ LIMIT 1";
 
 			$arr['suppress_filters'] = $arguments['suppress_filters'];
 
-			$arr = $this->type_factory->create_language( [
+			$arr = $this->type_factory->create_translation( [
 				$arr,
 				$this->type_factory->create_language( [
 					$data,
