@@ -16,7 +16,7 @@ use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
 
 defined( 'ABSPATH' ) or die();
 
-if ( file_exists( __DIR__ . '/src/autoload.php' ) ) {
+if ( is_readable( __DIR__ . '/src/autoload.php' ) ) {
 	/**
 	 * MultilingualPress autoload file.
 	 */
