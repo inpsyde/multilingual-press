@@ -43,13 +43,13 @@
     "phpunit/phpunit": "~4.8|~5.1"
   },
   "autoload": {
-    "psr-4": {
-      "Inpsyde\\MultilingualPress\\": "src"
-    }
+    "files": [
+      "src/autoload.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Inpsyde\\MultilingualPress\\Test\\": "tests/php"
+      "Inpsyde\\MultilingualPress\\Tests\\": "tests/php"
     }
   }
 }
