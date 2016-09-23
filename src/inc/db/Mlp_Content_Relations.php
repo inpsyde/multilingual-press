@@ -105,11 +105,8 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
 		wp_cache_delete( $cache_key, $this->cache_group );
 
-		do_action(
-			'mlp_debug',
-			current_filter()
-			. '/' . __METHOD__ . '/' . __LINE__
-			. " - {$this->wpdb->last_query}"
+		\Inpsyde\MultilingualPress\debug(
+			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->wpdb->last_query}"
 		);
 
 		return $result;
@@ -221,11 +218,8 @@ WHERE s.ml_blogid = %d
 		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
 		wp_cache_delete( $cache_key, $this->cache_group );
 
-		do_action(
-			'mlp_debug',
-			current_filter()
-			. '/' . __METHOD__ . '/' . __LINE__
-			. " - {$this->wpdb->last_query}"
+		\Inpsyde\MultilingualPress\debug(
+			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->wpdb->last_query}"
 		);
 
 		return $result;
@@ -297,11 +291,8 @@ WHERE s.ml_blogid = %d
 			'ml_type'             => $type,
 		] );
 
-		do_action(
-			'mlp_debug',
-			current_filter()
-			. '/' . __METHOD__ . '/' . __LINE__
-			. " - {$this->wpdb->last_query}"
+		\Inpsyde\MultilingualPress\debug(
+			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->wpdb->last_query}"
 		);
 
 		return $result;
@@ -326,11 +317,8 @@ WHERE s.ml_blogid = %d
 			$type
 		);
 
-		do_action(
-			'mlp_debug',
-			current_filter()
-			. '/' . __METHOD__ . '/' . __LINE__
-			. " - {$this->wpdb->last_query}"
+		\Inpsyde\MultilingualPress\debug(
+			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->wpdb->last_query}"
 		);
 
 		return [
@@ -371,11 +359,8 @@ WHERE s.ml_blogid = %d
 			]
 		);
 
-		do_action(
-			'mlp_debug',
-			current_filter()
-			. '/' . __METHOD__ . '/' . __LINE__
-			. " - {$this->wpdb->last_query}"
+		\Inpsyde\MultilingualPress\debug(
+			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->wpdb->last_query}"
 		);
 
 		return $result;
