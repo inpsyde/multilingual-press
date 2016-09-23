@@ -35,8 +35,8 @@ class TypeFactory {
 
 		return $this->get_factory(
 			'\Inpsyde\MultilingualPress\Common\Type\Language',
-			$class ?: '\Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage'
-		)->create( $args, $class );
+			$default_class = '\Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage'
+		)->create( $args, $class ?: $default_class );
 	}
 
 	/**
@@ -53,8 +53,8 @@ class TypeFactory {
 
 		return $this->get_factory(
 			'\Inpsyde\MultilingualPress\Common\Type\Translation',
-			$class ?: '\Inpsyde\MultilingualPress\Common\Type\FilterableTranslation'
-		)->create( $args, $class );
+			$default_class = '\Inpsyde\MultilingualPress\Common\Type\FilterableTranslation'
+		)->create( $args, $class ?: $default_class );
 	}
 
 	/**
@@ -71,8 +71,8 @@ class TypeFactory {
 
 		return $this->get_factory(
 			'\Inpsyde\MultilingualPress\Common\Type\URL',
-			$class ?: '\Inpsyde\MultilingualPress\Common\Type\EscapedURL'
-		)->create( $args, $class );
+			$default_class = '\Inpsyde\MultilingualPress\Common\Type\EscapedURL'
+		)->create( $args, $class ?: $default_class );
 	}
 
 	/**
@@ -90,8 +90,8 @@ class TypeFactory {
 
 		return $this->get_factory(
 			'\Inpsyde\MultilingualPress\Common\Type\VersionNumber',
-			$class ?: '\Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber'
-		)->create( $args, $class );
+			$default_class = '\Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber'
+		)->create( $args, $class ?: $default_class );
 	}
 
 	/**
