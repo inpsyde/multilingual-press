@@ -19,6 +19,8 @@ interface Container extends ArrayAccess {
 	 *
 	 * @param string   $name        The name of an existing factory callback.
 	 * @param callable $new_factory The new factory callback.
+	 *
+	 * @return void
 	 */
 	public function extend( $name, callable $new_factory );
 
@@ -26,6 +28,8 @@ interface Container extends ArrayAccess {
 	 * Locks the container.
 	 *
 	 * @since 3.0.0
+	 *
+	 * @return void
 	 */
 	public function lock();
 
@@ -33,6 +37,8 @@ interface Container extends ArrayAccess {
 	 * Bootstraps (and locks) the container.
 	 *
 	 * @since 3.0.0
+	 *
+	 * @return void
 	 */
 	public function bootstrap();
 
@@ -44,6 +50,8 @@ interface Container extends ArrayAccess {
 	 *
 	 * @param string $name  The name of a value or factory callback.
 	 * @param mixed  $value The value or factory callback.
+	 *
+	 * @return void
 	 */
 	public function share( $name, $value );
 }

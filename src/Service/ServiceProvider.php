@@ -16,6 +16,8 @@ interface ServiceProvider {
 	 * @since 3.0.0
 	 *
 	 * @param Container $container Container object.
+	 *
+	 * @return void
 	 */
 	public function register( Container $container );
 }

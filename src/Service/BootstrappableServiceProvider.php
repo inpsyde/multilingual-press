@@ -16,6 +16,8 @@ interface BootstrappableServiceProvider extends ServiceProvider {
 	 * @since 3.0.0
 	 *
 	 * @param Container $container Container object.
+	 *
+	 * @return void
 	 */
 	public function bootstrap( Container $container );
 }

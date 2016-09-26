@@ -119,6 +119,8 @@ final class AddOnlyContainer implements Container {
 	 * @param string $name  The name of a value or factory callback.
 	 * @param mixed  $value The value or factory callback.
 	 *
+	 * @return void
+	 *
 	 * @throws ContainerLockedException          if the container is locked.
 	 * @throws ContainerValueAlreadySetException if there already is a value with the given name.
 	 */
@@ -154,6 +156,8 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @param string $name The name of a value or factory callback.
 	 *
+	 * @return void
+	 *
 	 * @throws ContainerOffsetUnsetException
 	 */
 	public function offsetUnset( $name ) {
@@ -171,6 +175,8 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @param string   $name        The name of an existing factory callback.
 	 * @param callable $new_factory The new factory callback.
+	 *
+	 * @return void
 	 *
 	 * @throws ContainerLockedException          if the container is locked.
 	 * @throws ContainerValueNotSetException     if there is no value or factory callback with the given name.
@@ -204,6 +210,8 @@ final class AddOnlyContainer implements Container {
 	 * A locked container cannot be manipulated anymore. All stored values and factory callbacks are still accessible.
 	 *
 	 * @since 3.0.0
+	 *
+	 * @return void
 	 */
 	public function lock() {
 
@@ -216,6 +224,8 @@ final class AddOnlyContainer implements Container {
 	 * Only shared values and factory callbacks are accessible from now on.
 	 *
 	 * @since 3.0.0
+	 *
+	 * @return void
 	 */
 	public function bootstrap() {
 
@@ -232,6 +242,8 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @param string $name  The name of a value or factory callback.
 	 * @param mixed  $value The value or factory callback.
+	 *
+	 * @return void
 	 */
 	public function share( $name, $value ) {
 
