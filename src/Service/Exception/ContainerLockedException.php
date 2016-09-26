@@ -27,7 +27,7 @@ class ContainerLockedException extends Exception {
 		return new static( sprintf(
 			'Cannot %2$s "%1$s". Manipulating a locked container is not allowed.',
 			$name,
-			trim( $action )
+			$action
 		) );
 	}
 }
