@@ -42,39 +42,29 @@ class HTTPHeaders {
 			return false;
 		}
 
-		array_walk( $translations, [ $this, 'send_header' ] );
+		array_walk( $translations, function ( $url, $language ) {
+
+			$header = sprintf(
+				'Link: <%1$s>; rel="alternate"; hreflang="%2$s"',
+				esc_url( $url ),
+				esc_attr( $language )
+			);
+
+			/**
+			 * Filters the output of the hreflang links in the HTTP header.
+			 *
+			 * @since TODO
+			 *
+			 * @param string $header   Alternate language HTTP header.
+			 * @param string $language HTTP language code (e.g., "en-US").
+			 * @param string $url      Target URL.
+			 */
+			$header = (string) apply_filters( 'mlp_hreflang_http_header', $header, $language, $url );
+			if ( $header ) {
+				header( $header, false );
+			}
+		} );
 
 		return true;
-	}
-
-	/**
-	 * Sends an alternate language HTTP header with the given data.
-	 *
-	 * @param string $url      URL
-	 * @param string $language Language code.
-	 *
-	 * @return void
-	 */
-	private function send_header( $url, $language ) {
-
-		$header = sprintf(
-			'Link: <%1$s>; rel="alternate"; hreflang="%2$s"',
-			esc_url( $url ),
-			esc_attr( $language )
-		);
-
-		/**
-		 * Filters the output of the hreflang links in the HTTP header.
-		 *
-		 * @since TODO
-		 *
-		 * @param string $header   Alternate language HTTP header.
-		 * @param string $language HTTP language code (e.g., "en-US").
-		 * @param string $url      Target URL.
-		 */
-		$header = (string) apply_filters( 'mlp_hreflang_http_header', $header, $language, $url );
-		if ( $header ) {
-			header( $header, false );
-		}
 	}
 }
