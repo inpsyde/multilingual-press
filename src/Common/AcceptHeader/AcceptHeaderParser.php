@@ -19,5 +19,5 @@ interface AcceptHeaderParser {
 	 *
 	 * @return array Parsed Accept header in array form.
 	 */
-	public function parse_header( $header );
+	public function parse( $header );
 }
