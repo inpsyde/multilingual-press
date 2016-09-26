@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+
 /**
  * Main controller for the Redirect feature.
  */
@@ -86,8 +88,17 @@ class Mlp_Redirect {
 	 */
 	private function activation_column() {
 
-		$controller = new Mlp_Redirect_Column( null, null );
-		$controller->setup();
+		( new SitesListTableColumn(
+			'multilingualpress.redirect',
+			__( 'Redirect', 'multilingual-press' ),
+			function ( $id, $site_id ) {
+
+				// TODO: Don't hard-code option name.
+				return get_blog_option( $site_id, 'inpsyde_multilingual_redirect' )
+					? '<span class="dashicons dashicons-yes"></span>'
+					: '';
+			}
+		) )->register();
 	}
 
 	/**

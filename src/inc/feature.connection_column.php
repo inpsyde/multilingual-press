@@ -1,9 +1,7 @@
 <?php # -*- coding: utf-8 -*-
-/**
- * Add related sites to each site in the network site view
- *
- * @version  2015-06-11
- */
+
+use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+
 if ( is_admin() && ! empty( $GLOBALS[ 'pagenow' ] ) && 'sites.php' === $GLOBALS[ 'pagenow' ] ) {
 	add_action( 'inpsyde_mlp_loaded', 'mlp_feature_connection_column' );
 }
@@ -15,40 +13,19 @@ if ( is_admin() && ! empty( $GLOBALS[ 'pagenow' ] ) && 'sites.php' === $GLOBALS[
  */
 function mlp_feature_connection_column() {
 
-	$columns = new Mlp_Custom_Columns( [
-		'id'               => 'mlp_interlinked',
-		'header'           => esc_attr__( 'Relationships', 'multilingual-press' ),
-		'content_callback' => 'mlp_render_related_blog_column',
-	] );
+	( new SitesListTableColumn(
+		'multilingualpress.relationships',
+		__( 'Relationships', 'multilingual-press' ),
+		function ( $id, $site_id ) {
 
-	add_filter( 'wpmu_blogs_columns', [ $columns, 'add_header' ] );
-	add_action( 'manage_sites_custom_column', [ $columns, 'render_column' ], 10, 2 );
-}
+			switch_to_blog( $site_id );
+			$sites = (array) Mlp_Helpers::get_available_languages_titles();
+			restore_current_blog();
+			unset( $sites[ $site_id ] );
 
-/**
- * Add related site title for each site to network site view
- *
- * @param  string $column_name not used
- * @param  int    $blog_id
- *
- * @return string
- */
-function mlp_render_related_blog_column(
-	/** @noinspection PhpUnusedParameterInspection */
-	$column_name, $blog_id
-) {
-
-	switch_to_blog( $blog_id );
-	$blogs = (array) Mlp_Helpers::get_available_languages_titles();
-	restore_current_blog();
-
-	unset( $blogs[ $blog_id ] );
-
-	if ( empty( $blogs ) ) {
-		return esc_html__( 'none', 'multilingual-press' );
-	}
-
-	$blogs = array_map( 'esc_html', $blogs );
-
-	return '<div class="mlp_interlinked_blogs">' . join( '<br>', $blogs ) . '</div>';
+			return $sites
+				? '<div class="mlp_interlinked_blogs">' . join( '<br>', array_map( 'esc_html', $sites ) ) . '</div>'
+				: __( 'none', 'multilingual-press' );
+		}
+	) )->register();
 }
