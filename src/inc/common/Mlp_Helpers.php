@@ -21,11 +21,6 @@ class Mlp_Helpers {
 	private static $dependencies = [];
 
 	/**
-	 * @var string
-	 */
-	public static $link_table = '';
-
-	/**
 	 * Check whether redirect = on for specific blog
 	 *
 	 * @param    bool $blogid | blog to check setting for
