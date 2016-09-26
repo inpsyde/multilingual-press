@@ -28,7 +28,17 @@ class AcceptLanguageParser implements AcceptHeaderParser {
 			return [];
 		}
 
-		return array_reduce( $this->get_values( $header ), [ $this, 'add_priority' ], [] );
+		return array_reduce( $this->get_values( $header ), function ( array $values, $value ) {
+
+			$split_values = $this->split_value( $value );
+			if ( $split_values ) {
+				list( $language, $priority ) = $split_values;
+
+				$values[ $language ] = $priority;
+			}
+
+			return $values;
+		}, [] );
 	}
 
 	/**
@@ -69,26 +79,6 @@ class AcceptLanguageParser implements AcceptHeaderParser {
 
 		$values = explode( ',', $header );
 		$values = array_map( 'trim', $values );
-
-		return $values;
-	}
-
-	/**
-	 * Returns the passed array, extended with the priority of the passed value.
-	 *
-	 * @param float[] $values Array of priorities.
-	 * @param float   $value  Priority.
-	 *
-	 * @return float[] Array with languages as keys and priorities as values.
-	 */
-	private function add_priority( array $values, $value ) {
-
-		$split_values = $this->split_value( $value );
-		if ( $split_values ) {
-			list( $language, $priority ) = $split_values;
-
-			$values[ $language ] = $priority;
-		}
 
 		return $values;
 	}
