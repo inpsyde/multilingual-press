@@ -31,6 +31,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 		if ( ! isset( $this->properties ) ) {
 			$file_data = [
 				'plugin_base_name' => plugin_basename( $plugin_file_path ),
+				'plugin_dir_path'  => plugin_dir_path( $plugin_file_path ),
 				'plugin_dir_url'   => plugins_url( '/', $plugin_file_path ),
 				'plugin_file_path' => (string) $plugin_file_path,
 			];
@@ -126,6 +127,18 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 * @return string The base name of the plugin.
 	 */
 	public function plugin_base_name() {
+
+		return $this->offsetGet( __FUNCTION__ );
+	}
+
+	/**
+	 * Returns the absolute path of the plugin root folder.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The absolute path of the plugin root folder.
+	 */
+	public function plugin_dir_path() {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}

@@ -22,6 +22,15 @@ interface PluginProperties extends ArrayAccess {
 	public function plugin_base_name();
 
 	/**
+	 * Returns the absolute path of the plugin root folder.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The absolute path of the plugin root folder.
+	 */
+	public function plugin_dir_path();
+
+	/**
 	 * Returns the URL of the plugin root folder.
 	 *
 	 * @since 3.0.0
