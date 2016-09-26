@@ -12,11 +12,9 @@ use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 class Mlp_Update_Plugin_Data {
 
 	/**
-	 * Plugin data
-	 *
-	 * @var Inpsyde_Property_List_Interface
+	 * @var Mlp_Site_Relations_Interface
 	 */
-	private $plugin_data;
+	private $site_relations;
 
 	/**
 	 * @var VersionNumber
@@ -47,23 +45,25 @@ class Mlp_Update_Plugin_Data {
 	/**
 	 * Constructor
 	 *
-	 * @param   Inpsyde_Property_List_Interface $plugin_data
 	 * @param   wpdb                            $wpdb
 	 * @param   VersionNumber                   $current_version
 	 * @param   VersionNumber                   $last_version
-	 * @return  Mlp_Update_Plugin_Data
+	 * @param Mlp_Site_Relations_Interface $site_relations
 	 */
 	public function __construct(
-		Inpsyde_Property_List_Interface $plugin_data,
 		wpdb                            $wpdb,
 		VersionNumber    $current_version,
-		VersionNumber    $last_version
+		VersionNumber    $last_version,
+		Mlp_Site_Relations_Interface $site_relations
 	) {
 
-		$this->plugin_data     = $plugin_data;
-		$this->last_version    = $last_version;
+		$this->wpdb = $wpdb;
+
 		$this->current_version = $current_version;
-		$this->wpdb            = $wpdb;
+
+		$this->last_version = $last_version;
+
+		$this->site_relations = $site_relations;
 
 		// TODO: With WordPress 4.6 + 2, just use `get_sites()`, and remove `$this->is_pre_4_6`.
 		// Get the unaltered WordPress version.
@@ -123,7 +123,7 @@ class Mlp_Update_Plugin_Data {
 		// remove unneeded plugin data
 		delete_option( 'inpsyde_companyname' );
 
-		return update_site_option( 'mlp_version', $this->plugin_data->get( 'version' ) );
+		return update_site_option( 'mlp_version', $this->current_version );
 	}
 
 	/**
@@ -133,8 +133,6 @@ class Mlp_Update_Plugin_Data {
 	 */
 	private function import_site_relations() {
 
-		/** @var Mlp_Site_Relations_Interface $db */
-		$relations = $this->plugin_data->get( 'site_relations' );
 		$option_name = 'inpsyde_multilingual_blog_relationship';
 		$inserted = 0;
 
@@ -144,7 +142,7 @@ class Mlp_Update_Plugin_Data {
 
 			$linked = get_blog_option( $site_id, $option_name, [] );
 			if ( ! empty( $linked ) ) {
-				$inserted += $relations->set_relation( $site_id, $linked );
+				$inserted += $this->site_relations->set_relation( $site_id, $linked );
 			}
 
 			delete_blog_option( $site_id, $option_name );
@@ -221,7 +219,7 @@ class Mlp_Update_Plugin_Data {
 		$installer->install( new Mlp_Content_Relations_Schema( $this->wpdb ) );
 		$installer->install( new Mlp_Site_Relations_Schema( $this->wpdb ) );
 
-		return update_site_option( 'mlp_version', $this->plugin_data->get( 'version' ) );
+		return update_site_option( 'mlp_version', $this->current_version );
 	}
 
 }
