@@ -176,7 +176,7 @@ final class AddOnlyContainer implements Container {
 	 * @param string   $name        The name of an existing factory callback.
 	 * @param callable $new_factory The new factory callback.
 	 *
-	 * @return void
+	 * @return static Container instance.
 	 *
 	 * @throws ContainerLockedException          if the container is locked.
 	 * @throws ContainerValueNotSetException     if there is no value or factory callback with the given name.
@@ -202,6 +202,8 @@ final class AddOnlyContainer implements Container {
 
 			return $new_factory( $current_factory( $container ), $container );
 		};
+
+		return $this;
 	}
 
 	/**
@@ -243,12 +245,14 @@ final class AddOnlyContainer implements Container {
 	 * @param string $name  The name of a value or factory callback.
 	 * @param mixed  $value The value or factory callback.
 	 *
-	 * @return void
+	 * @return static Container instance.
 	 */
 	public function share( $name, $value ) {
 
 		$this->offsetSet( $name, $value );
 
 		$this->shared[ $name ] = true;
+
+		return $this;
 	}
 }
