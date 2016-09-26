@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+// TODO: Refactor as soon as the Language Manager namespace has been discussed. Implement ~\Common\ArrayDiffer.
+
 /**
  * Class Mlp_Array_Diff
  *
@@ -29,8 +32,9 @@ class Mlp_Array_Diff {
 	 */
 	public function get_difference( array $old, array $new ) {
 
-		$diff = [];
 		$new  = $this->normalize_new_array( $new, $old );
+
+		$diff = [];
 
 		foreach ( $old as $old_id => $old_data_array ) {
 

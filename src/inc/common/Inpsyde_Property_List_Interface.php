@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+// TODO: Remove as soon as it's not needed anymore, which means that all classes use either $container or $properties.
+
 /**
  * Simple property object interface.
 *

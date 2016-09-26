@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+// TODO: Refactor as soon as the Language Manager namespace has been discussed. If we use a ListTable, this is obsolete.
+
 /**
  * Provide information for paginated views.
  *
