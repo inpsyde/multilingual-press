@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Core;
 use Inpsyde\MultilingualPress\Factory\Error;
@@ -200,12 +201,13 @@ class Multilingual_Press {
 		);
 		add_action( 'plugins_loaded', [ $settings, 'setup' ], 8 );
 
-		$url = network_admin_url( 'settings.php?page=mlp' );
+		// TODO: Don't hard-code URL.
+		$settings_page_url = network_admin_url( 'settings.php?page=mlp' );
 
-		$action_link = new Mlp_Network_Plugin_Action_Link( [
-			'settings' => '<a href="' . esc_url( $url ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>',
-		] );
-		add_filter( 'network_admin_plugin_action_links_' . $this->properties->plugin_base_name(), [ $action_link, 'add' ] );
+		( new ActionLink(
+			'settings',
+			'<a href="' . esc_url( $settings_page_url ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>'
+		) )->register( 'network_admin_plugin_action_links_' . $this->properties->plugin_base_name() );
 	}
 
 	/**
