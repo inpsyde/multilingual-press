@@ -28,13 +28,15 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 	/**
 	 * Constructor
 	 *
-	 * @param wpdb   $wpdb
 	 * @param string $link_table_name
 	 */
-	public function __construct( wpdb $wpdb, $link_table_name ) {
+	public function __construct( $link_table_name ) {
 
-		$this->wpdb            = $wpdb;
+		global $wpdb;
+
 		$this->link_table_name = $wpdb->base_prefix . $link_table_name;
+
+		$this->wpdb = $wpdb;
 	}
 
 	/**
