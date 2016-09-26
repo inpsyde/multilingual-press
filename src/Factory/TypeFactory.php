@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Common\Factory;
+namespace Inpsyde\MultilingualPress\Factory;
 
 use Inpsyde\MultilingualPress\Common\Factory;
 use Inpsyde\MultilingualPress\Common\Type\Language;
@@ -11,7 +11,7 @@ use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 /**
  * Factory for all common data type objects.
  *
- * @package Inpsyde\MultilingualPress\Common\Factory
+ * @package Inpsyde\MultilingualPress\Factory
  * @since   3.0.0
  */
 class TypeFactory {
@@ -107,7 +107,7 @@ class TypeFactory {
 	private function get_factory( $base, $class ) {
 
 		if ( empty( $this->factories[ $base ] ) ) {
-			$this->factories[ $base ] = new Factory( $base, $class );
+			$this->factories[ $base ] = GenericFactory::with_default_class( $base, $class );
 		}
 
 		return $this->factories[ $base ];
