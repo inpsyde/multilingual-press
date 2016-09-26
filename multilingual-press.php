@@ -14,7 +14,7 @@
 
 namespace Inpsyde\MultilingualPress;
 
-use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 // TODO: Adapt the following imports:
 use \Mlp_Internal_Locations;

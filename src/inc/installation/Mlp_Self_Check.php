@@ -1,7 +1,7 @@
 <?php
 
-use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
  * Applies some checks before the main code can run.

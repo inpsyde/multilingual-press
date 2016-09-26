@@ -1,8 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
 use Inpsyde\MultilingualPress\Common\Type\Setting;
 use Inpsyde\MultilingualPress\Common\Type\URL;
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
  * Class Mlp_Language_Manager_Options_Page_Data

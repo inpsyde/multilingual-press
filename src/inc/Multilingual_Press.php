@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Core;
+use Inpsyde\MultilingualPress\Factory\Error;
 
 /**
  * Class Multilingual_Press
@@ -452,6 +453,7 @@ class Multilingual_Press {
 			$this->plugin_data->get( 'locations' ),
 			$this->plugin_data->get( 'type_factory' )
 		) );
+		$this->plugin_data->set( 'error_factory', new Error() );
 	}
 
 	/**
@@ -463,6 +465,7 @@ class Multilingual_Press {
 		Mlp_Helpers::insert_dependency( 'site_relations', $this->plugin_data->get( 'site_relations' ) );
 		Mlp_Helpers::insert_dependency( 'language_api', $this->plugin_data->get( 'language_api' ) );
 		Mlp_Helpers::insert_dependency( 'plugin_data', $this->plugin_data );
+		Mlp_Helpers::insert_dependency( 'error_factory', $this->plugin_data->get( 'error_factory' )  );
 	}
 
 }

@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
  * Fetch and set term translations

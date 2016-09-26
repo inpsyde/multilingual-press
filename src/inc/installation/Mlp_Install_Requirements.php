@@ -1,6 +1,6 @@
 <?php
 
-use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 
 /**

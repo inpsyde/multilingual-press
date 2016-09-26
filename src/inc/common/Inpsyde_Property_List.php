@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\Factory\Error;
+use Inpsyde\MultilingualPress\Factory\Error;
 
 /**
  * Simple property object.
@@ -50,6 +50,12 @@ use Inpsyde\MultilingualPress\Common\Factory\Error;
  * @property string             version
  */
 class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
+
+	/**
+	 * @var Factory
+	 */
+	private $error_factory;
+
 	/**
 	 * List of properties.
 	 *
@@ -85,6 +91,18 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 * @type bool
 	 */
 	protected $frozen = FALSE;
+
+	/**
+	 * Constructor. Sets up the properties.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Error $error_factory Optional. Error factory object. Defaults to null.
+	 */
+	public function __construct( Error $error_factory = null ) {
+
+		$this->error_factory = $error_factory ?: new Error();
+	}
 
 	/**
 	 * Set new value.
@@ -282,7 +300,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 			$code = __CLASS__;
 
 		if ( class_exists( 'WP_Error' ) )
-			return Error::create( $code, $msg );
+			return $this->error_factory->create( $code, $msg );
 
 		throw new Exception( $msg, $code );
 	}

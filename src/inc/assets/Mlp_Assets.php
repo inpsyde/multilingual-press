@@ -1,7 +1,7 @@
 <?php
 
 use Inpsyde\MultilingualPress\Assets\AssetURL;
-use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
  * Handle scripts and stylesheets

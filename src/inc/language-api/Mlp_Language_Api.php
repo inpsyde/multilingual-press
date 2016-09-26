@@ -1,10 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\Factory\TypeFactory;
-use Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage;
-use Inpsyde\MultilingualPress\Common\Type\FilterableTranslation;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
  * Class Mlp_Language_Api
