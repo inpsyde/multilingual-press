@@ -1,7 +1,9 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Core;
 use Inpsyde\MultilingualPress\Factory\Error;
+use Inpsyde\MultilingualPress\Service\Container;
 
 /**
  * Class Multilingual_Press
@@ -15,27 +17,19 @@ use Inpsyde\MultilingualPress\Factory\Error;
 class Multilingual_Press {
 
 	/**
-	 * The linked elements table
-	 *
-	 * @since  0.1
-	 * @var    string
+	 * @var Container
 	 */
-	private $link_table = '';
+	private $container;
 
 	/**
-	 * Local path to plugin file.
-	 *
-	 * @var string
-	 */
-	private $plugin_file_path;
-
-	/**
-	 * Overloaded instance for plugin data.
-	 *
-	 * @needs-refactoring
-	 * @var Inpsyde_Property_List_Interface
+	 * @var Mlp_Plugin_Properties
 	 */
 	private $plugin_data;
+
+	/**
+	 * @var PluginProperties
+	 */
+	private $properties;
 
 	/**
 	 * @var wpdb
@@ -45,21 +39,20 @@ class Multilingual_Press {
 	/**
 	 * Constructor
 	 *
-	 * @param Inpsyde_Property_List_Interface $data
-	 * @param wpdb $wpdb
+	 * @param Container $container
 	 */
-	public function __construct( Inpsyde_Property_List_Interface $data, wpdb $wpdb = NULL ) {
+	public function __construct( Container $container ) {
 
-		/* Someone has an old Free version active and activates the new Pro on
-		 * top of that. The old Free version tries now to create an instance of
-		 * this new version of the class, and the second parameter is missing.
-		 * This is where we stop.
-		 */
-		if ( NULL === $wpdb )
-			return;
+		global $wpdb;
 
-		$this->plugin_data = $data;
-		$this->wpdb        = $wpdb;
+		$this->container = $container;
+
+		$this->properties = $container['multilingualpress.properties'];
+
+		// This thing is only to keep this main controller working.
+		$this->plugin_data = new Mlp_Plugin_Properties();
+
+		$this->wpdb = $wpdb;
 	}
 
 	/**
@@ -67,19 +60,16 @@ class Multilingual_Press {
 	 *
 	 * @global	$wpdb wpdb WordPress Database Wrapper
 	 * @global	$pagenow string Current Page Wrapper
-	 * @return void
+	 * @return bool
 	 */
 	public function setup() {
-
-		require 'functions.php';
 
 		$this->prepare_plugin_data();
 		$this->load_assets();
 		$this->prepare_helpers();
-		$this->plugin_data->freeze(); // no changes allowed anymore
 
 		if ( ! $this->is_active_site() )
-			return;
+			return false;
 
 		// Hooks and filters
 		add_action( 'inpsyde_mlp_loaded', [ $this, 'load_plugin_textdomain' ], 1 );
@@ -115,6 +105,8 @@ class Multilingual_Press {
 			$this->run_admin_actions();
 		else
 			$this->run_frontend_actions();
+
+		return true;
 	}
 
 	/**
@@ -163,8 +155,7 @@ class Multilingual_Press {
 	 */
 	public function load_plugin_textdomain() {
 
-		$rel_path = dirname( plugin_basename( $this->plugin_file_path ) )
-				. $this->plugin_data->get( 'text_domain_path' );
+		$rel_path = dirname( $this->properties->plugin_base_name() ) . $this->properties->text_domain_path();
 
 		load_plugin_textdomain( 'multilingual-press', FALSE, $rel_path );
 	}
@@ -209,14 +200,12 @@ class Multilingual_Press {
 		);
 		add_action( 'plugins_loaded', [ $settings, 'setup' ], 8 );
 
-		$plugin_file = $this->plugin_data->get( 'plugin_base_name' );
-
 		$url = network_admin_url( 'settings.php?page=mlp' );
 
 		$action_link = new Mlp_Network_Plugin_Action_Link( [
 			'settings' => '<a href="' . esc_url( $url ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>',
 		] );
-		add_filter( "network_admin_plugin_action_links_$plugin_file", [ $action_link, 'add' ] );
+		add_filter( 'network_admin_plugin_action_links_' . $this->properties->plugin_base_name(), [ $action_link, 'add' ] );
 	}
 
 	/**
@@ -245,7 +234,7 @@ class Multilingual_Press {
 
 		$found = [];
 
-		$path = $this->plugin_data->get( 'plugin_dir_path' ) . "/src/inc";
+		$path = $this->properties->plugin_dir_path() . '/src/inc';
 
 		if ( ! is_readable( $path ) )
 			return $found;
@@ -386,6 +375,7 @@ class Multilingual_Press {
 			$this->load_site_settings_page();
 		}
 
+		// TODO: Check what this sucker needs...
 		new Mlp_Network_Site_Settings_Controller( $this->plugin_data );
 
 		new Mlp_Network_New_Site_Controller(
@@ -420,22 +410,28 @@ class Multilingual_Press {
 	 */
 	private function prepare_plugin_data() {
 
-		$site_relations = $this->plugin_data->get( 'site_relations' );
+		$type_factory = $this->container['multilingualpress.type_factory'];
+
+		$site_relations = new \Mlp_Site_Relations( 'mlp_site_relations' );
+
+		$this->plugin_data->set( 'site_relations', $site_relations );
+
+		$this->plugin_data->set( 'type_factory', $type_factory );
+
 		$table_list = new Mlp_Db_Table_List( $this->wpdb );
 
-		$this->link_table = $this->wpdb->base_prefix . 'multilingual_linked';
-		$this->plugin_file_path = $this->plugin_data->get( 'plugin_file_path' );
+		$link_table = $this->wpdb->base_prefix . 'multilingual_linked';
 		$this->plugin_data->set( 'module_manager', new Mlp_Module_Manager( 'state_modules' ) );
 		$this->plugin_data->set( 'site_manager', new Mlp_Module_Manager( 'inpsyde_multilingual' ) );
 		$this->plugin_data->set( 'table_list', $table_list );
-		$this->plugin_data->set( 'link_table', $this->link_table );
+		$this->plugin_data->set( 'link_table', $link_table );
 		$this->plugin_data->set(
 			'content_relations',
 			new Mlp_Content_Relations(
 				$this->wpdb,
 				$site_relations,
 				null,
-				$this->link_table
+				$link_table
 			)
 		);
 		$this->plugin_data->set(
@@ -446,13 +442,24 @@ class Multilingual_Press {
 				$site_relations,
 				$this->plugin_data->get( 'content_relations' ),
 				$this->wpdb,
-				$this->plugin_data->get( 'type_factory' )
+				$this->container['multilingualpress.type_factory']
 			)
 		);
+
+		// TODO: Remove as soon as the whole Assets structures have been refactored (Locations -> Assets\Locator).
+		$plugin_dir_path = $this->properties->plugin_dir_path();
+		$plugin_dir_url = $this->properties->plugin_dir_url();
+		$locations = new Mlp_Internal_Locations();
+		$locations->add_dir( $plugin_dir_path, $plugin_dir_url, 'plugin' );
+		$locations->add_dir( "$plugin_dir_path/assets/css", "$plugin_dir_url/assets/css", 'css' );
+		$locations->add_dir( "$plugin_dir_path/assets/js", "$plugin_dir_url/assets/js", 'js' );
+		$locations->add_dir( "$plugin_dir_path/assets/images", "$plugin_dir_url/assets/images", 'images' );
+		$locations->add_dir( "$plugin_dir_path/assets/images/flags", "$plugin_dir_url/assets/images/flags", 'flags' );
 		$this->plugin_data->set( 'assets', new Mlp_Assets(
-			$this->plugin_data->get( 'locations' ),
-			$this->plugin_data->get( 'type_factory' )
+			$locations,
+			$type_factory
 		) );
+
 		$this->plugin_data->set( 'error_factory', new Error() );
 	}
 
@@ -461,10 +468,8 @@ class Multilingual_Press {
 	 */
 	private function prepare_helpers() {
 
-		Mlp_Helpers::$link_table = $this->link_table;
 		Mlp_Helpers::insert_dependency( 'site_relations', $this->plugin_data->get( 'site_relations' ) );
 		Mlp_Helpers::insert_dependency( 'language_api', $this->plugin_data->get( 'language_api' ) );
-		Mlp_Helpers::insert_dependency( 'plugin_data', $this->plugin_data );
 		Mlp_Helpers::insert_dependency( 'error_factory', $this->plugin_data->get( 'error_factory' )  );
 	}
 
