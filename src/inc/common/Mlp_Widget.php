@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+// TODO: Refactor as soon as using a custom template renderer has been discussed.
+
 // TODO: With WordPress 4.6 + 2, deprecate `insert_asset_instance()` and `register()`, and construcotr-inject `$assets`.
 
 /**

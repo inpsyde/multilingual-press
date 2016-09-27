@@ -2,6 +2,8 @@
 
 use Inpsyde\MultilingualPress\Factory\Error;
 
+// TODO: Remove as soon as it's not needed anymore, which means that all classes use either $container or $properties.
+
 /**
  * Holds data about the plugin MultilingualPress
  *
