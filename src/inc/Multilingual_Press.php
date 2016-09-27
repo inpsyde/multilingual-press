@@ -461,6 +461,7 @@ class Multilingual_Press {
 			$locations,
 			$type_factory
 		) );
+		$this->plugin_data->set( 'locations', $locations );
 
 		$this->plugin_data->set( 'error_factory', new Error() );
 	}
