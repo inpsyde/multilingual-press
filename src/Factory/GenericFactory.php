@@ -46,9 +46,10 @@ class GenericFactory implements Factory {
 		$this->base_is_class = class_exists( $base );
 
 		if ( ! ( $this->base_is_class || interface_exists( $base ) ) ) {
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires a valid fully qualified class or interface name as first argument.'
-			);
+			throw new InvalidArgumentException( sprintf(
+				'"%s"" requires a valid fully qualified class or interface name as first argument.',
+				__METHOD__
+			) );
 		}
 
 		$this->base = (string) $base;
@@ -66,9 +67,10 @@ class GenericFactory implements Factory {
 			return;
 		}
 
-		throw new InvalidArgumentException(
-			__METHOD__ . ' requires a fully qualified class name as first or second argument.'
-		);
+		throw new InvalidArgumentException( sprintf(
+			'"%s"" requires a fully qualified class name as first or second argument.',
+			__METHOD__
+		) );
 	}
 
 	/**
@@ -131,9 +133,11 @@ class GenericFactory implements Factory {
 			! is_subclass_of( $class, $this->base, true )
 			&& ( ! $this->base_is_class || $class !== $this->base )
 		) {
-			throw new InvalidClassException(
-				"The class '{$class}' is invalid with respect to the defined base '{$this->base}'."
-			);
+			throw new InvalidClassException( sprintf(
+				'The class "%1$s" is invalid with respect to the defined base "%2$s".',
+				$class,
+				$this->base
+			) );
 		}
 	}
 }
