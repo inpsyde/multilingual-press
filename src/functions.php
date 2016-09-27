@@ -1,5 +1,132 @@
 <?php # -*- coding: utf-8 -*-
 
+namespace Inpsyde\MultilingualPress {
+
+/**
+ * Returns the according HTML string representation for the given array of attributes.
+ *
+ * @since 3.0.0
+ *
+ * @param string[] $attributes An array of HTML attribute names as keys and the according values.
+ *
+ * @return string The according HTML string representation for the given array of attributes.
+ */
+function attributes_array_to_string( array $attributes ) {
+
+	if ( ! $attributes ) {
+		return '';
+	}
+
+	$strings = [];
+
+	array_walk( $attributes, function ( $value, $name ) use ( &$strings ) {
+
+		$strings[] = $name . '="' . esc_attr( true === $value ? $name : $value ) . '"';
+	} );
+
+	return implode( ' ', $strings );
+}
+
+/**
+ * Writes debug data to the error log.
+ *
+ * To enable this function, add the following line to your wp-config.php file:
+ *
+ *     define( 'MULTILINGUALPRESS_DEBUG', true );
+ *
+ * @since 3.0.0
+ *
+ * @param string $message The message to be logged.
+ *
+ * @return void
+ */
+function debug( $message ) {
+
+	if ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG ) {
+		error_log( sprintf(
+			'MultilingualPress: %s %s',
+			date( 'H:m:s' ),
+			$message
+		) );
+	}
+}
+
+/**
+ * Returns the MultilingualPress language for the current site.
+ *
+ * @since 3.0.0
+ *
+ * @param bool $language_only Optional. Whether or not to return the language part only. Defaults to false.
+ *
+ * @return string The MultilingualPress language for the current site.
+ */
+function get_current_site_language( $language_only = false ) {
+
+	return get_site_language( get_current_blog_id(), $language_only );
+}
+
+/**
+ * Returns the given content ID, if valid, and the ID of the queried object otherwise.
+ *
+ * @since 3.0.0
+ *
+ * @param int $content_id Content ID.
+ *
+ * @return int The given content ID, if valid, and the ID of the queried object otherwise.
+ */
+function get_default_content_id( $content_id ) {
+
+	return (int) ( ( 0 < $content_id ) ? $content_id : get_queried_object_id() );
+}
+
+/**
+ * Returns the MultilingualPress language for the site with the given ID.
+ *
+ * @since 3.0.0
+ *
+ * @param int  $site_id       Optional. Site ID. Defaults to 0.
+ * @param bool $language_only Optional. Whether or not to return the language part only. Defaults to false.
+ *
+ * @return string The MultilingualPress language for the site with the given ID.
+ */
+function get_site_language( $site_id = 0, $language_only = false ) {
+
+	$site_id = $site_id ?: get_current_blog_id();
+
+	// TODO: Don't hardcode the option name.
+	$languages = get_site_option( 'inpsyde_multilingual' );
+
+	// TODO: Maybe also don't hardcode the 'lang' key...?
+	if ( ! isset( $languages[ $site_id ]['lang'] ) ) {
+		return '';
+	}
+
+	return $language_only
+		? strtok( $languages[ $site_id ]['lang'], '_' )
+		: (string) $languages[ $site_id ]['lang'];
+}
+
+/**
+ * Checks if the site with the given ID has HTTP redirection enabled.
+ *
+ * If no ID is passed, the current site is checked.
+ *
+ * @since 3.0.0
+ *
+ * @param int $site_id Optional. Site ID. Defaults to 0.
+ *
+ * @return bool Whether or not the site with the given ID has HTTP redirection enabled.
+ */
+function is_redirect_enabled( $site_id = 0 ) {
+
+	// TODO: Don't hard-code the option name.
+	return (bool) get_blog_option( $site_id ?: get_current_blog_id(), 'inpsyde_multilingual_redirect' );
+}
+
+}
+
+
+
 // TODO: Move all functions to Inpsyde\MultilingualPress namespace (see below) and adapt names (no prefix etc.).
 namespace {
 
@@ -51,37 +178,6 @@ namespace {
 	function mlp_is_script_debug_mode() {
 
 		return mlp_is_debug_mode() || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
-	}
-
-	/**
-	 * Wrapper for Mlp_Helpers:is_redirect, which returns
-	 * a blog's redirect setting
-	 *
-	 * @since    0.5.2a
-	 *
-	 * @param    bool $blogid
-	 *
-	 * @return    bool TRUE/FALSE
-	 */
-	function mlp_is_redirect( $blogid = false ) {
-
-		return Mlp_Helpers::is_redirect( $blogid );
-	}
-
-	/**
-	 * wrapper of Mlp_Helpers:get_current_blog_language
-	 * return current blog's language code ( not the locale used by WordPress,
-	 * but the one set by MlP)
-	 *
-	 * @since    0.1
-	 *
-	 * @param   bool $short
-	 *
-	 * @return    array Available languages
-	 */
-	function mlp_get_current_blog_language( $short = false ) {
-
-		return Mlp_Helpers::get_current_blog_language( $short );
 	}
 
 	/**
@@ -214,39 +310,6 @@ namespace {
 	}
 
 	/**
-	 * Return the language for the given blog.
-	 *
-	 * @param int  $blog_id Blog ID.
-	 * @param bool $short   Return only the first part of the language code?
-	 *
-	 * @return string
-	 */
-	function mlp_get_blog_language( $blog_id = 0, $short = true ) {
-
-		return Mlp_Helpers::get_blog_language( $blog_id, $short );
-	}
-
-	// TODO: Eventually remove this, with version 2.2.0 + 4 at the earliest.
-	if ( ! function_exists( 'get_blog_language' ) ) {
-
-		/**
-		 * Deprecated! Return the language for the given blog.
-		 *
-		 * @param int  $blog_id Blog ID.
-		 * @param bool $short   Return only the first part of the language code?
-		 *
-		 * @return string
-		 */
-		function get_blog_language( $blog_id = 0, $short = true ) {
-
-			_deprecated_function( __FUNCTION__, '2.2.0', 'mlp_get_blog_language' );
-
-			return Mlp_Helpers::get_blog_language( $blog_id, $short );
-		}
-
-	}
-
-	/**
 	 * Get language representation.
 	 *
 	 * @since 1.0.4
@@ -308,58 +371,6 @@ namespace {
 			}
 
 			return in_array( $blog_id, $cache[ $site_id ] );
-		}
-	}
-}
-
-namespace Inpsyde\MultilingualPress {
-
-	/**
-	 * Returns the according HTML string representation for the given array of attributes.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param string[] $attributes An array of HTML attribute names as keys and the according values.
-	 *
-	 * @return string The according HTML string representation for the given array of attributes.
-	 */
-	function attributes_array_to_string( array $attributes ) {
-
-		if ( ! $attributes ) {
-			return '';
-		}
-
-		$strings = [];
-
-		array_walk( $attributes, function ( $value, $name ) use ( &$strings ) {
-
-			$strings[] = $name . '="' . esc_attr( true === $value ? $name : $value ) . '"';
-		} );
-
-		return implode( ' ', $strings );
-	}
-
-	/**
-	 * Writes debug data to the error log.
-	 *
-	 * To enable this function, add the following line to your wp-config.php file:
-	 *
-	 *     define( 'MULTILINGUALPRESS_DEBUG', true );
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param string $message The message to be logged.
-	 *
-	 * @return void
-	 */
-	function debug( $message ) {
-
-		if ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG ) {
-			error_log( sprintf(
-				'MultilingualPress: %s %s',
-				date( 'H:m:s' ),
-				$message
-			) );
 		}
 	}
 }

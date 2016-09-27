@@ -21,46 +21,6 @@ class Mlp_Helpers {
 	private static $dependencies = [];
 
 	/**
-	 * Check whether redirect = on for specific blog
-	 *
-	 * @param    bool $blogid | blog to check setting for
-	 * @return    bool $redirect
-	 */
-	public static function is_redirect( $blogid = FALSE ) {
-
-		if ( ! $blogid )
-			$blogid = get_current_blog_id();
-
-		$redirect = get_blog_option( $blogid, 'inpsyde_multilingual_redirect' );
-
-		return (bool) $redirect;
-	}
-
-	/**
-	 * Get the language set by MultilingualPress.
-	 *
-	 * @param  bool $short
-	 * @return string the language code
-	 */
-	public static function get_current_blog_language( $short = FALSE ) {
-
-		// Get all registered blogs
-		$languages = get_site_option( 'inpsyde_multilingual' );
-
-		// Get current blog
-		$blogid = get_current_blog_id();
-
-		// If this blog is in a language
-		if ( ! isset ( $languages[ $blogid ][ 'lang' ] ) )
-			return '';
-
-		if ( ! $short )
-			return $languages[ $blogid ][ 'lang' ];
-
-		return strtok( $languages[ $blogid ][ 'lang' ], '_' );
-	}
-
-	/**
 	 * Load the languages set for each blog
 	 *
 	 * @since   0.1
@@ -170,7 +130,7 @@ class Mlp_Helpers {
 	 */
 	public static function load_linked_elements( $element_id = 0, $type = '', $blog_id = 0 ) {
 
-		$element_id = self::get_default_content_id( $element_id );
+		$element_id = \Inpsyde\MultilingualPress\get_default_content_id( $element_id );
 
 		if ( ! $element_id )
 			return [];
@@ -205,7 +165,7 @@ class Mlp_Helpers {
 		              /** @var Mlp_Language_Api $api */
 		$api        = self::$dependencies[ 'language_api' ];
 		$site_id    = get_current_blog_id();
-		$element_id = self::get_default_content_id( $element_id );
+		$element_id = \Inpsyde\MultilingualPress\get_default_content_id( $element_id );
 
 		$args = [
 			'site_id'    => $site_id,
@@ -330,35 +290,6 @@ class Mlp_Helpers {
 	}
 
 	/**
-	 * Get the language for a site
-	 *
-	 * @param    int $site_id ID of a blog
-	 * @param  bool  $short   Return only the first part of the language code.
-	 * @return    string Second part of language identifier
-	 */
-	public static function get_blog_language( $site_id = 0, $short = TRUE ) {
-
-		static $languages;
-
-		if ( 0 == $site_id )
-			$site_id = get_current_blog_id();
-
-		if ( empty ( $languages ) )
-			$languages = get_site_option( 'inpsyde_multilingual' );
-
-		if ( empty ( $languages )
-			or empty ( $languages[ $site_id ] )
-			or empty ( $languages[ $site_id ][ 'lang' ] )
-		)
-			return '';
-
-		if ( ! $short )
-			return $languages[ $site_id ][ 'lang' ];
-
-		return strtok( $languages[ $site_id ][ 'lang' ], '_' );
-	}
-
-	/**
 	 * Get the linked elements and display them as a list.
 	 *
 	 * @param array $args
@@ -447,11 +378,21 @@ class Mlp_Helpers {
 				break;
 
 			case 'priority':
-				uasort( $items, [ __CLASS__, 'sort_priorities' ] );
+				uasort( $items, function ( array $a, array $b ) {
+
+					if ( $a['priority'] === $b['priority'] ) {
+						return 0;
+					}
+
+					return ( $a['priority'] < $b['priority'] ) ? 1 : - 1;
+				} );
 				break;
 
 			case 'name':
-				uasort( $items, [ __CLASS__, 'strcasecmp_sort_names' ] );
+				uasort( $items, function ( array $a, array $b ) {
+
+					return strcasecmp( $a['name'], $b['name'] );
+				} );
 				break;
 		}
 
@@ -483,45 +424,6 @@ class Mlp_Helpers {
 	}
 
 	/**
-	 * Helper to sort languages.
-	 *
-	 * @param array $a
-	 * @param array $b
-	 * @return int
-	 */
-	private static function strcasecmp_sort_names( array $a, array $b ) {
-
-		return strcasecmp( $a['name'], $b['name'] );
-	}
-
-	/**
-	 * Helper to sort languages.
-	 *
-	 * @param array $a
-	 * @param array $b
-	 * @return int
-	 */
-	private static function sort_priorities( array $a, array $b ) {
-
-		if ( $a['priority'] === $b['priority'] )
-			return 0;
-
-		return ( $a['priority'] < $b['priority'] ) ? 1 : -1;
-	}
-
-	/**
-	 * @param  int $content_id
-	 * @return int
-	 */
-	private static function get_default_content_id( $content_id = 0 ) {
-
-		if ( 0 < (int) $content_id )
-			return $content_id;
-
-		return get_queried_object_id();
-	}
-
-	/**
 	 * @param  string $name
 	 * @param  object $instance
 	 * @return void
@@ -530,5 +432,4 @@ class Mlp_Helpers {
 
 		self::$dependencies[ $name ] = $instance;
 	}
-
 }
