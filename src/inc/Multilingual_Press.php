@@ -444,7 +444,7 @@ class Multilingual_Press {
 				$site_relations,
 				$this->plugin_data->get( 'content_relations' ),
 				$this->wpdb,
-				$this->container['multilingualpress.type_factory']
+				$type_factory
 			)
 		);
 
