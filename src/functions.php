@@ -315,6 +315,31 @@ namespace {
 namespace Inpsyde\MultilingualPress {
 
 	/**
+	 * Returns the according HTML string representation for the given array of attributes.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string[] $attributes An array of HTML attribute names as keys and the according values.
+	 *
+	 * @return string The according HTML string representation for the given array of attributes.
+	 */
+	function attributes_array_to_string( array $attributes ) {
+
+		if ( ! $attributes ) {
+			return '';
+		}
+
+		$strings = [];
+
+		array_walk( $attributes, function ( $value, $name ) use ( $strings ) {
+
+			$strings[] = $name . '="' . esc_attr( true === $value ? $name : $value ) . '"';
+		} );
+
+		return implode( ' ', $strings );
+	}
+
+	/**
 	 * Writes debug data to the error log.
 	 *
 	 * To enable this function, add the following line to your wp-config.php file:
@@ -330,7 +355,11 @@ namespace Inpsyde\MultilingualPress {
 	function debug( $message ) {
 
 		if ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG ) {
-			error_log( sprintf( 'MultilingualPress: %s %s', date( 'H:m:s' ), $message ) );
+			error_log( sprintf(
+				'MultilingualPress: %s %s',
+				date( 'H:m:s' ),
+				$message
+			) );
 		}
 	}
 }
