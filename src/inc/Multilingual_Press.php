@@ -300,7 +300,7 @@ class Multilingual_Press {
 	 */
 	public function language_attributes( $output ) {
 
-		$site_language = Mlp_Helpers::get_current_blog_language();
+		$site_language = \Inpsyde\MultilingualPress\get_current_site_language();
 		if ( ! $site_language ) {
 			return $output;
 		}

@@ -193,7 +193,7 @@ class Mlp_New_Site_View {
 						id="<?php echo esc_attr( $id ); ?>">
 					<?php echo esc_html( $blog_name ); ?>
 					-
-					<?php echo esc_html( Mlp_Helpers::get_blog_language( $site_id, false ) ); ?>
+					<?php echo esc_html( \Inpsyde\MultilingualPress\get_site_language( $site_id, false ) ); ?>
 				</label>
 			</p>
 			<?php

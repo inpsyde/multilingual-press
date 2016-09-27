@@ -19,7 +19,7 @@ function mlp_feature_language_column() {
 		function ( $id, $site_id ) {
 
 			switch_to_blog( $site_id );
-			$language = (array) Mlp_Helpers::get_current_blog_language();
+			$language = \Inpsyde\MultilingualPress\get_current_site_language();
 			restore_current_blog();
 
 			return '' === $language
