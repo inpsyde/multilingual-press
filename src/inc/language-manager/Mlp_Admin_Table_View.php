@@ -19,13 +19,6 @@ class Mlp_Admin_Table_View {
 	/**
 	 *
 	 *
-	 * @var Mlp_Html_Interface
-	 */
-	private $html;
-
-	/**
-	 *
-	 *
 	 * @var array
 	 */
 	private $columns;
@@ -46,7 +39,6 @@ class Mlp_Admin_Table_View {
 
 	/**
 	 * @param Mlp_Data_Access    $data
-	 * @param Mlp_Html_Interface $html
 	 * @param Mlp_Browsable      $pagination_data
 	 * @param array              $columns
 	 * @param int                $id
@@ -54,7 +46,6 @@ class Mlp_Admin_Table_View {
 	 */
 	public function __construct(
 		Mlp_Data_Access    $data,
-		Mlp_Html_Interface $html,
 		Mlp_Browsable      $pagination_data,
 		array              $columns,
 		$id,
@@ -62,7 +53,6 @@ class Mlp_Admin_Table_View {
 	) {
 
 		$this->data            = $data;
-		$this->html            = $html;
 		$this->pagination_data = $pagination_data;
 		$this->columns         = $columns;
 		$this->id              = $id;
@@ -222,7 +212,7 @@ class Mlp_Admin_Table_View {
 
 		return [
 			$this->get_input_name( $id, $col ),
-			$this->html->array_to_attrs( $attributes ),
+			\Inpsyde\MultilingualPress\attributes_array_to_string( $attributes ),
 			$value,
 		];
 	}

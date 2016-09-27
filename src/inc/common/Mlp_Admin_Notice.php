@@ -45,9 +45,7 @@ class Mlp_Admin_Notice {
 	 */
 	public function show() {
 
-		$html = new Mlp_Html();
-
-		$attrs = $html->array_to_attrs( $this->attrs );
+		$attrs = \Inpsyde\MultilingualPress\attributes_array_to_string( $this->attrs );
 
 		$msg = wpautop( $this->msg );
 

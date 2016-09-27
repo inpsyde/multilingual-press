@@ -334,7 +334,6 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		$view = new Mlp_Admin_Table_View (
 			$this->db,
-			new Mlp_Html,
 			$this->pagination_data,
 			$this->get_columns(),
 			'mlp-language-manager-table',
