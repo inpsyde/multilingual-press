@@ -331,7 +331,7 @@ namespace Inpsyde\MultilingualPress {
 
 		$strings = [];
 
-		array_walk( $attributes, function ( $value, $name ) use ( $strings ) {
+		array_walk( $attributes, function ( $value, $name ) use ( &$strings ) {
 
 			$strings[] = $name . '="' . esc_attr( true === $value ? $name : $value ) . '"';
 		} );
