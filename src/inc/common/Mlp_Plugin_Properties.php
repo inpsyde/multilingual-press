@@ -1,6 +1,6 @@
 <?php
 
-use Inpsyde\MultilingualPress\Common\Factory\Error;
+use Inpsyde\MultilingualPress\Factory\Error;
 
 /**
  * Holds data about the plugin MultilingualPress
@@ -23,7 +23,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 *
 	 * Used if a name is not available in this instance.
 	 *
-	 * @type Inpsyde_Property_List
+	 * @type Inpsyde_Property_List_Interface
 	 */
 	private $parent = NULL;
 
@@ -150,7 +150,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 * Further calls to has() and get() will not take this property into account.
 	 *
 	 * @param  string $name
-	 * @return void|Inpsyde_Property_List
+	 * @return void|Inpsyde_Property_List_Interface
 	 */
 	public function delete( $name ) {
 
@@ -270,7 +270,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 			$code = __CLASS__;
 
 		if ( class_exists( 'WP_Error' ) )
-			return Error::create( $code, $msg );
+			return ( new Error() )->create( $code, $msg );
 
 		throw new Exception( $msg, $code );
 	}
