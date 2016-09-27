@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+// TODO: Refactor as soon as the Assets namespace has been discussed (Locations -> Assets\Locator).
+
 /**
  * Manage paths and URLs
  *

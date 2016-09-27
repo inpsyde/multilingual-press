@@ -1,4 +1,7 @@
 <?php
+
+// TODO: Refactor as soon as the Assets namespace has been discussed (InternalLocations -> Assets\CoreLocator).
+
 /**
  * Manage plugin/theme paths and URLs
  *
