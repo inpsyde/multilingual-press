@@ -53,13 +53,13 @@ class HTMLLinkTags {
 			/**
 			 * Filters the output of the hreflang links in the HTML head.
 			 *
-			 * @since TODO
+			 * @since 3.0.0
 			 *
 			 * @param string $html     Alternate language HTML link tag.
 			 * @param string $language HTTP language code (e.g., "en-US").
 			 * @param string $url      Target URL.
 			 */
-			echo apply_filters( 'mlp_hreflang_html', $html, $language, $url );
+			echo apply_filters( 'multilingualpress.hreflang_html', $html, $language, $url );
 		} );
 
 		return true;

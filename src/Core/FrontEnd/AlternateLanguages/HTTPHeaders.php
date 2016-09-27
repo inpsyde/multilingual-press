@@ -53,13 +53,13 @@ class HTTPHeaders {
 			/**
 			 * Filters the output of the hreflang links in the HTTP header.
 			 *
-			 * @since TODO
+			 * @since 3.0.0
 			 *
 			 * @param string $header   Alternate language HTTP header.
 			 * @param string $language HTTP language code (e.g., "en-US").
 			 * @param string $url      Target URL.
 			 */
-			$header = (string) apply_filters( 'mlp_hreflang_http_header', $header, $language, $url );
+			$header = (string) apply_filters( 'multilingualpress.hreflang_http_header', $header, $language, $url );
 			if ( $header ) {
 				header( $header, false );
 			}

@@ -136,10 +136,9 @@ final class FilterableTranslation implements Translation {
 		}
 
 		/**
-		 * Filters the remote URL of the linked element.
+		 * Filters the URL of the remote element.
 		 *
-		 * @since 1.0.3
-		 * @since 2.2.0 Added the `$translation` argument.
+		 * @since 3.0.0
 		 *
 		 * @param string      $remote_url        URL of the remote element.
 		 * @param int         $target_site_id    ID of the target site.
@@ -147,7 +146,7 @@ final class FilterableTranslation implements Translation {
 		 * @param Translation $translation       Translation object.
 		 */
 		$remote_url = (string) apply_filters(
-			'mlp_linked_element_link',
+			'multilingualpress.translation_url',
 			(string) $this->remote_url,
 			$this->target_site_id(),
 			$this->target_content_id(),
