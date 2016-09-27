@@ -1,5 +1,7 @@
 <?php
 
+use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
+
 /**
  * Settings page controller.
  *
@@ -96,9 +98,6 @@ class Mlp_General_Settingspage {
 			return;
 		}
 
-		$msg = __( 'Settings saved.', 'multilingual-press' );
-		$notice = new Mlp_Admin_Notice( $msg, [ 'class' => 'updated' ] );
-		$notice->show();
+		( new AdminNotice( '<p>' . __( 'Settings saved.', 'multilingual-press' ) . '</p>' ) )->render();
 	}
-
 }

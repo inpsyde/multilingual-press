@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
+
 /**
  * Class Mlp_Network_Site_Settings_Controller
  *
@@ -210,9 +213,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		if ( empty ( $_GET[ 'msg' ] ) or 'updated' !== $_GET[ 'msg' ] )
 			return;
 
-		$msg    = esc_html__( 'Settings saved.', 'multilingual-press' );
-		$notice = new Mlp_Admin_Notice( $msg, [ 'class' => 'updated' ] );
-		$notice->show();
+		( new AdminNotice( '<p>' . __( 'Settings saved.', 'multilingual-press' ) . '</p>' ) )->render();
 	}
 
 	/**
