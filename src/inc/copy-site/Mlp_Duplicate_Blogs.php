@@ -1,4 +1,8 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Database\TableDuplicator;
+use Inpsyde\MultilingualPress\Database\TableReplacer;
+
 /**
  * Class Mlp_Duplicate_Blogs
  *
@@ -21,9 +25,14 @@ class Mlp_Duplicate_Blogs {
 	private $wpdb;
 
 	/**
-	 * @type Mlp_Table_Duplicator_Interface
+	 * @type TableDuplicator
 	 */
 	private $duplicator;
+
+	/**
+	 * @type TableReplacer
+	 */
+	private $replacer;
 
 	/**
 	 * @type Mlp_Db_Table_List_Interface
@@ -35,19 +44,22 @@ class Mlp_Duplicate_Blogs {
 	 *
 	 * @param string                         $link_table
 	 * @param wpdb                           $wpdb
-	 * @param Mlp_Table_Duplicator_Interface $duplicator
+	 * @param TableDuplicator $duplicator
+	 * @param TableReplacer $replacer
 	 * @param Mlp_Db_Table_List_Interface    $table_names
 	 */
 	public function __construct(
 		                               $link_table,
 		wpdb                           $wpdb,
-		Mlp_Table_Duplicator_Interface $duplicator,
+		TableDuplicator $duplicator,
+		TableReplacer $replacer,
 		Mlp_Db_Table_List_Interface    $table_names
 	) {
 
 		$this->link_table  = $link_table;
 		$this->wpdb        = $wpdb;
 		$this->duplicator  = $duplicator;
+		$this->replacer  = $replacer;
 		$this->table_names = $table_names;
 	}
 
@@ -105,11 +117,9 @@ class Mlp_Duplicate_Blogs {
 				$this->wpdb->prefix,
 				$table_name
 			);
-			$this->duplicator->replace_content(
-				$new_name,
-				$table_name,
-				TRUE
-			);
+			if ( $this->duplicator->duplicate_table( $table_name, $new_name ) ) {
+				$this->replacer->replace_table( $new_name, $table_name );
+			}
 		}
 
 		if ( isset( $_POST['blog']['activate_plugins'] ) ) {
