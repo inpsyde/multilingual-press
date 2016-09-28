@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Database\Table;
+
 /**
  * Interface Mlp_Db_Installer_Interface
  *
@@ -9,14 +12,14 @@
 interface Mlp_Db_Installer_Interface {
 
 	/**
-	 * @param Mlp_Db_Schema_Interface $schema
+	 * @param Table $schema
 	 * @return void
 	 */
-	public function install( Mlp_Db_Schema_Interface $schema = NULL );
+	public function install( Table $schema = NULL );
 
 	/**
-	 * @param Mlp_Db_Schema_Interface $schema
+	 * @param Table $schema
 	 * @return FALSE|int
 	 */
-	public function uninstall( Mlp_Db_Schema_Interface $schema = NULL );
+	public function uninstall( Table $schema = NULL );
 }

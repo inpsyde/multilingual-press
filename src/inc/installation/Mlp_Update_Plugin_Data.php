@@ -1,6 +1,7 @@
 <?php
 
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+use Inpsyde\MultilingualPress\Database\Table;
 
 /**
  * MultilingualPress Installation
@@ -152,12 +153,12 @@ class Mlp_Update_Plugin_Data {
 	/**
 	 * Update mlp_multilingual_linked table and set type to "post" if empty
 	 *
-	 * @param Mlp_Db_Schema_Interface $linked
+	 * @param Table $linked
 	 * @return void
 	 */
-	private function update_type_column( Mlp_Db_Schema_Interface $linked ) {
+	private function update_type_column( Table $linked ) {
 
-		$table = $linked->get_table_name();
+		$table = $linked->name();
 		$this->wpdb->query(
 			'UPDATE ' . $table . ' set ml_type = "post" WHERE ml_type NOT IN("post", "term")'
 		);
@@ -168,10 +169,10 @@ class Mlp_Update_Plugin_Data {
 	 *
 	 * @since 0.1
 	 * @uses load_plugin_textdomain, plugin_basename
-	 * @param Mlp_Db_Schema_Interface $languages
+	 * @param Table $languages
 	 * @return void
 	 */
-	private function import_active_languages( Mlp_Db_Schema_Interface $languages ) {
+	private function import_active_languages( Table $languages ) {
 
 		// get active languages
 		$mlp_settings = get_site_option( 'inpsyde_multilingual' );
@@ -179,7 +180,7 @@ class Mlp_Update_Plugin_Data {
 		if ( empty ( $mlp_settings ) )
 			return;
 
-		$table = $languages->get_table_name();
+		$table = $languages->name();
 		$sql   = 'SELECT ID FROM ' . $table . 'WHERE wp_locale = %s OR iso_639_1 = %s';
 
 		foreach ( $mlp_settings as $mlp_site ) {

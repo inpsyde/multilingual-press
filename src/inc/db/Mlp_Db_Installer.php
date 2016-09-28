@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Database\Table;
+
 /**
  * Class Mlp_Db_Installer
  *
@@ -12,7 +14,7 @@
 class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 
 	/**
-	 * @var Mlp_Db_Schema_Interface
+	 * @var Table
 	 */
 	private $db_info;
 
@@ -24,9 +26,9 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	/**
 	 * Constructor. Set up the properties.
 	 *
-	 * @param Mlp_Db_Schema_Interface $db_info Table information.
+	 * @param Table $db_info Table information.
 	 */
-	public function __construct( Mlp_Db_Schema_Interface $db_info ) {
+	public function __construct( Table $db_info ) {
 
 		global $wpdb;
 
@@ -37,15 +39,15 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	/**
 	 * Delete the table.
 	 *
-	 * @param Mlp_Db_Schema_Interface $schema Table information.
+	 * @param Table $schema Table information.
 	 *
 	 * @return int|bool Number of rows affected/selected or FALSE on error.
 	 */
-	public function uninstall( Mlp_Db_Schema_Interface $schema = NULL ) {
+	public function uninstall( Table $schema = NULL ) {
 
 		$schema = $this->get_schema( $schema );
 
-		$table = $schema->get_table_name();
+		$table = $schema->name();
 
 		return $this->wpdb->query( "DROP TABLE IF EXISTS $table" );
 	}
@@ -53,29 +55,29 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	/**
 	 * Create the table according to the given data.
 	 *
-	 * @param Mlp_Db_Schema_Interface $schema Table information.
+	 * @param Table $schema Table information.
 	 *
 	 * @return int Number of table operations run during installation.
 	 */
-	public function install( Mlp_Db_Schema_Interface $schema = NULL ) {
+	public function install( Table $schema = NULL ) {
 
 		// make dbDelta() available
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		$db_info = $this->get_schema( $schema );
-		$table = $db_info->get_table_name();
-		$columns = $db_info->get_schema();
+		$table = $db_info->name();
+		$columns = $db_info->schema();
 		$columns_sql = $this->array_to_sql_columns( $columns );
 
 		$add = '';
 
-		$primary_key = $db_info->get_primary_key();
+		$primary_key = $db_info->primary_key();
 		if ( ! empty( $primary_key ) ) {
 			// Due to dbDelta: two spaces after PRIMARY KEY!
 			$add .= "\tPRIMARY KEY  ($primary_key)";
 		}
 
-		$index_sql = $db_info->get_index_sql();
+		$index_sql = $db_info->keys_sql();
 		if ( ! empty( $index_sql ) ) {
 			if ( ! empty( $primary_key ) ) {
 				$add .= ",\n";
@@ -99,14 +101,14 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	/**
 	 * Insert default content into the given table.
 	 *
-	 * @param Mlp_Db_Schema_Interface $db_info Table information.
+	 * @param Table $db_info Table information.
 	 * @param array                   $columns Table columns.
 	 *
 	 * @return int|bool
 	 */
-	private function insert_default( Mlp_Db_Schema_Interface $db_info, array $columns ) {
+	private function insert_default( Table $db_info, array $columns ) {
 
-		$table = $db_info->get_table_name();
+		$table = $db_info->name();
 
 		// Bail if the table is not empty
 		$temp = $this->wpdb->query( "SELECT 1 FROM $table LIMIT 1" );
@@ -114,12 +116,12 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 			return 0;
 		}
 
-		$content = $db_info->get_default_content();
+		$content = $db_info->default_content_sql();
 		if ( empty( $content ) ) {
 			return 0;
 		}
 
-		$to_remove = $db_info->get_autofilled_keys();
+		$to_remove = $db_info->fields_without_default_content();
 		foreach ( $to_remove as $remove_key ) {
 			unset ( $columns[ $remove_key ] );
 		}
@@ -179,11 +181,11 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	 *
 	 * Basically a check for NULL values.
 	 *
-	 * @param Mlp_Db_Schema_Interface $schema Table information.
+	 * @param Table $schema Table information.
 	 *
-	 * @return Mlp_Db_Schema_Interface
+	 * @return Table
 	 */
-	private function get_schema( Mlp_Db_Schema_Interface $schema = NULL ) {
+	private function get_schema( Table $schema = NULL ) {
 
 		if ( NULL === $schema ) {
 			return $this->db_info;

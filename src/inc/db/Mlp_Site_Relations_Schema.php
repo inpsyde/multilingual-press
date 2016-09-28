@@ -1,5 +1,7 @@
 <?php
 
+use Inpsyde\MultilingualPress\Database\Table;
+
 /**
  * Schema for site relations.
  *
@@ -7,7 +9,7 @@
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
+class Mlp_Site_Relations_Schema implements Table {
 
 	/**
 	 * @var wpdb
@@ -29,7 +31,7 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 *
 	 * @return string
 	 */
-	public function get_table_name() {
+	public function name() {
 
 		return $this->wpdb->base_prefix . 'mlp_site_relations';
 	}
@@ -41,7 +43,7 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 *
 	 * @return array
 	 */
-	public function get_schema() {
+	public function schema() {
 
 		return [
 			'ID'     => 'INT NOT NULL AUTO_INCREMENT',
@@ -55,7 +57,7 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 *
 	 * @return string
 	 */
-	public function get_primary_key() {
+	public function primary_key() {
 
 		return 'ID';
 	}
@@ -65,7 +67,7 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 *
 	 * @return array
 	 */
-	public function get_autofilled_keys() {
+	public function fields_without_default_content() {
 
 		return [ 'ID', ];
 	}
@@ -75,7 +77,7 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 *
 	 * @return string
 	 */
-	public function get_index_sql() {
+	public function keys_sql() {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
 		return "KEY (site_1,site_2),\n\tUNIQUE KEY site_combinations (site_1,site_2)";
@@ -86,7 +88,7 @@ class Mlp_Site_Relations_Schema implements Mlp_Db_Schema_Interface {
 	 *
 	 * @return string
 	 */
-	public function get_default_content() {
+	public function default_content_sql() {
 
 		return '';
 	}
