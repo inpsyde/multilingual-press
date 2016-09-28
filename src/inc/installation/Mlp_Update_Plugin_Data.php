@@ -215,6 +215,7 @@ class Mlp_Update_Plugin_Data {
 	 */
 	public function install_plugin() {
 
+		// TODO: Inject (empty) installer in constructor.
 		$installer = new Mlp_Db_Installer( new Mlp_Db_Languages_Schema( $this->wpdb ) );
 		$installer->install();
 		$installer->install( new Mlp_Content_Relations_Schema( $this->wpdb ) );

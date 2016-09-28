@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Database\TableInstaller;
 
 /**
  * Class Mlp_Db_Installer
@@ -11,7 +12,7 @@ use Inpsyde\MultilingualPress\Database\Table;
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
+class Mlp_Db_Installer implements TableInstaller {
 
 	/**
 	 * @var Table
