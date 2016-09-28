@@ -67,7 +67,7 @@ class Mlp_Site_Relations_Schema implements Table {
 	 *
 	 * @return array
 	 */
-	public function fields_without_default_content() {
+	public function columns_without_default_content() {
 
 		return [ 'ID', ];
 	}

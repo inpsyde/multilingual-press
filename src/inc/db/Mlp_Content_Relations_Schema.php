@@ -70,7 +70,7 @@ class Mlp_Content_Relations_Schema implements Table {
 	 *
 	 * @return array
 	 */
-	public function fields_without_default_content() {
+	public function columns_without_default_content() {
 
 		return [ 'ml_id', ];
 	}

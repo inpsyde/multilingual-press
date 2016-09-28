@@ -11,6 +11,15 @@ namespace Inpsyde\MultilingualPress\Database;
 interface Table {
 
 	/**
+	 * Returns an array with all columns that do not have any default content.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array All columns that do not have any default content.
+	 */
+	public function columns_without_default_content();
+
+	/**
 	 * Returns the SQL string for the default content.
 	 *
 	 * @since 3.0.0
@@ -18,15 +27,6 @@ interface Table {
 	 * @return string The SQL string for the default content.
 	 */
 	public function default_content_sql();
-
-	/**
-	 * Returns an array with all fields that do not have any default content.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return array All fields that do not have any default content.
-	 */
-	public function fields_without_default_content();
 
 	/**
 	 * Returns the SQL string for all (unique) keys.
