@@ -2,6 +2,7 @@
 
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Database\Table\ContentRelations;
 use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 
 /**
@@ -112,6 +113,8 @@ class Mlp_Update_Plugin_Data {
 			$this->import_active_languages( new Mlp_Db_Languages_Schema( $this->wpdb ) );
 		}
 
+		$table_prefix = $this->wpdb->base_prefix;
+
 		if ( version_compare( $last_version, '2.0.4', '<' ) ) {
 			$installer = new WPDBTableInstaller();
 			$installer->install( new Mlp_Site_Relations_Schema( $this->wpdb ) );
@@ -120,7 +123,7 @@ class Mlp_Update_Plugin_Data {
 		}
 
 		if ( version_compare( $last_version, '2.3.2', '<' ) ) {
-			$this->update_type_column( new Mlp_Content_Relations_Schema( $this->wpdb ) );
+			$this->update_type_column( new ContentRelations( $table_prefix ) );
 		}
 
 		// remove unneeded plugin data
@@ -217,13 +220,14 @@ class Mlp_Update_Plugin_Data {
 	 */
 	public function install_plugin() {
 
+		$table_prefix = $this->wpdb->base_prefix;
+
 		// TODO: Inject (empty) installer in constructor.
 		$installer = new WPDBTableInstaller();
 		$installer->install( new Mlp_Db_Languages_Schema( $this->wpdb ) );
-		$installer->install( new Mlp_Content_Relations_Schema( $this->wpdb ) );
+		$installer->install( new ContentRelations( $table_prefix ) );
 		$installer->install( new Mlp_Site_Relations_Schema( $this->wpdb ) );
 
 		return update_site_option( 'mlp_version', $this->current_version );
 	}
-
 }
