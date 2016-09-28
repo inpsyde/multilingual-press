@@ -211,61 +211,6 @@ class Mlp_Helpers {
 	}
 
 	/**
-	 * function for custom plugins to get activated on all language blogs
-	 *
-	 * @param   int    $element_id ID of the selected element
-	 * @param   string $type       type of the selected element
-	 * @param   int    $blog_id    ID of the selected blog
-	 * @param   string $hook
-	 * @param   mixed  $param
-	 * @return  WP_Error|NULL
-	 */
-	public static function run_custom_plugin(
-		/** @noinspection PhpUnusedParameterInspection */
-		$element_id, $type, $blog_id, $hook, $param
-	) {
-
-		/** @var Factory $error_factory */
-		$error_factory = $api = self::$dependencies['error_factory'];
-
-		if ( empty( $element_id ) )
-			return $error_factory->create(
-				'mlp_empty_custom_element',
-				__( 'Empty Element', 'multilingual-press' )
-			);
-
-		if ( empty( $type ) )
-			return $error_factory->create( 'mlp_empty_custom_type', __( 'Empty Type', 'multilingual-press' ) );
-
-		if ( empty ( $hook ) || ! is_callable( $hook ) )
-			return $error_factory->create( 'mlp_empty_custom_hook', __( 'Invalid Hook', 'multilingual-press' ) );
-
-		// set the current element in the mlp class
-		$languages    = mlp_get_available_languages();
-		$current_blog_id = get_current_blog_id();
-
-		if ( 0 == count( $languages ) )
-			return NULL;
-
-		foreach ( $languages as $language_id => $language_name ) {
-
-			if ( $current_blog_id == $language_id )
-				continue;
-
-			switch_to_blog( $language_id );
-
-			/**
-			 * custom hook
-			 * @param mixed $param
-			 */
-			do_action( $hook, $param );
-			restore_current_blog();
-		}
-
-		return NULL;
-	}
-
-	/**
 	 * Get the URL for the icon from a site ID
 	 *
 	 * @param  int    $site_id ID of a site

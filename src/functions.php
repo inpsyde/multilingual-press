@@ -227,24 +227,6 @@ namespace {
 	}
 
 	/**
-	 * wrapper of Mlp_Helpers function for custom plugins to get activated on all language blogs
-	 *
-	 * @since    0.1
-	 *
-	 * @param    int    $element_id ID of the selected element
-	 * @param    string $type       type of the selected element
-	 * @param    int    $blog_id    ID of the selected blog
-	 * @param    string $hook       name of the hook that will be executed
-	 * @param    array  $param      parameters for the function
-	 *
-	 * @return    WP_Error|NULL
-	 */
-	function mlp_run_custom_plugin( $element_id = 0, $type = '', $blog_id = 0, $hook = null, $param = null ) {
-
-		return Mlp_Helpers::run_custom_plugin( $element_id, $type, $blog_id, $hook, $param );
-	}
-
-	/**
 	 * wrapper of Mlp_Helpers function for function to get the url of the flag from a blogid
 	 *
 	 * @since    0.1
