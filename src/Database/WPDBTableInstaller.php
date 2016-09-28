@@ -75,9 +75,9 @@ class WPDBTableInstaller implements TableInstaller {
 		 */
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		dbDelta( "CREATE TABLE $table_name ({$columns}{$keys}) $options;" );
+		dbDelta( "CREATE TABLE $table_name ({$columns}{$keys}) $options" );
 
-		if ( ! $this->db->query( $this->db->prepare( 'SHOW TABLES LIKE %s', $table_name ) ) ) {
+		if ( ! $this->table_exists( $table_name ) ) {
 			return false;
 		}
 
@@ -180,6 +180,20 @@ class WPDBTableInstaller implements TableInstaller {
 	}
 
 	/**
+	 * Checks if a table with the given name exists in the database.
+	 *
+	 * @param string $table_name The name of a table.
+	 *
+	 * @return bool Whether or not a table with the given name exists in the database.
+	 */
+	private function table_exists( $table_name ) {
+
+		$query = $this->db->prepare( 'SHOW TABLES LIKE %s', $table_name );
+
+		return (bool) $this->db->query( $query );
+	}
+
+	/**
 	 * Inserts the according default content into the given table.
 	 *
 	 * @param Table $table Table object.
@@ -205,6 +219,6 @@ class WPDBTableInstaller implements TableInstaller {
 		$columns = array_diff( $columns, $table->columns_without_default_content() );
 		$columns = implode( ',', $columns );
 
-		$this->db->query( "INSERT INTO $table_name ($columns) VALUES $default_content;" );
+		$this->db->query( "INSERT INTO $table_name ($columns) VALUES $default_content" );
 	}
 }
