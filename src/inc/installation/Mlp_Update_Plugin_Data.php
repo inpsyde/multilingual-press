@@ -2,6 +2,7 @@
 
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 
 /**
  * MultilingualPress Installation
@@ -112,8 +113,9 @@ class Mlp_Update_Plugin_Data {
 		}
 
 		if ( version_compare( $last_version, '2.0.4', '<' ) ) {
-			$installer = new Mlp_Db_Installer( new Mlp_Site_Relations_Schema( $this->wpdb ) );
-			$installer->install();
+			$installer = new WPDBTableInstaller();
+			$installer->install( new Mlp_Site_Relations_Schema( $this->wpdb ) );
+
 			$this->import_site_relations();
 		}
 
@@ -216,8 +218,8 @@ class Mlp_Update_Plugin_Data {
 	public function install_plugin() {
 
 		// TODO: Inject (empty) installer in constructor.
-		$installer = new Mlp_Db_Installer( new Mlp_Db_Languages_Schema( $this->wpdb ) );
-		$installer->install();
+		$installer = new WPDBTableInstaller();
+		$installer->install( new Mlp_Db_Languages_Schema( $this->wpdb ) );
 		$installer->install( new Mlp_Content_Relations_Schema( $this->wpdb ) );
 		$installer->install( new Mlp_Site_Relations_Schema( $this->wpdb ) );
 
