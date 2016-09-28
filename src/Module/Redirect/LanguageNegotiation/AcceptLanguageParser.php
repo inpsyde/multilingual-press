@@ -10,7 +10,7 @@ use Inpsyde\MultilingualPress\Common\AcceptHeader\AcceptHeaderParser;
  * @package Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation
  * @since   3.0.0
  */
-class AcceptLanguageParser implements AcceptHeaderParser {
+final class AcceptLanguageParser implements AcceptHeaderParser {
 
 	/**
 	 * Parses the given Accept header and returns the according data in array form.

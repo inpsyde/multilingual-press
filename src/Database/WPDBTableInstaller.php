@@ -11,7 +11,7 @@ use wpdb;
  * @package Inpsyde\MultilingualPress\Database
  * @since   3.0.0
  */
-class WPDBTableInstaller implements TableInstaller {
+final class WPDBTableInstaller implements TableInstaller {
 
 	/**
 	 * @var wpdb

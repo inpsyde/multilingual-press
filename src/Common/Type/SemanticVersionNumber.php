@@ -9,7 +9,7 @@ namespace Inpsyde\MultilingualPress\Common\Type;
  * @see     http://semver.org/#semantic-versioning-specification-semver
  * @since   3.0.0
  */
-class SemanticVersionNumber implements VersionNumber {
+final class SemanticVersionNumber implements VersionNumber {
 
 	/**
 	 * @var string

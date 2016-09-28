@@ -11,7 +11,7 @@ use Inpsyde\MultilingualPress\Service\ServiceProvider;
  * @package Inpsyde\MultilingualPress\Factory
  * @since   3.0.0
  */
-class FactoryProvider implements ServiceProvider {
+final class FactoryProvider implements ServiceProvider {
 
 	/**
 	 * Registers the provided services on the given container.

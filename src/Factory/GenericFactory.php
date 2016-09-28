@@ -13,7 +13,7 @@ use ReflectionClass;
  * @package Inpsyde\MultilingualPress\Factory
  * @since   3.0.0
  */
-class GenericFactory implements Factory {
+final class GenericFactory implements Factory {
 
 	/**
 	 * @var string

@@ -12,7 +12,7 @@ use WP_Error;
  * @package Inpsyde\MultilingualPress\Factory
  * @since   3.0.0
  */
-class Error implements Factory {
+final class Error implements Factory {
 
 	/**
 	 * Fully qualified name of the base (class).
