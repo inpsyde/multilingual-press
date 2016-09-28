@@ -104,12 +104,12 @@ final class ContentRelations implements Table {
 	public function schema() {
 
 		return [
-			'ml_id'               => 'int NOT NULL AUTO_INCREMENT',
+			'ml_id'               => 'int unsigned NOT NULL AUTO_INCREMENT',
 			'ml_source_blogid'    => 'bigint(20) NOT NULL',
 			'ml_source_elementid' => 'bigint(20) NOT NULL',
 			'ml_blogid'           => 'bigint(20) NOT NULL',
 			'ml_elementid'        => 'bigint(20) NOT NULL',
-			'ml_type'             => 'varchar(20) CHARACTER SET utf8 NOT NULL',
+			'ml_type'             => 'varchar(20) NOT NULL',
 		];
 	}
 }

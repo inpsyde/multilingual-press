@@ -102,7 +102,7 @@ final class SiteRelations implements Table {
 	public function schema() {
 
 		return [
-			'ID'     => 'int NOT NULL AUTO_INCREMENT',
+			'ID'     => 'int unsigned NOT NULL AUTO_INCREMENT',
 			'site_1' => 'bigint(20) NOT NULL',
 			'site_2' => 'bigint(20) NOT NULL',
 		];
