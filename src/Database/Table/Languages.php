@@ -1,83 +1,40 @@
 <?php # -*- coding: utf-8 -*-
 
+namespace Inpsyde\MultilingualPress\Database\Table;
+
 use Inpsyde\MultilingualPress\Database\Table;
 
 /**
- * Class Mlp_Db_Languages_Schema
+ * Languages table.
  *
- * Specific data for the language table.
- *
- * @version 2015.06.28
- * @author  Inpsyde GmbH, toscho
- * @license GPL
+ * @package Inpsyde\MultilingualPress\Database\Table
+ * @since   3.0.0
  */
-class Mlp_Db_Languages_Schema implements Table {
+final class Languages implements Table {
 
 	/**
-	 * @var wpdb
+	 * @var string
 	 */
-	private $wpdb;
+	private $prefix;
 
 	/**
 	 * Constructor. Set up the properties.
 	 *
-	 * @param wpdb $wpdb Database object.
+	 * @since 3.0.0
+	 *
+	 * @param string $prefix Optional Table name prefix. Defaults to empty string.
 	 */
-	public function __construct( wpdb $wpdb ) {
+	public function __construct( $prefix = '' ) {
 
-		$this->wpdb = $wpdb;
+		$this->prefix = (string) $prefix;
 	}
 
 	/**
-	 * Return the table name.
+	 * Returns an array with all columns that do not have any default content.
 	 *
-	 * @return string
-	 */
-	public function name() {
-
-		return $this->wpdb->base_prefix . 'mlp_languages';
-	}
-
-	/**
-	 * Return the table schema.
+	 * @since 3.0.0
 	 *
-	 * See wp_get_db_schema() in wp-admin/includes/schema.php for the default schema.
-	 *
-	 * @return array
-	 */
-	public function schema() {
-
-		return [
-			'ID'           => 'bigint unsigned NOT NULL auto_increment',
-			'english_name' => 'tinytext',
-			'native_name'  => 'tinytext',
-			'custom_name'  => 'tinytext NOT NULL',
-			// BOOL was added in MyQL 5.0.3, but WordPress requires just 5.0.0
-			'is_rtl'       => 'tinyint(1) unsigned DEFAULT 0',
-			// Could be de-DE-1901 or something more sophisticated
-			'iso_639_1'    => 'VARCHAR(20)',
-			'iso_639_2'    => 'VARCHAR(20)',
-			'wp_locale'    => 'tinytext',
-			// Same as iso_639_1, but with '-', not '_'
-			'http_name'    => 'VARCHAR(20)',
-			'priority'     => 'tinyint(1) unsigned DEFAULT 10',
-		];
-	}
-
-	/**
-	 * Return the primary key.
-	 *
-	 * @return string
-	 */
-	public function primary_key() {
-
-		return 'ID';
-	}
-
-	/**
-	 * Return the array of autofilled keys.
-	 *
-	 * @return array
+	 * @return array All columns that do not have any default content.
 	 */
 	public function columns_without_default_content() {
 
@@ -88,24 +45,15 @@ class Mlp_Db_Languages_Schema implements Table {
 	}
 
 	/**
-	 * Return the SQL string for any indexes and unique keys.
+	 * Returns the SQL string for the default content.
 	 *
-	 * @return string
-	 */
-	public function keys_sql() {
-
-		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
-		return 'KEY (http_name)';
-	}
-
-	/**
-	 * Return the SQL string for any default content.
+	 * @since 3.0.0
 	 *
-	 * @return string
+	 * @return string The SQL string for the default content.
 	 */
 	public function default_content_sql() {
 
-		$fields = [
+		$rows = [
 			'aa'    => [
 				'english_name' => 'Afar',
 				'native_name'  => 'Afaraf',
@@ -576,6 +524,16 @@ class Mlp_Db_Languages_Schema implements Table {
 				'http_name'    => 'en-GB',
 				'priority'     => 1,
 			],
+			'en-nz' => [
+				'english_name' => 'English (New Zealand)',
+				'native_name'  => 'English (New Zealand)',
+				'is_rtl'       => 0,
+				'iso_639_1'    => 'en',
+				'iso_639_2'    => 'eng',
+				'wp_locale'    => 'en_NZ',
+				'http_name'    => 'en-NZ',
+				'priority'     => 1,
+			],
 			'eo'    => [
 				'english_name' => 'Esperanto',
 				'native_name'  => 'Esperanto',
@@ -763,7 +721,7 @@ class Mlp_Db_Languages_Schema implements Table {
 				'iso_639_1'    => 'fr',
 				'iso_639_2'    => 'fra',
 				'wp_locale'    => '',
-				'http_name'    => 'fr',
+				'http_name'    => 'fr-CH',
 				'priority'     => 1,
 			],
 			'fy'    => [
@@ -1823,7 +1781,7 @@ class Mlp_Db_Languages_Schema implements Table {
 				'iso_639_1'    => 'zh',
 				'iso_639_2'    => 'zho',
 				'wp_locale'    => '',
-				'http_name'    => 'zh',
+				'http_name'    => 'zh-SG',
 				'priority'     => 1,
 			],
 			'zh-tw' => [
@@ -1848,13 +1806,71 @@ class Mlp_Db_Languages_Schema implements Table {
 			],
 		];
 
-		$out = [];
+		$rows = array_map( function ( array $row ) {
 
-		foreach ( $fields as $field ) {
-			$out[ ] = "( '" . join( "', '", array_values( $field ) ) . "' )";
-		}
+			return '(\'' . join( '\',\'', $row ) . '\')';
+		}, $rows );
 
-		return join( ",", $out );
+		return implode( ',', $rows );
 	}
 
+	/**
+	 * Returns the SQL string for all (unique) keys.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The SQL string for all (unique) keys.
+	 */
+	public function keys_sql() {
+
+		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
+		return 'KEY (http_name)';
+	}
+
+	/**
+	 * Returns the table name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The table name.
+	 */
+	public function name() {
+
+		return "{$this->prefix}mlp_languages";
+	}
+
+	/**
+	 * Returns the primary key.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The primary key.
+	 */
+	public function primary_key() {
+
+		return 'ID';
+	}
+
+	/**
+	 * Returns the table schema.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array An array with fields as keys and the according SQL definitions as values.
+	 */
+	public function schema() {
+
+		return [
+			'ID'           => 'bigint(20) unsigned NOT NULL auto_increment',
+			'english_name' => 'tinytext',
+			'native_name'  => 'tinytext',
+			'custom_name'  => 'tinytext',
+			'is_rtl'       => 'tinyint(1) unsigned DEFAULT 0',
+			'iso_639_1'    => 'varchar(20)',
+			'iso_639_2'    => 'varchar(20)',
+			'wp_locale'    => 'tinytext',
+			'http_name'    => 'varchar(20)',
+			'priority'     => 'tinyint(1) unsigned DEFAULT 10',
+		];
+	}
 }

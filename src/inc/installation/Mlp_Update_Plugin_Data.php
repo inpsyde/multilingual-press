@@ -3,6 +3,7 @@
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\Table\ContentRelations;
+use Inpsyde\MultilingualPress\Database\Table\Languages;
 use Inpsyde\MultilingualPress\Database\Table\SiteRelations;
 use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 
@@ -110,11 +111,11 @@ class Mlp_Update_Plugin_Data {
 	 */
 	private function update_plugin_data( $last_version ) {
 
-		if ( $last_version === 1 ) {
-			$this->import_active_languages( new Mlp_Db_Languages_Schema( $this->wpdb ) );
-		}
-
 		$table_prefix = $this->wpdb->base_prefix;
+
+		if ( $last_version === 1 ) {
+			$this->import_active_languages( new Languages( $table_prefix ) );
+		}
 
 		if ( version_compare( $last_version, '2.0.4', '<' ) ) {
 			$installer = new WPDBTableInstaller();
@@ -225,7 +226,7 @@ class Mlp_Update_Plugin_Data {
 
 		// TODO: Inject (empty) installer in constructor.
 		$installer = new WPDBTableInstaller();
-		$installer->install( new Mlp_Db_Languages_Schema( $this->wpdb ) );
+		$installer->install( new Languages( $table_prefix ) );
 		$installer->install( new ContentRelations( $table_prefix ) );
 		$installer->install( new SiteRelations( $table_prefix ) );
 

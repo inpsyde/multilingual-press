@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Database\Table\Languages;
 use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 
 /**
@@ -201,7 +203,9 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		check_admin_referer( $this->setting->action(), $this->setting->nonce_name() );
 
-		$table = new Mlp_Db_Languages_Schema( $this->wpdb );
+		$table_prefix = $this->wpdb->base_prefix;
+
+		$table = new Languages( $table_prefix );
 
 		$installer = new WPDBTableInstaller( $table );
 		$installer->uninstall();
@@ -210,7 +214,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		/**
 		 * Runs after having reset the database table.
 		 *
-		 * @param Mlp_Db_Languages_Schema $table Languages table object.
+		 * @param Table $table Languages table object.
 		 */
 		do_action( 'mlp_reset_table_done', $table );
 
