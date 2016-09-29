@@ -34,7 +34,7 @@ final class SiteRelations implements Table {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return array All columns that do not have any default content.
+	 * @return string[] All columns that do not have any default content.
 	 */
 	public function columns_without_default_content() {
 
@@ -97,7 +97,7 @@ final class SiteRelations implements Table {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return array An array with fields as keys and the according SQL definitions as values.
+	 * @return string[] An array with fields as keys and the according SQL definitions as values.
 	 */
 	public function schema() {
 
