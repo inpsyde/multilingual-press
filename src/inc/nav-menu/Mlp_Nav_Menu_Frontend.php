@@ -84,6 +84,7 @@ class Mlp_Nav_Menu_Frontend {
 			return false;
 		}
 
+		// TODO: Check the object type (could also be a term), and delete the real thing (in a separate method).
 		wp_delete_post( $item->ID );
 
 		return true;
