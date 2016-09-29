@@ -3,6 +3,7 @@
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Core;
+use Inpsyde\MultilingualPress\Database\WPDBTableList;
 use Inpsyde\MultilingualPress\Factory\Error;
 use Inpsyde\MultilingualPress\Service\Container;
 
@@ -420,7 +421,7 @@ class Multilingual_Press {
 
 		$this->plugin_data->set( 'type_factory', $type_factory );
 
-		$table_list = new Mlp_Db_Table_List( $this->wpdb );
+		$table_list = new WPDBTableList( $this->wpdb );
 
 		$link_table = $this->wpdb->base_prefix . 'multilingual_linked';
 		$this->plugin_data->set( 'module_manager', new Mlp_Module_Manager( 'state_modules' ) );

@@ -2,6 +2,7 @@
 
 use Inpsyde\MultilingualPress\Database\StringReplacer;
 use Inpsyde\MultilingualPress\Database\TableDuplicator;
+use Inpsyde\MultilingualPress\Database\TableList;
 use Inpsyde\MultilingualPress\Database\TableReplacer;
 
 /**
@@ -41,9 +42,9 @@ class Mlp_Duplicate_Blogs {
 	private $string_replacer;
 
 	/**
-	 * @type Mlp_Db_Table_List_Interface
+	 * @type TableList
 	 */
-	private $table_names;
+	private $table_list;
 
 	/**
 	 * Constructor
@@ -52,7 +53,7 @@ class Mlp_Duplicate_Blogs {
 	 * @param wpdb                           $wpdb
 	 * @param TableDuplicator $duplicator
 	 * @param TableReplacer $replacer
-	 * @param Mlp_Db_Table_List_Interface    $table_names
+	 * @param TableList    $table_list
 	 * @param StringReplacer $string_replacer
 	 */
 	public function __construct(
@@ -60,7 +61,7 @@ class Mlp_Duplicate_Blogs {
 		wpdb                           $wpdb,
 		TableDuplicator $duplicator,
 		TableReplacer $replacer,
-		Mlp_Db_Table_List_Interface    $table_names,
+		TableList    $table_list,
 		StringReplacer $string_replacer
 	) {
 
@@ -68,7 +69,7 @@ class Mlp_Duplicate_Blogs {
 		$this->wpdb        = $wpdb;
 		$this->duplicator  = $duplicator;
 		$this->replacer  = $replacer;
-		$this->table_names = $table_names;
+		$this->table_list = $table_list;
 
 		$this->string_replacer = $string_replacer;
 	}
@@ -228,9 +229,7 @@ class Mlp_Duplicate_Blogs {
 	 */
 	private function get_table_names( array $context ) {
 
-		$tables = $this->table_names->get_site_core_tables(
-			$context[ 'source_blog_id' ]
-		);
+		$tables = $this->table_list->site_tables( $context[ 'source_blog_id' ] );
 
 		/**
 		 * Filter the to-be-duplicated tables.
