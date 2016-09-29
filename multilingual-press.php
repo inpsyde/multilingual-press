@@ -15,6 +15,7 @@
 namespace Inpsyde\MultilingualPress;
 
 use Inpsyde\MultilingualPress\Core\ImmutablePluginProperties;
+use Inpsyde\MultilingualPress\Database\DatabaseServiceProvider;
 use Inpsyde\MultilingualPress\Factory\FactoryProvider;
 use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
 
@@ -44,6 +45,7 @@ function bootstrap() {
 
 	$multilingualpress = new MultilingualPress( $container );
 	$multilingualpress
+		->register_service_provider( new DatabaseServiceProvider() )
 		->register_service_provider( new FactoryProvider() );
 
 	/**
