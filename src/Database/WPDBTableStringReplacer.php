@@ -5,12 +5,12 @@ namespace Inpsyde\MultilingualPress\Database;
 use wpdb;
 
 /**
- * String replacer implementation using the WordPress database object.
+ * Table string replacer implementation using the WordPress database object.
  *
  * @package Inpsyde\MultilingualPress\Database
  * @since   3.0.0
  */
-final class WPDBStringReplacer implements StringReplacer {
+final class WPDBTableStringReplacer implements TableStringReplacer {
 
 	/**
 	 * @var wpdb

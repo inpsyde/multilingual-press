@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Database\StringReplacer;
+use Inpsyde\MultilingualPress\Database\TableStringReplacer;
 use Inpsyde\MultilingualPress\Database\TableDuplicator;
 use Inpsyde\MultilingualPress\Database\TableList;
 use Inpsyde\MultilingualPress\Database\TableReplacer;
@@ -37,7 +37,7 @@ class Mlp_Duplicate_Blogs {
 	private $replacer;
 
 	/**
-	 * @type StringReplacer
+	 * @type TableStringReplacer
 	 */
 	private $string_replacer;
 
@@ -49,12 +49,12 @@ class Mlp_Duplicate_Blogs {
 	/**
 	 * Constructor
 	 *
-	 * @param string                         $link_table
-	 * @param wpdb                           $wpdb
-	 * @param TableDuplicator $duplicator
-	 * @param TableReplacer $replacer
-	 * @param TableList    $table_list
-	 * @param StringReplacer $string_replacer
+	 * @param string              $link_table
+	 * @param wpdb                $wpdb
+	 * @param TableDuplicator     $duplicator
+	 * @param TableReplacer       $replacer
+	 * @param TableList           $table_list
+	 * @param TableStringReplacer $string_replacer
 	 */
 	public function __construct(
 		                               $link_table,
@@ -62,7 +62,7 @@ class Mlp_Duplicate_Blogs {
 		TableDuplicator $duplicator,
 		TableReplacer $replacer,
 		TableList    $table_list,
-		StringReplacer $string_replacer
+		TableStringReplacer $string_replacer
 	) {
 
 		$this->link_table  = $link_table;

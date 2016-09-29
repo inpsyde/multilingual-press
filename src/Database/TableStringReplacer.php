@@ -3,12 +3,12 @@
 namespace Inpsyde\MultilingualPress\Database;
 
 /**
- * Interface for all string replacer implementations.
+ * Interface for all table string replacer implementations.
  *
  * @package Inpsyde\MultilingualPress\Database
  * @since   3.0.0
  */
-interface StringReplacer {
+interface TableStringReplacer {
 
 	/**
 	 * Replaces one string with another all given columns of the given table at once.
