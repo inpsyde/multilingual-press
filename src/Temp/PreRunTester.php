@@ -2,10 +2,11 @@
 
 namespace Inpsyde\MultilingualPress\Temp;
 
+use Inpsyde\MultilingualPress\API\WPDBSiteRelations;
+use Inpsyde\MultilingualPress\Database\Table\SiteRelations;
 use Inpsyde\MultilingualPress\Service\Container;
 use Mlp_Network_Plugin_Deactivation;
 use Mlp_Self_Check;
-use Mlp_Site_Relations;
 use Mlp_Update_Plugin_Data;
 
 /**
@@ -52,7 +53,7 @@ class PreRunTester {
 			] );
 
 			// TODO: Get off container, as soon as the API namespace has been refactored.
-			$site_relations = new Mlp_Site_Relations( 'mlp_site_relations' );
+			$site_relations = new WPDBSiteRelations( new SiteRelations( $GLOBALS['wpdb']->base_prefix ) );
 
 			switch ( $self_check->is_current_version( $current_version, $last_version ) ) {
 				case Mlp_Self_Check::NEEDS_INSTALLATION:

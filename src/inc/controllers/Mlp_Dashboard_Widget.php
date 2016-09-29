@@ -1,21 +1,23 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\SiteRelations;
+
 /**
  * Dashboard widget for incomplete translations.
  */
 class Mlp_Dashboard_Widget {
 
 	/**
-	 * @var Mlp_Site_Relations_Interface
+	 * @var SiteRelations
 	 */
 	private $site_relations;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
-	 * @param Mlp_Site_Relations_Interface $site_relations
+	 * @param SiteRelations $site_relations
 	 */
-	public function __construct( Mlp_Site_Relations_Interface $site_relations ) {
+	public function __construct( SiteRelations $site_relations ) {
 
 		$this->site_relations = $site_relations;
 	}
@@ -115,7 +117,7 @@ class Mlp_Dashboard_Widget {
 	 */
 	public function dashboard_widget() {
 
-		$related_blogs = $this->site_relations->get_related_sites();
+		$related_blogs = $this->site_relations->get_related_site_ids();
 		if ( ! $related_blogs ) {
 			?>
 			<p>

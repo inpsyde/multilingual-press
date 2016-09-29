@@ -1,5 +1,6 @@
 <?php
 
+use Inpsyde\MultilingualPress\API\SiteRelations as SiteRelationsAPI;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\Table\ContentRelations;
@@ -17,7 +18,7 @@ use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 class Mlp_Update_Plugin_Data {
 
 	/**
-	 * @var Mlp_Site_Relations_Interface
+	 * @var SiteRelationsAPI
 	 */
 	private $site_relations;
 
@@ -53,13 +54,13 @@ class Mlp_Update_Plugin_Data {
 	 * @param   wpdb                            $wpdb
 	 * @param   VersionNumber                   $current_version
 	 * @param   VersionNumber                   $last_version
-	 * @param Mlp_Site_Relations_Interface $site_relations
+	 * @param SiteRelationsAPI $site_relations
 	 */
 	public function __construct(
 		wpdb                            $wpdb,
 		VersionNumber    $current_version,
 		VersionNumber    $last_version,
-		Mlp_Site_Relations_Interface $site_relations
+		SiteRelationsAPI $site_relations
 	) {
 
 		$this->wpdb = $wpdb;
@@ -150,7 +151,7 @@ class Mlp_Update_Plugin_Data {
 
 			$linked = get_blog_option( $site_id, $option_name, [] );
 			if ( ! empty( $linked ) ) {
-				$inserted += $this->site_relations->set_relation( $site_id, $linked );
+				$inserted += $this->site_relations->insert_relations( $site_id, $linked );
 			}
 
 			delete_blog_option( $site_id, $option_name );

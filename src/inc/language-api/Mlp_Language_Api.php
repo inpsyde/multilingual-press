@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
@@ -33,7 +34,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	private $table_name;
 
 	/**
-	 *@var Mlp_Site_Relations_Interface
+	 *@var SiteRelations
 	 */
 	private $site_relations;
 
@@ -64,7 +65,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 *
 	 * @param   Inpsyde_Property_List_Interface $data
 	 * @param   string                          $table_name
-	 * @param   Mlp_Site_Relations_Interface    $site_relations
+	 * @param   SiteRelations    $site_relations
 	 * @param   Mlp_Content_Relations_Interface $content_relations
 	 * @param   wpdb                            $wpdb
 	 * @param   TypeFactory                     $type_factory      Type factory object.
@@ -72,7 +73,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	public function __construct(
 		Inpsyde_Property_List_Interface $data,
 		$table_name,
-		Mlp_Site_Relations_Interface    $site_relations,
+		SiteRelations    $site_relations,
 		Mlp_Content_Relations_Interface $content_relations,
 		wpdb                            $wpdb,
 		TypeFactory                     $type_factory
@@ -674,7 +675,7 @@ WHERE `http_name` IN( $values )";
 		if ( empty ( $site_id ) )
 			$site_id = get_current_blog_id();
 
-		$sites = $this->site_relations->get_related_sites( $site_id );
+		$sites = $this->site_relations->get_related_site_ids( $site_id );
 
 		if ( empty ( $sites ) )
 			return [];

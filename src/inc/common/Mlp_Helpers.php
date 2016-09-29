@@ -1,6 +1,6 @@
 <?php
 
-use Inpsyde\MultilingualPress\Common\Factory;
+use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 
 /**
@@ -40,15 +40,12 @@ class Mlp_Helpers {
 		if ( empty ( $languages ) )
 			return [];
 
-		/** @var Mlp_Site_Relations $site_relations */
+		/** @var SiteRelations $site_relations */
 		$site_relations = self::$dependencies[ 'site_relations' ];
 
 		// Do we need related blogs only?
 		if ( FALSE === $not_related ) {
-			$related_blogs = $site_relations->get_related_sites(
-				get_current_blog_id(),
-				! is_user_logged_in()
-			);
+			$related_blogs = $site_relations->get_related_site_ids( get_current_blog_id() );
 
 			// No related blogs? Leave here.
 			if ( empty ( $related_blogs ) )

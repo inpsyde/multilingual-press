@@ -1,8 +1,10 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\WPDBSiteRelations;
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Core;
+use Inpsyde\MultilingualPress\Database\Table\SiteRelations;
 use Inpsyde\MultilingualPress\Database\WPDBTableList;
 use Inpsyde\MultilingualPress\Factory\Error;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -415,7 +417,7 @@ class Multilingual_Press {
 
 		$type_factory = $this->container['multilingualpress.type_factory'];
 
-		$site_relations = new \Mlp_Site_Relations( 'mlp_site_relations' );
+		$site_relations = new WPDBSiteRelations( new SiteRelations( $GLOBALS['wpdb']->base_prefix ) );
 
 		$this->plugin_data->set( 'site_relations', $site_relations );
 

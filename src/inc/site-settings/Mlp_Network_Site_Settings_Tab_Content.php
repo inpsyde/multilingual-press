@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\Setting;
 
 /**
@@ -22,7 +23,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	private $language_api;
 
 	/**
-	 * @var Mlp_Site_Relations_Interface
+	 * @var SiteRelations
 	 */
 	private $relations;
 
@@ -37,13 +38,13 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	 * @param Mlp_Language_Api_Interface   $language_api Language API.
 	 * @param Setting                      $setting      Options page data.
 	 * @param int                          $blog_id      Blog ID
-	 * @param Mlp_Site_Relations_Interface $relations    Site relations.
+	 * @param SiteRelations $relations    Site relations.
 	 */
 	public function __construct(
 		Mlp_Language_Api_Interface $language_api,
 		Setting $setting,
 		$blog_id,
-		Mlp_Site_Relations_Interface $relations
+		SiteRelations $relations
 	) {
 
 		$this->language_api = $language_api;
@@ -237,7 +238,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 					restore_current_blog();
 
 					// Get current settings
-					$related_blogs = $this->relations->get_related_sites( $this->blog_id );
+					$related_blogs = $this->relations->get_related_site_ids( $this->blog_id );
 					$checked       = checked( TRUE, in_array( $blog_id, $related_blogs ), FALSE );
 					$id            = 'related_blog_' . $blog_id;
 					?>

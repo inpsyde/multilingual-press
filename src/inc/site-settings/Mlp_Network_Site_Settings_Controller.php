@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
 
 /**
@@ -153,11 +154,11 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function update_related_blogs( $blog_id ) {
 
-		/** @var Mlp_Site_Relations_Interface $relations */
+		/** @var SiteRelations $relations */
 		$relations   = $this->plugin_data->get( 'site_relations' );
 		$changed     = 0;
 		$new_related = $this->get_new_related_blogs();
-		$old_related = $relations->get_related_sites( $blog_id, FALSE );
+		$old_related = $relations->get_related_site_ids( $blog_id, FALSE );
 
 		// All relations removed.
 		if ( empty ( $new_related ) && ! empty ( $old_related ) )
@@ -166,7 +167,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$add_ids = $this->get_new_relations( $new_related, $old_related );
 
 		if ( ! empty ( $add_ids ) )
-			$changed += $relations->set_relation( $blog_id, $add_ids );
+			$changed += $relations->insert_relations( $blog_id, $add_ids );
 
 		if ( ! empty ( $old_related ) )
 			$changed += $this->delete_unset_relations( $blog_id, $old_related, $new_related, $relations, $changed );
@@ -258,7 +259,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 * @param $changed
 	 * @return int
 	 */
-	private function delete_unset_relations( $blog_id, $old_related, $new_related, Mlp_Site_Relations_Interface $relations, $changed ) {
+	private function delete_unset_relations( $blog_id, $old_related, $new_related, SiteRelations $relations, $changed ) {
 
 		// Delete removed relations.
 		foreach ( $old_related as $old_blog_id ) {

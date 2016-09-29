@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\SiteRelations;
+
 /**
  * Relationships between content blocks (posts, terms, whatever).
  *
@@ -20,7 +22,7 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	private $link_table;
 
 	/**
-	 * @var Mlp_Site_Relations_Interface
+	 * @var SiteRelations
 	 */
 	private $site_relations;
 
@@ -33,13 +35,13 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	 * Constructor. Set up the properties.
 	 *
 	 * @param wpdb                         $wpdb           Database object.
-	 * @param Mlp_Site_Relations_Interface $site_relations Site relations object.
+	 * @param SiteRelations $site_relations Site relations object.
 	 * @param                              $deprecated
 	 * @param string                       $link_table     Link table name.
 	 */
 	public function __construct(
 		wpdb $wpdb,
-		Mlp_Site_Relations_Interface $site_relations,
+		SiteRelations $site_relations,
 		$deprecated,
 		$link_table
 	) {

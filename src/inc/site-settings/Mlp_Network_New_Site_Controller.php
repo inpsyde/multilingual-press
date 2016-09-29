@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\API\SiteRelations;
+
 /**
  * MultilingualPress New Site Controller
  *
@@ -20,7 +23,7 @@ class Mlp_Network_New_Site_Controller {
 	/**
 	 * Language API
 	 *
-	 * @var Mlp_Language_Api_Interface
+	 * @var SiteRelations
 	 */
 	private $site_relation;
 
@@ -28,11 +31,11 @@ class Mlp_Network_New_Site_Controller {
 	 * Constructor
 	 * @wp-hook plugins_loaded
 	 * @param Mlp_Language_Api_Interface   $language_api
-	 * @param Mlp_Site_Relations_Interface $site_relation
+	 * @param SiteRelations $site_relation
 	 */
 	public function __construct(
 		Mlp_Language_Api_Interface   $language_api,
-		Mlp_Site_Relations_Interface $site_relation
+		SiteRelations $site_relation
 	) {
 
 		if ( ! is_network_admin() )
@@ -165,6 +168,6 @@ class Mlp_Network_New_Site_Controller {
 		$new_related = (array) $_POST[ 'related_blogs' ];
 		$related     = array_map( 'intval', $new_related );
 
-		return $this->site_relation->set_relation( $blog_id, $related );
+		return $this->site_relation->insert_relations( $blog_id, $related );
 	}
 }

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\SiteRelations;
+
 /**
  * Data model for advanced post translation. Handles inserts and updates.
  */
@@ -31,7 +33,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	private $post_request_data = [];
 
 	/**
-	 * @var Mlp_Site_Relations_Interface
+	 * @var SiteRelations
 	 */
 	private $relations;
 
@@ -46,13 +48,13 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 * @param                                      $deprecated
 	 * @param Mlp_Translatable_Post_Data_Interface $basic_data
 	 * @param array                                $allowed_post_types
-	 * @param Mlp_Site_Relations_Interface         $relations
+	 * @param SiteRelations         $relations
 	 */
 	public function __construct(
 		$deprecated,
 		Mlp_Translatable_Post_Data_Interface $basic_data,
 		array $allowed_post_types,
-		Mlp_Site_Relations_Interface $relations
+		SiteRelations $relations
 	) {
 
 		$this->basic_data = $basic_data;
@@ -113,7 +115,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 
 		$thumb_data = $this->get_source_thumb_data( $post_id );
 
-		$related_blogs = $this->relations->get_related_sites( $source_blog_id );
+		$related_blogs = $this->relations->get_related_site_ids( $source_blog_id );
 		if ( empty( $related_blogs ) ) {
 			return;
 		}
