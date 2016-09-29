@@ -169,7 +169,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	private function parse_accept_header( $accept_header ) {
 
-		$fields = $this->parser->parse_header( $accept_header );
+		$fields = $this->parser->parse( $accept_header );
 
 		if ( empty ( $fields ) )
 			return $fields;
