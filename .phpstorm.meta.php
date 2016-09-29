@@ -8,6 +8,7 @@ namespace PHPSTORM_META {
 
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,
 			'multilingualpress.properties' instanceof \Inpsyde\MultilingualPress\Common\PluginProperties,
+			'multilingualpress.site_relations' instanceof \Inpsyde\MultilingualPress\API\SiteRelations,
 			'multilingualpress.table.content_relations' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.table.languages' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.table.site_relations' instanceof \Inpsyde\MultilingualPress\Database\Table,
@@ -23,6 +24,7 @@ namespace PHPSTORM_META {
 
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,
 			'multilingualpress.properties' instanceof \Inpsyde\MultilingualPress\Common\PluginProperties,
+			'multilingualpress.site_relations' instanceof \Inpsyde\MultilingualPress\API\SiteRelations,
 			'multilingualpress.table.content_relations' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.table.languages' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.table.site_relations' instanceof \Inpsyde\MultilingualPress\Database\Table,
