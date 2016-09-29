@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Database\WPDBStringReplacer;
 use Inpsyde\MultilingualPress\Database\WPDBTableDuplicator;
 use Inpsyde\MultilingualPress\Database\WPDBTableReplacer;
 
@@ -19,7 +20,8 @@ function mlp_feature_duplicate_blog( Inpsyde_Property_List_Interface $data ) {
 		$wpdb,
 		new WPDBTableDuplicator(),
 		new WPDBTableReplacer(),
-		$data->get( 'table_list' )
+		$data->get( 'table_list' ),
+		new WPDBStringReplacer()
 	);
 	$duplicator->setup();
 }

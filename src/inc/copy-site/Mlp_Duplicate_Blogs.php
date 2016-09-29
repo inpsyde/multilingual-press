@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Database\StringReplacer;
 use Inpsyde\MultilingualPress\Database\TableDuplicator;
 use Inpsyde\MultilingualPress\Database\TableReplacer;
 
@@ -35,6 +36,11 @@ class Mlp_Duplicate_Blogs {
 	private $replacer;
 
 	/**
+	 * @type StringReplacer
+	 */
+	private $string_replacer;
+
+	/**
 	 * @type Mlp_Db_Table_List_Interface
 	 */
 	private $table_names;
@@ -47,13 +53,15 @@ class Mlp_Duplicate_Blogs {
 	 * @param TableDuplicator $duplicator
 	 * @param TableReplacer $replacer
 	 * @param Mlp_Db_Table_List_Interface    $table_names
+	 * @param StringReplacer $string_replacer
 	 */
 	public function __construct(
 		                               $link_table,
 		wpdb                           $wpdb,
 		TableDuplicator $duplicator,
 		TableReplacer $replacer,
-		Mlp_Db_Table_List_Interface    $table_names
+		Mlp_Db_Table_List_Interface    $table_names,
+		StringReplacer $string_replacer
 	) {
 
 		$this->link_table  = $link_table;
@@ -61,6 +69,8 @@ class Mlp_Duplicate_Blogs {
 		$this->duplicator  = $duplicator;
 		$this->replacer  = $replacer;
 		$this->table_names = $table_names;
+
+		$this->string_replacer = $string_replacer;
 	}
 
 	/**
@@ -393,16 +403,14 @@ LIMIT 2";
 			$this->wpdb->comments      => [ 'comment_content' ]
 		];
 
-		$db_replace    = new Mlp_Db_Replace( $this->wpdb );
 		$replaced_rows = 0;
 
 		foreach ( $tables as $table => $columns ) {
-			$replaced_rows += (int) $db_replace->replace_string(
-				null,
+			$replaced_rows += $this->string_replacer->replace_string(
+				$table,
 				$columns,
 				$copy_files->source_url,
-				$copy_files->dest_url,
-				$table
+				$copy_files->dest_url
 			);
 		}
 
