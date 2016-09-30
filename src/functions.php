@@ -52,6 +52,46 @@ function debug( $message ) {
 }
 
 /**
+ * Returns the individual MultilingualPress language code of all (related) sites.
+ *
+ * @since 3.0.0
+ *
+ * @param bool $related_sites_only Optional. Restrict to related sites only? Defaults to true.
+ *
+ * @return string[] An array with site IDs as keys and the individual MultilingualPress language code as values.
+ */
+function get_available_languages( $related_sites_only = true ) {
+
+	// TODO: Do not hard-code the option name, and maybe even get the languages some other way.
+	$languages = (array) get_network_option( null, 'inpsyde_multilingual', [] );
+	if ( ! $languages ) {
+		return [];
+	}
+
+	if ( $related_sites_only ) {
+		$related_site_ids = MultilingualPress::resolve( 'multilingualpress.site_relations' )->get_related_site_ids();
+		if ( ! $related_site_ids ) {
+			return [];
+		}
+
+		// Restrict ro related sites.
+		$languages = array_diff_key( $languages, array_flip( $related_site_ids ) );
+	}
+
+	$available_languages = [];
+
+	// TODO: In the old option, there might also be sites with a "-1" as lang value. Update the option, and set to "".
+	array_walk( $languages, function ( $language_data, $site_id ) use ( &$available_languages ) {
+
+		if ( isset( $language_data['lang'] ) ) {
+			$available_languages[ (int) $site_id ] = (string) $language_data['lang'];
+		}
+	} );
+
+	return $available_languages;
+}
+
+/**
  * Returns the MultilingualPress language for the current site.
  *
  * @since 3.0.0
@@ -94,7 +134,7 @@ function get_site_language( $site_id = 0, $language_only = false ) {
 	$site_id = $site_id ?: get_current_blog_id();
 
 	// TODO: Don't hardcode the option name.
-	$languages = get_site_option( 'inpsyde_multilingual' );
+	$languages = get_network_option( null, 'inpsyde_multilingual' );
 
 	// TODO: Maybe also don't hardcode the 'lang' key...?
 	if ( ! isset( $languages[ $site_id ]['lang'] ) ) {
@@ -178,21 +218,6 @@ namespace {
 	function mlp_is_script_debug_mode() {
 
 		return mlp_is_debug_mode() || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
-	}
-
-	/**
-	 * wrapper of Mlp_Helpers:get_available_languages
-	 * load the available languages
-	 *
-	 * @since    0.1
-	 *
-	 * @param  bool $nonrelated
-	 *
-	 * @return    array Available languages
-	 */
-	function mlp_get_available_languages( $nonrelated = false ) {
-
-		return Mlp_Helpers::get_available_languages( $nonrelated );
 	}
 
 	/**

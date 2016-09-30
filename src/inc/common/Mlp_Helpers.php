@@ -21,59 +21,6 @@ class Mlp_Helpers {
 	private static $dependencies = [];
 
 	/**
-	 * Load the languages set for each blog
-	 *
-	 * @since   0.1
-	 * @static
-	 * @access  public
-	 * @uses    get_site_option, get_blog_option, get_current_blog_id, format_code_lang
-	 * @param   $not_related | filter out non-related blogs? By default
-	 * @return  array $options
-	 */
-	public static function get_available_languages( $not_related = FALSE ) {
-
-		$related_blogs = [];
-
-		// Get all registered blogs
-		$languages = get_site_option( 'inpsyde_multilingual' );
-
-		if ( empty ( $languages ) )
-			return [];
-
-		/** @var SiteRelations $site_relations */
-		$site_relations = self::$dependencies[ 'site_relations' ];
-
-		// Do we need related blogs only?
-		if ( FALSE === $not_related ) {
-			$related_blogs = $site_relations->get_related_site_ids( get_current_blog_id() );
-
-			// No related blogs? Leave here.
-			if ( empty ( $related_blogs ) )
-				return [];
-		}
-
-		$options = [];
-
-		// Loop through blogs
-		foreach ( $languages as $language_blogid => $language_data ) {
-
-			// no blogs with a link to other blogs
-			if ( empty ( $language_data[ 'lang' ] ) || '-1' === $language_data[ 'lang' ] )
-				continue;
-
-			// Filter out blogs that are not related
-			if ( ! $not_related && ! in_array( $language_blogid, $related_blogs ) )
-				continue;
-
-			$lang = $language_data[ 'lang' ];
-
-			$options[ $language_blogid ] = $lang;
-		}
-
-		return $options;
-	}
-
-	/**
 	 * Load the alternative title
 	 * set for each blog language
 	 *
@@ -248,31 +195,6 @@ class Mlp_Helpers {
 			'strict'            => FALSE, // get exact translations only
 		 ];
 		$params = wp_parse_args( $args, $defaults );
-
-		// TODO: Eventually remove this, with version 2.2.0 + 4 at the earliest.
-		switch ( $params[ 'link_text' ] ) {
-			case 'text_flag':
-				_doing_it_wrong(
-					__METHOD__,
-					"The value 'text_flag' for the argument 'link_text' is deprecated and will be removed in the future. Please use the value TRUE for the argument 'display_flag', and choose one of the possible options for the argument 'link_text'.",
-					'2.2.0'
-				);
-
-				$params[ 'link_text' ] = 'native';
-				$params[ 'display_flag' ] = TRUE;
-				break;
-
-			case 'flag':
-				_doing_it_wrong(
-					__METHOD__,
-					"The value 'flag' for the argument 'link_text' is deprecated and will be removed in the future. Please use the value TRUE for the argument 'display_flag', and the value 'none' for the argument 'link_text'.",
-					'2.2.0'
-				);
-
-				$params[ 'link_text' ] = 'none';
-				$params[ 'display_flag' ] = TRUE;
-				break;
-		}
 
 		/**
 		 * Get the Language API object.

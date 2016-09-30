@@ -59,7 +59,7 @@ class Mlp_Redirect_Frontend {
 			return $url;
 		}
 
-		$languages = mlp_get_available_languages();
+		$languages = \Inpsyde\MultilingualPress\get_available_languages();
 		if ( empty( $languages[ $site_id ] ) ) {
 			return $url;
 		}
