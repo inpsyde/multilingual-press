@@ -45,7 +45,7 @@ class Mlp_Install_Requirements implements Mlp_Requirements_Interface {
 	public function get_min_wp_version() {
 
 		return $this->type_factory->create_version_number( [
-			'4.2.0',
+			'4.4.0',
 		] );
 	}
 
