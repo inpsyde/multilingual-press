@@ -1,5 +1,7 @@
 <?php
 
+use Inpsyde\MultilingualPress\API\ContentRelations;
+
 /**
  * Class Mlp_Relationship_Changer
  *
@@ -42,7 +44,7 @@ class Mlp_Relationship_Changer {
 	private $new_post_title = '';
 
 	/**
-	 * @type Mlp_Content_Relations_Interface
+	 * @type ContentRelations
 	 */
 	private $content_relations;
 

@@ -6,6 +6,7 @@ namespace PHPSTORM_META {
 		new \Inpsyde\MultilingualPress\Service\Container            => [
 			'' == '@',
 
+			'multilingualpress.content_relations' instanceof \Inpsyde\MultilingualPress\API\ContentRelations,
 			'multilingualpress.content_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,
 			'multilingualpress.languages_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
@@ -22,6 +23,7 @@ namespace PHPSTORM_META {
 		\Inpsyde\MultilingualPress\MultilingualPress::resolve( '' ) => [
 			'' == '@',
 
+			'multilingualpress.content_relations' instanceof \Inpsyde\MultilingualPress\API\ContentRelations,
 			'multilingualpress.content_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,
 			'multilingualpress.languages_table' instanceof \Inpsyde\MultilingualPress\Database\Table,

@@ -1,10 +1,12 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\WPDBContentRelations;
 use Inpsyde\MultilingualPress\API\WPDBSiteRelations;
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Core;
-use Inpsyde\MultilingualPress\Database\Table\SiteRelations;
+use Inpsyde\MultilingualPress\Database\Table\ContentRelationsTable;
+use Inpsyde\MultilingualPress\Database\Table\SiteRelationsTable;
 use Inpsyde\MultilingualPress\Database\WPDBTableList;
 use Inpsyde\MultilingualPress\Factory\Error;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -417,7 +419,9 @@ class Multilingual_Press {
 
 		$type_factory = $this->container['multilingualpress.type_factory'];
 
-		$site_relations = new WPDBSiteRelations( new SiteRelations( $GLOBALS['wpdb']->base_prefix ) );
+		$content_relations_table = new ContentRelationsTable( $GLOBALS['wpdb']->base_prefix );
+
+		$site_relations = new WPDBSiteRelations( new SiteRelationsTable( $GLOBALS['wpdb']->base_prefix ) );
 
 		$this->plugin_data->set( 'site_relations', $site_relations );
 
@@ -425,19 +429,13 @@ class Multilingual_Press {
 
 		$table_list = new WPDBTableList( $this->wpdb );
 
-		$link_table = $this->wpdb->base_prefix . 'multilingual_linked';
 		$this->plugin_data->set( 'module_manager', new Mlp_Module_Manager( 'state_modules' ) );
 		$this->plugin_data->set( 'site_manager', new Mlp_Module_Manager( 'inpsyde_multilingual' ) );
 		$this->plugin_data->set( 'table_list', $table_list );
-		$this->plugin_data->set( 'link_table', $link_table );
+		$this->plugin_data->set( 'link_table', $content_relations_table->name() );
 		$this->plugin_data->set(
 			'content_relations',
-			new Mlp_Content_Relations(
-				$this->wpdb,
-				$site_relations,
-				null,
-				$link_table
-			)
+			new WPDBContentRelations( $content_relations_table, $site_relations )
 		);
 		$this->plugin_data->set(
 			'language_api',

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\ContentRelations;
+
 /**
  * Prepare data for the term edit form.
  *
@@ -25,7 +27,7 @@ class Mlp_Term_Translation_Presenter {
 	private $key_base;
 
 	/**
-	 * @var Mlp_Content_Relations_Interface
+	 * @var ContentRelations
 	 */
 	private $content_relations;
 
@@ -37,12 +39,12 @@ class Mlp_Term_Translation_Presenter {
 	/**
 	 * Constructor. Set up the properties.
 	 *
-	 * @param Mlp_Content_Relations_Interface   $content_relations Content relations object.
+	 * @param ContentRelations   $content_relations Content relations object.
 	 * @param Inpsyde_Nonce_Validator_Interface $nonce             Nonce validator object.
 	 * @param string                            $key_base          Term key base.
 	 */
 	public function __construct(
-		Mlp_Content_Relations_Interface $content_relations,
+		ContentRelations $content_relations,
 		Inpsyde_Nonce_Validator_Interface $nonce,
 		$key_base
 	) {

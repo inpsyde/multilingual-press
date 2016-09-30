@@ -1,5 +1,7 @@
 <?php
 
+use Inpsyde\MultilingualPress\API\ContentRelations;
+
 /**
  * Mlp_Term_Translation_Controller
  *
@@ -25,7 +27,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	private $presenter;
 
 	/**
-	 * @var Mlp_Content_Relations_Interface
+	 * @var ContentRelations
 	 */
 	private $content_relations;
 
@@ -35,9 +37,9 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	private $key_base = 'mlp[term_translation]';
 
 	/**
-	 * @param Mlp_Content_Relations_Interface $content_relations
+	 * @param ContentRelations $content_relations
 	 */
-	public function __construct( Mlp_Content_Relations_Interface $content_relations ) {
+	public function __construct( ContentRelations $content_relations ) {
 
 		$this->content_relations = $content_relations;
 

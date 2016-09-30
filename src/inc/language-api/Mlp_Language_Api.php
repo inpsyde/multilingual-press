@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
@@ -44,7 +45,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	private $wpdb;
 
 	/**
-	 * @var Mlp_Content_Relations_Interface
+	 * @var ContentRelations
 	 */
 	private $content_relations;
 
@@ -66,7 +67,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 * @param   Inpsyde_Property_List_Interface $data
 	 * @param   string                          $table_name
 	 * @param   SiteRelations    $site_relations
-	 * @param   Mlp_Content_Relations_Interface $content_relations
+	 * @param   ContentRelations $content_relations
 	 * @param   wpdb                            $wpdb
 	 * @param   TypeFactory                     $type_factory      Type factory object.
 	 */
@@ -74,7 +75,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		Inpsyde_Property_List_Interface $data,
 		$table_name,
 		SiteRelations    $site_relations,
-		Mlp_Content_Relations_Interface $content_relations,
+		ContentRelations $content_relations,
 		wpdb                            $wpdb,
 		TypeFactory                     $type_factory
 	) {

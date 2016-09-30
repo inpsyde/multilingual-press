@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\ContentRelations;
+
 /**
  * Data model for post translation. Handles inserts of new posts only.
  */
@@ -11,7 +13,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	private $allowed_post_types;
 
 	/**
-	 * @var Mlp_Content_Relations_Interface
+	 * @var ContentRelations
 	 */
 	private $content_relations;
 
@@ -44,13 +46,13 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 * @param                                 $deprecated
 	 * @param array                           $allowed_post_types
 	 * @param string                          $link_table
-	 * @param Mlp_Content_Relations_Interface $content_relations
+	 * @param ContentRelations $content_relations
 	 */
 	function __construct(
 		$deprecated,
 		array $allowed_post_types,
 		$link_table,
-		Mlp_Content_Relations_Interface $content_relations
+		ContentRelations $content_relations
 	) {
 
 		$this->allowed_post_types = $allowed_post_types;

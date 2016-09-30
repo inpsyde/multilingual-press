@@ -24,6 +24,14 @@ final class APIServiceProvider implements ServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container->share( 'multilingualpress.content_relations', function ( Container $container ) {
+
+			return new WPDBContentRelations(
+				$container['multilingualpress.content_relations_table'],
+				$container['multilingualpress.site_relations']
+			);
+		} );
+
 		$container->share( 'multilingualpress.site_relations', function ( Container $container ) {
 
 			return new WPDBSiteRelations( $container['multilingualpress.site_relations_table'] );
