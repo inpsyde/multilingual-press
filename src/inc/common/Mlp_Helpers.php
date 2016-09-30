@@ -1,6 +1,5 @@
 <?php
 
-use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 
 /**

@@ -52,16 +52,14 @@ class PreRunTester {
 				$properties->version(),
 			] );
 
-			// TODO: Get off container, as soon as the API namespace has been refactored.
-			$site_relations = new WPDBSiteRelations( new SiteRelationsTable( $GLOBALS['wpdb']->base_prefix ) );
-
 			switch ( $self_check->is_current_version( $current_version, $last_version ) ) {
 				case Mlp_Self_Check::NEEDS_INSTALLATION:
 					( new Mlp_Update_Plugin_Data(
 						$wpdb,
 						$current_version,
 						$last_version,
-						$site_relations
+						$container['multilingualpress.site_relations'],
+						$container['multilingualpress.table_installer']
 					) )->install_plugin();
 					break;
 
@@ -70,7 +68,8 @@ class PreRunTester {
 						$wpdb,
 						$current_version,
 						$last_version,
-						$site_relations
+						$container['multilingualpress.site_relations'],
+						$container['multilingualpress.table_installer']
 					) )->update( new Mlp_Network_Plugin_Deactivation() );
 					break;
 			}

@@ -8,7 +8,6 @@ use Inpsyde\MultilingualPress\Core;
 use Inpsyde\MultilingualPress\Database\Table\ContentRelationsTable;
 use Inpsyde\MultilingualPress\Database\Table\SiteRelationsTable;
 use Inpsyde\MultilingualPress\Database\WPDBTableList;
-use Inpsyde\MultilingualPress\Factory\Error;
 use Inpsyde\MultilingualPress\Module\NetworkOptionModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
 
@@ -420,36 +419,25 @@ class Multilingual_Press {
 
 		$type_factory = $this->container['multilingualpress.type_factory'];
 
-		$content_relations_table = new ContentRelationsTable( $GLOBALS['wpdb']->base_prefix );
+		$site_relations = $this->container['multilingualpress.site_relations'];
 
-		$site_relations = new WPDBSiteRelations( new SiteRelationsTable( $GLOBALS['wpdb']->base_prefix ) );
-
-		$this->plugin_data->set( 'site_relations', $site_relations );
-
-		$this->plugin_data->set( 'type_factory', $type_factory );
-
-		$table_list = new WPDBTableList( $this->wpdb );
-
-		$this->plugin_data->set( 'module_manager', new NetworkOptionModuleManager( 'state_modules' ) );
+		$this->plugin_data->set( 'module_manager', new NetworkOptionModuleManager( 'multilingualpress_modules' ) );
 		// TODO: Check if the "site manager" really should be a module manager object...
 		$this->plugin_data->set( 'site_manager', new NetworkOptionModuleManager( 'inpsyde_multilingual' ) );
-		$this->plugin_data->set( 'table_list', $table_list );
-		$this->plugin_data->set( 'link_table', $content_relations_table->name() );
-		$this->plugin_data->set(
-			'content_relations',
-			new WPDBContentRelations( $content_relations_table, $site_relations )
-		);
-		$this->plugin_data->set(
-			'language_api',
-			new Mlp_Language_Api(
-				$this->plugin_data,
-				'mlp_languages',
-				$site_relations,
-				$this->plugin_data->get( 'content_relations' ),
-				$this->wpdb,
-				$type_factory
-			)
-		);
+
+		$this->plugin_data->set( 'site_relations', $site_relations );
+		$this->plugin_data->set( 'type_factory', $type_factory );
+		$this->plugin_data->set( 'table_list', $this->container['multilingualpress.table_list'] );
+		$this->plugin_data->set( 'link_table', $this->container['multilingualpress.content_relations_table']->name() );
+		$this->plugin_data->set( 'content_relations', $this->container['multilingualpress.content_relations'] );
+		$this->plugin_data->set( 'language_api', new Mlp_Language_Api(
+			$this->plugin_data,
+			'mlp_languages',
+			$site_relations,
+			$this->plugin_data->get( 'content_relations' ),
+			$this->wpdb,
+			$type_factory
+		) );
 
 		// TODO: Remove as soon as the whole Assets structures have been refactored (Locations -> Assets\Locator).
 		$plugin_dir_path = $this->properties->plugin_dir_path();
@@ -465,8 +453,6 @@ class Multilingual_Press {
 			$type_factory
 		) );
 		$this->plugin_data->set( 'locations', $locations );
-
-		$this->plugin_data->set( 'error_factory', new Error() );
 	}
 
 	/**
@@ -474,9 +460,7 @@ class Multilingual_Press {
 	 */
 	private function prepare_helpers() {
 
-		Mlp_Helpers::insert_dependency( 'site_relations', $this->plugin_data->get( 'site_relations' ) );
 		Mlp_Helpers::insert_dependency( 'language_api', $this->plugin_data->get( 'language_api' ) );
-		Mlp_Helpers::insert_dependency( 'error_factory', $this->plugin_data->get( 'error_factory' )  );
 	}
 
 }

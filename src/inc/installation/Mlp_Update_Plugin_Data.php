@@ -6,7 +6,7 @@ use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\Table\ContentRelationsTable;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 use Inpsyde\MultilingualPress\Database\Table\SiteRelationsTable;
-use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
+use Inpsyde\MultilingualPress\Database\TableInstaller;
 
 /**
  * MultilingualPress Installation
@@ -49,18 +49,25 @@ class Mlp_Update_Plugin_Data {
 	private $is_pre_4_6;
 
 	/**
+	 * @var TableInstaller
+	 */
+	private $table_installer;
+
+	/**
 	 * Constructor
 	 *
 	 * @param   wpdb                            $wpdb
 	 * @param   VersionNumber                   $current_version
 	 * @param   VersionNumber                   $last_version
 	 * @param SiteRelations $site_relations
+	 * @param TableInstaller $table_installer
 	 */
 	public function __construct(
 		wpdb                            $wpdb,
 		VersionNumber    $current_version,
 		VersionNumber    $last_version,
-		SiteRelations $site_relations
+		SiteRelations $site_relations,
+		TableInstaller $table_installer
 	) {
 
 		$this->wpdb = $wpdb;
@@ -70,6 +77,8 @@ class Mlp_Update_Plugin_Data {
 		$this->last_version = $last_version;
 
 		$this->site_relations = $site_relations;
+
+		$this->table_installer = $table_installer;
 
 		// TODO: With WordPress 4.6 + 2, just use `get_sites()`, and remove `$this->is_pre_4_6`.
 		// Get the unaltered WordPress version.
@@ -225,11 +234,9 @@ class Mlp_Update_Plugin_Data {
 
 		$table_prefix = $this->wpdb->base_prefix;
 
-		// TODO: Inject (empty) installer in constructor.
-		$installer = new WPDBTableInstaller();
-		$installer->install( new LanguagesTable( $table_prefix ) );
-		$installer->install( new ContentRelationsTable( $table_prefix ) );
-		$installer->install( new SiteRelationsTable( $table_prefix ) );
+		$this->table_installer->install( new LanguagesTable( $table_prefix ) );
+		$this->table_installer->install( new ContentRelationsTable( $table_prefix ) );
+		$this->table_installer->install( new SiteRelationsTable( $table_prefix ) );
 
 		return update_site_option( 'mlp_version', $this->current_version );
 	}

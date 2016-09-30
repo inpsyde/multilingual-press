@@ -54,21 +54,6 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 		 */
 		do_action( 'mlp_modules_save_fields', $_POST );
 
-		// backwards compatibility
-		if ( has_action( 'mlp_settings_save_fields' ) ) {
-			_doing_it_wrong(
-				'mlp_settings_save_fields',
-				'mlp_settings_save_fields is deprecated, use mlp_modules_save_fields instead.',
-				'1.2'
-			);
-
-			/**
-			 * @see mlp_modules_save_fields
-			 * @deprecated
-			 */
-			do_action( 'mlp_settings_save_fields' );
-		}
-
 		wp_safe_redirect( network_admin_url( 'settings.php?page=mlp&message=updated' ) );
 		mlp_exit();
 	}

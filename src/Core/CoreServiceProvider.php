@@ -30,6 +30,7 @@ final class CoreServiceProvider implements ServiceProvider {
 		$container['multilingualpress.module_manager'] = function () {
 
 			// TODO: Maybe store the option name somewhere? But then again, who else really needs to know it?
+			// TODO: Migration: The old option name was "state_modules", and it stored "on" and "off" values, no bools.
 			return new Module\NetworkOptionModuleManager( 'multilingualpress_modules' );
 		};
 	}
