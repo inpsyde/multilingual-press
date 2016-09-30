@@ -10,7 +10,7 @@ use Inpsyde\MultilingualPress\Database\Table;
  * @package Inpsyde\MultilingualPress\Database\Table
  * @since   3.0.0
  */
-final class Languages implements Table {
+final class LanguagesTable implements Table {
 
 	/**
 	 * @var string

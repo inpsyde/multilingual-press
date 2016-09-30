@@ -1,11 +1,11 @@
 <?php
 
-use Inpsyde\MultilingualPress\API\SiteRelations as SiteRelationsAPI;
+use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 use Inpsyde\MultilingualPress\Database\Table;
-use Inpsyde\MultilingualPress\Database\Table\ContentRelations;
-use Inpsyde\MultilingualPress\Database\Table\Languages;
-use Inpsyde\MultilingualPress\Database\Table\SiteRelations;
+use Inpsyde\MultilingualPress\Database\Table\ContentRelationsTable;
+use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
+use Inpsyde\MultilingualPress\Database\Table\SiteRelationsTable;
 use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 
 /**
@@ -18,7 +18,7 @@ use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 class Mlp_Update_Plugin_Data {
 
 	/**
-	 * @var SiteRelationsAPI
+	 * @var SiteRelations
 	 */
 	private $site_relations;
 
@@ -54,13 +54,13 @@ class Mlp_Update_Plugin_Data {
 	 * @param   wpdb                            $wpdb
 	 * @param   VersionNumber                   $current_version
 	 * @param   VersionNumber                   $last_version
-	 * @param SiteRelationsAPI $site_relations
+	 * @param SiteRelations $site_relations
 	 */
 	public function __construct(
 		wpdb                            $wpdb,
 		VersionNumber    $current_version,
 		VersionNumber    $last_version,
-		SiteRelationsAPI $site_relations
+		SiteRelations $site_relations
 	) {
 
 		$this->wpdb = $wpdb;
@@ -115,18 +115,18 @@ class Mlp_Update_Plugin_Data {
 		$table_prefix = $this->wpdb->base_prefix;
 
 		if ( $last_version === 1 ) {
-			$this->import_active_languages( new Languages( $table_prefix ) );
+			$this->import_active_languages( new LanguagesTable( $table_prefix ) );
 		}
 
 		if ( version_compare( $last_version, '2.0.4', '<' ) ) {
 			$installer = new WPDBTableInstaller();
-			$installer->install( new SiteRelations( $table_prefix ) );
+			$installer->install( new SiteRelationsTable( $table_prefix ) );
 
 			$this->import_site_relations();
 		}
 
 		if ( version_compare( $last_version, '2.3.2', '<' ) ) {
-			$this->update_type_column( new ContentRelations( $table_prefix ) );
+			$this->update_type_column( new ContentRelationsTable( $table_prefix ) );
 		}
 
 		// remove unneeded plugin data
@@ -227,9 +227,9 @@ class Mlp_Update_Plugin_Data {
 
 		// TODO: Inject (empty) installer in constructor.
 		$installer = new WPDBTableInstaller();
-		$installer->install( new Languages( $table_prefix ) );
-		$installer->install( new ContentRelations( $table_prefix ) );
-		$installer->install( new SiteRelations( $table_prefix ) );
+		$installer->install( new LanguagesTable( $table_prefix ) );
+		$installer->install( new ContentRelationsTable( $table_prefix ) );
+		$installer->install( new SiteRelationsTable( $table_prefix ) );
 
 		return update_site_option( 'mlp_version', $this->current_version );
 	}

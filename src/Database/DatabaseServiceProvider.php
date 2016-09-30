@@ -24,19 +24,19 @@ final class DatabaseServiceProvider implements ServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$container->share( 'multilingualpress.table.content_relations', function () {
+		$container->share( 'multilingualpress.content_relations_table', function () {
 
-			return new Table\ContentRelations( $GLOBALS['wpdb']->base_prefix );
+			return new Table\ContentRelationsTable( $GLOBALS['wpdb']->base_prefix );
 		} );
 
-		$container->share( 'multilingualpress.table.languages', function () {
+		$container->share( 'multilingualpress.languages_table', function () {
 
-			return new Table\Languages( $GLOBALS['wpdb']->base_prefix );
+			return new Table\LanguagesTable( $GLOBALS['wpdb']->base_prefix );
 		} );
 
-		$container->share( 'multilingualpress.table.site_relations', function () {
+		$container->share( 'multilingualpress.site_relations_table', function () {
 
-			return new Table\SiteRelations( $GLOBALS['wpdb']->base_prefix );
+			return new Table\SiteRelationsTable( $GLOBALS['wpdb']->base_prefix );
 		} );
 
 		$container->share( 'multilingualpress.table_duplicator', function () {

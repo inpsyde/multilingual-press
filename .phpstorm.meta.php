@@ -6,12 +6,12 @@ namespace PHPSTORM_META {
 		new \Inpsyde\MultilingualPress\Service\Container            => [
 			'' == '@',
 
+			'multilingualpress.content_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,
+			'multilingualpress.languages_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.properties' instanceof \Inpsyde\MultilingualPress\Common\PluginProperties,
 			'multilingualpress.site_relations' instanceof \Inpsyde\MultilingualPress\API\SiteRelations,
-			'multilingualpress.table.content_relations' instanceof \Inpsyde\MultilingualPress\Database\Table,
-			'multilingualpress.table.languages' instanceof \Inpsyde\MultilingualPress\Database\Table,
-			'multilingualpress.table.site_relations' instanceof \Inpsyde\MultilingualPress\Database\Table,
+			'multilingualpress.site_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.table_duplicator' instanceof \Inpsyde\MultilingualPress\Database\TableDuplicator,
 			'multilingualpress.table_installer' instanceof \Inpsyde\MultilingualPress\Database\TableInstaller,
 			'multilingualpress.table_list' instanceof \Inpsyde\MultilingualPress\Database\TableList,
@@ -22,12 +22,12 @@ namespace PHPSTORM_META {
 		\Inpsyde\MultilingualPress\MultilingualPress::resolve( '' ) => [
 			'' == '@',
 
+			'multilingualpress.content_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,
+			'multilingualpress.languages_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.properties' instanceof \Inpsyde\MultilingualPress\Common\PluginProperties,
 			'multilingualpress.site_relations' instanceof \Inpsyde\MultilingualPress\API\SiteRelations,
-			'multilingualpress.table.content_relations' instanceof \Inpsyde\MultilingualPress\Database\Table,
-			'multilingualpress.table.languages' instanceof \Inpsyde\MultilingualPress\Database\Table,
-			'multilingualpress.table.site_relations' instanceof \Inpsyde\MultilingualPress\Database\Table,
+			'multilingualpress.site_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.table_duplicator' instanceof \Inpsyde\MultilingualPress\Database\TableDuplicator,
 			'multilingualpress.table_installer' instanceof \Inpsyde\MultilingualPress\Database\TableInstaller,
 			'multilingualpress.table_list' instanceof \Inpsyde\MultilingualPress\Database\TableList,

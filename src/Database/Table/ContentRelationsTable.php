@@ -4,13 +4,15 @@ namespace Inpsyde\MultilingualPress\Database\Table;
 
 use Inpsyde\MultilingualPress\Database\Table;
 
+// TODO: This (as well as the Content Relations API) will be (functionally) refactored after the structural one.
+
 /**
- * Site relations table.
+ * Content relations table.
  *
  * @package Inpsyde\MultilingualPress\Database\Table
  * @since   3.0.0
  */
-final class SiteRelations implements Table {
+final class ContentRelationsTable implements Table {
 
 	/**
 	 * @var string
@@ -39,7 +41,7 @@ final class SiteRelations implements Table {
 	public function columns_without_default_content() {
 
 		return [
-			'ID',
+			'ml_id',
 		];
 	}
 
@@ -65,7 +67,7 @@ final class SiteRelations implements Table {
 	public function keys_sql() {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
-		return "KEY (site_1,site_2),\n\tUNIQUE KEY site_combinations (site_1,site_2)";
+		return "KEY (ml_blogid,ml_elementid)";
 	}
 
 	/**
@@ -77,7 +79,7 @@ final class SiteRelations implements Table {
 	 */
 	public function name() {
 
-		return "{$this->prefix}mlp_site_relations";
+		return "{$this->prefix}multilingual_linked";
 	}
 
 	/**
@@ -89,7 +91,7 @@ final class SiteRelations implements Table {
 	 */
 	public function primary_key() {
 
-		return 'ID';
+		return 'ml_id';
 	}
 
 	/**
@@ -102,9 +104,12 @@ final class SiteRelations implements Table {
 	public function schema() {
 
 		return [
-			'ID'     => 'int unsigned NOT NULL AUTO_INCREMENT',
-			'site_1' => 'bigint(20) NOT NULL',
-			'site_2' => 'bigint(20) NOT NULL',
+			'ml_id'               => 'int unsigned NOT NULL AUTO_INCREMENT',
+			'ml_source_blogid'    => 'bigint(20) NOT NULL',
+			'ml_source_elementid' => 'bigint(20) NOT NULL',
+			'ml_blogid'           => 'bigint(20) NOT NULL',
+			'ml_elementid'        => 'bigint(20) NOT NULL',
+			'ml_type'             => 'varchar(20) NOT NULL',
 		];
 	}
 }
