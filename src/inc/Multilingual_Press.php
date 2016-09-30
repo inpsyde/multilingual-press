@@ -9,6 +9,7 @@ use Inpsyde\MultilingualPress\Database\Table\ContentRelationsTable;
 use Inpsyde\MultilingualPress\Database\Table\SiteRelationsTable;
 use Inpsyde\MultilingualPress\Database\WPDBTableList;
 use Inpsyde\MultilingualPress\Factory\Error;
+use Inpsyde\MultilingualPress\Module\NetworkOptionModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
 
 /**
@@ -429,8 +430,9 @@ class Multilingual_Press {
 
 		$table_list = new WPDBTableList( $this->wpdb );
 
-		$this->plugin_data->set( 'module_manager', new Mlp_Module_Manager( 'state_modules' ) );
-		$this->plugin_data->set( 'site_manager', new Mlp_Module_Manager( 'inpsyde_multilingual' ) );
+		$this->plugin_data->set( 'module_manager', new NetworkOptionModuleManager( 'state_modules' ) );
+		// TODO: Check if the "site manager" really should be a module manager object...
+		$this->plugin_data->set( 'site_manager', new NetworkOptionModuleManager( 'inpsyde_multilingual' ) );
 		$this->plugin_data->set( 'table_list', $table_list );
 		$this->plugin_data->set( 'link_table', $content_relations_table->name() );
 		$this->plugin_data->set(

@@ -1,5 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Module\Module;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
+
 /**
  * Advanced translator.
  */
@@ -154,21 +157,17 @@ class Mlp_Advanced_Translator {
 	 */
 	private function register_setting() {
 
-		/** @var Mlp_Module_Manager_Interface $module_manager */
+		/** @var ModuleManager $module_manager */
 		$module_manager = $this->plugin_data->get( 'module_manager' );
 
-		$display_name = __( 'Advanced Translator', 'multilingual-press' );
-
-		$description = __(
-			'Use the WYSIWYG editor to write all translations on one screen, including thumbnails and taxonomies.',
-			'multilingual-press'
-		);
-
-		return $module_manager->register( [
-			'display_name' => $display_name,
-			'slug'         => 'class-' . __CLASS__,
-			'description'  => $description,
-		 ] );
+		return $module_manager->register_module( new Module( 'advanced_translator', [
+			'description' => __(
+				'Use the WYSIWYG editor to write all translations on one screen, including thumbnails and taxonomies.',
+				'multilingual-press'
+			),
+			'name'        => __( 'Advanced Translator', 'multilingual-press' ),
+			'active'      => true,
+		] ) );
 	}
 
 	/**

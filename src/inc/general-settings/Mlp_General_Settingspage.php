@@ -1,6 +1,7 @@
 <?php
 
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
 
 /**
  * Settings page controller.
@@ -22,7 +23,7 @@ class Mlp_General_Settingspage {
 	private $model;
 
 	/**
-	 * @var Mlp_Module_Manager_Interface
+	 * @var ModuleManager
 	 */
 	private $modules;
 
@@ -34,10 +35,10 @@ class Mlp_General_Settingspage {
 	/**
 	 * Constructor
 	 *
-	 * @param Mlp_Module_Manager_Interface $modules
+	 * @param ModuleManager $modules
 	 * @param Mlp_Assets_Interface         $assets
 	 */
-	public function __construct( Mlp_Module_Manager_Interface $modules, Mlp_Assets_Interface $assets ) {
+	public function __construct( ModuleManager $modules, Mlp_Assets_Interface $assets ) {
 
 		$this->modules = $modules;
 		$this->assets = $assets;

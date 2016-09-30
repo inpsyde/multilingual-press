@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Module\Module;
+
 /**
  * Class Mlp_General_Settings_View
  *
@@ -54,17 +57,17 @@ class Mlp_General_Settings_View {
 			<?php wp_nonce_field( $this->module_mapper->get_nonce_action() ); ?>
 			<table class="mlp-admin-feature-table">
 				<?php
-				foreach ( $modules as $slug => $module ) {
+				foreach ( $modules as $id => $module ) {
 					/**
 					 * Filter the visibility of the module in the features table.
 					 *
 					 * @param bool $invisible Should the module be hidden?
 					 */
-					if ( apply_filters( "mlp_dont_show_module_$slug", false ) ) {
+					if ( apply_filters( "mlp_dont_show_module_$id", false ) ) {
 						continue;
 					}
 
-					echo $this->module_row( $slug, $module );
+					echo $this->module_row( $module );
 				}
 
 				/**
@@ -87,71 +90,33 @@ class Mlp_General_Settings_View {
 	/**
 	 * Create markup for activation rows.
 	 *
-	 * @param  string $slug
-	 * @param  array  $module
+	 * @param Module $module
 	 * @return string
 	 */
-	protected function module_row( $slug, $module ) {
+	protected function module_row( Module $module ) {
 
-		// backwards compatibility check
-		if ( is_array( $module['state'] ) && isset( $module['state']['state'] ) ) {
-			$module['state'] = $module['state']['state'];
-		}
+		$is_active = $module->is_active();
 
-		$class = 'on' === $module['state'] ? 'active' : 'inactive';
-		$name  = "mlp_state_$slug";
-		$title = $this->get_module_title( $module );
-		$desc  = $this->get_module_description( $module );
+		$class = $is_active ? 'active' : 'inactive';
+
+		$name  = 'mlp_state_' . $module->id();
 
 		ob_start();
 		?>
 		<tr class="<?php echo esc_attr( $class ); ?>">
 			<td class="check-column">
 				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
-					id="id_<?php echo esc_attr( $name ); ?>"<?php checked( 'on', $module['state'] ); ?>>
+					id="id_<?php echo esc_attr( $name ); ?>"<?php checked( $is_active ); ?>>
 			</td>
 			<td>
 				<label for="id_<?php echo esc_attr( $name ); ?>" class="mlp-block-label">
-					<strong><?php echo esc_html( $title ); ?></strong><br>
-					<?php echo esc_html( $desc ); ?>
+					<strong><?php echo esc_html( $module->name() ); ?></strong><br>
+					<?php echo esc_html( $module->description() ); ?>
 				</label>
-				<?php
-				if ( isset( $module['callback'] ) ) {
-					call_user_func( $module['callback'] );
-				}
-				?>
 			</td>
 		</tr>
 
 		<?php
 		return ob_get_clean();
-	}
-
-	/**
-	 * Get module title.
-	 *
-	 * @param $module
-	 * @return string
-	 */
-	private function get_module_title( array $module ) {
-
-		if ( isset ( $module[ 'display_name_callback' ] ) )
-			return call_user_func( $module[ 'display_name_callback' ] );
-
-		return $module[ 'display_name' ];
-	}
-
-	/**
-	 * Get module description.
-	 *
-	 * @param array $module
-	 * @return string
-	 */
-	private function get_module_description( array $module ) {
-
-		if ( isset ( $module[ 'description_callback' ] ) )
-			return call_user_func( $module[ 'description_callback' ] );
-
-		return $module[ 'description' ];
 	}
 }

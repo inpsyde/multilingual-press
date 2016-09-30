@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
 
 /**
  * Main controller for the Redirect feature.
@@ -13,7 +14,7 @@ class Mlp_Redirect {
 	private $language_api;
 
 	/**
-	 * @var Mlp_Module_Manager_Interface
+	 * @var ModuleManager
 	 */
 	private $modules;
 
@@ -25,12 +26,12 @@ class Mlp_Redirect {
 	/**
 	 * Constructor.
 	 *
-	 * @param Mlp_Module_Manager_Interface $modules
+	 * @param ModuleManager $modules
 	 * @param Mlp_Language_Api_Interface   $language_api
 	 * @param                              $deprecated
 	 */
 	public function __construct(
-		Mlp_Module_Manager_Interface $modules,
+		ModuleManager $modules,
 		Mlp_Language_Api_Interface $language_api,
 		$deprecated
 	) {

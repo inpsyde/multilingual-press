@@ -1,4 +1,8 @@
 <?php
+
+use Inpsyde\MultilingualPress\Module\Module;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
+
 /**
  * Handles the registration of the redirect feature.
  *
@@ -11,17 +15,17 @@
 class Mlp_Redirect_Registration {
 
 	/**
-	 * @var Mlp_Module_Manager_Interface
+	 * @var ModuleManager
 	 */
-	private $modules;
+	private $module_manager;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Mlp_Module_Manager_Interface $modules
+	 * @param ModuleManager $module_manager
 	 */
-	public function __construct( Mlp_Module_Manager_Interface $modules ) {
-		$this->modules   = $modules;
+	public function __construct( ModuleManager $module_manager ) {
+		$this->module_manager   = $module_manager;
 	}
 
 	/**
@@ -31,10 +35,10 @@ class Mlp_Redirect_Registration {
 	 */
 	public function setup() {
 
-		return $this->modules->register( [
-			'display_name'	=> __( 'HTTP Redirect', 'multilingual-press' ),
-			'slug'			=> 'class-' . __CLASS__,
-			'description'   => __( 'Redirect visitors according to browser language settings.', 'multilingual-press' ),
-		] );
+		return $this->module_manager->register_module( new Module( 'redirect', [
+			'description' => __( 'Redirect visitors according to browser language settings.', 'multilingual-press' ),
+			'name'        => __( 'HTTP Redirect', 'multilingual-press' ),
+			'active'      => false,
+		] ) );
 	}
 }

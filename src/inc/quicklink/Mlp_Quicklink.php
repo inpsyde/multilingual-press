@@ -2,6 +2,8 @@
 
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
+use Inpsyde\MultilingualPress\Module\Module;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
 
 /**
  * Displays an element link flyout tab in the frontend.
@@ -19,7 +21,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	private $language_api;
 
 	/**
-	 * @var Mlp_Module_Manager_Interface
+	 * @var ModuleManager
 	 */
 	private $module_manager;
 
@@ -36,12 +38,12 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	/**
 	 * Constructor. Sets up the properties.
 	 *
-	 * @param Mlp_Module_Manager_Interface $module_manager Module manager object.
+	 * @param ModuleManager $module_manager Module manager object.
 	 * @param Mlp_Language_Api_Interface   $language_api   Language API object.
 	 * @param Mlp_Assets_Interface         $assets         Asset manager object.
 	 */
 	public function __construct(
-		Mlp_Module_Manager_Interface $module_manager,
+		ModuleManager $module_manager,
 		Mlp_Language_Api_Interface $language_api,
 		Mlp_Assets_Interface $assets
 	) {
@@ -120,12 +122,11 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 */
 	private function register_setting() {
 
-		return $this->module_manager->register( [
-			'description'  => __( 'Show link to translations in post content.', 'multilingual-press' ),
-			'display_name' => __( 'Quicklink', 'multilingual-press' ),
-			'slug'         => 'class-' . __CLASS__,
-			'state'        => 'off',
-		] );
+		return $this->module_manager->register_module( new Module( 'quicklinks', [
+			'description' => __( 'Show link to translations in post content.', 'multilingual-press' ),
+			'name'        => __( 'Quicklinks', 'multilingual-press' ),
+			'active'      => false,
+		] ) );
 	}
 
 	/**

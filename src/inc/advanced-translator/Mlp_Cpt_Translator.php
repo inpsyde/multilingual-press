@@ -1,4 +1,8 @@
 <?php
+
+use Inpsyde\MultilingualPress\Module\Module;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
+
 /**
  * Module Name:	MultilingualPress Custom Post Type Module
  * Description:	Allow MlP functionality for specific custom post types
@@ -81,40 +85,17 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 */
 	private function register_setting() {
 
-		/** @var Mlp_Module_Manager_Interface $module_manager */
+		/** @var ModuleManager $module_manager */
 		$module_manager = $this->plugin_data->get( 'module_manager' );
 
-		$display_name = __( 'Custom Post Type Translator', 'multilingual-press' );
-
-		$description = __(
-			'Enable translation of custom post types. Creates a second settings box below this. The post types must be activated for the whole network or on the main site.',
-			'multilingual-press'
-		);
-
-		return $module_manager->register( [
-			'display_name' => $display_name,
-			'slug'         => 'class-' . __CLASS__,
-			'description'  => $description,
-			'callback'     => [ $this, 'extend_settings_description' ],
-		] );
-	}
-
-	/**
-	 * Explain when there are no custom post types.
-	 *
-	 * @return string
-	 */
-	public function extend_settings_description() {
-
-		$found = $this->get_custom_post_types();
-
-		if ( empty ( $found ) ) {
-			return '<p class="mlp-callback-indent"><em>'
-				. __( 'No custom post type found.', 'multilingual-press' )
-				. '</em></p>';
-		}
-
-		return '';
+		return $module_manager->register_module( new Module( 'post_type_support', [
+			'description' => __(
+				'Enable translation of custom post types. Creates a second settings box below this. The post types must be activated for the whole network or on the main site.',
+				'multilingual-press'
+			),
+			'name'        => __( 'Custom Post Type Translator', 'multilingual-press' ),
+			'active'      => false,
+		] ) );
 	}
 
 	/**

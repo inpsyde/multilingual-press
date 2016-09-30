@@ -1,5 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Module\Module;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
+
 /**
  * Class Mlp_General_Settings_Module_Mapper
  *
@@ -10,9 +13,9 @@
 class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface {
 
 	/**
-	 * @var Mlp_Module_Manager_Interface
+	 * @var ModuleManager
 	 */
-	private $modules;
+	private $module_manager;
 
 	/**
 	 * @var string
@@ -20,11 +23,11 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 	private $nonce_action = 'mlp_modules';
 
 	/**
-	 * @param Mlp_Module_Manager_Interface $modules
+	 * @param ModuleManager $module_manager
 	 */
-	public function __construct( Mlp_Module_Manager_Interface $modules ) {
+	public function __construct( ModuleManager $module_manager ) {
 
-		$this->modules = $modules;
+		$this->module_manager = $module_manager;
 	}
 
 	/**
@@ -76,28 +79,29 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 	 */
 	private function set_module_activation_status() {
 
-		$modules = $this->modules->get_modules();
-		$slugs = array_keys( $modules );
+		$modules = $this->module_manager->get_modules();
 
-		foreach ( $slugs as $slug ) {
-			if ( isset( $_POST[ "mlp_state_$slug" ] ) && '1' === $_POST[ "mlp_state_$slug" ] ) {
-				$this->modules->activate( $slug );
+		$ids = array_keys( $modules );
+
+		foreach ( $ids as $id ) {
+			if ( isset( $_POST[ "mlp_state_$id" ] ) && '1' === $_POST[ "mlp_state_$id" ] ) {
+				$this->module_manager->activate_module( $id );
 			} else {
-				$this->modules->deactivate( $slug );
+				$this->module_manager->deactivate_module( $id );
 			}
 		}
 
-		$this->modules->save();
+		$this->module_manager->save_modules();
 	}
 
 	/**
-	 * @param string $status
+	 * @param int $state
 	 *
-	 * @return array
+	 * @return Module[]
 	 */
-	public function get_modules( $status = 'all' ) {
+	public function get_modules( $state = ModuleManager::MODULE_STATE_ALL ) {
 
-		return $this->modules->get_modules( $status );
+		return $this->module_manager->get_modules( $state );
 	}
 
 	/**

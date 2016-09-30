@@ -1,4 +1,8 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Module\Module;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
+
 /**
  * Interface Mlp_Module_Mapper_Interface
  *
@@ -11,9 +15,9 @@ interface Mlp_Module_Mapper_Interface {
 	/**
 	 * Constructor
 	 *
-	 * @param Mlp_Module_Manager_Interface $modules
+	 * @param ModuleManager $modules
 	 */
-	public function __construct( Mlp_Module_Manager_Interface $modules );
+	public function __construct( ModuleManager $modules );
 
 	/**
 	 * Save module options.
@@ -25,10 +29,10 @@ interface Mlp_Module_Mapper_Interface {
 	/**
 	 * Wrapper for the same method of $modules.
 	 *
-	 * @param string $status
-	 * @return array
+	 * @param int $state
+	 * @return Module[]
 	 */
-	public function get_modules( $status = 'all' );
+	public function get_modules( $state = ModuleManager::MODULE_STATE_ALL );
 
 	/**
 	 * Get name for nonce action parameter.

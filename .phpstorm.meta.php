@@ -10,6 +10,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.content_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,
 			'multilingualpress.languages_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
+			'multilingualpress.module_manager' instanceof \Inpsyde\MultilingualPress\Module\ModuleManager,
 			'multilingualpress.properties' instanceof \Inpsyde\MultilingualPress\Common\PluginProperties,
 			'multilingualpress.site_relations' instanceof \Inpsyde\MultilingualPress\API\SiteRelations,
 			'multilingualpress.site_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,

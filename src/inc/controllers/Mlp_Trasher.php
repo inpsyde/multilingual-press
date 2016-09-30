@@ -1,12 +1,15 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Module\Module;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
+
 /**
  * Provides a new post meta and checkbox to trash the posts through the related blogs.
  */
 class Mlp_Trasher {
 
 	/**
-	 * @var Mlp_Module_Manager_Interface
+	 * @var ModuleManager
 	 */
 	private $module_manager;
 
@@ -18,9 +21,9 @@ class Mlp_Trasher {
 	/**
 	 * Constructor. Sets up the properties.
 	 *
-	 * @param Mlp_Module_Manager_Interface $module_manager Module manager object.
+	 * @param ModuleManager $module_manager Module manager object.
 	 */
-	public function __construct( Mlp_Module_Manager_Interface $module_manager ) {
+	public function __construct( ModuleManager $module_manager ) {
 
 		$this->module_manager = $module_manager;
 	}
@@ -173,15 +176,13 @@ class Mlp_Trasher {
 	 */
 	private function register_setting() {
 
-		$description = __(
-			'This module provides a new post meta and checkbox to trash the posts. If you enable the checkbox and move a post to the trash MultilingualPress also will trash the linked posts.',
-			'multilingual-press'
-		);
-
-		return $this->module_manager->register( [
-			'display_name' => __( 'Trasher', 'multilingual-press' ),
-			'slug'         => 'class-' . __CLASS__,
-			'description'  => $description,
-		] );
+		return $this->module_manager->register_module( new Module( 'trasher', [
+			'description' => __(
+				'This module provides a new post meta and checkbox to trash the posts. If you enable the checkbox and move a post to the trash MultilingualPress also will trash the linked posts.',
+				'multilingual-press'
+			),
+			'name'        => __( 'Trasher', 'multilingual-press' ),
+			'active'      => false,
+		] ) );
 	}
 }
