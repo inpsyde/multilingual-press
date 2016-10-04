@@ -3,9 +3,13 @@
 namespace Inpsyde\MultilingualPress;
 
 use BadMethodCallException;
+use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
+use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\ServiceProvider;
+use RuntimeException;
 
 /**
  * MultilingualPress front controller.
@@ -30,8 +34,8 @@ final class MultilingualPress {
 	 */
 	private $is_bootstrapped = false;
 
-	/**TODO: Adapt type to Module\ModuleServiceProvider.
-	 * @var mixed[]
+	/**
+	 * @var ModuleServiceProvider[]
 	 */
 	private $modules = [];
 
@@ -88,7 +92,9 @@ final class MultilingualPress {
 		if ( $provider instanceof BootstrappableServiceProvider ) {
 			$this->bootstrappables[] = $provider;
 
-			// TODO: Take care of module service providers here...
+			if ( $provider instanceof ModuleServiceProvider ) {
+				$this->modules[] = $provider;
+			}
 		}
 
 		return $this;
@@ -185,10 +191,23 @@ final class MultilingualPress {
 	 */
 	private function register_modules() {
 
-		// Get module manager.
+		$module_manager = static::$container['multilingualpress.module_manager'];
+		if ( ! $module_manager instanceof ModuleManager ) {
+			throw new RuntimeException( 'Cannot register modules. Invalid module manager instance.' );
+		}
 
-		// Check if instance of Module Manager interface. If not, throw RuntimeException.
+		array_walk(
+			$this->modules,
+			function ( ModuleServiceProvider $provider ) use ( $module_manager ) {
 
-		// TODO: Register modules...
+				if (
+					$provider->register_module( $module_manager )
+					&& $provider instanceof ActivationAwareModuleServiceProvider
+				) {
+
+					$provider->activate();
+				}
+			}
+		);
 	}
 }
