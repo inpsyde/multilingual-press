@@ -63,7 +63,7 @@ function debug( $message ) {
 function get_available_languages( $related_sites_only = true ) {
 
 	// TODO: Do not hard-code the option name, and maybe even get the languages some other way.
-	$languages = (array) get_network_option( null, 'inpsyde_multilingual', [] );
+	$languages = get_network_option( null, 'inpsyde_multilingual', [] );
 	if ( ! $languages ) {
 		return [];
 	}
@@ -134,7 +134,7 @@ function get_site_language( $site_id = 0, $language_only = false ) {
 	$site_id = $site_id ?: get_current_blog_id();
 
 	// TODO: Don't hardcode the option name.
-	$languages = get_network_option( null, 'inpsyde_multilingual' );
+	$languages = get_network_option( null, 'inpsyde_multilingual', [] );
 
 	// TODO: Maybe also don't hardcode the 'lang' key...?
 	if ( ! isset( $languages[ $site_id ]['lang'] ) ) {

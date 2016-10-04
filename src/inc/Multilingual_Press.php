@@ -126,9 +126,7 @@ class Multilingual_Press {
 		if ( is_network_admin() )
 			return TRUE;
 
-		$relations = get_site_option( 'inpsyde_multilingual', [] );
-
-		if ( array_key_exists( get_current_blog_id(), $relations ) )
+		if ( array_key_exists( get_current_blog_id(), (array) get_site_option( 'inpsyde_multilingual', [] ) ) )
 			return TRUE;
 
 		return FALSE;
@@ -272,8 +270,8 @@ class Multilingual_Press {
 		$site_relations = $this->plugin_data->get( 'site_relations' );
 		$site_relations->delete_relation( $blog_id );
 
-		// Update site option
-		$blogs = (array) get_site_option( 'inpsyde_multilingual', [] );
+		// Update network option.
+		$blogs = get_network_option( null, 'inpsyde_multilingual', [] );
 		if ( isset( $blogs[ $blog_id ] ) ) {
 			unset( $blogs[ $blog_id ] );
 			update_site_option( 'inpsyde_multilingual', $blogs );
@@ -354,7 +352,7 @@ class Multilingual_Press {
 			return FALSE;
 
 		// Get blogs related to the current blog
-		$all_blogs = get_site_option( 'inpsyde_multilingual', [] );
+		$all_blogs = (array) get_site_option( 'inpsyde_multilingual', [] );
 
 		if ( 1 > count( $all_blogs ) && is_super_admin() )
 			return TRUE;

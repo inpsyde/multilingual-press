@@ -3,6 +3,9 @@
 namespace Inpsyde\MultilingualPress;
 
 use BadMethodCallException;
+use Inpsyde\MultilingualPress\Installation\Installer;
+use Inpsyde\MultilingualPress\Installation\SystemChecker;
+use Inpsyde\MultilingualPress\Installation\Updater;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
@@ -134,8 +137,7 @@ final class MultilingualPress {
 		class_exists( 'Mlp_Load_Controller' ) or require __DIR__ . '/inc/autoload/Mlp_Load_Controller.php';
 		new \Mlp_Load_Controller( static::$container['multilingualpress.properties']->plugin_dir_path() . '/src/inc' );
 
-		// TODO: Refactor according to new architecure.
-		if ( ! ( new Temp\PreRunTester() )->test( static::$container ) ) {
+		if ( ! $this->check_installation() ) {
 			return false;
 		}
 
@@ -171,6 +173,50 @@ final class MultilingualPress {
 	}
 
 	/**
+	 * Checks (and adapts) the current MultilingualPress installation.
+	 *
+	 * @return bool Whether or not MultilingualPress is installed properly.
+	 */
+	private function check_installation() {
+
+		$properties = static::$container['multilingualpress.properties'];
+
+		$type_factory = static::$container['multilingualpress.type_factory'];
+
+		$system_checker = new SystemChecker( $properties, $type_factory );
+
+		$installation_check = $system_checker->check_installation();
+
+		if ( SystemChecker::PLUGIN_DEACTIVATED === $installation_check ) {
+			return false;
+		}
+
+		if ( SystemChecker::INSTALLATION_OK === $installation_check ) {
+			$installed_version = $type_factory->create_version_number( [
+				// TODO: Don't hardcode the option.
+				get_network_option( null, 'mlp_version' ),
+			] );
+
+			$current_version = $type_factory->create_version_number( [
+				$properties->version(),
+			] );
+
+			// The container is not yet bootstrapped, so it's passed to avoid any unnecessary instantiation.
+			switch ( $system_checker->check_version( $installed_version, $current_version ) ) {
+				case SystemChecker::NEEDS_INSTALLATION:
+					( new Installer( static::$container ) )->install( $current_version );
+					break;
+
+				case SystemChecker::NEEDS_UPGRADE:
+					( new Updater( static::$container ) )->update( $installed_version, $current_version );
+					break;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Checks if the current request needs MultilingualPress to register any modules.
 	 *
 	 * @return bool Whether or not MultilingualPress should register any modules.
@@ -181,7 +227,11 @@ final class MultilingualPress {
 			return true;
 		}
 
-		return array_key_exists( get_current_blog_id(), (array) get_site_option( 'inpsyde_multilingual', [] ) );
+		return array_key_exists(
+			get_current_blog_id(),
+			// TODO: Don't hardcode the option, and also maybe even check some other way.
+			(array) get_network_option( null, 'inpsyde_multilingual', [] )
+		);
 	}
 
 	/**
@@ -192,9 +242,6 @@ final class MultilingualPress {
 	private function register_modules() {
 
 		$module_manager = static::$container['multilingualpress.module_manager'];
-		if ( ! $module_manager instanceof ModuleManager ) {
-			throw new RuntimeException( 'Cannot register modules. Invalid module manager instance.' );
-		}
 
 		array_walk(
 			$this->modules,

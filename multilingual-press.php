@@ -19,6 +19,7 @@ use Inpsyde\MultilingualPress\Core\CoreServiceProvider;
 use Inpsyde\MultilingualPress\Core\ImmutablePluginProperties;
 use Inpsyde\MultilingualPress\Database\DatabaseServiceProvider;
 use Inpsyde\MultilingualPress\Factory\FactoryProvider;
+use Inpsyde\MultilingualPress\Installation\InstallationServiceProvider;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
 
@@ -52,6 +53,7 @@ function bootstrap() {
 		->register_service_provider( new APIServiceProvider() )
 		->register_service_provider( new DatabaseServiceProvider() )
 		->register_service_provider( new FactoryProvider() )
+		->register_service_provider( new InstallationServiceProvider() )
 		->register_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() );
 
 	/**
