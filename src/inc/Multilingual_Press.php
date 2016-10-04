@@ -1,13 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\API\WPDBContentRelations;
-use Inpsyde\MultilingualPress\API\WPDBSiteRelations;
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Core;
-use Inpsyde\MultilingualPress\Database\Table\ContentRelationsTable;
-use Inpsyde\MultilingualPress\Database\Table\SiteRelationsTable;
-use Inpsyde\MultilingualPress\Database\WPDBTableList;
 use Inpsyde\MultilingualPress\Module\NetworkOptionModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
 
@@ -399,6 +394,7 @@ class Multilingual_Press {
 		// Use correct language for html element
 		add_filter( 'language_attributes', [ $this, 'language_attributes' ] );
 
+		// TODO: Move the following block to ~\Core\CoreServiceProvider as soon as the Language API has been refactored.
 		$translations = new Core\FrontEnd\AlternateLanguages\UnfilteredTranslations(
 			$this->plugin_data->get( 'language_api' )
 		);
@@ -421,7 +417,7 @@ class Multilingual_Press {
 
 		$site_relations = $this->container['multilingualpress.site_relations'];
 
-		$this->plugin_data->set( 'module_manager', new NetworkOptionModuleManager( 'multilingualpress_modules' ) );
+		$this->plugin_data->set( 'module_manager', $this->container['multilingualpress.module_manager'] );
 		// TODO: Check if the "site manager" really should be a module manager object...
 		$this->plugin_data->set( 'site_manager', new NetworkOptionModuleManager( 'inpsyde_multilingual' ) );
 
