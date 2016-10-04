@@ -21,38 +21,11 @@ class AlternativeLanguageTitles {
 	private $cache_key = 'mlp_alternative_language_titles';
 
 	/**
-	 * Updates the cache entry for the alternative language title of the updated site.
-	 *
-	 * @since   3.0.0
-	 * @wp-hook mlp_blogs_save_fields
-	 *
-	 * @return bool Whether or not any alternative language titles were updated.
-	 */
-	public function update() {
-
-		$site_id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : get_current_blog_id();
-		if ( 1 > $site_id ) {
-			return false;
-		}
-
-		$titles = wp_cache_get( $this->cache_key, $this->cache_group );
-		if ( ! isset( $titles[ $site_id ] ) ) {
-			return false;
-		}
-
-		unset( $titles[ $site_id ] );
-
-		wp_cache_set( $this->cache_key, $titles, $this->cache_group );
-
-		return true;
-	}
-
-	/**
 	 * Returns the alternative language title for the site with the given ID.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $site_id Site ID.
+	 * @param int $site_id Optional. Site ID. Defaults to 0.
 	 *
 	 * @return string The alternative language title for the site with the given ID.
 	 */
@@ -83,5 +56,32 @@ class AlternativeLanguageTitles {
 		wp_cache_set( $this->cache_key, $titles, $this->cache_group );
 
 		return $title;
+	}
+
+	/**
+	 * Updates the cache entry for the alternative language title of the updated site.
+	 *
+	 * @since   3.0.0
+	 * @wp-hook mlp_blogs_save_fields
+	 *
+	 * @return bool Whether or not any alternative language titles were updated.
+	 */
+	public function update() {
+
+		$site_id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : get_current_blog_id();
+		if ( 1 > $site_id ) {
+			return false;
+		}
+
+		$titles = wp_cache_get( $this->cache_key, $this->cache_group );
+		if ( ! isset( $titles[ $site_id ] ) ) {
+			return false;
+		}
+
+		unset( $titles[ $site_id ] );
+
+		wp_cache_set( $this->cache_key, $titles, $this->cache_group );
+
+		return true;
 	}
 }
