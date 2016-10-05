@@ -66,7 +66,6 @@ class Multilingual_Press {
 	public function setup() {
 
 		$this->prepare_plugin_data();
-		$this->load_assets();
 		$this->prepare_helpers();
 
 		if ( ! $this->is_active_site() )
@@ -160,33 +159,6 @@ class Multilingual_Press {
 	}
 
 	/**
-	 * Register assets internally.
-	 *
-	 * @return void
-	 */
-	public function load_assets() {
-
-		/** @type Mlp_Assets $assets */
-		$assets = $this->plugin_data->get( 'assets' );
-
-		$admin_url = admin_url();
-		$admin_url = parse_url( $admin_url, PHP_URL_PATH );
-		$admin_url = esc_url( $admin_url );
-
-		$assets->add( 'mlp-admin', 'admin.js', [ 'backbone' ], [
-			'mlpSettings' => [ 'urlRoot' => $admin_url, ],
-		] );
-
-		$assets->add( 'mlp_admin_css', 'admin.css' );
-
-		$assets->add( 'mlp-frontend', 'frontend.js' );
-
-		$assets->add( 'mlp_frontend_css', 'frontend.css' );
-
-		add_action( 'init', [ $assets, 'register' ], 0 );
-	}
-
-	/**
 	 * Create network settings page.
 	 *
 	 * @return void
@@ -195,7 +167,7 @@ class Multilingual_Press {
 
 		$settings = new Mlp_General_Settingspage(
 			$this->plugin_data->get( 'module_manager' ),
-			$this->plugin_data->get( 'assets' )
+			$this->container['multilingualpress.asset_manager']
 		);
 		add_action( 'plugins_loaded', [ $settings, 'setup' ], 8 );
 
@@ -217,7 +189,7 @@ class Multilingual_Press {
 
 		$settings = new Mlp_General_Settingspage(
 			$this->plugin_data->get( 'site_manager' ),
-			$this->plugin_data->get( 'assets' )
+			$this->container['multilingualpress.asset_manager']
 		);
 		$settings->setup();
 		add_action( 'plugins_loaded', [ $settings, 'setup' ], 8 );
@@ -434,19 +406,8 @@ class Multilingual_Press {
 		) );
 
 		// TODO: Remove as soon as the whole Assets structures have been refactored (Locations -> Assets\Locator).
-		$plugin_dir_path = $this->properties->plugin_dir_path();
-		$plugin_dir_url = $this->properties->plugin_dir_url();
-		$locations = new Mlp_Internal_Locations();
-		$locations->add_dir( $plugin_dir_path, $plugin_dir_url, 'plugin' );
-		$locations->add_dir( "$plugin_dir_path/assets/css", "$plugin_dir_url/assets/css", 'css' );
-		$locations->add_dir( "$plugin_dir_path/assets/js", "$plugin_dir_url/assets/js", 'js' );
-		$locations->add_dir( "$plugin_dir_path/assets/images", "$plugin_dir_url/assets/images", 'images' );
-		$locations->add_dir( "$plugin_dir_path/assets/images/flags", "$plugin_dir_url/assets/images/flags", 'flags' );
-		$this->plugin_data->set( 'assets', new Mlp_Assets(
-			$locations,
-			$type_factory
-		) );
-		$this->plugin_data->set( 'locations', $locations );
+		$this->plugin_data->set( 'assets', $this->container['multilingualpress.asset_manager'] );
+		$this->plugin_data->set( 'locations', $this->container['multilingualpress.internal_locations'] );
 	}
 
 	/**

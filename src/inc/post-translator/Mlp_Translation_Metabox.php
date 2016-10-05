@@ -119,7 +119,7 @@ class Mlp_Translation_Metabox {
 		}
 
 		$assets = $this->plugin_data->get( 'assets' );
-		$assets->provide( [ 'mlp-admin', 'mlp_admin_css' ] );
+		//$assets->provide( [ 'mlp-admin', 'mlp_admin_css' ] );
 	}
 
 	/**

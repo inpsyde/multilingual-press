@@ -50,7 +50,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	private $frozen = FALSE;
 
 	/**
-	 * @type Mlp_Internal_Locations
+	 * @type \Inpsyde\MultilingualPress\Core\InternalLocations
 	 */
 	private $locations;
 
@@ -92,25 +92,25 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 			return $this->locations;
 
 		if ( 'css_url' === $name )
-			return $this->locations->get_dir( 'css', 'url' );
+			return $this->locations->get( 'css', 'url' );
 
 		if ( 'js_url' === $name )
-			return $this->locations->get_dir( 'js', 'url' );
+			return $this->locations->get( 'js', 'url' );
 
 		if ( 'flag_url' === $name )
-			return $this->locations->get_dir( 'flags', 'url' );
+			return $this->locations->get( 'flags', 'url' );
 
 		if ( 'flag_path' === $name )
-			return $this->locations->get_dir( 'flags', 'path' );
+			return $this->locations->get( 'flags', 'path' );
 
 		if ( 'image_url' === $name )
-			return $this->locations->get_dir( 'images', 'url' );
+			return $this->locations->get( 'images', 'url' );
 
 		if ( 'plugin_dir_path' === $name )
-			return $this->locations->get_dir( 'plugin', 'path' );
+			return $this->locations->get( 'plugin', 'path' );
 
 		if ( 'plugin_url' === $name )
-			return $this->locations->get_dir( 'plugin', 'url' );
+			return $this->locations->get( 'plugin', 'url' );
 
 		if ( isset ( $this->properties[ $name ] ) )
 			return $this->properties[ $name ];

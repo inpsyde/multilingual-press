@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Module\Module;
@@ -11,9 +12,9 @@ use Inpsyde\MultilingualPress\Module\ModuleManager;
 class Mlp_Quicklink implements Mlp_Updatable {
 
 	/**
-	 * @var Mlp_Assets_Interface
+	 * @var AssetManager
 	 */
-	private $assets;
+	private $asset_manager;
 
 	/**
 	 * @var Mlp_Language_Api_Interface
@@ -40,19 +41,19 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 *
 	 * @param ModuleManager $module_manager Module manager object.
 	 * @param Mlp_Language_Api_Interface   $language_api   Language API object.
-	 * @param Mlp_Assets_Interface         $assets         Asset manager object.
+	 * @param AssetManager         $asset_manager         Asset manager object.
 	 */
 	public function __construct(
 		ModuleManager $module_manager,
 		Mlp_Language_Api_Interface $language_api,
-		Mlp_Assets_Interface $assets
+		AssetManager $asset_manager
 	) {
 
 		$this->module_manager = $module_manager;
 
 		$this->language_api = $language_api;
 
-		$this->assets = $assets;
+		$this->asset_manager = $asset_manager;
 
 		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_quicklink_position' );
 	}
@@ -102,7 +103,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 			return false;
 		}
 
-		return $this->assets->provide( 'mlp_frontend_css' );
+		return $this->asset_manager->enqueue_style( 'multilingualpress' );
 	}
 
 	/**

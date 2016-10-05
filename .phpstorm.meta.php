@@ -6,10 +6,13 @@ namespace PHPSTORM_META {
 		new \Inpsyde\MultilingualPress\Service\Container            => [
 			'' == '@',
 
+			'multilingualpress.asset_factory' instanceof \Inpsyde\MultilingualPress\Asset\AssetFactory,
+			'multilingualpress.asset_manager' instanceof \Inpsyde\MultilingualPress\Asset\AssetManager,
 			'multilingualpress.content_relations' instanceof \Inpsyde\MultilingualPress\API\ContentRelations,
 			'multilingualpress.content_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,
 			'multilingualpress.installer' instanceof \Inpsyde\MultilingualPress\Installation\Installer,
+			'multilingualpress.internal_locations' instanceof \Inpsyde\MultilingualPress\Core\InternalLocations,
 			'multilingualpress.languages_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.module_manager' instanceof \Inpsyde\MultilingualPress\Module\ModuleManager,
 			'multilingualpress.network_plugin_deactivator' instanceof \Inpsyde\MultilingualPress\Installation\NetworkPluginDeactivator,
@@ -28,6 +31,8 @@ namespace PHPSTORM_META {
 		\Inpsyde\MultilingualPress\MultilingualPress::resolve( '' ) => [
 			'' == '@',
 
+			'multilingualpress.asset_factory' instanceof \Inpsyde\MultilingualPress\Asset\AssetFactory,
+			'multilingualpress.asset_manager' instanceof \Inpsyde\MultilingualPress\Asset\AssetManager,
 			'multilingualpress.content_relations' instanceof \Inpsyde\MultilingualPress\API\ContentRelations,
 			'multilingualpress.content_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,

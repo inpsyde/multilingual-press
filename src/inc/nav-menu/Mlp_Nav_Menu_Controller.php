@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Asset\AssetManager;
+
 /**
  * Front controller for language menu items.
  *
@@ -42,23 +45,23 @@ class Mlp_Nav_Menu_Controller {
 	private $language_api;
 
 	/**
-	 * @type Mlp_Assets_Interface
+	 * @type AssetManager
 	 */
-	private $assets;
+	private $asset_manager;
 
 	/**
 	 * Constructor
 	 *
 	 * @param Mlp_Language_Api_Interface $language_api
-	 * @param Mlp_Assets_Interface       $assets
+	 * @param AssetManager       $asset_manager
 	 */
 	public function __construct(
 		Mlp_Language_Api_Interface $language_api,
-		Mlp_Assets_Interface       $assets
+		AssetManager       $asset_manager
 	) {
 
 		$this->language_api = $language_api;
-		$this->assets       = $assets;
+		$this->asset_manager       = $asset_manager;
 	}
 
 	/**
@@ -139,7 +142,7 @@ class Mlp_Nav_Menu_Controller {
 			$this->handle,
 			$this->meta_key,
 			$nonce_validator,
-			$this->assets
+			$this->asset_manager
 		);
 
 		$this->view = new Mlp_Simple_Nav_Menu_Selectors( $this->data );

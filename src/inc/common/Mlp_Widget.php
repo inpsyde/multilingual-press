@@ -1,18 +1,15 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\MultilingualPress;
+
 // TODO: Refactor as soon as using a custom template renderer has been discussed.
 
-// TODO: With WordPress 4.6 + 2, deprecate `insert_asset_instance()` and `register()`, and construcotr-inject `$assets`.
+// TODO: With WordPress 4.6 + 2, deprecate `widget_register()`, and constructor-inject `$asset_manager`.
 
 /**
  * Language Switcher widget.
  */
 class Mlp_Widget extends WP_Widget {
-
-	/**
-	 * @var Mlp_Assets_Interface
-	 */
-	private static $assets;
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -43,18 +40,6 @@ class Mlp_Widget extends WP_Widget {
 	}
 
 	/**
-	 * Sets the assets manager.
-	 *
-	 * @param Mlp_Assets_Interface $assets Assets.
-	 *
-	 * @return void
-	 */
-	public static function insert_asset_instance( Mlp_Assets_Interface $assets ) {
-
-		self::$assets = $assets;
-	}
-
-	/**
 	 * Enqueues the frontend styles.
 	 *
 	 * @wp-hook template_redirect
@@ -68,7 +53,9 @@ class Mlp_Widget extends WP_Widget {
 			return false;
 		}
 
-		return self::$assets->provide( 'mlp_frontend_css' );
+		MultilingualPress::resolve( 'multilingualpress.asset_manager' )->enqueue_style( 'multilingualpress' );
+
+		return true;
 	}
 
 	/**

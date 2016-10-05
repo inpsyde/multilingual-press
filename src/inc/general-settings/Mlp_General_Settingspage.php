@@ -1,5 +1,6 @@
 <?php
 
+use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
@@ -13,9 +14,9 @@ use Inpsyde\MultilingualPress\Module\ModuleManager;
 class Mlp_General_Settingspage {
 
 	/**
-	 * @type Mlp_Assets_Interface
+	 * @type AssetManager
 	 */
-	private $assets;
+	private $asset_manager;
 
 	/**
 	 * @var Mlp_General_Settings_Module_Mapper
@@ -36,12 +37,13 @@ class Mlp_General_Settingspage {
 	 * Constructor
 	 *
 	 * @param ModuleManager $modules
-	 * @param Mlp_Assets_Interface         $assets
+	 * @param AssetManager  $asset_manager
 	 */
-	public function __construct( ModuleManager $modules, Mlp_Assets_Interface $assets ) {
+	public function __construct( ModuleManager $modules, AssetManager $asset_manager ) {
 
 		$this->modules = $modules;
-		$this->assets = $assets;
+
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
@@ -79,7 +81,8 @@ class Mlp_General_Settingspage {
 			[ $view, 'render_page' ]
 		);
 
-		$this->assets->provide( [ 'mlp-admin', 'mlp_admin_css' ] );
+		$this->asset_manager->enqueue_script( 'multilingualpress-admin' );
+		$this->asset_manager->enqueue_style( 'multilingualpress-admin' );
 	}
 
 	/**

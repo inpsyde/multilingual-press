@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Asset\AssetManager;
+
 /**
  * Data read and write for backend nav menu management.
  */
@@ -25,9 +28,9 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 	private $nonce;
 
 	/**
-	 * @var Mlp_Assets_Interface
+	 * @var AssetManager
 	 */
-	private $assets;
+	private $asset_manager;
 
 	/**
 	 * Constructor.
@@ -35,13 +38,13 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 	 * @param string                            $handle
 	 * @param string                            $meta_key
 	 * @param Inpsyde_Nonce_Validator_Interface $nonce
-	 * @param Mlp_Assets_Interface              $assets
+	 * @param AssetManager              $asset_manager
 	 */
 	public function __construct(
 		$handle,
 		$meta_key,
 		Inpsyde_Nonce_Validator_Interface $nonce,
-		Mlp_Assets_Interface $assets
+		AssetManager $asset_manager
 	) {
 
 		$this->handle = $handle;
@@ -50,7 +53,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 
 		$this->nonce = $nonce;
 
-		$this->assets = $assets;
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
@@ -90,7 +93,8 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 	 */
 	public function register_script() {
 
-		$this->assets->provide( [ 'mlp-admin', 'mlp_admin_css' ] );
+		$this->asset_manager->enqueue_script( 'multilingualpress-admin' );
+		$this->asset_manager->enqueue_style( 'multilingualpress-admin' );
 	}
 
 	/**
