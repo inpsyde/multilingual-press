@@ -2,11 +2,11 @@
 
 namespace Inpsyde\MultilingualPress\Installation;
 
-use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
-use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Database\TableInstaller;
 
 /**
- * Performs installation-specific tasks.
+ * MultilingualPress installer.
  *
  * @package Inpsyde\MultilingualPress\Installation
  * @since   3.0.0
@@ -14,40 +14,62 @@ use Inpsyde\MultilingualPress\Service\Container;
 class Installer {
 
 	/**
-	 * @var Container
+	 * @var Table
 	 */
-	private $container;
+	private $content_relations_table;
+
+	/**
+	 * @var Table
+	 */
+	private $languages_table;
+
+	/**
+	 * @var Table
+	 */
+	private $site_relations_table;
+
+	/**
+	 * @var TableInstaller
+	 */
+	private $table_installer;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Container $container Container object.
+	 * @param TableInstaller $table_installer         Table installer object.
+	 * @param Table          $content_relations_table Content relations table object.
+	 * @param Table          $languages_table         Languages table object.
+	 * @param Table          $site_relations_table    Site relations table object.
 	 */
-	public function __construct( Container $container ) {
+	public function __construct(
+		TableInstaller $table_installer,
+		Table $content_relations_table,
+		Table $languages_table,
+		Table $site_relations_table
+	) {
 
-		$this->container = $container;
+		$this->table_installer = $table_installer;
+
+		$this->content_relations_table = $content_relations_table;
+
+		$this->languages_table = $languages_table;
+
+		$this->site_relations_table = $site_relations_table;
 	}
 
 	/**
-	 * Installs the current version of MultilingualPress.
+	 * Performs installation-specific tasks.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param VersionNumber $version MultilingualPress version number.
-	 *
-	 * @return bool Whether or not the current version of MultilingualPress was installed successfully.
+	 * @return void
 	 */
-	public function install( VersionNumber $version ) {
+	public function install() {
 
-		$table_installer = $this->container['multilingualpress.table_installer'];
-
-		$table_installer->install( $this->container['multilingualpress.content_relations_table'] );
-		$table_installer->install( $this->container['multilingualpress.languages_table'] );
-		$table_installer->install( $this->container['multilingualpress.site_relations_table'] );
-
-		// TODO: Don't hardcode the option.
-		return update_network_option( null, 'mlp_version', $version );
+		$this->table_installer->install( $this->content_relations_table );
+		$this->table_installer->install( $this->languages_table );
+		$this->table_installer->install( $this->site_relations_table );
 	}
 }

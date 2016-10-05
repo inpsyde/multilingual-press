@@ -2,8 +2,10 @@
 
 namespace Inpsyde\MultilingualPress\Installation;
 
+use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
-use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Database\TableInstaller;
 use wpdb;
 
 /**
@@ -15,9 +17,9 @@ use wpdb;
 class Updater {
 
 	/**
-	 * @var Container
+	 * @var Table
 	 */
-	private $container;
+	private $content_relations_table;
 
 	/**
 	 * @var wpdb
@@ -25,15 +27,53 @@ class Updater {
 	private $db;
 
 	/**
+	 * @var Table
+	 */
+	private $languages_table;
+
+	/**
+	 * @var SiteRelations
+	 */
+	private $site_relations;
+
+	/**
+	 * @var Table
+	 */
+	private $site_relations_table;
+
+	/**
+	 * @var TableInstaller
+	 */
+	private $table_installer;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Container $container Container object.
+	 * @param TableInstaller $table_installer         Table installer object.
+	 * @param Table          $content_relations_table Content relations table object.
+	 * @param Table          $languages_table         Languages table object.
+	 * @param Table          $site_relations_table    Site relations table object.
+	 * @param SiteRelations  $site_relations          Site relations API.
 	 */
-	public function __construct( Container $container ) {
+	public function __construct(
+		TableInstaller $table_installer,
+		Table $content_relations_table,
+		Table $languages_table,
+		Table $site_relations_table,
+		SiteRelations $site_relations
+	) {
 
-		$this->container = $container;
+		$this->table_installer = $table_installer;
+
+		$this->content_relations_table = $content_relations_table;
+
+		$this->languages_table = $languages_table;
+
+		$this->site_relations_table = $site_relations_table;
+
+		$this->site_relations = $site_relations;
 
 		$this->db = $GLOBALS['wpdb'];
 	}
@@ -43,17 +83,11 @@ class Updater {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param VersionNumber $installed_version Installed MultilingualPress version.
-	 * @param VersionNumber $current_version   Current MultilingualPress version.
+	 * @param VersionNumber  $installed_version       Installed MultilingualPress version.
 	 *
-	 * @return bool Whether or not the plugin data was updated succesffully.
+	 * @return void
 	 */
-	public function update( VersionNumber $installed_version, VersionNumber $current_version ) {
-
-		$this->container['network_plugin_deactivator']->deactivate_plugins( [
-			'disable-acf.php',
-			'mlp-wp-seo-compat.php',
-		] );
+	public function update( VersionNumber $installed_version ) {
 
 		if ( VersionNumber::FALLBACK_VERSION === $installed_version ) {
 			// TODO: Move either to separate class or method on an existing class in the Language API namespace.
@@ -61,9 +95,7 @@ class Updater {
 		}
 
 		if ( version_compare( $installed_version, '2.0.4', '<' ) ) {
-			$this->container['multilingualpress.table_installer']->install(
-				$this->container['multilingualpress.site_relations_table']
-			);
+			$this->table_installer->install( $this->site_relations_table );
 
 			$this->import_site_relations();
 
@@ -74,8 +106,6 @@ class Updater {
 
 		// Remove obsolete plugin data.
 		delete_option( 'inpsyde_companyname' );
-
-		return update_site_option( 'mlp_version', $current_version );
 	}
 
 	/**
@@ -84,8 +114,6 @@ class Updater {
 	 * @return void
 	 */
 	private function import_site_relations() {
-
-		$site_relations = $this->container['multilingualpress.site_relations'];
 
 		// TODO: With WordPress 4.6 + 2, just use `get_sites()`, and remove `$is_pre_4_6`.
 
@@ -98,7 +126,7 @@ class Updater {
 
 			$linked = get_blog_option( $site_id, 'inpsyde_multilingual_blog_relationship', [] );
 			if ( $linked ) {
-				$site_relations->insert_relations( $site_id, $linked );
+				$this->site_relations->insert_relations( $site_id, $linked );
 			}
 
 			delete_blog_option( $site_id, 'inpsyde_multilingual_blog_relationship' );
@@ -112,7 +140,7 @@ class Updater {
 	 */
 	private function update_type_column() {
 
-		$table = $this->container['multilingualpress.content_relations_table']->name();
+		$table = $this->content_relations_table->name();
 
 		$this->db->query( "UPDATE $table set ml_type = 'post' WHERE ml_type NOT IN('post','term')" );
 	}
@@ -129,7 +157,7 @@ class Updater {
 			return;
 		}
 
-		$table = $this->container['multilingualpress.languages_table']->name();
+		$table = $this->languages_table->name();
 
 		$query = "SELECT ID FROM $table WHERE wp_locale = %s OR iso_639_1 = %s";
 

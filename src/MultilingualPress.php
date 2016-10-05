@@ -3,16 +3,12 @@
 namespace Inpsyde\MultilingualPress;
 
 use BadMethodCallException;
-use Inpsyde\MultilingualPress\Installation\Installer;
 use Inpsyde\MultilingualPress\Installation\SystemChecker;
-use Inpsyde\MultilingualPress\Installation\Updater;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
-use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\ServiceProvider;
-use RuntimeException;
 
 /**
  * MultilingualPress front controller.
@@ -41,6 +37,11 @@ final class MultilingualPress {
 	 * @var ModuleServiceProvider[]
 	 */
 	private $modules = [];
+
+	/**@todo Migrate from old 'mlp_version' option.
+	 * @var string
+	 */
+	private $version_option = 'multilingualpress_version';
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -179,11 +180,7 @@ final class MultilingualPress {
 	 */
 	private function check_installation() {
 
-		$properties = static::$container['multilingualpress.properties'];
-
-		$type_factory = static::$container['multilingualpress.type_factory'];
-
-		$system_checker = new SystemChecker( $properties, $type_factory );
+		$system_checker = static::$container['multilingualpress.system_checker'];
 
 		$installation_check = $system_checker->check_installation();
 
@@ -192,25 +189,35 @@ final class MultilingualPress {
 		}
 
 		if ( SystemChecker::INSTALLATION_OK === $installation_check ) {
+			$type_factory = static::$container['multilingualpress.type_factory'];
+
 			$installed_version = $type_factory->create_version_number( [
-				// TODO: Don't hardcode the option.
-				get_network_option( null, 'mlp_version' ),
+				get_network_option( null, $this->version_option ),
 			] );
 
 			$current_version = $type_factory->create_version_number( [
-				$properties->version(),
+				static::$container['multilingualpress.properties']->version(),
 			] );
 
-			// The container is not yet bootstrapped, so it's passed to avoid any unnecessary instantiation.
 			switch ( $system_checker->check_version( $installed_version, $current_version ) ) {
+				case SystemChecker::INSTALLATION_OK:
+					return true;
+
 				case SystemChecker::NEEDS_INSTALLATION:
-					( new Installer( static::$container ) )->install( $current_version );
+					static::$container['multilingualpress.installer']->install();
 					break;
 
 				case SystemChecker::NEEDS_UPGRADE:
-					( new Updater( static::$container ) )->update( $installed_version, $current_version );
+					static::$container['multilingualpress.network_plugin_deactivator']->deactivate_plugins( [
+						'disable-acf.php',
+						'mlp-wp-seo-compat.php',
+					] );
+
+					static::$container['multilingualpress.updater']->update( $installed_version );
 					break;
 			}
+
+			update_network_option( null, $this->version_option, $current_version );
 		}
 
 		return true;

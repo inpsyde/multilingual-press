@@ -24,9 +24,38 @@ final class InstallationServiceProvider implements ServiceProvider  {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.installer'] = function ( Container $container ) {
+
+			return new Installer(
+				$container['multilingualpress.table_installer'],
+				$container['multilingualpress.content_relations_table'],
+				$container['multilingualpress.languages_table'],
+				$container['multilingualpress.site_relations_table']
+			);
+		};
+
 		$container->share( 'multilingualpress.network_plugin_deactivator', function () {
 
 			return new MatchingNetworkPluginDeactivator();
 		} );
+
+		$container['multilingualpress.system_checker'] = function ( Container $container ) {
+
+			return new SystemChecker(
+				$container['multilingualpress.properties'],
+				$container['multilingualpress.type_factory']
+			);
+		};
+
+		$container['multilingualpress.updater'] = function ( Container $container ) {
+
+			return new Updater(
+				$container['multilingualpress.table_installer'],
+				$container['multilingualpress.content_relations_table'],
+				$container['multilingualpress.languages_table'],
+				$container['multilingualpress.site_relations_table'],
+				$container['multilingualpress.site_relations']
+			);
+		};
 	}
 }
