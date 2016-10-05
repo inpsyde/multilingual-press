@@ -1824,7 +1824,7 @@ final class LanguagesTable implements Table {
 	public function keys_sql() {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
-		return 'KEY (http_name)';
+		return 'KEY http_name (http_name)';
 	}
 
 	/**

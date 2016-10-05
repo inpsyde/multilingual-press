@@ -65,7 +65,7 @@ final class SiteRelationsTable implements Table {
 	public function keys_sql() {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
-		return "KEY (site_1,site_2),\n\tUNIQUE KEY site_combinations (site_1,site_2)";
+		return "UNIQUE KEY site_combinations (site_1,site_2)";
 	}
 
 	/**
