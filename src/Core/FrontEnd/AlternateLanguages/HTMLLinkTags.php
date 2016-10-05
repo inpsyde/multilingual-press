@@ -44,7 +44,7 @@ class HTMLLinkTags {
 
 		array_walk( $translations, function ( $url, $language ) {
 
-			$html = sprintf(
+			$html_link_tag = sprintf(
 				'<link rel="alternate" hreflang="%1$s" href="%2$s">',
 				esc_attr( $language ),
 				esc_url( $url )
@@ -55,11 +55,11 @@ class HTMLLinkTags {
 			 *
 			 * @since 3.0.0
 			 *
-			 * @param string $html     Alternate language HTML link tag.
-			 * @param string $language HTTP language code (e.g., "en-US").
-			 * @param string $url      Target URL.
+			 * @param string $html_link_tag Alternate language HTML link tag.
+			 * @param string $language      HTTP language code (e.g., "en-US").
+			 * @param string $url           Target URL.
 			 */
-			echo apply_filters( 'multilingualpress.hreflang_html', $html, $language, $url );
+			echo apply_filters( 'multilingualpress.hreflang_html_link_tag', $html_link_tag, $language, $url );
 		} );
 
 		return true;
