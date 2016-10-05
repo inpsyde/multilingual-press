@@ -1,11 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Assets;
+namespace Inpsyde\MultilingualPress\Asset;
 
 /**
  * Asset URL data type implementation aware of debug mode and thus potentially minified asset files.
  *
- * @package Inpsyde\MultilingualPress\Assets
+ * @package Inpsyde\MultilingualPress\Asset
  * @since   3.0.0
  */
 final class DebugAwareAssetURL implements AssetURL {
@@ -41,6 +41,20 @@ final class DebugAwareAssetURL implements AssetURL {
 
 			$this->version = filemtime( $file_path );
 		}
+	}
+
+	/**
+	 * Returns a new URL object, instantiated according to the given location object.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param AssetLocation $location Asset location object.
+	 *
+	 * @return static URL object.
+	 */
+	public static function from_location( AssetLocation $location ) {
+
+		return new static( $location->file(), $location->path(), $location->url() );
 	}
 
 	/**
