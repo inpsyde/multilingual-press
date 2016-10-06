@@ -68,6 +68,7 @@ class Mlp_User_Backend_Language {
 		add_filter( 'locale', [ $this, 'locale' ] );
 
 		// Add User Field for own blog language
+		// TODO: Refactor to use ~\Common\Setting\User\* stuff.
 		add_filter( 'personal_options', [ $this, 'edit_user_profile' ] );
 		add_filter( 'profile_update', [ $this, 'profile_update' ] );
 

@@ -1,5 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Setting\User\UserSetting;
+use Inpsyde\MultilingualPress\Common\Setting\User\SecureUserSettingUpdater;
+
 /**
  * Allows users to disable automatic redirects in their profile.
  */
@@ -16,13 +19,11 @@ class Mlp_Redirect_User_Settings {
 
 		$nonce = Mlp_Nonce_Validator_Factory::create( 'save_redirect_user_setting' );
 
-		$user_settings_controller = new Mlp_User_Settings_Controller(
+		( new UserSetting(
 			new Mlp_Redirect_User_Settings_Html( $meta_key, $nonce ),
-			new Mlp_User_Settings_Updater( $meta_key, $nonce )
-		);
-		$user_settings_controller->setup();
+			new SecureUserSettingUpdater( $meta_key, $nonce )
+		) )->register();
 
-		$redirect_filter = new Mlp_Redirect_Filter( $meta_key );
-		add_filter( 'mlp_do_redirect', [ $redirect_filter, 'filter_redirect' ] );
+		add_filter( 'mlp_do_redirect', [ new Mlp_Redirect_Filter( $meta_key ), 'filter_redirect' ] );
 	}
 }
