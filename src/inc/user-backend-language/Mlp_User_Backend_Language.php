@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
@@ -13,6 +14,11 @@ use Inpsyde\MultilingualPress\Module\ModuleManager;
  * @license GPL
  */
 class Mlp_User_Backend_Language {
+
+	/**
+	 * $var AssetManager
+	 */
+	private $asset_manager;
 
 	/**
 	 * $var ModuleManager
@@ -30,10 +36,13 @@ class Mlp_User_Backend_Language {
 	 * Constructor.
 	 *
 	 * @param ModuleManager $module_manager
+	 * @param AssetManager $asset_manager
 	 */
-	public function __construct( ModuleManager $module_manager ) {
+	public function __construct( ModuleManager $module_manager, AssetManager $asset_manager ) {
 
 		$this->module_manager = $module_manager;
+
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
@@ -204,7 +213,7 @@ class Mlp_User_Backend_Language {
 	 *
 	 * @wp-hook admin_head-options-general.php
 	 *
-	 * @return void
+	 * @return bool Whether or not the script was enqueued successfully.
 	 */
 	public function enqueue_script() {
 
@@ -214,11 +223,14 @@ class Mlp_User_Backend_Language {
 
 		$unfiltered_locale = get_locale();
 
-		wp_localize_script( 'mlp-admin', 'mlpUserBackEndLanguageSettings', [
-			'locale' => 'en_US' === $unfiltered_locale ? '' : esc_js( $unfiltered_locale ),
-		] );
-		wp_enqueue_script( 'mlp-admin' );
-
 		add_filter( 'locale', [ $this, 'locale' ] );
+
+		return $this->asset_manager->enqueue_script_with_data(
+			'multilingualpress-admin',
+			'mlpUserBackEndLanguageSettings',
+			[
+				'locale' => 'en_US' === $unfiltered_locale ? '' : esc_js( $unfiltered_locale ),
+			]
+		);
 	}
 }

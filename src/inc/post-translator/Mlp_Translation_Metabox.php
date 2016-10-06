@@ -101,7 +101,7 @@ class Mlp_Translation_Metabox {
 
 		$site_relations = $this->plugin_data->get( 'site_relations' );
 
-		$related_blogs = $site_relations->get_related_sites( $current_blog_id, false );
+		$related_blogs = $site_relations->get_related_site_ids( $current_blog_id, false );
 
 		if ( empty( $related_blogs ) ) {
 			return;
@@ -118,8 +118,9 @@ class Mlp_Translation_Metabox {
 			}
 		}
 
-		$assets = $this->plugin_data->get( 'assets' );
-		//$assets->provide( [ 'mlp-admin', 'mlp_admin_css' ] );
+		$asset_manager = $this->plugin_data->get( 'assets' );
+		$asset_manager->enqueue_script( 'multilingualpress-admin' );
+		$asset_manager->enqueue_style( 'multilingualpress-admin' );
 	}
 
 	/**

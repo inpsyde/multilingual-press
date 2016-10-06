@@ -179,7 +179,7 @@ class Mlp_Advanced_Translator {
 	 */
 	public function localize_script() {
 
-		wp_localize_script( 'mlp-admin', 'mlpCopyPostSettings', [
+		$this->plugin_data->get( 'assets' )->add_script_data( 'multilingualpress-admin', 'mlpCopyPostSettings', [
 			'action' => $this->ajax_action,
 			'siteID' => get_current_blog_id(),
 		] );

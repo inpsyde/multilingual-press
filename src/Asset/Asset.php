@@ -45,4 +45,13 @@ interface Asset {
 	 * @return string|null The file version.
 	 */
 	public function version();
+
+	/**
+	 * Returns the handle.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The handle.
+	 */
+	public function __toString();
 }

@@ -122,7 +122,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 			'remote_site_id' => $remote_site_id,
 			'remote_post_id' => $remote_post->ID,
 		] );
-		$view = new Mlp_Relationship_Control_Meta_Box_View( $this->data, $this );
+		$view = new Mlp_Relationship_Control_Meta_Box_View( $this->data, $this, $this->plugin->get( 'assets' ) );
 		$view->render();
 	}
 

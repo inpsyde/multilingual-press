@@ -11,6 +11,9 @@ if ( is_admin() ) {
  */
 function mlp_feature_user_backend_language( Inpsyde_Property_List_Interface $data ) {
 
-	$user_lang = new Mlp_User_Backend_Language( $data->get( 'module_manager' ) );
+	$user_lang = new Mlp_User_Backend_Language(
+		$data->get( 'module_manager' ),
+		$data->get( 'assets' )
+	);
 	$user_lang->setup();
 }

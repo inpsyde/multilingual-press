@@ -379,7 +379,7 @@ HTML;
 </form>
 HTML;
 
-			wp_enqueue_script( 'mlp-frontend' );
+			$this->asset_manager->enqueue_script( 'multilingualpress' );
 		}
 
 		/**

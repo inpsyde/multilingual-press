@@ -1,5 +1,7 @@
 <?php
 
+use Inpsyde\MultilingualPress\Asset\AssetManager;
+
 /**
  * Class Mlp_Relationship_Control_Meta_Box_View
  *
@@ -42,12 +44,18 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	private $updater;
 
 	/**
+	 * @var AssetManager
+	 */
+	private $asset_manager;
+
+	/**
 	 * @param Mlp_Relationship_Control_Data $data
 	 * @param Mlp_Updatable                 $updater
 	 */
 	public function __construct(
 		Mlp_Relationship_Control_Data $data,
-		Mlp_Updatable                 $updater
+		Mlp_Updatable                 $updater,
+		AssetManager $asset_manager
 	) {
 
 		$this->post            = $data->get_source_post();
@@ -57,6 +65,8 @@ class Mlp_Relationship_Control_Meta_Box_View {
 		$this->data            = $data;
 		$this->updater         = $updater;
 		$this->search_input_id = "mlp_post_search_$this->remote_site_id";
+
+		$this->asset_manager = $asset_manager;
 	}
 
 	public function render() {
@@ -161,7 +171,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	 */
 	private function localize_script() {
 
-		wp_localize_script( 'mlp-admin', 'mlpRelationshipControlSettings', [
+		$this->asset_manager->add_script_data( 'multilingualpress-admin', 'mlpRelationshipControlSettings', [
 			'L10n' => [
 				'noPostSelected'       => __( 'Please select a post.', 'multilingual-press' ),
 				'unsavedRelationships' => __(
@@ -177,9 +187,10 @@ class Mlp_Relationship_Control_Meta_Box_View {
 		 * @param int $threshold Minimum number of characters required to fire the remote post search.
 		 */
 		$threshold = (int) apply_filters( 'mlp_remote_post_search_threshold', 3 );
-		$threshold = max( 1, $threshold );
 
-		wp_localize_script( 'mlp-admin', 'mlpRemotePostSearchSettings', [ 'threshold' => $threshold, ] );
+		$this->asset_manager->add_script_data( 'multilingualpress-admin', 'mlpRemotePostSearchSettings', [
+			'threshold' => max( 1, $threshold ),
+		] );
 	}
 
 	/**

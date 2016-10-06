@@ -108,7 +108,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 			return;
 		}
 
-		wp_localize_script( 'mlp-admin', 'mlpNavMenusSettings', [
+		$this->asset_manager->add_script_data( 'multilingualpress-admin', 'mlpNavMenusSettings', [
 			'action'    => $this->handle,
 			'metaBoxID' => $this->handle,
 			'nonce'     => wp_create_nonce( $this->nonce->get_action() ),

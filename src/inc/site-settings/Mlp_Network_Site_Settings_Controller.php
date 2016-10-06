@@ -42,7 +42,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 
 		$this->plugin_data = $plugin_data;
 		$this->setting = new Mlp_Network_Site_Settings_Tab_Data( $plugin_data->get( 'type_factory' ) );
-		$this->page_properties = new Mlp_Network_Site_Settings_Properties( $plugin_data );
+		$this->page_properties = new Mlp_Network_Site_Settings_Properties();
 
 		new Mlp_Network_Site_Settings( $this->page_properties, $this );
 
@@ -75,7 +75,8 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 * @return void
 	 */
 	public function enqueue_stylesheet() {
-		wp_enqueue_style( 'mlp-admin-css' );
+
+		$this->plugin_data->get( 'assets' )->enqueue_style( 'multilingualpress-admin' );
 	}
 
 	/**

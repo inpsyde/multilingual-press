@@ -10,18 +10,6 @@ class Mlp_Network_Site_Settings_Properties
 	implements Mlp_Network_Site_Settings_Properties_Interface {
 
 	/**
-	 * @var Inpsyde_Property_List_Interface
-	 */
-	private $plugin_data;
-
-	/**
-	 * @param Inpsyde_Property_List_Interface $plugin_data
-	 */
-	public function __construct( Inpsyde_Property_List_Interface $plugin_data ) {
-		$this->plugin_data = $plugin_data;
-	}
-
-	/**
 	 * @return string
 	 */
 	public function get_param_name() {
