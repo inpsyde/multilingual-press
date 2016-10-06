@@ -56,7 +56,8 @@ function bootstrap() {
 		->register_service_provider( new DatabaseServiceProvider() )
 		->register_service_provider( new FactoryProvider() )
 		->register_service_provider( new InstallationServiceProvider() )
-		->register_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() );
+		->register_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() )
+		->register_service_provider( new Module\Trasher\ServiceProvider() );
 
 	/**
 	 * MultilingualPress functions.
