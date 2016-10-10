@@ -393,7 +393,6 @@ class Multilingual_Press {
 
 		$this->plugin_data->set( 'site_relations', $site_relations );
 		$this->plugin_data->set( 'type_factory', $type_factory );
-		$this->plugin_data->set( 'table_list', $this->container['multilingualpress.table_list'] );
 		$this->plugin_data->set( 'link_table', $this->container['multilingualpress.content_relations_table']->name() );
 		$this->plugin_data->set( 'content_relations', $this->container['multilingualpress.content_relations'] );
 		$this->plugin_data->set( 'language_api', new Mlp_Language_Api(

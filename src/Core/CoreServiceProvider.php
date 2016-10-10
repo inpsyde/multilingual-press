@@ -25,6 +25,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.base_path_adapter'] = function () {
+
+			return new CachingBasePathAdapter();
+		};
+
 		// TODO: Make this a regular not shared service as soon as everything else has been adapted.
 		$container->share( 'multilingualpress.internal_locations', function () {
 

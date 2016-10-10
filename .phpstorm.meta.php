@@ -8,6 +8,8 @@ namespace PHPSTORM_META {
 
 			'multilingualpress.asset_factory' instanceof \Inpsyde\MultilingualPress\Asset\AssetFactory,
 			'multilingualpress.asset_manager' instanceof \Inpsyde\MultilingualPress\Asset\AssetManager,
+			'multilingualpress.attachment_copier' instanceof \Inpsyde\MultilingualPress\SiteDuplication\AttachmentCopier,
+			'multilingualpress.base_path_adapter' instanceof \Inpsyde\MultilingualPress\Common\BasePathAdapter,
 			'multilingualpress.content_relations' instanceof \Inpsyde\MultilingualPress\API\ContentRelations,
 			'multilingualpress.content_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Common\Factory,
@@ -17,6 +19,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.module_manager' instanceof \Inpsyde\MultilingualPress\Module\ModuleManager,
 			'multilingualpress.network_plugin_deactivator' instanceof \Inpsyde\MultilingualPress\Installation\NetworkPluginDeactivator,
 			'multilingualpress.properties' instanceof \Inpsyde\MultilingualPress\Common\PluginProperties,
+			'multilingualpress.site_duplication_settings_view' instanceof \Inpsyde\MultilingualPress\SiteDuplication\SettingsView,
 			'multilingualpress.site_relations' instanceof \Inpsyde\MultilingualPress\API\SiteRelations,
 			'multilingualpress.site_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.system_checker' instanceof \Inpsyde\MultilingualPress\Installation\SystemChecker,

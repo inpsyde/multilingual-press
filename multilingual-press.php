@@ -23,6 +23,7 @@ use Inpsyde\MultilingualPress\Factory\FactoryProvider;
 use Inpsyde\MultilingualPress\Installation\InstallationServiceProvider;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
+use Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicationServiceProvider;
 
 defined( 'ABSPATH' ) or die();
 
@@ -57,7 +58,8 @@ function bootstrap() {
 		->register_service_provider( new FactoryProvider() )
 		->register_service_provider( new InstallationServiceProvider() )
 		->register_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() )
-		->register_service_provider( new Module\Trasher\ServiceProvider() );
+		->register_service_provider( new Module\Trasher\ServiceProvider() )
+		->register_service_provider( new SiteDuplicationServiceProvider() );
 
 	/**
 	 * MultilingualPress functions.

@@ -452,4 +452,141 @@ WHERE s.ml_blogid = %d
 
 		return $result;
 	}
+
+	/**
+	 * Checks if the site with the given ID has any relations of the given (or any) content type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int    $site_id Site ID.
+	 * @param string $type    Optional. Content type. Defaults to empty string.
+	 *
+	 * @return bool Whether or not the site with the given ID has any relations of the given (or any) content type.
+	 */
+	public function has_site_relations( $site_id, $type = '' ) {
+
+		$args = [ $site_id ];
+
+		$query = "SELECT ml_id FROM {$this->table} WHERE ml_blogid = %d AND ml_source_blogid != ml_blogid";
+		if ( $type ) {
+			$query .= ' AND ml_type = %s';
+
+			$args[] = $type;
+		}
+
+		return (bool) $this->db->query( $this->db->prepare( "$query LIMIT 1", $args ) );
+	}
+
+	/**
+	 * Copies all relations of the given (or any) content type from the given source site to the given destination site.
+	 *
+	 * This method is suited to be used after site duplication, because both sites are assumed to have the exact same
+	 * content IDs.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int    $source_site_id      Source site ID.
+	 * @param int    $destination_site_id Destination site ID.
+	 * @param string $type                Optional. Content type. Defaults to empty string.
+	 *
+	 * @return int The number of relations duplicated.
+	 */
+	public function duplicate_relations( $source_site_id, $destination_site_id, $type = '' ) {
+
+		$args = [
+			$destination_site_id,
+			$source_site_id,
+		];
+
+		$query = "
+INSERT INTO {$this->table} (
+	ml_source_blogid,
+	ml_source_elementid,
+	ml_blogid,
+	ml_elementid,
+	ml_type
+)
+SELECT ml_source_blogid, ml_source_elementid, %d, ml_elementid, ml_type
+FROM {$this->table}
+WHERE ml_blogid = %d";
+		if ( $type ) {
+			$query .= ' AND ml_type = %s';
+
+			$args[] = $type;
+		}
+
+		return (int) $this->db->query( $this->db->prepare( $query, $args ) );
+	}
+
+	/**
+	 * Relates all posts between the given source site and the given destination site.
+	 *
+	 * This method is suited to be used after site duplication, because both sites are assumed to have the exact same
+	 * post IDs. Furthermore, the current site is assumed to be either the source site or the destination site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $source_site_id      Source site ID.
+	 * @param int $destination_site_id Destination site ID.
+	 *
+	 * @return int The number of relations inserted.
+	 */
+	public function relate_all_posts( $source_site_id, $destination_site_id ) {
+
+		$inserted = 0;
+
+		// TODO: Restrict to "supported post types", and improve post status (e.g., `NOT IN ('trash', 'auto-draft')`?).
+		$query = "
+INSERT INTO {$this->table} (
+	ml_source_blogid,
+	ml_source_elementid,
+	ml_blogid,
+	ml_elementid,
+	ml_type
+)
+SELECT %d, ID, %d, ID, 'post'
+FROM {$this->db->posts}
+WHERE post_status IN ('publish', 'future', 'draft', 'pending', 'private')";
+
+		foreach ( [ $source_site_id, $destination_site_id ] as $site_id ) {
+			$inserted += (int) $this->db->query( $this->db->prepare( $query, $source_site_id, $site_id ) );
+		}
+
+		return $inserted;
+	}
+
+	/**
+	 * Relates all terms between the given source site and the given destination site.
+	 *
+	 * This method is suited to be used after site duplication, because both sites are assumed to have the exact same
+	 * term taxonomy IDs. Furthermore, the current site is assumed to be either the source site or the destination site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $source_site_id      Source site ID.
+	 * @param int $destination_site_id Destination site ID.
+	 *
+	 * @return int The number of relations inserted.
+	 */
+	public function relate_all_terms( $source_site_id, $destination_site_id ) {
+
+		$inserted = 0;
+
+		$query = "
+INSERT INTO {$this->table} (
+	ml_source_blogid,
+	ml_source_elementid,
+	ml_blogid,
+	ml_elementid,
+	ml_type
+)
+SELECT %d, term_taxonomy_id, %d, term_taxonomy_id, 'term'
+FROM {$this->db->term_taxonomy}";
+
+		foreach ( [ $source_site_id, $destination_site_id ] as $site_id ) {
+			$inserted += (int) $this->db->query( $this->db->prepare( $query, $source_site_id, $site_id ) );
+		}
+
+		return $inserted;
+	}
 }
