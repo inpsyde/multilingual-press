@@ -1821,7 +1821,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'iso_639_1'    => 'zh',
 				'iso_639_2'    => 'zho',
 				'wp_locale'    => '',
-				'http_name'    => 'zh',
+				'http_name'    => 'zh-SG',
 				'priority'     => 1,
 			),
 			'zh-tw' => array(
