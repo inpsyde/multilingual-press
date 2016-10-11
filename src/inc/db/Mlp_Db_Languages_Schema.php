@@ -761,7 +761,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'iso_639_1'    => 'fr',
 				'iso_639_2'    => 'fra',
 				'wp_locale'    => '',
-				'http_name'    => 'fr',
+				'http_name'    => 'fr-CH',
 				'priority'     => 1,
 			),
 			'fy'    => array(
