@@ -36,6 +36,12 @@ class Mlp_Update_Plugin_Data {
 	private $all_sites;
 
 	/**
+	 * @todo Remove with WordPress 4.6 + 2.
+	 * @var bool
+	 */
+	private $is_pre_4_6;
+
+	/**
 	 * Constructor
 	 *
 	 * @param   Inpsyde_Property_List_Interface $plugin_data
@@ -55,7 +61,14 @@ class Mlp_Update_Plugin_Data {
 		$this->last_version    = $last_version;
 		$this->current_version = $current_version;
 		$this->wpdb            = $wpdb;
-		$this->all_sites       = wp_get_sites();
+
+		// TODO: With WordPress 4.6 + 2, just use `get_sites()`, and remove `$this->is_pre_4_6`.
+		// Get the unaltered WordPress version.
+		require ABSPATH . WPINC . '/version.php';
+		/** @var string $wp_version */
+		$this->is_pre_4_6 = version_compare( $wp_version, '4.6-RC1', '<' );
+
+		$this->all_sites = $this->is_pre_4_6 ? wp_get_sites() : get_sites();
 	}
 
 	/**
@@ -125,14 +138,15 @@ class Mlp_Update_Plugin_Data {
 		$inserted = 0;
 
 		foreach ( $this->all_sites as $site ) {
+			// TODO: With WordPress 4.6 + 2, just use `$site->id`.
+			$site_id = $this->is_pre_4_6 ? $site['blog_id'] : $site->id;
 
-			$linked = get_blog_option( $site[ 'blog_id' ], $option_name, array() );
-
+			$linked = get_blog_option( $site_id, $option_name, array() );
 			if ( ! empty( $linked ) ) {
-				$inserted += $relations->set_relation( $site[ 'blog_id' ], $linked );
+				$inserted += $relations->set_relation( $site_id, $linked );
 			}
 
-			delete_blog_option( $site[ 'blog_id' ], $option_name );
+			delete_blog_option( $site_id, $option_name );
 		}
 	}
 
