@@ -3,7 +3,6 @@
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Core;
-use Inpsyde\MultilingualPress\Module\NetworkOptionModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
 
 /**
@@ -65,15 +64,6 @@ class Multilingual_Press {
 	 */
 	public function setup() {
 
-		$this->prepare_plugin_data();
-		$this->prepare_helpers();
-
-		if ( ! $this->is_active_site() )
-			return false;
-
-		// Hooks and filters
-		add_action( 'inpsyde_mlp_loaded', [ $this, 'load_plugin_textdomain' ], 1 );
-
 		// Load modules
 		$this->load_features();
 
@@ -110,27 +100,6 @@ class Multilingual_Press {
 	}
 
 	/**
-	 * Check if the current context needs more MultilingualPress actions.
-	 *
-	 * @return bool
-	 */
-	private function is_active_site() {
-
-		global $pagenow;
-
-		if ( in_array( $pagenow, [ 'admin-post.php', 'admin-ajax.php' ], true ) ) {
-			return true;
-		}
-
-		if ( is_network_admin() )
-			return TRUE;
-
-		if ( array_key_exists( get_current_blog_id(), (array) get_site_option( 'inpsyde_multilingual', [] ) ) )
-			return TRUE;
-
-		return FALSE;
-	}
-	/**
 	 * @return void
 	 */
 	public function late_load() {
@@ -142,20 +111,6 @@ class Multilingual_Press {
 		 * @param wpdb                            $wpdb        Database object.
 		 */
 		do_action( 'mlp_and_wp_loaded', $this->plugin_data, $this->wpdb );
-	}
-
-	/**
-	 * Load the localization
-	 *
-	 * @since 0.1
-	 * @uses load_plugin_textdomain, plugin_basename
-	 * @return void
-	 */
-	public function load_plugin_textdomain() {
-
-		$rel_path = dirname( $this->properties->plugin_base_name() ) . $this->properties->text_domain_path();
-
-		load_plugin_textdomain( 'multilingual-press', FALSE, $rel_path );
 	}
 
 	/**
@@ -271,19 +226,6 @@ class Multilingual_Press {
 	 * Checks for errors
 	 *
 	 * @access	public
-	 * @since	0.8
-	 * @uses
-	 * @return	boolean
-	 */
-	public function check_for_user_errors() {
-
-		return $this->check_for_errors();
-	}
-
-	/**
-	 * Checks for errors
-	 *
-	 * @access	public
 	 * @since	0.9
 	 * @uses
 	 * @return	void
@@ -361,37 +303,33 @@ class Multilingual_Press {
 	/**
 	 * @return void
 	 */
-	private function prepare_plugin_data() {
+	public function prepare_plugin_data() {
+
+		$site_relations = $this->container['multilingualpress.site_relations'];
+
+		$content_relations = $this->container['multilingualpress.content_relations'];
 
 		$type_factory = $this->container['multilingualpress.type_factory'];
 
-		$site_relations = $this->container['multilingualpress.site_relations'];
+		$language_api = new Mlp_Language_Api(
+			$this->plugin_data,
+			'mlp_languages',
+			$site_relations,
+			$content_relations,
+			$this->wpdb,
+			$type_factory
+		);
 
 		$this->plugin_data->set( 'module_manager', $this->container['multilingualpress.module_manager'] );
 		$this->plugin_data->set( 'site_relations', $site_relations );
 		$this->plugin_data->set( 'type_factory', $type_factory );
 		$this->plugin_data->set( 'link_table', $this->container['multilingualpress.content_relations_table']->name() );
-		$this->plugin_data->set( 'content_relations', $this->container['multilingualpress.content_relations'] );
-		$this->plugin_data->set( 'language_api', new Mlp_Language_Api(
-			$this->plugin_data,
-			'mlp_languages',
-			$site_relations,
-			$this->plugin_data->get( 'content_relations' ),
-			$this->wpdb,
-			$type_factory
-		) );
-
+		$this->plugin_data->set( 'content_relations', $content_relations );
+		$this->plugin_data->set( 'language_api', $language_api );
 		// TODO: Remove as soon as the whole Assets structures have been refactored (Locations -> Assets\Locator).
 		$this->plugin_data->set( 'assets', $this->container['multilingualpress.asset_manager'] );
 		$this->plugin_data->set( 'locations', $this->container['multilingualpress.internal_locations'] );
-	}
-
-	/**
-	 * @return void
-	 */
-	private function prepare_helpers() {
 
 		Mlp_Helpers::insert_dependency( 'language_api', $this->plugin_data->get( 'language_api' ) );
 	}
-
 }
