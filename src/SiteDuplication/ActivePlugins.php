@@ -11,13 +11,9 @@ namespace Inpsyde\MultilingualPress\SiteDuplication;
 class ActivePlugins {
 
 	/**
-	 * Name of the option that stores all active plugins.
-	 *
-	 * @since 3.0.0
-	 *
 	 * @var string
 	 */
-	const OPTION = 'active_plugins';
+	private $option = 'active_plugins';
 
 	/**
 	 * Fires the plugin activation hooks for all active plugins.
@@ -28,7 +24,7 @@ class ActivePlugins {
 	 */
 	public function activate() {
 
-		$plugins = get_option( self::OPTION );
+		$plugins = get_option( $this-$this->option );
 		if ( ! $plugins ) {
 			return 0;
 		}
@@ -57,6 +53,6 @@ class ActivePlugins {
 	 */
 	public function deactivate() {
 
-		return update_option( self::OPTION, [] );
+		return update_option( $this->option, [] );
 	}
 }
