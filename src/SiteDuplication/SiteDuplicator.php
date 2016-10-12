@@ -293,7 +293,7 @@ class SiteDuplicator {
 
 		$theme = wp_get_theme();
 		/** This action is documented in wp-includes/theme.php. */
-		do_action( 'switch_theme', $theme->get( 'Name' ), $theme );
+		do_action( 'switch_theme', $theme->get( 'Name' ), $theme, $theme );
 	}
 
 	/**
