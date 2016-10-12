@@ -6,6 +6,7 @@ namespace PHPSTORM_META {
 		new \Inpsyde\MultilingualPress\Service\Container            => [
 			'' == '@',
 
+			'multilingualpress.active_plugins' instanceof \Inpsyde\MultilingualPress\SiteDuplication\ActivePlugins,
 			'multilingualpress.asset_factory' instanceof \Inpsyde\MultilingualPress\Asset\AssetFactory,
 			'multilingualpress.asset_manager' instanceof \Inpsyde\MultilingualPress\Asset\AssetManager,
 			'multilingualpress.attachment_copier' instanceof \Inpsyde\MultilingualPress\SiteDuplication\AttachmentCopier,
@@ -20,6 +21,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.network_plugin_deactivator' instanceof \Inpsyde\MultilingualPress\Installation\NetworkPluginDeactivator,
 			'multilingualpress.properties' instanceof \Inpsyde\MultilingualPress\Common\PluginProperties,
 			'multilingualpress.site_duplication_settings_view' instanceof \Inpsyde\MultilingualPress\SiteDuplication\SettingsView,
+			'multilingualpress.site_duplicator' instanceof \Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicator,
 			'multilingualpress.site_relations' instanceof \Inpsyde\MultilingualPress\API\SiteRelations,
 			'multilingualpress.site_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.system_checker' instanceof \Inpsyde\MultilingualPress\Installation\SystemChecker,
