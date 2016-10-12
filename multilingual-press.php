@@ -7,7 +7,6 @@
  * Author URI:  http://inpsyde.com
  * Version:     3.0.0-dev
  * Text Domain: multilingual-press
- * Domain Path: languages
  * License:     MIT
  * Network:     true
  */
