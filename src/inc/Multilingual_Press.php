@@ -181,21 +181,6 @@ class Multilingual_Press {
 	}
 
 	/**
-	 * Create site settings page.
-	 *
-	 * @return void
-	 */
-	private function load_site_settings_page() {
-
-		$settings = new Mlp_General_Settingspage(
-			$this->plugin_data->get( 'site_manager' ),
-			$this->container['multilingualpress.asset_manager']
-		);
-		$settings->setup();
-		add_action( 'plugins_loaded', [ $settings, 'setup' ], 8 );
-	}
-
-	/**
 	 * Find and load core and pro features.
 	 *
 	 * @access	public
@@ -342,11 +327,6 @@ class Multilingual_Press {
 			$this->load_module_settings_page();
 		}
 
-		$site_manager = $this->plugin_data->get( 'site_manager' );
-		if ( $site_manager->has_modules() ) {
-			$this->load_site_settings_page();
-		}
-
 		// TODO: Check what this sucker needs...
 		new Mlp_Network_Site_Settings_Controller( $this->plugin_data );
 
@@ -388,9 +368,6 @@ class Multilingual_Press {
 		$site_relations = $this->container['multilingualpress.site_relations'];
 
 		$this->plugin_data->set( 'module_manager', $this->container['multilingualpress.module_manager'] );
-		// TODO: Check if the "site manager" really should be a module manager object...
-		$this->plugin_data->set( 'site_manager', new NetworkOptionModuleManager( 'inpsyde_multilingual' ) );
-
 		$this->plugin_data->set( 'site_relations', $site_relations );
 		$this->plugin_data->set( 'type_factory', $type_factory );
 		$this->plugin_data->set( 'link_table', $this->container['multilingualpress.content_relations_table']->name() );
