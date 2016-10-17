@@ -16,6 +16,11 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	private $language_api;
 
 	/**
+	 * @var float
+	 */
+	private $language_only_priority_factor;
+
+	/**
 	 * @type Mlp_Accept_Header_Parser_Interface
 	 */
 	private $parser;
@@ -31,6 +36,20 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 		$this->language_api = $language_api;
 		$this->parser = $parser;
+
+		/**
+		 * Filters the factor used to compute the priority of language-only matches. This has to be between 0 and 1.
+		 *
+		 * @see   get_user_priority()
+		 * @since 2.4.8
+		 *
+		 * @param float $factor The factor used to compute the priority of language-only matches.
+		 */
+		$factor = (float) apply_filters( 'multilingualpress.language_only_priority_factor', .7 );
+		$factor = min( 1, $factor );
+		$factor = max( 0, $factor );
+
+		$this->language_only_priority_factor = $factor;
 	}
 
 	/**
@@ -145,14 +164,16 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	private function get_user_priority( Mlp_Language_Interface $language, Array $user ) {
 
 		$lang_http = $language->get_name( 'http_name' );
+		$lang_http = strtolower( $lang_http );
 
 		if ( isset ( $user[ $lang_http ] ) )
 			return $user[ $lang_http ];
 
 		$lang_short = $language->get_name( 'language_short' );
+		$lang_short = strtolower( $lang_short );
 
 		if ( isset ( $user[ $lang_short ] ) )
-			return $user[ $lang_short ];
+			return $this->language_only_priority_factor * $user[ $lang_short ];
 
 		return 0;
 	}
@@ -173,12 +194,13 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		$out = array ();
 
 		foreach ( $fields as $name => $priority ) {
+			$name = strtolower( $name );
 
 			$out[ $name ] = $priority;
 
 			$short = $this->get_short_form( $name );
 
-			if ( ( $short !== $name ) && ! isset ( $out[ $short ] ) )
+			if ( $short && ( $short !== $name ) && ! isset ( $out[ $short ] ) )
 				$out[ $short ] = $priority;
 		}
 
