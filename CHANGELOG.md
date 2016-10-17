@@ -8,6 +8,8 @@
 [issue #232](https://github.com/inpsyde/multilingual-press/issues/232).
 - Language Manager: Fix HTTP code of _French (Switzerland)_, see
 [issue #233](https://github.com/inpsyde/multilingual-press/issues/233).
+- Redirect: Fix priority of language-only redirect matches, see
+[issue #234](https://github.com/inpsyde/multilingual-press/issues/234).
 
 ## 2.4.7
 - CSS: Use font weight "600" instead of "bold", see
