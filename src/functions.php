@@ -63,7 +63,7 @@ function debug( $message ) {
 function get_available_languages( $related_sites_only = true ) {
 
 	// TODO: Do not hard-code the option name, and maybe even get the languages some other way.
-	$languages = get_network_option( null, 'inpsyde_multilingual', [] );
+	$languages = (array) get_network_option( null, 'inpsyde_multilingual', [] );
 	if ( ! $languages ) {
 		return [];
 	}

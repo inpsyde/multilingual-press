@@ -177,7 +177,7 @@ class Mlp_New_Site_View {
 	 */
 	private function render_relationships() {
 
-		$sites = get_site_option( 'inpsyde_multilingual', [] );
+		$sites = (array) get_site_option( 'inpsyde_multilingual', [] );
 		foreach ( array_keys( $sites ) as $site_id ) {
 			$site_id = (int) $site_id;
 

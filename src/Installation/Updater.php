@@ -152,7 +152,7 @@ class Updater {
 	 */
 	private function import_active_languages() {
 
-		$languages = get_network_option( null, 'inpsyde_multilingual', [] );
+		$languages = (array) get_network_option( null, 'inpsyde_multilingual', [] );
 		if ( ! $languages ) {
 			return;
 		}
