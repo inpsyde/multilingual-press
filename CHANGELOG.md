@@ -8,6 +8,17 @@
 - Language API: Use fallback names for languages, see
 [issue #224](https://github.com/inpsyde/multilingual-press/issues/224).
 
+## 2.4.8
+- Install/Uninstall: Prevent potential PHP notice due to deprecated `wp_get_sites()` function, see
+[issue #229](https://github.com/inpsyde/multilingual-press/issues/229) and
+[issue #236](https://github.com/inpsyde/multilingual-press/issues/236).
+- Language Manager: Fix HTTP code of _Chinese (Singapore)_, see
+[issue #232](https://github.com/inpsyde/multilingual-press/issues/232).
+- Language Manager: Fix HTTP code of _French (Switzerland)_, see
+[issue #233](https://github.com/inpsyde/multilingual-press/issues/233).
+- Redirect: Fix priority of language-only redirect matches, see
+[issue #234](https://github.com/inpsyde/multilingual-press/issues/234).
+
 ## 2.4.7
 - CSS: Use font weight "600" instead of "bold", see
 [Native Fonts in 4.6](https://make.wordpress.org/core/2016/07/07/native-fonts-in-4-6/).

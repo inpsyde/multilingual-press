@@ -22,6 +22,11 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	private $language_api;
 
 	/**
+	 * @var float
+	 */
+	private $language_only_priority_factor;
+
+	/**
 	 * @var AcceptHeaderParser
 	 */
 	private $parser;
@@ -35,6 +40,20 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		$this->language_api = $language_api;
 
 		$this->parser = $parser ?: new AcceptLanguageParser();
+
+		/**
+		 * Filters the factor used to compute the priority of language-only matches. This has to be between 0 and 1.
+		 *
+		 * @see   get_user_priority()
+		 * @since 2.4.8
+		 *
+		 * @param float $factor The factor used to compute the priority of language-only matches.
+		 */
+		$factor = (float) apply_filters( 'multilingualpress.language_only_priority_factor', .7 );
+		$factor = min( 1, $factor );
+		$factor = max( 0, $factor );
+
+		$this->language_only_priority_factor = $factor;
 	}
 
 	/**
@@ -148,15 +167,17 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	private function get_user_priority( Language $language, array $user ) {
 
-		$lang_http = $language->name( 'http_name' );
+		$lang_http = strtolower( $language->name( 'http_name' ) );
 
-		if ( isset ( $user[ $lang_http ] ) )
+		if ( isset( $user[ $lang_http ] ) ) {
 			return $user[ $lang_http ];
+		}
 
-		$lang_short = $language->name( 'language_short' );
+		$lang_short = strtolower( $language->name( 'language_short' ) );
 
-		if ( isset ( $user[ $lang_short ] ) )
-			return $user[ $lang_short ];
+		if ( isset( $user[ $lang_short ] ) ) {
+			return $this->language_only_priority_factor * $user[ $lang_short ];
+		}
 
 		return 0;
 	}
@@ -177,12 +198,13 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		$out = [];
 
 		foreach ( $fields as $name => $priority ) {
+			$name = strtolower( $name );
 
 			$out[ $name ] = $priority;
 
 			$short = $this->get_short_form( $name );
 
-			if ( ( $short !== $name ) && ! isset ( $out[ $short ] ) )
+			if ( $short && ( $short !== $name ) && ! isset ( $out[ $short ] ) )
 				$out[ $short ] = $priority;
 		}
 
