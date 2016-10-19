@@ -36,6 +36,8 @@ namespace PHPSTORM_META {
 			'multilingualpress.trasher_setting_view' instanceof \Inpsyde\MultilingualPress\Module\Trasher\TrasherSettingView,
 			'multilingualpress.type_factory' instanceof \Inpsyde\MultilingualPress\Factory\TypeFactory,
 			'multilingualpress.updater' instanceof \Inpsyde\MultilingualPress\Installation\Updater,
+			'multilingualpress.user_admin_language_locale_filter' instanceof \Inpsyde\MultilingualPress\Module\UserAdminLanguage\LocaleFilter,
+			'multilingualpress.user_admin_language_repository' instanceof \Inpsyde\MultilingualPress\Module\UserAdminLanguage\LanguageRepository,
 		],
 		\Inpsyde\MultilingualPress\MultilingualPress::resolve( '' ) => [
 			'' == '@',

@@ -52,9 +52,9 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 		}
 
 		// TODO: Well, actually validate as soon as the Nonce namespace has been refactored.
-		if ( $this->validator /* && ! $this->validator->validate() */ ) {
-			return false;
-		}
+		//if ( $this->validator && ! $this->validator->validate() ) {
+		//	return false;
+		//}
 
 		$value = $this->get_value();
 
