@@ -329,7 +329,7 @@ class Mlp_Advanced_Translator_View {
 			$html .= sprintf(
 				'<label for="%2$s"><input type="%3$s" name="%4$s[]" id="%2$s" value="%5$s"%6$s>%1$s</label><br>',
 				esc_html( $term->name ),
-				esc_attr( $term->slug ) . '_id',
+				esc_attr( "term-{$remote_blog_id}-{$term->term_taxonomy_id}" ),
 				esc_attr( $input_type ),
 				esc_attr( $name ),
 				esc_attr( $term->term_id ),
