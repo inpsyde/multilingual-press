@@ -1,7 +1,7 @@
-'use strict';
+const autoprefixer = require( 'autoprefixer' );
+const loadGrundModules = require( 'load-grunt-tasks' );
 
-module.exports = function( grunt ) {
-
+module.exports = function ( grunt ) {
 	grunt.initConfig( {
 		config: {
 			assets: {
@@ -111,7 +111,7 @@ module.exports = function( grunt ) {
 			tests: {
 				options: {
 					rules: {
-						"no-native-reassign": 0
+						'no-native-reassign': 0
 					}
 				},
 				src: [ '<%= config.tests.js %>**/*.js' ]
@@ -171,10 +171,6 @@ module.exports = function( grunt ) {
 
 			dest: {
 				src: [ '<%= config.scripts.dest %>*.js' ]
-			},
-
-			gruntfile: {
-				src: [ 'Gruntfile.js' ]
 			}
 		},
 
@@ -251,7 +247,7 @@ module.exports = function( grunt ) {
 						/**
 						 * @see {@link https://github.com/postcss/autoprefixer Autoprefixer}
 						 */
-						require( 'autoprefixer' )( {
+						autoprefixer( {
 							browsers: '> 1%, last 2 versions, IE 8',
 							cascade: false
 						} )
@@ -304,13 +300,13 @@ module.exports = function( grunt ) {
 
 			// DO NOT run this directly. Run "$ grunt tape" instead.
 			tape: {
-				command: function( file ) {
+				command( file ) {
 					/**
 					 * @see {@link https://github.com/babel/babel/tree/master/packages/babel-cli babel-cli}
 					 * @see {@link https://github.com/speedskater/babel-plugin-rewire babel-plugin-rewire}
 					 * @see {@link https://github.com/substack/faucet faucet}
 					 */
-					return '"./node_modules/.bin/babel-node" --plugins rewire ' + file + ' | "./node_modules/.bin/faucet"';
+					return `"./node_modules/.bin/babel-node" --plugins rewire ${file} | "./node_modules/.bin/faucet"`;
 				}
 			}
 		},
@@ -351,8 +347,7 @@ module.exports = function( grunt ) {
 			gruntfile: {
 				files: [ 'Gruntfile.js' ],
 				tasks: [
-					'eslint:gruntfile',
-					'jsvalidate:gruntfile'
+					'eslint:gruntfile'
 				]
 			},
 
@@ -409,9 +404,9 @@ module.exports = function( grunt ) {
 					'<%= config.src %>**/*.php'
 				],
 				dest: '<%= config.name %>.zip',
-				router: function( filepath ) {
+				router( filepath ) {
 					// Put files into "multilingual-press/" folder.
-					return 'multilingual-press/' + filepath;
+					return `multilingual-press/${filepath}`;
 				}
 			}
 		}
@@ -420,12 +415,12 @@ module.exports = function( grunt ) {
 	/**
 	 * @see {@link https://github.com/sindresorhus/load-grunt-tasks load-grunt-tasks}
 	 */
-	require( 'load-grunt-tasks' )( grunt );
+	loadGrundModules( grunt );
 
 	// JavaScript tests (babel-node -> tape) task.
-	grunt.registerTask( 'tape', function() {
-		grunt.file.expand( grunt.template.process( '<%= config.tests.js %>**/*Test.js' ) ).forEach( function( file ) {
-			grunt.task.run( 'shell:tape:' + file );
+	grunt.registerTask( 'tape', () => {
+		grunt.file.expand( grunt.template.process( '<%= config.tests.js %>**/*Test.js' ) ).forEach( ( file ) => {
+			grunt.task.run( `shell:tape:${file}` );
 		} );
 	} );
 
@@ -454,13 +449,11 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'ci', [
 		'common',
-		'jsvalidate:gruntfile',
 		'sass:check'
 	] );
 
 	grunt.registerTask( 'develop', [
 		'newer:eslint',
-		'newer:jsvalidate:gruntfile',
 		'newer:delegate:imagemin-images',
 		'newer:jsonlint',
 		'newer:phplint:src',
@@ -472,7 +465,6 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'pre-commit', [
 		'changed-clean',
 		'newer-clean',
-		'jsvalidate:gruntfile',
 		'imagemin',
 		'common',
 		'lineending',
@@ -486,5 +478,4 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'default', 'develop' );
-
 };

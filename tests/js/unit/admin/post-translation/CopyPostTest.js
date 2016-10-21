@@ -1,10 +1,10 @@
-import globalStub from "../../stubs/global";
-import test from "tape";
-import sinon from "sinon";
-import * as _ from "lodash";
-import * as F from "../../functions";
-import jQueryObject from "../../stubs/jQueryObject";
-import CopyPost from "../../../../../resources/js/admin/post-translation/CopyPost";
+import globalStub from '../../stubs/global';
+import test from 'tape';
+import sinon from 'sinon';
+import * as _ from 'lodash';
+import * as F from '../../functions';
+import JqueryObject from '../../stubs/JqueryObject';
+import CopyPost from '../../../../../resources/js/admin/post-translation/CopyPost';
 
 const { $, Backbone, window } = global;
 
@@ -42,7 +42,7 @@ test( 'content (element missing) ...', ( assert ) => {
 test( 'content (element present) ...', ( assert ) => {
 	const content = F.getRandomString();
 
-	const $content = new jQueryObject();
+	const $content = new JqueryObject();
 	$content.val.returns( content );
 
 	$.withArgs( '#content' ).returns( $content );
@@ -76,7 +76,7 @@ test( 'excerpt (element missing) ...', ( assert ) => {
 test( 'excerpt (element present) ...', ( assert ) => {
 	const excerpt = F.getRandomString();
 
-	const $excerpt = new jQueryObject();
+	const $excerpt = new JqueryObject();
 	$excerpt.val.returns( excerpt );
 
 	$.withArgs( '#excerpt' ).returns( $excerpt );
@@ -110,7 +110,7 @@ test( 'postID (element missing) ...', ( assert ) => {
 test( 'postID (element present) ...', ( assert ) => {
 	const postID = F.getRandomInteger( 1 );
 
-	const $postID = new jQueryObject();
+	const $postID = new JqueryObject();
 	$postID.val.returns( postID );
 
 	$.withArgs( '#post_ID' ).returns( $postID );
@@ -157,7 +157,7 @@ test( 'slug (element missing) ...', ( assert ) => {
 test( 'slug (element present) ...', ( assert ) => {
 	const slug = F.getRandomString();
 
-	const $slug = new jQueryObject();
+	const $slug = new JqueryObject();
 	$slug.text.returns( slug );
 
 	$.withArgs( '#editable-post-name-full' ).returns( $slug );
@@ -247,7 +247,7 @@ test( 'title (element missing) ...', ( assert ) => {
 test( 'title (element present) ...', ( assert ) => {
 	const title = F.getRandomString();
 
-	const $title = new jQueryObject();
+	const $title = new JqueryObject();
 	$title.val.returns( title );
 
 	$.withArgs( '#title' ).returns( $title );
@@ -293,25 +293,25 @@ test( 'copyPostData ...', ( assert ) => {
 
 	const content = F.getRandomString();
 
-	const $content = new jQueryObject();
+	const $content = new JqueryObject();
 	$content.val.returns( content );
 
 	const excerpt = F.getRandomString();
 
-	const $excerpt = new jQueryObject();
+	const $excerpt = new JqueryObject();
 	$excerpt.val.returns( excerpt );
 
 	const slug = F.getRandomString();
 
-	const $slug = new jQueryObject();
+	const $slug = new JqueryObject();
 	$slug.text.returns( slug );
 
 	const title = F.getRandomString();
 
-	const $title = new jQueryObject();
+	const $title = new JqueryObject();
 	$title.val.returns( title );
 
-	const $copiedPostFlag = new jQueryObject();
+	const $copiedPostFlag = new JqueryObject();
 
 	const remoteSiteID = F.getRandomInteger( 1 );
 
@@ -320,7 +320,7 @@ test( 'copyPostData ...', ( assert ) => {
 		.withArgs( '#excerpt' ).returns( $excerpt )
 		.withArgs( '#editable-post-name-full' ).returns( $slug )
 		.withArgs( '#title' ).returns( $title )
-		.withArgs( '#mlp-translation-data-' + remoteSiteID + '-copied-post' ).returns( $copiedPostFlag );
+		.withArgs( `#mlp-translation-data-${remoteSiteID}-copied-post` ).returns( $copiedPostFlag );
 
 	const testee = createTestee( options );
 
@@ -367,10 +367,13 @@ test( 'copyPostData ...', ( assert ) => {
 		tinyMCEContent,
 		content,
 		excerpt
-		};
+	};
 
 	assert.deepEqual(
-		model.save.calledWith( data, { data, processData: true } ),
+		model.save.calledWith( data, {
+			data,
+			processData: true
+		} ),
 		true,
 		'... SHOULD fetch new data.'
 	);
@@ -390,7 +393,7 @@ test( 'copyPostData ...', ( assert ) => {
 test( 'getRemoteSiteID (no site ID) ...', ( assert ) => {
 	const testee = createTestee();
 
-	const $button = new jQueryObject();
+	const $button = new JqueryObject();
 
 	assert.equal(
 		testee.getRemoteSiteID( $button ),
@@ -406,7 +409,7 @@ test( 'getRemoteSiteID (site ID specified) ...', ( assert ) => {
 
 	const siteID = F.getRandomInteger();
 
-	const $button = new jQueryObject();
+	const $button = new JqueryObject();
 	$button.data.returns( siteID );
 
 	assert.equal(
@@ -423,9 +426,9 @@ test( 'fadeOutMetaBox ...', ( assert ) => {
 
 	const remoteSiteID = F.getRandomInteger( 1 );
 
-	const $metaBox = new jQueryObject();
+	const $metaBox = new JqueryObject();
 
-	$.withArgs( '#inpsyde_multilingual_' + remoteSiteID ).returns( $metaBox );
+	$.withArgs( `#inpsyde_multilingual_${remoteSiteID}` ).returns( $metaBox );
 
 	testee.fadeOutMetaBox( remoteSiteID );
 
@@ -461,9 +464,9 @@ test( 'updatePostData (unsuccessful AJAX request) ...', ( assert ) => {
 	testee.fadeInMetaBox = sinon.spy();
 
 	// Create a generic jQuery result.
-	const $jQueryObject = new jQueryObject();
+	const $JqueryObject = new JqueryObject();
 
-	$.returns( $jQueryObject );
+	$.returns( $JqueryObject );
 
 	assert.equal(
 		testee.updatePostData(),
@@ -472,7 +475,7 @@ test( 'updatePostData (unsuccessful AJAX request) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		$jQueryObject.val.callCount,
+		$JqueryObject.val.callCount,
 		0,
 		'... SHOULD NOT touch any elements.'
 	);
@@ -525,21 +528,21 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	// Turn method into spy.
 	testee.fadeInMetaBox = sinon.spy();
 
-	const prefix = 'mlp-translation-data-' + data.siteID + '-';
+	const prefix = `mlp-translation-data-${data.siteID}-`;
 
-	const $title = new jQueryObject();
+	const $title = new JqueryObject();
 
-	const $slug = new jQueryObject();
+	const $slug = new JqueryObject();
 
-	const $content = new jQueryObject();
+	const $content = new JqueryObject();
 
-	const $excerpt = new jQueryObject();
+	const $excerpt = new JqueryObject();
 
 	$
-		.withArgs( '#' + prefix + 'title' ).returns( $title )
-		.withArgs( '#' + prefix + 'name' ).returns( $slug )
-		.withArgs( '#' + prefix + 'content' ).returns( $content )
-		.withArgs( '#' + prefix + 'excerpt' ).returns( $excerpt );
+		.withArgs( `#${prefix}title` ).returns( $title )
+		.withArgs( `#${prefix}name` ).returns( $slug )
+		.withArgs( `#${prefix}content` ).returns( $content )
+		.withArgs( `#${prefix}excerpt` ).returns( $excerpt );
 
 	assert.equal(
 		testee.updatePostData(),
@@ -560,7 +563,7 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		testee.setTinyMCEContent.calledWith( prefix + 'content', data.tinyMCEContent ),
+		testee.setTinyMCEContent.calledWith( `${prefix}content`, data.tinyMCEContent ),
 		true,
 		'... SHOULD set the tinyMCE content to the expected value.'
 	);
@@ -658,9 +661,9 @@ test( 'fadeInMetaBox ...', ( assert ) => {
 
 	const remoteSiteID = F.getRandomInteger( 1 );
 
-	const $metaBox = new jQueryObject();
+	const $metaBox = new JqueryObject();
 
-	$.withArgs( '#inpsyde_multilingual_' + remoteSiteID ).returns( $metaBox );
+	$.withArgs( `#inpsyde_multilingual_${remoteSiteID}` ).returns( $metaBox );
 
 	testee.fadeInMetaBox( remoteSiteID );
 

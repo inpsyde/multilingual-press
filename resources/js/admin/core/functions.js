@@ -24,14 +24,14 @@ const getModuleName = ( module ) => {
  * @returns {Object} The settings.
  */
 export const getSettings = ( module ) => {
-	module = getModuleName( module );
+	const moduleName = getModuleName( module );
 
-	if ( 'undefined' !== typeof window[ 'mlp' + module + 'Settings' ] ) {
-		return window[ 'mlp' + module + 'Settings' ];
+	if ( 'undefined' !== typeof window[ `mlp${moduleName}Settings` ] ) {
+		return window[ `mlp${moduleName}Settings` ];
 	}
 
-	if ( 'undefined' !== typeof window[ module ] ) {
-		return window[ module ];
+	if ( 'undefined' !== typeof window[ moduleName ] ) {
+		return window[ moduleName ];
 	}
 
 	return {};

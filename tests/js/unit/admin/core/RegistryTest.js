@@ -1,8 +1,8 @@
-import "../../stubs/global";
-import test from "tape";
-import sinon from "sinon";
-import * as F from "../../functions";
-import Registry from "../../../../../resources/js/admin/core/Registry";
+import '../../stubs/global';
+import test from 'tape';
+import sinon from 'sinon';
+import * as F from '../../functions';
+import Registry from '../../../../../resources/js/admin/core/Registry';
 
 /**
  * Returns a new instance of the class under test.
@@ -92,8 +92,8 @@ test( 'initializeRoute ...', ( assert ) => {
 
 	testee.initializeRoute( route, modules );
 
+	// The third calledWith argument (i.e., callback) is missing as it is a function, which sinon cannot handle.
 	assert.equal(
-		// The third argument (i.e., the callback) is missing as it is an (arrow) function, which sinon cannot handle.
 		router.route.calledWith( route, route ),
 		true,
 		'... SHOULD route once, and pass along the expected arguments.'

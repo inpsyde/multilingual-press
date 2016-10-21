@@ -1,7 +1,7 @@
-import test from "tape";
-import sinon from "sinon";
-import * as F from "../functions";
-import * as Util from "../../../../resources/js/common/utils";
+import test from 'tape';
+import sinon from 'sinon';
+import * as F from '../functions';
+import * as Util from '../../../../resources/js/common/utils';
 
 const window = global.window = {
 	location: {
@@ -28,7 +28,7 @@ test( 'addEventListener (using an IE8 browser) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		$element.attachEvent.calledWith( 'on' + type ),
+		$element.attachEvent.calledWith( `on${type}` ),
 		true,
 		'... SHOULD attach the event listener on the expected event using IE8 methods.'
 	);

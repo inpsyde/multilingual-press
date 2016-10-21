@@ -70,9 +70,9 @@ class NavMenus extends Backbone.View {
 		const data = {
 			action: this.settings.action,
 			menu: _this.$menu.val(),
-			mlp_sites: this.getSiteIDs()
+			mlp_sites: this.getSiteIDs(),
+			[ this.settings.nonceName ]: this.settings.nonce
 		};
-		data[ this.settings.nonceName ] = this.settings.nonce;
 
 		event.preventDefault();
 

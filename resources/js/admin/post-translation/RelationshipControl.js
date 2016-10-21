@@ -65,10 +65,10 @@ class RelationshipControl extends Backbone.View {
 	 * @returns {jQuery[]} The array of jQuery objects representing meta boxes with unsaved relationships.
 	 */
 	updateUnsavedRelationships( event ) {
-		const $input = $( event.target ),
-			$metaBox = $input.closest( '.mlp-translation-meta-box' ),
-			$button = $metaBox.find( '.mlp-save-relationship-button' ),
-			index = _this.unsavedRelationships.findIndex( e => e === $metaBox );
+		const $input = $( event.target );
+		const $metaBox = $input.closest( '.mlp-translation-meta-box' );
+		const $button = $metaBox.find( '.mlp-save-relationship-button' );
+		const index = _this.unsavedRelationships.findIndex( ( e ) => e === $metaBox );
 
 		if ( 'stay' === $input.val() ) {
 			$button.prop( 'disabled', 'disabled' );
@@ -100,10 +100,10 @@ class RelationshipControl extends Backbone.View {
 	 * @param {Event} event - The click event of a save relationship button.
 	 */
 	saveRelationship( event ) {
-		const $button = $( event.target ),
-			remoteSiteID = $button.data( 'remote-site-id' ),
-			action = $( 'input[name="mlp-rc-action[' + remoteSiteID + ']"]:checked' ).val(),
-			eventName = this.getEventName( action );
+		const $button = $( event.target );
+		const remoteSiteID = $button.data( 'remote-site-id' );
+		const action = $( `input[name="mlp-rc-action[${remoteSiteID}]"]:checked` ).val();
+		const eventName = this.getEventName( action );
 
 		if ( 'stay' === action ) {
 			return;
@@ -114,8 +114,8 @@ class RelationshipControl extends Backbone.View {
 		/**
 		 * Triggers the according event for the current relationship action, and passes data and the event's name.
 		 */
-		_this.EventManager.trigger( 'RelationshipControl:' + eventName, {
-			action: 'mlp_rc_' + action,
+		_this.EventManager.trigger( `RelationshipControl:${eventName}`, {
+			action: `mlp_rc_${action}`,
 			remote_site_id: remoteSiteID,
 			remote_post_id: $button.data( 'remote-post-id' ),
 			source_site_id: $button.data( 'source-site-id' ),
@@ -148,9 +148,11 @@ class RelationshipControl extends Backbone.View {
 	 * @param {Object} data - The common data for all relationship requests.
 	 */
 	connectNewPost( data ) {
-		data.new_post_title = $( 'input[name="post_title"]' ).val();
+		const postData = data;
 
-		this.sendRequest( data );
+		postData.new_post_title = $( 'input[name="post_title"]' ).val();
+
+		this.sendRequest( postData );
 	}
 
 	/**
@@ -167,17 +169,18 @@ class RelationshipControl extends Backbone.View {
 	 * @returns {Boolean} Whether or not the request has been sent.
 	 */
 	connectExistingPost( data ) {
-		const newPostID = Number( $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() || 0 );
-
+		const newPostID = Number( $( `input[name="mlp_add_post[${data.remote_site_id}]"]:checked` ).val() || 0 );
 		if ( ! newPostID ) {
 			window.alert( this.settings.L10n.noPostSelected );
 
 			return false;
 		}
 
-		data.new_post_id = newPostID;
+		const postData = data;
 
-		this.sendRequest( data );
+		postData.new_post_id = newPostID;
+
+		this.sendRequest( postData );
 
 		return true;
 	}

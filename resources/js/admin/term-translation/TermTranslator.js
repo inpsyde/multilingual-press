@@ -30,7 +30,7 @@ class TermTranslator extends Backbone.View {
 
 	/**
 	 * Returns the jQuery object representing the MultilingualPress term selects.
-	 * @returns {jQuery}
+	 * @returns {jQuery} The jQuery object representing the MultilingualPress term selects.
 	 */
 	get $selects() {
 		return _this.$selects;
@@ -41,18 +41,15 @@ class TermTranslator extends Backbone.View {
 	 * @param {Event} event - The change event of a term select element.
 	 */
 	propagateSelectedTerm( event ) {
-		let $select,
-			relation;
-
 		if ( _this.isPropagating ) {
 			return;
 		}
 
 		_this.isPropagating = true;
 
-		$select = $( event.target );
+		const $select = $( event.target );
 
-		relation = this.getSelectedRelation( $select );
+		const relation = this.getSelectedRelation( $select );
 		if ( '' !== relation ) {
 			this.$selects.not( $select ).each( ( index, element ) => this.selectTerm( $( element ), relation ) );
 		}
@@ -76,8 +73,7 @@ class TermTranslator extends Backbone.View {
 	 * @returns {Boolean} Whether or not a term was selected.
 	 */
 	selectTerm( $select, relation ) {
-		const $option = $select.find( 'option[data-relation="' + relation + '"]' );
-
+		const $option = $select.find( `option[data-relation="${relation}"]` );
 		if ( $option.length ) {
 			$select.val( $option.val() );
 

@@ -77,11 +77,9 @@ class Controller {
 			callback
 		};
 
-		if ( ! Array.isArray( routes ) ) {
-			routes = [ routes ];
-		}
+		const routesArray = Array.isArray( routes ) ? routes : [ routes ];
 
-		routes.forEach( ( route ) => _this.registry.registerModuleForRoute( moduleData, route ) );
+		routesArray.forEach( ( route ) => _this.registry.registerModuleForRoute( moduleData, route ) );
 	}
 }
 

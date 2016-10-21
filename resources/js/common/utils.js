@@ -8,7 +8,7 @@ export const addEventListener = ( $element, type, listener ) => {
 	if ( $element.addEventListener ) {
 		$element.addEventListener( type, listener );
 	} else {
-		$element.attachEvent( 'on' + type, () => {
+		$element.attachEvent( `on${type}`, () => {
 			listener.call( $element );
 		} );
 	}

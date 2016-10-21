@@ -1,7 +1,7 @@
-import "../../stubs/global";
-import test from "tape";
-import * as F from "../../functions";
-import Model from "../../../../../resources/js/admin/core/Model";
+import '../../stubs/global';
+import test from 'tape';
+import * as F from '../../functions';
+import Model from '../../../../../resources/js/admin/core/Model';
 
 test( 'constructor ...', ( assert ) => {
 	const urlRoot = F.getRandomString();

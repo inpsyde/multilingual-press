@@ -132,7 +132,7 @@ class CopyPost extends Backbone.View {
 
 		this.fadeOutMetaBox( remoteSiteID );
 
-		$( '#mlp-translation-data-' + remoteSiteID + '-copied-post' ).val( 1 );
+		$( `#mlp-translation-data-${remoteSiteID}-copied-post` ).val( 1 );
 
 		/**
 		 * Triggers the event before copying post data, and passes an object for adding custom data, and the current
@@ -177,7 +177,7 @@ class CopyPost extends Backbone.View {
 	 * @param {Number} remoteSiteID - The remote site ID.
 	 */
 	fadeOutMetaBox( remoteSiteID ) {
-		$( '#inpsyde_multilingual_' + remoteSiteID ).css( 'opacity', .4 );
+		$( `#inpsyde_multilingual_${remoteSiteID}` ).css( 'opacity', .4 );
 	}
 
 	/**
@@ -185,26 +185,23 @@ class CopyPost extends Backbone.View {
 	 * @returns {Boolean} Whether or not the post data have been updated.
 	 */
 	updatePostData() {
-		let data,
-			prefix;
-
 		if ( ! this.model.get( 'success' ) ) {
 			return false;
 		}
 
-		data = this.model.get( 'data' );
+		const data = this.model.get( 'data' );
 
-		prefix = 'mlp-translation-data-' + data.siteID + '-';
+		const prefix = `mlp-translation-data-${data.siteID}-`;
 
-		$( '#' + prefix + 'title' ).val( data.title );
+		$( `#${prefix}title` ).val( data.title );
 
-		$( '#' + prefix + 'name' ).val( data.slug );
+		$( `#${prefix}name` ).val( data.slug );
 
-		this.setTinyMCEContent( prefix + 'content', data.tinyMCEContent );
+		this.setTinyMCEContent( `${prefix}content`, data.tinyMCEContent );
 
-		$( '#' + prefix + 'content' ).val( data.content );
+		$( `#${prefix}content` ).val( data.content );
 
-		$( '#' + prefix + 'excerpt' ).val( data.excerpt );
+		$( `#${prefix}excerpt` ).val( data.excerpt );
 
 		/**
 		 * Triggers the event for updating the post, and passes the according data.
@@ -223,13 +220,11 @@ class CopyPost extends Backbone.View {
 	 * @returns {Boolean} Whether or not the post content has been updated.
 	 */
 	setTinyMCEContent( editorID, content ) {
-		let editor;
-
 		if ( 'undefined' === typeof window.tinyMCE ) {
 			return false;
 		}
 
-		editor = window.tinyMCE.get( editorID );
+		const editor = window.tinyMCE.get( editorID );
 		if ( ! editor ) {
 			return false;
 		}
@@ -244,7 +239,7 @@ class CopyPost extends Backbone.View {
 	 * @param {Number} remoteSiteID - The remote site ID.
 	 */
 	fadeInMetaBox( remoteSiteID ) {
-		$( '#inpsyde_multilingual_' + remoteSiteID ).css( 'opacity', 1 );
+		$( `#inpsyde_multilingual_${remoteSiteID}` ).css( 'opacity', 1 );
 	}
 }
 

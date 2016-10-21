@@ -1,20 +1,18 @@
-'use strict';
-
-import * as Util from "./common/utils";
-import * as F from "./admin/core/functions";
-import { Toggler } from "./admin/core/common";
-import Controller from "./admin/core/Controller";
-import EventManager from "./admin/core/EventManager";
-import Model from "./admin/core/Model";
-import Registry from "./admin/core/Registry";
-import Router from "./admin/core/Router";
-import NavMenus from "./admin/nav-menus/NavMenus";
-import AddNewSite from "./admin/network/AddNewSite";
-import CopyPost from "./admin/post-translation/CopyPost";
-import RelationshipControl from "./admin/post-translation/RelationshipControl";
-import RemotePostSearch from "./admin/post-translation/RemotePostSearch";
-import TermTranslator from "./admin/term-translation/TermTranslator";
-import UserBackEndLanguage from "./admin/user-settings/UserBackEndLanguage";
+import * as Util from './common/utils';
+import * as F from './admin/core/functions';
+import { Toggler } from './admin/core/common';
+import Controller from './admin/core/Controller';
+import EventManager from './admin/core/EventManager';
+import Model from './admin/core/Model';
+import Registry from './admin/core/Registry';
+import Router from './admin/core/Router';
+import NavMenus from './admin/nav-menus/NavMenus';
+import AddNewSite from './admin/network/AddNewSite';
+import CopyPost from './admin/post-translation/CopyPost';
+import RelationshipControl from './admin/post-translation/RelationshipControl';
+import RemotePostSearch from './admin/post-translation/RemotePostSearch';
+import TermTranslator from './admin/term-translation/TermTranslator';
+import UserBackEndLanguage from './admin/user-settings/UserBackEndLanguage';
 
 const { ajaxurl: ajaxUrl, jQuery: $ } = window;
 
@@ -64,17 +62,15 @@ const toggler = new Toggler( {
 // Initialize the state togglers.
 toggler.initializeStateTogglers();
 
-let settings;
-
 // Register the NavMenus module for the Menus admin page.
-settings = F.getSettings( 'NavMenus' );
+const navMenusSettings = F.getSettings( 'NavMenus' );
 controller.registerModule( 'nav-menus.php', NavMenus, {
-	el: '#' + settings.metaBoxID,
+	el: `#${navMenusSettings.metaBoxID}`,
 	events: {
 		'click #submit-mlp-language': 'sendRequest'
 	},
 	model: new Model( { urlRoot: ajaxUrl } ),
-	settings
+	settings: navMenusSettings
 } );
 
 // Register the AddNewSite module for the Add New Site network admin page.

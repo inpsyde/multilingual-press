@@ -1,5 +1,5 @@
-import sinon from "sinon";
-import jQueryObject from "./jQueryObject";
+import sinon from 'sinon';
+import JqueryObject from './JqueryObject';
 
 const Backbone = {
 	Events: {
@@ -12,21 +12,20 @@ const Backbone = {
 	History: {
 		started: false
 	},
-	Model: function() {
+	Model() {
 	},
-	Router: function() {
+	Router() {
 	},
-	View: function( options = {} ) {
-		this.$el = options.$el || new jQueryObject();
-		this.model = options.model || new Backbone.Model();
+	View( { $el = new JqueryObject(), model = new Backbone.Model() } ) {
+		this.$el = $el;
+		this.model = model;
+	},
+	_restore() {
+		this.Events.on.reset();
+		this.Events.trigger.reset();
+		this.history.start.reset();
+		this.History.started = false;
 	}
-};
-
-Backbone._restore = () => {
-	Backbone.Events.on.reset();
-	Backbone.Events.trigger.reset();
-	Backbone.history.start.reset();
-	Backbone.History.started = false;
 };
 
 Backbone.Model.prototype.fetch = sinon.spy();

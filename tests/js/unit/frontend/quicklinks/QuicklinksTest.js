@@ -1,7 +1,7 @@
-import test from "tape";
-import sinon from "sinon";
-import * as F from "../../functions";
-import Quicklinks from "../../../../../resources/js/frontend/quicklinks/Quicklinks";
+import test from 'tape';
+import sinon from 'sinon';
+import * as F from '../../functions';
+import Quicklinks from '../../../../../resources/js/frontend/quicklinks/Quicklinks';
 
 const document = global.document = {};
 
@@ -92,8 +92,8 @@ test( 'attachSubmitHandler (correct selector) ...', ( assert ) => {
 		'... SHOULD return true.'
 	);
 
+	// The third calledWith argument (i.e., listener) is missing as it is a bound function, which sinon cannot handle.
 	assert.equal(
-		// The third argument (i.e., the listener) is missing as it is a bound function, which sinon cannot handle.
 		Util.addEventListener.calledWith( $element, 'submit' ),
 		true,
 		'... SHOULD attach the expected event handler.'

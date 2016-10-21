@@ -1,6 +1,4 @@
-'use strict';
-
-import * as Util from "./common/utils";
+import * as Util from './common/utils';
 import Quicklinks from './frontend/quicklinks/Quicklinks';
 
 /**

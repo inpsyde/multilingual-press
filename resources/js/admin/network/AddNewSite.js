@@ -46,7 +46,7 @@ class AddNewSite extends Backbone.View {
 	adaptLanguage( event ) {
 		const language = this.getLanguage( $( event.target ) );
 
-		if ( _this.$language.find( '[value="' + language + '"]' ).length ) {
+		if ( _this.$language.find( `[value="${language}"]` ).length ) {
 			_this.$language.val( language );
 		}
 	}

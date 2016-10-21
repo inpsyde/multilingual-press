@@ -1,10 +1,10 @@
-import "../../stubs/global";
-import test from "tape";
-import sinon from "sinon";
-import * as _ from "lodash";
-import * as F from "../../functions";
-import jQueryObject from "../../stubs/jQueryObject";
-import TermTranslator from "../../../../../resources/js/admin/term-translation/TermTranslator";
+import '../../stubs/global';
+import test from 'tape';
+import sinon from 'sinon';
+import * as _ from 'lodash';
+import * as F from '../../functions';
+import JqueryObject from '../../stubs/JqueryObject';
+import TermTranslator from '../../../../../resources/js/admin/term-translation/TermTranslator';
 
 /**
  * Returns a new instance of the class under test.
@@ -24,7 +24,7 @@ test( '$selects ...', ( assert ) => {
 	const $selects = F.getRandomString();
 
 	const options = {
-		$el: new jQueryObject( {
+		$el: new JqueryObject( {
 			find: () => $selects
 		} )
 	};
@@ -98,10 +98,10 @@ test( 'propagateSelectedTerm (not propagating, invalid relation) ...', ( assert 
 test( 'propagateSelectedTerm (not propagating, valid relation) ...', ( assert ) => {
 	const _elements = F.getRandomArray();
 
-	const $selects = new jQueryObject( { _elements } );
+	const $selects = new JqueryObject( { _elements } );
 	$selects.not.returnsThis();
 
-	const $el = new jQueryObject();
+	const $el = new JqueryObject();
 	$el.find.returns( $selects );
 
 	const testee = createTestee( { $el } );
@@ -132,10 +132,10 @@ test( 'propagateSelectedTerm (not propagating, valid relation) ...', ( assert ) 
 test( 'getSelectedRelation (relation missing) ...', ( assert ) => {
 	const testee = createTestee();
 
-	const $option = new jQueryObject();
+	const $option = new JqueryObject();
 	$option.data.returns( undefined );
 
-	const $select = new jQueryObject();
+	const $select = new JqueryObject();
 	$select.find.returns( $option );
 
 	assert.equal(
@@ -152,10 +152,10 @@ test( 'getSelectedRelation (relation specified) ...', ( assert ) => {
 
 	const relation = F.getRandomString();
 
-	const $option = new jQueryObject();
+	const $option = new JqueryObject();
 	$option.data.returns( relation );
 
-	const $select = new jQueryObject();
+	const $select = new JqueryObject();
 	$select.find.returns( $option );
 
 	assert.equal(
@@ -172,12 +172,12 @@ test( 'selectTerm (matching relation) ...', ( assert ) => {
 
 	const termID = F.getRandomInteger();
 
-	const $option = new jQueryObject( {
+	const $option = new JqueryObject( {
 		_elements: [ 'element' ]
 	} );
 	$option.val.returns( termID );
 
-	const $select = new jQueryObject();
+	const $select = new JqueryObject();
 	$select.find.returns( $option );
 
 	assert.equal(
@@ -204,13 +204,13 @@ test( 'selectTerm (no matching relation) ...', ( assert ) => {
 
 	const termID = F.getRandomInteger();
 
-	const $option = new jQueryObject();
+	const $option = new JqueryObject();
 	$option.val.returns( termID );
 
-	const $options = new jQueryObject();
+	const $options = new JqueryObject();
 	$options.first.returns( $option );
 
-	const $select = new jQueryObject();
+	const $select = new JqueryObject();
 	$select.find.returns( $options );
 
 	assert.equal(
@@ -234,8 +234,8 @@ test( 'selectTerm (relation missing) ...', ( assert ) => {
 	// Make method return an empty string (i.e., no relation found).
 	testee.getSelectedRelation = F.returnEmptyString;
 
-	const $select = new jQueryObject();
-	$select.find.returns( new jQueryObject() );
+	const $select = new JqueryObject();
+	$select.find.returns( new JqueryObject() );
 
 	assert.equal(
 		testee.selectTerm( $select, 'relation' ),

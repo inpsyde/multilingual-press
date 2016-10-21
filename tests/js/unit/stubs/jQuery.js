@@ -1,5 +1,5 @@
-import sinon from "sinon";
-import jQueryObject from "./jQueryObject";
+import sinon from 'sinon';
+import JqueryObject from './JqueryObject';
 
 const arrayEach = ( a, c ) => {
 	a.forEach( ( e, i ) => {
@@ -13,14 +13,22 @@ const objectEach = ( o, c ) => {
 
 const jQuery = sinon.stub();
 jQuery.ajax = sinon.stub();
-jQuery.each = ( o = {}, c ) => Array.isArray( o ) ? arrayEach( o, c ) : objectEach( o, c );
+jQuery.each = ( o, c ) => {
+	if ( Array.isArray( o ) ) {
+		arrayEach( o, c );
+
+		return;
+	}
+
+	objectEach( o, c );
+};
 jQuery.trim = ( a ) => a;
 
 jQuery._restore = () => {
 	jQuery.reset().resetBehavior();
 
-	// TODO: On each call, return a fresh jQueryObject. Depends on something like sinon.stub().returnsCallbackResult()`.
-	jQuery.returns( new jQueryObject() );
+	// TODO: On each call, return a fresh JqueryObject. Depends on something like sinon.stub().returnsCallbackResult().
+	jQuery.returns( new JqueryObject() );
 };
 
 jQuery._restore();

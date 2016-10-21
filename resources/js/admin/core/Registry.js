@@ -38,8 +38,8 @@ class Registry {
 	 * @returns {Object} The module instance.
 	 */
 	createModule( data ) {
-		const Constructor = data.Constructor,
-			module = new Constructor( data.options || {} );
+		const Constructor = data.Constructor;
+		const module = new Constructor( data.options || {} );
 
 		_this.modules[ Constructor.name ] = module;
 
@@ -88,7 +88,9 @@ class Registry {
 			_this.data[ route ] = [];
 		}
 
-		return _this.data[ route ].push( module );
+		_this.data[ route ].push( module );
+
+		return _this.data[ route ];
 	}
 }
 

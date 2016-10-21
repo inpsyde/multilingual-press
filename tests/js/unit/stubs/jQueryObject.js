@@ -1,9 +1,14 @@
 /* eslint-disable no-invalid-this */
 
-import sinon from "sinon";
-import * as _ from "lodash";
+import sinon from 'sinon';
+import * as _ from 'lodash';
 
-export default function jQueryObject( customMembers = {} ) {
+/**
+ * Creates a jQuery object for testing.
+ * @param {Object} [customMembers={}] - Optional. Custom members of the jQuery object. Defaults to empty object.
+ * @constructor
+ */
+export default function JqueryObject( customMembers = {} ) {
 	const members = _.extend( {
 		_elements: [],
 

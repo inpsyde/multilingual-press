@@ -1,8 +1,8 @@
-import "../../stubs/global";
-import test from "tape";
-import * as F from "../../functions";
-import jQueryObject from "../../stubs/jQueryObject";
-import UserBackEndLanguage from "../../../../../resources/js/admin/user-settings/UserBackEndLanguage";
+import '../../stubs/global';
+import test from 'tape';
+import * as F from '../../functions';
+import JqueryObject from '../../stubs/JqueryObject';
+import UserBackEndLanguage from '../../../../../resources/js/admin/user-settings/UserBackEndLanguage';
 
 test( 'settings ...', ( assert ) => {
 	const options = {
@@ -22,7 +22,7 @@ test( 'settings ...', ( assert ) => {
 
 test( 'updateSiteLanguage ...', ( assert ) => {
 	const options = {
-		$el: new jQueryObject(),
+		$el: new JqueryObject(),
 		settings: {
 			locale: F.getRandomString()
 		}

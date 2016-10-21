@@ -17,7 +17,7 @@ export class Toggler extends Backbone.View {
 	 * @param {jQuery} $toggler - The jQuery representation of a toggler element.
 	 */
 	initializeStateToggler( $toggler ) {
-		$( '[name="' + $toggler.attr( 'name' ) + '"]' ).on( 'change', {
+		$( `[name="${$toggler.attr( 'name' )}"]` ).on( 'change', {
 			$toggler
 		}, this.toggleElementIfChecked );
 	}
@@ -46,8 +46,8 @@ export class Toggler extends Backbone.View {
 	 * @param {Event} event - The change event of an input element.
 	 */
 	toggleElementIfChecked( event ) {
-		const $toggler = event.data.$toggler,
-			targetID = $toggler.data( 'toggle-target' );
+		const $toggler = event.data.$toggler;
+		const targetID = $toggler.data( 'toggle-target' );
 
 		if ( targetID ) {
 			$( targetID ).toggle( $toggler.is( ':checked' ) );

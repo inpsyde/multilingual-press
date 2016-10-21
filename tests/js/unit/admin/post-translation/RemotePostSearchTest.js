@@ -1,10 +1,10 @@
-import globalStub from "../../stubs/global";
-import test from "tape";
-import sinon from "sinon";
-import * as _ from "lodash";
-import * as F from "../../functions";
-import jQueryObject from "../../stubs/jQueryObject";
-import RemotePostSearch from "../../../../../resources/js/admin/post-translation/RemotePostSearch";
+import globalStub from '../../stubs/global';
+import test from 'tape';
+import sinon from 'sinon';
+import * as _ from 'lodash';
+import * as F from '../../functions';
+import JqueryObject from '../../stubs/JqueryObject';
+import RemotePostSearch from '../../../../../resources/js/admin/post-translation/RemotePostSearch';
 
 const { $, Backbone } = global;
 
@@ -67,7 +67,7 @@ test( 'initializeResults ...', ( assert ) => {
 
 	const _elements = F.getRandomArray( 1, 10, element );
 
-	$.withArgs( '.mlp-search-field' ).returns( new jQueryObject( { _elements } ) );
+	$.withArgs( '.mlp-search-field' ).returns( new JqueryObject( { _elements } ) );
 
 	testee.initializeResults();
 
@@ -129,7 +129,7 @@ test( 'reactToInput (unchanged input value) ...', ( assert ) => {
 
 	const value = F.getRandomString();
 
-	const $input = new jQueryObject();
+	const $input = new JqueryObject();
 	$input.data.withArgs( 'value' ).returns( value );
 	$input.val.returns( value );
 
@@ -174,7 +174,7 @@ test( 'reactToInput (changed input value) ...', ( assert ) => {
 
 	const value = F.getRandomString();
 
-	const $input = new jQueryObject();
+	const $input = new JqueryObject();
 	$input.data.withArgs( 'value' ).returns( 'value' );
 	$input.val.returns( value );
 

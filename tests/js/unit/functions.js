@@ -40,7 +40,7 @@ export const getRandomObject = ( min = 0, max = 10, value ) => {
 	const o = {};
 
 	for ( let i = 0; i < getRandomInteger( min, max ); i++ ) {
-		o[ 'element' + i ] = value || getRandomString();
+		o[ `element-${i}` ] = value || getRandomString();
 	}
 
 	return o;

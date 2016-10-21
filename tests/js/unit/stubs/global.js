@@ -1,7 +1,7 @@
-import sinon from "sinon";
-import _ from "./underscore";
-import Backbone from "./Backbone";
-import jQuery from "./jQuery";
+import sinon from 'sinon';
+import _ from './underscore';
+import Backbone from './Backbone';
+import jQuery from './jQuery';
 
 const window = {
 	$: jQuery,

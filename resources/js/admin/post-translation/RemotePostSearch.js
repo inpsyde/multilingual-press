@@ -55,9 +55,10 @@ class RemotePostSearch extends Backbone.View {
 	 * @param {HTMLElement} element - The HTML element.
 	 */
 	initializeResult( element ) {
-		const $element = $( element ),
-			$resultsContainer = $( '#' + $element.data( 'results-container-id' ) ),
-			siteID = $element.data( 'remote-site-id' );
+		const $element = $( element );
+		const id = `#${$element.data( 'results-container-id' )}`;
+		const $resultsContainer = $( id );
+		const siteID = $element.data( 'remote-site-id' );
 
 		_this.defaultResults[ siteID ] = $resultsContainer.html();
 		_this.resultsContainers[ siteID ] = $resultsContainer;
@@ -85,10 +86,8 @@ class RemotePostSearch extends Backbone.View {
 	 * @param {Event} event - The keyup event of a post search element.
 	 */
 	reactToInput( event ) {
-		const $input = $( event.target ),
-			value = $.trim( $input.val() || '' );
-
-		let remoteSiteID;
+		const $input = $( event.target );
+		const value = $.trim( $input.val() || '' );
 
 		if ( value === $input.data( 'value' ) ) {
 			return;
@@ -98,7 +97,7 @@ class RemotePostSearch extends Backbone.View {
 
 		$input.data( 'value', value );
 
-		remoteSiteID = $input.data( 'remote-site-id' );
+		const remoteSiteID = $input.data( 'remote-site-id' );
 
 		if ( '' === value ) {
 			_this.resultsContainers[ remoteSiteID ].html( _this.defaultResults[ remoteSiteID ] );
@@ -124,10 +123,8 @@ class RemotePostSearch extends Backbone.View {
 	 * @returns {Boolean} Whether or not new data has been rendered.
 	 */
 	render() {
-		let data;
-
 		if ( this.model.get( 'success' ) ) {
-			data = this.model.get( 'data' );
+			const data = this.model.get( 'data' );
 
 			if ( _this.resultsContainers[ data.remoteSiteID ] ) {
 				_this.resultsContainers[ data.remoteSiteID ].html( data.html );

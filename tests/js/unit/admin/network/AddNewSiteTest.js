@@ -1,10 +1,10 @@
-import globalStub from "../../stubs/global";
-import test from "tape";
-import sinon from "sinon";
-import * as _ from "lodash";
-import * as F from "../../functions";
-import jQueryObject from "../../stubs/jQueryObject";
-import AddNewSite from "../../../../../resources/js/admin/network/AddNewSite";
+import globalStub from '../../stubs/global';
+import test from 'tape';
+import sinon from 'sinon';
+import * as _ from 'lodash';
+import * as F from '../../functions';
+import JqueryObject from '../../stubs/JqueryObject';
+import AddNewSite from '../../../../../resources/js/admin/network/AddNewSite';
 
 const { $ } = global;
 
@@ -23,13 +23,13 @@ const createTestee = ( options ) => {
 test( 'constructor (template) ...', ( assert ) => {
 	const markup = F.getRandomString();
 
-	const $template = new jQueryObject();
+	const $template = new JqueryObject();
 	$template.html.returns( markup );
 
 	$.withArgs( '#mlp-add-new-site-template' ).returns( $template );
 
-	const $el = new jQueryObject();
-	$el.find.returns( new jQueryObject() );
+	const $el = new JqueryObject();
+	$el.find.returns( new JqueryObject() );
 
 	createTestee( { $el } );
 
@@ -58,8 +58,8 @@ test( 'constructor (no template) ...', ( assert ) => {
 } );
 
 test( 'adaptLanguage (language found) ...', ( assert ) => {
-	const $language = new jQueryObject();
-	$language.find.returns( new jQueryObject( { _elements: [ 'language' ] } ) );
+	const $language = new JqueryObject();
+	$language.find.returns( new JqueryObject( { _elements: [ 'language' ] } ) );
 
 	$.withArgs( '#mlp-site-language' ).returns( $language );
 
@@ -85,8 +85,8 @@ test( 'adaptLanguage (language found) ...', ( assert ) => {
 } );
 
 test( 'adaptLanguage (language not found) ...', ( assert ) => {
-	const $language = new jQueryObject();
-	$language.find.returns( new jQueryObject() );
+	const $language = new JqueryObject();
+	$language.find.returns( new JqueryObject() );
 
 	$.withArgs( '#mlp-site-language' ).returns( $language );
 
@@ -113,7 +113,7 @@ test( 'getLanguage (English, United States) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
-		testee.getLanguage( new jQueryObject() ),
+		testee.getLanguage( new JqueryObject() ),
 		'en-US',
 		'... SHOULD return the locale for English (United States).'
 	);
@@ -124,7 +124,7 @@ test( 'getLanguage (English, United States) ...', ( assert ) => {
 test( 'getLanguage (German, Germany) ...', ( assert ) => {
 	const testee = createTestee();
 
-	const $select = new jQueryObject();
+	const $select = new JqueryObject();
 	$select.val.returns( 'de_DE' );
 
 	assert.equal(
@@ -141,7 +141,7 @@ test( 'getLanguage (Klingon) ...', ( assert ) => {
 
 	const language = 'tlh';
 
-	const $select = new jQueryObject();
+	const $select = new JqueryObject();
 	$select.val.returns( language );
 
 	assert.equal(
@@ -164,7 +164,7 @@ test( 'togglePluginsRow ...', ( assert ) => {
 
 	const siteID = F.getRandomBool() ? F.getRandomInteger( 1 ) : '';
 
-	const $siteID = new jQueryObject();
+	const $siteID = new JqueryObject();
 	$siteID.val.returns( siteID );
 
 	$.returns( $siteID );

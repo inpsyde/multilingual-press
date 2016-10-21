@@ -1,19 +1,19 @@
-import globalStub from "../../stubs/global";
-import test from "tape";
-import sinon from "sinon";
-import * as F from "../../functions";
-import jQueryObject from "../../stubs/jQueryObject";
-import { Toggler } from "../../../../../resources/js/admin/core/common";
+import globalStub from '../../stubs/global';
+import test from 'tape';
+import sinon from 'sinon';
+import * as F from '../../functions';
+import JqueryObject from '../../stubs/JqueryObject';
+import { Toggler } from '../../../../../resources/js/admin/core/common';
 
 const { $ } = global;
 
 test( 'initializeStateToggler ...', ( assert ) => {
 	const testee = new Toggler();
 
-	const $toggler = new jQueryObject();
+	const $toggler = new JqueryObject();
 	$toggler.attr.returnsArg( 0 );
 
-	const $togglers = new jQueryObject();
+	const $togglers = new JqueryObject();
 
 	$.withArgs( '[name="name"]' ).returns( $togglers );
 
@@ -41,10 +41,10 @@ test( 'initializeStateTogglers ...', ( assert ) => {
 
 	const _elements = F.getRandomArray( 1, 10, element );
 
-	const $element = new jQueryObject();
+	const $element = new JqueryObject();
 
 	$
-		.withArgs( '.mlp-state-toggler' ).returns( new jQueryObject( { _elements } ) )
+		.withArgs( '.mlp-state-toggler' ).returns( new JqueryObject( { _elements } ) )
 		.withArgs( element ).returns( $element );
 
 	testee.initializeStateTogglers();
@@ -74,9 +74,9 @@ test( 'toggleElement (invalid target) ...', ( assert ) => {
 		target: F.getRandomString()
 	};
 
-	const $toggler = new jQueryObject();
+	const $toggler = new JqueryObject();
 
-	const $target = new jQueryObject();
+	const $target = new JqueryObject();
 
 	$
 		.withArgs( event.target ).returns( $toggler )
@@ -105,10 +105,10 @@ test( 'toggleElement (valid target) ...', ( assert ) => {
 
 	const targetID = F.getRandomString();
 
-	const $toggler = new jQueryObject();
+	const $toggler = new JqueryObject();
 	$toggler.data.withArgs( 'toggle-target' ).returns( targetID );
 
-	const $target = new jQueryObject();
+	const $target = new JqueryObject();
 
 	$
 		.withArgs( event.target ).returns( $toggler )
@@ -133,11 +133,11 @@ test( 'toggleElementIfChecked (unchecked) ...', ( assert ) => {
 
 	const event = {
 		data: {
-			$toggler: new jQueryObject()
+			$toggler: new JqueryObject()
 		}
 	};
 
-	const $target = new jQueryObject();
+	const $target = new JqueryObject();
 
 	$.returns( $target );
 
@@ -162,7 +162,7 @@ test( 'toggleElementIfChecked (checked) ...', ( assert ) => {
 
 	const isChecked = F.getRandomBool();
 
-	const $toggler = new jQueryObject();
+	const $toggler = new JqueryObject();
 	$toggler.data.withArgs( 'toggle-target' ).returns( targetID );
 	$toggler.is.withArgs( ':checked' ).returns( isChecked );
 
@@ -172,7 +172,7 @@ test( 'toggleElementIfChecked (checked) ...', ( assert ) => {
 		}
 	};
 
-	const $target = new jQueryObject();
+	const $target = new JqueryObject();
 
 	$.withArgs( targetID ).returns( $target );
 
