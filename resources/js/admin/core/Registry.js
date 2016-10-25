@@ -88,9 +88,7 @@ class Registry {
 			_this.data[ route ] = [];
 		}
 
-		_this.data[ route ].push( module );
-
-		return _this.data[ route ];
+		return _this.data[ route ].push( module );
 	}
 }
 
