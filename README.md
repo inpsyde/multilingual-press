@@ -19,10 +19,6 @@ will still work as separate sites without any data-loss or garbage output.
 
 Our **Language Manager** offers 174 languages, and you can edit them.
 
-We cannot guarantee free ad hoc support. Please be patient, we are a small team.
-You can follow our progress and development notices on our
-[developer blog](http://make.multilingualpress.org).
-
 ## Features
 
 - Set up unlimited site relationships in the site manager.
@@ -46,6 +42,10 @@ when you don't use widgets or a sidebar.
 - User specific language settings for the back-end. Every user can choose a preferred language for the user interface
 without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
+
+We cannot guarantee free ad hoc support. Please be patient, we are a small team.
+You can follow our progress and development notices on our
+[developer blog](http://make.multilingualpress.org).
 
 ## Premium Support
 

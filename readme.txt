@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.4
 Tested up to: 4.6
-Stable tag: 2.4.7
+Stable tag: 2.4.8
 
 Simply THE multisite-based free open source plugin for your multilingual websites.
 
@@ -21,10 +21,6 @@ In contrast to most other translation plugins there is **no lock-in effect**: Wh
 will still work as separate sites without any data-loss or garbage output.
 
 Our **Language Manager** offers 174 languages, and you can edit them.
-
-We cannot guarantee free ad hoc support. Please be patient, we are a small team.
-You can follow our progress and development notices on our
-[developer blog](http://make.multilingualpress.org).
 
 = Features =
 
@@ -49,6 +45,10 @@ when you don't use widgets or a sidebar.
 - User specific language settings for the back-end. Every user can choose a preferred language for the user interface
 without affecting the output of the front-end.
 - Show posts with incomplete translations in a dashboard widget.
+
+We cannot guarantee free ad hoc support. Please be patient, we are a small team.
+You can follow our progress and development notices on our
+[developer blog](http://make.multilingualpress.org).
 
 = Premium Support =
 
@@ -113,6 +113,18 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.4.8 =
+- Install/Uninstall: Prevent potential PHP notice due to deprecated `wp_get_sites()` function, see
+[issue #229](https://github.com/inpsyde/multilingual-press/issues/229) and
+[issue #236](https://github.com/inpsyde/multilingual-press/issues/236).
+- Language Manager: Fix HTTP code of _Chinese (Singapore)_, see
+[issue #232](https://github.com/inpsyde/multilingual-press/issues/232).
+- Language Manager: Fix HTTP code of _French (Switzerland)_, see
+[issue #233](https://github.com/inpsyde/multilingual-press/issues/233).
+- Redirect: Fix priority of language-only redirect matches, see
+[issue #234](https://github.com/inpsyde/multilingual-press/issues/234).
+- Post Translator: Prevent potential update of wrong posts, props 082net.
 
 = 2.4.7 =
 - CSS: Use font weight "600" instead of "bold", see
