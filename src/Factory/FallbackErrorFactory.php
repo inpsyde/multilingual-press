@@ -7,21 +7,12 @@ use Inpsyde\MultilingualPress\Common\Factory;
 use WP_Error;
 
 /**
- * Factory for WordPress error objects.
+ * Factory for WordPress error objects performing a fallback to WP_Error.
  *
  * @package Inpsyde\MultilingualPress\Factory
  * @since   3.0.0
  */
-final class Error implements Factory {
-
-	/**
-	 * Fully qualified name of the base (class).
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string
-	 */
-	const BASE = '\WP_Error';
+final class FallbackErrorFactory implements ErrorFactory {
 
 	/**
 	 * @var Factory
@@ -33,11 +24,12 @@ final class Error implements Factory {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $default_class Optional. Fully qualified name of the default class. Defaults to self::BASE.
+	 * @param string $default_class Optional. Fully qualified name of the default class. Defaults to
+	 *                              ErrorFactory::DEFAULT_CLASS.
 	 */
-	public function __construct( $default_class = self::BASE ) {
+	public function __construct( $default_class = ErrorFactory::DEFAULT_CLASS ) {
 
-		$this->factory = GenericFactory::with_default_class( self::BASE, (string) $default_class );
+		$this->factory = GenericFactory::with_default_class( ErrorFactory::BASE, (string) $default_class );
 	}
 
 	/**
@@ -61,7 +53,7 @@ final class Error implements Factory {
 				throw $e;
 			}
 
-			return $this->factory->create( $args, self::BASE );
+			return $this->factory->create( $args, ErrorFactory::DEFAULT_CLASS );
 		}
 
 		return $object;

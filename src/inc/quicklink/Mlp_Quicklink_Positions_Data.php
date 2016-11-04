@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+
 /**
  * Provides data for the configuration on the MultilingualPress network settings page.
  */
@@ -13,18 +15,18 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	private $form_name = 'mlp-quicklink-position';
 
 	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
+	 * @var Nonce
 	 */
-	private $nonce_validator;
+	private $nonce;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce_validator Nonce validator object.
+	 * @param Nonce $nonce Nonce object.
 	 */
-	public function __construct( Inpsyde_Nonce_Validator_Interface $nonce_validator ) {
+	public function __construct( Nonce $nonce ) {
 
-		$this->nonce_validator = $nonce_validator;
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -98,7 +100,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 
 		$current = $this->get_current_position( $positions );
 
-		$out = wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name(), true, false );
+		$out = \Inpsyde\MultilingualPress\nonce_field( $this->nonce );
 		$out .= '<p id="mlp-quicklink-positions">';
 
 		foreach ( $positions as $key => $label ) {

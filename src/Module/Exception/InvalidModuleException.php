@@ -18,7 +18,7 @@ class InvalidModuleException extends Exception {
 	 * @since 3.0.0
 	 *
 	 * @param string $id     Module ID.
-	 * @param string $action Optional. Action to be perfomed. Defaults to 'read'.
+	 * @param string $action Optional. Action to be performed. Defaults to 'read'.
 	 *
 	 * @return static Exception object.
 	 */

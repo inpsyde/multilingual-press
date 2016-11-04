@@ -18,7 +18,7 @@ class ContainerBootstrappedException extends Exception {
 	 * @since 3.0.0
 	 *
 	 * @param string $name   The name of the value or factory callback.
-	 * @param string $action Optional. Action to be perfomed. Defaults to 'read'.
+	 * @param string $action Optional. Action to be performed. Defaults to 'read'.
 	 *
 	 * @return static Exception object.
 	 */

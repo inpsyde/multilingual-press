@@ -26,7 +26,12 @@ final class FactoryProvider implements ServiceProvider {
 
 		$container->share( 'multilingualpress.error_factory', function () {
 
-			return new Error();
+			return new FallbackErrorFactory();
+		} );
+
+		$container->share( 'multilingualpress.nonce_factory', function () {
+
+			return new FallbackNonceFactory();
 		} );
 
 		$container->share( 'multilingualpress.type_factory', function () {

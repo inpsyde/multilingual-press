@@ -3,6 +3,7 @@
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use WP_Post;
 
 /**
@@ -19,6 +20,11 @@ class TrasherSettingUpdater {
 	private $content_relations;
 
 	/**
+	 * @var Nonce
+	 */
+	private $nonce;
+
+	/**
 	 * @var TrasherSettingRepository
 	 */
 	private $setting_repository;
@@ -30,12 +36,19 @@ class TrasherSettingUpdater {
 	 *
 	 * @param TrasherSettingRepository $setting_repository Trasher setting repository object.
 	 * @param ContentRelations         $content_relations  Content relations API object.
+	 * @param Nonce                    $nonce              Nonce object.
 	 */
-	public function __construct( TrasherSettingRepository $setting_repository, ContentRelations $content_relations ) {
+	public function __construct(
+		TrasherSettingRepository $setting_repository,
+		ContentRelations $content_relations,
+		Nonce $nonce
+	) {
 
 		$this->setting_repository = $setting_repository;
 
 		$this->content_relations = $content_relations;
+
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -51,18 +64,17 @@ class TrasherSettingUpdater {
 	 */
 	public function update_settings( $post_id, WP_Post $post ) {
 
+		if ( ! $this->nonce->is_valid() )  {
+			return 0;
+		}
+
 		if ( ! in_array( $post->post_status, [ 'publish', 'draft' ], true ) ) {
 			return 0;
 		}
 
-		$meta_key = TrasherSettingRepository::META_KEY;
-		if ( ! array_key_exists( $meta_key, $_POST ) ) {
-			return 0;
-		}
-
-		// TODO: Use a nonce here!
-
-		$value = (bool) $_POST[ $meta_key ];
+		$value = array_key_exists( TrasherSettingRepository::META_KEY, $_POST )
+			? (bool) $_POST[ TrasherSettingRepository::META_KEY ]
+			: false;
 
 		if ( ! $this->setting_repository->update( $post_id, $value ) ) {
 			return 0;

@@ -2,6 +2,7 @@
 
 namespace Inpsyde\MultilingualPress\Module\UserAdminLanguage;
 
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\Setting\User\UserSetting;
 use Inpsyde\MultilingualPress\Common\Setting\User\SecureUserSettingUpdater;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
@@ -83,8 +84,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 				);
 			} );
 
-			// TODO: Adapt.
-			$nonce = \Mlp_Nonce_Validator_Factory::create( 'save_user_admin_language_setting' );
+			$nonce = new WPNonce( 'save_user_admin_language_setting' );
 
 			( new UserSetting(
 				new Setting(

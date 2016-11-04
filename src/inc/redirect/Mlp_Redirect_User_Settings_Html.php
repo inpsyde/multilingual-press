@@ -1,5 +1,6 @@
 <?php
 
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\User\UserSettingViewModel;
 
 /**
@@ -17,17 +18,18 @@ class Mlp_Redirect_User_Settings_Html implements UserSettingViewModel {
 	private $key;
 
 	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
+	 * @var Nonce
 	 */
 	private $nonce;
 
 	/**
-	 * @param string                            $key
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce
+	 * @param string $key
+	 * @param Nonce  $nonce Nonce object.
 	 */
-	public function __construct( $key, Inpsyde_Nonce_Validator_Interface $nonce ) {
+	public function __construct( $key, Nonce $nonce ) {
 
-		$this->key   = $key;
+		$this->key = $key;
+
 		$this->nonce = $nonce;
 	}
 
@@ -55,18 +57,17 @@ class Mlp_Redirect_User_Settings_Html implements UserSettingViewModel {
 		$id = "{$this->key}_id";
 
 		ob_start();
-
-		wp_nonce_field( $this->nonce->get_action(), $this->nonce->get_name() );
 		?>
 		<label for="<?php echo esc_attr( $id ); ?>">
 			<input type="checkbox" name="<?php echo esc_attr( $this->key ); ?>" value="1"
 				id="<?php echo esc_attr( $id ); ?>"
-				<?php checked( 1, (int) get_user_meta( $user->ID, $this->key ), false ); ?>>
+				<?php checked( 1, (int) get_user_meta( $user->ID, $this->key ) ); ?>>
 			<?php
 			esc_html_e(
 				'Do not redirect me automatically to the best matching language version.',
 				'multilingual-press'
 			);
+			echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce );
 			?>
 		</label>
 		<?php

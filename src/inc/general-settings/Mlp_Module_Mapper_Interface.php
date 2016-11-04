@@ -13,13 +13,6 @@ use Inpsyde\MultilingualPress\Module\ModuleManager;
 interface Mlp_Module_Mapper_Interface {
 
 	/**
-	 * Constructor
-	 *
-	 * @param ModuleManager $modules
-	 */
-	public function __construct( ModuleManager $modules );
-
-	/**
 	 * Save module options.
 	 *
 	 * @return	void
@@ -33,11 +26,4 @@ interface Mlp_Module_Mapper_Interface {
 	 * @return Module[]
 	 */
 	public function get_modules( $state = ModuleManager::MODULE_STATE_ALL );
-
-	/**
-	 * Get name for nonce action parameter.
-	 *
-	 * @return string
-	 */
-	public function get_nonce_action();
 }

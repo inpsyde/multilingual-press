@@ -2,6 +2,8 @@
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Type\Setting;
 
 /**
  * Class Mlp_Network_Site_Settings_Controller
@@ -22,7 +24,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	private $plugin_data;
 
 	/**
-	 * @var Mlp_Network_Site_Settings_Tab_Data
+	 * @var Setting
 	 */
 	private $setting;
 
@@ -32,29 +34,37 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	private $page_properties;
 
 	/**
+	 * @var Nonce
+	 */
+	private $nonce;
+
+	/**
 	 * Constructor. Set up the properties.
 	 *
-	 * @param Inpsyde_Property_List_Interface $plugin_data Plugin data.
-	 *
 	 * @wp-hook plugins_loaded
+	 *
+	 * @param Inpsyde_Property_List_Interface $plugin_data Plugin data.
+	 * @param Setting                         $setting     Setting object.
+	 * @param Nonce                           $nonce       Nonce object.
 	 */
-	public function __construct( Inpsyde_Property_List_Interface $plugin_data ) {
+	public function __construct( Inpsyde_Property_List_Interface $plugin_data, Setting $setting, Nonce $nonce ) {
 
 		$this->plugin_data = $plugin_data;
-		$this->setting = new Mlp_Network_Site_Settings_Tab_Data( $plugin_data->get( 'type_factory' ) );
+
+		$this->setting = $setting;
+
+		$this->nonce = $nonce;
+
+		add_action( 'admin_post_' . $setting->action(), [ $this, 'update_settings' ] );
+
 		$this->page_properties = new Mlp_Network_Site_Settings_Properties();
-
-		new Mlp_Network_Site_Settings( $this->page_properties, $this );
-
-		add_action(
-			'admin_post_' . $this->setting->action(),
-			[ $this, 'update_settings' ]
-		);
 
 		add_action(
 			'admin_print_styles-' . $this->page_properties->get_param_value(),
 			[ $this, 'enqueue_stylesheet' ]
 		);
+
+		new Mlp_Network_Site_Settings( $this->page_properties, $this );
 	}
 
 	/**
@@ -86,8 +96,9 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	public function update_settings() {
 
-		if ( ! check_admin_referer( $this->setting->action(), $this->setting->nonce_name() ) )
-			wp_die( 'Invalid', 'Invalid', [ 'response' => 403 ] );
+		if ( ! $this->nonce->is_valid() ) {
+			wp_die( 'Invalid', 'Invalid', 403 );
+		}
 
 		$blog_id = $this->get_blog_id();
 
@@ -159,7 +170,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$relations   = $this->plugin_data->get( 'site_relations' );
 		$changed     = 0;
 		$new_related = $this->get_new_related_blogs();
-		$old_related = $relations->get_related_site_ids( $blog_id, FALSE );
+		$old_related = $relations->get_related_site_ids( $blog_id );
 
 		// All relations removed.
 		if ( empty ( $new_related ) && ! empty ( $old_related ) )
@@ -189,7 +200,8 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 			$this->plugin_data->get( 'language_api' ),
 			$this->setting,
 			$this->get_blog_id(),
-			$this->plugin_data->get( 'site_relations' )
+			$this->plugin_data->get( 'site_relations' ),
+			$this->nonce
 		);
 		$view->render_content();
 	}

@@ -2,6 +2,7 @@
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
 /**
@@ -27,6 +28,11 @@ class Mlp_General_Settingspage {
 	 * @var ModuleManager
 	 */
 	private $modules;
+
+	/**
+	 * @var WPNonce
+	 */
+	private $nonce;
 
 	/**
 	 * @var string
@@ -55,10 +61,12 @@ class Mlp_General_Settingspage {
 	 */
 	public function setup() {
 
-		$this->model = new Mlp_General_Settings_Module_Mapper( $this->modules );
+		$this->nonce = new WPNonce( 'update_multilingualpress_modules' );
 
-		add_filter( 'network_admin_menu', [ $this, 'register_settings_page' ] );
-		add_filter( 'admin_post_mlp_update_modules', [ $this->model, 'update_modules' ] );
+		$this->model = new Mlp_General_Settings_Module_Mapper( $this->modules, $this->nonce );
+
+		add_action( 'network_admin_menu', [ $this, 'register_settings_page' ] );
+		add_action( 'admin_post_mlp_update_modules', [ $this->model, 'update_modules' ] );
 		add_action( 'network_admin_notices', [ $this, 'show_update_message' ] );
 	}
 
@@ -69,7 +77,7 @@ class Mlp_General_Settingspage {
 	 */
 	public function register_settings_page() {
 
-		$view = new Mlp_General_Settings_View( $this->model );
+		$view = new Mlp_General_Settings_View( $this->model, $this->nonce );
 
 		// Register options page
 		$this->page_hook = add_submenu_page(

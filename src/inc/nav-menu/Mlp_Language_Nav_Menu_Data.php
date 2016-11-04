@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
  * Data read and write for backend nav menu management.
@@ -23,7 +24,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 	private $handle;
 
 	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
+	 * @var Nonce
 	 */
 	private $nonce;
 
@@ -37,13 +38,13 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 	 *
 	 * @param string                            $handle
 	 * @param string                            $meta_key
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce
+	 * @param Nonce $nonce
 	 * @param AssetManager              $asset_manager
 	 */
 	public function __construct(
 		$handle,
 		$meta_key,
-		Inpsyde_Nonce_Validator_Interface $nonce,
+		Nonce $nonce,
 		AssetManager $asset_manager
 	) {
 
@@ -111,8 +112,8 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 		$this->asset_manager->add_script_data( 'multilingualpress-admin', 'mlpNavMenusSettings', [
 			'action'    => $this->handle,
 			'metaBoxID' => $this->handle,
-			'nonce'     => wp_create_nonce( $this->nonce->get_action() ),
-			'nonceName' => $this->nonce->get_name(),
+			'nonce'     => (string) $this->nonce,
+			'nonceName' => $this->nonce->action(),
 		] );
 	}
 

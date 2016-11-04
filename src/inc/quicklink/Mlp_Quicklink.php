@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Module\Module;
@@ -27,9 +28,9 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	private $module_manager;
 
 	/**
-	 * @var Inpsyde_Nonce_Validator
+	 * @var Nonce
 	 */
-	private $nonce_validator;
+	private $nonce;
 
 	/**
 	 * @var Translation[]
@@ -39,14 +40,16 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	/**
 	 * Constructor. Sets up the properties.
 	 *
-	 * @param ModuleManager $module_manager Module manager object.
-	 * @param Mlp_Language_Api_Interface   $language_api   Language API object.
-	 * @param AssetManager         $asset_manager         Asset manager object.
+	 * @param ModuleManager              $module_manager Module manager object.
+	 * @param Mlp_Language_Api_Interface $language_api   Language API object.
+	 * @param AssetManager               $asset_manager  Asset manager object.
+	 * @param Nonce                      $nonce          Nonce object.
 	 */
 	public function __construct(
 		ModuleManager $module_manager,
 		Mlp_Language_Api_Interface $language_api,
-		AssetManager $asset_manager
+		AssetManager $asset_manager,
+		Nonce $nonce
 	) {
 
 		$this->module_manager = $module_manager;
@@ -55,7 +58,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 
 		$this->asset_manager = $asset_manager;
 
-		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_quicklink_position' );
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -410,7 +413,7 @@ HTML;
 	 */
 	public function draw_options_page_form_fields() {
 
-		$data = new Mlp_Quicklink_Positions_Data( $this->nonce_validator );
+		$data = new Mlp_Quicklink_Positions_Data( $this->nonce );
 
 		$box = new Mlp_Extra_General_Settings_Box( $data );
 		$box->print_box();
@@ -425,7 +428,7 @@ HTML;
 	 */
 	public function save_options_page_form_fields() {
 
-		if ( ! $this->nonce_validator->is_valid() ) {
+		if ( ! $this->nonce->is_valid() ) {
 			return;
 		}
 

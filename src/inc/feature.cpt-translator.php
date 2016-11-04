@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
+
 add_action( 'inpsyde_mlp_loaded', 'mlp_feature_cpt_translator', 8 );
 
 /**
@@ -8,5 +11,6 @@ add_action( 'inpsyde_mlp_loaded', 'mlp_feature_cpt_translator', 8 );
  * @return void
  */
 function mlp_feature_cpt_translator( Inpsyde_Property_List_Interface $data ) {
-	new Mlp_Cpt_Translator( $data );
+
+	new Mlp_Cpt_Translator( $data, new WPNonce( 'save_cpt_translator_settings' ) );
 }

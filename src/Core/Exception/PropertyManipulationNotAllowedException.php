@@ -18,7 +18,7 @@ class PropertyManipulationNotAllowedException extends Exception {
 	 * @since 3.0.0
 	 *
 	 * @param string $name   The name of the property.
-	 * @param string $action Optional. Action to be perfomed. Defaults to 'set'.
+	 * @param string $action Optional. Action to be performed. Defaults to 'set'.
 	 *
 	 * @return static Exception object.
 	 */

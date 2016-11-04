@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+
 /**
  * Request validation for the action 'save_post'.
  *
@@ -9,17 +12,17 @@
 class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface {
 
 	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
+	 * @var Nonce
 	 */
 	private $nonce;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce
+	 * @param Nonce $nonce Nonce object.
 	 */
-	function __construct( Inpsyde_Nonce_Validator_Interface $nonce )
-	{
+	public function __construct( Nonce $nonce ) {
+
 		$this->nonce = $nonce;
 	}
 

@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\Setting\User\UserSetting;
 use Inpsyde\MultilingualPress\Common\Setting\User\SecureUserSettingUpdater;
 
@@ -17,7 +18,7 @@ class Mlp_Redirect_User_Settings {
 
 		$meta_key = 'mlp_redirect';
 
-		$nonce = Mlp_Nonce_Validator_Factory::create( 'save_redirect_user_setting' );
+		$nonce = new WPNonce( 'save_redirect_user_setting' );
 
 		( new UserSetting(
 			new Mlp_Redirect_User_Settings_Html( $meta_key, $nonce ),

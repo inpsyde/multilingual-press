@@ -2,7 +2,9 @@
 
 namespace Inpsyde\MultilingualPress {
 
-/**
+	use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+
+	/**
  * Returns the according HTML string representation for the given array of attributes.
  *
  * @since 3.0.0
@@ -161,6 +163,27 @@ function is_redirect_enabled( $site_id = 0 ) {
 
 	// TODO: Don't hard-code the option name.
 	return (bool) get_blog_option( $site_id ?: get_current_blog_id(), 'inpsyde_multilingual_redirect' );
+}
+
+/**
+ * Returns the HTML string for the hidden nonce field according to the given nonce object.
+ *
+ * @since 3.0.0
+ *
+ * @param Nonce $nonce        Nonce object.
+ * @param bool  $with_referer Optional. Render a referer field as well? Defaults to true.
+ *
+ * @return string The HTML string for the hidden nonce field according to the given nonce object.
+ */
+function nonce_field( Nonce $nonce, $with_referer = true ) {
+
+	// TODO: Maybe get rid of $with_referer, because check_admin_referer() still cannot be used (due to action hash)...?
+	return sprintf(
+		'<input type="hidden" name="%s" value="%s">%s',
+		esc_attr( $nonce->action() ),
+		esc_attr( (string) $nonce ),
+		$with_referer ? wp_referer_field( false ) : ''
+	);
 }
 
 }

@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Factory\NonceFactory;
 
 /**
  * Data model for post translation. Handles inserts of new posts only.
@@ -23,6 +24,11 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	private $link_table;
 
 	/**
+	 * @var NonceFactory
+	 */
+	private $nonce_factory;
+
+	/**
 	 * @var array
 	 */
 	private $parent_elements = [];
@@ -43,16 +49,18 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	private $source_site_id;
 
 	/**
-	 * @param                                 $deprecated
-	 * @param array                           $allowed_post_types
-	 * @param string                          $link_table
+	 * @param                  $deprecated
+	 * @param array            $allowed_post_types
+	 * @param string           $link_table
 	 * @param ContentRelations $content_relations
+	 * @param NonceFactory     $nonce_factory      Nonce factory object.
 	 */
 	function __construct(
 		$deprecated,
 		array $allowed_post_types,
 		$link_table,
-		ContentRelations $content_relations
+		ContentRelations $content_relations,
+		NonceFactory $nonce_factory
 	) {
 
 		$this->allowed_post_types = $allowed_post_types;
@@ -60,6 +68,8 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		$this->link_table = $link_table;
 
 		$this->content_relations = $content_relations;
+
+		$this->nonce_factory = $nonce_factory;
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			$this->post_request_data = $_POST;
@@ -163,12 +173,9 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 				continue;
 			}
 
-			$nonce_validator = Mlp_Nonce_Validator_Factory::create(
+			$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $this->nonce_factory->create( [
 				"save_translation_of_post_{$post_id}_for_site_{$blog_id}",
-				$this->source_site_id
-			);
-
-			$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
+			] ) );
 			if ( ! $request_validator->is_valid( $post ) ) {
 				continue;
 			}

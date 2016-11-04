@@ -17,11 +17,6 @@ class Mlp_Term_Translation_Presenter {
 	private $taxonomy_name;
 
 	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
-	 */
-	private $nonce;
-
-	/**
 	 * @var string
 	 */
 	private $key_base;
@@ -39,18 +34,15 @@ class Mlp_Term_Translation_Presenter {
 	/**
 	 * Constructor. Set up the properties.
 	 *
-	 * @param ContentRelations   $content_relations Content relations object.
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce             Nonce validator object.
-	 * @param string                            $key_base          Term key base.
+	 * @param ContentRelations $content_relations Content relations object.
+	 * @param string           $key_base          Term key base.
 	 */
 	public function __construct(
 		ContentRelations $content_relations,
-		Inpsyde_Nonce_Validator_Interface $nonce,
 		$key_base
 	) {
 
 		$this->content_relations = $content_relations;
-		$this->nonce = $nonce;
 		$this->key_base = $key_base;
 
 		$this->current_site_id = get_current_blog_id();
@@ -134,21 +126,6 @@ class Mlp_Term_Translation_Presenter {
 		unset( $languages[ $current_blog_id ] );
 
 		return $languages;
-	}
-
-	/**
-	 * Return the nonce field.
-	 *
-	 * @return string
-	 */
-	public function get_nonce_field() {
-
-		return wp_nonce_field(
-			$this->nonce->get_action(),
-			$this->nonce->get_name(),
-			TRUE,
-			FALSE
-		);
 	}
 
 	/**

@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+
 /**
  * Meta box output.
  *
@@ -9,17 +12,18 @@
 class Mlp_Translation_Metabox_View {
 
 	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
+	 * @var Nonce
 	 */
 	private $nonce;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce
+	 * @param Nonce $nonce Nonce object.
 	 */
-	public function __construct( Inpsyde_Nonce_Validator_Interface $nonce ) {
-		$this->nonce   = $nonce;
+	public function __construct( Nonce $nonce ) {
+
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -31,7 +35,6 @@ class Mlp_Translation_Metabox_View {
 	 */
 	public function render( WP_Post $post, array $meta_box ) {
 
-		wp_nonce_field( $this->nonce->get_action(), $this->nonce->get_name() );
 		?>
 		<!-- MultilingualPress Translation Box -->
 		<div class="holder mlp-translation-meta-box">
@@ -122,6 +125,8 @@ class Mlp_Translation_Metabox_View {
 			$data->remote_blog_id,
 			$data->remote_post
 		);
+
+		echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce );
 		?>
 		</div>
 		<!-- /MultilingualPress Translation Box -->

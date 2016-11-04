@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Core;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -189,10 +190,12 @@ class Multilingual_Press {
 			update_site_option( 'inpsyde_multilingual', $blogs );
 		}
 
+		$table = $this->container['multilingualpress.content_relations_table']->name();
+
 		// Clean up linked elements table
 		$sql = "
 			DELETE
-			FROM {$this->link_table}
+			FROM {$table}
 			WHERE ml_source_blogid = %d
 				OR ml_blogid = %d";
 		$sql = $wpdb->prepare( $sql, $blog_id, $blog_id );
@@ -269,8 +272,12 @@ class Multilingual_Press {
 			$this->load_module_settings_page();
 		}
 
+		$setting = new Mlp_Network_Site_Settings_Tab_Data( $this->plugin_data->get( 'type_factory' ) );
+
+		$nonce = new WPNonce( $setting->action() );
+
 		// TODO: Check what this sucker needs...
-		new Mlp_Network_Site_Settings_Controller( $this->plugin_data );
+		new Mlp_Network_Site_Settings_Controller( $this->plugin_data, $setting, $nonce );
 
 		new Mlp_Network_New_Site_Controller(
 			$this->plugin_data->get( 'language_api' ),
@@ -329,6 +336,7 @@ class Multilingual_Press {
 		// TODO: Remove as soon as the whole Assets structures have been refactored (Locations -> Assets\Locator).
 		$this->plugin_data->set( 'assets', $this->container['multilingualpress.asset_manager'] );
 		$this->plugin_data->set( 'locations', $this->container['multilingualpress.internal_locations'] );
+		$this->plugin_data->set( 'nonce_factory', $this->container['multilingualpress.nonce_factory'] );
 
 		Mlp_Helpers::insert_dependency( 'language_api', $this->plugin_data->get( 'language_api' ) );
 	}

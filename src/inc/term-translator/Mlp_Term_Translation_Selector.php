@@ -1,4 +1,7 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+
 /**
  * Mlp_Term_Translation_Selector
  *
@@ -7,6 +10,11 @@
  * @license GPL
  */
 class Mlp_Term_Translation_Selector {
+
+	/**
+	 * @var Nonce
+	 */
+	private $nonce;
 
 	/**
 	 * @var Mlp_Term_Translation_Presenter
@@ -19,11 +27,15 @@ class Mlp_Term_Translation_Selector {
 	private $related_sites = [];
 
 	/**
+	 * @param Nonce                          $nonce     Nonce object.
 	 * @param Mlp_Term_Translation_Presenter $presenter
 	 */
-	public function __construct( Mlp_Term_Translation_Presenter $presenter ) {
+	public function __construct( Nonce $nonce, Mlp_Term_Translation_Presenter $presenter ) {
 
-		$this->presenter     = $presenter;
+		$this->nonce = $nonce;
+
+		$this->presenter = $presenter;
+
 		$this->related_sites = $presenter->get_site_languages();
 	}
 
@@ -72,7 +84,7 @@ class Mlp_Term_Translation_Selector {
 			return FALSE;
 		}
 
-		echo $this->presenter->get_nonce_field();
+		echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce );
 
 		$this->print_style();
 		?>

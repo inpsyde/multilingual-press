@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Module\Module;
 
 /**
@@ -19,13 +20,21 @@ class Mlp_General_Settings_View {
 	private $module_mapper;
 
 	/**
+	 * @var Nonce
+	 */
+	private $nonce;
+
+	/**
 	 * Constructor. Set up the properties.
 	 *
 	 * @param Mlp_Module_Mapper_Interface $module_mapper Module mapper.
+	 * @param Nonce                       $nonce         Nonce object.
 	 */
-	public function __construct( Mlp_Module_Mapper_Interface $module_mapper ) {
+	public function __construct( Mlp_Module_Mapper_Interface $module_mapper, Nonce $nonce ) {
 
 		$this->module_mapper = $module_mapper;
+
+		$this->nonce = $nonce;
 	}
 
 	public function render_page() {
@@ -42,7 +51,7 @@ class Mlp_General_Settings_View {
 	 * Modules Manager
 	 *
 	 * @since	0.1
-	 * @uses	get_site_option, _e, admin_url, wp_nonce_field,
+	 * @uses	get_site_option, _e, admin_url,
 	 * 			do_action, submit_button
 	 * @return	void
 	 */
@@ -54,7 +63,7 @@ class Mlp_General_Settings_View {
 		?>
 		<form action="<?php echo admin_url( 'admin-post.php?action=mlp_update_modules' ); ?>" method="post"
 			id="mlp_modules">
-			<?php wp_nonce_field( $this->module_mapper->get_nonce_action() ); ?>
+			<?php echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce ); ?>
 			<table class="mlp-admin-feature-table">
 				<?php
 				foreach ( $modules as $id => $module ) {

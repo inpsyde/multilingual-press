@@ -1,6 +1,6 @@
 <?php
 
-use Inpsyde\MultilingualPress\Factory\Error;
+use Inpsyde\MultilingualPress\Factory\FallbackErrorFactory;
 
 // TODO: Remove as soon as it's not needed anymore, which means that all classes use either $container or $properties.
 
@@ -272,7 +272,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 			$code = __CLASS__;
 
 		if ( class_exists( 'WP_Error' ) )
-			return ( new Error() )->create( $code, $msg );
+			return ( new FallbackErrorFactory() )->create( $code, $msg );
 
 		throw new Exception( $msg, $code );
 	}

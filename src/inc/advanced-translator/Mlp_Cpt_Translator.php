@@ -1,5 +1,6 @@
 <?php
 
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
@@ -37,19 +38,21 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	private $plugin_data;
 
 	/**
-	 * @var Inpsyde_Nonce_Validator
+	 * @var Nonce
 	 */
-	private $nonce_validator;
+	private $nonce;
 
 	/**
 	 * Constructor
 	 *
-	 * @param  Inpsyde_Property_List_Interface $data
+	 * @param Inpsyde_Property_List_Interface $data
+	 * @param Nonce                           $nonce Nonce object.
 	 */
-	public function __construct( Inpsyde_Property_List_Interface $data ) {
+	public function __construct( Inpsyde_Property_List_Interface $data, Nonce $nonce ) {
 
 		$this->plugin_data = $data;
-		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_cpt_translator_settings' );
+
+		$this->nonce = $nonce;
 
 		// Quit here if module is turned off
 		if ( ! $this->register_setting() )
@@ -114,7 +117,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		$data = new Mlp_Cpt_Translator_Extra_General_Settings_Box_Data(
 			$this,
-			$this->nonce_validator
+			$this->nonce
 		);
 		$box  = new Mlp_Extra_General_Settings_Box( $data );
 		$box->print_box();
@@ -142,7 +145,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 */
 	public function save_options_page_form_fields() {
 
-		if ( ! $this->nonce_validator->is_valid() )
+		if ( ! $this->nonce->is_valid() )
 			return FALSE;
 
 		$options    = get_site_option( 'inpsyde_multilingual_cpt' );

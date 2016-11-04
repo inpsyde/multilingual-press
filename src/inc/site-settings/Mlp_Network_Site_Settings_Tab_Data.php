@@ -35,19 +35,7 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 	 */
 	public function action() {
 
-		return 'mlp_network_site_settings';
-	}
-
-	/**
-	 * Returns the nonce name for the setting.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return string Nonce name.
-	 */
-	public function nonce_name() {
-
-		return 'mlp_network_site_settings_nonce';
+		return 'save_multilingualpress_site_settings';
 	}
 
 	/**
@@ -74,59 +62,5 @@ class Mlp_Network_Site_Settings_Tab_Data implements Setting {
 		return $this->type_factory->create_url( [
 			admin_url( 'admin-post.php' ),
 		] );
-	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see Mlp_Network_Site_Settings_Tab_Data::get_action}.
-	 *
-	 * @return string
-	 */
-	public function get_action_name() {
-
-		// TODO: Adapt the following as soon as the class got refactored.
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'Mlp_Network_Site_Settings_Tab_Data::get_action'
-		);
-
-		return $this->action();
-	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see Mlp_Network_Site_Settings_Tab_Data::get_url}.
-	 *
-	 * @return string
-	 */
-	public function get_form_action() {
-
-		// TODO: Adapt the following as soon as the class got refactored.
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'(string) Mlp_Network_Site_Settings_Tab_Data::get_url'
-		);
-
-		return (string) $this->url();
-	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see Mlp_Network_Site_Settings_Tab_Data::get_action}.
-	 *
-	 * @return string
-	 */
-	public function get_nonce_action() {
-
-		// TODO: Adapt the following as soon as the class got refactored.
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'Mlp_Network_Site_Settings_Tab_Data::get_action'
-		);
-
-		return $this->action();
 	}
 }

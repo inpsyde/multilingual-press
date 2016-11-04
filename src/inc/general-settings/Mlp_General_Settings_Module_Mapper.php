@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
@@ -18,16 +19,19 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 	private $module_manager;
 
 	/**
-	 * @var string
+	 * @var Nonce
 	 */
-	private $nonce_action = 'mlp_modules';
+	private $nonce;
 
 	/**
 	 * @param ModuleManager $module_manager
+	 * @param Nonce         $nonce          Nonce object.
 	 */
-	public function __construct( ModuleManager $module_manager ) {
+	public function __construct( ModuleManager $module_manager, Nonce $nonce ) {
 
 		$this->module_manager = $module_manager;
+
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -37,10 +41,12 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 	 */
 	public function update_modules() {
 
-		check_admin_referer( $this->nonce_action );
+		if ( ! $this->nonce->is_valid() ) {
+			wp_die();
+		}
 
 		if ( ! current_user_can( 'manage_network_options' ) ) {
-			wp_die( 'FU' );
+			wp_die();
 		}
 
 		$this->set_module_activation_status();
@@ -88,14 +94,4 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 
 		return $this->module_manager->get_modules( $state );
 	}
-
-	/**
-	 *
-	 * @return string
-	 */
-	public function get_nonce_action() {
-
-		return $this->nonce_action;
-	}
-
 }

@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+
 /**
  *
  * @author  toscho
@@ -6,13 +9,17 @@
  * @license MIT
  */
 
-class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
-	implements Mlp_Extra_General_Settings_Box_Data_Interface
-{
+class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data implements Mlp_Extra_General_Settings_Box_Data_Interface {
+
 	/**
-	 * @var Mlp_Updatable
+	 * @var string
 	 */
-	private $update;
+	private $form_name = 'mlp_cpts';
+
+	/**
+	 * @var Nonce
+	 */
+	private $nonce;
 
 	/**
 	 * @var array
@@ -20,26 +27,21 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	private $post_types = [];
 
 	/**
-	 * Prefix for 'name' attribute in form fields.
-	 *
-	 * @type string
+	 * @var Mlp_Updatable
 	 */
-	private $form_name = 'mlp_cpts';
-
-	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
-	 */
-	private $nonce_validator;
+	private $update;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param Mlp_Updatable                     $update
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce_validator
+	 * @param Mlp_Updatable $update
+	 * @param Nonce         $nonce  Nonce object.
 	 */
-	public function __construct( Mlp_Updatable $update, Inpsyde_Nonce_Validator_Interface $nonce_validator ) {
-		$this->update          = $update;
-		$this->nonce_validator = $nonce_validator;
+	public function __construct( Mlp_Updatable $update, Nonce $nonce ) {
+
+		$this->update = $update;
+
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -121,12 +123,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 		if ( empty ( $post_types ) )
 			return '';
 
-		$out = wp_nonce_field(
-			$this->nonce_validator->get_action(),
-			$this->nonce_validator->get_name(),
-			TRUE,
-			FALSE
-		);
+		$out = \Inpsyde\MultilingualPress\nonce_field( $this->nonce );
 		$out .= '<table><tbody>';
 
 		foreach ( $post_types as $cpt => $cpt_params )

@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
+use Inpsyde\MultilingualPress\Factory\NonceFactory;
 
 /**
  * Data model for advanced post translation. Handles inserts and updates.
@@ -20,12 +21,17 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	/**
 	 * @var string
 	 */
-	private $name_base = 'mlp_translation_data';
+	private $id_base = 'mlp-translation-data';
 
 	/**
 	 * @var string
 	 */
-	private $id_base = 'mlp-translation-data';
+	private $name_base = 'mlp_translation_data';
+
+	/**
+	 * @var NonceFactory
+	 */
+	private $nonce_factory;
 
 	/**
 	 * @var array
@@ -48,13 +54,15 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 * @param                                      $deprecated
 	 * @param Mlp_Translatable_Post_Data_Interface $basic_data
 	 * @param array                                $allowed_post_types
-	 * @param SiteRelations         $relations
+	 * @param SiteRelations                        $relations
+	 * @param NonceFactory                         $nonce_factory Nonce factory object.
 	 */
 	public function __construct(
 		$deprecated,
 		Mlp_Translatable_Post_Data_Interface $basic_data,
 		array $allowed_post_types,
-		SiteRelations $relations
+		SiteRelations $relations,
+		NonceFactory $nonce_factory
 	) {
 
 		$this->basic_data = $basic_data;
@@ -62,6 +70,8 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		$this->allowed_post_types = $allowed_post_types;
 
 		$this->relations = $relations;
+
+		$this->nonce_factory = $nonce_factory;
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			$this->post_request_data = $_POST;
@@ -150,12 +160,11 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 				continue;
 			}
 
-			$nonce_validator = Mlp_Nonce_Validator_Factory::create(
+			$nonce = $this->nonce_factory->create( [
 				"save_translation_of_post_{$post_id}_for_site_$remote_blog_id",
-				$source_blog_id
-			);
+			] );
 
-			$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce_validator );
+			$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce );
 			if ( ! $request_validator->is_valid( $post ) ) {
 				continue;
 			}

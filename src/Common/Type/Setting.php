@@ -20,15 +20,6 @@ interface Setting {
 	public function action();
 
 	/**
-	 * Returns the nonce name for the setting.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return string Nonce name.
-	 */
-	public function nonce_name();
-
-	/**
 	 * Returns the title of the setting.
 	 *
 	 * @since 3.0.0

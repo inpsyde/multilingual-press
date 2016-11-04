@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Factory\NonceFactory;
+
 /**
  * Controller for the basic translation meta box.
  */
@@ -19,6 +21,11 @@ class Mlp_Translation_Metabox {
 	private $data;
 
 	/**
+	 * @var NonceFactory
+	 */
+	private $nonce_factory;
+
+	/**
 	 * @var Inpsyde_Property_List_Interface
 	 */
 	private $plugin_data;
@@ -36,6 +43,8 @@ class Mlp_Translation_Metabox {
 
 		$this->plugin_data = $plugin_data;
 
+		$this->nonce_factory = $plugin_data->get( 'nonce_factory' );
+
 		/**
 		 * Filter the allowed post types.
 		 *
@@ -52,7 +61,8 @@ class Mlp_Translation_Metabox {
 			null,
 			$this->allowed_post_types,
 			$this->plugin_data->get( 'link_table' ),
-			$this->plugin_data->get( 'content_relations' )
+			$this->plugin_data->get( 'content_relations' ),
+			$this->nonce_factory
 		);
 
 		add_action( 'add_meta_boxes', [ $this, 'register_meta_boxes' ], 10, 2 );
@@ -114,7 +124,7 @@ class Mlp_Translation_Metabox {
 			}
 
 			if ( $current_blog_id !== (int) $blog_id ) {
-				$this->register_metabox_per_language( $blog_id, $post, $current_blog_id );
+				$this->register_metabox_per_language( $blog_id, $post );
 			}
 		}
 
@@ -187,11 +197,10 @@ class Mlp_Translation_Metabox {
 	 *
 	 * @param int     $blog_id
 	 * @param WP_Post $post
-	 * @param int     $current_blog_id
 	 *
 	 * @return void
 	 */
-	private function register_metabox_per_language( $blog_id, WP_Post $post, $current_blog_id ) {
+	private function register_metabox_per_language( $blog_id, WP_Post $post ) {
 
 		$remote_post = $this->data->get_remote_post( $post, $blog_id );
 
@@ -205,12 +214,9 @@ class Mlp_Translation_Metabox {
 			'language'       => $lang,
 		 ];
 
-		$nonce_validator = Mlp_Nonce_Validator_Factory::create(
-			"save_translation_of_post_{$post->ID}_for_site_$blog_id",
-			$current_blog_id
-		);
-
-		$view = new Mlp_Translation_Metabox_View( $nonce_validator );
+		$view = new Mlp_Translation_Metabox_View( $this->nonce_factory->create( [
+			"save_translation_of_post_{$post->ID}_for_site_$blog_id"
+		] ) );
 
 		add_meta_box(
 			"inpsyde_multilingual_$blog_id",

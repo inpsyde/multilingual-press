@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\Type\Setting;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
  * Update changed languages for the language manager.
@@ -31,6 +31,11 @@ class Mlp_Language_Updater {
 	private $db;
 
 	/**
+	 * @var Nonce
+	 */
+	private $nonce;
+
+	/**
 	 * Used to get the current page to limit the items to compare.
 	 *
 	 * @type Mlp_Browsable
@@ -38,29 +43,25 @@ class Mlp_Language_Updater {
 	private $pagination_data;
 
 	/**
-	 * @var Setting
-	 */
-	private $setting;
-
-	/**
 	 * Constructor.
 	 *
-	 * @param Setting $setting
 	 * @param Mlp_Browsable         $pagination_data
 	 * @param Mlp_Array_Diff        $array_diff
 	 * @param Mlp_Data_Access       $db
+	 * @param Nonce                 $nonce Nonce object.
 	 */
 	public function __construct(
-		Setting $setting,
 		Mlp_Browsable         $pagination_data,
 		Mlp_Array_Diff        $array_diff,
-		Mlp_Data_Access       $db
+		Mlp_Data_Access       $db,
+		Nonce $nonce
 	) {
 
-		$this->setting       = $setting;
 		$this->pagination_data = $pagination_data;
 		$this->array_diff      = $array_diff;
 		$this->db              = $db;
+
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -86,7 +87,9 @@ class Mlp_Language_Updater {
 	 */
 	private function validate_request() {
 
-		check_admin_referer( $this->setting->action(), $this->setting->nonce_name() );
+		if ( ! $this->nonce->is_valid() ) {
+			mlp_exit( 'invalid request' );
+		}
 
 		if ( empty ( $_POST[ 'languages' ] ) )
 			mlp_exit( 'invalid request' );

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
+
 /**
  * Handles the site-specific Redirect setting.
  */
@@ -27,7 +29,7 @@ class Mlp_Redirect_Site_Settings {
 	 */
 	public function setup() {
 
-		$nonce = Mlp_Nonce_Validator_Factory::create( 'save_redirect_site_setting' );
+		$nonce = new WPNonce( 'save_redirect_site_setting' );
 
 		$data = new Mlp_Redirect_Settings_Data( $nonce, $this->option_name );
 

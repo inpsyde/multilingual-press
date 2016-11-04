@@ -1,4 +1,7 @@
 <?php
+
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+
 /**
  * Save site settings for redirect feature.
  *
@@ -11,27 +14,25 @@
 class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface {
 
 	/**
+	 * @var Nonce
+	 */
+	private $nonce;
+
+	/**
 	 * @var string
 	 */
 	private $option_name;
 
 	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
-	 */
-	private $nonce;
-
-	/**
 	 * Constructor.
 	 *
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce
-	 * @param string                            $option_name
+	 * @param Nonce  $nonce       Nonce object.
+	 * @param string $option_name
 	 */
-	public function __construct(
-		Inpsyde_Nonce_Validator_Interface $nonce,
-		$option_name = 'inpsyde_multilingual_redirect'
-	) {
+	public function __construct( Nonce $nonce, $option_name = 'inpsyde_multilingual_redirect' ) {
 
-		$this->nonce       = $nonce;
+		$this->nonce = $nonce;
+
 		$this->option_name = $option_name;
 	}
 
@@ -43,8 +44,9 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 	 */
 	public function save( array $data ) {
 
-		if ( ! $this->nonce->is_valid() )
-			return FALSE;
+		if ( ! $this->nonce->is_valid() ) {
+			return false;
+		}
 
 		$id    = $this->get_current_blog_id( $data, get_current_blog_id() );
 		$value = $this->get_sent_value( $data );

@@ -51,10 +51,11 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	/**
 	 * @param Mlp_Relationship_Control_Data $data
 	 * @param Mlp_Updatable                 $updater
+	 * @param AssetManager                  $asset_manager
 	 */
 	public function __construct(
 		Mlp_Relationship_Control_Data $data,
-		Mlp_Updatable                 $updater,
+		Mlp_Updatable $updater,
 		AssetManager $asset_manager
 	) {
 

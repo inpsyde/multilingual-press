@@ -43,19 +43,7 @@ class Mlp_Language_Manager_Options_Page_Data implements Setting {
 	 */
 	public function action() {
 
-		return 'mlp_update_languages';
-	}
-
-	/**
-	 * Returns the nonce name for the setting.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return string Nonce name.
-	 */
-	public function nonce_name() {
-
-		return 'mlp_language_table_nonce';
+		return 'update_multilingualpress_languages';
 	}
 
 	/**
@@ -82,59 +70,5 @@ class Mlp_Language_Manager_Options_Page_Data implements Setting {
 		return $this->type_factory->create_url( [
 			admin_url( 'admin-post.php' ),
 		] );
-	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see Mlp_Language_Manager_Options_Page_Data::get_action}.
-	 *
-	 * @return string
-	 */
-	public function get_action_name() {
-
-		// TODO: Adapt the following as soon as the class got refactored.
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'Inpsyde\MultilingualPress\Common\Type\Mlp_Language_Manager_Options_Page_Data::get_action'
-		);
-
-		return $this->action();
-	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see Mlp_Language_Manager_Options_Page_Data::get_url}.
-	 *
-	 * @return string
-	 */
-	public function get_form_action() {
-
-		// TODO: Adapt the following as soon as the class got refactored.
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'(string) Inpsyde\MultilingualPress\Common\Type\Mlp_Language_Manager_Options_Page_Data::get_url'
-		);
-
-		return (string) $this->url();
-	}
-
-	/**
-	 * @deprecated 3.0.0 Deprecated in favor of {@see Mlp_Language_Manager_Options_Page_Data::get_action}.
-	 *
-	 * @return string
-	 */
-	public function get_nonce_action() {
-
-		// TODO: Adapt the following as soon as the class got refactored.
-
-		_deprecated_function(
-			__METHOD__,
-			'3.0.0',
-			'Inpsyde\MultilingualPress\Common\Type\Mlp_Language_Manager_Options_Page_Data::get_action'
-		);
-
-		return $this->action();
 	}
 }

@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
@@ -34,6 +35,11 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 * @var Mlp_Language_Manager_Page_View
 	 */
 	private $view;
+
+	/**
+	 * @var WPNonce
+	 */
+	private $nonce;
 
 	/**
 	 * @var string
@@ -82,17 +88,21 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			$this->page_title,
 			$this->plugin_data->get( 'type_factory' )
 		);
+
+		$this->nonce = new WPNonce( $this->setting->action() );
+
 		$this->view            = new Mlp_Language_Manager_Page_View(
 			$this->setting,
 			$this,
-			$this->pagination_data
-			);
+			$this->pagination_data,
+			$this->nonce
+		);
 
 		$updater = new Mlp_Language_Updater(
-			$this->setting,
 			$this->pagination_data,
 			new Mlp_Array_Diff( $this->get_columns() ),
-			$database
+			$database,
+			$this->nonce
 		);
 
 		add_action(
@@ -135,7 +145,8 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	public function enqueue_style() {
 
-		$assets = $this->plugin_data->get( 'assets' );
+		// TODO: Check why this is not needed. The CSS must've been enqueued somewhere before already...
+		//$assets = $this->plugin_data->get( 'assets' );
 		//$assets->provide( 'mlp_admin_css' );
 	}
 
@@ -181,11 +192,10 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	private function get_reset_table_link() {
 
 		$request = remove_query_arg( 'msg', wp_unslash( $_SERVER['REQUEST_URI'] ) );
-		$nonce   = wp_create_nonce( $this->setting->action() );
 		$url     = add_query_arg( [
-			'action'                     => $this->reset_action,
-			$this->setting->nonce_name() => $nonce,
-			'_wp_http_referer'           => esc_attr( $request )
+			'action'               => $this->reset_action,
+			$this->nonce->action() => (string) $this->nonce,
+			'_wp_http_referer'     => esc_attr( $request )
 		], (string) $this->setting->url() );
 		?>
 		<p>
@@ -201,7 +211,9 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	public function reset_table() {
 
-		check_admin_referer( $this->setting->action(), $this->setting->nonce_name() );
+		if ( ! $this->nonce->is_valid() ) {
+			wp_die();
+		}
 
 		$table_prefix = $this->wpdb->base_prefix;
 

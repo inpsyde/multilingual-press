@@ -79,7 +79,8 @@ class Mlp_Advanced_Translator {
 			null,
 			$base_data['basic_data'],
 			$base_data['allowed_post_types'],
-			$this->plugin_data->get( 'site_relations' )
+			$this->plugin_data->get( 'site_relations' ),
+			$this->plugin_data->get( 'nonce_factory' )
 		);
 
 		$this->view = new Mlp_Advanced_Translator_View( $this->translation_data );

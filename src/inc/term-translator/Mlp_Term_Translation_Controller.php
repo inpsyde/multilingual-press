@@ -1,6 +1,7 @@
 <?php
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
  * Mlp_Term_Translation_Controller
@@ -17,7 +18,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	private $view = NULL;
 
 	/**
-	 * @var Inpsyde_Nonce_Validator
+	 * @var Nonce
 	 */
 	private $nonce;
 
@@ -38,28 +39,13 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 	/**
 	 * @param ContentRelations $content_relations
+	 * @param Nonce            $nonce             Nonce object.
 	 */
-	public function __construct( ContentRelations $content_relations ) {
+	public function __construct( ContentRelations $content_relations, Nonce $nonce ) {
 
 		$this->content_relations = $content_relations;
 
-		$this->nonce = Mlp_Nonce_Validator_Factory::create( $this->get_nonce_action(), get_current_blog_id() );
-	}
-
-	/**
-	 * Returns the nonce action for the current request wrt. the current taxonomy and term, if any.
-	 *
-	 * @return string
-	 */
-	private function get_nonce_action() {
-
-		$taxonomy = empty( $_REQUEST['taxonomy'] ) ? '' : (string) $_REQUEST['taxonomy'];
-
-		$term_taxonomy_id = empty( $_REQUEST['tag_ID'] ) ? 0 : (int) $_REQUEST['tag_ID'];
-
-		$action = "save_{$taxonomy}_translations_$term_taxonomy_id";
-
-		return $action;
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -151,11 +137,10 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		$this->presenter = new Mlp_Term_Translation_Presenter(
 			$this->content_relations,
-			$this->nonce,
 			$this->key_base
 		);
 
-		$this->view = new Mlp_Term_Translation_Selector( $this->presenter );
+		$this->view = new Mlp_Term_Translation_Selector( $this->nonce, $this->presenter );
 
 		return $this->view;
 	}

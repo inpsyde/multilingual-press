@@ -1,6 +1,7 @@
 <?php
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
  * Mlp_Term_Connector
@@ -12,7 +13,7 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
 class Mlp_Term_Connector {
 
 	/**
-	 * @var Inpsyde_Nonce_Validator_Interface
+	 * @var Nonce
 	 */
 	private $nonce;
 
@@ -39,14 +40,14 @@ class Mlp_Term_Connector {
 	/**
 	 * Constructor. Set up the properties.
 	 *
-	 * @param ContentRelations   $content_relations Content relations object.
-	 * @param Inpsyde_Nonce_Validator_Interface $nonce             Nonce validator object.
-	 * @param array                             $taxonomies        Taxonomy names.
-	 * @param array                             $post_data         Post data.
+	 * @param ContentRelations $content_relations Content relations object.
+	 * @param Nonce            $nonce             Nonce object.
+	 * @param array            $taxonomies        Taxonomy names.
+	 * @param array            $post_data         Post data.
 	 */
 	public function __construct(
 		ContentRelations $content_relations,
-		Inpsyde_Nonce_Validator_Interface $nonce,
+		Nonce $nonce,
 		array $taxonomies,
 		array $post_data
 	) {

@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Common\Setting\User;
 
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+
 /**
  * User setting updater implementation validating a nonce specific to the update action included in the request data.
  *
@@ -15,24 +17,24 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 	 */
 	private $meta_key;
 
-	/**@todo Adapt class.
-	 * @var object
+	/**
+	 * @var Nonce
 	 */
-	private $validator;
+	private $nonce;
 
-	/**@todo Adapt validator class.
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $meta_key  User meta key.
-	 * @param object $validator Optional. Validator object. Defaults to null.
+	 * @param string $meta_key User meta key.
+	 * @param Nonce  $nonce    Optional. Nonce object. Defaults to null.
 	 */
-	public function __construct( $meta_key, $validator = null ) {
+	public function __construct( $meta_key, Nonce $nonce = null ) {
 
 		$this->meta_key = (string) $meta_key;
 
-		$this->validator = $validator;
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -51,10 +53,9 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 			return false;
 		}
 
-		// TODO: Well, actually validate as soon as the Nonce namespace has been refactored.
-		//if ( $this->validator && ! $this->validator->validate() ) {
-		//	return false;
-		//}
+		if ( $this->nonce && ! $this->nonce->is_valid() ) {
+			return false;
+		}
 
 		$value = $this->get_value();
 
@@ -74,7 +75,7 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 			? $_GET[ $this->meta_key ]
 			: '';
 
-		if ( empty( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+		if ( empty( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
 			return $value;
 		}
 

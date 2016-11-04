@@ -2,6 +2,7 @@
 
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ActivationAwareness;
 use Inpsyde\MultilingualPress\Module\Module;
@@ -29,6 +30,8 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$nonce = new WPNonce( 'save_trasher_setting' );
+
 		$container['multilingualpress.trasher'] = function ( Container $container ) {
 
 			return new Trasher(
@@ -42,17 +45,18 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			return new TrasherSettingRepository();
 		};
 
-		$container['multilingualpress.trasher_setting_updater'] = function ( Container $container ) {
+		$container['multilingualpress.trasher_setting_updater'] = function ( Container $container ) use ( $nonce ) {
 
 			return new TrasherSettingUpdater(
 				$container['multilingualpress.trasher_setting_repository'],
-				$container['multilingualpress.content_relations']
+				$container['multilingualpress.content_relations'],
+				$nonce
 			);
 		};
 
-		$container['multilingualpress.trasher_setting_view'] = function ( Container $container ) {
+		$container['multilingualpress.trasher_setting_view'] = function ( Container $container ) use ( $nonce ) {
 
-			return new TrasherSettingView( $container['multilingualpress.trasher_setting_repository'] );
+			return new TrasherSettingView( $container['multilingualpress.trasher_setting_repository'], $nonce );
 		};
 	}
 

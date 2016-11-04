@@ -2,6 +2,7 @@
 
 namespace Inpsyde\MultilingualPress\Module\UserAdminLanguage;
 
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\User\UserSettingViewModel;
 use WP_User;
 
@@ -24,24 +25,20 @@ final class Setting implements UserSettingViewModel {
 	private $meta_key;
 
 	/**
-	 * @var \Inpsyde_Nonce_Validator_Interface
+	 * @var Nonce
 	 */
 	private $nonce;
 
-	/**@todo Adapt nonce!
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string                             $meta_key            User meta key.
-	 * @param \Inpsyde_Nonce_Validator_Interface $nonce               Nonce validator object.
-	 * @param LanguageRepository                 $language_repository Language repository object.
+	 * @param string             $meta_key            User meta key.
+	 * @param Nonce              $nonce               Nonce validator object.
+	 * @param LanguageRepository $language_repository Language repository object.
 	 */
-	public function __construct(
-		$meta_key,
-		\Inpsyde_Nonce_Validator_Interface $nonce,
-		LanguageRepository $language_repository
-	) {
+	public function __construct( $meta_key, Nonce $nonce, LanguageRepository $language_repository ) {
 
 		$this->meta_key = (string) $meta_key;
 
@@ -70,9 +67,10 @@ final class Setting implements UserSettingViewModel {
 		$languages[] = 'en_US';
 
 		return sprintf(
-			'<select name="%2$s" id="%2$s" autocomplete="off">%1$s</select>',
+			'<select name="%2$s" id="%2$s" autocomplete="off">%1$s</select>%3$s',
 			$this->get_language_options( $languages, $this->language_repository->get_user_language( $user->ID ) ),
-			esc_attr( $this->meta_key )
+			esc_attr( $this->meta_key ),
+			\Inpsyde\MultilingualPress\nonce_field( $this->nonce )
 		);
 	}
 
