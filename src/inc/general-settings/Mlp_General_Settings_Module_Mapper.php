@@ -61,7 +61,7 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 		do_action( 'mlp_modules_save_fields', $_POST );
 
 		wp_safe_redirect( network_admin_url( 'settings.php?page=mlp&message=updated' ) );
-		mlp_exit();
+		\Inpsyde\MultilingualPress\call_exit();
 	}
 
 	/**

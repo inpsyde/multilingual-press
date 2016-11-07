@@ -92,7 +92,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 		else
 			print '<pre>' . print_r( $result, 1 ) . '</pre>';
 
-		mlp_exit();
+		\Inpsyde\MultilingualPress\call_exit();
 	}
 
 	/**

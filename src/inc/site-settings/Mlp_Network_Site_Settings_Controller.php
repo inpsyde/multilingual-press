@@ -115,7 +115,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 
 		$url = add_query_arg( 'msg', 'updated', $_POST[ '_wp_http_referer' ] );
 		wp_safe_redirect( $url );
-		mlp_exit();
+		\Inpsyde\MultilingualPress\call_exit();
 	}
 
 	/**

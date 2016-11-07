@@ -2,9 +2,10 @@
 
 namespace Inpsyde\MultilingualPress {
 
-	use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use wpdb;
 
-	/**
+/**
  * Returns the according HTML string representation for the given array of attributes.
  *
  * @since 3.0.0
@@ -27,6 +28,22 @@ function attributes_array_to_string( array $attributes ) {
 	} );
 
 	return implode( ' ', $strings );
+}
+
+/**
+ * Wrapper for the exit language construct.
+ *
+ * Introduced to allow for easy unit testing.
+ *
+ * @since 3.0.0
+ *
+ * @param int|string $status Exit status.
+ *
+ * @return void
+ */
+function call_exit( $status = '' ) {
+
+	exit( $status );
 }
 
 /**
@@ -149,6 +166,18 @@ function get_site_language( $site_id = 0, $language_only = false ) {
 }
 
 /**
+ * Checks if MultilingualPress debug mode is on.
+ *
+ * @since 3.0.0
+ *
+ * @return bool Whether or not MultilingualPress debug mode is on.
+ */
+function is_debug_mode() {
+
+	return ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG );
+}
+
+/**
  * Checks if the site with the given ID has HTTP redirection enabled.
  *
  * If no ID is passed, the current site is checked.
@@ -166,6 +195,30 @@ function is_redirect_enabled( $site_id = 0 ) {
 }
 
 /**
+ * Checks if either MultilingualPress or WordPress script debug mode is on.
+ *
+ * @since 3.0.0
+ *
+ * @return bool Whether or not MultilingualPress or WordPress script debug mode is on.
+ */
+function is_script_debug_mode() {
+
+	return is_debug_mode() || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
+}
+
+/**
+ * Checks if either MultilingualPress or WordPress debug mode is on.
+ *
+ * @since 3.0.0
+ *
+ * @return bool Whether or not MultilingualPress or WordPress debug mode is on.
+ */
+function is_wp_debug_mode() {
+
+	return is_debug_mode() || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
+}
+
+/**
  * Returns the HTML string for the hidden nonce field according to the given nonce object.
  *
  * @since 3.0.0
@@ -177,7 +230,7 @@ function is_redirect_enabled( $site_id = 0 ) {
  */
 function nonce_field( Nonce $nonce, $with_referer = true ) {
 
-	// TODO: Maybe get rid of $with_referer, because check_admin_referer() still cannot be used (due to action hash)...?
+	// TODO: Maybe get rid of $with_referer, because check_*_referer() still cannot be used (due to action hash)...?
 	return sprintf(
 		'<input type="hidden" name="%s" value="%s">%s',
 		esc_attr( $nonce->action() ),
@@ -186,62 +239,46 @@ function nonce_field( Nonce $nonce, $with_referer = true ) {
 	);
 }
 
+/**
+ * Checks if the site with the given ID exists (within the current or given network) and is not marked as deleted.
+ *
+ * @since 3.0.0
+ *
+ * @param int $site_id    Site ID.
+ * @param int $network_id Optional. Network ID. Defaults to 0.
+ *
+ * @return bool Wheter or not the site with the given ID exists and is not marked as deleted.
+ */
+function site_exists( $site_id, $network_id = 0 ) {
+
+	static $cache = [];
+
+	// We don't test large sites.
+	if ( wp_is_large_network() ) {
+		return true;
+	}
+
+	// TODO: With WordPress 4.6 + 2, use get_current_network_id() instead of "get_current_site()->id".
+	$network_id = (int) ( $network_id ? $network_id : get_current_site()->id );
+
+	if ( ! isset( $cache[ $network_id ] ) ) {
+		/** @var wpdb $wpdb */
+		global $wpdb;
+
+		$query = $wpdb->prepare( "SELECT blog_id FROM {$wpdb->blogs} WHERE site_id = %d AND deleted = 0", $network_id );
+
+		$cache[ $network_id ] = array_map( 'intval', $wpdb->get_col( $query ) );
+	}
+
+	return in_array( (int) $site_id, $cache[ $network_id ], true );
+}
+
 }
 
 
 
 // TODO: Move all functions to Inpsyde\MultilingualPress namespace (see below) and adapt names (no prefix etc.).
 namespace {
-
-	/**
-	 * Wrapper for the exit language construct.
-	 *
-	 * Introduced to allow for easy unit testing.
-	 *
-	 * @param int|string $status Exit status.
-	 *
-	 * @return void
-	 */
-	function mlp_exit( $status = '' ) {
-
-		exit( $status );
-	}
-
-	/**
-	 * Checks if MultilingualPress debug mode is on.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not MultilingualPress debug mode is on.
-	 */
-	function mlp_is_debug_mode() {
-
-		return ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG );
-	}
-
-	/**
-	 * Checks if either MultilingualPress or WordPress debug mode is on.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not MultilingualPress or WordPress debug mode is on.
-	 */
-	function mlp_is_wp_debug_mode() {
-
-		return mlp_is_debug_mode() || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
-	}
-
-	/**
-	 * Checks if either MultilingualPress or script debug mode is on.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not MultilingualPress or script debug mode is on.
-	 */
-	function mlp_is_script_debug_mode() {
-
-		return mlp_is_debug_mode() || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
-	}
 
 	/**
 	 * wrapper of Mlp_Helpers:: get_available_language_title
@@ -354,53 +391,5 @@ namespace {
 	function mlp_get_lang_by_iso( $iso, $field = 'native_name' ) {
 
 		return Mlp_Helpers::get_lang_by_iso( $iso, $field );
-	}
-
-	if ( ! function_exists( 'blog_exists' ) ) {
-
-		/**
-		 * Checks if a blog exists and is not marked as deleted.
-		 *
-		 * @link   http://wordpress.stackexchange.com/q/138300/73
-		 *
-		 * @param  int $blog_id
-		 * @param  int $site_id
-		 *
-		 * @return bool
-		 */
-		function blog_exists( $blog_id, $site_id = 0 ) {
-
-			/** @type wpdb $wpdb */
-			global $wpdb;
-			static $cache = [];
-
-			$site_id = (int) $site_id;
-
-			if ( 0 === $site_id ) {
-				$site_id = get_current_site()->id;
-			}
-
-			if ( empty ( $cache ) or empty ( $cache[ $site_id ] ) ) {
-
-				if ( wp_is_large_network() ) // we do not test large sites.
-				{
-					return true;
-				}
-
-				$query = "SELECT `blog_id` FROM $wpdb->blogs
-					WHERE site_id = $site_id AND deleted = 0";
-
-				$result = $wpdb->get_col( $query );
-
-				// Make sure the array is always filled with something.
-				if ( empty ( $result ) ) {
-					$cache[ $site_id ] = [ 'do not check again' ];
-				} else {
-					$cache[ $site_id ] = $result;
-				}
-			}
-
-			return in_array( $blog_id, $cache[ $site_id ] );
-		}
 	}
 }

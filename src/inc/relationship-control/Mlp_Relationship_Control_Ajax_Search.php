@@ -48,7 +48,7 @@ class Mlp_Relationship_Control_Ajax_Search {
 		$this->render();
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			mlp_exit();
+			\Inpsyde\MultilingualPress\call_exit();
 		}
 	}
 

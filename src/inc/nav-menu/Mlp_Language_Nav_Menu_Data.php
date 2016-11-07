@@ -188,7 +188,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 	 */
 	private function is_valid_blog_id( array $titles, $blog_id ) {
 
-		return isset( $titles[ $blog_id ] ) && blog_exists( $blog_id );
+		return isset( $titles[ $blog_id ] ) && \Inpsyde\MultilingualPress\site_exists( $blog_id );
 	}
 
 	/**

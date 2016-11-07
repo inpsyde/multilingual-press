@@ -89,7 +89,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		$post = null;
 
 		$linked = Mlp_Helpers::load_linked_elements( $source_post->ID, '', get_current_blog_id() );
-		if ( ! empty( $linked[ $blog_id ] ) && blog_exists( $blog_id ) ) {
+		if ( ! empty( $linked[ $blog_id ] ) && \Inpsyde\MultilingualPress\site_exists( $blog_id ) ) {
 			$post = get_blog_post( $blog_id, $linked[ $blog_id ] );
 		}
 
@@ -169,7 +169,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 
 		// Create a copy of the item for every related blog
 		foreach ( $to_translate as $blog_id ) {
-			if ( $blog_id == get_current_blog_id() or ! blog_exists( $blog_id ) ) {
+			if ( $blog_id == get_current_blog_id() or ! \Inpsyde\MultilingualPress\site_exists( $blog_id ) ) {
 				continue;
 			}
 

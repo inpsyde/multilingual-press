@@ -61,7 +61,7 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 		$this->save_session( $redirect_match['language'] );
 
 		wp_redirect( $url );
-		mlp_exit();
+		\Inpsyde\MultilingualPress\call_exit();
 
 		return true;
 	}
