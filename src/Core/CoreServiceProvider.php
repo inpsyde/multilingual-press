@@ -88,5 +88,18 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				"$plugin_dir_path/assets/images/flags",
 				"$plugin_dir_url/assets/images/flags"
 			);
+
+		add_action( 'widgets_init', function () {
+
+			// TODO: With WordPress 4.6 + 2, do the following:
+			/*
+			register_widget( new \Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher\Widget(
+				new \Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher\WidgetView(),
+				$container->get( 'multilingualpress.asset_manager' )
+			) );
+			*/
+
+			register_widget( '\Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher\Widget' );
+		} );
 	}
 }
