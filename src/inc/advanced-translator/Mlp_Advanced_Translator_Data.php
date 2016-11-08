@@ -661,6 +661,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function is_connectable_status( WP_Post $post ) {
 
+		// TODO: Discuss post status "future"...
 		if ( in_array( $post->post_status, [ 'publish', 'draft', 'private', 'auto-draft' ], true ) ) {
 			return true;
 		}
