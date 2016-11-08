@@ -36,7 +36,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new InternalLocations();
 		} );
 
-		// TODO: Make this a regular not shared service as soon as everything else has been adapted.
+		// TODO: Make a regular not shared service as soon as everything else has been adapted. Or remove from here?
 		$container->share( 'multilingualpress.module_manager', function () {
 
 			// TODO: Maybe store the option name somewhere? But then again, who else really needs to know it?
@@ -91,8 +91,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		add_action( 'widgets_init', function () {
 
-			// TODO: With WordPress 4.6 + 2, do the following:
-			/*
+			/* TODO: With WordPress 4.6 + 2, do the following (via Container?):
 			register_widget( new \Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher\Widget(
 				new \Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher\WidgetView(),
 				$container->get( 'multilingualpress.asset_manager' )

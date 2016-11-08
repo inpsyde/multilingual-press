@@ -75,7 +75,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 				$unfiltered_locale = get_locale();
 				$locale_filter->enable();
 
-				return $asset_manager->enqueue_script_with_data(
+				$asset_manager->enqueue_script_with_data(
 					'multilingualpress-admin',
 					'mlpUserBackEndLanguageSettings',
 					[

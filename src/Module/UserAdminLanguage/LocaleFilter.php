@@ -40,7 +40,7 @@ class LocaleFilter {
 	}
 
 	/**
-	 * Removes the locale filter.
+	 * Removes the filter.
 	 *
 	 * @since 3.0.0
 	 *
@@ -58,7 +58,7 @@ class LocaleFilter {
 	}
 
 	/**
-	 * Adds the locale filter.
+	 * Adds the filter.
 	 *
 	 * @since 3.0.0
 	 *
