@@ -20,6 +20,8 @@ namespace PHPSTORM_META {
 			'multilingualpress.module_manager' instanceof \Inpsyde\MultilingualPress\Module\ModuleManager,
 			'multilingualpress.network_plugin_deactivator' instanceof \Inpsyde\MultilingualPress\Installation\NetworkPluginDeactivator,
 			'multilingualpress.nonce_factory' instanceof \Inpsyde\MultilingualPress\Factory\FallbackNonceFactory,
+			'multilingualpress.post_type_link_url_filter' instanceof \Inpsyde\MultilingualPress\Module\CustomPostTypeSupport\URLFilter,
+			'multilingualpress.post_type_repository' instanceof \Inpsyde\MultilingualPress\Module\CustomPostTypeSupport\PostTypeRepository,
 			'multilingualpress.properties' instanceof \Inpsyde\MultilingualPress\Common\PluginProperties,
 			'multilingualpress.site_duplication_settings_view' instanceof \Inpsyde\MultilingualPress\SiteDuplication\SettingsView,
 			'multilingualpress.site_duplicator' instanceof \Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicator,
