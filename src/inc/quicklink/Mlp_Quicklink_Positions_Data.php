@@ -1,11 +1,12 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxViewModel;
 
 /**
  * Provides data for the configuration on the MultilingualPress network settings page.
  */
-class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Data_Interface {
+class Mlp_Quicklink_Positions_Data implements SettingsBoxViewModel {
 
 	/**
 	 * Prefix for 'name' attribute in form fields.
@@ -36,7 +37,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	 *
 	 * @return string
 	 */
-	public function get_title() {
+	public function title() {
 
 		return esc_html__( 'Quicklink position', 'multilingual-press' );
 	}
@@ -48,7 +49,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	 *
 	 * @return string
 	 */
-	public function get_main_description() {
+	public function description() {
 
 		return '';
 	}
@@ -60,7 +61,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	 *
 	 * @return string
 	 */
-	public function get_main_label_id() {
+	public function label_id() {
 
 		return '';
 	}
@@ -70,23 +71,17 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	 *
 	 * @return string
 	 */
-	public function get_box_id() {
+	public function id() {
 
 		return $this->form_name . '-setting';
 	}
 
 	/**
-	 * @param string $name
-	 *
 	 * @return mixed|void Either a value, or void for actions.
 	 */
-	public function update( $name ) {
+	public function markup() {
 
-		if ( 'general.settings.extra.box' === $name ) {
-			return $this->get_box_content();
-		}
-
-		return '';
+		return $this->get_box_content();
 	}
 
 	/**

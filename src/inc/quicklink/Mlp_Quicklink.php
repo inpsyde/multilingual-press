@@ -2,6 +2,7 @@
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxView;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Module\Module;
@@ -415,8 +416,8 @@ HTML;
 
 		$data = new Mlp_Quicklink_Positions_Data( $this->nonce );
 
-		$box = new Mlp_Extra_General_Settings_Box( $data );
-		$box->print_box();
+		$box = new SettingsBoxView( $data );
+		$box->render();
 	}
 
 	/**
