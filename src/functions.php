@@ -46,6 +46,8 @@ function call_exit( $status = '' ) {
 	exit( $status );
 }
 
+// TODO: Implement check_admin_referer( Nonce $nonce ) and check_ajax_referer( Nonce $nonce ) functions.
+
 /**
  * Writes debug data to the error log.
  *
@@ -230,7 +232,6 @@ function is_wp_debug_mode() {
  */
 function nonce_field( Nonce $nonce, $with_referer = true ) {
 
-	// TODO: Maybe get rid of $with_referer, because check_*_referer() still cannot be used (due to action hash)...?
 	return sprintf(
 		'<input type="hidden" name="%s" value="%s">%s',
 		esc_attr( $nonce->action() ),

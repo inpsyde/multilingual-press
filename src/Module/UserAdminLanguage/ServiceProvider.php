@@ -84,6 +84,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 				);
 			} );
 
+			// This nonce is not accessible via the container because it is used no matter what by static parties.
 			$nonce = new WPNonce( 'save_user_admin_language_setting' );
 
 			( new UserSetting(

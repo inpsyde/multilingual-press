@@ -30,8 +30,6 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$nonce = new WPNonce( 'save_trasher_setting' );
-
 		$container['multilingualpress.trasher'] = function ( Container $container ) {
 
 			return new Trasher(
@@ -40,23 +38,31 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			);
 		};
 
+		$container['multilingualpress.trasher_setting_nonce'] = function () {
+
+			return new WPNonce( 'save_trasher_setting' );
+		};
+
 		$container['multilingualpress.trasher_setting_repository'] = function () {
 
 			return new TrasherSettingRepository();
 		};
 
-		$container['multilingualpress.trasher_setting_updater'] = function ( Container $container ) use ( $nonce ) {
+		$container['multilingualpress.trasher_setting_updater'] = function ( Container $container ) {
 
 			return new TrasherSettingUpdater(
 				$container['multilingualpress.trasher_setting_repository'],
 				$container['multilingualpress.content_relations'],
-				$nonce
+				$container['multilingualpress.trasher_setting_nonce']
 			);
 		};
 
-		$container['multilingualpress.trasher_setting_view'] = function ( Container $container ) use ( $nonce ) {
+		$container['multilingualpress.trasher_setting_view'] = function ( Container $container ) {
 
-			return new TrasherSettingView( $container['multilingualpress.trasher_setting_repository'], $nonce );
+			return new TrasherSettingView(
+				$container['multilingualpress.trasher_setting_repository'],
+				$container['multilingualpress.trasher_setting_nonce']
+			);
 		};
 	}
 

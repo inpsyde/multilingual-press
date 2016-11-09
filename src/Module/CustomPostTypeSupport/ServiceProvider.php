@@ -31,14 +31,35 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.post_type_link_url_filter'] = function ( Container $container ) {
+
+			return new URLFilter( $container['multilingualpress.post_type_repository'] );
+		};
+
 		$container['multilingualpress.post_type_repository'] = function () {
 
 			return new TypeSafePostTypeRepository();
 		};
 
-		$container['multilingualpress.post_type_link_url_filter'] = function ( Container $container ) {
+		$container['multilingualpress.post_type_support_settings_box'] = function ( Container $container ) {
 
-			return new URLFilter( $container['multilingualpress.post_type_repository'] );
+			return new CustomPostTypeSupportSettingsBox(
+				$container['multilingualpress.post_type_repository']->get_custom_post_types(),
+				$container['multilingualpress.post_type_support_settings_nonce']
+			);
+		};
+
+		$container['multilingualpress.post_type_support_settings_nonce'] = function () {
+
+			return new WPNonce( 'update_custom_post_type_support_settings' );
+		};
+
+		$container['multilingualpress.post_type_support_settings_updater'] = function ( Container $container ) {
+
+			return new PostTypeSupportSettingsUpdater(
+				$container['multilingualpress.post_type_support_settings_nonce'],
+				$container['multilingualpress.post_type_repository']
+			);
 		};
 	}
 
@@ -55,26 +76,23 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 		$this->on_activation( function () use ( $container ) {
 
-			$nonce = new WPNonce( 'update_custom_post_type_support_settings' );
+			$repository = $container['multilingualpress.post_type_repository'];
 
-			$post_type_repository = $container['multilingualpress.post_type_repository'];
+			$settings_box = $container['multilingualpress.post_type_support_settings_box'];
 
-			add_action( 'mlp_modules_add_fields', function () use ( $post_type_repository, $nonce ) {
+			add_action( 'mlp_modules_add_fields', function () use ( $settings_box, $repository ) {
 
-				$post_types = $post_type_repository->get_custom_post_types();
-				if ( $post_types ) {
-					( new SettingsBoxView( new CustomPostTypeSupportSettingsBox( $post_types, $nonce ) ) )->render();
+				if ( $repository->get_custom_post_types() ) {
+					( new SettingsBoxView( $settings_box ) )->render();
 				}
 			} );
 
-			add_action( 'mlp_modules_save_fields', function () use ( $post_type_repository, $nonce ) {
+			$updater = $container['multilingualpress.post_type_support_settings_updater'];
+			add_action( 'mlp_modules_save_fields', [ $updater, 'update_settings' ] );
 
-				( new PostTypeSupportSettingsUpdater( $nonce, $post_type_repository ) )->update_settings();
-			} );
+			add_filter( 'mlp_allowed_post_types', function ( array $post_types ) use ( $repository ) {
 
-			add_filter( 'mlp_allowed_post_types', function ( array $post_types ) use ( $post_type_repository ) {
-
-				return array_merge( $post_types, $post_type_repository->get_supported_post_types() );
+				return array_merge( $post_types, $repository->get_supported_post_types() );
 			} );
 
 			$url_filter = $container['multilingualpress.post_type_link_url_filter'];
