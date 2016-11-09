@@ -21,6 +21,11 @@ final class WPNonce implements Nonce {
 	private $action_hash;
 
 	/**
+	 * @var Context
+	 */
+	private $context;
+
+	/**
 	 * @var string
 	 */
 	private $nonce;
@@ -30,11 +35,14 @@ final class WPNonce implements Nonce {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $action Nonce action.
+	 * @param string  $action  Nonce action.
+	 * @param Context $context Optional. Nonce context object. Defaults to null.
 	 */
-	public function __construct( $action ) {
+	public function __construct( $action, Context $context = null ) {
 
 		$this->action = (string) $action;
+
+		$this->context = $context;
 
 		$this->action_hash = (string) wp_hash( $this->action . get_current_blog_id(), 'nonce' );
 
@@ -66,25 +74,23 @@ final class WPNonce implements Nonce {
 	}
 
 	/**
-	 * Checks if the nonce is valid with respect to the given context.
+	 * Checks if the nonce is valid with respect to the current context.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Context $context Optional. Nonce context object. Defaults to null.
-	 *
 	 * @return bool Whether or not the nonce is valid.
 	 */
-	public function is_valid( Context $context = null ) {
+	public function is_valid() {
 
-		if ( ! $context ) {
-			$context = new RequestContext();
+		if ( ! $this->context ) {
+			$this->context = new RequestContext();
 		}
 
-		if ( ! isset( $context[ $this->action ] ) ) {
+		if ( ! isset( $this->context[ $this->action ] ) ) {
 			return false;
 		}
 
-		$nonce = $context[ $this->action ];
+		$nonce = $this->context[ $this->action ];
 		if ( ! is_string( $nonce ) ) {
 			return false;
 		}

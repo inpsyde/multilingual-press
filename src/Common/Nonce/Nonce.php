@@ -28,14 +28,12 @@ interface Nonce {
 	 */
 	public function action();
 
-	/**@todo Discuss moving the context to the constructor (which is not included here, of course).
-	 * Checks if the nonce is valid with respect to the given context.
+	/**
+	 * Checks if the nonce is valid with respect to the current context.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Context $context Optional. Nonce context object. Defaults to null.
-	 *
 	 * @return bool Whether or not the nonce is valid.
 	 */
-	public function is_valid( Context $context = null );
+	public function is_valid();
 }
