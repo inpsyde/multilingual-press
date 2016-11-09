@@ -26,11 +26,6 @@ class Mlp_Advanced_Translator {
 	private $plugin_data;
 
 	/**
-	 * @var Mlp_Advanced_Translator_Data
-	 */
-	private $translation_data;
-
-	/**
 	 * The view class.
 	 *
 	 * @var Mlp_Advanced_Translator_View
@@ -57,9 +52,6 @@ class Mlp_Advanced_Translator {
 
 		add_action( 'mlp_post_translator_init', [ $this, 'setup' ] );
 		add_filter( 'mlp_external_save_method', '__return_true' );
-
-		// Disable default actions
-		add_action( 'mlp_translation_meta_box_registered', [ $this, 'register_metabox_view_details' ], 10, 2 );
 	}
 
 	/**
@@ -75,7 +67,7 @@ class Mlp_Advanced_Translator {
 
 		$this->basic_data = $base_data['basic_data'];
 
-		$this->translation_data = new Mlp_Advanced_Translator_Data(
+		$translation_data = new Mlp_Advanced_Translator_Data(
 			null,
 			$base_data['basic_data'],
 			$base_data['allowed_post_types'],
@@ -83,11 +75,12 @@ class Mlp_Advanced_Translator {
 			$this->plugin_data->get( 'nonce_factory' )
 		);
 
-		$this->view = new Mlp_Advanced_Translator_View( $this->translation_data );
-
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-			add_action( 'save_post', [ $this->translation_data, 'save' ], 10, 2 );
+			add_action( 'save_post', [ $translation_data, 'save' ], 10, 2 );
 		}
+
+		$this->view = new Mlp_Advanced_Translator_View( $translation_data );
+		add_action( 'mlp_translation_meta_box_registered', [ $this, 'register_metabox_view_details' ], 10, 2 );
 
 		// Disable the checkbox, we can translate auto-drafts.
 		add_filter( 'mlp_post_translator_activation_checkbox', '__return_false' );
