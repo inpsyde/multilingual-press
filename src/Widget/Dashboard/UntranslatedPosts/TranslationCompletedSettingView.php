@@ -3,6 +3,7 @@
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use WP_Post;
 
 /**
  * Translation completed setting view.
@@ -43,11 +44,13 @@ class TranslationCompletedSettingView {
 	 * @since   3.0.0
 	 * @wp-hook post_submitbox_misc_actions
 	 *
+	 * @param WP_Post $post Post object.
+	 *
 	 * @return void
 	 */
-	public function render() {
+	public function render( WP_Post $post ) {
 
-		$post_id = get_the_ID();
+		$post_id = $post->ID;
 
 		$translated = $this->post_repository->is_post_translated( $post_id );
 

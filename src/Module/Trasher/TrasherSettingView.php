@@ -3,6 +3,7 @@
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use WP_Post;
 
 /**
  * Trasher setting view.
@@ -43,9 +44,11 @@ class TrasherSettingView {
 	 * @since   3.0.0
 	 * @wp-hook post_submitbox_misc_actions
 	 *
+	 * @param WP_Post $post Post object.
+	 *
 	 * @return void
 	 */
-	public function render() {
+	public function render( WP_Post $post ) {
 
 		$id = 'mlp-trasher';
 		?>
@@ -53,7 +56,8 @@ class TrasherSettingView {
 			<?php echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce ); ?>
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( TrasherSettingRepository::META_KEY ); ?>"
-					value="1" id="<?php echo esc_attr( $id ); ?>" <?php checked( $this->setting_repository->get() ); ?>>
+					value="1" id="<?php echo esc_attr( $id ); ?>"
+					<?php checked( $this->setting_repository->get( $post->ID ) ); ?>>
 				<?php _e( 'Send all the translations to trash when this post is trashed.', 'multilingual-press' ); ?>
 			</label>
 		</div>
