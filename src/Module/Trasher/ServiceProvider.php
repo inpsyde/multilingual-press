@@ -45,7 +45,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 		$container['multilingualpress.trasher_setting_repository'] = function () {
 
-			return new TrasherSettingRepository();
+			return new TypeSafeTrasherSettingRepository();
 		};
 
 		$container['multilingualpress.trasher_setting_updater'] = function ( Container $container ) {

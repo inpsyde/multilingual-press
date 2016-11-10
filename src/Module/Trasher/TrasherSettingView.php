@@ -47,9 +47,9 @@ class TrasherSettingView {
 	 */
 	public function render() {
 
-		$id = 'trasher';
+		$id = 'mlp-trasher';
 		?>
-		<div class="misc-pub-section curtime misc-pub-section-last">
+		<div class="misc-pub-section misc-pub-mlp-trasher">
 			<?php echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce ); ?>
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( TrasherSettingRepository::META_KEY ); ?>"
