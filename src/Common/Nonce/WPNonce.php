@@ -16,19 +16,9 @@ final class WPNonce implements Nonce {
 	private $action;
 
 	/**
-	 * @var string
-	 */
-	private $action_hash;
-
-	/**
 	 * @var Context
 	 */
 	private $context;
-
-	/**
-	 * @var string
-	 */
-	private $nonce;
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -43,10 +33,6 @@ final class WPNonce implements Nonce {
 		$this->action = (string) $action;
 
 		$this->context = $context;
-
-		$this->action_hash = (string) wp_hash( $this->action . get_current_blog_id(), 'nonce' );
-
-		$this->nonce = (string) wp_create_nonce( $this->action_hash );
 	}
 
 	/**
@@ -58,7 +44,7 @@ final class WPNonce implements Nonce {
 	 */
 	public function __toString() {
 
-		return $this->nonce;
+		return (string) wp_create_nonce( $this->get_hash() );
 	}
 
 	/**
@@ -95,6 +81,16 @@ final class WPNonce implements Nonce {
 			return false;
 		}
 
-		return (bool) wp_verify_nonce( $nonce, $this->action_hash );
+		return (bool) wp_verify_nonce( $nonce, $this->get_hash() );
+	}
+
+	/**
+	 * Returns a hash for the current action and site ID.
+	 *
+	 * @return string The hash for the current action and site ID.
+	 */
+	private function get_hash() {
+
+		return (string) wp_hash( $this->action . get_current_blog_id(), 'nonce' );
 	}
 }
