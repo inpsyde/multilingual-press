@@ -1,4 +1,8 @@
 <?php # -*- coding: utf-8 -*-
+
+use Inpsyde\MultilingualPress\Translation\FullRequestDataManipulator;
+use Inpsyde\MultilingualPress\Translation\RequestDataManipulator;
+
 add_action( 'inpsyde_mlp_loaded', 'mlp_feature_translation_metabox' );
 
 /**
@@ -12,8 +16,8 @@ function mlp_feature_translation_metabox( Inpsyde_Property_List_Interface $data 
 	if ( 'POST' !== $_SERVER[ 'REQUEST_METHOD' ] )
 		return;
 
-	$switcher = new Mlp_Global_Switcher( Mlp_Global_Switcher::TYPE_POST );
-
-	add_action( 'mlp_before_post_synchronization', [ $switcher, 'strip' ] );
-	add_action( 'mlp_after_post_synchronization',  [ $switcher, 'fill' ] );
+	// TODO: Fetch the manipulator off the container, but somehow take care of not adding it multiple times!
+	$request_data_manipulator = new FullRequestDataManipulator( RequestDataManipulator::METHOD_POST );
+	add_action( 'mlp_before_post_synchronization', [ $request_data_manipulator, 'clear_data' ] );
+	add_action( 'mlp_after_post_synchronization', [ $request_data_manipulator, 'restore_data' ] );
 }

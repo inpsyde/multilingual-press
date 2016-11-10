@@ -2,6 +2,8 @@
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Translation\FullRequestDataManipulator;
+use Inpsyde\MultilingualPress\Translation\RequestDataManipulator;
 
 /**
  * Mlp_Term_Translation_Controller
@@ -164,16 +166,10 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	 */
 	private function activate_switcher() {
 
-		$switcher = new Mlp_Global_Switcher( Mlp_Global_Switcher::TYPE_POST );
-
-		add_action(
-			'mlp_before_term_synchronization',
-			[ $switcher, 'strip' ]
-		);
-		add_action(
-			'mlp_after_term_synchronization',
-			[ $switcher, 'fill' ]
-		);
+		// TODO: Fetch the manipulator off the container, but somehow take care of not adding it multiple times!
+		$request_data_manipulator = new FullRequestDataManipulator( RequestDataManipulator::METHOD_POST );
+		add_action( 'mlp_before_term_synchronization', [ $request_data_manipulator, 'clear_data' ] );
+		add_action( 'mlp_after_term_synchronization', [ $request_data_manipulator, 'restore_data' ] );
 	}
 
 	/**
