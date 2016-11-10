@@ -1,17 +1,17 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Widget\Sidebar;
+namespace Inpsyde\MultilingualPress\Widget\Dashboard;
 
 /**
- * Interface for all sidebar widget view implementations.
+ * Interface for all dashboard widget view implementations.
  *
- * @package Inpsyde\MultilingualPress\Widget\Sidebar
+ * @package Inpsyde\MultilingualPress\Widget\Dashboard
  * @since   3.0.0
  */
 interface View {
 
 	/**
-	 * Renders the widget's front end view.
+	 * Renders the widget's view.
 	 *
 	 * @since 3.0.0
 	 *

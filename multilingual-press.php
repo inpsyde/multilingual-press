@@ -60,7 +60,8 @@ function bootstrap() {
 		->register_service_provider( new Module\CustomPostTypeSupport\ServiceProvider() )
 		->register_service_provider( new Module\Trasher\ServiceProvider() )
 		->register_service_provider( new Module\UserAdminLanguage\ServiceProvider() )
-		->register_service_provider( new SiteDuplicationServiceProvider() );
+		->register_service_provider( new SiteDuplicationServiceProvider() )
+		->register_service_provider( new Widget\WidgetServiceProvider() );
 
 	/**
 	 * MultilingualPress functions.

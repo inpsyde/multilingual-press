@@ -7,6 +7,5 @@ add_action( 'mlp_and_wp_loaded', 'mlp_feature_dashboard_widget' );
  */
 function mlp_feature_dashboard_widget( Inpsyde_Property_List_Interface $data ) {
 
-	$controller = new Mlp_Dashboard_Widget( $data->get( 'site_relations' ) );
-	$controller->initialize();
+	( new Mlp_Dashboard_Widget( $data->get( 'site_relations' ) ) )->initialize();
 }
