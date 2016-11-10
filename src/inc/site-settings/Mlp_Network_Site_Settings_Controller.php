@@ -96,7 +96,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	public function update_settings() {
 
-		if ( ! $this->nonce->is_valid() ) {
+		if ( ! \Inpsyde\MultilingualPress\check_admin_referer( $this->nonce ) ) {
 			wp_die( 'Invalid', 'Invalid', 403 );
 		}
 

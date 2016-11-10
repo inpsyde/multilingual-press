@@ -87,9 +87,7 @@ class Mlp_Language_Updater {
 	 */
 	private function validate_request() {
 
-		if ( ! $this->nonce->is_valid() ) {
-			\Inpsyde\MultilingualPress\call_exit( 'invalid request' );
-		}
+		\Inpsyde\MultilingualPress\check_admin_referer( $this->nonce );
 
 		if ( empty ( $_POST[ 'languages' ] ) )
 			\Inpsyde\MultilingualPress\call_exit( 'invalid request' );

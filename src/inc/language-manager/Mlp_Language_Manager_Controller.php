@@ -211,9 +211,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	public function reset_table() {
 
-		if ( ! $this->nonce->is_valid() ) {
-			wp_die();
-		}
+		\Inpsyde\MultilingualPress\check_admin_referer( $this->nonce );
 
 		$table_prefix = $this->wpdb->base_prefix;
 

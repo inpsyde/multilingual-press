@@ -41,9 +41,7 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 	 */
 	public function update_modules() {
 
-		if ( ! $this->nonce->is_valid() ) {
-			wp_die();
-		}
+		\Inpsyde\MultilingualPress\check_admin_referer( $this->nonce );
 
 		if ( ! current_user_can( 'manage_network_options' ) ) {
 			wp_die();

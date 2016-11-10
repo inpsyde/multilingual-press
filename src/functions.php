@@ -46,7 +46,57 @@ function call_exit( $status = '' ) {
 	exit( $status );
 }
 
-// TODO: Implement check_admin_referer( Nonce $nonce ) and check_ajax_referer( Nonce $nonce ) functions.
+/**
+ * Checks if the given nonce is valid, and if not, terminates WordPress execution unless this is an admin request.
+ *
+ * This function is the MultilingualPress equivalent of the WordPress function with the same name.
+ *
+ * @since 3.0.0
+ *
+ * @param Nonce $nonce Nonce object.
+ *
+ * @return bool Whether or not the nonce is valid.
+ */
+function check_admin_referer( Nonce $nonce ) {
+
+	if ( $nonce->is_valid() ) {
+		return true;
+	}
+
+	if ( 0 !== strpos( strtolower( wp_get_referer() ), strtolower( admin_url() ) ) ) {
+		wp_nonce_ays( null );
+		call_exit();
+	}
+
+	return false;
+}
+
+/**
+ * Checks if the given nonce is valid, and if not, terminates WordPress execution according to passed flag.
+ *
+ * This function is the MultilingualPress equivalent of the WordPress function with the same name.
+ *
+ * @since 3.0.0
+ *
+ * @param Nonce $nonce     Nonce object.
+ * @param bool  $terminate Optional. Terminate WordPress execution in case the nonce is invalid? Defaults to true.
+ *
+ * @return bool Whether or not the nonce is valid.
+ */
+function check_ajax_referer( Nonce $nonce, $terminate = true ) {
+
+	$is_nonce_valid = $nonce->is_valid();
+
+	if ( $terminate && ! $is_nonce_valid ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			wp_die( '-1' );
+		} else {
+			call_exit( '-1' );
+		}
+	}
+
+	return $is_nonce_valid;
+}
 
 /**
  * Writes debug data to the error log.
