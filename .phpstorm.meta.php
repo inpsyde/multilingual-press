@@ -45,6 +45,8 @@ namespace PHPSTORM_META {
 			'multilingualpress.trasher_setting_updater' instanceof \Inpsyde\MultilingualPress\Module\Trasher\TrasherSettingUpdater,
 			'multilingualpress.trasher_setting_view' instanceof \Inpsyde\MultilingualPress\Module\Trasher\TrasherSettingView,
 			'multilingualpress.type_factory' instanceof \Inpsyde\MultilingualPress\Factory\TypeFactory,
+			'multilingualpress.untranslated_posts_dashboard_widget' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\DashboardWidget,
+			'multilingualpress.untranslated_posts_dashboard_widget_view' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\View,
 			'multilingualpress.untranslated_posts_repository' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostRepository,
 			'multilingualpress.updater' instanceof \Inpsyde\MultilingualPress\Installation\Updater,
 			'multilingualpress.user_admin_language_locale_filter' instanceof \Inpsyde\MultilingualPress\Module\UserAdminLanguage\LocaleFilter,

@@ -15,10 +15,10 @@ interface View {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param array $args     Widget arguments.
+	 * @param mixed $object   Queried object, or other stuff.
 	 * @param array $instance Widget settings.
 	 *
 	 * @return void
 	 */
-	public function render( array $args, array $instance );
+	public function render( $object, array $instance );
 }

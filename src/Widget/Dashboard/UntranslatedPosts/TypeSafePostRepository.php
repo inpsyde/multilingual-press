@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
+use WP_Post;
+
 /**
  * Type-safe untranslated posts repository implementation.
  *
@@ -9,6 +11,36 @@ namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
  * @since   3.0.0
  */
 final class TypeSafePostRepository implements PostRepository {
+
+	/**
+	 * Returns all untranslated posts for the current site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return WP_Post[] All untranslated posts for the current site.
+	 */
+	public function get_untranslated_posts() {
+
+		return get_posts( [
+			// Not suppressing filters (which is done by default when using get_posts()) makes caching possible.
+			'suppress_filters' => false,
+			// Post status 'any' automatically excludes both 'auto-draft' and 'trash'.
+			'post_status'      => 'any',
+			'meta_query'       => [
+				'relation' => 'OR',
+				[
+					'key'     => PostRepository::META_KEY,
+					'compare' => '!=',
+					'value'   => true,
+				],
+				[
+					'key'     => PostRepository::DEPRECATED_META_KEY,
+					'compare' => '!=',
+					'value'   => true,
+				],
+			],
+		] );
+	}
 
 	/**
 	 * Checks if the post with the given ID has been translated.

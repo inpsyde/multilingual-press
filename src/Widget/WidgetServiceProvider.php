@@ -43,6 +43,36 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 			return new Dashboard\UntranslatedPosts\TypeSafePostRepository();
 		};
 
+		$container['multilingualpress.untranslated_posts_dashboard_widget'] = function ( Container $container ) {
+
+			/**
+			 * Filters the capability required to view the dashboard widget.
+			 *
+			 * @since 3.0.0
+			 *
+			 * @param string $capability Capability required to view the dashboard widget.
+			 */
+			$capability = (string) apply_filters(
+				'multilingualpress.untranslated_posts_dashboard_widget_capability',
+				'edit_others_posts'
+			);
+
+			return new Dashboard\DashboardWidget(
+				'multilingualpress-untranslated-posts-dashboard-widget',
+				__( 'Untranslated Posts', 'multilingual-press' ),
+				$container['multilingualpress.untranslated_posts_dashboard_widget_view'],
+				$capability
+			);
+		};
+
+		$container['multilingualpress.untranslated_posts_dashboard_widget_view'] = function ( Container $container ) {
+
+			return new Dashboard\UntranslatedPosts\WidgetView(
+				$container['multilingualpress.site_relations'],
+				$container['multilingualpress.untranslated_posts_repository']
+			);
+		};
+
 		$container['multilingualpress.translation_completed_setting_updater'] = function ( Container $container ) {
 
 			return new Dashboard\UntranslatedPosts\TranslationCompletedSettingUpdater(
@@ -62,6 +92,8 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 	 * @return void
 	 */
 	public function bootstrap( Container $container ) {
+
+		$container['multilingualpress.untranslated_posts_dashboard_widget']->register();
 
 		add_action(
 			'post_submitbox_misc_actions',

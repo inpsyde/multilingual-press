@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
+use WP_Post;
+
 /**
  * Interface for all untranslated posts repository implementations.
  *
@@ -27,6 +29,15 @@ interface PostRepository {
 	 * @var string
 	 */
 	const META_KEY = '_post_is_translated';
+
+	/**
+	 * Returns all untranslated posts for the current site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return WP_Post[] All untranslated posts for the current site.
+	 */
+	public function get_untranslated_posts();
 
 	/**
 	 * Checks if the post with the given ID has been translated.
