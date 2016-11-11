@@ -2,6 +2,11 @@
 
 namespace Inpsyde\MultilingualPress\Core;
 
+use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
+use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
+use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
+use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPage;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -43,6 +48,42 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			// TODO: Migration: The old option name was "state_modules", and it stored "on" and "off" values, no bools.
 			return new Module\NetworkOptionModuleManager( 'multilingualpress_modules' );
 		} );
+
+		$container['multilingualpress.plugin_settings_page'] = function ( Container $container ) {
+
+			return SettingsPage::with_parent(
+				SettingsPage::ADMIN_NETWORK,
+				SettingsPage::PARENT_NETWORK_SETTINGS,
+				__( 'MultilingualPress', 'multilingual-press' ),
+				__( 'MultilingualPress', 'multilingual-press' ),
+				'manage_network_options',
+				'multilingualpress',
+				$container['multilingualpress.plugin_settings_page_view']
+			);
+		};
+
+		$container['multilingualpress.plugin_settings_page_view'] = function ( Container $container ) {
+
+			return new PluginSettingsPage\View(
+				$container['multilingualpress.module_manager'],
+				$container['multilingualpress.update_plugin_settings_nonce'],
+				$container['multilingualpress.asset_manager']
+			);
+		};
+
+		$container['multilingualpress.plugin_settings_updater'] = function ( Container $container ) {
+
+			return new PluginSettingsPage\PluginSettingsUpdater(
+				$container['multilingualpress.module_manager'],
+				$container['multilingualpress.update_plugin_settings_nonce'],
+				$container['multilingualpress.plugin_settings_page']
+			);
+		};
+
+		$container['multilingualpress.update_plugin_settings_nonce'] = function () {
+
+			return new WPNonce( 'update_plugin_settings' );
+		};
 	}
 
 	/**
@@ -58,9 +99,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$properties = $container['multilingualpress.properties'];
 
-		$plugin_dir_path = $properties->plugin_dir_path();
+		$plugin_dir_path = rtrim( $properties->plugin_dir_path(), '/' );
 
-		$plugin_dir_url = $properties->plugin_dir_url();
+		$plugin_dir_url = rtrim( $properties->plugin_dir_url(), '/' );
 
 		$container['multilingualpress.internal_locations']
 			->add(
@@ -88,5 +129,29 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				"$plugin_dir_path/assets/images/flags",
 				"$plugin_dir_url/assets/images/flags"
 			);
+
+		$setting_page = $container['multilingualpress.plugin_settings_page'];
+
+		add_action( 'plugins_loaded', [ $setting_page, 'register' ], 8 );
+
+		add_action(
+			'admin_post_' . PluginSettingsPage\PluginSettingsUpdater::ACTION,
+			[ $container['multilingualpress.plugin_settings_updater'], 'update_settings' ]
+		);
+
+		add_action( 'network_admin_notices', function () use ( $setting_page ) {
+
+			if (
+				isset( $_GET['message'] )
+				&& isset( $GLOBALS['hook_suffix'] ) && $setting_page->hookname() === $GLOBALS['hook_suffix']
+			) {
+				( new AdminNotice( '<p>' . __( 'Settings saved.', 'multilingual-press' ) . '</p>' ) )->render();
+			}
+		} );
+
+		( new ActionLink(
+			'settings',
+			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>'
+		) )->register( 'network_admin_plugin_action_links_' . $properties->plugin_base_name() );
 	}
 }

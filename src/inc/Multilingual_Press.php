@@ -1,6 +1,5 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Core;
@@ -112,28 +111,6 @@ class Multilingual_Press {
 		 * @param wpdb                            $wpdb        Database object.
 		 */
 		do_action( 'mlp_and_wp_loaded', $this->plugin_data, $this->wpdb );
-	}
-
-	/**
-	 * Create network settings page.
-	 *
-	 * @return void
-	 */
-	private function load_module_settings_page() {
-
-		$settings = new Mlp_General_Settingspage(
-			$this->plugin_data->get( 'module_manager' ),
-			$this->container['multilingualpress.asset_manager']
-		);
-		add_action( 'plugins_loaded', [ $settings, 'setup' ], 8 );
-
-		// TODO: Don't hard-code URL.
-		$settings_page_url = network_admin_url( 'settings.php?page=mlp' );
-
-		( new ActionLink(
-			'settings',
-			'<a href="' . esc_url( $settings_page_url ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>'
-		) )->register( 'network_admin_plugin_action_links_' . $this->properties->plugin_base_name() );
 	}
 
 	/**
@@ -266,11 +243,6 @@ class Multilingual_Press {
 	 * @return void
 	 */
 	private function run_admin_actions() {
-
-		$module_manager = $this->plugin_data->get( 'module_manager' );
-		if ( $module_manager->has_modules() ) {
-			$this->load_module_settings_page();
-		}
 
 		$setting = new Mlp_Network_Site_Settings_Tab_Data( $this->plugin_data->get( 'type_factory' ) );
 
