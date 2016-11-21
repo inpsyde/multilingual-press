@@ -271,11 +271,15 @@ class Multilingual_Press {
 		);
 		add_action( 'template_redirect', function () use ( $translations ) {
 
-			( new Core\FrontEnd\AlternateLanguages\HTTPHeaders( $translations ) )->send();
+			if ( ! is_paged() ) {
+				( new Core\FrontEnd\AlternateLanguages\HTTPHeaders( $translations ) )->send();
+			}
 		} );
 		add_action( 'wp_head', function () use ( $translations ) {
 
-			( new Core\FrontEnd\AlternateLanguages\HTMLLinkTags( $translations ) )->render();
+			if ( ! is_paged() ) {
+				( new Core\FrontEnd\AlternateLanguages\HTMLLinkTags( $translations ) )->render();
+			}
 		} );
 	}
 
