@@ -107,6 +107,10 @@ class Mlp_Nav_Menu_Frontend {
 		/** This filter is documented in inc/types/Mlp_Translation.php */
 		$item->url = apply_filters( 'mlp_linked_element_link', $url, $site_id, 0, $translation );
 
+		if ( get_current_blog_id() === $site_id ) {
+			$item->classes[] = 'mlp-current-language-nav-item';	
+		}
+		
 		/**
 		 * Runs before a nav menu item is sent to the walker.
 		 *
