@@ -70,7 +70,7 @@ class NavMenus extends Backbone.View {
 		const data = {
 			action: this.settings.action,
 			menu: _this.$menu.val(),
-			mlp_sites: this.getSiteIDs(),
+			mlp_sites: this.getSiteIds(),
 			[ this.settings.nonceName ]: this.settings.nonce
 		};
 
@@ -90,7 +90,7 @@ class NavMenus extends Backbone.View {
 	 * Returns the site IDs for the checked languages in the Languages meta box.
 	 * @returns {Number[]} The site IDs.
 	 */
-	getSiteIDs() {
+	getSiteIds() {
 		const ids = [];
 
 		_this.$languages.filter( ':checked' ).each( ( i, element ) => ids.push( Number( $( element ).val() || 0 ) ) );

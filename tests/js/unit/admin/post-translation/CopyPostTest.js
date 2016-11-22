@@ -95,11 +95,11 @@ test( 'excerpt (element present) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'postID (element missing) ...', ( assert ) => {
+test( 'postId (element missing) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
-		testee.postID,
+		testee.postId,
 		0,
 		'... SHOULD be 0.'
 	);
@@ -107,19 +107,19 @@ test( 'postID (element missing) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'postID (element present) ...', ( assert ) => {
-	const postID = F.getRandomInteger( 1 );
+test( 'postId (element present) ...', ( assert ) => {
+	const postId = F.getRandomInteger( 1 );
 
-	const $postID = new JqueryObject();
-	$postID.val.returns( postID );
+	const $postId = new JqueryObject();
+	$postId.val.returns( postId );
 
-	$.withArgs( '#post_ID' ).returns( $postID );
+	$.withArgs( '#post_ID' ).returns( $postId );
 
 	const testee = createTestee();
 
 	assert.equal(
-		testee.postID,
-		postID,
+		testee.postId,
+		postId,
 		'... SHOULD have the value of the according element.'
 	);
 
@@ -176,11 +176,11 @@ test( 'slug (element present) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'tinyMCEContent (TinyMCE undefined) ...', ( assert ) => {
+test( 'tinyMceContent (tinyMCE undefined) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
-		testee.tinyMCEContent,
+		testee.tinyMceContent,
 		'',
 		'... SHOULD be empty.'
 	);
@@ -188,7 +188,7 @@ test( 'tinyMCEContent (TinyMCE undefined) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'tinyMCEContent (TinyMCE missing) ...', ( assert ) => {
+test( 'tinyMceContent (tinyMCE missing) ...', ( assert ) => {
 	// Prepare tinyMCE.
 	window.tinyMCE = {
 		get: F.returnNull
@@ -197,7 +197,7 @@ test( 'tinyMCEContent (TinyMCE missing) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
-		testee.tinyMCEContent,
+		testee.tinyMceContent,
 		'',
 		'... SHOULD be empty.'
 	);
@@ -208,21 +208,21 @@ test( 'tinyMCEContent (TinyMCE missing) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'tinyMCEContent (TinyMCE present) ...', ( assert ) => {
-	const tinyMCEContent = F.getRandomString();
+test( 'tinyMceContent (tinyMCE present) ...', ( assert ) => {
+	const tinyMceContent = F.getRandomString();
 
 	// Prepare tinyMCE.
 	window.tinyMCE = {
 		get: sinon.stub().withArgs( 'content' ).returns( {
-			getContent: () => tinyMCEContent
+			getContent: () => tinyMceContent
 		} )
 	};
 
 	const testee = createTestee();
 
 	assert.equal(
-		testee.tinyMCEContent,
-		tinyMCEContent,
+		testee.tinyMceContent,
+		tinyMceContent,
 		'... SHOULD have the expected value.'
 	);
 
@@ -267,12 +267,12 @@ test( 'title (element present) ...', ( assert ) => {
 } );
 
 test( 'copyPostData ...', ( assert ) => {
-	const tinyMCEContent = F.getRandomString();
+	const tinyMceContent = F.getRandomString();
 
 	// Prepare tinyMCE.
 	window.tinyMCE = {
 		get: sinon.stub().withArgs( 'content' ).returns( {
-			getContent: () => tinyMCEContent
+			getContent: () => tinyMceContent
 		} )
 	};
 
@@ -287,7 +287,7 @@ test( 'copyPostData ...', ( assert ) => {
 		model,
 		settings: {
 			action: F.getRandomString(),
-			siteID: F.getRandomInteger( 1 )
+			siteId: F.getRandomInteger( 1 )
 		}
 	};
 
@@ -313,19 +313,19 @@ test( 'copyPostData ...', ( assert ) => {
 
 	const $copiedPostFlag = new JqueryObject();
 
-	const remoteSiteID = F.getRandomInteger( 1 );
+	const remoteSiteId = F.getRandomInteger( 1 );
 
 	$
 		.withArgs( '#content' ).returns( $content )
 		.withArgs( '#excerpt' ).returns( $excerpt )
 		.withArgs( '#editable-post-name-full' ).returns( $slug )
 		.withArgs( '#title' ).returns( $title )
-		.withArgs( `#mlp-translation-data-${remoteSiteID}-copied-post` ).returns( $copiedPostFlag );
+		.withArgs( `#mlp-translation-data-${remoteSiteId}-copied-post` ).returns( $copiedPostFlag );
 
 	const testee = createTestee( options );
 
 	// Turn method into stub.
-	testee.getRemoteSiteID = sinon.stub().returns( remoteSiteID );
+	testee.getRemoteSiteId = sinon.stub().returns( remoteSiteId );
 
 	// Turn method into spy.
 	testee.fadeOutMetaBox = sinon.spy();
@@ -353,7 +353,7 @@ test( 'copyPostData ...', ( assert ) => {
 	);
 
 	assert.equal(
-		EventManager.trigger.calledWith( 'CopyPost:copyPostData', {}, options.settings.siteID, 0, remoteSiteID ),
+		EventManager.trigger.calledWith( 'CopyPost:copyPostData', {}, options.settings.siteId, 0, remoteSiteId ),
 		true,
 		'... SHOULD trigger the expected event.'
 	);
@@ -361,10 +361,10 @@ test( 'copyPostData ...', ( assert ) => {
 	const data = {
 		action: options.settings.action,
 		current_post_id: 0,
-		remote_site_id: remoteSiteID,
+		remote_site_id: remoteSiteId,
 		title,
 		slug,
-		tinyMCEContent,
+		tinyMceContent,
 		content,
 		excerpt
 	};
@@ -390,13 +390,13 @@ test( 'copyPostData ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getRemoteSiteID (no site ID) ...', ( assert ) => {
+test( 'getRemoteSiteId (no site ID) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const $button = new JqueryObject();
 
 	assert.equal(
-		testee.getRemoteSiteID( $button ),
+		testee.getRemoteSiteId( $button ),
 		0,
 		'... SHOULD return 0.'
 	);
@@ -404,17 +404,17 @@ test( 'getRemoteSiteID (no site ID) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getRemoteSiteID (site ID specified) ...', ( assert ) => {
+test( 'getRemoteSiteId (site ID specified) ...', ( assert ) => {
 	const testee = createTestee();
 
-	const siteID = F.getRandomInteger();
+	const siteId = F.getRandomInteger();
 
 	const $button = new JqueryObject();
-	$button.data.returns( siteID );
+	$button.data.returns( siteId );
 
 	assert.equal(
-		testee.getRemoteSiteID( $button ),
-		siteID,
+		testee.getRemoteSiteId( $button ),
+		siteId,
 		'... SHOULD return the site ID.'
 	);
 
@@ -424,13 +424,13 @@ test( 'getRemoteSiteID (site ID specified) ...', ( assert ) => {
 test( 'fadeOutMetaBox ...', ( assert ) => {
 	const testee = createTestee();
 
-	const remoteSiteID = F.getRandomInteger( 1 );
+	const remoteSiteId = F.getRandomInteger( 1 );
 
 	const $metaBox = new JqueryObject();
 
-	$.withArgs( `#inpsyde_multilingual_${remoteSiteID}` ).returns( $metaBox );
+	$.withArgs( `#inpsyde_multilingual_${remoteSiteId}` ).returns( $metaBox );
 
-	testee.fadeOutMetaBox( remoteSiteID );
+	testee.fadeOutMetaBox( remoteSiteId );
 
 	assert.equal(
 		$metaBox.css.callCount,
@@ -458,7 +458,7 @@ test( 'updatePostData (unsuccessful AJAX request) ...', ( assert ) => {
 	const testee = createTestee( options );
 
 	// Turn method into spy.
-	testee.setTinyMCEContent = sinon.spy();
+	testee.setTinyMceContent = sinon.spy();
 
 	// Turn method into spy.
 	testee.fadeInMetaBox = sinon.spy();
@@ -481,7 +481,7 @@ test( 'updatePostData (unsuccessful AJAX request) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		testee.setTinyMCEContent.callCount,
+		testee.setTinyMceContent.callCount,
 		0,
 		'... SHOULD NOT change any tinyMCE content.'
 	);
@@ -504,9 +504,9 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	const data = {
 		content: F.getRandomString(),
 		excerpt: F.getRandomString(),
-		siteID: F.getRandomInteger( 1 ),
+		siteId: F.getRandomInteger( 1 ),
 		slug: F.getRandomString(),
-		tinyMCEContent: F.getRandomString(),
+		tinyMceContent: F.getRandomString(),
 		title: F.getRandomString()
 	};
 
@@ -523,12 +523,12 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	const testee = createTestee( options );
 
 	// Turn method into spy.
-	testee.setTinyMCEContent = sinon.spy();
+	testee.setTinyMceContent = sinon.spy();
 
 	// Turn method into spy.
 	testee.fadeInMetaBox = sinon.spy();
 
-	const prefix = `mlp-translation-data-${data.siteID}-`;
+	const prefix = `mlp-translation-data-${data.siteId}-`;
 
 	const $title = new JqueryObject();
 
@@ -563,7 +563,7 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		testee.setTinyMCEContent.calledWith( `${prefix}content`, data.tinyMCEContent ),
+		testee.setTinyMceContent.calledWith( `${prefix}content`, data.tinyMceContent ),
 		true,
 		'... SHOULD set the tinyMCE content to the expected value.'
 	);
@@ -592,11 +592,11 @@ test( 'updatePostData (successful AJAX request) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'setTinyMCEContent (no tinyMCE) ...', ( assert ) => {
+test( 'setTinyMceContent (no tinyMCE) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
-		testee.setTinyMCEContent(),
+		testee.setTinyMceContent(),
 		false,
 		'... SHOULD return false.'
 	);
@@ -604,7 +604,7 @@ test( 'setTinyMCEContent (no tinyMCE) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'setTinyMCEContent (requested tinyMCE not available) ...', ( assert ) => {
+test( 'setTinyMceContent (requested tinyMCE not available) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Mock tinyMCE.
@@ -613,7 +613,7 @@ test( 'setTinyMCEContent (requested tinyMCE not available) ...', ( assert ) => {
 	};
 
 	assert.equal(
-		testee.setTinyMCEContent(),
+		testee.setTinyMceContent(),
 		false,
 		'... SHOULD return false.'
 	);
@@ -624,7 +624,7 @@ test( 'setTinyMCEContent (requested tinyMCE not available) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'setTinyMCEContent (requested tinyMCE available) ...', ( assert ) => {
+test( 'setTinyMceContent (requested tinyMCE available) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const editor = {
@@ -639,7 +639,7 @@ test( 'setTinyMCEContent (requested tinyMCE available) ...', ( assert ) => {
 	const content = F.getRandomString();
 
 	assert.equal(
-		testee.setTinyMCEContent( 'editorID', content ),
+		testee.setTinyMceContent( 'editorID', content ),
 		true,
 		'... SHOULD return true.'
 	);
@@ -659,13 +659,13 @@ test( 'setTinyMCEContent (requested tinyMCE available) ...', ( assert ) => {
 test( 'fadeInMetaBox ...', ( assert ) => {
 	const testee = createTestee();
 
-	const remoteSiteID = F.getRandomInteger( 1 );
+	const remoteSiteId = F.getRandomInteger( 1 );
 
 	const $metaBox = new JqueryObject();
 
-	$.withArgs( `#inpsyde_multilingual_${remoteSiteID}` ).returns( $metaBox );
+	$.withArgs( `#inpsyde_multilingual_${remoteSiteId}` ).returns( $metaBox );
 
-	testee.fadeInMetaBox( remoteSiteID );
+	testee.fadeInMetaBox( remoteSiteId );
 
 	assert.equal(
 		$metaBox.css.callCount,

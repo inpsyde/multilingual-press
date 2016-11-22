@@ -234,7 +234,7 @@ class Mlp_Advanced_Translator {
 		);
 		$slug = esc_attr( $slug );
 
-		$tmce_content = filter_input( INPUT_POST, 'tinyMCEContent' );
+		$tmce_content = filter_input( INPUT_POST, 'tinyMceContent' );
 		/**
 		 * Filters a post's TinyMCE content for a remote site.
 		 *
@@ -296,10 +296,10 @@ class Mlp_Advanced_Translator {
 		$data = (array) apply_filters(
 			'mlp_process_post_data_for_remote_site',
 			[
-				'siteID'         => $remote_site_id,
+				'siteId'         => $remote_site_id,
 				'title'          => $title,
 				'slug'           => $slug,
-				'tinyMCEContent' => $tmce_content,
+				'tinyMceContent' => $tmce_content,
 				'content'        => $content,
 				'excerpt'        => $excerpt,
 			],

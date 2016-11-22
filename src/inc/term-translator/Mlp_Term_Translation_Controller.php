@@ -2,8 +2,6 @@
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
-use Inpsyde\MultilingualPress\Translation\FullRequestDataManipulator;
-use Inpsyde\MultilingualPress\Translation\RequestDataManipulator;
 
 /**
  * Mlp_Term_Translation_Controller
@@ -66,10 +64,6 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 		$post_data = $this->get_post_data();
 
 		$delete = isset( $_POST[ 'action' ] ) && 'delete-tag' === $_POST[ 'action' ];
-
-		if ( $post_data ) {
-			$this->activate_switcher();
-		}
 
 		if ( $post_data || $delete ) {
 			$this->activate_term_connector( $taxonomies, $post_data, $delete );
@@ -159,17 +153,6 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 		}
 
 		return get_object_taxonomies( $post_types );
-	}
-
-	/**
-	 * @return void
-	 */
-	private function activate_switcher() {
-
-		// TODO: Fetch the manipulator off the container, but somehow take care of not adding it multiple times!
-		$request_data_manipulator = new FullRequestDataManipulator( RequestDataManipulator::METHOD_POST );
-		add_action( 'mlp_before_term_synchronization', [ $request_data_manipulator, 'clear_data' ] );
-		add_action( 'mlp_after_term_synchronization', [ $request_data_manipulator, 'restore_data' ] );
 	}
 
 	/**

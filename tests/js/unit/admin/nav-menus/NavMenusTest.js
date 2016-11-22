@@ -73,10 +73,10 @@ test( 'sendRequest ...', ( assert ) => {
 
 	const testee = createTestee( options );
 
-	const siteIDs = F.getRandomArray();
+	const siteIds = F.getRandomArray();
 
 	// Make method return a random array.
-	testee.getSiteIDs = () => siteIDs;
+	testee.getSiteIds = () => siteIds;
 
 	const event = {
 		preventDefault: sinon.spy()
@@ -88,7 +88,7 @@ test( 'sendRequest ...', ( assert ) => {
 		data: {
 			action: options.settings.action,
 			menu,
-			mlp_sites: siteIDs
+			mlp_sites: siteIds
 		},
 		processData: true
 	};
@@ -112,7 +112,7 @@ test( 'sendRequest ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getSiteIDs (no checked languages) ...', ( assert ) => {
+test( 'getSiteIds (no checked languages) ...', ( assert ) => {
 	const $languages = new JqueryObject();
 	$languages.filter.returnsThis();
 
@@ -122,7 +122,7 @@ test( 'getSiteIDs (no checked languages) ...', ( assert ) => {
 	const testee = createTestee( { $el } );
 
 	assert.deepEqual(
-		testee.getSiteIDs(),
+		testee.getSiteIds(),
 		[],
 		'... SHOULD return an empty array (which is the default).'
 	);
@@ -130,7 +130,7 @@ test( 'getSiteIDs (no checked languages) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getSiteIDs (checked languages) ...', ( assert ) => {
+test( 'getSiteIds (checked languages) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const _elements = F.getRandomArray( 1 );
@@ -143,7 +143,7 @@ test( 'getSiteIDs (checked languages) ...', ( assert ) => {
 	} );
 
 	assert.equal(
-		testee.getSiteIDs().length,
+		testee.getSiteIds().length,
 		_elements.length,
 		'... SHOULD return an array with the expected length.'
 	);

@@ -8,8 +8,17 @@ use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPage;
 use Inpsyde\MultilingualPress\Module;
+use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
+use Inpsyde\MultilingualPress\Relations\Post\RelationshipController;
+use Inpsyde\MultilingualPress\Relations\Post\RelationshipControlView;
+use Inpsyde\MultilingualPress\Relations\Post\Search\RequestAwareSearch;
+use Inpsyde\MultilingualPress\Relations\Post\Search\SearchController;
+use Inpsyde\MultilingualPress\Relations\Post\Search\StatusAwareSearchResultsView;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
+use Inpsyde\MultilingualPress\Translation\FullRequestDataManipulator;
+use Inpsyde\MultilingualPress\Translation\RequestDataManipulator;
+use WP_Post;
 
 /**
  * Service provider for all Core objects.
@@ -80,6 +89,45 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
+		$container['multilingualpress.post_request_data_manipulator'] = function () {
+
+			return new FullRequestDataManipulator( RequestDataManipulator::METHOD_POST );
+		};
+
+		$container['multilingualpress.relationship_control_search'] = function () {
+
+			return new RequestAwareSearch();
+		};
+
+		$container['multilingualpress.relationship_control_search_controller'] = function ( Container $container ) {
+
+			return new SearchController(
+				$container['multilingualpress.relationship_control_search_results_view']
+			);
+		};
+
+		$container['multilingualpress.relationship_control_search_results_view'] = function ( Container $container ) {
+
+			return new StatusAwareSearchResultsView(
+				$container['multilingualpress.relationship_control_search']
+			);
+		};
+
+		$container['multilingualpress.relationship_control_view'] = function ( Container $container ) {
+
+			return new RelationshipControlView(
+				$container['multilingualpress.relationship_control_search_results_view'],
+				$container['multilingualpress.asset_manager']
+			);
+		};
+
+		$container['multilingualpress.relationship_controller'] = function ( Container $container ) {
+
+			return new RelationshipController(
+				$container['multilingualpress.content_relations']
+			);
+		};
+
 		$container['multilingualpress.update_plugin_settings_nonce'] = function () {
 
 			return new WPNonce( 'update_plugin_settings' );
@@ -143,7 +191,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			if (
 				isset( $_GET['message'] )
-				&& isset( $GLOBALS['hook_suffix'] ) && $setting_page->hookname() === $GLOBALS['hook_suffix']
+				&& isset( $GLOBALS['hook_suffix'] )
+				&& $setting_page->hookname() === $GLOBALS['hook_suffix']
 			) {
 				( new AdminNotice( '<p>' . __( 'Settings saved.', 'multilingual-press' ) . '</p>' ) )->render();
 			}
@@ -153,5 +202,51 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			'settings',
 			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>'
 		) )->register( 'network_admin_plugin_action_links_' . $properties->plugin_base_name() );
+
+		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+			$post_request_data_manipulator = $container['multilingualpress.post_request_data_manipulator'];
+
+			add_action( 'mlp_before_post_synchronization', [ $post_request_data_manipulator, 'clear_data' ] );
+			add_action( 'mlp_after_post_synchronization', [ $post_request_data_manipulator, 'restore_data' ] );
+
+			add_action( 'mlp_before_term_synchronization', [ $post_request_data_manipulator, 'clear_data' ] );
+			add_action( 'mlp_after_term_synchronization', [ $post_request_data_manipulator, 'restore_data' ] );
+		}
+
+		if ( is_admin() ) {
+			$relationship_control_view = $container['multilingualpress.relationship_control_view'];
+
+			add_action(
+				'mlp_translation_meta_box_bottom',
+				function ( WP_Post $post, $remote_site_id, WP_Post $remote_post ) use ( $relationship_control_view ) {
+
+					global $pagenow;
+					if ( 'post.php' === $pagenow ) {
+						$relationship_control_view->render( new RelationshipContext( [
+							RelationshipContext::KEY_REMOTE_POST_ID => $remote_post->ID,
+							RelationshipContext::KEY_REMOTE_SITE_ID => $remote_site_id,
+							RelationshipContext::KEY_SOURCE_POST_ID => $post->ID,
+							RelationshipContext::KEY_SOURCE_SITE_ID => get_current_blog_id(),
+						] ) );
+					}
+				},
+				200,
+				3
+			);
+
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX && isset( $_REQUEST['action'] ) ) {
+				switch ( $_REQUEST['action'] ) {
+					case SearchController::ACTION:
+						$container['multilingualpress.relationship_control_search_controller']->initialize();
+						break;
+
+					case RelationshipController::ACTION_CONNECT_EXISTING:
+					case RelationshipController::ACTION_CONNECT_NEW:
+					case RelationshipController::ACTION_DISCONNECT:
+						$container['multilingualpress.relationship_controller']->initialize();
+						break;
+				}
+			}
+		}
 	}
 }

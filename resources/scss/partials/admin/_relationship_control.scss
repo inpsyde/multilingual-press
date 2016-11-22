@@ -1,3 +1,18 @@
+.mlp-relationship-control {
+	margin: .5em 0 .5em auto;
+}
+
 .mlp-rc-settings {
 	@include clearfix();
+}
+
+.mlp-rc-actions {
+	float: left;
+	width: 20em;
+}
+
+.mlp-rc-search-container  {
+	display: none;
+	float: left;
+	max-width: 30em;
 }

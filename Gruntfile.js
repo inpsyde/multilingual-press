@@ -418,8 +418,10 @@ module.exports = function ( grunt ) {
 	loadGrundModules( grunt );
 
 	// JavaScript tests (babel-node -> tape) task.
-	grunt.registerTask( 'tape', () => {
-		grunt.file.expand( grunt.template.process( '<%= config.tests.js %>**/*Test.js' ) ).forEach( ( file ) => {
+	grunt.registerTask( 'tape', ( path ) => {
+		path = ( path || '' ).replace( /^[/\\]+/, '' ).replace( /[/\\]+$/, '' );
+		path = path ? `${path}/` : '';
+		grunt.file.expand( grunt.template.process( `<%= config.tests.js %>${path}**/*Test.js` ) ).forEach( ( file ) => {
 			grunt.task.run( `shell:tape:${file}` );
 		} );
 	} );

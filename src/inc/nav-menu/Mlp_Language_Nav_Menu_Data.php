@@ -111,7 +111,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 
 		$this->asset_manager->add_script_data( 'multilingualpress-admin', 'mlpNavMenusSettings', [
 			'action'    => $this->handle,
-			'metaBoxID' => $this->handle,
+			'metaBoxId' => $this->handle,
 			'nonce'     => (string) $this->nonce,
 			'nonceName' => $this->nonce->action(),
 		] );

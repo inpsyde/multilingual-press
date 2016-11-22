@@ -4,23 +4,23 @@ import sinon from 'sinon';
 import * as _ from 'lodash';
 import * as F from '../../functions';
 import JqueryObject from '../../stubs/JqueryObject';
-import RemotePostSearch from '../../../../../resources/js/admin/post-translation/RemotePostSearch';
+import LiveSearch from '../../../../../resources/js/admin/post-translation/LiveSearch';
 
 const { $, Backbone } = global;
 
 /**
  * Returns a new instance of the class under test.
  * @param {Object} [options] - Optional. The constructor options.
- * @returns {RemotePostSearch} The instance of the class under test.
+ * @returns {LiveSearch} The instance of the class under test.
  */
 const createTestee = ( options ) => {
 	// Rewire internal data.
-	RemotePostSearch.__Rewire__( '_this', {
+	LiveSearch.__Rewire__( '_this', {
 		defaultResults: [],
 		resultsContainers: []
 	} );
 
-	return new RemotePostSearch( _.extend( { settings: {} }, options ) );
+	return new LiveSearch( _.extend( { settings: {} }, options ) );
 };
 
 test( 'constructor ...', ( assert ) => {
@@ -67,7 +67,7 @@ test( 'initializeResults ...', ( assert ) => {
 
 	const _elements = F.getRandomArray( 1, 10, element );
 
-	$.withArgs( '.mlp-search-field' ).returns( new JqueryObject( { _elements } ) );
+	$.withArgs( '.mlp-rc-search' ).returns( new JqueryObject( { _elements } ) );
 
 	testee.initializeResults();
 
@@ -177,6 +177,7 @@ test( 'reactToInput (changed input value) ...', ( assert ) => {
 	const $input = new JqueryObject();
 	$input.data.withArgs( 'value' ).returns( 'value' );
 	$input.val.returns( value );
+	$input.closest.withArgs( '.mlp-relationship-control' ).returns( new JqueryObject() );
 
 	$.withArgs( target ).returns( $input );
 
@@ -219,7 +220,7 @@ test( 'render ...', ( assert ) => {
 	const model = new Backbone.Model();
 	model.get
 		.withArgs( 'success' ).returns( success )
-		.withArgs( 'data' ).returns( { remoteSiteID: F.getRandomInteger() } );
+		.withArgs( 'data' ).returns( { remoteSiteId: F.getRandomInteger() } );
 
 	const options = {
 		model

@@ -34,10 +34,10 @@ export class Toggler extends Backbone.View {
 	 * @param {Event} event - The click event of a toggler element.
 	 */
 	toggleElement( event ) {
-		const targetID = $( event.target ).data( 'toggle-target' );
+		const targetId = $( event.target ).data( 'toggle-target' );
 
-		if ( targetID ) {
-			$( targetID ).toggle();
+		if ( targetId ) {
+			$( targetId ).toggle();
 		}
 	}
 
@@ -47,10 +47,10 @@ export class Toggler extends Backbone.View {
 	 */
 	toggleElementIfChecked( event ) {
 		const $toggler = event.data.$toggler;
-		const targetID = $toggler.data( 'toggle-target' );
+		const targetId = $toggler.data( 'toggle-target' );
 
-		if ( targetID ) {
-			$( targetID ).toggle( $toggler.is( ':checked' ) );
+		if ( targetId ) {
+			$( targetId ).toggle( $toggler.is( ':checked' ) );
 		}
 	}
 }

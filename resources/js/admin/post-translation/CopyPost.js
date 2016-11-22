@@ -43,7 +43,7 @@ class CopyPost extends Backbone.View {
 		 * The currently edited post's ID.
 		 * @type {Number}
 		 */
-		_this.postID = Number( $( '#post_ID' ).val() || 0 );
+		_this.postId = Number( $( '#post_ID' ).val() || 0 );
 
 		/**
 		 * The settings.
@@ -74,8 +74,8 @@ class CopyPost extends Backbone.View {
 	 * Returns the currently edited post's ID.
 	 * @returns {Number} The currently edited post's ID.
 	 */
-	get postID() {
-		return _this.postID;
+	get postId() {
+		return _this.postId;
 	}
 
 	/**
@@ -99,16 +99,16 @@ class CopyPost extends Backbone.View {
 	 * Returns the TinyMCE content of the original post.
 	 * @returns {string} The post content.
 	 */
-	get tinyMCEContent() {
+	get tinyMceContent() {
 		if ( 'undefined' !== typeof window.tinyMCE ) {
 			/**
 			 * The TinyMCE instance of the currently edited post's visual editor.
 			 * @type {Object}
 			 */
-			_this.tinyMCE = window.tinyMCE.get( 'content' );
+			_this.tinyMce = window.tinyMCE.get( 'content' );
 		}
 
-		return _this.tinyMCE ? _this.tinyMCE.getContent() : '';
+		return _this.tinyMce ? _this.tinyMce.getContent() : '';
 	}
 
 	/**
@@ -124,15 +124,15 @@ class CopyPost extends Backbone.View {
 	 * @param {Event} event - The click event of a "Copy source post" button.
 	 */
 	copyPostData( event ) {
-		const remoteSiteID = this.getRemoteSiteID( $( event.target ) );
+		const remoteSiteId = this.getRemoteSiteId( $( event.target ) );
 
 		let data = {};
 
 		event.preventDefault();
 
-		this.fadeOutMetaBox( remoteSiteID );
+		this.fadeOutMetaBox( remoteSiteId );
 
-		$( `#mlp-translation-data-${remoteSiteID}-copied-post` ).val( 1 );
+		$( `#mlp-translation-data-${remoteSiteId}-copied-post` ).val( 1 );
 
 		/**
 		 * Triggers the event before copying post data, and passes an object for adding custom data, and the current
@@ -141,19 +141,19 @@ class CopyPost extends Backbone.View {
 		_this.EventManager.trigger(
 			'CopyPost:copyPostData',
 			data,
-			this.settings.siteID,
-			this.postID,
-			remoteSiteID
+			this.settings.siteId,
+			this.postId,
+			remoteSiteId
 		);
 
 		data = _.extend( data, {
 			action: this.settings.action,
-			current_post_id: this.postID,
-			remote_site_id: remoteSiteID,
+			current_post_id: this.postId,
+			remote_site_id: remoteSiteId,
 			title: this.title,
 			slug: this.slug,
 			content: this.content,
-			tinyMCEContent: this.tinyMCEContent,
+			tinyMceContent: this.tinyMceContent,
 			excerpt: this.excerpt
 		} );
 
@@ -168,16 +168,16 @@ class CopyPost extends Backbone.View {
 	 * @param {jQuery} $button - A "Copy source post" button.
 	 * @returns {Number} The site ID.
 	 */
-	getRemoteSiteID( $button ) {
+	getRemoteSiteId( $button ) {
 		return Number( $button.data( 'site-id' ) || 0 );
 	}
 
 	/**
 	 * Fades the meta box out.
-	 * @param {Number} remoteSiteID - The remote site ID.
+	 * @param {Number} remoteSiteId - The remote site ID.
 	 */
-	fadeOutMetaBox( remoteSiteID ) {
-		$( `#inpsyde_multilingual_${remoteSiteID}` ).css( 'opacity', .4 );
+	fadeOutMetaBox( remoteSiteId ) {
+		$( `#inpsyde_multilingual_${remoteSiteId}` ).css( 'opacity', .4 );
 	}
 
 	/**
@@ -191,13 +191,13 @@ class CopyPost extends Backbone.View {
 
 		const data = this.model.get( 'data' );
 
-		const prefix = `mlp-translation-data-${data.siteID}-`;
+		const prefix = `mlp-translation-data-${data.siteId}-`;
 
 		$( `#${prefix}title` ).val( data.title );
 
 		$( `#${prefix}name` ).val( data.slug );
 
-		this.setTinyMCEContent( `${prefix}content`, data.tinyMCEContent );
+		this.setTinyMceContent( `${prefix}content`, data.tinyMceContent );
 
 		$( `#${prefix}content` ).val( data.content );
 
@@ -208,23 +208,23 @@ class CopyPost extends Backbone.View {
 		 */
 		_this.EventManager.trigger( 'CopyPost:updatePostData', data );
 
-		this.fadeInMetaBox( data.siteID );
+		this.fadeInMetaBox( data.siteId );
 
 		return true;
 	}
 
 	/**
 	 * Sets the given content for the tinyMCE editor with the given ID.
-	 * @param {String} editorID - The tinyMCE editor's ID.
+	 * @param {String} editorId - The tinyMCE editor's ID.
 	 * @param {String} content - The content.
 	 * @returns {Boolean} Whether or not the post content has been updated.
 	 */
-	setTinyMCEContent( editorID, content ) {
+	setTinyMceContent( editorId, content ) {
 		if ( 'undefined' === typeof window.tinyMCE ) {
 			return false;
 		}
 
-		const editor = window.tinyMCE.get( editorID );
+		const editor = window.tinyMCE.get( editorId );
 		if ( ! editor ) {
 			return false;
 		}
@@ -236,10 +236,10 @@ class CopyPost extends Backbone.View {
 
 	/**
 	 * Fades the meta box in.
-	 * @param {Number} remoteSiteID - The remote site ID.
+	 * @param {Number} remoteSiteId - The remote site ID.
 	 */
-	fadeInMetaBox( remoteSiteID ) {
-		$( `#inpsyde_multilingual_${remoteSiteID}` ).css( 'opacity', 1 );
+	fadeInMetaBox( remoteSiteId ) {
+		$( `#inpsyde_multilingual_${remoteSiteId}` ).css( 'opacity', 1 );
 	}
 }
 

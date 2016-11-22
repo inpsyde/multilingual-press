@@ -17,9 +17,9 @@ const _this = {
 };
 
 /**
- * The MultilingualPress RemotePostSearch module.
+ * The MultilingualPress LiveSearch module.
  */
-class RemotePostSearch extends Backbone.View {
+class LiveSearch extends Backbone.View {
 	/**
 	 * Constructor. Sets up the properties.
 	 * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
@@ -28,13 +28,25 @@ class RemotePostSearch extends Backbone.View {
 		super( options );
 
 		/**
+		 * Action to be used in search requests.
+		 * @type {String}
+		 */
+		_this.action = String( options.settings.action || '' );
+
+		/**
+		 * Argument name to be used in order to denote the search in requests.
+		 * @type {String}
+		 */
+		_this.argName = String( options.settings.argName || '' );
+
+		/**
 		 * The settings.
 		 * @type {Object}
 		 */
 		_this.settings = options.settings;
 
 		/**
-		 * Minimum number of characters required to fire the remote post search.
+		 * Minimum number of characters required to fire the live search.
 		 * @type {Number}
 		 */
 		_this.threshold = parseInt( options.settings.threshold, 10 ) || 3;
@@ -55,20 +67,20 @@ class RemotePostSearch extends Backbone.View {
 	 * @param {HTMLElement} element - The HTML element.
 	 */
 	initializeResult( element ) {
-		const $element = $( element );
-		const id = `#${$element.data( 'results-container-id' )}`;
-		const $resultsContainer = $( id );
-		const siteID = $element.data( 'remote-site-id' );
+		const $container = $( element ).closest( '.mlp-relationship-control' );
+		const selector = $container.data( 'results-selector' ) || '';
+		const $resultsContainer = $( selector );
+		const siteId = $container.data( 'remote-site-id' );
 
-		_this.defaultResults[ siteID ] = $resultsContainer.html();
-		_this.resultsContainers[ siteID ] = $resultsContainer;
+		_this.defaultResults[ siteId ] = $resultsContainer.html();
+		_this.resultsContainers[ siteId ] = $resultsContainer;
 	}
 
 	/**
 	 * Initializes both the default search result views as well as the result containers.
 	 */
 	initializeResults() {
-		$( '.mlp-search-field' ).each( ( index, element ) => this.initializeResult( element ) );
+		$( '.mlp-rc-search' ).each( ( index, element ) => this.initializeResult( element ) );
 	}
 
 	/**
@@ -97,20 +109,22 @@ class RemotePostSearch extends Backbone.View {
 
 		$input.data( 'value', value );
 
-		const remoteSiteID = $input.data( 'remote-site-id' );
-
 		if ( '' === value ) {
-			_this.resultsContainers[ remoteSiteID ].html( _this.defaultResults[ remoteSiteID ] );
+			const remoteSiteId = $input.closest( '.mlp-relationship-control' ).data( 'remote-site-id' );
+
+			_this.resultsContainers[ remoteSiteId ].html( _this.defaultResults[ remoteSiteId ] );
 		} else if ( value.length >= _this.threshold ) {
+			const $container = $input.closest( '.mlp-relationship-control' );
+
 			this.reactToInputTimer = setTimeout( () => {
 				this.model.fetch( {
 					data: {
-						action: 'mlp_rc_remote_post_search',
-						remote_site_id: remoteSiteID,
-						remote_post_id: $input.data( 'remote-post-id' ),
-						source_site_id: $input.data( 'source-site-id' ),
-						source_post_id: $input.data( 'source-post-id' ),
-						s: value
+						action: _this.action,
+						remote_post_id: $container.data( 'remote-post-id' ),
+						remote_site_id: $container.data( 'remote-site-id' ),
+						source_post_id: $container.data( 'source-post-id' ),
+						source_site_id: $container.data( 'source-site-id' ),
+						[ _this.argName ]: value
 					},
 					processData: true
 				} );
@@ -126,8 +140,8 @@ class RemotePostSearch extends Backbone.View {
 		if ( this.model.get( 'success' ) ) {
 			const data = this.model.get( 'data' );
 
-			if ( _this.resultsContainers[ data.remoteSiteID ] ) {
-				_this.resultsContainers[ data.remoteSiteID ].html( data.html );
+			if ( _this.resultsContainers[ data.remoteSiteId ] ) {
+				_this.resultsContainers[ data.remoteSiteId ].html( data.html );
 			}
 
 			return true;
@@ -137,4 +151,4 @@ class RemotePostSearch extends Backbone.View {
 	}
 }
 
-export default RemotePostSearch;
+export default LiveSearch;

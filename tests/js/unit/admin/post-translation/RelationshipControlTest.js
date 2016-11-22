@@ -213,7 +213,7 @@ test( 'confirmUnsavedRelationships (unsaved relationships, user confirmed discar
 	// Rewire internal data.
 	RelationshipControl.__Rewire__( '_this', {
 		settings: {
-			L10n: {
+			l10n: {
 				unsavedRelationships: ''
 			}
 		},
@@ -247,7 +247,7 @@ test( 'confirmUnsavedRelationships (unsaved relationships, user canceled discard
 	// Rewire internal data.
 	RelationshipControl.__Rewire__( '_this', {
 		settings: {
-			L10n: {
+			l10n: {
 				unsavedRelationships: ''
 			}
 		},
@@ -296,14 +296,15 @@ test( 'saveRelationship (nothing changed) ...', ( assert ) => {
 	const $input = new JqueryObject();
 	$input.val.returns( action );
 
-	$.returns( $input );
+	$.returns( $input )
+		.withArgs( event.target ).returns( { closest: sinon.stub().returns( new JqueryObject() ) } );
 
 	testee.saveRelationship( event );
 
 	assert.equal(
-		testee.getEventName.calledWith( action ),
-		true,
-		'... SHOULD fetch the event name for the expected action.'
+		testee.getEventName.callCount,
+		0,
+		'... SHOULD NOT fetch the event name for the default action.'
 	);
 
 	assert.equal(
@@ -341,8 +342,11 @@ test( 'saveRelationship (data changed) ...', ( assert ) => {
 	const $input = new JqueryObject();
 	$input.val.returns( action );
 
+	const $container = new JqueryObject();
+	$container.data.returnsArg( 0 );
+
 	const $button = new JqueryObject();
-	$button.data.returnsArg( 0 );
+	$button.closest.withArgs( '.mlp-relationship-control' ).returns( $container );
 
 	$.returns( $input )
 		.withArgs( event.target ).returns( $button );
@@ -362,7 +366,7 @@ test( 'saveRelationship (data changed) ...', ( assert ) => {
 	);
 
 	const eventData = {
-		action: `mlp_rc_${action}`,
+		action,
 		remote_post_id: 'remote-post-id',
 		remote_site_id: 'remote-site-id',
 		source_post_id: 'source-post-id',
@@ -381,11 +385,17 @@ test( 'saveRelationship (data changed) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getEventName (search) ...', ( assert ) => {
-	const testee = createTestee();
+test( 'getEventName (connect existing post) ...', ( assert ) => {
+	const actionConnectExisting = F.getRandomString();
+
+	const testee = createTestee( {
+		settings: {
+			actionConnectExisting
+		}
+	} );
 
 	assert.equal(
-		testee.getEventName( 'search' ),
+		testee.getEventName( actionConnectExisting ),
 		'connectExistingPost',
 		'... SHOULD return the expected result.'
 	);
@@ -393,11 +403,17 @@ test( 'getEventName (search) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getEventName (new) ...', ( assert ) => {
-	const testee = createTestee();
+test( 'getEventName (connect new post) ...', ( assert ) => {
+	const actionConnectNew = F.getRandomString();
+
+	const testee = createTestee( {
+		settings: {
+			actionConnectNew
+		}
+	} );
 
 	assert.equal(
-		testee.getEventName( 'new' ),
+		testee.getEventName( actionConnectNew ),
 		'connectNewPost',
 		'... SHOULD return the expected result.'
 	);
@@ -405,11 +421,17 @@ test( 'getEventName (new) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'getEventName (disconnect) ...', ( assert ) => {
-	const testee = createTestee();
+test( 'getEventName (disconnect post) ...', ( assert ) => {
+	const actionDisconnect = F.getRandomString();
+
+	const testee = createTestee( {
+		settings: {
+			actionDisconnect
+		}
+	} );
 
 	assert.equal(
-		testee.getEventName( 'disconnect' ),
+		testee.getEventName( actionDisconnect ),
 		'disconnectPost',
 		'... SHOULD return the expected result.'
 	);
@@ -421,7 +443,7 @@ test( 'getEventName (unknown action) ...', ( assert ) => {
 	const testee = createTestee();
 
 	assert.equal(
-		testee.getEventName(),
+		testee.getEventName( '' ),
 		'',
 		'... SHOULD return an empty string.'
 	);
@@ -527,7 +549,7 @@ test( 'connectExistingPost (input checked) ...', ( assert ) => {
 
 test( 'connectExistingPost (no input checked) ...', ( assert ) => {
 	const settings = {
-		L10n: {
+		l10n: {
 			noPostSelected: ''
 		}
 	};

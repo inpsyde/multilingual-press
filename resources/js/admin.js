@@ -9,8 +9,8 @@ import Router from './admin/core/Router';
 import NavMenus from './admin/nav-menus/NavMenus';
 import AddNewSite from './admin/network/AddNewSite';
 import CopyPost from './admin/post-translation/CopyPost';
+import LiveSearch from './admin/post-translation/LiveSearch';
 import RelationshipControl from './admin/post-translation/RelationshipControl';
-import RemotePostSearch from './admin/post-translation/RemotePostSearch';
 import TermTranslator from './admin/term-translation/TermTranslator';
 import UserBackEndLanguage from './admin/user-settings/UserBackEndLanguage';
 
@@ -65,7 +65,7 @@ toggler.initializeStateTogglers();
 // Register the NavMenus module for the Menus admin page.
 const navMenusSettings = F.getSettings( 'NavMenus' );
 controller.registerModule( 'nav-menus.php', NavMenus, {
-	el: `#${navMenusSettings.metaBoxID}`,
+	el: `#${navMenusSettings.metaBoxId}`,
 	events: {
 		'click #submit-mlp-language': 'sendRequest'
 	},
@@ -93,6 +93,17 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], CopyPost, {
 	settings: F.getSettings( 'CopyPost' )
 } );
 
+// Register the LiveSearch module for the Edit Post and Add New Post admin pages.
+controller.registerModule( [ 'post.php', 'post-new.php' ], LiveSearch, {
+	el: '#post-body',
+	events: {
+		'keydown .mlp-rc-search': 'preventFormSubmission',
+		'keyup .mlp-rc-search': 'reactToInput'
+	},
+	model: new Model( { urlRoot: ajaxUrl } ),
+	settings: F.getSettings( 'LiveSearch' )
+}, ( module ) => module.initializeResults() );
+
 // Register the RelationshipControl module for the Edit Post and Add New Post admin pages.
 controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, {
 	el: '#post-body',
@@ -105,17 +116,6 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, 
 	settings: F.getSettings( 'RelationshipControl' ),
 	Util
 }, ( module ) => module.initializeEventHandlers() );
-
-// Register the RemotePostSearch module for the Edit Post and Add New Post admin pages.
-controller.registerModule( [ 'post.php', 'post-new.php' ], RemotePostSearch, {
-	el: '#post-body',
-	events: {
-		'keydown .mlp-search-field': 'preventFormSubmission',
-		'keyup .mlp-search-field': 'reactToInput'
-	},
-	model: new Model( { urlRoot: ajaxUrl } ),
-	settings: F.getSettings( 'RemotePostSearch' )
-}, ( module ) => module.initializeResults() );
 
 // Register the TermTranslator module for the Tags and Edit Tag admin page.
 controller.registerModule( [ 'edit-tags.php', 'term.php' ], TermTranslator, {
