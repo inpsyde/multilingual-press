@@ -123,7 +123,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 
 		$source_blog_id = get_current_blog_id();
 
-		$thumb_data = $this->get_source_thumb_data( $post_id );
+		$featured_image_path = $this->get_featured_image_path( $post_id );
 
 		$related_blogs = $this->relations->get_related_site_ids( $source_blog_id );
 		if ( empty( $related_blogs ) ) {
@@ -187,8 +187,8 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 
 				$this->basic_data->update_remote_post_meta( $new_id, $post_meta );
 
-				if ( $sync_thumb && $thumb_data->has_thumb ) {
-					$this->copy_thumb( $new_id, $thumb_data );
+				if ( $sync_thumb && $featured_image_path ) {
+					$this->copy_thumb( $new_id, $featured_image_path );
 				}
 
 				$tax_data = empty( $post_data['tax'] ) ? [] : (array) $post_data['tax'];
@@ -256,12 +256,12 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	/**
 	 * Copy the featured image.
 	 *
-	 * @param  int      $new_id
-	 * @param  stdClass $thumb_data
+	 * @param int    $new_id
+	 * @param string $featured_image_path
 	 *
 	 * @return bool     TRUE on success, FALSE when the image could not be copied.
 	 */
-	private function copy_thumb( $new_id, stdClass $thumb_data ) {
+	private function copy_thumb( $new_id, $featured_image_path ) {
 
 		// Prepare and Copy the image
 		$filedir = wp_upload_dir();
@@ -271,8 +271,8 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 			return false;
 		}
 
-		$filename = wp_unique_filename( $filedir['path'], $thumb_data->meta['file'] );
-		$copy     = copy( $thumb_data->file_path, $filedir['path'] . '/' . $filename );
+		$filename = wp_unique_filename( $filedir['path'], basename( $featured_image_path ) );
+		$copy     = copy( $featured_image_path, $filedir['path'] . '/' . $filename );
 
 		// Now insert it into the posts
 		if ( ! $copy ) {
@@ -313,32 +313,19 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 *
 	 * @param  int $post_id
 	 *
-	 * @return stdClass
+	 * @return string
 	 */
-	private function get_source_thumb_data( $post_id ) {
-
-		$data = new stdClass();
+	private function get_featured_image_path( $post_id ) {
 
 		if ( ! has_post_thumbnail( $post_id ) ) {
-			$data->has_thumb = false;
-
-			return $data;
+			return '';
 		}
 
-		$data->has_thumb = true;
+		$meta = wp_get_attachment_metadata( get_post_thumbnail_id( $post_id ) );
 
-		include_once ABSPATH . 'wp-admin/includes/image.php';
-		include_once ABSPATH . WPINC . '/media.php';
+		$filedir = wp_upload_dir();
 
-		// Load Original Image
-		$data->id   = get_post_thumbnail_id( $post_id );
-		$data->meta = wp_get_attachment_metadata( $data->id );
-
-		// Build path to original Image
-		$data->filedir   = wp_upload_dir();
-		$data->file_path = $data->filedir['basedir'] . '/' . $data->meta['file'];
-
-		return $data;
+		return $filedir['basedir'] . '/' . $meta['file'];
 	}
 
 	/**
