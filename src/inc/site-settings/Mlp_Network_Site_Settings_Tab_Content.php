@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Type\Setting;
@@ -19,9 +20,9 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	private $blog_id;
 
 	/**
-	 * @var Mlp_Language_Api_Interface
+	 * @var Languages
 	 */
-	private $language_api;
+	private $languages;
 
 	/**
 	 * @var Nonce
@@ -41,21 +42,21 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	/**
 	 * Constructor. Set up the properties.
 	 *
-	 * @param Mlp_Language_Api_Interface $language_api Language API.
-	 * @param Setting                    $setting      Options page data.
-	 * @param int                        $blog_id      Blog ID
-	 * @param SiteRelations              $relations    Site relations.
-	 * @param Nonce                      $nonce        Nonce object.
+	 * @param Languages     $languages Languages API object.
+	 * @param Setting       $setting   Options page data.
+	 * @param int           $blog_id   Blog ID
+	 * @param SiteRelations $relations Site relations.
+	 * @param Nonce         $nonce     Nonce object.
 	 */
 	public function __construct(
-		Mlp_Language_Api_Interface $language_api,
+		Languages $languages,
 		Setting $setting,
 		$blog_id,
 		SiteRelations $relations,
 		Nonce $nonce
 	) {
 
-		$this->language_api = $language_api;
+		$this->languages = $languages;
 
 		$this->setting = $setting;
 
@@ -81,10 +82,8 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce );
 
 			$siteoption = get_site_option( 'inpsyde_multilingual', [] );
-			$languages  = $this->language_api->get_db()->get_items( [ 'page' => -1 ]  );
-
 			echo '<table class="form-table mlp-admin-settings-table">';
-			$this->show_language_options( $siteoption, $languages );
+			$this->show_language_options( $siteoption, $this->languages->get_all_languages() );
 			$this->show_blog_relationships( $siteoption );
 
 			/**
@@ -144,7 +143,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 					<?php
 					foreach ( $languages as $language ) {
 
-						$language_code = str_replace( '-', '_', $language->http_name );
+						$language_code = str_replace( '-', '_', $language['http_name'] );
 
 						// missing HTTP code
 						if ( empty ( $language_code ) ) {
@@ -199,18 +198,18 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	}
 
 	/**
-	 * @param stdClass $language
+	 * @param array $language
 	 * @return string
 	 */
-	private function get_language_name( $language ) {
+	private function get_language_name( array $language ) {
 
 		$parts = [];
 
-		if ( ! empty ( $language->english_name ) )
-			$parts[] = $language->english_name;
+		if ( ! empty ( $language['english_name'] ) )
+			$parts[] = $language['english_name'];
 
-		if ( ! empty ( $language->native_name ) )
-			$parts[] = $language->native_name;
+		if ( ! empty ( $language['native_name'] ) )
+			$parts[] = $language['native_name'];
 
 		$parts = array_unique( $parts );
 

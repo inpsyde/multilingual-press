@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\Languages;
+
 /**
  * This view template renders several setting fields for the Add New Site admin page.
  */
@@ -11,18 +13,18 @@ class Mlp_New_Site_View {
 	private $default_language;
 
 	/**
-	 * @var Mlp_Language_Api_Interface
+	 * @var Languages
 	 */
-	private $language_api;
+	private $languages;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param Mlp_Language_Api_Interface $language_api
+	 * @param Languages $languages
 	 */
-	public function __construct( Mlp_Language_Api_Interface $language_api ) {
+	public function __construct( Languages $languages ) {
 
-		$this->language_api = $language_api;
+		$this->languages = $languages;
 
 		$this->default_language = $this->get_default_language();
 	}
@@ -59,9 +61,7 @@ class Mlp_New_Site_View {
 	 */
 	public function render() {
 
-		$db = $this->language_api->get_db();
-
-		$languages = $db->get_items( [ 'page' => -1 ] );
+		$languages = $this->languages->get_all_languages();
 		?>
 		<h2>
 			<?php esc_html_e( 'MultilingualPress', 'multilingual-press' ); ?>
@@ -152,20 +152,20 @@ class Mlp_New_Site_View {
 	/**
 	 * Renders the language option element for the given language object.
 	 *
-	 * @param object $language Language object.
+	 * @param array $language Language data.
 	 *
 	 * @return void
 	 */
-	private function render_language_option( $language ) {
+	private function render_language_option( array $language ) {
 
-		if ( empty( $language->http_name ) ) {
+		if ( empty( $language['http_name'] ) ) {
 			return;
 		}
 
-		$selected = selected( $this->default_language, $language->http_name, false );
+		$selected = selected( $this->default_language, $language['http_name'], false );
 		?>
-		<option value="<?php echo esc_attr( $language->http_name ); ?>" <?php echo $selected; ?>>
-			<?php echo "{$language->english_name}/{$language->native_name}"; ?>
+		<option value="<?php echo esc_attr( $language['http_name'] ); ?>" <?php echo $selected; ?>>
+			<?php echo "{$language['english_name']}/{$language['native_name']}"; ?>
 		</option>
 		<?php
 	}

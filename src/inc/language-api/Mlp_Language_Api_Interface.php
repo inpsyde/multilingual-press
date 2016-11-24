@@ -1,7 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\Common\Type\Translation;
-use Inpsyde\MultilingualPress\Common\Type\URL;
 
 /**
  * Interface Mlp_Language_Api_Interface
@@ -18,22 +17,6 @@ interface Mlp_Language_Api_Interface {
 	 * @return Mlp_Data_Access
 	 */
 	public function get_db();
-
-	/**
-	 * Access to this instance from the outside.
-	 *
-	 * Usage:
-	 * <code>
-	 * $mlp_language_api = apply_filters( 'mlp_language_api', NULL );
-	 * if ( is_a( $mlp_language_api, 'Mlp_Language_Api_Interface' ) ) {
-	 *     // do something
-	 * }
-	 * </code>
-	 *
-	 * @return Mlp_Language_Api_Interface
-	 */
-	public function get_instance();
-
 
 	/**
 	 * Ask for specific translations with arguments.
@@ -54,38 +37,5 @@ interface Mlp_Language_Api_Interface {
 	 */
 	public function get_translations( array $args = [] );
 
-	/**
-	 * @param  string $iso Something like de_AT
-	 *
-	 * @param string $field the field which should be queried
-	 * @return mixed
-	 */
-	public function get_lang_data_by_iso( $iso, $field = 'native_name' );
-
-	/**
-	 * @param  int    $site_id
-	 * @param  int    $content_id
-	 * @param  string $type
-	 * @return array
-	 */
-	public function get_related_content_ids( $site_id, $content_id, $type );
-
-	/**
-	 * Get language names for related blogs.
-	 *
-	 * @see Mlp_Helpers::get_available_languages_titles()
-	 * @param  int $base_site
-	 * @return array
-	 */
-	public function get_site_languages( $base_site = 0 );
-
 	public function load_language_manager();
-
-	/**
-	 * @param  string $language Formatted like en_GB
-	 * @param  int    $site_id
-	 * @return URL URL instance.
-	 */
-	public function get_flag_by_language( $language, $site_id = 0 );
-
 }

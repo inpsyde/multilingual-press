@@ -252,8 +252,9 @@ class Multilingual_Press {
 		new Mlp_Network_Site_Settings_Controller( $this->plugin_data, $setting, $nonce );
 
 		new Mlp_Network_New_Site_Controller(
-			$this->plugin_data->get( 'language_api' ),
-			$this->plugin_data->get( 'site_relations' )
+			$this->plugin_data->get( 'languages' ),
+			$this->plugin_data->get( 'site_relations' ),
+			$this->plugin_data->get( 'language_api' )
 		);
 	}
 
@@ -311,6 +312,7 @@ class Multilingual_Press {
 		$this->plugin_data->set( 'language_api', $language_api );
 		// TODO: Remove as soon as the whole Assets structures have been refactored (Locations -> Assets\Locator).
 		$this->plugin_data->set( 'assets', $this->container['multilingualpress.asset_manager'] );
+		$this->plugin_data->set( 'languages', $this->container['multilingualpress.languages'] );
 		$this->plugin_data->set( 'locations', $this->container['multilingualpress.internal_locations'] );
 		$this->plugin_data->set( 'nonce_factory', $this->container['multilingualpress.nonce_factory'] );
 

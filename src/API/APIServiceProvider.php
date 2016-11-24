@@ -32,6 +32,13 @@ final class APIServiceProvider implements ServiceProvider {
 			);
 		} );
 
+		$container->share( 'multilingualpress.languages', function ( Container $container ) {
+
+			return new WPDBLanguages(
+				$container['multilingualpress.languages_table']
+			);
+		} );
+
 		$container->share( 'multilingualpress.site_relations', function ( Container $container ) {
 
 			return new WPDBSiteRelations( $container['multilingualpress.site_relations_table'] );

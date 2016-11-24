@@ -87,11 +87,12 @@ final class WPDBSiteRelations implements SiteRelations {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $site_id Optional. Site ID. Defaults to 0.
+	 * @param int  $site_id      Optional. Site ID. Defaults to 0.
+	 * @param bool $include_site Optional. Whether or not to include the given site ID. Defaults to false.
 	 *
 	 * @return int[] The array holding the IDs of all sites related to the site with the given (or current) ID.
 	 */
-	public function get_related_site_ids( $site_id = 0 ) {
+	public function get_related_site_ids( $site_id = 0, $include_site = false ) {
 
 		$site_id = $site_id ?: get_current_blog_id();
 		if ( ! absint( $site_id ) ) {
@@ -114,10 +115,15 @@ ORDER BY site_id ASC";
 		$query = $this->db->prepare( $query, $site_id, $site_id );
 
 		$rows = $this->db->get_col( $query );
+		if ( ! $rows ) {
+			return [];
+		}
 
-		return $rows
-			? array_map( 'intval', $rows )
-			: [];
+		if ( $include_site ) {
+			$rows[] = $site_id;
+		}
+
+		return array_map( 'intval', $rows );
 	}
 
 	/**

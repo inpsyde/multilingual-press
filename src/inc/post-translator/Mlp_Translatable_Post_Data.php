@@ -86,15 +86,12 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 */
 	public function get_remote_post( WP_Post $source_post, $blog_id ) {
 
-		$post = null;
-
-		$linked = Mlp_Helpers::load_linked_elements( $source_post->ID, '', get_current_blog_id() );
+		$linked = \Inpsyde\MultilingualPress\get_translation_ids( $source_post->ID );
 		if ( ! empty( $linked[ $blog_id ] ) && \Inpsyde\MultilingualPress\site_exists( $blog_id ) ) {
 			$post = get_blog_post( $blog_id, $linked[ $blog_id ] );
-		}
-
-		if ( $post ) {
-			return $post;
+			if ( $post ) {
+				return $post;
+			}
 		}
 
 		return $this->get_dummy_post( $source_post->post_type );
@@ -250,7 +247,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		}
 
 		if ( 0 < $post_parent ) {
-			$this->parent_elements = mlp_get_linked_elements( $post_parent );
+			$this->parent_elements = \Inpsyde\MultilingualPress\get_translation_ids( $post_parent );
 		}
 	}
 

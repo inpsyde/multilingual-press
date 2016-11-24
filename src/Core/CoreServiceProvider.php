@@ -44,7 +44,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new CachingBasePathAdapter();
 		};
 
-		// TODO: Make this a regular not shared service as soon as everything else has been adapted.
 		$container->share( 'multilingualpress.internal_locations', function () {
 
 			return new InternalLocations();

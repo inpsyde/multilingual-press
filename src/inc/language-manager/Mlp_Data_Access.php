@@ -14,6 +14,7 @@ interface Mlp_Data_Access {
 	public function get_total_items_number();
 
 	/**
+	 * TODO: Move to Languages API class.
 	 *
 	 * @param   array $params
 	 * @param   String $type
@@ -22,18 +23,14 @@ interface Mlp_Data_Access {
 	public function get_items( array $params = [], $type = OBJECT_K );
 
 	/**
+	 * TODO: Move to Languages API class.
+	 *
 	 * @param array  $items
 	 * @param string $field_format
 	 * @param string $where_format
 	 * @return array
 	 */
 	public function update_items_by_id( array $items, $field_format = '%s', $where_format = '%d' );
-
-	/**
-	 * @param array $params
-	 * @return mixed
-	 */
-	public function insert_item( array $params );
 
 	/**
 	 * @return int

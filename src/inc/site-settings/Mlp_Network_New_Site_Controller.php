@@ -1,5 +1,6 @@
 <?php
 
+use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 
 /**
@@ -14,40 +15,41 @@ use Inpsyde\MultilingualPress\API\SiteRelations;
 class Mlp_Network_New_Site_Controller {
 
 	/**
-	 * Language API
-	 *
 	 * @var Mlp_Language_Api_Interface
 	 */
-	private $language_api;
+	private $old_language_api;
 
 	/**
-	 * Language API
-	 *
 	 * @var SiteRelations
 	 */
 	private $site_relation;
 
 	/**
 	 * Constructor
+	 *
 	 * @wp-hook plugins_loaded
-	 * @param Mlp_Language_Api_Interface   $language_api
-	 * @param SiteRelations $site_relation
+	 *
+	 * @param Languages                  $languages Languages API object.
+	 * @param SiteRelations              $site_relation
+	 * @param Mlp_Language_Api_Interface $old_language_api
 	 */
 	public function __construct(
-		Mlp_Language_Api_Interface   $language_api,
-		SiteRelations $site_relation
+		Languages $languages,
+		SiteRelations $site_relation,
+		Mlp_Language_Api_Interface $old_language_api
 	) {
 
 		if ( ! is_network_admin() )
 			return;
 
-		$this->language_api  = $language_api;
-		$this->site_relation = $site_relation;
+		$this->site_relation    = $site_relation;
+
+		$this->old_language_api = $old_language_api;
 
 		add_action( 'wpmu_new_blog', [ $this, 'update' ] );
 
 		// TODO: Simplify, by deleting the template stuff, with the release of WordPress 4.5.0 + 2.
-		$view = new Mlp_New_Site_View( $this->language_api );
+		$view = new Mlp_New_Site_View( $languages );
 		// Get the unaltered WordPress version.
 		require ABSPATH . WPINC . '/version.php';
 		/** @var string $wp_version */
@@ -136,7 +138,8 @@ class Mlp_Network_New_Site_Controller {
 			],
 		];
 
-		$available_language = $this->language_api->get_db()->get_items( $search, OBJECT );
+		// TODO: Use the new Languages API object as soon as completely refactored.
+		$available_language = $this->old_language_api->get_db()->get_items( $search, OBJECT );
 
 		// no results found? -> return
 		if ( empty( $available_language ) )

@@ -3,7 +3,6 @@
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
-use Inpsyde\MultilingualPress\Common\Type\URL;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
@@ -88,30 +87,19 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$this->type_factory = $type_factory;
 
 		add_action( 'wp_loaded', [ $this, 'load_language_manager' ] );
-		add_filter( 'mlp_language_api', [ $this, 'get_instance' ] );
+
+		// TODO: Remove in favor of MultilingualPress:resolve().
+		add_filter( 'mlp_language_api', function () {
+
+			return $this;
+		} );
 	}
 
 	/**
-	 * (non-PHPdoc)
-	 * @see Mlp_Language_Api_Interface::get_db()
+	 * @return Mlp_Language_Db_Access
 	 */
 	public function get_db() {
 		return $this->language_db;
-	}
-
-	/**
-	 * Access to this instance from the outside.
-	 *
-	 * Usage:
-	 * <code>
-	 * $mlp_language_api = apply_filters( 'mlp_language_api', NULL );
-	 * if ( is_a( $mlp_language_api, 'Mlp_Language_Api_Interface' ) ) {
-	 *     // do something
-	 * }
-	 * </code>
-	 */
-	public function get_instance() {
-		return $this;
 	}
 
 	/**
@@ -121,90 +109,6 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	public function load_language_manager() {
 
 		new Mlp_Language_Manager_Controller( $this->data, $this->language_db, $this->wpdb );
-	}
-
-	/**
-	 * Get language names for related blogs.
-	 *
-	 * @see Mlp_Helpers::get_available_languages_titles()
-	 * @param  int $base_site
-	 * @return array
-	 */
-	public function get_site_languages( $base_site = 0 ) {
-
-		$related_blogs = $options = [];
-		$languages     = get_site_option( 'inpsyde_multilingual' );
-
-		if ( 0 !== $base_site ) {
-
-			$related_blogs = $this->get_related_sites( $base_site, TRUE );
-
-			if ( empty ( $related_blogs ) )
-				return [];
-		}
-
-		if ( ! is_array( $languages ) )
-			return [];
-
-		foreach ( $languages as $site_id => $language_data ) {
-
-			// Filter out blogs that are not related
-			if ( ! in_array( $site_id, $related_blogs ) && 0 !== $base_site )
-				continue;
-
-			$lang = '';
-
-			if ( isset ( $language_data[ 'text' ] ) )
-				$lang = $language_data[ 'text' ];
-
-			if ( empty ( $language_data[ 'lang' ] ) )
-				continue;
-
-			if ( '' === $lang )
-				$lang = $this->get_lang_data_by_iso( $language_data[ 'lang' ], 'native_name', 'english_name' );
-
-			$options[ $site_id ] = $lang;
-		}
-
-		return $options;
-	}
-
-	/**
-	 * @param  string $iso Something like de_AT
-	 *
-	 * @param string          $field     Optional. The field which should be queried. Defaults to 'native_name'.
-	 * @param string|string[] $fallbacks Optional. Falback language fields. Defaults to English and native name.
-	 *
-	 * @return string
-	 */
-	public function get_lang_data_by_iso(
-		$iso,
-		$field = 'native_name',
-		$fallbacks = [
-			'native_name',
-			'english_name',
-		]
-	) {
-
-		$iso = str_replace( '_', '-', $iso );
-
-		$query = "
-SELECT *
-FROM {$this->table_name}
-WHERE http_name = %s
-LIMIT 1";
-		$query = $this->wpdb->prepare( $query, $iso );
-
-		$results = $this->wpdb->get_row( $query, ARRAY_A );
-
-		$fallbacks = array_unique( array_merge( [ $field ], (array) $fallbacks ) );
-		foreach ( $fallbacks as $key ) {
-			if ( ! empty( $results[ $key ] ) ) {
-				return $results[ $key ];
-			}
-		}
-
-		return '';
 	}
 
 	/**
@@ -242,7 +146,7 @@ LIMIT 1";
 		if ( is_array( $cached ) )
 			return $cached;
 
-		$sites = $this->get_related_sites(
+		$sites = $this->site_relations->get_related_site_ids(
 			$arguments[ 'site_id' ],
 			$arguments[ 'include_base' ]
 		);
@@ -253,7 +157,7 @@ LIMIT 1";
 		if ( ! empty ( $arguments[ 'content_id' ] ) ) {
 
 			// array with site_ids as keys, content_ids as values
-			$content_relations = $this->get_related_content_ids(
+			$content_relations = $this->content_relations->get_relations(
 				$arguments[ 'site_id' ],
 				$arguments[ 'content_id' ],
 				$arguments[ 'type' ]
@@ -367,10 +271,7 @@ LIMIT 1";
 			}
 
 			if ( '' !== $data[ 'http_name' ] ) {
-				$arr[ 'icon_url' ] = $this->get_flag_by_language(
-					$data[ 'http_name' ],
-					$site_id
-				);
+				$arr[ 'icon_url' ] = \Inpsyde\MultilingualPress\get_flag_url_for_site( $site_id );
 			} else {
 				$arr[ 'icon_url' ] = $this->type_factory->create_url( [
 					'',
@@ -407,7 +308,7 @@ LIMIT 1";
 	 * @param  string $post_type
 	 * @return array
 	 */
-	public function get_post_type_archive_translation( $post_type ) {
+	private function get_post_type_archive_translation( $post_type ) {
 
 		$return = [
 			'remote_url' => $this->type_factory->create_url( [
@@ -478,40 +379,6 @@ LIMIT 1";
 	}
 
 	/**
-	 * Get the flag URL for the given language.
-	 *
-	 * @param string $language Formatted like en_GB
-	 * @param int    $site_id  Site ID.
-	 *
-	 * @return URL URL instance.
-	 */
-	public function get_flag_by_language( $language, $site_id = 0 ) {
-
-		$custom_flag = get_blog_option( $site_id, 'inpsyde_multilingual_flag_url' );
-		if ( $custom_flag ) {
-			return $this->type_factory->create_url( [
-				$custom_flag,
-			] );
-		}
-
-		$flag_path = $this->data->get( 'flag_path' );
-
-		$language = str_replace( '-', '_', $language );
-		$sub = strtok( $language, '_' );
-		$file_name = $sub . '.gif';
-
-		if ( is_readable( "$flag_path/$file_name" ) ) {
-			return $this->type_factory->create_url( [
-				$this->data->get( 'flag_url' ) . $file_name,
-			] );
-		}
-
-		return $this->type_factory->create_url( [
-			'',
-		] );
-	}
-
-	/**
 	 * @return array
 	 */
 	private function get_all_language_data() {
@@ -573,33 +440,6 @@ WHERE `http_name` IN( $values )";
 		$this->language_data_from_db = $languages;
 
 		return $languages;
-	}
-
-	/**
-	 * @param $language_data
-	 *
-	 * @return array
-	 */
-	private function get_language_tag( $language_data ) {
-
-		$tag = $like = '';
-
-		if ( ! empty( $language_data[ 'lang' ] ) ) {
-			$tag = str_replace( '_', '-', $language_data[ 'lang' ] );
-		} elseif (
-			! empty( $language_data[ 'text' ] )
-			&& preg_match( '~[a-zA-Z-]+~', $language_data[ 'text' ] )
-		) {
-			$tag = str_replace( '_', '-', $language_data[ 'text' ] );
-		}
-
-		// a site might have just 'EN' as text and no other values
-		if ( FALSE === strpos( $tag, '-' ) ) {
-			$tag = strtolower( $tag );
-			$like = $tag;
-		}
-
-		return [ $tag, $like ];
 	}
 
 	/**
@@ -667,27 +507,6 @@ WHERE `http_name` IN( $values )";
 	}
 
 	/**
-	 * @param      $site_id
-	 * @param bool $include_base
-	 * @return array
-	 */
-	private function get_related_sites( $site_id, $include_base ) {
-
-		if ( empty ( $site_id ) )
-			$site_id = get_current_blog_id();
-
-		$sites = $this->site_relations->get_related_site_ids( $site_id );
-
-		if ( empty ( $sites ) )
-			return [];
-
-		if ( $include_base )
-			$sites[] = $site_id;
-
-		return $sites;
-	}
-
-	/**
 	 * Get the current post type.
 	 *
 	 * When we have an archive with multiple post types, a custom query, we use
@@ -749,74 +568,5 @@ WHERE `http_name` IN( $values )";
 		}
 
 		return get_queried_object_id();
-	}
-
-	/**
-	 * @param  array $arguments
-	 * @return array
-	 */
-	private function prepare_translation_relations( array $arguments ) {
-
-		if ( ! $this->can_have_relations( $arguments ) )
-			return [];
-
-		$relations = $this->get_related_content_ids(
-			$arguments[ 'site_id' ],
-			$arguments[ 'content_id' ],
-			$arguments[ 'type' ]
-		);
-
-		if ( 'post' !== $arguments[ 'type' ] || is_admin() )
-			return $relations;
-
-		return $this->remove_unpublished_posts( $relations );
-	}
-
-	/**
-	 * Check if the current request is worth to be queried for relations
-	 *
-	 * @param array $arguments
-	 * @return bool
-	 */
-	private function can_have_relations( array $arguments ) {
-
-		if ( empty ( $arguments[ 'content_id' ] ) )
-			return FALSE;
-
-		return in_array( $arguments['type'], [ 'post', 'term' ], true );
-	}
-
-	/**
-	 * @param  array $relations
-	 * @return array
-	 */
-	private function remove_unpublished_posts( array $relations ) {
-
-		foreach ( $relations as $site_id => $content_id ) {
-
-			$post = get_blog_post( $site_id, $content_id );
-
-			if ( ! $post || 'publish' !== $post->post_status )
-				unset( $relations[ $site_id ] );
-		}
-
-		return $relations;
-	}
-
-	/**
-	 * Returns an array with site ID as keys and content ID as values.
-	 *
-	 * @param  int    $site_id
-	 * @param  int    $content_id
-	 * @param  string $type
-	 * @return array
-	 */
-	public function get_related_content_ids( $site_id, $content_id, $type ) {
-
-		return $this->content_relations->get_relations(
-			$site_id,
-			$content_id,
-			$type
-		);
 	}
 }

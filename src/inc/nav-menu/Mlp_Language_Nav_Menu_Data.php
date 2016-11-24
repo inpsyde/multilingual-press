@@ -62,7 +62,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 	 */
 	public function get_list() {
 
-		return mlp_get_available_languages_titles( true );
+		return \Inpsyde\MultilingualPress\get_available_language_names();
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 			return [];
 		}
 
-		$titles = mlp_get_available_languages_titles( true );
+		$titles = \Inpsyde\MultilingualPress\get_available_language_names();
 
 		return $this->prepare_menu_items( $titles );
 	}

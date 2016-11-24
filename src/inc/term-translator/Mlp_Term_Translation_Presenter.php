@@ -120,10 +120,8 @@ class Mlp_Term_Translation_Presenter {
 	 */
 	public function get_site_languages() {
 
-		$languages = mlp_get_available_languages_titles();
-
-		$current_blog_id = get_current_blog_id();
-		unset( $languages[ $current_blog_id ] );
+		$languages = \Inpsyde\MultilingualPress\get_available_language_names();
+		unset( $languages[ get_current_blog_id() ] );
 
 		return $languages;
 	}

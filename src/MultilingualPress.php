@@ -322,7 +322,7 @@ final class MultilingualPress {
 			function ( $id, $site_id ) {
 
 				switch_to_blog( $site_id );
-				$sites = (array) \Mlp_Helpers::get_available_languages_titles();
+				$sites = \Inpsyde\MultilingualPress\get_available_language_names();
 				restore_current_blog();
 				unset( $sites[ $site_id ] );
 
@@ -341,7 +341,12 @@ final class MultilingualPress {
 
 				return '' === $language
 					? __( 'none', 'multilingual-press' )
-					: '<div class="mlp_site_language">' . esc_html( \Mlp_Helpers::get_lang_by_iso( $language ) ) . '</div>';
+					: sprintf(
+						'<div class="mlp_site_language">%s</div>',
+						esc_html( \Inpsyde\MultilingualPress\get_language_by_http_name(
+							str_replace( '_', '-', $language )
+						) )
+					);
 			}
 		) )->register();
 	}

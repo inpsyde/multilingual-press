@@ -219,21 +219,6 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 		return $queries;
 	}
 
-
-	/**
-	 * @param array $params
-	 * @return void
-	 */
-	public function insert_item( array $params ) {}
-
-	/**
-	 * @param $page_size
-	 * @return void
-	 */
-	public function set_page_size( $page_size ) {
-		$this->page_size  = $page_size;
-	}
-
 	/**
 	 * @return int
 	 */

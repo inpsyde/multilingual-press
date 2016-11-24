@@ -20,78 +20,6 @@ class Mlp_Helpers {
 	private static $dependencies = [];
 
 	/**
-	 * Load the alternative title
-	 * set for each blog language
-	 *
-	 * @since   0.5.3b
-	 * @static
-	 * @access  public
-	 * @uses    get_site_option
-	 * @param   bool $related Filter out unrelated blogs?
-	 * @return  array $options
-	 */
-	public static function get_available_languages_titles( $related = TRUE ) {
-
-		/** @var Mlp_Language_Api $api */
-		$api  = self::$dependencies['language_api'];
-		$blog = $related ? get_current_blog_id() : 0;
-
-		return $api->get_site_languages( $blog );
-	}
-
-	/**
-	 * Get native name by ISO-639-1 code.
-	 *
-	 * @param string          $iso       Language code like "en" or "de"
-	 * @param string          $field     Optional. The field which should be queried. Defaults to 'native_name'.
-	 * @param string|string[] $fallbacks Optional. Falback language fields. Defaults to English and native name.
-	 *
-	 * @return mixed
-	 */
-	public static function get_lang_by_iso(
-		$iso,
-		$field = 'native_name',
-		$fallbacks = [
-			'native_name',
-			'english_name',
-		]
-	) {
-
-		/** @var Mlp_Language_Api $api */
-		$api  = self::$dependencies['language_api'];
-
-		return $api->get_lang_data_by_iso( $iso, $field, $fallbacks );
-	}
-
-	/**
-	 * Get the element ID in other blogs for the selected element
-	 *
-	 * @param   int    $element_id ID of the selected element
-	 * @param   string $type       | type of the selected element
-	 * @param   int    $blog_id    ID of the selected blog
-	 * @return  array $elements
-	 */
-	public static function load_linked_elements( $element_id = 0, $type = '', $blog_id = 0 ) {
-
-		$element_id = \Inpsyde\MultilingualPress\get_default_content_id( $element_id );
-
-		if ( ! $element_id )
-			return [];
-
-		// If no ID is provided, get current blogs' ID
-		if ( 0 === $blog_id )
-			$blog_id = get_current_blog_id();
-
-		if ( '' === $type )
-			$type = 'post';
-
-		/** @var Mlp_Language_Api $api */
-		$api = self::$dependencies[ 'language_api' ];
-
-		return $api->get_related_content_ids( $blog_id, $element_id, $type );
-	}
-
-	/**
 	 * Get the element ID in other blogs for the selected element
 	 * with additional information.
 	 *
@@ -151,30 +79,6 @@ class Mlp_Helpers {
 		}
 
 		return $return;
-	}
-
-	/**
-	 * Get the URL for the icon from a site ID
-	 *
-	 * @param  int    $site_id ID of a site
-	 * @return string URL of the language image
-	 */
-	public static function get_language_flag( $site_id = 0 ) {
-
-		if ( 0 === $site_id )
-			$site_id = get_current_blog_id();
-
-		$languages = get_site_option( 'inpsyde_multilingual' );
-
-		if ( empty ( $languages[ $site_id ] ) )
-			return '';
-
-		/** @var Mlp_Language_Api $api */
-		$api = self::$dependencies[ 'language_api' ];
-
-		$url = (string) $api->get_flag_by_language( $languages[ $site_id ], $site_id );
-
-		return $url;
 	}
 
 	/**

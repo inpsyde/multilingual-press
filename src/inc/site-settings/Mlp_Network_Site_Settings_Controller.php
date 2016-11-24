@@ -197,7 +197,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$this->show_update_message();
 
 		$view = new Mlp_Network_Site_Settings_Tab_Content(
-			$this->plugin_data->get( 'language_api' ),
+			$this->plugin_data->get( 'languages' ),
 			$this->setting,
 			$this->get_blog_id(),
 			$this->plugin_data->get( 'site_relations' ),
