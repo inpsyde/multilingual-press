@@ -39,6 +39,7 @@ class Mlp_Term_Fields {
 			return FALSE;
 		}
 
+		// TODO: Split view.
 		$view = new Mlp_Term_Field_View( $this->updatable );
 
 		add_action( "{$taxonomy}_add_form_fields", [ $view, 'add_term' ] );
@@ -54,15 +55,10 @@ class Mlp_Term_Fields {
 
 		$screen = get_current_screen();
 
-		if ( empty( $screen->taxonomy ) ) {
-			return '';
+		if ( ! empty( $screen->taxonomy ) && in_array( $screen->taxonomy, $this->taxonomies, true ) ) {
+			return $screen->taxonomy;
 		}
 
-		if ( ! in_array( $screen->taxonomy, $this->taxonomies, true ) ) {
-			return '';
-		}
-
-		return $screen->taxonomy;
+		return '';
 	}
-
 }

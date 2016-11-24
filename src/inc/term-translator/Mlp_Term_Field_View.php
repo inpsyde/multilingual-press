@@ -10,49 +10,29 @@
 class Mlp_Term_Field_View {
 
 	/**
-	 * @type string
-	 */
-	const EDIT_TERM_BEFORE = 'edit_term_before';
-
-	/**
-	 * @type string
-	 */
-	const EDIT_TERM_AFTER = 'edit_term_after';
-
-	/**
-	 * @type string
-	 */
-	const ADD_TERM_BEFORE = 'add_term_before';
-
-	/**
-	 * @type string
-	 */
-	const ADD_TERM_AFTER = 'add_term_after';
-
-	/**
-	 * @type string
-	 */
-	const ADD_TERM_TITLE = 'add_term_title';
-
-	/**
-	 * @type string
+	 * @var string
 	 */
 	const ADD_TERM_FIELDS = 'add_term_fields';
 
 	/**
-	 * @type string
+	 * @var string
 	 */
 	const ADD_TERM_FIELDSET_ID = 'add_term_fieldset_id';
 
 	/**
-	 * @type string
+	 * @var string
 	 */
-	const EDIT_TERM_TITLE = 'edit_term_title';
+	const ADD_TERM_TITLE = 'add_term_title';
 
 	/**
-	 * @type string
+	 * @var string
 	 */
 	const EDIT_TERM_FIELDS = 'edit_term_fields';
+
+	/**
+	 * @var string
+	 */
+	const EDIT_TERM_TITLE = 'edit_term_title';
 
 	/**
 	 * @var Mlp_Updatable
@@ -74,16 +54,12 @@ class Mlp_Term_Field_View {
 	 */
 	public function edit_term() {
 
-		$this->updatable->update( self::EDIT_TERM_BEFORE );
-
-		$title = $this->updatable->update( self::EDIT_TERM_TITLE );
 		?>
 		<tr class="form-field">
-			<th scope="row"><?php echo esc_html( $title ); ?></th>
+			<th scope="row"><?php echo esc_html( $this->updatable->update( self::EDIT_TERM_TITLE ) ); ?></th>
 			<td><?php $this->updatable->update( self::EDIT_TERM_FIELDS ); ?></td>
 		</tr>
 		<?php
-		$this->updatable->update( self::EDIT_TERM_AFTER );
 	}
 
 	/**
@@ -93,18 +69,12 @@ class Mlp_Term_Field_View {
 	 */
 	public function add_term() {
 
-		$this->updatable->update( self::ADD_TERM_BEFORE );
-
-		$id = $this->updatable->update( self::ADD_TERM_FIELDSET_ID );
-
-		$title = $this->updatable->update( self::ADD_TERM_TITLE );
 		?>
-		<fieldset class="form-field" id="<?php echo esc_attr( $id ); ?>">
-			<legend><?php echo esc_html( $title ); ?></legend>
+		<fieldset class="form-field"
+			id="<?php echo esc_attr( $this->updatable->update( self::ADD_TERM_FIELDSET_ID ) ); ?>">
+			<legend><?php echo esc_html( $this->updatable->update( self::ADD_TERM_TITLE ) ); ?></legend>
 			<?php $this->updatable->update( self::ADD_TERM_FIELDS ); ?>
 		</fieldset>
 		<?php
-		$this->updatable->update( self::ADD_TERM_AFTER );
 	}
-
 }
