@@ -252,9 +252,8 @@ class Multilingual_Press {
 		new Mlp_Network_Site_Settings_Controller( $this->plugin_data, $setting, $nonce );
 
 		new Mlp_Network_New_Site_Controller(
-			$this->plugin_data->get( 'languages' ),
 			$this->plugin_data->get( 'site_relations' ),
-			$this->plugin_data->get( 'language_api' )
+			$this->plugin_data->get( 'languages' )
 		);
 	}
 
@@ -301,7 +300,8 @@ class Multilingual_Press {
 			$site_relations,
 			$content_relations,
 			$this->wpdb,
-			$type_factory
+			$type_factory,
+			$this->container['multilingualpress.request']
 		);
 
 		$this->plugin_data->set( 'module_manager', $this->container['multilingualpress.module_manager'] );

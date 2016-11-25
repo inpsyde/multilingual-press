@@ -3,6 +3,7 @@
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
+use Inpsyde\MultilingualPress\Common\Request;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
@@ -15,11 +16,6 @@ use Inpsyde\MultilingualPress\Factory\TypeFactory;
  * @license GPL
  */
 class Mlp_Language_Api implements Mlp_Language_Api_Interface {
-
-	/**
-	 * @var Mlp_Language_Db_Access
-	 */
-	private $language_db;
 
 	/**
 	 * @var Inpsyde_Property_List_Interface
@@ -59,16 +55,22 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	private $type_factory;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * Constructor.
 	 *
 	 * @wp-hook plugins_loaded
 	 *
 	 * @param   Inpsyde_Property_List_Interface $data
 	 * @param   string                          $table_name
-	 * @param   SiteRelations    $site_relations
-	 * @param   ContentRelations $content_relations
+	 * @param   SiteRelations                   $site_relations
+	 * @param   ContentRelations                $content_relations
 	 * @param   wpdb                            $wpdb
-	 * @param   TypeFactory                     $type_factory      Type factory object.
+	 * @param   TypeFactory                     $type_factory Type factory object.
+	 * @param Request                           $request      Request object.
 	 */
 	public function __construct(
 		Inpsyde_Property_List_Interface $data,
@@ -76,39 +78,27 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		SiteRelations    $site_relations,
 		ContentRelations $content_relations,
 		wpdb                            $wpdb,
-		TypeFactory                     $type_factory
+		TypeFactory                     $type_factory,
+		Request $request
 	) {
+
 		$this->data              = $data;
 		$this->wpdb              = $wpdb;
-		$this->language_db       = new Mlp_Language_Db_Access( $table_name );
 		$this->table_name        = $this->wpdb->base_prefix . $table_name;
 		$this->site_relations    = $site_relations;
 		$this->content_relations = $content_relations;
 		$this->type_factory = $type_factory;
 
-		add_action( 'wp_loaded', [ $this, 'load_language_manager' ] );
+		$this->request = $request;
 
-		// TODO: Remove in favor of MultilingualPress:resolve().
-		add_filter( 'mlp_language_api', function () {
+		add_action( 'wp_loaded', function () {
 
-			return $this;
+			new Mlp_Language_Manager_Controller(
+				$this->data,
+				new Mlp_Language_Db_Access( $this->table_name ),
+				$this->wpdb
+			);
 		} );
-	}
-
-	/**
-	 * @return Mlp_Language_Db_Access
-	 */
-	public function get_db() {
-		return $this->language_db;
-	}
-
-	/**
-	 *
-	 * @return void
-	 */
-	public function load_language_manager() {
-
-		new Mlp_Language_Manager_Controller( $this->data, $this->language_db, $this->wpdb );
 	}
 
 	/**
@@ -117,7 +107,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 *
 	 * @see prepare_translation_arguments()
 	 *
-*@param array $args {
+	 * @param array $args {
 	 *
 	 *     Optional. If left out, some magic happens.
 	 *
@@ -135,14 +125,11 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 */
 	public function get_translations( array $args = [] ) {
 
-		/** @type WP_Rewrite $wp_rewrite */
-		global $wp_rewrite;
+		$arguments = $this->prepare_translation_arguments( $args );
 
-		$arguments         = $this->prepare_translation_arguments( $args );
-		$key               = md5( serialize( $arguments ) );
-		$content_relations = [];
-		$cached            = wp_cache_get( $key, 'mlp' );
+		$key = md5( serialize( $arguments ) );
 
+		$cached = wp_cache_get( $key, 'mlp' );
 		if ( is_array( $cached ) )
 			return $cached;
 
@@ -153,6 +140,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		if ( empty ( $sites ) )
 			return [];
+
+		$content_relations = [];
 
 		if ( ! empty ( $arguments[ 'content_id' ] ) ) {
 
@@ -185,6 +174,9 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		}
 
 		reset( $translations );
+
+		/** @type WP_Rewrite $wp_rewrite */
+		global $wp_rewrite;
 
 		foreach ( $translations as $site_id => &$arr ) {
 
@@ -443,89 +435,6 @@ WHERE `http_name` IN( $values )";
 	}
 
 	/**
-	 * @uses get_request_type()
-	 * @return string
-	 */
-	private function get_request_type() {
-
-		$checks = [
-			'admin'             => 'is_admin',
-			'post'              => [ $this, 'is_singular' ],
-			'term'              => [
-				$this,
-				'is_term_archive_request'
-			 ],
-			'post_type_archive' => 'is_post_type_archive',
-			'search'            => 'is_search',
-			'front_page'        => 'is_front_page',
-		];
-		foreach ( $checks as $type => $callback ) {
-
-			if ( call_user_func( $callback ) ) {
-				return $type;
-			}
-		}
-
-		return '';
-	}
-
-	/** @noinspection PhpUnusedPrivateMethodInspection
-	 * Check for regular singular pages and separate page for posts
-	 *
-	 * @return bool
-	 */
-	private function is_singular() {
-
-		if ( is_singular() ) {
-			return TRUE;
-		}
-
-		return $this->is_separate_home_page();
-	}
-
-	/**
-	 * Check for separate page for posts
-	 *
-	 * @return bool
-	 */
-	private function is_separate_home_page() {
-
-		return is_home() && ! is_front_page();
-	}
-
-	/** @noinspection PhpUnusedPrivateMethodInspection
-	 * @return  bool
-	 */
-	private function is_term_archive_request() {
-
-		$queried_object = get_queried_object();
-
-		if ( ! isset ( $queried_object->taxonomy ) )
-			return FALSE;
-
-		return isset ( $queried_object->name );
-	}
-
-	/**
-	 * Get the current post type.
-	 *
-	 * When we have an archive with multiple post types, a custom query, we use
-	 * just the first post type. This is not ideal, but easier to handle further
-	 * down.
-	 *
-	 * @return string
-	 */
-	private function get_request_post_type() {
-
-		$post_type = get_query_var( 'post_type' );
-
-		if ( is_array( $post_type ) )
-			$post_type = reset( $post_type );
-
-		return (string) $post_type;
-	}
-
-	/**
 	 * @param array $args
 	 * @return array
 	 */
@@ -535,11 +444,11 @@ WHERE `http_name` IN( $values )";
 			// always greater than 0
 			'site_id'          => get_current_blog_id(),
 			// 0 if missing
-			'content_id'       => $this->get_query_id(),
-			'type'             => $this->get_request_type(),
+			'content_id'       => $this->request->queried_object_id(),
+			'type'             => $this->request->type(),
 			'strict'           => true,
 			'search_term'      => get_search_query(),
-			'post_type'        => $this->get_request_post_type(),
+			'post_type'        => $this->request->post_type(),
 			'include_base'     => false,
 			'suppress_filters' => false,
 		] );
@@ -552,21 +461,5 @@ WHERE `http_name` IN( $values )";
 		$arguments = apply_filters( 'mlp_get_translations_arguments', $arguments );
 
 		return $arguments;
-	}
-
-	/**
-	 * Get ID of queried object, post type or term.
-	 *
-	 * We need the term taxonomy ID for terms.
-	 *
-	 * @return int
-	 */
-	private function get_query_id() {
-
-		if ( is_category() || is_tag() || is_tax() ) {
-			return get_queried_object()->term_taxonomy_id;
-		}
-
-		return get_queried_object_id();
 	}
 }

@@ -116,7 +116,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 	/**
 	 * @param  array $site_option
-	 * @param  array $languages
+	 * @param  object[] $languages
 	 * @return void
 	 */
 	private function show_language_options( $site_option, $languages ) {
@@ -143,7 +143,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 					<?php
 					foreach ( $languages as $language ) {
 
-						$language_code = str_replace( '-', '_', $language['http_name'] );
+						$language_code = str_replace( '-', '_', $language->http_name );
 
 						// missing HTTP code
 						if ( empty ( $language_code ) ) {
@@ -198,18 +198,18 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	}
 
 	/**
-	 * @param array $language
+	 * @param object $language
 	 * @return string
 	 */
-	private function get_language_name( array $language ) {
+	private function get_language_name( $language ) {
 
 		$parts = [];
 
-		if ( ! empty ( $language['english_name'] ) )
-			$parts[] = $language['english_name'];
+		if ( ! empty ( $language->english_name ) )
+			$parts[] = $language->english_name;
 
-		if ( ! empty ( $language['native_name'] ) )
-			$parts[] = $language['native_name'];
+		if ( ! empty ( $language->native_name ) )
+			$parts[] = $language->native_name;
 
 		$parts = array_unique( $parts );
 

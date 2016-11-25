@@ -6,6 +6,7 @@ use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
+use Inpsyde\MultilingualPress\Common\ConditionalAwareRequest;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPage;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
@@ -126,6 +127,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.content_relations']
 			);
 		};
+
+		$container->share( 'multilingualpress.request', function () {
+
+			return new ConditionalAwareRequest();
+		} );
 
 		$container['multilingualpress.update_plugin_settings_nonce'] = function () {
 

@@ -33,7 +33,7 @@ class Mlp_Helpers {
 			return [];
 
 		$return     = [];
-		              /** @var Mlp_Language_Api $api */
+		              /** @var Mlp_Language_Api_Interface $api */
 		$api        = self::$dependencies[ 'language_api' ];
 		$site_id    = get_current_blog_id();
 		$element_id = \Inpsyde\MultilingualPress\get_default_content_id( $element_id );
@@ -99,16 +99,8 @@ class Mlp_Helpers {
 		 ];
 		$params = wp_parse_args( $args, $defaults );
 
-		/**
-		 * Get the Language API object.
-		 *
-		 * @param Mlp_Language_Api_Interface $language_api Language API object.
-		 */
-		$api = apply_filters( 'mlp_language_api', NULL );
 		/** @var Mlp_Language_Api_Interface $api */
-		if ( ! is_a( $api, 'Mlp_Language_Api_Interface' ) ) {
-			return '';
-		}
+		$api = self::$dependencies['language_api'];
 
 		$translations_args = [
 			'strict'       => $params[ 'strict' ],

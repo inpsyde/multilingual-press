@@ -15,13 +15,6 @@
 interface Mlp_Browsable {
 
 	/**
-	 * Constructor.
-	 *
-	 * @param Mlp_Data_Access $data
-	 */
-	public function __construct( Mlp_Data_Access $data );
-
-	/**
 	 * Amount of items.
 	 *
 	 * @return integer

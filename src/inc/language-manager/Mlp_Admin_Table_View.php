@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\Languages;
+
 /**
  * Class Mlp_Admin_Table_View
  *
@@ -10,11 +12,9 @@
 class Mlp_Admin_Table_View {
 
 	/**
-	 *
-	 *
-	 * @var Mlp_Data_Access
+	 * @var Languages
 	 */
-	private $data;
+	private $languages;
 
 	/**
 	 *
@@ -38,21 +38,21 @@ class Mlp_Admin_Table_View {
 	private $name;
 
 	/**
-	 * @param Mlp_Data_Access    $data
+	 * @param Languages    $languages
 	 * @param Mlp_Browsable      $pagination_data
 	 * @param array              $columns
 	 * @param int                $id
 	 * @param string             $name
 	 */
 	public function __construct(
-		Mlp_Data_Access    $data,
+		Languages    $languages,
 		Mlp_Browsable      $pagination_data,
 		array              $columns,
 		$id,
 		$name
 	) {
 
-		$this->data            = $data;
+		$this->languages       = $languages;
 		$this->pagination_data = $pagination_data;
 		$this->columns         = $columns;
 		$this->id              = $id;
@@ -79,8 +79,9 @@ class Mlp_Admin_Table_View {
 	 */
 	private function print_tbody() {
 
-		$rows = $this->data->get_items( [
-			'page' => $this->pagination_data->get_current_page(),
+		$rows = $this->languages->get_languages( [
+			'number' => $this->pagination_data->get_items_per_page(),
+			'page'   => $this->pagination_data->get_current_page(),
 		] );
 		if ( ! $rows ) {
 			?>

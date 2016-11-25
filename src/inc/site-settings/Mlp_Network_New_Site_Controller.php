@@ -15,9 +15,9 @@ use Inpsyde\MultilingualPress\API\SiteRelations;
 class Mlp_Network_New_Site_Controller {
 
 	/**
-	 * @var Mlp_Language_Api_Interface
+	 * @var Languages
 	 */
-	private $old_language_api;
+	private $languages;
 
 	/**
 	 * @var SiteRelations
@@ -27,24 +27,18 @@ class Mlp_Network_New_Site_Controller {
 	/**
 	 * Constructor
 	 *
-	 * @wp-hook plugins_loaded
-	 *
-	 * @param Languages                  $languages Languages API object.
-	 * @param SiteRelations              $site_relation
-	 * @param Mlp_Language_Api_Interface $old_language_api
+	 * @param SiteRelations $site_relation Site relations API object.
+	 * @param Languages     $languages     Languages API object.
 	 */
-	public function __construct(
-		Languages $languages,
-		SiteRelations $site_relation,
-		Mlp_Language_Api_Interface $old_language_api
-	) {
+	public function __construct( SiteRelations $site_relation, Languages $languages ) {
 
-		if ( ! is_network_admin() )
+		if ( ! is_network_admin() ) {
 			return;
+		}
 
-		$this->site_relation    = $site_relation;
+		$this->site_relation = $site_relation;
 
-		$this->old_language_api = $old_language_api;
+		$this->languages = $languages;
 
 		add_action( 'wpmu_new_blog', [ $this, 'update' ] );
 
@@ -123,23 +117,19 @@ class Mlp_Network_New_Site_Controller {
 	private function update_wplang( $blog_id ) {
 
 		$posted = $this->get_posted_language();
-
-		if ( ! $posted )
+		if ( ! $posted ) {
 			return;
+		}
 
-		// search for wp_locale where search = $http_name
-		$search = [
-			'fields' => [ 'wp_locale' ],
-			'where'  => [
+		$available_language = $this->languages->get_languages( [
+			'fields'     => 'wp_locale',
+			'conditions' => [
 				[
-					'field'  => 'http_name',
-					'search' => $posted,
+					'field' => 'http_name',
+					'value' => $posted,
 				],
 			],
-		];
-
-		// TODO: Use the new Languages API object as soon as completely refactored.
-		$available_language = $this->old_language_api->get_db()->get_items( $search, OBJECT );
+		] );
 
 		// no results found? -> return
 		if ( empty( $available_language ) )

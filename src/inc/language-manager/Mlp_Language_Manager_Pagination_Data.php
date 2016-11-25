@@ -29,7 +29,6 @@ class Mlp_Language_Manager_Pagination_Data implements Mlp_Browsable {
 
 	/**
 	 * (non-PHPdoc)
-	 * @see Mlp_Browsable::get_total_items()
 	 */
 	public function get_total_items() {
 
@@ -54,7 +53,7 @@ class Mlp_Language_Manager_Pagination_Data implements Mlp_Browsable {
 	 */
 	public function get_items_per_page() {
 
-		return $this->data->get_page_size();
+		return 20;
 	}
 
 	/**

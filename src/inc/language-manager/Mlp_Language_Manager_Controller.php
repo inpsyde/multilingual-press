@@ -22,11 +22,6 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	private $plugin_data;
 
 	/**
-	 * @var Mlp_Data_Access
-	 */
-	private $db;
-
-	/**
 	 * @var Mlp_Language_Manager_Options_Page_Data
 	 */
 	private $setting;
@@ -82,7 +77,6 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		$this->plugin_data     = $data;
 		$this->wpdb = $wpdb;
 		$this->page_title      = __( 'Language Manager', 'multilingual-press' );
-		$this->db              = $database;
 		$this->pagination_data = new Mlp_Language_Manager_Pagination_Data( $database );
 		$this->setting       = new Mlp_Language_Manager_Options_Page_Data(
 			$this->page_title,
@@ -101,7 +95,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		$updater = new Mlp_Language_Updater(
 			$this->pagination_data,
 			new Mlp_Array_Diff( $this->get_columns() ),
-			$database,
+			$this->plugin_data->get( 'languages' ),
 			$this->nonce
 		);
 
@@ -351,7 +345,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	private function show_table() {
 
 		$view = new Mlp_Admin_Table_View (
-			$this->db,
+			$this->plugin_data->get( 'languages' ),
 			$this->pagination_data,
 			$this->get_columns(),
 			'mlp-language-manager-table',

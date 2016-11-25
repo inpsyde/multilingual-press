@@ -9,236 +9,25 @@
 class Mlp_Language_Db_Access implements Mlp_Data_Access {
 
 	/**
-	 * @var int
-	 */
-	private $page_size = 20;
-
-	/**
 	 * @var string
 	 */
 	private $table_name;
 
 	/**
-	 * @var array
-	 */
-	private $fields = [ 
-		    'ID' => '%d',
-            'english_name' => '%s',
-            'native_name' =>  '%s',
-            'custom_name' => '%s',
-            'is_rtl' => '%d',
-            'iso_639_1' => '%s',
-            'iso_639_2' => '%s',
-            'wp_locale' => '%s',
-            'http_name' => '%s',
-            'priority' => '%d',
-	 ];
-
-	/**
-	 * @var array
-	 */
-	private $compare_operators = [ 
-		'=',
-		'<=>',
-		'>',
-		'>=',
-		'<',
-		'<=',
-		'LIKE',
-		'!=',
-		'<>',
-		'NOT LIKE',
-		'NOT REGEXP',
-		'REGEXP',
-		'RLIKE',
-	 ];
-
-	/**
 	 * @param     $table_name
-	 * @param int $page_size
 	 */
-	public function __construct( $table_name, $page_size = 20 ) {
-		$this->table_name = $GLOBALS['wpdb']->base_prefix . $table_name;
-		$this->page_size  = (int) $page_size;
+	public function __construct( $table_name ) {
+
+		$this->table_name = (string) $table_name;
 	}
 
 	/**
+	 * TODO: Get rid of this as soon as the Language Manager has been refactored into a list table.
+	 *
 	 * @return int
 	 */
 	public function get_total_items_number() {
 
-		global $wpdb;
-
-		$all = $wpdb->get_results(
-			"SELECT COUNT(*) as amount FROM `{$this->table_name}`",
-			OBJECT_K // Makes the result the first and only key.
-		);
-		return (int) key( $all );
-	}
-
-	/**
-	 * @param array  $params
-	 * @param string $type
-	 *
-	 * @return array
-	 */
-	public function get_items( array $params = [], $type = OBJECT_K ) {
-
-		global $wpdb;
-
-		$default_params = [
-			'page'     => 1,
-			'fields'   => [],
-			'where'    => [],
-			'order_by' => [
-				[
-					'field' => 'priority',
-					'order' => 'DESC',
-				],
-				[
-					'field' => 'english_name',
-					'order' => 'ASC',
-				],
-			],
-		];
-		$params = wp_parse_args( $params, $default_params );
-
-		$select_fields = '';
-		if ( ! empty( $params['fields'] ) ) {
-			$params['fields'] = esc_sql( $params['fields'] );
-			foreach ( $params['fields'] as $field ) {
-				// Check for not allowed fields.
-				if ( ! isset( $this->fields[ $field ] ) ) {
-					continue;
-				}
-
-				$select_fields .= ',' . $field;
-			}
-
-			// Remove the leading comma.
-			if ( isset( $select_fields[0] ) ) {
-				$select_fields = substr( $select_fields, 1 );
-			}
-		}
-		if ( '' === $select_fields ) {
-			$select_fields = '*';
-		}
-
-		$select = "SELECT $select_fields";
-
-		$from = "FROM {$this->table_name}";
-
-		$where = '';
-		if ( ! empty( $params['where'] ) ) {
-			$where = 'WHERE 1=1 ';
-			foreach ( $params['where'] as $search ) {
-				if ( empty( $search['field'] ) ) {
-					continue;
-				}
-
-				$field = $search['field'];
-
-				// Check for not allowed fields.
-				if ( ! isset( $this->fields[ $field ] ) ) {
-					continue;
-				}
-
-				if ( ! isset( $search['compare'] ) ) {
-					$search['compare'] = '=';
-				} elseif ( ! in_array( $search['compare'], $this->compare_operators, true ) ) {
-					continue;
-				}
-
-				$where .= $wpdb->prepare(
-					" AND $field {$search['compare']} {$this->fields[ $field ]}",
-					$search['search']
-				);
-			}
-		}
-
-		$order = '';
-		if ( ! empty( $params['order_by'] ) ) {
-			foreach ( $params['order_by'] as $order_by ) {
-				if ( empty( $order_by['field'] ) ) {
-					continue;
-				}
-
-				$field = $order_by['field'];
-
-				// Check for not allowed fields.
-				if ( ! isset( $this->fields[ $field ] ) ) {
-					continue;
-				}
-
-				$order .= ',' . $field;
-				if ( ! empty( $order_by['order'] ) ) {
-					$_order_by = strtoupper( $order_by['order'] );
-					if ( in_array( $_order_by, [ 'ASC', 'DESC' ], true ) ) {
-						$order .= ' ' . $_order_by;
-					}
-				}
-			}
-
-			if ( isset( $order[0] ) ) {
-				$order = 'ORDER BY ' . substr( $order, 1 );
-			}
-		}
-
-		$limit = $this->get_limit( (int) $params['page'] );
-
-		$query = "$select $from $where $order $limit";
-
-		$result = $wpdb->get_results( $query, $type );
-
-		return null === $result ? [] : $result;
-	}
-
-	/**
-	 * @param array  $items
-	 * @param string $field_format
-	 * @param string $where_format
-	 * @return array
-	 */
-	public function update_items_by_id( array $items, $field_format = '%s', $where_format = '%d' ) {
-
-		global $wpdb;
-
-		$queries = [];
-
-		foreach ( $items as $id => $values ) {
-			$wpdb->update(
-				$this->table_name,
-				(array) $values,
-				[ 'ID' => $id ],
-				$field_format,
-				$where_format
-			);
-			$queries[ $id ] = $wpdb->last_error;
-		}
-
-		return $queries;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function get_page_size() {
-		return $this->page_size;
-	}
-
-	/**
-	 * @param int $page
-	 *
-	 * @return string
-	 */
-	private function get_limit( $page ) {
-
-		if ( -1 === $page ) {
-			return '';
-		}
-
-		$start = $this->page_size * ( $page - 1 );
-
-		return "LIMIT $start, $this->page_size";
+		return (int) $GLOBALS['wpdb']->get_var( "SELECT COUNT(*) as amount FROM `{$this->table_name}`" );
 	}
 }

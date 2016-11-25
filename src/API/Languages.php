@@ -11,11 +11,11 @@ namespace Inpsyde\MultilingualPress\API;
 interface Languages {
 
 	/**
-	 * Returns an array of arrays with all available language data.
+	 * Returns an array with objects of all available languages.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return mixed[][] The array of arrays with all available language data.
+	 * @return object[] The array with objects of all available languages.
 	 */
 	public function get_all_languages();
 
@@ -38,4 +38,26 @@ interface Languages {
 			'english_name',
 		]
 	);
+
+	/**
+	 * Returns all languages according to the given arguments.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $args Arguments.
+	 *
+	 * @return object[] The array with objects of all languages according to the given arguments.
+	 */
+	public function get_languages( array $args = [] );
+
+	/**
+	 * Updates the given languages.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $languages An array with language IDs as keys and one or more fields as values.
+	 *
+	 * @return int The number of updated languages.
+	 */
+	public function update_languages_by_id( array $languages );
 }

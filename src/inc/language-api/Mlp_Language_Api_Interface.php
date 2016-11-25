@@ -12,13 +12,6 @@ use Inpsyde\MultilingualPress\Common\Type\Translation;
 interface Mlp_Language_Api_Interface {
 
 	/**
-	 * Access to language database handler.
-	 *
-	 * @return Mlp_Data_Access
-	 */
-	public function get_db();
-
-	/**
 	 * Ask for specific translations with arguments.
 	 *
 	 * Possible arguments are:
@@ -36,6 +29,4 @@ interface Mlp_Language_Api_Interface {
 	 * @return Translation[] Array of Mlp_Translation instances, site IDs are the keys
 	 */
 	public function get_translations( array $args = [] );
-
-	public function load_language_manager();
 }
