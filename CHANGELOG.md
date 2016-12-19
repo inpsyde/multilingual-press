@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.9
+- Installation: Fix _Incorrect index name ''_ errors, see
+[issue #246](https://github.com/inpsyde/multilingual-press/issues/246).
+- Alternate Languages: Fix `hreflang` HTTP Headers and HTML `<link />` tags being provided on paged requests.
+
 ## 2.4.8
 - Install/Uninstall: Prevent potential PHP notice due to deprecated `wp_get_sites()` function, see
 [issue #229](https://github.com/inpsyde/multilingual-press/issues/229) and
