@@ -111,7 +111,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 		global $wp_version;
 
-		if ( version_compare( $wp_version, '4.7.0', '>=' ) ) {
+		if ( version_compare( $wp_version, '4.7', '>=' ) ) {
 			return false;
 		}
 
