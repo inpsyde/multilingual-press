@@ -118,6 +118,7 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 - Installation: Fix _Incorrect index name ''_ errors, see
 [issue #246](https://github.com/inpsyde/multilingual-press/issues/246).
 - Alternate Languages: Fix `hreflang` HTTP Headers and HTML `<link />` tags being provided on paged requests.
+- Advanced Translator: Fix saving two posts due to (auto-)draft behavior.
 
 = 2.4.8 =
 - Install/Uninstall: Prevent potential PHP notice due to deprecated `wp_get_sites()` function, see
