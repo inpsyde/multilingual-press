@@ -36,6 +36,10 @@ class Mlp_Hreflang_Header_Output {
 	 */
 	public function wp_head() {
 
+		if ( is_paged() ) {
+			return;
+		}
+
 		$translations = $this->get_translations();
 		if ( ! $translations ) {
 			return;
@@ -67,6 +71,10 @@ class Mlp_Hreflang_Header_Output {
 	 * @return void
 	 */
 	public function http_header() {
+
+		if ( is_paged() ) {
+			return;
+		}
 
 		$translations = $this->get_translations();
 		if ( ! $translations ) {
