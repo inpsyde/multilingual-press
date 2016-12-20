@@ -178,7 +178,15 @@ class Mlp_Helpers {
 		}
 
 		$output .= '</ul></div>';
-
+		
+		/**
+		 * Filter the output of the linked elementes
+		 * 
+		 * @param	string $output the generated HTML
+		 * @param	array $items the language items
+		 * @param	array $params the parameters which came from the original call
+		 */
+		$output = apply_filters( 'mlp_linked_elements_html', $output, $items, $params );
 		return $output;
 	}
 
