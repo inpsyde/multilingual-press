@@ -17,6 +17,10 @@
 	font-size: 1.7em;
 }
 
+.mlp-namediv {
+	margin-bottom: 10px;
+}
+
 .mlp-name {
 	padding: 3px 8px;
 	line-height: 150%;
@@ -56,16 +60,17 @@
 }
 
 .mlp-copy-post-button {
-	float: left;
 	position: relative;
 	z-index: 10;
+	padding-left: 5px;
 
-	&:before {
-		margin-right: 5px;
-		line-height: 20px;
-		color: #888;
-		font-size: 15px;
-		vertical-align: middle;
+	.wp-media-buttons-icon {
+		background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+
+		&::before {
+			content: "\f167";
+			font: 18px/1 dashicons;
+		}
 	}
 }
 

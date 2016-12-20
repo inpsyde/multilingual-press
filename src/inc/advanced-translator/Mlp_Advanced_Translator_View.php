@@ -49,10 +49,12 @@ class Mlp_Advanced_Translator_View {
 
 		$id = $this->get_id( $remote_site_id, 'copied-post' );
 		?>
-		<a href="#" class="button mlp-copy-post-button dashicons-before dashicons-image-rotate-right"
-			data-site-id="<?php echo esc_attr( $matches[1] ); ?>"><?php
-			esc_html_e( 'Copy source post', 'multilingual-press' );
-			?></a>
+		<div class="wp-media-buttons">
+			<button class="button mlp-copy-post-button" data-site-id="<?php echo esc_attr( $matches[1] ); ?>">
+				<span class="wp-media-buttons-icon"></span>
+				<?php esc_html_e( 'Copy source post', 'multilingual-press' ); ?>
+			</button>
+		</div>
 		<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="" id="<?php echo esc_attr( $id ); ?>">
 		<?php
 	}
