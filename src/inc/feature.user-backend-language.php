@@ -1,7 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
 if ( is_admin() ) {
-	add_action( 'inpsyde_mlp_loaded', 'mlp_feature_user_backend_language', 0 );
+	global $wp_version;
+
+	if ( version_compare( $wp_version, '4.7', '<' ) ) {
+		add_action( 'inpsyde_mlp_loaded', 'mlp_feature_user_backend_language', 0 );
+	}
 }
 
 /**
