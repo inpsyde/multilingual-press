@@ -309,7 +309,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				if ( ( empty ( $arr[ 'target_url' ] ) && ! $arguments[ 'strict' ] )
 					|| 'front_page' === $arguments[ 'type' ]
 				) {
-					$arr[ 'target_url' ] = get_site_url( $site_id, '/' );
+					$arr[ 'target_url' ] = get_home_url( $site_id, '/' );
 				}
 
 				if ( empty ( $arr[ 'target_url' ] ) )

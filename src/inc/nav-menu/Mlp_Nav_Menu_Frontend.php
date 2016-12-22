@@ -126,17 +126,17 @@ class Mlp_Nav_Menu_Frontend {
 	 */
 	private function get_item_details( array $translations, $site_id ) {
 
-		$site_url = get_site_url( $site_id, '/' );
+		$home_url = get_home_url( $site_id, '/' );
 
 		if ( empty( $translations[ $site_id ] ) ) {
-			return array( $site_url, null );
+			return array( $home_url, null );
 		}
 
 		$translation = $translations[ $site_id ];
 
 		$url = $translation->get_remote_url();
 		if ( empty( $url ) ) {
-			$url = $site_url;
+			$url = $home_url;
 		}
 
 		return array( $url, $translation );
