@@ -44,7 +44,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 		$container['multilingualpress.post_type_support_settings_box'] = function ( Container $container ) {
 
 			return new CustomPostTypeSupportSettingsBox(
-				$container['multilingualpress.post_type_repository']->get_custom_post_types(),
+				$container['multilingualpress.post_type_repository'],
 				$container['multilingualpress.post_type_support_settings_nonce']
 			);
 		};
@@ -80,7 +80,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 			$settings_box = $container['multilingualpress.post_type_support_settings_box'];
 
-			add_action( 'mlp_modules_add_fields', function () use ( $settings_box, $repository ) {
+			add_action( 'multilingualpress.after_module_list', function () use ( $settings_box, $repository ) {
 
 				if ( $repository->get_custom_post_types() ) {
 					( new SettingsBoxView( $settings_box ) )->render();

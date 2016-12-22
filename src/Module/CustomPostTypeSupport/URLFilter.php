@@ -106,7 +106,7 @@ class URLFilter {
 			];
 		}
 
-		return site_url( add_query_arg( $args, '' ) );
+		return home_url( add_query_arg( $args, '' ) );
 	}
 
 	/**
