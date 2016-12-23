@@ -102,6 +102,10 @@ class Mlp_Nav_Menu_Frontend {
 			return;
 		}
 
+		if ( get_current_blog_id() === $site_id ) {
+			$item->classes[] = 'mlp-current-language-item';
+		}
+
 		list( $url, $translation ) = $this->get_item_details( $translations, $site_id );
 
 		/** This filter is documented in inc/types/Mlp_Translation.php */
