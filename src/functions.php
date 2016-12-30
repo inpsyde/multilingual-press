@@ -1,11 +1,12 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress {
+namespace Inpsyde\MultilingualPress;
 
-	use Inpsyde\MultilingualPress\Common\Locations;
-	use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
-	use Inpsyde\MultilingualPress\Common\Type\URL;
-	use wpdb;
+use Inpsyde\MultilingualPress\Common\Locations;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Type\Translation;
+use Inpsyde\MultilingualPress\Common\Type\URL;
+use wpdb;
 
 /**
  * Returns the according HTML string representation for the given array of attributes.
@@ -317,6 +318,122 @@ function get_language_by_http_name(
 }
 
 /**
+ * Renders a list of all translations according to the given arguments
+ *
+ * @since 3.0.0
+ *
+ * @param array $args Optional. Arguments array. Defaults to empty array.
+ *
+ * @return string The generated HTML.
+ */
+function get_linked_elements( array $args = [] ) {
+
+	$args = wp_parse_args( $args, [
+		'link_text'         => 'native',
+		'display_flag'      => false,
+		'sort'              => 'priority',
+		'show_current_blog' => false,
+		'strict'            => false,
+	] );
+
+	$output = '';
+
+	$translations = MultilingualPress::resolve( 'multilingualpress.translations' )->get_translations( [
+		'strict'       => $args['strict'],
+		'include_base' => $args['show_current_blog'],
+	] );
+	if ( $translations ) {
+
+		$translations = array_filter( $translations, function ( Translation $translation ) {
+
+			return (bool) $translation->remote_url();
+		} );
+
+		$link_text = $args['link_text'];
+
+		$translations = array_map( function ( Translation $translation ) use ( $link_text ) {
+
+			$language = $translation->language();
+
+			return [
+				'url'      => $translation->remote_url(),
+				'http'     => $language->name( 'http' ),
+				'name'     => $language->name( $link_text ),
+				'priority' => $language->priority(),
+				'icon'     => (string) $translation->icon_url(),
+			];
+		}, $translations );
+
+		switch ( $args['sort'] ) {
+			case 'blogid':
+				ksort( $translations );
+				break;
+
+			case 'priority':
+				uasort( $translations, function ( array $a, array $b ) {
+
+					if ( $a['priority'] === $b['priority'] ) {
+						return 0;
+					}
+
+					return ( $a['priority'] < $b['priority'] ) ? 1 : -1;
+				} );
+				break;
+
+			case 'name':
+				uasort( $translations, function ( array $a, array $b ) {
+
+					return strcasecmp( $a['name'], $b['name'] );
+				} );
+				break;
+		}
+
+		$current_site_id = get_current_blog_id();
+
+		$output = '<div class="mlp-language-box mlp_language_box"><ul>';
+
+		foreach ( $translations as $site_id => $translation ) {
+			$name = $translation['name'];
+
+			$img = ( ! empty( $translation['icon'] ) && $args['display_flag'] )
+				? '<img src="' . esc_url( $translation['icon'] ) . '" alt="' . esc_attr( $name ) . '"> '
+				: '';
+
+			if ( $current_site_id === $site_id ) {
+				$output .= '<li><a class="mlp-current-language-item" href="">' . $img . esc_html( $name ) . '</a></li>';
+			} else {
+				$output .= sprintf(
+					'<li><a rel="alternate" hreflang="%1$s" href="%2$s">%3$s%4$s</a></li>',
+					esc_attr( $translation['http'] ),
+					esc_url( $translation['url'] ),
+					$img,
+					esc_html( $name )
+				);
+			}
+		}
+
+		$output .= '</ul></div>';
+	}
+
+	/**
+	 * Filters the output of the linked elements.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string  $output       The generated HTML.
+	 * @param array[] $translations The translations.
+	 * @param array   $args         The passed arguments (including missing defaults).
+	 */
+	$output = (string) apply_filters( 'multilingualpress.linked_elements_html', $output, $translations, $args );
+
+	if ( ! empty( $args['echo'] ) ) {
+		echo $output;
+	}
+
+	return $output;
+}
+
+/**
  * Returns the MultilingualPress language for the site with the given ID.
  *
  * @since 3.0.0
@@ -366,6 +483,63 @@ function get_translation_ids( $content_id = 0, $type = 'post', $site_id = 0 ) {
 		$content_id,
 		(string) $type
 	);
+}
+
+/**
+ * Returns all translations for the content element with the given ID.
+ *
+ * @since 3.0.0
+ *
+ * @param int $content_id Optional. Content ID. Defaults to 0.
+ *
+ * @return array[] An array with site IDs as keys and arrays with translation data as values.
+ */
+function get_translations( $content_id = 0 ) {
+
+	if ( ! is_singular() && ! is_tag() && ! is_category() && ! is_tax() ) {
+		return [];
+	}
+
+	$site_id = get_current_blog_id();
+
+	$content_id = get_default_content_id( $content_id );
+
+	$translations = MultilingualPress::resolve( 'multilingualpress.translations' )->get_translations( [
+		'site_id'    => $site_id,
+		'content_id' => $content_id,
+	] );
+
+	if ( ! $translations ) {
+		return [];
+	}
+
+	unset( $translations[ $site_id ] );
+
+	$translations = array_filter( $translations, function ( Translation $translation ) {
+
+		return (bool) $translation->remote_url();
+	} );
+
+	if ( ! $translations ) {
+		return [];
+	}
+
+	$translations = array_map( function ( Translation $translation ) {
+
+		$language = $translation->language();
+
+		return [
+			'post_id'        => $translation->target_content_id(),
+			'post_title'     => $translation->remote_title(),
+			'permalink'      => $translation->remote_url(),
+			'flag'           => $translation->icon_url(),
+			'lang'           => $language->name( 'lang' ),
+			'language_short' => $language->name( 'lang' ),
+			'language_long'  => $language->name( 'language_long' ),
+		];
+	}, $translations );
+
+	return $translations;
 }
 
 /**
@@ -473,61 +647,4 @@ function site_exists( $site_id, $network_id = 0 ) {
 	}
 
 	return in_array( (int) $site_id, $cache[ $network_id ], true );
-}
-
-}
-
-
-
-// TODO: Move all functions to Inpsyde\MultilingualPress namespace (see below) and adapt names (no prefix etc.).
-namespace {
-
-	/**
-	 * Wrapper for Mlp_Helpers::show_linked_elements().
-	 *
-	 * @param array|string $args_or_deprecated_text Arguments array, or value for the 'link_text' argument.
-	 * @param bool         $deprecated_echo         Optional. Display the output? Defaults to TRUE.
-	 * @param string       $deprecated_sort         Optional. Sort elements. Defaults to 'blogid'.
-	 *
-	 * @return string
-	 */
-	function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecated_echo = true, $deprecated_sort = 'blogid' ) {
-
-		$args     = is_array( $args_or_deprecated_text )
-			? $args_or_deprecated_text
-			: [
-				'link_text' => $args_or_deprecated_text,
-				'sort'      => $deprecated_sort,
-			];
-		$defaults = [
-			'link_text'         => 'text',
-			'sort'              => 'priority',
-			'show_current_blog' => false,
-			'display_flag'      => false,
-			'strict'            => false, // get exact translations only
-		];
-		$params   = wp_parse_args( $args, $defaults );
-		$output   = Mlp_Helpers::show_linked_elements( $params );
-
-		$echo = isset( $params['echo'] ) ? $params['echo'] : $deprecated_echo;
-		if ( $echo ) {
-			echo $output;
-		}
-
-		return $output;
-	}
-
-	/**
-	 * get the linked elements with a lot of more information
-	 *
-	 * @since    0.7
-	 *
-	 * @param    int $element_id current post / page / whatever
-	 *
-	 * @return    array
-	 */
-	function mlp_get_interlinked_permalinks( $element_id = 0 ) {
-
-		return Mlp_Helpers::get_interlinked_permalinks( $element_id );
-	}
 }
