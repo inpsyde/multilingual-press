@@ -163,27 +163,23 @@ final class MultilingualPress {
 
 		$this->is_bootstrapped = true;
 
-		// TODO: Remove as soon as the old front controller has been replaced completely.
+		// TODO: Eventually remove/refactor according to new architecure as soon as the old controller got replaced.
 		class_exists( 'Multilingual_Press' ) or require __DIR__ . '/inc/Multilingual_Press.php';
-
-		// TODO: Refactor according to new architecure.
 		$old_controller = new \Multilingual_Press( static::$container );
 		$old_controller->prepare_plugin_data();
 
-		if ( ! $needs_modules ) {
-			return true;
+		if ( $needs_modules ) {
+			load_plugin_textdomain( 'multilingual-press' );
+
+			if ( is_admin() ) {
+				$this->bootstrap_admin();
+			} else {
+				$this->bootstrap_front_end();
+			}
+
+			// TODO: Refactor according to new architecure.
+			$old_controller->setup();
 		}
-
-		load_plugin_textdomain( 'multilingual-press' );
-
-		if ( is_admin() ) {
-			$this->bootstrap_admin();
-		} else {
-			$this->bootstrap_front_end();
-		}
-
-		// TODO: Refactor according to new architecure.
-		$old_controller->setup();
 
 		return true;
 	}
@@ -358,5 +354,6 @@ final class MultilingualPress {
 	 */
 	private function bootstrap_front_end() {
 
+		// TODO: Move parts from the old controller to here.
 	}
 }

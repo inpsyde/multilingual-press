@@ -10,7 +10,7 @@ add_action( 'inpsyde_mlp_loaded', 'mlp_nav_menu_init' );
 function mlp_nav_menu_init( Inpsyde_Property_List_Interface $data ) {
 
 	$controller = new Mlp_Nav_Menu_Controller(
-		$data->get( 'language_api' ),
+		$data->get( 'translations' ),
 		$data->get( 'assets' )
 	);
 	$controller->initialize();

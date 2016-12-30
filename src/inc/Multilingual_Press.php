@@ -2,7 +2,6 @@
 
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\PluginProperties;
-use Inpsyde\MultilingualPress\Core;
 use Inpsyde\MultilingualPress\Service\Container;
 
 /**
@@ -93,8 +92,9 @@ class Multilingual_Press {
 
 		if ( is_admin() )
 			$this->run_admin_actions();
-		else
-			$this->run_frontend_actions();
+		else {
+			add_filter( 'language_attributes', [ $this, 'language_attributes' ] );
+		}
 
 		return true;
 	}
@@ -260,32 +260,6 @@ class Multilingual_Press {
 	/**
 	 * @return void
 	 */
-	private function run_frontend_actions() {
-
-		// Use correct language for html element
-		add_filter( 'language_attributes', [ $this, 'language_attributes' ] );
-
-		// TODO: Move the following block to ~\Core\CoreServiceProvider as soon as the Language API has been refactored.
-		$translations = new Core\FrontEnd\AlternateLanguages\UnfilteredTranslations(
-			$this->plugin_data->get( 'language_api' )
-		);
-		add_action( 'template_redirect', function () use ( $translations ) {
-
-			if ( ! is_paged() ) {
-				( new Core\FrontEnd\AlternateLanguages\HTTPHeaders( $translations ) )->send();
-			}
-		} );
-		add_action( 'wp_head', function () use ( $translations ) {
-
-			if ( ! is_paged() ) {
-				( new Core\FrontEnd\AlternateLanguages\HTMLLinkTags( $translations ) )->render();
-			}
-		} );
-	}
-
-	/**
-	 * @return void
-	 */
 	public function prepare_plugin_data() {
 
 		$site_relations = $this->container['multilingualpress.site_relations'];
@@ -294,28 +268,26 @@ class Multilingual_Press {
 
 		$type_factory = $this->container['multilingualpress.type_factory'];
 
-		$language_api = new Mlp_Language_Api(
-			$this->plugin_data,
-			'mlp_languages',
-			$site_relations,
-			$content_relations,
-			$this->wpdb,
-			$type_factory,
-			$this->container['multilingualpress.request']
-		);
+		// TODO: Check if the following really needs to be done regardles of MultilingualPress modules being not used.
+		add_action( 'wp_loaded', function () {
+
+			new Mlp_Language_Manager_Controller(
+				$this->plugin_data,
+				new Mlp_Language_Db_Access( $this->container['multilingualpress.languages_table']->name() ),
+				$this->wpdb
+			);
+		} );
 
 		$this->plugin_data->set( 'module_manager', $this->container['multilingualpress.module_manager'] );
 		$this->plugin_data->set( 'site_relations', $site_relations );
 		$this->plugin_data->set( 'type_factory', $type_factory );
 		$this->plugin_data->set( 'link_table', $this->container['multilingualpress.content_relations_table']->name() );
 		$this->plugin_data->set( 'content_relations', $content_relations );
-		$this->plugin_data->set( 'language_api', $language_api );
+		$this->plugin_data->set( 'translations', $this->container['multilingualpress.translations'] );
 		// TODO: Remove as soon as the whole Assets structures have been refactored (Locations -> Assets\Locator).
 		$this->plugin_data->set( 'assets', $this->container['multilingualpress.asset_manager'] );
 		$this->plugin_data->set( 'languages', $this->container['multilingualpress.languages'] );
 		$this->plugin_data->set( 'locations', $this->container['multilingualpress.internal_locations'] );
 		$this->plugin_data->set( 'nonce_factory', $this->container['multilingualpress.nonce_factory'] );
-
-		Mlp_Helpers::insert_dependency( 'language_api', $this->plugin_data->get( 'language_api' ) );
 	}
 }

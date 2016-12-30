@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguages;
 
+use Inpsyde\MultilingualPress\API\Translations;
+
 /**
  * Alternate language HTTP headers.
  *
@@ -20,7 +22,7 @@ class HTTPHeaders {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Translations $translations Translations access object.
+	 * @param Translations $translations Translations API object.
 	 */
 	public function __construct( Translations $translations ) {
 
@@ -37,7 +39,7 @@ class HTTPHeaders {
 	 */
 	public function send() {
 
-		$translations = $this->translations->to_array();
+		$translations = $this->translations->get_unfiltered_translations();
 		if ( ! $translations ) {
 			return false;
 		}

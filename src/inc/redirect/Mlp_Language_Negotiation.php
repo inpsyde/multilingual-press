@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\Translations;
 use Inpsyde\MultilingualPress\Common\AcceptHeader\AcceptHeaderParser;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
@@ -17,9 +18,9 @@ use Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation\AcceptLanguage
 class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 	/**
-	 * @type Mlp_Language_Api_Interface
+	 * @type Translations
 	 */
-	private $language_api;
+	private $translations;
 
 	/**
 	 * @var float
@@ -32,12 +33,12 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	private $parser;
 
 	/**
-	 * @param Mlp_Language_Api_Interface $language_api Language API object.
+	 * @param Translations $translations Translations API object.
 	 * @param AcceptHeaderParser         $parser       Optional. Accept-Language parser object. Defaults to null.
 	 */
-	public function __construct( Mlp_Language_Api_Interface $language_api, AcceptHeaderParser $parser = null ) {
+	public function __construct( Translations $translations, AcceptHeaderParser $parser = null ) {
 
-		$this->language_api = $language_api;
+		$this->translations = $translations;
 
 		$this->parser = $parser ?: new AcceptLanguageParser();
 
@@ -61,9 +62,9 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	public function get_redirect_match() {
 
-		$translations = $this->language_api->get_translations(
-			[ 'include_base' => TRUE ]
-		);
+		$translations = $this->translations->get_translations( [
+			'include_base' => true,
+		] );
 
 		if ( empty ( $translations ) )
 			return $this->get_fallback_match();

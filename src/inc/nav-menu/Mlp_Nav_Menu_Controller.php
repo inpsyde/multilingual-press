@@ -1,5 +1,6 @@
 <?php
 
+use Inpsyde\MultilingualPress\API\Translations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 
@@ -13,56 +14,46 @@ use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 class Mlp_Nav_Menu_Controller {
 
 	/**
-	 * Basic identifier for all sort of operations.
-	 *
-	 * @type string
+	 * @@var string
 	 */
 	private $handle   = 'mlp_nav_menu';
 
 	/**
-	 * Post meta key for nav items.
-	 *
-	 * @type string
+	 * @@var string
 	 */
 	private $meta_key = '_blog_id';
 
 	/**
-	 * Backend model.
-	 *
 	 * @var Mlp_Language_Nav_Menu_Data
 	 */
 	private $data;
 
 	/**
-	 * Backend view.
-	 *
-	 * @type Mlp_Simple_Nav_Menu_Selectors
+	 * @@var Mlp_Simple_Nav_Menu_Selectors
 	 */
 	private $view;
 
 	/**
-	 * @type Mlp_Language_Api_Interface
+	 * @@var Translations
 	 */
-	private $language_api;
+	private $translations;
 
 	/**
-	 * @type AssetManager
+	 * @@var AssetManager
 	 */
 	private $asset_manager;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Mlp_Language_Api_Interface $language_api
+	 * @param Translations $translations
 	 * @param AssetManager       $asset_manager
 	 */
-	public function __construct(
-		Mlp_Language_Api_Interface $language_api,
-		AssetManager       $asset_manager
-	) {
+	public function __construct( Translations $translations, AssetManager $asset_manager ) {
 
-		$this->language_api = $language_api;
-		$this->asset_manager       = $asset_manager;
+		$this->translations = $translations;
+
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
@@ -89,7 +80,7 @@ class Mlp_Nav_Menu_Controller {
 
 		$frontend = new Mlp_Nav_Menu_Frontend(
 			$this->meta_key,
-			$this->language_api
+			$this->translations
 		);
 
 		add_filter( 'wp_nav_menu_objects', [ $frontend, 'filter_items' ] );

@@ -1,16 +1,12 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\Translations;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 
 /**
  * Filters nav menu items and passes the proper URL.
  */
 class Mlp_Nav_Menu_Frontend {
-
-	/**
-	 * @var Mlp_Language_Api_Interface
-	 */
-	private $language_api;
 
 	/**
 	 * @var string
@@ -23,16 +19,21 @@ class Mlp_Nav_Menu_Frontend {
 	private $site_ids = [];
 
 	/**
+	 * @var Translations
+	 */
+	private $translations;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param string                     $meta_key     The site ID meta key.
-	 * @param Mlp_Language_Api_Interface $language_api The language API.
+	 * @param string       $meta_key         The site ID meta key.
+	 * @param Translations $translations Translations API object.
 	 */
-	public function __construct( $meta_key, Mlp_Language_Api_Interface $language_api ) {
+	public function __construct( $meta_key, Translations $translations ) {
 
 		$this->meta_key = $meta_key;
 
-		$this->language_api = $language_api;
+		$this->translations = $translations;
 	}
 
 	/**
@@ -46,7 +47,7 @@ class Mlp_Nav_Menu_Frontend {
 	 */
 	public function filter_items( array $items ) {
 
-		$translations = $this->language_api->get_translations( [
+		$translations = $this->translations->get_translations( [
 			'strict'       => false,
 			'include_base' => true,
 		 ] );

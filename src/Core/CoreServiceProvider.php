@@ -252,6 +252,21 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 						break;
 				}
 			}
+		} else {
+			$translations = $container['multilingualpress.translations'];
+
+			add_action( 'template_redirect', function () use ( $translations ) {
+
+				if ( ! is_paged() ) {
+					( new FrontEnd\AlternateLanguages\HTTPHeaders( $translations ) )->send();
+				}
+			} );
+			add_action( 'wp_head', function () use ( $translations ) {
+
+				if ( ! is_paged() ) {
+					( new FrontEnd\AlternateLanguages\HTMLLinkTags( $translations ) )->render();
+				}
+			} );
 		}
 	}
 }

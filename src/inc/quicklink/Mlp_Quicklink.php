@@ -1,7 +1,9 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\Translations as TranslationsAPI;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Request;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxView;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
@@ -19,9 +21,9 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	private $asset_manager;
 
 	/**
-	 * @var Mlp_Language_Api_Interface
+	 * @var TranslationsAPI
 	 */
-	private $language_api;
+	private $translations_api;
 
 	/**
 	 * @var ModuleManager
@@ -42,20 +44,20 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 * Constructor. Sets up the properties.
 	 *
 	 * @param ModuleManager              $module_manager Module manager object.
-	 * @param Mlp_Language_Api_Interface $language_api   Language API object.
+	 * @param TranslationsAPI $translations_api   Translations API object.
 	 * @param AssetManager               $asset_manager  Asset manager object.
 	 * @param Nonce                      $nonce          Nonce object.
 	 */
 	public function __construct(
 		ModuleManager $module_manager,
-		Mlp_Language_Api_Interface $language_api,
+		TranslationsAPI $translations_api,
 		AssetManager $asset_manager,
 		Nonce $nonce
 	) {
 
 		$this->module_manager = $module_manager;
 
-		$this->language_api = $language_api;
+		$this->translations_api = $translations_api;
 
 		$this->asset_manager = $asset_manager;
 
@@ -75,7 +77,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 		}
 
 		if ( is_admin() ) {
-			add_action( 'mlp_modules_add_fields', [ $this, 'draw_options_page_form_fields' ] );
+			add_action( 'multilingualpress.after_module_list', [ $this, 'draw_options_page_form_fields' ] );
 
 			// Use this hook to handle the user input of your modules' options page form fields
 			add_filter( 'mlp_modules_save_fields', [ $this, 'save_options_page_form_fields' ] );
@@ -275,7 +277,9 @@ ORDER BY domain DESC";
 			return $this->translations;
 		}
 
-		$this->translations = $this->language_api->get_translations( [ 'type' => 'post' ] );
+		$this->translations = $this->translations_api->get_translations( [
+			'type' => Request::TYPE_SINGULAR,
+		] );
 
 		return $this->translations;
 	}

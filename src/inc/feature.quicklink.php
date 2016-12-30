@@ -13,7 +13,7 @@ function mlp_feature_quicklink( Inpsyde_Property_List_Interface $data ) {
 
 	$controller = new Mlp_Quicklink(
 		$data->get( 'module_manager' ),
-		$data->get( 'language_api' ),
+		$data->get( 'translations' ),
 		$data->get( 'assets' ),
 		new WPNonce( 'save_quicklink_position' )
 	);

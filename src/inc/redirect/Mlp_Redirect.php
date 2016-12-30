@@ -1,5 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\Translations;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
@@ -9,9 +10,9 @@ use Inpsyde\MultilingualPress\Module\ModuleManager;
 class Mlp_Redirect {
 
 	/**
-	 * @var Mlp_Language_Api_Interface
+	 * @var Translations
 	 */
-	private $language_api;
+	private $translations;
 
 	/**
 	 * @var ModuleManager
@@ -27,18 +28,18 @@ class Mlp_Redirect {
 	 * Constructor.
 	 *
 	 * @param ModuleManager $modules
-	 * @param Mlp_Language_Api_Interface   $language_api
+	 * @param Translations   $translations
 	 * @param                              $deprecated
 	 */
 	public function __construct(
 		ModuleManager $modules,
-		Mlp_Language_Api_Interface $language_api,
+		Translations $translations,
 		$deprecated
 	) {
 
 		$this->modules = $modules;
 
-		$this->language_api = $language_api;
+		$this->translations = $translations;
 	}
 
 	/**
@@ -76,7 +77,7 @@ class Mlp_Redirect {
 	 */
 	private function frontend_redirect() {
 
-		$negotiation = new Mlp_Language_Negotiation( $this->language_api );
+		$negotiation = new Mlp_Language_Negotiation( $this->translations );
 		$response    = new Mlp_Redirect_Response( $negotiation );
 		$controller  = new Mlp_Redirect_Frontend( $response, $this->option );
 		$controller->setup();
