@@ -20,6 +20,15 @@ interface Languages {
 	public function get_all_languages();
 
 	/**
+	 * Returns the complete language data of all sites.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array[] The array with site IDs as keys and arrays with all language data as values.
+	 */
+	public function get_all_site_languages();
+
+	/**
 	 * Returns the desired field value of the language with the given HTTP code.
 	 *
 	 * @since 3.0.0

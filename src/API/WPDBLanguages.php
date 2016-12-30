@@ -77,6 +77,63 @@ final class WPDBLanguages implements Languages {
 	}
 
 	/**
+	 * Returns the complete language data of all sites.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array[] The array with site IDs as keys and arrays with all language data as values.
+	 */
+	public function get_all_site_languages() {
+
+		$languages = get_site_option( 'inpsyde_multilingual', [] );
+		if ( ! $languages || ! is_array( $languages ) ) {
+			return [];
+		}
+
+		$names = [];
+
+		$iso_codes = [];
+
+		foreach ( $languages as $site_id => $language ) {
+			if ( ! empty( $language['lang'] ) ) {
+				$names[ $site_id ] = str_replace( '_', '-', $language['lang'] );
+			} elseif ( ! empty( $language['text'] ) && preg_match( '~[a-zA-Z-]+~', $language['text'] ) ) {
+				$names[ $site_id ] = str_replace( '_', '-', $language['text'] );
+			}
+
+			if ( isset( $names[ $site_id ] ) && false === strpos( $names[ $site_id ], '-' ) ) {
+				$names[ $site_id ] = strtolower( $names[ $site_id ] );
+
+				$iso_codes[ $site_id ] = $names[ $site_id ];
+			}
+
+			unset( $languages[ $site_id ]['lang'] );
+		}
+
+		$query = "
+SELECT *
+FROM {$this->table}
+WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names ) ) ) . "')";
+
+		if ( $iso_codes ) {
+			$query .= "\n\tOR iso_639_1 IN ('" . join( "','", array_map( 'esc_sql', array_values( $iso_codes ) ) ) . "')";
+		}
+
+		foreach ( $this->db->get_results( $query, ARRAY_A ) as $language ) {
+			foreach ( $names as $site_id => $name ) {
+				if (
+					in_array( $name, $language, true )
+					|| ( isset( $iso_codes[ $site_id ] ) && $language['iso_639_1'] === $iso_codes[ $site_id ] )
+				) {
+					$languages[ $site_id ] += $language;
+				}
+			}
+		}
+
+		return $languages;
+	}
+
+	/**
 	 * Returns the desired field value of the language with the given HTTP code.
 	 *
 	 * @since 3.0.0

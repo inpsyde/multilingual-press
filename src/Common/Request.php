@@ -53,7 +53,7 @@ interface Request {
 	 *
 	 * @var string
 	 */
-	const TYPE_SINGULAR = 'singular';
+	const TYPE_SINGULAR = 'post';
 
 	/**
 	 * Request type.
@@ -62,7 +62,7 @@ interface Request {
 	 *
 	 * @var string
 	 */
-	const TYPE_TERM_ARCHIVE = 'term-archive';
+	const TYPE_TERM_ARCHIVE = 'term';
 
 	/**
 	 * Returns the (first) post type of the current request.
