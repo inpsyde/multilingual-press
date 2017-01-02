@@ -21,6 +21,7 @@ use Inpsyde\MultilingualPress\Database\DatabaseServiceProvider;
 use Inpsyde\MultilingualPress\Factory\FactoryProvider;
 use Inpsyde\MultilingualPress\Installation\InstallationServiceProvider;
 use Inpsyde\MultilingualPress\Module;
+use Inpsyde\MultilingualPress\NavMenu\NavMenuServiceProvider;
 use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
 use Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicationServiceProvider;
 use Inpsyde\MultilingualPress\Translation\TranslationServiceProvider;
@@ -61,6 +62,7 @@ function bootstrap() {
 		->register_service_provider( new Module\CustomPostTypeSupport\ServiceProvider() )
 		->register_service_provider( new Module\Trasher\ServiceProvider() )
 		->register_service_provider( new Module\UserAdminLanguage\ServiceProvider() )
+		->register_service_provider( new NavMenuServiceProvider() )
 		->register_service_provider( new SiteDuplicationServiceProvider() )
 		->register_service_provider( new TranslationServiceProvider() )
 		->register_service_provider( new Widget\WidgetServiceProvider() );

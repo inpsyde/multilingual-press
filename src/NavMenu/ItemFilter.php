@@ -1,17 +1,19 @@
 <?php # -*- coding: utf-8 -*-
 
+namespace Inpsyde\MultilingualPress\NavMenu;
+
 use Inpsyde\MultilingualPress\API\Translations;
+use Inpsyde\MultilingualPress\Common\Type\NullTranslation;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
+use WP_Post;
 
 /**
  * Filters nav menu items and passes the proper URL.
+ *
+ * @package Inpsyde\MultilingualPress\NavMenu
+ * @since   3.0.0
  */
-class Mlp_Nav_Menu_Frontend {
-
-	/**
-	 * @var string
-	 */
-	private $meta_key;
+class ItemFilter {
 
 	/**
 	 * @var int[]
@@ -24,14 +26,13 @@ class Mlp_Nav_Menu_Frontend {
 	private $translations;
 
 	/**
-	 * Constructor.
+	 * Constructor. Sets up the properties.
 	 *
-	 * @param string       $meta_key         The site ID meta key.
+	 * @since 3.0.0
+	 *
 	 * @param Translations $translations Translations API object.
 	 */
-	public function __construct( $meta_key, Translations $translations ) {
-
-		$this->meta_key = $meta_key;
+	public function __construct( Translations $translations ) {
 
 		$this->translations = $translations;
 	}
@@ -39,18 +40,19 @@ class Mlp_Nav_Menu_Frontend {
 	/**
 	 * Filters the nav menu items.
 	 *
+	 * @since   3.0.0
 	 * @wp-hook wp_nav_menu_objects
 	 *
 	 * @param WP_Post[] $items Nav menu items.
 	 *
-	 * @return WP_Post[]
+	 * @return WP_Post[] Filtered nav menu items.
 	 */
 	public function filter_items( array $items ) {
 
 		$translations = $this->translations->get_translations( [
 			'strict'       => false,
 			'include_base' => true,
-		 ] );
+		] );
 
 		foreach ( $items as $key => $item ) {
 			if ( $this->maybe_delete_obsolete_item( $item ) ) {
@@ -68,13 +70,13 @@ class Mlp_Nav_Menu_Frontend {
 	}
 
 	/**
-	 * Checks if the site with the given post's remote site ID still exists, and deletes the post if not.
+	 * Checks if the site with the given item's remote site ID still exists, and deletes the item if not.
 	 *
 	 * @param WP_Post $item Nav menu item.
 	 *
-	 * @return bool
+	 * @return bool Whether or not the item was deleted.
 	 */
-	public function maybe_delete_obsolete_item( WP_Post $item ) {
+	private function maybe_delete_obsolete_item( WP_Post $item ) {
 
 		$site_id = $this->get_site_id( $item );
 		if ( ! $site_id ) {
@@ -97,13 +99,13 @@ class Mlp_Nav_Menu_Frontend {
 	 * @param WP_Post       $item         Nav menu item object.
 	 * @param Translation[] $translations Translation objects.
 	 *
-	 * @return void
+	 * @return bool Whether or not the item was prepared successfully.
 	 */
 	private function prepare_item( WP_Post $item, array $translations ) {
 
 		$site_id = $this->get_site_id( $item );
 		if ( ! $site_id ) {
-			return;
+			return false;
 		}
 
 		if ( get_current_blog_id() === $site_id ) {
@@ -112,42 +114,45 @@ class Mlp_Nav_Menu_Frontend {
 
 		list( $url, $translation ) = $this->get_item_details( $translations, $site_id );
 
-		/** This filter is documented in inc/types/Mlp_Translation.php */
-		$item->url = apply_filters( 'mlp_linked_element_link', $url, $site_id, 0, $translation );
+		/** This filter is documented in Common\Type\FilterableTranslation.php */
+		$item->url = apply_filters( 'multilingualpress.translation_url', $url, $site_id, 0, $translation );
 
 		/**
-		 * Runs before a nav menu item is sent to the walker.
+		 * Fires right before a nav menu item is sent to the walker.
+		 *
+		 * @since 3.0.0
 		 *
 		 * @param WP_Post     $item        Nav menu item object.
 		 * @param Translation $translation Translation object.
 		 */
-		do_action( 'mlp_prepare_nav_menu_item_output', $item, $translation );
+		do_action( 'multilingualpress.prepare_nav_menu_item', $item, $translation );
+
+		return true;
 	}
 
 	/**
 	 * Returns the remote URL and the translation object for the according item.
 	 *
 	 * @param Translation[] $translations Translation objects.
-	 * @param int                         $site_id      Site ID.
+	 * @param int           $site_id      Site ID.
 	 *
-	 * @return array
+	 * @return array The remote URL and the translation object for the according item.
 	 */
 	private function get_item_details( array $translations, $site_id ) {
 
-		$home_url = get_home_url( $site_id, '/' );
-
 		if ( empty( $translations[ $site_id ] ) ) {
-			return [ $home_url, null ];
+			return [
+				get_home_url( $site_id, '/' ),
+				new NullTranslation(),
+			];
 		}
 
 		$translation = $translations[ $site_id ];
 
-		$url = $translation->remote_url();
-		if ( empty( $url ) ) {
-			$url = $home_url;
-		}
-
-		return [ $url, $translation ];
+		return [
+			$translation->remote_url() ?: get_home_url( $site_id, '/' ),
+			$translation,
+		];
 	}
 
 	/**
@@ -155,7 +160,7 @@ class Mlp_Nav_Menu_Frontend {
 	 *
 	 * @param WP_Post $item Nav menu item object.
 	 *
-	 * @return int
+	 * @return int Site ID.
 	 */
 	private function get_site_id( WP_Post $item ) {
 
@@ -165,7 +170,7 @@ class Mlp_Nav_Menu_Frontend {
 		}
 
 		$site_id = in_array( $item->type, [ 'language', 'custom' ], true )
-			? (int) get_post_meta( $item->ID, $this->meta_key, true )
+			? (int) get_post_meta( $item->ID, ItemRepository::META_KEY_SITE_ID, true )
 			: 0;
 
 		$this->site_ids[ $item->ID ] = $site_id;

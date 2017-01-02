@@ -35,7 +35,7 @@ class Mlp_Redirect_Frontend {
 	 */
 	public function setup() {
 
-		add_filter( 'mlp_linked_element_link', [ $this, 'add_noredirect_parameter' ], 10, 2 );
+		add_filter( 'multilingualpress.translation_url', [ $this, 'add_noredirect_parameter' ], 10, 2 );
 
 		if ( $this->is_redirectable() ) {
 			add_action( 'template_redirect', [ $this->response, 'redirect' ], 1 );
@@ -45,7 +45,7 @@ class Mlp_Redirect_Frontend {
 	/**
 	 * Adds the noredirect query var to the given URL.
 	 *
-	 * @wp-hook mlp_linked_element_link
+	 * @wp-hook multilingualpress.translation_url
 	 *
 	 * @param string $url     URL.
 	 * @param int    $site_id Site ID.
