@@ -36,25 +36,27 @@ class PostTypeSupportSettingsUpdater {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Nonce              $nonce      Nonce object.
 	 * @param PostTypeRepository $repository Post type repository object.
+	 * @param Nonce              $nonce      Nonce object.
 	 */
-	public function __construct( Nonce $nonce, PostTypeRepository $repository ) {
-
-		$this->nonce = $nonce;
+	public function __construct( PostTypeRepository $repository, Nonce $nonce ) {
 
 		$this->repository = $repository;
+
+		$this->nonce = $nonce;
 	}
 
 	/**
 	 * Updates the post type support settings.
 	 *
 	 * @since   3.0.0
-	 * @wp-hook mlp_modules_save_fields
+	 * @wp-hook multilingualpress.save_modules
+	 *
+	 * @param array $data Request data.
 	 *
 	 * @return bool Whether or not the settings were updated successfully.
 	 */
-	public function update_settings() {
+	public function update_settings( array $data ) {
 
 		if ( ! $this->nonce->is_valid() ) {
 			return false;
@@ -62,13 +64,13 @@ class PostTypeSupportSettingsUpdater {
 
 		$custom_post_types = $this->repository->get_custom_post_types();
 
-		if ( ! $custom_post_types || empty( $_POST[ self::SETTINGS_NAME ] ) ) {
+		if ( ! $custom_post_types || empty( $data[ self::SETTINGS_NAME ] ) ) {
 			return $this->repository->unsupport_all_post_types();
 		}
 
 		$custom_post_types = array_keys( $custom_post_types );
 
-		$settings = (array) $_POST[ self::SETTINGS_NAME ];
+		$settings = (array) $data[ self::SETTINGS_NAME ];
 
 		$custom_post_types = array_combine( $custom_post_types, array_map( function ( $slug ) use ( $settings ) {
 

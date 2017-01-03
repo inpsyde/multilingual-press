@@ -155,6 +155,8 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		 */
 		do_action( 'mlp_before_post_synchronization', $this->save_context );
 
+		// TODO: Fire also a typeless action that has the type (i.e., post) as second argument.
+
 		foreach ( $this->post_request_data[ $this->name_base ] as $remote_blog_id => $post_data ) {
 			if (
 				! in_array( $remote_blog_id, $related_blogs )

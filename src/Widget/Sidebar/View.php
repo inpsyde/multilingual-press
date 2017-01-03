@@ -15,10 +15,11 @@ interface View {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param array $args     Widget arguments.
-	 * @param array $instance Widget settings.
+	 * @param array  $args     Widget arguments.
+	 * @param array  $instance Widget settings.
+	 * @param string $id_base  Widget ID base.
 	 *
 	 * @return void
 	 */
-	public function render( array $args, array $instance );
+	public function render( array $args, array $instance, $id_base );
 }

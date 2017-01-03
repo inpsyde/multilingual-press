@@ -72,13 +72,13 @@ class PluginSettingsUpdater {
 		$this->module_manager->save_modules();
 
 		/**
-		 * Runs before the redirect.
+		 * Fires right after the module settings have been updated, and right before the redirect.
 		 *
-		 * Process your fields in the $_POST superglobal here and then call update_site_option().
+		 * @since 3.0.0
 		 *
-		 * @param array $_POST
+		 * @param array $_POST Request data.
 		 */
-		do_action( 'mlp_modules_save_fields', $_POST );
+		do_action( 'multilingualpress.save_modules', $_POST );
 
 		wp_safe_redirect( add_query_arg( 'message', 'updated', $this->settings_page->url() ) );
 		\Inpsyde\MultilingualPress\call_exit();

@@ -122,7 +122,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 */
 	public function title() {
 
-		return __( 'Custom Post Type Support Settings', 'multilingual-press' );
+		return __( 'Custom Post Type Support', 'multilingual-press' );
 	}
 
 	/**@todo With WordPress 4.6 + 2, use WP_Post_Type as type hint.

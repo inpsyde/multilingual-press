@@ -199,7 +199,7 @@ final class Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		$this->view->render( (array) $args, (array) $instance );
+		$this->view->render( (array) $args, (array) $instance, $this->id_base );
 	}
 
 	/**

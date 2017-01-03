@@ -2,23 +2,18 @@
 
 namespace Inpsyde\MultilingualPress\Module\UserAdminLanguage;
 
+use Inpsyde\MultilingualPress\Common\ContextAwareFilter;
+use Inpsyde\MultilingualPress\Common\Filter;
+
 /**
  * User admin language locale filter.
  *
  * @package Inpsyde\MultilingualPress\Module\UserAdminLanguage
  * @since   3.0.0
  */
-class LocaleFilter {
+final class LocaleFilter implements Filter {
 
-	/**
-	 * @var callable
-	 */
-	private $filter;
-
-	/**
-	 * @var string
-	 */
-	private $hook = 'locale';
+	use ContextAwareFilter;
 
 	/**
 	 * @var LanguageRepository
@@ -36,43 +31,9 @@ class LocaleFilter {
 
 		$this->language_repository = $language_repository;
 
-		$this->filter = [ $this, 'filter_locale' ];
-	}
+		$this->callback = [ $this, 'filter_locale' ];
 
-	/**
-	 * Removes the filter.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not the filter was removed successfully.
-	 */
-	public function disable() {
-
-		if ( has_filter( $this->hook, $this->filter ) ) {
-			remove_filter( $this->hook, $this->filter );
-
-			return true;
-		};
-
-		return false;
-	}
-
-	/**
-	 * Adds the filter.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not the filter was added successfully.
-	 */
-	public function enable() {
-
-		if ( has_filter( $this->hook, $this->filter ) ) {
-			return false;
-		};
-
-		add_filter( $this->hook, $this->filter );
-
-		return true;
+		$this->hook = 'locale';
 	}
 
 	/**

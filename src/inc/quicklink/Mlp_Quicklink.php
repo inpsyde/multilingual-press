@@ -2,18 +2,14 @@
 
 use Inpsyde\MultilingualPress\API\Translations as TranslationsAPI;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
-use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Request;
-use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxView;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
-use Inpsyde\MultilingualPress\Module\Module;
-use Inpsyde\MultilingualPress\Module\ModuleManager;
 
 /**
  * Displays an element link flyout tab in the frontend.
  */
-class Mlp_Quicklink implements Mlp_Updatable {
+class Mlp_Quicklink {
 
 	/**
 	 * @var AssetManager
@@ -26,42 +22,24 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	private $translations_api;
 
 	/**
-	 * @var ModuleManager
-	 */
-	private $module_manager;
-
-	/**
-	 * @var Nonce
-	 */
-	private $nonce;
-
-	/**
 	 * @var Translation[]
 	 */
-	private $translations = [];
+	private $translations;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
-	 * @param ModuleManager              $module_manager Module manager object.
 	 * @param TranslationsAPI $translations_api   Translations API object.
 	 * @param AssetManager               $asset_manager  Asset manager object.
-	 * @param Nonce                      $nonce          Nonce object.
 	 */
 	public function __construct(
-		ModuleManager $module_manager,
 		TranslationsAPI $translations_api,
-		AssetManager $asset_manager,
-		Nonce $nonce
+		AssetManager $asset_manager
 	) {
-
-		$this->module_manager = $module_manager;
 
 		$this->translations_api = $translations_api;
 
 		$this->asset_manager = $asset_manager;
-
-		$this->nonce = $nonce;
 	}
 
 	/**
@@ -71,150 +49,9 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 */
 	public function initialize( ) {
 
-		// Quit here if module is turned off
-		if ( ! $this->register_setting() ) {
-			return;
-		}
-
-		if ( is_admin() ) {
-			add_action( 'multilingualpress.after_module_list', [ $this, 'draw_options_page_form_fields' ] );
-
-			// Use this hook to handle the user input of your modules' options page form fields
-			add_filter( 'mlp_modules_save_fields', [ $this, 'save_options_page_form_fields' ] );
-		} else {
-			if ( ! empty( $_POST['mlp_quicklink_select'] ) ) {
-				$this->redirect_quick_link( (string) $_POST['mlp_quicklink_select'] );
-			}
-
-			add_action( 'wp_head', [ $this, 'load_style' ], 0 );
-
+		if ( ! is_admin() ) {
 			add_filter( 'the_content', [ $this, 'frontend_tab' ] );
 		}
-	}
-
-	/**
-	 * Requires the stylesheet.
-	 *
-	 * @return bool
-	 */
-	public function load_style() {
-
-		$translations = $this->get_translations();
-		if ( ! $translations ) {
-			return false;
-		}
-
-		$theme_support = get_theme_support( 'multilingualpress' );
-		if ( ! empty( $theme_support[0]['quicklink_style'] ) ) {
-			return false;
-		}
-
-		return $this->asset_manager->enqueue_style( 'multilingualpress' );
-	}
-
-	/**
-	 * Nothing to do here.
-	 *
-	 * @param string $name
-	 *
-	 * @return void
-	 */
-	public function update( $name ) {
-	}
-
-	/**
-	 * Registers the module.
-	 *
-	 * @return bool
-	 */
-	private function register_setting() {
-
-		return $this->module_manager->register_module( new Module( 'quicklinks', [
-			'description' => __( 'Show link to translations in post content.', 'multilingual-press' ),
-			'name'        => __( 'Quicklinks', 'multilingual-press' ),
-			'active'      => false,
-		] ) );
-	}
-
-	/**
-	 * Catches quicklink submissions and redirects if the URL is valid.
-	 *
-	 * @since 1.0.4
-	 *
-	 * @param string $url The URL that is to be redirected to.
-	 *
-	 * @return void
-	 */
-	private function redirect_quick_link( $url ) {
-
-		$callback = [ $this, 'extend_allowed_hosts' ];
-		add_filter( 'allowed_redirect_hosts', $callback, 10, 2 );
-
-		$url = wp_validate_redirect( $url, false );
-
-		remove_filter( 'allowed_redirect_hosts', $callback );
-
-		if ( ! $url ) {
-			return;
-		}
-
-		// Force GET request.
-		wp_redirect( $url, 303 );
-		\Inpsyde\MultilingualPress\call_exit();
-	}
-
-	/**
-	 * Adds all domains of the network to the allowed hosts.
-	 *
-	 * @wp-hook allowed_redirect_hosts
-	 *
-	 * @since 1.0.4
-	 *
-	 * @param string[] $home_hosts  Array with one entry: the host of home_url().
-	 * @param string   $remote_host Host name of the URL to validate.
-	 *
-	 * @return string[]
-	 */
-	public function extend_allowed_hosts( array $home_hosts, $remote_host ) {
-
-		// Network with sub directories.
-		if ( in_array( $remote_host, $home_hosts, true ) ) {
-			return $home_hosts;
-		}
-
-		/** @var wpdb $wpdb */
-		global $wpdb;
-
-		$query = "
-SELECT domain
-FROM {$wpdb->blogs}
-WHERE site_id = %d
-	AND public   = '1'
-	AND archived = '0'
-	AND mature   = '0'
-	AND spam     = '0'
-	AND deleted  = '0'
-ORDER BY domain DESC";
-		$query = $wpdb->prepare( $query, $wpdb->siteid );
-
-		$domains = $wpdb->get_col( $query );
-
-		$allowed_hosts = array_merge( $home_hosts, $domains );
-		$allowed_hosts = array_unique( $allowed_hosts );
-
-		return $allowed_hosts;
-	}
-
-	/**
-	 * Deletes the according site option on module deactivation.
-	 *
-	 * @since 0.1
-	 *
-	 * @return void
-	 */
-	public static function deactivate_module() {
-
-		delete_site_option( 'inpsyde_multilingual_quicklink_options' );
 	}
 
 	/**
@@ -228,25 +65,24 @@ ORDER BY domain DESC";
 	 */
 	public function frontend_tab( $content ) {
 
-		/** @var Translation[] $translations */
 		$translations = $this->get_translations();
 		if ( ! $translations ) {
 			return $content;
 		}
+
+		$this->asset_manager->enqueue_style( 'multilingualpress' );
 
 		$current_blog_id = get_current_blog_id();
 
 		$translated = [];
 
 		foreach ( $translations as $site => $translation ) {
-			if ( $current_blog_id === $site ) {
-				continue;
+			if ( $current_blog_id !== $site ) {
+				$translated[ $translation->remote_url() ] = $translation->language();
 			}
-
-			$translated[ $translation->remote_url() ] = $translation->language();
 		}
 
-		// Get post link option.
+		// TODO: Use repository here.
 		$option = get_site_option( 'inpsyde_multilingual_quicklink_options' );
 
 		$position = isset( $option['mlp_quicklink_position'] ) ? $option['mlp_quicklink_position'] : 'tr';
@@ -269,17 +105,15 @@ ORDER BY domain DESC";
 	 */
 	private function get_translations() {
 
-		if ( ! is_singular() ) {
-			return [];
-		}
-
-		if ( $this->translations ) {
+		if ( isset( $this->translations ) ) {
 			return $this->translations;
 		}
 
-		$this->translations = $this->translations_api->get_translations( [
-			'type' => Request::TYPE_SINGULAR,
-		] );
+		$this->translations = is_singular()
+			? $this->translations_api->get_translations( [
+				'type' => Request::TYPE_SINGULAR,
+			] )
+			: [];
 
 		return $this->translations;
 	}
@@ -407,44 +241,5 @@ HTML;
 			$selections,
 			$position
 		);
-	}
-
-	/**
-	 * Displays the module options page form fields.
-	 *
-	 * @since 0.1
-	 *
-	 * @return void
-	 */
-	public function draw_options_page_form_fields() {
-
-		$data = new Mlp_Quicklink_Positions_Data( $this->nonce );
-
-		$box = new SettingsBoxView( $data );
-		$box->render();
-	}
-
-	/**
-	 * Saves module user input.
-	 *
-	 * @since 0.1
-	 *
-	 * @return void
-	 */
-	public function save_options_page_form_fields() {
-
-		if ( ! $this->nonce->is_valid() ) {
-			return;
-		}
-
-		// Get current site options
-		$options = get_site_option( 'inpsyde_multilingual_quicklink_options' );
-
-		// Get values from submitted form
-		$options['mlp_quicklink_position'] = isset( $_POST['quicklink-position'] )
-			? esc_attr( $_POST['quicklink-position'] )
-			: false;
-
-		update_site_option( 'inpsyde_multilingual_quicklink_options', $options );
 	}
 }

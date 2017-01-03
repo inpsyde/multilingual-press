@@ -57,8 +57,8 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 		$container['multilingualpress.post_type_support_settings_updater'] = function ( Container $container ) {
 
 			return new PostTypeSupportSettingsUpdater(
-				$container['multilingualpress.post_type_support_settings_nonce'],
-				$container['multilingualpress.post_type_repository']
+				$container['multilingualpress.post_type_repository'],
+				$container['multilingualpress.post_type_support_settings_nonce']
 			);
 		};
 	}
@@ -88,7 +88,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			} );
 
 			$updater = $container['multilingualpress.post_type_support_settings_updater'];
-			add_action( 'mlp_modules_save_fields', [ $updater, 'update_settings' ] );
+			add_action( 'multilingualpress.save_modules', [ $updater, 'update_settings' ] );
 
 			add_filter( 'mlp_allowed_post_types', function ( array $post_types ) use ( $repository ) {
 
@@ -96,8 +96,8 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			} );
 
 			$url_filter = $container['multilingualpress.post_type_link_url_filter'];
-			add_action( 'mlp_before_link', [ $url_filter, 'enable' ] );
-			add_action( 'mlp_after_link', [ $url_filter, 'disable' ] );
+			add_action( 'multilingualpress.generate_permalink', [ $url_filter, 'enable' ] );
+			add_action( 'multilingualpress.generated_permalink', [ $url_filter, 'disable' ] );
 		} );
 	}
 

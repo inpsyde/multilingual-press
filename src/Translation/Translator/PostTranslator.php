@@ -82,9 +82,27 @@ final class PostTranslator implements Translator {
 		}
 
 		if ( 'publish' === $post->post_status || current_user_can( 'edit_post', $post_id ) ) {
-			do_action( 'mlp_before_link' );
+			$post_id = (int) $post_id;
+
+			/**
+			 * Fires right before MultilingualPress generates a permalink.
+			 *
+			 * @since 3.0.0
+			 *
+			 * @param int $object_id Object ID.
+			 */
+			do_action( 'multilingualpress.generate_permalink', $post_id );
+
 			$url = get_permalink( $post_id );
-			do_action( 'mlp_after_link' );
+
+			/**
+			 * Fires right after MultilingualPress generated a permalink.
+			 *
+			 * @since 3.0.0
+			 *
+			 * @param int $object_id Object ID.
+			 */
+			do_action( 'multilingualpress.generated_permalink', $post_id );
 
 			return [
 				'remote_title' => get_the_title( $post_id ),

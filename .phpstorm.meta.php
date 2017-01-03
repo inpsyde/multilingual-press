@@ -34,7 +34,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.plugin_settings_updater' instanceof \Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPage\PluginSettingsUpdater,
 			'multilingualpress.post_request_data_manipulator' instanceof \Inpsyde\MultilingualPress\Translation\RequestDataManipulator,
 			'multilingualpress.post_translator' instanceof \Inpsyde\MultilingualPress\Translation\Translator,
-			'multilingualpress.post_type_link_url_filter' instanceof \Inpsyde\MultilingualPress\Module\CustomPostTypeSupport\URLFilter,
+			'multilingualpress.post_type_link_url_filter' instanceof \Inpsyde\MultilingualPress\Common\Filter,
 			'multilingualpress.post_type_repository' instanceof \Inpsyde\MultilingualPress\Module\CustomPostTypeSupport\PostTypeRepository,
 			'multilingualpress.post_type_support_settings_box' instanceof \Inpsyde\MultilingualPress\Common\Setting\SettingsBoxViewModel,
 			'multilingualpress.post_type_support_settings_nonce' instanceof \Inpsyde\MultilingualPress\Common\Nonce\Nonce,
@@ -73,7 +73,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.untranslated_posts_repository' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostRepository,
 			'multilingualpress.update_plugin_settings_nonce' instanceof \Inpsyde\MultilingualPress\Common\Nonce\Nonce,
 			'multilingualpress.updater' instanceof \Inpsyde\MultilingualPress\Installation\Updater,
-			'multilingualpress.user_admin_language_locale_filter' instanceof \Inpsyde\MultilingualPress\Module\UserAdminLanguage\LocaleFilter,
+			'multilingualpress.user_admin_language_locale_filter' instanceof \Inpsyde\MultilingualPress\Common\Filter,
 			'multilingualpress.user_admin_language_repository' instanceof \Inpsyde\MultilingualPress\Module\UserAdminLanguage\LanguageRepository,
 		],
 		\Inpsyde\MultilingualPress\MultilingualPress::resolve( '' ) => [

@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
+use Inpsyde\MultilingualPress\Common\ContextAwareFilter;
+use Inpsyde\MultilingualPress\Common\Filter;
 use WP_Post;
 
 /**
@@ -10,17 +12,9 @@ use WP_Post;
  * @package Inpsyde\MultilingualPress\Module\CustomPostTypeSupport
  * @since   3.0.0
  */
-class URLFilter {
+final class URLFilter implements Filter {
 
-	/**
-	 * @var callable
-	 */
-	private $filter;
-
-	/**
-	 * @var string
-	 */
-	private $hook = 'post_type_link';
+	use ContextAwareFilter;
 
 	/**
 	 * @var PostTypeRepository
@@ -38,43 +32,11 @@ class URLFilter {
 
 		$this->post_type_repository = $post_type_repository;
 
-		$this->filter = [ $this, 'unprettify_permalink' ];
-	}
+		$this->accepted_args = 2;
 
-	/**
-	 * Removes the filter.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not the filter was removed successfully.
-	 */
-	public function disable() {
+		$this->callback = [ $this, 'unprettify_permalink' ];
 
-		if ( has_filter( $this->hook, $this->filter ) ) {
-			remove_filter( $this->hook, $this->filter );
-
-			return true;
-		};
-
-		return false;
-	}
-
-	/**
-	 * Adds the filter.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not the filter was added successfully.
-	 */
-	public function enable() {
-
-		if ( has_filter( $this->hook, $this->filter ) ) {
-			return false;
-		};
-
-		add_filter( $this->hook, $this->filter, 10, 2 );
-
-		return true;
+		$this->hook = 'post_type_link';
 	}
 
 	/**

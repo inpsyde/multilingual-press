@@ -60,6 +60,7 @@ function bootstrap() {
 		->register_service_provider( new InstallationServiceProvider() )
 		->register_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() )
 		->register_service_provider( new Module\CustomPostTypeSupport\ServiceProvider() )
+		->register_service_provider( new Module\Quicklinks\ServiceProvider() )
 		->register_service_provider( new Module\Trasher\ServiceProvider() )
 		->register_service_provider( new Module\UserAdminLanguage\ServiceProvider() )
 		->register_service_provider( new NavMenuServiceProvider() )
