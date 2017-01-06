@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPage;
+namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -9,7 +9,7 @@ use Inpsyde\MultilingualPress\Module\ModuleManager;
 /**
  * Plugin settings updater.
  *
- * @package Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPage
+ * @package Inpsyde\MultilingualPress\Core\Admin
  * @since   3.0.0
  */
 class PluginSettingsUpdater {

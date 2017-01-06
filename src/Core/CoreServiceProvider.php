@@ -7,7 +7,8 @@ use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\ConditionalAwareRequest;
-use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPage;
+use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
+use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsUpdater;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipController;
@@ -73,7 +74,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.plugin_settings_page_view'] = function ( Container $container ) {
 
-			return new PluginSettingsPage\View(
+			return new PluginSettingsPageView(
 				$container['multilingualpress.module_manager'],
 				$container['multilingualpress.update_plugin_settings_nonce'],
 				$container['multilingualpress.asset_manager']
@@ -82,7 +83,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.plugin_settings_updater'] = function ( Container $container ) {
 
-			return new PluginSettingsPage\PluginSettingsUpdater(
+			return new PluginSettingsUpdater(
 				$container['multilingualpress.module_manager'],
 				$container['multilingualpress.update_plugin_settings_nonce'],
 				$container['multilingualpress.plugin_settings_page']
@@ -188,7 +189,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		add_action( 'plugins_loaded', [ $setting_page, 'register' ], 8 );
 
 		add_action(
-			'admin_post_' . PluginSettingsPage\PluginSettingsUpdater::ACTION,
+			'admin_post_' . PluginSettingsUpdater::ACTION,
 			[ $container['multilingualpress.plugin_settings_updater'], 'update_settings' ]
 		);
 
@@ -258,13 +259,13 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			add_action( 'template_redirect', function () use ( $translations ) {
 
 				if ( ! is_paged() ) {
-					( new FrontEnd\AlternateLanguages\HTTPHeaders( $translations ) )->send();
+					( new FrontEnd\AlternateLanguageHTTPHeaders( $translations ) )->send();
 				}
 			} );
 			add_action( 'wp_head', function () use ( $translations ) {
 
 				if ( ! is_paged() ) {
-					( new FrontEnd\AlternateLanguages\HTMLLinkTags( $translations ) )->render();
+					( new FrontEnd\AlternateLanguageHTMLLinkTags( $translations ) )->render();
 				}
 			} );
 		}

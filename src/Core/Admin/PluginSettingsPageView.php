@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPage;
+namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageView;
@@ -11,10 +11,10 @@ use Inpsyde\MultilingualPress\Module\ModuleManager;
 /**
  * Plugin settings page view.
  *
- * @package Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPage
+ * @package Inpsyde\MultilingualPress\Core\Admin
  * @since   3.0.0
  */
-final class View implements SettingsPageView {
+final class PluginSettingsPageView implements SettingsPageView {
 
 	/**
 	 * @var AssetManager

@@ -1,16 +1,16 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguages;
+namespace Inpsyde\MultilingualPress\Core\FrontEnd;
 
 use Inpsyde\MultilingualPress\API\Translations;
 
 /**
  * Alternate language HTTP headers.
  *
- * @package Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguages
+ * @package Inpsyde\MultilingualPress\Core\FrontEnd
  * @since   3.0.0
  */
-class HTTPHeaders {
+class AlternateLanguageHTTPHeaders {
 
 	/**
 	 * @var Translations
