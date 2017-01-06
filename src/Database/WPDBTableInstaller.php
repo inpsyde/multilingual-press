@@ -2,7 +2,7 @@
 
 namespace Inpsyde\MultilingualPress\Database;
 
-use Inpsyde\MultilingualPress\Database\Exception\InvalidTableException;
+use Inpsyde\MultilingualPress\Database\Exception\InvalidTable;
 use wpdb;
 
 /**
@@ -51,13 +51,13 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return bool Whether or not the table was installed successfully.
 	 *
-	 * @throws InvalidTableException if a table was neither passed, nor injected via the constructor.
+	 * @throws InvalidTable if a table was neither passed, nor injected via the constructor.
 	 */
 	public function install( Table $table = null ) {
 
 		$table = $table ?: $this->table;
 		if ( ! $table ) {
-			throw InvalidTableException::for_action( 'install' );
+			throw InvalidTable::for_action( 'install' );
 		}
 
 		$table_name = $table->name();
@@ -95,13 +95,13 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return bool Whether or not the table was uninstalled successfully.
 	 *
-	 * @throws InvalidTableException if a table was neither passed, nor injected via the constructor.
+	 * @throws InvalidTable if a table was neither passed, nor injected via the constructor.
 	 */
 	public function uninstall( Table $table = null ) {
 
 		$table = $table ?: $this->table;
 		if ( ! $table ) {
-			throw InvalidTableException::for_action( 'uninstall' );
+			throw InvalidTable::for_action( 'uninstall' );
 		}
 
 		return false !== $this->db->query( 'DROP TABLE IF EXISTS ' . $table->name() );

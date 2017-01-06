@@ -10,7 +10,7 @@ use Exception;
  * @package Inpsyde\MultilingualPress\Service\Exception
  * @since   3.0.0
  */
-class ContainerValueNotSetException extends Exception {
+class ValueNotSet extends Exception {
 
 	/**
 	 * Returns a new exception object.

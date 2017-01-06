@@ -5,12 +5,12 @@ namespace Inpsyde\MultilingualPress\Service\Exception;
 use Exception;
 
 /**
- * Exception to be thrown when a locked container is to be manipulated.
+ * Exception to be thrown when a value that has already been set is to be manipulated.
  *
  * @package Inpsyde\MultilingualPress\Service\Exception
  * @since   3.0.0
  */
-class ContainerLockedException extends Exception {
+class ValueAlreadySet extends Exception {
 
 	/**
 	 * Returns a new exception object.
@@ -18,14 +18,14 @@ class ContainerLockedException extends Exception {
 	 * @since 3.0.0
 	 *
 	 * @param string $name   The name of the value or factory callback.
-	 * @param string $action Optional. Action to be performed. Defaults to 'set'.
+	 * @param string $action Optional. Action to be performed. Defaults to 'extend'.
 	 *
 	 * @return static Exception object.
 	 */
-	public static function for_name( $name, $action = 'set' ) {
+	public static function for_name( $name, $action = 'extend' ) {
 
 		return new static( sprintf(
-			'Cannot %2$s "%1$s". Manipulating a locked container is not allowed.',
+			'Cannot %2$s "%1$s". There already is a value with this name.',
 			$name,
 			$action
 		) );

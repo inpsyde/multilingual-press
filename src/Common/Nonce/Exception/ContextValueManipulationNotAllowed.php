@@ -10,7 +10,7 @@ use Exception;
  * @package Inpsyde\MultilingualPress\Common\Nonce\Exception
  * @since   3.0.0
  */
-class ContextValueManipulationNotAllowedException extends Exception {
+class ContextValueManipulationNotAllowed extends Exception {
 
 	/**
 	 * Returns a new exception object.

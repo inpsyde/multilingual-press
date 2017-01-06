@@ -2,8 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Module;
 
-use Inpsyde\MultilingualPress\Module\Exception\InvalidModuleException;
-use Inpsyde\MultilingualPress\Module\Exception\ModuleAlreadyRegisteredException;
+use Inpsyde\MultilingualPress\Module\Exception\InvalidModule;
+use Inpsyde\MultilingualPress\Module\Exception\ModuleAlreadyRegistered;
 
 /**
  * Module manager implementation using a network option for storage.
@@ -51,12 +51,12 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return Module Module object.
 	 *
-	 * @throws InvalidModuleException if there is no module with the given ID.
+	 * @throws InvalidModule if there is no module with the given ID.
 	 */
 	public function activate_module( $id ) {
 
 		if ( ! $this->has_module( $id ) ) {
-			throw InvalidModuleException::for_id( $id, 'activate' );
+			throw InvalidModule::for_id( $id, 'activate' );
 		}
 
 		$this->states[ $id ] = true;
@@ -73,12 +73,12 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return Module Module object.
 	 *
-	 * @throws InvalidModuleException if there is no module with the given ID.
+	 * @throws InvalidModule if there is no module with the given ID.
 	 */
 	public function deactivate_module( $id ) {
 
 		if ( ! $this->has_module( $id ) ) {
-			throw InvalidModuleException::for_id( $id, 'deactivate' );
+			throw InvalidModule::for_id( $id, 'deactivate' );
 		}
 
 		$this->states[ $id ] = false;
@@ -95,12 +95,12 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return Module Module object.
 	 *
-	 * @throws InvalidModuleException if there is no module with the given ID.
+	 * @throws InvalidModule if there is no module with the given ID.
 	 */
 	public function get_module( $id ) {
 
 		if ( ! $this->has_module( $id ) ) {
-			throw InvalidModuleException::for_id( $id, 'read' );
+			throw InvalidModule::for_id( $id, 'read' );
 		}
 
 		return $this->modules[ $id ];
@@ -181,14 +181,14 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return bool Whether or not the module is active.
 	 *
-	 * @throws ModuleAlreadyRegisteredException if a module with the ID of the given module already has been registered.
+	 * @throws ModuleAlreadyRegistered if a module with the ID of the given module already has been registered.
 	 */
 	public function register_module( Module $module ) {
 
 		$id = $module->id();
 
 		if ( $this->has_module( $id ) ) {
-			throw ModuleAlreadyRegisteredException::for_id( $id, 'register' );
+			throw ModuleAlreadyRegistered::for_id( $id, 'register' );
 		}
 
 		if ( isset( $this->states[ $id ] ) ) {

@@ -1,17 +1,17 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\NavMenu\MetaBox;
+namespace Inpsyde\MultilingualPress\NavMenu;
 
 use Inpsyde\MultilingualPress\Common\Admin\MetaBoxModel;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBoxView;
 
 /**
- * Language meta box view.
+ * Languages meta box view.
  *
- * @package Inpsyde\MultilingualPress\NavMenu\MetaBox
+ * @package Inpsyde\MultilingualPress\NavMenu
  * @since   3.0.0
  */
-final class View implements MetaBoxView {
+final class LanguagesMetaBoxView implements MetaBoxView {
 
 	/**
 	 * @var string

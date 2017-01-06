@@ -4,8 +4,6 @@ namespace Inpsyde\MultilingualPress\NavMenu;
 
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
-use Inpsyde\MultilingualPress\NavMenu\MetaBox\Model as MetaBoxModel;
-use Inpsyde\MultilingualPress\NavMenu\MetaBox\View as MetaBoxView;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 
@@ -58,12 +56,12 @@ final class NavMenuServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.nav_menu_meta_box_model'] = function () {
 
-			return new MetaBoxModel();
+			return new LanguagesMetaBoxModel();
 		};
 
 		$container['multilingualpress.nav_menu_meta_box_view'] = function ( Container $container ) {
 
-			return new MetaBoxView( $container['multilingualpress.nav_menu_meta_box_model'] );
+			return new LanguagesMetaBoxView( $container['multilingualpress.nav_menu_meta_box_model'] );
 		};
 	}
 

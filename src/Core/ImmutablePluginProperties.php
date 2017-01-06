@@ -3,8 +3,8 @@
 namespace Inpsyde\MultilingualPress\Core;
 
 use Inpsyde\MultilingualPress\Common\PluginProperties;
-use Inpsyde\MultilingualPress\Core\Exception\PropertyManipulationNotAllowedException;
-use Inpsyde\MultilingualPress\Core\Exception\PropertyNotSetException;
+use Inpsyde\MultilingualPress\Core\Exception\PropertyManipulationNotAllowed;
+use Inpsyde\MultilingualPress\Core\Exception\PropertyNotSet;
 
 /**
  * Immutable plugin properties implementation.
@@ -71,12 +71,12 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return mixed The value of the property with the given name.
 	 *
-	 * @throws PropertyNotSetException if there is no property with the given name.
+	 * @throws PropertyNotSet if there is no property with the given name.
 	 */
 	public function offsetGet( $name ) {
 
 		if ( ! $this->offsetExists( $name ) ) {
-			throw PropertyNotSetException::for_name( $name, 'read' );
+			throw PropertyNotSet::for_name( $name, 'read' );
 		}
 
 		return $this->properties[ $name ];
@@ -94,11 +94,11 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return void
 	 *
-	 * @throws PropertyManipulationNotAllowedException
+	 * @throws PropertyManipulationNotAllowed
 	 */
 	public function offsetSet( $name, $value ) {
 
-		throw PropertyManipulationNotAllowedException::for_name( $name, 'set' );
+		throw PropertyManipulationNotAllowed::for_name( $name, 'set' );
 	}
 
 	/**
@@ -112,11 +112,11 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return void
 	 *
-	 * @throws PropertyManipulationNotAllowedException
+	 * @throws PropertyManipulationNotAllowed
 	 */
 	public function offsetUnset( $name ) {
 
-		throw PropertyManipulationNotAllowedException::for_name( $name, 'unset' );
+		throw PropertyManipulationNotAllowed::for_name( $name, 'unset' );
 	}
 
 	/**

@@ -2,8 +2,9 @@
 
 namespace Inpsyde\MultilingualPress;
 
-use BadMethodCallException;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+use Inpsyde\MultilingualPress\Core\Exception\InstanceAlreadyBootstrapped;
+use Inpsyde\MultilingualPress\Core\Exception\CannotResolveName;
 use Inpsyde\MultilingualPress\Installation\SystemChecker;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
@@ -67,15 +68,12 @@ final class MultilingualPress {
 	 *
 	 * @return mixed The value or factory callback.
 	 *
-	 * @throws BadMethodCallException if called too early.
+	 * @throws CannotResolveName if there is no container available (i.e., MultilingualPress has not been intitialised).
 	 */
 	public static function resolve( $name ) {
 
 		if ( ! static::$container instanceof Container ) {
-			throw new BadMethodCallException( sprintf(
-				'Cannot resolve "%s". MultilingualPress has not yet been initialised.',
-				$name
-			) );
+			throw CannotResolveName::for_name( $name );
 		}
 
 		return static::$container[ $name ];
@@ -112,14 +110,12 @@ final class MultilingualPress {
 	 *
 	 * @return bool Whether or not MultilingualPress was bootstrapped successfully.
 	 *
-	 * @throws BadMethodCallException if called on a MultilingualPress instance that has already been bootstrapped.
+	 * @throws InstanceAlreadyBootstrapped if called on a MultilingualPress instance that has already been bootstrapped.
 	 */
 	public function bootstrap() {
 
 		if ( $this->is_bootstrapped ) {
-			throw new BadMethodCallException(
-				'Cannot bootstrap a MultilingualPress instance that has already been bootstrapped.'
-			);
+			throw new InstanceAlreadyBootstrapped();
 		}
 
 		/**

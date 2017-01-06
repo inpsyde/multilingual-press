@@ -10,7 +10,7 @@ use Exception;
  * @package Inpsyde\MultilingualPress\Database\Exception
  * @since   3.0.0
  */
-class InvalidTableException extends Exception {
+class InvalidTable extends Exception {
 
 	/**
 	 * Returns a new exception object.

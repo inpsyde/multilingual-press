@@ -1,16 +1,16 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\NavMenu\MetaBox;
+namespace Inpsyde\MultilingualPress\NavMenu;
 
 use Inpsyde\MultilingualPress\Common\Admin\MetaBoxModel;
 
 /**
- * Language meta box model.
+ * Languages meta box model.
  *
- * @package Inpsyde\MultilingualPress\NavMenu\MetaBox
+ * @package Inpsyde\MultilingualPress\NavMenu
  * @since   3.0.0
  */
-final class Model implements MetaBoxModel {
+final class LanguagesMetaBoxModel implements MetaBoxModel {
 
 	/**
 	 * Returns the meta box ID.

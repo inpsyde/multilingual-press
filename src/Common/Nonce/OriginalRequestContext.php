@@ -2,8 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Common\Nonce;
 
-use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueManipulationNotAllowedException;
-use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueNotSetException;
+use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueManipulationNotAllowed;
+use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueNotSet;
 
 /**
  * Nonce context implementation wrapping around GET and POST request data using filter_input().
@@ -73,7 +73,7 @@ final class OriginalRequestContext implements Context {
 	 *
 	 * @return mixed The value with the given name.
 	 *
-	 * @throws ContextValueNotSetException if there is no value with the given name.
+	 * @throws ContextValueNotSet if there is no value with the given name.
 	 */
 	public function offsetGet( $name ) {
 
@@ -81,7 +81,7 @@ final class OriginalRequestContext implements Context {
 			return $this->cache[ $name ];
 		}
 
-		throw ContextValueNotSetException::for_name( $name, 'read' );
+		throw ContextValueNotSet::for_name( $name, 'read' );
 	}
 
 	/**
@@ -96,11 +96,11 @@ final class OriginalRequestContext implements Context {
 	 *
 	 * @return void
 	 *
-	 * @throws ContextValueManipulationNotAllowedException
+	 * @throws ContextValueManipulationNotAllowed
 	 */
 	public function offsetSet( $name, $value ) {
 
-		throw ContextValueManipulationNotAllowedException::for_name( $name, 'set' );
+		throw ContextValueManipulationNotAllowed::for_name( $name, 'set' );
 	}
 
 	/**
@@ -114,10 +114,10 @@ final class OriginalRequestContext implements Context {
 	 *
 	 * @return void
 	 *
-	 * @throws ContextValueManipulationNotAllowedException
+	 * @throws ContextValueManipulationNotAllowed
 	 */
 	public function offsetUnset( $name ) {
 
-		throw ContextValueManipulationNotAllowedException::for_name( $name, 'unset' );
+		throw ContextValueManipulationNotAllowed::for_name( $name, 'unset' );
 	}
 }

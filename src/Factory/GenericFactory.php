@@ -3,7 +3,7 @@
 namespace Inpsyde\MultilingualPress\Factory;
 
 use Inpsyde\MultilingualPress\Common\Factory;
-use Inpsyde\MultilingualPress\Factory\Exception\InvalidClassException;
+use Inpsyde\MultilingualPress\Factory\Exception\InvalidClass;
 use InvalidArgumentException;
 use ReflectionClass;
 
@@ -125,7 +125,7 @@ final class GenericFactory implements Factory {
 	 *
 	 * @return void
 	 *
-	 * @throws InvalidClassException if the class with the given name is invalid with respect to the defined base.
+	 * @throws InvalidClass if the class with the given name is invalid with respect to the defined base.
 	 */
 	private function check_class( $class ) {
 
@@ -133,11 +133,7 @@ final class GenericFactory implements Factory {
 			! is_subclass_of( $class, $this->base, true )
 			&& ( ! $this->base_is_class || $class !== $this->base )
 		) {
-			throw new InvalidClassException( sprintf(
-				'The class "%1$s" is invalid with respect to the defined base "%2$s".',
-				$class,
-				$this->base
-			) );
+			throw InvalidClass::for_base( $class, $this->base );
 		}
 	}
 }
