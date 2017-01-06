@@ -20,6 +20,42 @@ interface SettingsRepository {
 	const OPTION = 'inpsyde_multilingual_quicklink_options';
 
 	/**
+	 * Position value.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const POSITION_BOTTOM_LEFT = 'bl';
+
+	/**
+	 * Position value.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const POSITION_BOTTOM_RIGHT = 'br';
+
+	/**
+	 * Position value.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const POSITION_TOP_LEFT = 'tl';
+
+	/**
+	 * Position value.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const POSITION_TOP_RIGHT = 'tr';
+
+	/**
 	 * Returns all available positions.
 	 *
 	 * @since 3.0.0

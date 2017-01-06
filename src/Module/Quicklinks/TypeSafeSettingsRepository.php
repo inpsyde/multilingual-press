@@ -26,10 +26,10 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 
 		if ( ! $this->available_positions ) {
 			$this->available_positions = [
-				'tl' => __( 'Top left', 'multilingual-press' ),
-				'tr' => __( 'Top right', 'multilingual-press' ),
-				'bl' => __( 'Bottom left', 'multilingual-press' ),
-				'br' => __( 'Bottom right', 'multilingual-press' ),
+				SettingsRepository::POSITION_TOP_LEFT     => __( 'Top left', 'multilingual-press' ),
+				SettingsRepository::POSITION_TOP_RIGHT    => __( 'Top right', 'multilingual-press' ),
+				SettingsRepository::POSITION_BOTTOM_LEFT  => __( 'Bottom left', 'multilingual-press' ),
+				SettingsRepository::POSITION_BOTTOM_RIGHT => __( 'Bottom right', 'multilingual-press' ),
 			];
 		}
 
@@ -56,7 +56,9 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 			return $settings['mlp_quicklink_position'];
 		}
 
-		return array_pop( $valid_positions );
+		return in_array( SettingsRepository::POSITION_TOP_RIGHT, $valid_positions, true )
+			? SettingsRepository::POSITION_TOP_RIGHT
+			: (string) array_pop( $valid_positions );
 	}
 
 	/**

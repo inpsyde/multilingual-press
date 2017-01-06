@@ -31,6 +31,15 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.quicklinks'] = function ( Container $container ) {
+
+			return new Quicklinks(
+				$container['multilingualpress.translations'],
+				$container['multilingualpress.quicklinks_settings_repository'],
+				$container['multilingualpress.asset_manager']
+			);
+		};
+
 		$container['multilingualpress.quicklinks_redirect_hosts_filter'] = function () {
 
 			return new RedirectHostsFilter();
@@ -94,12 +103,17 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 					[ $container['multilingualpress.quicklinks_settings_updater'], 'update_settings' ]
 				);
 			} else {
-				// TODO: Attach name as constant to some class (e.g., the front-end view).
-				if ( ! empty( $_POST['mlp_quicklink_select'] ) && is_string( $_POST['mlp_quicklink_select'] ) ) {
+				if ( ! empty( $_POST[ Quicklinks::NAME ] ) && is_string( $_POST[ Quicklinks::NAME ] ) ) {
 					$container['multilingualpress.quicklinks_redirector']->maybe_redirect(
-						$_POST['mlp_quicklink_select']
+						$_POST[ Quicklinks::NAME ]
 					);
 				}
+
+				add_filter(
+					'the_content',
+					[ $container['multilingualpress.quicklinks'], 'add_to_content' ],
+					PHP_INT_MAX
+				);
 			}
 		} );
 	}

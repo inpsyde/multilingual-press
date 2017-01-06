@@ -343,7 +343,6 @@ function get_linked_elements( array $args = [] ) {
 		'include_base' => $args['show_current_blog'],
 	] );
 	if ( $translations ) {
-
 		$translations = array_filter( $translations, function ( Translation $translation ) {
 
 			return (bool) $translation->remote_url();
@@ -508,17 +507,13 @@ function get_translations( $content_id = 0 ) {
 		'site_id'    => $site_id,
 		'content_id' => $content_id,
 	] );
-
-	if ( ! $translations ) {
-		return [];
-	}
-
 	unset( $translations[ $site_id ] );
+	if ( $translations ) {
+		$translations = array_filter( $translations, function ( Translation $translation ) {
 
-	$translations = array_filter( $translations, function ( Translation $translation ) {
-
-		return (bool) $translation->remote_url();
-	} );
+			return (bool) $translation->remote_url();
+		} );
+	}
 
 	if ( ! $translations ) {
 		return [];

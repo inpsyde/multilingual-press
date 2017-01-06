@@ -1,25 +1,32 @@
 .mlp-quicklinks {
-	max-width: 10em;
-	padding: 10px;
+	max-width: 50%;
 
-	&.bl,
-	&.tl {
+	&.mlp-quicklinks-position-bl,
+	&.mlp-quicklinks-position-tl {
 		float: left;
 		margin-right: 20px;
 	}
 
-	&.br,
-	&.tr {
+	&.mlp-quicklinks-position-br,
+	&.mlp-quicklinks-position-tr {
 		float: right;
 		margin-left: 20px;
 	}
 
-	&.bl,
-	&.br {
+	&.mlp-quicklinks-position-bl,
+	&.mlp-quicklinks-position-br {
+		margin-top: 20px;
 		@include clearfix();
 	}
-}
 
-.mlp-quicklinks-form  input {
-	font-size: .9em;
+	&.mlp-quicklinks-position-bl,
+	&.mlp-quicklinks-position-br {
+		margin-bottom: 20px;
+	}
+
+	[type="submit"] {
+		display: block;
+		margin: 10px auto 0;
+		min-width: 50%;
+	}
 }
