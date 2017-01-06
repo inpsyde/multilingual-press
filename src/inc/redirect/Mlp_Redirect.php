@@ -29,12 +29,10 @@ class Mlp_Redirect {
 	 *
 	 * @param ModuleManager $modules
 	 * @param Translations   $translations
-	 * @param                              $deprecated
 	 */
 	public function __construct(
 		ModuleManager $modules,
-		Translations $translations,
-		$deprecated
+		Translations $translations
 	) {
 
 		$this->modules = $modules;

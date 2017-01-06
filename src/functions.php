@@ -611,6 +611,32 @@ function nonce_field( Nonce $nonce, $with_referer = true ) {
 }
 
 /**
+ * Replaces in the language attributes for the html tag the WordPress language with the MultilingualPress language.
+ *
+ * @since   3.0.0
+ * @wp-hook language_attributes
+ *
+ * @param string $language_attributes The language attributes for the html tag.
+ *
+ * @return string The language attributes for the html tag.
+ */
+function replace_language_in_language_attributes( $language_attributes ) {
+
+	$site_language = \Inpsyde\MultilingualPress\get_current_site_language();
+	if ( ! $site_language ) {
+		return $language_attributes;
+	}
+
+	$language_attributes = preg_replace(
+		'/(lang=[\"\'])' . get_bloginfo( 'language' ) . '([\"\'])/',
+		'$1' . str_replace( '_', '-', $site_language ) . '$2',
+		$language_attributes
+	);
+
+	return $language_attributes;
+}
+
+/**
  * Checks if the site with the given ID exists (within the current or given network) and is not marked as deleted.
  *
  * @since 3.0.0

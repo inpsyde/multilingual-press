@@ -4,6 +4,7 @@ use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Type\Setting;
+use Inpsyde\MultilingualPress\MultilingualPress;
 
 /**
  * Class Mlp_Network_Site_Settings_Controller
@@ -15,13 +16,6 @@ use Inpsyde\MultilingualPress\Common\Type\Setting;
  * @license GPL
  */
 class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
-
-	/**
-	 * Plugin data
-	 *
-	 * @var Inpsyde_Property_List_Interface
-	 */
-	private $plugin_data;
 
 	/**
 	 * @var Setting
@@ -43,13 +37,10 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 *
 	 * @wp-hook plugins_loaded
 	 *
-	 * @param Inpsyde_Property_List_Interface $plugin_data Plugin data.
 	 * @param Setting                         $setting     Setting object.
 	 * @param Nonce                           $nonce       Nonce object.
 	 */
-	public function __construct( Inpsyde_Property_List_Interface $plugin_data, Setting $setting, Nonce $nonce ) {
-
-		$this->plugin_data = $plugin_data;
+	public function __construct( Setting $setting, Nonce $nonce ) {
 
 		$this->setting = $setting;
 
@@ -86,7 +77,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	public function enqueue_stylesheet() {
 
-		$this->plugin_data->get( 'assets' )->enqueue_style( 'multilingualpress-admin' );
+		MultilingualPress::resolve( 'multilingualpress.asset_manager' )->enqueue_style( 'multilingualpress-admin' );
 	}
 
 	/**
@@ -167,7 +158,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	private function update_related_blogs( $blog_id ) {
 
 		/** @var SiteRelations $relations */
-		$relations   = $this->plugin_data->get( 'site_relations' );
+		$relations   = MultilingualPress::resolve( 'multilingualpress.site_relations' );
 		$changed     = 0;
 		$new_related = $this->get_new_related_blogs();
 		$old_related = $relations->get_related_site_ids( $blog_id );
@@ -197,10 +188,10 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$this->show_update_message();
 
 		$view = new Mlp_Network_Site_Settings_Tab_Content(
-			$this->plugin_data->get( 'languages' ),
+			MultilingualPress::resolve( 'multilingualpress.languages' ),
 			$this->setting,
 			$this->get_blog_id(),
-			$this->plugin_data->get( 'site_relations' ),
+			MultilingualPress::resolve( 'multilingualpress.site_relations' ),
 			$this->nonce
 		);
 		$view->render_content();

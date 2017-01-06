@@ -162,7 +162,9 @@ final class MultilingualPress {
 		// TODO: Eventually remove/refactor according to new architecure as soon as the old controller got replaced.
 		class_exists( 'Multilingual_Press' ) or require __DIR__ . '/inc/Multilingual_Press.php';
 		$old_controller = new \Multilingual_Press( static::$container );
-		$old_controller->prepare_plugin_data();
+
+		// TODO: Check if the following really needs to be done regardles of MultilingualPress modules being not used.
+		add_action( 'wp_loaded', [ $old_controller, 'prepare_plugin_data' ] );
 
 		if ( $needs_modules ) {
 			load_plugin_textdomain( 'multilingual-press' );
@@ -350,6 +352,6 @@ final class MultilingualPress {
 	 */
 	private function bootstrap_front_end() {
 
-		// TODO: Move parts from the old controller to here.
+		add_filter( 'language_attributes', __NAMESPACE__ . '\\replace_language_in_language_attributes' );
 	}
 }

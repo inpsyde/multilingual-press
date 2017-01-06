@@ -10,7 +10,7 @@ class Mlp_Network_Site_Settings {
 	/**
 	 * Tab configuration.
 	 *
-	 * @var Inpsyde_Property_List_Interface
+	 * @var Mlp_Network_Site_Settings_Properties
 	 */
 	private $config;
 

@@ -2,6 +2,7 @@
 
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
+use Inpsyde\MultilingualPress\MultilingualPress;
 
 /**
  * Advanced translator.
@@ -19,13 +20,6 @@ class Mlp_Advanced_Translator {
 	private $basic_data;
 
 	/**
-	 * Passed by main controller.
-	 *
-	 * @var Inpsyde_Property_List_Interface
-	 */
-	private $plugin_data;
-
-	/**
 	 * The view class.
 	 *
 	 * @var Mlp_Advanced_Translator_View
@@ -34,12 +28,8 @@ class Mlp_Advanced_Translator {
 
 	/**
 	 * Constructor
-	 *
-	 * @param  Inpsyde_Property_List_Interface $data
 	 */
-	public function __construct( Inpsyde_Property_List_Interface $data ) {
-
-		$this->plugin_data = $data;
+	public function __construct() {
 
 		// Quit here if module is turned off
 		if ( ! $this->register_setting() ) {
@@ -71,8 +61,8 @@ class Mlp_Advanced_Translator {
 			null,
 			$base_data['basic_data'],
 			$base_data['allowed_post_types'],
-			$this->plugin_data->get( 'site_relations' ),
-			$this->plugin_data->get( 'nonce_factory' )
+			MultilingualPress::resolve( 'multilingualpress.site_relations' ),
+			MultilingualPress::resolve( 'multilingualpress.nonce_factory' )
 		);
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
@@ -152,7 +142,7 @@ class Mlp_Advanced_Translator {
 	private function register_setting() {
 
 		/** @var ModuleManager $module_manager */
-		$module_manager = $this->plugin_data->get( 'module_manager' );
+		$module_manager = MultilingualPress::resolve( 'multilingualpress.module_manager' );
 
 		return $module_manager->register_module( new Module( 'advanced_translator', [
 			'description' => __(
@@ -173,10 +163,13 @@ class Mlp_Advanced_Translator {
 	 */
 	public function localize_script() {
 
-		$this->plugin_data->get( 'assets' )->add_script_data( 'multilingualpress-admin', 'mlpCopyPostSettings', [
-			'action' => $this->ajax_action,
-			'siteID' => get_current_blog_id(),
-		] );
+		MultilingualPress::resolve( 'multilingualpress.asset_manager' )->add_script_data(
+			'multilingualpress-admin',
+			'mlpCopyPostSettings', [
+				'action' => $this->ajax_action,
+				'siteID' => get_current_blog_id(),
+			]
+		);
 	}
 
 	/**

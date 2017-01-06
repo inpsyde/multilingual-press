@@ -1,9 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
+use Inpsyde\MultilingualPress\MultilingualPress;
 
 /**
  * Class Mlp_Language_Manager_Controller
@@ -17,9 +19,9 @@ use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 	/**
-	 * @var Inpsyde_Property_List_Interface
+	 * @var Languages
 	 */
-	private $plugin_data;
+	private $languages;
 
 	/**
 	 * @var Mlp_Language_Manager_Options_Page_Data
@@ -64,23 +66,20 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	/**
 	 * Constructor.
 	 *
-	 * @param Inpsyde_Property_List_Interface $data
 	 * @param Mlp_Data_Access                 $database
 	 * @param wpdb                            $wpdb
 	 */
 	public function __construct(
-		Inpsyde_Property_List_Interface $data,
 		Mlp_Data_Access                 $database,
 		wpdb                            $wpdb
 		) {
 
-		$this->plugin_data     = $data;
-		$this->wpdb = $wpdb;
+		$this->wpdb            = $wpdb;
 		$this->page_title      = __( 'Language Manager', 'multilingual-press' );
 		$this->pagination_data = new Mlp_Language_Manager_Pagination_Data( $database );
-		$this->setting       = new Mlp_Language_Manager_Options_Page_Data(
+		$this->setting         = new Mlp_Language_Manager_Options_Page_Data(
 			$this->page_title,
-			$this->plugin_data->get( 'type_factory' )
+			MultilingualPress::resolve( 'multilingualpress.type_factory' )
 		);
 
 		$this->nonce = new WPNonce( $this->setting->action() );
@@ -92,10 +91,12 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			$this->nonce
 		);
 
-		$updater = new Mlp_Language_Updater(
+		$this->languages = MultilingualPress::resolve( 'multilingualpress.languages' );
+
+		$updater               = new Mlp_Language_Updater(
 			$this->pagination_data,
 			new Mlp_Array_Diff( $this->get_columns() ),
-			$this->plugin_data->get( 'languages' ),
+			$this->languages,
 			$this->nonce
 		);
 
@@ -345,7 +346,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	private function show_table() {
 
 		$view = new Mlp_Admin_Table_View (
-			$this->plugin_data->get( 'languages' ),
+			$this->languages,
 			$this->pagination_data,
 			$this->get_columns(),
 			'mlp-language-manager-table',
