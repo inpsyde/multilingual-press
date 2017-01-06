@@ -19,7 +19,7 @@ final class TypeSafeTrasherSettingRepository implements TrasherSettingRepository
 	 *
 	 * @return bool The trasher setting value for the post with the given ID, or the current post.
 	 */
-	public function get( $post_id = 0 ) {
+	public function get_setting( $post_id = 0 ) {
 
 		return (bool) get_post_meta( $post_id ?: get_the_ID(), TrasherSettingRepository::META_KEY, true );
 	}
@@ -34,7 +34,7 @@ final class TypeSafeTrasherSettingRepository implements TrasherSettingRepository
 	 *
 	 * @return bool Whether or not the trasher setting value was updated successfully.
 	 */
-	public function update( $post_id, $value ) {
+	public function update_setting( $post_id, $value ) {
 
 		return (bool) update_post_meta( $post_id, TrasherSettingRepository::META_KEY, (bool) $value );
 	}

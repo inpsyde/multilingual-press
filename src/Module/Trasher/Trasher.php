@@ -49,7 +49,7 @@ class Trasher {
 	 */
 	public function trash_related_posts( $post_id ) {
 
-		if ( ! $this->setting_repository->get( $post_id ) ) {
+		if ( ! $this->setting_repository->get_setting( $post_id ) ) {
 			return 0;
 		}
 

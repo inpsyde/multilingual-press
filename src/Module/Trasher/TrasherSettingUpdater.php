@@ -76,7 +76,7 @@ class TrasherSettingUpdater {
 			? (bool) $_POST[ TrasherSettingRepository::META_KEY ]
 			: false;
 
-		if ( ! $this->setting_repository->update( $post_id, $value ) ) {
+		if ( ! $this->setting_repository->update_setting( $post_id, $value ) ) {
 			return 0;
 		}
 
@@ -95,7 +95,7 @@ class TrasherSettingUpdater {
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$updated_posts, $value ) {
 
 			switch_to_blog( $site_id );
-			$updated_posts += $this->setting_repository->update( $post_id, $value );
+			$updated_posts += $this->setting_repository->update_setting( $post_id, $value );
 			restore_current_blog();
 		} );
 

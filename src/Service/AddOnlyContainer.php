@@ -166,6 +166,22 @@ final class AddOnlyContainer implements Container {
 	}
 
 	/**
+	 * Bootstraps (and locks) the container.
+	 *
+	 * Only shared values and factory callbacks are accessible from now on.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return void
+	 */
+	public function bootstrap() {
+
+		$this->lock();
+
+		$this->is_bootstrapped = true;
+	}
+
+	/**
 	 * Replaces the factory callback with the given name with the given factory callback.
 	 *
 	 * The new factory callback will receive as first argument the object created by the current factory, and as second
@@ -218,22 +234,6 @@ final class AddOnlyContainer implements Container {
 	public function lock() {
 
 		$this->is_locked = true;
-	}
-
-	/**
-	 * Bootstraps (and locks) the container.
-	 *
-	 * Only shared values and factory callbacks are accessible from now on.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return void
-	 */
-	public function bootstrap() {
-
-		$this->lock();
-
-		$this->is_bootstrapped = true;
 	}
 
 	/**

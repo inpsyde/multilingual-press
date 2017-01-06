@@ -190,7 +190,7 @@ LIMIT 1";
 
 		$existing = $this->wp_rewrite->get_extra_permastruct( $taxonomy );
 
-		if ( ! $this->update_required( $expected, $existing ) ) {
+		if ( ! $this->is_update_required( $expected, $existing ) ) {
 			return false;
 		}
 
@@ -232,7 +232,7 @@ LIMIT 1";
 	 *
 	 * @return bool Wheter or not the taxonomy bases require an update.
 	 */
-	private function update_required( $expected, $existing ) {
+	private function is_update_required( $expected, $existing ) {
 
 		if ( ! $expected ) {
 			return false;

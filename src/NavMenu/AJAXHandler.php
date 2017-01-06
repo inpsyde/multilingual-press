@@ -57,7 +57,7 @@ class AJAXHandler {
 	 */
 	public function send_items() {
 
-		if ( ! $this->validate_request() ) {
+		if ( ! $this->is_request_valid() ) {
 			wp_send_json_error();
 		}
 
@@ -82,7 +82,7 @@ class AJAXHandler {
 	 *
 	 * @return bool Whether or not the request is valid.
 	 */
-	private function validate_request() {
+	private function is_request_valid() {
 
 		return (
 			current_user_can( 'edit_theme_options' )

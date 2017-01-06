@@ -102,7 +102,7 @@ class SitesListTableColumn {
 	 */
 	public function render_content( $id, $site_id ) {
 
-		if ( $this->id === $id ) {
+		if ( $id === $this->id ) {
 			echo call_user_func( $this->render_callback, $id, $site_id );
 
 			return true;

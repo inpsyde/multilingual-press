@@ -13,6 +13,15 @@ use ArrayAccess;
 interface Container extends ArrayAccess {
 
 	/**
+	 * Bootstraps (and locks) the container.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return void
+	 */
+	public function bootstrap();
+
+	/**
 	 * Replaces the factory callback with the given name with the given factory callback.
 	 *
 	 * @since 3.0.0
@@ -32,15 +41,6 @@ interface Container extends ArrayAccess {
 	 * @return void
 	 */
 	public function lock();
-
-	/**
-	 * Bootstraps (and locks) the container.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return void
-	 */
-	public function bootstrap();
 
 	/**
 	 * Stores the given value or factory callback with the given name, and defines it to be accessible even after the

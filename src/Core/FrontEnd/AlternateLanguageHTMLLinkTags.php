@@ -35,7 +35,7 @@ class AlternateLanguageHTMLLinkTags {
 	 * @since   3.0.0
 	 * @wp-hook wp_head
 	 *
-	 * @return bool Whether or not headers have been sent.
+	 * @return bool Whether or not link tags have been rendered.
 	 */
 	public function render() {
 
