@@ -2,8 +2,8 @@
 Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont, ChriCo, dnaber-de, paddelboot
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.4
-Tested up to: 4.6
-Stable tag: 2.4.8
+Tested up to: 4.7
+Stable tag: 2.5.0
 
 Simply THE multisite-based free open source plugin for your multilingual websites.
 
