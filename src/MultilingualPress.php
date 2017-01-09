@@ -322,19 +322,15 @@ final class MultilingualPress {
 
 		$module_manager = static::$container['multilingualpress.module_manager'];
 
-		array_walk(
-			$this->modules,
-			function ( ModuleServiceProvider $provider ) use ( $module_manager ) {
+		array_walk( $this->modules, function ( ModuleServiceProvider $module ) use ( $module_manager ) {
 
-				if (
-					$provider->register_module( $module_manager )
-					&& $provider instanceof ActivationAwareModuleServiceProvider
-				) {
+			if ( $module->register_module( $module_manager ) ) {
+				if ( $module instanceof ActivationAwareModuleServiceProvider ) {
 
-					$provider->activate();
+					$module->activate();
 				}
 			}
-		);
+		} );
 	}
 
 	/**
