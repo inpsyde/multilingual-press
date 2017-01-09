@@ -183,10 +183,8 @@ final class MultilingualPress {
 			 * Fires right before MultilingualPress registers any modules.
 			 *
 			 * @since 3.0.0
-			 *
-			 * @param static $multilingualpress MultilingualPress instance.
 			 */
-			do_action( static::ACTION_REGISTER_MODULES, $this );
+			do_action( static::ACTION_REGISTER_MODULES );
 
 			$this->register_modules();
 		}
@@ -201,16 +199,12 @@ final class MultilingualPress {
 		 * Fires right after MultilingualPress was bootstrapped.
 		 *
 		 * @since 3.0.0
-		 *
-		 * @param static $multilingualpress MultilingualPress instance.
 		 */
-		do_action( static::ACTION_BOOTSTRAPPED, $this );
+		do_action( static::ACTION_BOOTSTRAPPED );
 
 		// TODO: Eventually remove/refactor according to new architecure as soon as the old controller got replaced.
 		class_exists( 'Multilingual_Press' ) or require __DIR__ . '/inc/Multilingual_Press.php';
-		$old_controller = new \Multilingual_Press( static::$container );
-
-		// TODO: Check if the following really needs to be done regardles of MultilingualPress modules being not used.
+		$old_controller = new \Multilingual_Press();
 		add_action( 'wp_loaded', [ $old_controller, 'prepare_plugin_data' ] );
 
 		if ( $needs_modules ) {
@@ -229,10 +223,8 @@ final class MultilingualPress {
 			 * Fires right after MultilingualPress was completely initialized.
 			 *
 			 * @since 3.0.0
-			 *
-			 * @param static $multilingualpress MultilingualPress instance.
 			 */
-			do_action( static::ACTION_INITIALIZED, $this );
+			do_action( static::ACTION_INITIALIZED );
 		}
 
 		return true;
