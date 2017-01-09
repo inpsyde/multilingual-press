@@ -97,6 +97,11 @@ class SystemChecker {
 	private $plugin_properties;
 
 	/**
+	 * @var SiteRelationsChecker
+	 */
+	private $site_relations_checker;
+
+	/**
 	 * @var TypeFactory
 	 */
 	private $type_factory;
@@ -106,14 +111,21 @@ class SystemChecker {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param PluginProperties $plugin_properties Plugin properties object.
-	 * @param TypeFactory      $type_factory      Type factory object.
+	 * @param PluginProperties     $plugin_properties      Plugin properties object.
+	 * @param TypeFactory          $type_factory           Type factory object.
+	 * @param SiteRelationsChecker $site_relations_checker Site relations checkerobject.
 	 */
-	public function __construct( PluginProperties $plugin_properties, TypeFactory $type_factory ) {
+	public function __construct(
+		PluginProperties $plugin_properties,
+		TypeFactory $type_factory,
+		SiteRelationsChecker $site_relations_checker
+	) {
 
 		$this->plugin_properties = $plugin_properties;
 
 		$this->type_factory = $type_factory;
+
+		$this->site_relations_checker = $site_relations_checker;
 	}
 
 	/**
@@ -138,6 +150,8 @@ class SystemChecker {
 		$this->check_plugin_activation();
 
 		if ( ! $this->errors ) {
+			$this->site_relations_checker->check_relations();
+
 			return self::INSTALLATION_OK;
 		}
 

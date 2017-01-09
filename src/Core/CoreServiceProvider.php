@@ -209,6 +209,25 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>'
 		) )->register( 'network_admin_plugin_action_links_' . $properties->plugin_base_name() );
 
+		$content_relations = $container['multilingualpress.content_relations'];
+
+		$site_relations = $container['multilingualpress.site_relations'];
+
+		add_action( 'delete_blog', function ( $site_id ) use ( $content_relations, $site_relations ) {
+
+			$content_relations->delete_relations_for_site( $site_id );
+
+			$site_relations->delete_relation( $site_id );
+
+			// TODO: Refactor to use a repository as soon as available (see Mlp_Network_Site_Settings_Controller).
+			$languages = get_network_option( null, 'inpsyde_multilingual' );
+			if ( isset( $languages[ $site_id ] ) ) {
+				unset( $languages[ $site_id ] );
+
+				update_site_option( 'inpsyde_multilingual', $languages );
+			}
+		} );
+
 		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
 			$post_request_data_manipulator = $container['multilingualpress.post_request_data_manipulator'];
 

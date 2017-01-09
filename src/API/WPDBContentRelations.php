@@ -105,6 +105,23 @@ final class WPDBContentRelations implements ContentRelations {
 	}
 
 	/**
+	 * Deletes all relations for the site with the given ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $site_id Site ID.
+	 *
+	 * @return int Number of deleted rows.
+	 */
+	public function delete_relations_for_site( $site_id ) {
+
+		$query = "DELETE FROM {$this->table} WHERE ml_source_blogid = %d OR ml_blogid = %d";
+		$query = $this->db->prepare( $query, $site_id );
+
+		return (int) $this->db->query( $query );
+	}
+
+	/**
 	 * Return the term taxonomy ID of the given target site for the given source term.
 	 *
 	 * @param int    $source_site_id    Source blog ID.

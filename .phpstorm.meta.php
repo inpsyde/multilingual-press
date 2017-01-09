@@ -57,6 +57,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.search_translator' instanceof \Inpsyde\MultilingualPress\Translation\Translator,
 			'multilingualpress.site_duplicator' instanceof \Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicator,
 			'multilingualpress.site_relations' instanceof \Inpsyde\MultilingualPress\API\SiteRelations,
+			'multilingualpress.site_relations_checker' instanceof \Inpsyde\MultilingualPress\Installation\SiteRelationsChecker,
 			'multilingualpress.site_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.system_checker' instanceof \Inpsyde\MultilingualPress\Installation\SystemChecker,
 			'multilingualpress.table_duplicator' instanceof \Inpsyde\MultilingualPress\Database\TableDuplicator,

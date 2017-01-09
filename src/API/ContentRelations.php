@@ -32,6 +32,17 @@ interface ContentRelations {
 	);
 
 	/**
+	 * Deletes all relations for the site with the given ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $site_id Site ID.
+	 *
+	 * @return int Number of deleted rows.
+	 */
+	public function delete_relations_for_site( $site_id );
+
+	/**
 	 * Return the term taxonomy ID of the given target site for the given source term.
 	 *
 	 * @param int    $source_site_id    Source blog ID.

@@ -39,11 +39,19 @@ final class InstallationServiceProvider implements ServiceProvider  {
 			return new MatchingNetworkPluginDeactivator();
 		} );
 
+		$container['multilingualpress.site_relations_checker'] = function ( Container $container ) {
+
+			return new ContextAwareSiteRelationsChecker(
+				$container['multilingualpress.site_relations']
+			);
+		};
+
 		$container['multilingualpress.system_checker'] = function ( Container $container ) {
 
 			return new SystemChecker(
 				$container['multilingualpress.properties'],
-				$container['multilingualpress.type_factory']
+				$container['multilingualpress.type_factory'],
+				$container['multilingualpress.site_relations_checker']
 			);
 		};
 
