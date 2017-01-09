@@ -170,7 +170,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 				continue;
 			}
 
-			$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $this->nonce_factory->create( [
+			$request_validator = new Mlp_Save_Post_Request_Validator( $this->nonce_factory->create( [
 				"save_translation_of_post_{$post_id}_for_site_{$blog_id}",
 			] ) );
 			if ( ! $request_validator->is_valid( $post ) ) {

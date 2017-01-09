@@ -169,7 +169,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 				"save_translation_of_post_{$post_id}_for_site_$remote_blog_id",
 			] );
 
-			$request_validator = Mlp_Save_Post_Request_Validator_Factory::create( $nonce );
+			$request_validator = new Mlp_Save_Post_Request_Validator( $nonce );
 			if ( ! $request_validator->is_valid( $post ) ) {
 				continue;
 			}
