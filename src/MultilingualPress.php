@@ -21,6 +21,42 @@ use Inpsyde\MultilingualPress\Service\ServiceProvider;
 final class MultilingualPress {
 
 	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_BOOTSTRAP = 'multilingualpress.bootstrap';
+
+	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_BOOTSTRAPPED = 'multilingualpress.bootstrapped';
+
+	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_INITIALIZED = 'multilingualpress.initialized';
+
+	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_REGISTER_MODULES = 'multilingualpress.register_modules';
+
+	/**
 	 * @var Container
 	 */
 	private static $container;
@@ -127,7 +163,7 @@ final class MultilingualPress {
 		 *
 		 * @param static $multilingualpress MultilingualPress instance.
 		 */
-		do_action( 'multilingualpress.bootstrap', $this );
+		do_action( static::ACTION_BOOTSTRAP, $this );
 
 		static::$container->lock();
 
@@ -147,8 +183,10 @@ final class MultilingualPress {
 			 * Fires right before MultilingualPress registers any modules.
 			 *
 			 * @since 3.0.0
+			 *
+			 * @param static $multilingualpress MultilingualPress instance.
 			 */
-			do_action( 'multilingualpress.register_modules' );
+			do_action( static::ACTION_REGISTER_MODULES, $this );
 
 			$this->register_modules();
 		}
@@ -158,6 +196,15 @@ final class MultilingualPress {
 		static::$container->bootstrap();
 
 		$this->is_bootstrapped = true;
+
+		/**
+		 * Fires right after MultilingualPress was bootstrapped.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param static $multilingualpress MultilingualPress instance.
+		 */
+		do_action( static::ACTION_BOOTSTRAPPED, $this );
 
 		// TODO: Eventually remove/refactor according to new architecure as soon as the old controller got replaced.
 		class_exists( 'Multilingual_Press' ) or require __DIR__ . '/inc/Multilingual_Press.php';
@@ -170,13 +217,22 @@ final class MultilingualPress {
 			load_plugin_textdomain( 'multilingual-press' );
 
 			if ( is_admin() ) {
-				$this->bootstrap_admin();
+				$this->initialize_admin();
 			} else {
-				$this->bootstrap_front_end();
+				$this->initialize_front_end();
 			}
 
 			// TODO: Refactor according to new architecure.
 			$old_controller->setup();
+
+			/**
+			 * Fires right after MultilingualPress was completely initialized.
+			 *
+			 * @since 3.0.0
+			 *
+			 * @param static $multilingualpress MultilingualPress instance.
+			 */
+			do_action( static::ACTION_INITIALIZED, $this );
 		}
 
 		return true;
@@ -294,7 +350,7 @@ final class MultilingualPress {
 	 *
 	 * @return void
 	 */
-	private function bootstrap_admin() {
+	private function initialize_admin() {
 
 		global $pagenow;
 
@@ -350,7 +406,7 @@ final class MultilingualPress {
 	 *
 	 * @return void
 	 */
-	private function bootstrap_front_end() {
+	private function initialize_front_end() {
 
 		add_filter( 'language_attributes', __NAMESPACE__ . '\\replace_language_in_language_attributes' );
 	}

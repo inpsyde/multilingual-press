@@ -55,6 +55,13 @@ final class InstallationServiceProvider implements ServiceProvider  {
 			);
 		};
 
+		$container['multilingualpress.uninstaller'] = function ( Container $container ) {
+
+			return new Uninstaller(
+				$container['multilingualpress.table_installer']
+			);
+		};
+
 		$container['multilingualpress.updater'] = function ( Container $container ) {
 
 			return new Updater(

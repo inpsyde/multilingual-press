@@ -76,6 +76,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.trasher_setting_updater' instanceof \Inpsyde\MultilingualPress\Module\Trasher\TrasherSettingUpdater,
 			'multilingualpress.trasher_setting_view' instanceof \Inpsyde\MultilingualPress\Module\Trasher\TrasherSettingView,
 			'multilingualpress.type_factory' instanceof \Inpsyde\MultilingualPress\Factory\TypeFactory,
+			'multilingualpress.uninstaller' instanceof \Inpsyde\MultilingualPress\Installation\Uninstaller,
 			'multilingualpress.untranslated_posts_dashboard_widget' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\DashboardWidget,
 			'multilingualpress.untranslated_posts_dashboard_widget_view' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\View,
 			'multilingualpress.untranslated_posts_repository' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostRepository,
@@ -108,6 +109,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.table_string_replacer' instanceof \Inpsyde\MultilingualPress\Database\TableStringReplacer,
 			'multilingualpress.translations' instanceof \Inpsyde\MultilingualPress\API\Translations,
 			'multilingualpress.type_factory' instanceof \Inpsyde\MultilingualPress\Factory\TypeFactory,
+			'multilingualpress.uninstaller' instanceof \Inpsyde\MultilingualPress\Installation\Uninstaller,
 		],
 	];
 }

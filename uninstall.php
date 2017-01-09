@@ -1,88 +1,75 @@
-<?php
+<?php # -*- coding: utf-8 -*-
 /**
- * Uninstall routines. This file is called automatically when the plugin
- * is deleted per user interface.
+ * Uninstall routines.
  *
- * See http://codex.wordpress.org/Function_Reference/register_uninstall_hook
+ * This file is called automatically when the plugin is deleted per user interface.
+ *
+ * @see https://developer.wordpress.org/plugins/the-basics/uninstall-methods/
  */
 
-// Prevent direct access.
-defined( 'WP_UNINSTALL_PLUGIN' ) || die();
+namespace Inpsyde\MultilingualPress;
 
-// We don't do anything on single sites anyway.
-if ( ! is_multisite() )
-	return;
+defined( 'ABSPATH' ) or die();
 
-
-// check if the "pro"-version is available and activated
-if ( function_exists( 'mlp_pro_init' ) ) {
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	return;
 }
 
-// check if the "free"-version is available and activated
-if ( function_exists( 'mlp_init' ) ) {
+if ( ! current_user_can( 'activate_plugins' ) ) {
 	return;
 }
 
-
-// getting all available plugins
-$plugins = get_plugins();
-$check   = '';
-
-if ( WP_UNINSTALL_PLUGIN === 'multilingual-press/multilingual-press.php' ) {
-	// checking if the pro is available (not active) when the free is uninstalled
-	if ( array_key_exists( 'multilingual-press-pro/multilingual-press.php', $plugins ) )
-		return;
-}
-else if ( WP_UNINSTALL_PLUGIN === 'multilingual-press-pro/multilingual-press.php' ) {
-	// checking if the free is available (not active) when the pro is uninstalled
-	if ( array_key_exists( 'multilingual-press/multilingual-press.php', $plugins ) )
-		return;
+if ( ! is_multisite() ) {
+	return;
 }
 
+$main_plugin_file = __DIR__ . '/multilingual-press.php';
 
-// ------ Tables ------
-/**
- * @var wpdb
+if (
+	plugin_basename( $main_plugin_file ) !== WP_UNINSTALL_PLUGIN
+	|| ! is_readable( $main_plugin_file )
+) {
+	unset( $main_plugin_file );
+
+	return;
+}
+
+/** @noinspection PhpIncludeInspection
+ * MultilingualPress main plugin file.
  */
-global $wpdb;
+require_once $main_plugin_file;
 
-$tables = [
-	'mlp_languages',
-	'multilingual_linked',
-	'mlp_site_relations',
-];
-foreach ( $tables as $table )
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->base_prefix . $table );
+unset( $main_plugin_file );
 
-
-// ------ Site options ------
-
-delete_site_option( 'inpsyde_multilingual' );
-delete_site_option( 'inpsyde_multilingual_cpt' );
-delete_site_option( 'inpsyde_multilingual_quicklink_options' );
-delete_site_option( 'state_modules' );
-delete_site_option( 'mlp_version' );
-delete_site_option( 'multilingual_press_check_db' );
-
-
-// ------ Blog options ------
-
-// TODO: With WordPress 4.6 + 2, just use `get_sites()` and `$site->id`.
-// Get the unaltered WordPress version.
-require ABSPATH . WPINC . '/version.php';
-/** @var string $wp_version */
-$is_pre_4_6 = version_compare( $wp_version, '4.6-RC1', '<' );
-
-$sites = $is_pre_4_6 ? wp_get_sites() : get_sites();
-foreach ( $sites as $site ) {
-	switch_to_blog( $is_pre_4_6 ? $site['blog_id'] : $site->id );
-
-	delete_option( 'inpsyde_multilingual_blog_relationship' );
-	delete_option( 'inpsyde_multilingual_redirect' );
-	delete_option( 'inpsyde_multilingual_flag_url' );
-	delete_option( 'inpsyde_multilingual_default_actions' );
-	delete_option( 'inpsyde_license_status_MultilingualPress Pro' );
-
-	restore_current_blog();
+if ( bootstrap() ) {
+	return;
 }
+
+$uninstaller = MultilingualPress::resolve( 'multilingualpress.uninstaller' );
+
+$uninstaller->uninstall_tables( [
+	MultilingualPress::resolve( 'multilingualpress.content_relations_table' ),
+	MultilingualPress::resolve( 'multilingualpress.languages_table' ),
+	MultilingualPress::resolve( 'multilingualpress.site_relations_table' ),
+] );
+
+// TODO: Use class constants instead of hard-coded strings.
+$uninstaller->delete_network_options( [
+	'inpsyde_multilingual',
+	'inpsyde_multilingual_cpt',
+	'inpsyde_multilingual_quicklink_options',
+	'mlp_version',
+	'multilingual_press_check_db',
+	'state_modules',
+] );
+
+// TODO: Use class constants instead of hard-coded strings.
+$uninstaller->delete_site_options( [
+	'inpsyde_license_status_MultilingualPress Pro',
+	'inpsyde_multilingual_blog_relationship',
+	'inpsyde_multilingual_default_actions',
+	'inpsyde_multilingual_flag_url',
+	'inpsyde_multilingual_redirect',
+] );
+
+unset( $uninstaller );
