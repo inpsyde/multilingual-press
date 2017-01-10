@@ -4,7 +4,6 @@ namespace Inpsyde\MultilingualPress\Installation;
 
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\TableInstaller;
-use Inpsyde\MultilingualPress\MultilingualPress;
 
 /**
  * MultilingualPress uninstaller.
@@ -50,10 +49,6 @@ class Uninstaller {
 		}
 
 		if ( ! is_multisite() ) {
-			return false;
-		}
-
-		if ( did_action( MultilingualPress::ACTION_INITIALIZED ) ) {
 			return false;
 		}
 
