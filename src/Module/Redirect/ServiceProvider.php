@@ -4,6 +4,8 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
+use Inpsyde\MultilingualPress\Common\Setting\Site\SecureSiteSettingUpdater;
+use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSetting;
 use Inpsyde\MultilingualPress\Common\Setting\User\SecureUserSettingUpdater;
 use Inpsyde\MultilingualPress\Common\Setting\User\UserSetting;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
@@ -61,27 +63,39 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 			$repository = $container['multilingualpress.redirect_settings_repository'];
 
-			// This nonce is not accessible via the container because it is used no matter what by static parties.
-			$nonce = new WPNonce( 'save_redirect_user_setting' );
+			// This nonce is not accessible via the container because it is used by static parties only.
+			$user_setting_nonce = new WPNonce( 'save_redirect_user_setting' );
 
 			( new UserSetting(
-				new RedirectUserSetting( SettingsRepository::META_KEY_USER, $nonce, $repository ),
-				new SecureUserSettingUpdater( SettingsRepository::META_KEY_USER, $nonce )
+				new RedirectUserSetting( SettingsRepository::META_KEY_USER, $user_setting_nonce, $repository ),
+				new SecureUserSettingUpdater( SettingsRepository::META_KEY_USER, $user_setting_nonce )
 			) )->register();
 
 			if ( is_admin() ) {
-				if ( is_network_admin() ) {
-					( new SitesListTableColumn(
-						'multilingualpress.redirect',
-						__( 'Redirect', 'multilingual-press' ),
-						function ( $id, $site_id ) {
+				global $pagenow;
 
-							// TODO: Don't hard-code option name, use repository or class constant.
-							return get_blog_option( $site_id, 'inpsyde_multilingual_redirect' )
-								? '<span class="dashicons dashicons-yes"></span>'
-								: '';
-						}
-					) )->register();
+				// This nonce is not accessible via the container because it is used by static parties only.
+				$site_setting_nonce = new WPNonce( 'save_redirect_site_setting' );
+
+				( new SiteSetting(
+					new RedirectSiteSetting( SettingsRepository::OPTION_SITE, $site_setting_nonce, $repository ),
+					new SecureSiteSettingUpdater( SettingsRepository::OPTION_SITE, $site_setting_nonce )
+				) )->register();
+
+				if ( is_network_admin() ) {
+					if ( 'sites.php' === $pagenow ) {
+						( new SitesListTableColumn(
+							'multilingualpress.redirect',
+							__( 'Redirect', 'multilingual-press' ),
+							function ( $id, $site_id ) {
+
+								// TODO: Don't hard-code option name, use repository or class constant.
+								return get_blog_option( $site_id, 'inpsyde_multilingual_redirect' )
+									? '<span class="dashicons dashicons-yes"></span>'
+									: '';
+							}
+						) )->register();
+					}
 				}
 			} else {
 				$container['multilingualpress.redirect_filter']->enable();

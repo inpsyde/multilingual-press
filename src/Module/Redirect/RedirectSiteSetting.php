@@ -3,26 +3,25 @@
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
-use Inpsyde\MultilingualPress\Common\Setting\User\UserSettingViewModel;
-use WP_User;
+use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
 
 /**
- * Redirect user setting.
+ * Redirect site setting.
  *
  * @package Inpsyde\MultilingualPress\Module\Redirect
  * @since   3.0.0
  */
-final class RedirectUserSetting implements UserSettingViewModel {
-
-	/**
-	 * @var string
-	 */
-	private $meta_key;
+class RedirectSiteSetting implements SiteSettingViewModel {
 
 	/**
 	 * @var Nonce
 	 */
 	private $nonce;
+
+	/**
+	 * @var string
+	 */
+	private $option;
 
 	/**
 	 * @var SettingsRepository
@@ -34,13 +33,13 @@ final class RedirectUserSetting implements UserSettingViewModel {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string             $meta_key   User meta key.
+	 * @param string             $option     Option name.
 	 * @param Nonce              $nonce      Nonce object.
 	 * @param SettingsRepository $repository Settings repository object.
 	 */
-	public function __construct( $meta_key, Nonce $nonce, SettingsRepository $repository ) {
+	public function __construct( $option, Nonce $nonce, SettingsRepository $repository ) {
 
-		$this->meta_key = (string) $meta_key;
+		$this->option = (string) $option;
 
 		$this->nonce = $nonce;
 
@@ -48,38 +47,38 @@ final class RedirectUserSetting implements UserSettingViewModel {
 	}
 
 	/**
-	 * Returns the markup for the user setting.
+	 * Returns the markup for the site setting.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param WP_User $user User object.
+	 * @param int $site_id Site ID.
 	 *
-	 * @return string The markup for the user setting.
+	 * @return string The markup for the site setting.
 	 */
-	public function markup( WP_User $user ) {
+	public function markup( $site_id ) {
 
 		return sprintf(
 			'<label for="%2$s"><input type="checkbox" name="%2$s" value="1" id="%2$s"%3$s>%1$s</label>%4$s',
-			esc_html__( 'Do not redirect me to the best matching language version.', 'multilingual-press' ),
-			esc_attr( $this->meta_key ),
-			checked( $this->repository->get_user_setting( $user->ID ), true, false ),
+			esc_html__( 'Enable automatic redirect', 'multilingual-press' ),
+			esc_attr( $this->option ),
+			checked( $this->repository->get_site_setting( $site_id ), true, false ),
 			\Inpsyde\MultilingualPress\nonce_field( $this->nonce )
 		);
 	}
 
 	/**
-	 * Returns the title of the user setting.
+	 * Returns the title of the site setting.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string The markup for the user setting.
+	 * @return string The markup for the site setting.
 	 */
 	public function title() {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
 			esc_html__( 'Redirect', 'multilingual-press' ),
-			esc_attr( $this->meta_key )
+			esc_attr( $this->option )
 		);
 	}
 }

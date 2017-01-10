@@ -13,11 +13,6 @@ class Mlp_Redirect {
 	private $translations;
 
 	/**
-	 * @var string
-	 */
-	private $option = 'inpsyde_multilingual_redirect';
-
-	/**
 	 * Constructor.
 	 *
 	 * @param Translations $translations
@@ -34,17 +29,13 @@ class Mlp_Redirect {
 	 */
 	public function setup() {
 
-		if ( is_admin() ) {
-			if ( is_network_admin() ) {
-				( new Mlp_Redirect_Site_Settings( $this->option ) )->setup();
-			}
-		} else {
+		if ( ! is_admin() ) {
 			if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
 				( new Mlp_Redirect_Frontend(
 					new Mlp_Redirect_Response(
 						new Mlp_Language_Negotiation( $this->translations )
 					),
-					$this->option
+					'inpsyde_multilingual_redirect'
 				) )->setup();
 			}
 		}
