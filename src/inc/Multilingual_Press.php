@@ -17,10 +17,7 @@ class Multilingual_Press {
 		new Mlp_Advanced_Translator();
 
 		// Redirect
-		( new Mlp_Redirect(
-			MultilingualPress::resolve( 'multilingualpress.module_manager' ),
-			MultilingualPress::resolve( 'multilingualpress.translations' )
-		) )->setup();
+		( new Mlp_Redirect( MultilingualPress::resolve( 'multilingualpress.translations' ) ) )->setup();
 
 		// Translation Meta Box
 		new Mlp_Translation_Metabox();
