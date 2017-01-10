@@ -35,6 +35,11 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.noredirect_permalink_filter'] = function () {
+
+			return new NoredirectPermalinkFilter();
+		};
+
 		$container['multilingualpress.redirect_filter'] = function ( Container $container ) {
 
 			return new RedirectFilter(
@@ -45,6 +50,50 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 		$container['multilingualpress.redirect_settings_repository'] = function () {
 
 			return new TypeSafeSettingsRepository();
+		};
+
+		$container['multilingualpress.redirect_site_setting'] = function ( Container $container ) {
+
+			return new RedirectSiteSetting(
+				SettingsRepository::OPTION_SITE,
+				$container['multilingualpress.save_redirect_site_setting_nonce'],
+				$container['multilingualpress.redirect_settings_repository']
+			);
+		};
+
+		$container['multilingualpress.redirect_site_setting_updater'] = function ( Container $container ) {
+
+			return new SecureSiteSettingUpdater(
+				SettingsRepository::OPTION_SITE,
+				$container['multilingualpress.save_redirect_site_setting_nonce']
+			);
+		};
+
+		$container['multilingualpress.redirect_user_setting'] = function ( Container $container ) {
+
+			return new RedirectUserSetting(
+				SettingsRepository::META_KEY_USER,
+				$container['multilingualpress.save_redirect_user_setting_nonce'],
+				$container['multilingualpress.redirect_settings_repository']
+			);
+		};
+
+		$container['multilingualpress.redirect_user_setting_updater'] = function ( Container $container ) {
+
+			return new SecureUserSettingUpdater(
+				SettingsRepository::META_KEY_USER,
+				$container['multilingualpress.save_redirect_user_setting_nonce']
+			);
+		};
+
+		$container['multilingualpress.save_redirect_site_setting_nonce'] = function () {
+
+			return new WPNonce( 'save_redirect_site_setting' );
+		};
+
+		$container['multilingualpress.save_redirect_user_setting_nonce'] = function () {
+
+			return new WPNonce( 'save_redirect_user_setting' );
 		};
 	}
 
@@ -61,25 +110,17 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 		$this->on_activation( function () use ( $container ) {
 
-			$repository = $container['multilingualpress.redirect_settings_repository'];
-
-			// This nonce is not accessible via the container because it is used by static parties only.
-			$user_setting_nonce = new WPNonce( 'save_redirect_user_setting' );
-
 			( new UserSetting(
-				new RedirectUserSetting( SettingsRepository::META_KEY_USER, $user_setting_nonce, $repository ),
-				new SecureUserSettingUpdater( SettingsRepository::META_KEY_USER, $user_setting_nonce )
+				$container['multilingualpress.redirect_user_setting'],
+				$container['multilingualpress.redirect_user_setting_updater']
 			) )->register();
 
 			if ( is_admin() ) {
 				global $pagenow;
 
-				// This nonce is not accessible via the container because it is used by static parties only.
-				$site_setting_nonce = new WPNonce( 'save_redirect_site_setting' );
-
 				( new SiteSetting(
-					new RedirectSiteSetting( SettingsRepository::OPTION_SITE, $site_setting_nonce, $repository ),
-					new SecureSiteSettingUpdater( SettingsRepository::OPTION_SITE, $site_setting_nonce )
+					$container['multilingualpress.redirect_site_setting'],
+					$container['multilingualpress.redirect_site_setting_updater']
 				) )->register();
 
 				if ( is_network_admin() ) {
@@ -98,6 +139,8 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 					}
 				}
 			} else {
+				$container['multilingualpress.noredirect_permalink_filter']->enable();
+
 				$container['multilingualpress.redirect_filter']->enable();
 			}
 		} );

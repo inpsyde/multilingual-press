@@ -37,6 +37,11 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			);
 		};
 
+		$container['multilingualpress.post_request_data_manipulator'] = function () {
+
+			return new FullRequestDataManipulator( RequestDataManipulator::METHOD_POST );
+		};
+
 		$container['multilingualpress.post_translator'] = function ( Container $container ) {
 
 			return new PostTranslator(
@@ -106,5 +111,15 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$container['multilingualpress.term_translator'],
 			Request::TYPE_TERM_ARCHIVE
 		);
+
+		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+			$post_request_data_manipulator = $container['multilingualpress.post_request_data_manipulator'];
+
+			add_action( 'mlp_before_post_synchronization', [ $post_request_data_manipulator, 'clear_data' ] );
+			add_action( 'mlp_after_post_synchronization', [ $post_request_data_manipulator, 'restore_data' ] );
+
+			add_action( 'mlp_before_term_synchronization', [ $post_request_data_manipulator, 'clear_data' ] );
+			add_action( 'mlp_after_term_synchronization', [ $post_request_data_manipulator, 'restore_data' ] );
+		}
 	}
 }

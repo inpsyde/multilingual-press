@@ -43,6 +43,28 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 			return new TypeSafeLanguageRepository();
 		};
+
+		$container['multilingualpress.user_admin_language_setting'] = function ( Container $container ) {
+
+			return new Setting(
+				LanguageRepository::META_KEY,
+				$container['multilingualpress.save_user_admin_language_setting_nonce'],
+				$container['multilingualpress.user_admin_language_repository']
+			);
+		};
+
+		$container['multilingualpress.save_user_admin_language_setting_nonce'] = function () {
+
+			return new WPNonce( 'save_user_admin_language_setting' );
+		};
+
+		$container['multilingualpress.user_admin_language_setting_updater'] = function ( Container $container ) {
+
+			return new SecureUserSettingUpdater(
+				LanguageRepository::META_KEY,
+				$container['multilingualpress.save_user_admin_language_setting_nonce']
+			);
+		};
 	}
 
 	/**
@@ -84,16 +106,9 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 				);
 			} );
 
-			// This nonce is not accessible via the container because it is used no matter what by static parties.
-			$nonce = new WPNonce( 'save_user_admin_language_setting' );
-
 			( new UserSetting(
-				new Setting(
-					LanguageRepository::META_KEY,
-					$nonce,
-					$container['multilingualpress.user_admin_language_repository']
-				),
-				new SecureUserSettingUpdater( LanguageRepository::META_KEY, $nonce )
+				$container['multilingualpress.user_admin_language_setting'],
+				$container['multilingualpress.user_admin_language_setting_updater']
 			) )->register();
 		} );
 	}
