@@ -2,7 +2,6 @@
 
 namespace Inpsyde\MultilingualPress;
 
-use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
 use Inpsyde\MultilingualPress\Core\Exception\InstanceAlreadyBootstrapped;
 use Inpsyde\MultilingualPress\Core\Exception\CannotResolveName;
 use Inpsyde\MultilingualPress\Installation\SystemChecker;
@@ -37,15 +36,6 @@ final class MultilingualPress {
 	 * @var string
 	 */
 	const ACTION_BOOTSTRAPPED = 'multilingualpress.bootstrapped';
-
-	/**
-	 * Action name.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string
-	 */
-	const ACTION_INITIALIZED = 'multilingualpress.initialized';
 
 	/**
 	 * Action name.
@@ -179,13 +169,6 @@ final class MultilingualPress {
 
 		$needs_modules = $this->needs_modules();
 		if ( $needs_modules ) {
-			/**
-			 * Fires right before MultilingualPress registers any modules.
-			 *
-			 * @since 3.0.0
-			 */
-			do_action( static::ACTION_REGISTER_MODULES );
-
 			$this->register_modules();
 		}
 
@@ -205,27 +188,10 @@ final class MultilingualPress {
 		// TODO: Eventually remove/refactor according to new architecure as soon as the old controller got replaced.
 		class_exists( 'Multilingual_Press' ) or require __DIR__ . '/inc/Multilingual_Press.php';
 		$old_controller = new \Multilingual_Press();
-		add_action( 'wp_loaded', [ $old_controller, 'prepare_plugin_data' ] );
-
 		if ( $needs_modules ) {
-			load_plugin_textdomain( 'multilingual-press' );
-
-			if ( is_admin() ) {
-				$this->initialize_admin();
-			} else {
-				$this->initialize_front_end();
-			}
-
-			// TODO: Refactor according to new architecure.
 			$old_controller->setup();
-
-			/**
-			 * Fires right after MultilingualPress was completely initialized.
-			 *
-			 * @since 3.0.0
-			 */
-			do_action( static::ACTION_INITIALIZED );
 		}
+		add_action( 'wp_loaded', [ $old_controller, 'prepare_plugin_data' ] );
 
 		return true;
 	}
@@ -320,6 +286,13 @@ final class MultilingualPress {
 	 */
 	private function register_modules() {
 
+		/**
+		 * Fires right before MultilingualPress registers any modules.
+		 *
+		 * @since 3.0.0
+		 */
+		do_action( static::ACTION_REGISTER_MODULES );
+
 		$module_manager = static::$container['multilingualpress.module_manager'];
 
 		array_walk( $this->modules, function ( ModuleServiceProvider $module ) use ( $module_manager ) {
@@ -331,71 +304,5 @@ final class MultilingualPress {
 				}
 			}
 		} );
-	}
-
-	/**
-	 * Wires up all admin-specific things.
-	 *
-	 * @return void
-	 */
-	private function initialize_admin() {
-
-		global $pagenow;
-
-		if ( 'sites.php' === $pagenow ) {
-			$this->register_sites_list_table_columns();
-		}
-	}
-
-	/**
-	 * Registers columns for the list table on the Sites page in the Network Admin.
-	 *
-	 * @return void
-	 */
-	private function register_sites_list_table_columns() {
-
-		( new SitesListTableColumn(
-			'multilingualpress.relationships',
-			__( 'Relationships', 'multilingual-press' ),
-			function ( $id, $site_id ) {
-
-				switch_to_blog( $site_id );
-				$sites = \Inpsyde\MultilingualPress\get_available_language_names();
-				restore_current_blog();
-				unset( $sites[ $site_id ] );
-
-				return $sites
-					? '<div class="mlp_interlinked_blogs">' . join( '<br>', array_map( 'esc_html', $sites ) ) . '</div>'
-					: __( 'none', 'multilingual-press' );
-			}
-		) )->register();
-
-		( new SitesListTableColumn(
-			'multilingualpress.site_language',
-			__( 'Site Language', 'multilingual-press' ),
-			function ( $id, $site_id ) {
-
-				$language = \Inpsyde\MultilingualPress\get_site_language( $site_id );
-
-				return '' === $language
-					? __( 'none', 'multilingual-press' )
-					: sprintf(
-						'<div class="mlp_site_language">%s</div>',
-						esc_html( \Inpsyde\MultilingualPress\get_language_by_http_name(
-							str_replace( '_', '-', $language )
-						) )
-					);
-			}
-		) )->register();
-	}
-
-	/**
-	 * Wires up all front-end-specific things.
-	 *
-	 * @return void
-	 */
-	private function initialize_front_end() {
-
-		add_filter( 'language_attributes', __NAMESPACE__ . '\\replace_language_in_language_attributes' );
 	}
 }

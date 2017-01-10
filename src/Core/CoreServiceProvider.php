@@ -5,6 +5,7 @@ namespace Inpsyde\MultilingualPress\Core;
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
+use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\ConditionalAwareRequest;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
@@ -184,6 +185,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				"$plugin_dir_url/assets/images/flags"
 			);
 
+		load_plugin_textdomain( 'multilingual-press' );
+
 		$setting_page = $container['multilingualpress.plugin_settings_page'];
 
 		add_action( 'plugins_loaded', [ $setting_page, 'register' ], 8 );
@@ -239,6 +242,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		}
 
 		if ( is_admin() ) {
+			global $pagenow;
+
 			$relationship_control_view = $container['multilingualpress.relationship_control_view'];
 
 			add_action(
@@ -272,6 +277,45 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 						break;
 				}
 			}
+
+			if ( 'sites.php' === $pagenow ) {
+				( new SitesListTableColumn(
+					'multilingualpress.relationships',
+					__( 'Relationships', 'multilingual-press' ),
+					function ( $id, $site_id ) {
+
+						switch_to_blog( $site_id );
+						$sites = \Inpsyde\MultilingualPress\get_available_language_names();
+						restore_current_blog();
+						unset( $sites[ $site_id ] );
+
+						return $sites
+							? sprintf(
+								'<div class="mlp-site-relations">%s</div>',
+								join( '<br>', array_map( 'esc_html', $sites ) )
+							)
+							: __( 'none', 'multilingual-press' );
+					}
+				) )->register();
+
+				( new SitesListTableColumn(
+					'multilingualpress.site_language',
+					__( 'Site Language', 'multilingual-press' ),
+					function ( $id, $site_id ) {
+
+						$language = \Inpsyde\MultilingualPress\get_site_language( $site_id );
+
+						return '' === $language
+							? __( 'none', 'multilingual-press' )
+							: sprintf(
+								'<div class="mlp-site-language">%s</div>',
+								esc_html( \Inpsyde\MultilingualPress\get_language_by_http_name(
+									str_replace( '_', '-', $language )
+								) )
+							);
+					}
+				) )->register();
+			}
 		} else {
 			$translations = $container['multilingualpress.translations'];
 
@@ -287,6 +331,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 					( new FrontEnd\AlternateLanguageHTMLLinkTags( $translations ) )->render();
 				}
 			} );
+
+			add_filter( 'language_attributes', __NAMESPACE__ . '\\replace_language_in_language_attributes' );
 		}
 	}
 }
