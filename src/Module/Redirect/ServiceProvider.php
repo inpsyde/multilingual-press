@@ -3,6 +3,9 @@
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
+use Inpsyde\MultilingualPress\Common\Setting\User\SecureUserSettingUpdater;
+use Inpsyde\MultilingualPress\Common\Setting\User\UserSetting;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ActivationAwareness;
 use Inpsyde\MultilingualPress\Module\Module;
@@ -30,7 +33,17 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		// TODO: Move initialization stuff from Mlp_Redirect_* files to here.
+		$container['multilingualpress.redirect_filter'] = function ( Container $container ) {
+
+			return new RedirectFilter(
+				$container['multilingualpress.redirect_settings_repository']
+			);
+		};
+
+		$container['multilingualpress.redirect_settings_repository'] = function () {
+
+			return new TypeSafeSettingsRepository();
+		};
 	}
 
 	/**
@@ -45,6 +58,16 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	public function bootstrap( Container $container ) {
 
 		$this->on_activation( function () use ( $container ) {
+
+			$repository = $container['multilingualpress.redirect_settings_repository'];
+
+			// This nonce is not accessible via the container because it is used no matter what by static parties.
+			$nonce = new WPNonce( 'save_redirect_user_setting' );
+
+			( new UserSetting(
+				new RedirectUserSetting( SettingsRepository::META_KEY_USER, $nonce, $repository ),
+				new SecureUserSettingUpdater( SettingsRepository::META_KEY_USER, $nonce )
+			) )->register();
 
 			if ( is_admin() ) {
 				if ( is_network_admin() ) {
@@ -61,6 +84,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 					) )->register();
 				}
 			} else {
+				$container['multilingualpress.redirect_filter']->enable();
 			}
 		} );
 	}

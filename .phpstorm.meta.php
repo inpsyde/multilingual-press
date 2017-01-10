@@ -48,6 +48,8 @@ namespace PHPSTORM_META {
 			'multilingualpress.quicklinks_settings_nonce' instanceof \Inpsyde\MultilingualPress\Common\Nonce\Nonce,
 			'multilingualpress.quicklinks_settings_repository' instanceof \Inpsyde\MultilingualPress\Module\Quicklinks\SettingsRepository,
 			'multilingualpress.quicklinks_settings_updater' instanceof \Inpsyde\MultilingualPress\Module\Quicklinks\SettingsUpdater,
+			'multilingualpress.redirect_filter' instanceof \Inpsyde\MultilingualPress\Common\Filter,
+			'multilingualpress.redirect_settings_repository' instanceof \Inpsyde\MultilingualPress\Module\Redirect\SettingsRepository,
 			'multilingualpress.relationship_control_search' instanceof \Inpsyde\MultilingualPress\Relations\Post\Search\Search,
 			'multilingualpress.relationship_control_search_controller' instanceof \Inpsyde\MultilingualPress\Relations\Post\Search\SearchController,
 			'multilingualpress.relationship_control_search_results_view' instanceof \Inpsyde\MultilingualPress\Relations\Post\Search\SearchResultsView,

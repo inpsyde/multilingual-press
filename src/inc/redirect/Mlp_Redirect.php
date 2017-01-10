@@ -34,8 +34,6 @@ class Mlp_Redirect {
 	 */
 	public function setup() {
 
-		( new Mlp_Redirect_User_Settings() )->setup();
-
 		if ( is_admin() ) {
 			if ( is_network_admin() ) {
 				( new Mlp_Redirect_Site_Settings( $this->option ) )->setup();
