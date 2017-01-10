@@ -35,7 +35,7 @@ final class Setting implements UserSettingViewModel {
 	 * @since 3.0.0
 	 *
 	 * @param string             $meta_key            User meta key.
-	 * @param Nonce              $nonce               Nonce validator object.
+	 * @param Nonce              $nonce               Nonce object.
 	 * @param LanguageRepository $language_repository Language repository object.
 	 */
 	public function __construct( $meta_key, Nonce $nonce, LanguageRepository $language_repository ) {
