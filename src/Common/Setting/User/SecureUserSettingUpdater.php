@@ -71,7 +71,7 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 	 */
 	private function get_value() {
 
-		$value = array_key_exists( $this->meta_key, $_GET )
+		$value = array_key_exists( $this->meta_key, $_GET ) && is_string( $_GET[ $this->meta_key ] )
 			? $_GET[ $this->meta_key ]
 			: '';
 
@@ -79,7 +79,7 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 			return $value;
 		}
 
-		return array_key_exists( $this->meta_key, $_POST )
+		return array_key_exists( $this->meta_key, $_POST ) && is_string( $_POST[ $this->meta_key ] )
 			? $_POST[ $this->meta_key ]
 			: '';
 	}

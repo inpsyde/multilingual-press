@@ -13,7 +13,8 @@ interface UserSettingUpdater {
 	/**
 	 * Updates the setting with the data in the request for the user with the given ID.
 	 *
-	 * @since 3.0.0
+	 * @since   3.0.0
+	 * @wp-hook profile_update
 	 *
 	 * @param int $user_id User ID.
 	 *

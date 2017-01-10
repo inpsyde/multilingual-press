@@ -52,11 +52,10 @@ class UserSettingView {
 		if ( $this->check_user && ! current_user_can( 'edit_user', $user->ID ) ) {
 			return false;
 		}
-
 		?>
 		<tr>
 			<th scope="row">
-				<?php echo $this->model->title( $user ); ?>
+				<?php echo $this->model->title(); ?>
 			</th>
 			<td>
 				<?php echo $this->model->markup( $user ); ?>
