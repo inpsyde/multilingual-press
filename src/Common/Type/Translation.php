@@ -11,6 +11,15 @@ namespace Inpsyde\MultilingualPress\Common\Type;
 interface Translation {
 
 	/**
+	 * Filter hook.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_URL = 'multilingualpress.translation_url';
+
+	/**
 	 * Returns the icon URL object.
 	 *
 	 * @since 3.0.0

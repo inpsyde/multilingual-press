@@ -115,7 +115,7 @@ class ItemFilter {
 		list( $url, $translation ) = $this->get_item_details( $translations, $site_id );
 
 		/** This filter is documented in Common\Type\FilterableTranslation.php */
-		$item->url = apply_filters( 'multilingualpress.translation_url', $url, $site_id, 0, $translation );
+		$item->url = apply_filters( Translation::FILTER_URL, $url, $site_id, 0, $translation );
 
 		/**
 		 * Fires right before a nav menu item is sent to the walker.

@@ -146,7 +146,7 @@ final class FilterableTranslation implements Translation {
 		 * @param Translation $translation       Translation object.
 		 */
 		$remote_url = (string) apply_filters(
-			'multilingualpress.translation_url',
+			Translation::FILTER_URL,
 			(string) $this->remote_url,
 			$this->target_site_id(),
 			$this->target_content_id(),
