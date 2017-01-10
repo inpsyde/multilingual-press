@@ -100,9 +100,10 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		/**
 		 * Runs after having saved the site settings.
 		 *
-		 * @param array $_POST The $_POST superglobal.
+		 * @param array $data    The data to be saved.
+		 * @param int   $site_id Site ID.
 		 */
-		do_action( 'mlp_blogs_save_fields', $_POST );
+		do_action( 'mlp_blogs_save_fields', $_POST, $blog_id );
 
 		$url = add_query_arg( 'msg', 'updated', $_POST[ '_wp_http_referer' ] );
 		wp_safe_redirect( $url );

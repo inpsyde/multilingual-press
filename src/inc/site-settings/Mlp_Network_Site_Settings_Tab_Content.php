@@ -93,19 +93,6 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			 */
 			do_action( 'mlp_blogs_add_fields', $this->blog_id );
 
-			if ( has_action( 'mlp_blogs_add_fields_secondary' ) ) {
-				_doing_it_wrong(
-					'mlp_blogs_add_fields_secondary',
-					'mlp_blogs_add_fields_secondary is deprecated, use mlp_blogs_add_fields instead.',
-					'2.1'
-				);
-			}
-			/**
-			 * @see mlp_blogs_add_fields
-			 * @deprecated
-			 */
-			do_action( 'mlp_blogs_add_fields_secondary', $this->blog_id );
-
 			echo '</table>';
 
 			submit_button();
@@ -231,7 +218,6 @@ class Mlp_Network_Site_Settings_Tab_Content {
 		if ( empty ( $site_option ) ) {
 			return;
 		}
-
 		?>
 		<tr class="form-field">
 			<th scope="row"><?php esc_html_e( 'Relationships', 'multilingual-press' ); ?></th>
