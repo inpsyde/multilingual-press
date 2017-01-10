@@ -30,6 +30,8 @@ final class RedirectHostsFilter implements Filter {
 
 		$this->accepted_args = 2;
 
+		$this->callback = [ $this, 'filter_hosts' ];
+
 		$this->db = $GLOBALS['wpdb'];
 
 		$this->hook = 'allowed_redirect_hosts';
