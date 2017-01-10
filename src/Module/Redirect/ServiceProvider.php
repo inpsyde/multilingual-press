@@ -141,6 +141,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			} else {
 				$container['multilingualpress.noredirect_permalink_filter']->enable();
 
+				// TODO: Maybe integrate filter logic directly into the (to be done) RedirectRequestValidator...?
 				$container['multilingualpress.redirect_filter']->enable();
 			}
 		} );

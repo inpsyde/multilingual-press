@@ -35,38 +35,9 @@ class Mlp_Redirect_Frontend {
 	 */
 	public function setup() {
 
-		add_filter( 'multilingualpress.translation_url', [ $this, 'add_noredirect_parameter' ], 10, 2 );
-
 		if ( $this->is_redirectable() ) {
 			add_action( 'template_redirect', [ $this->response, 'redirect' ], 1 );
 		}
-	}
-
-	/**
-	 * Adds the noredirect query var to the given URL.
-	 *
-	 * @wp-hook multilingualpress.translation_url
-	 *
-	 * @param string $url     URL.
-	 * @param int    $site_id Site ID.
-	 *
-	 * @return string
-	 */
-	public function add_noredirect_parameter( $url, $site_id ) {
-
-		$url = (string) $url;
-		if ( ! $url ) {
-			return $url;
-		}
-
-		$languages = \Inpsyde\MultilingualPress\get_available_languages();
-		if ( empty( $languages[ $site_id ] ) ) {
-			return $url;
-		}
-
-		$url = add_query_arg( 'noredirect', $languages[ $site_id ], $url );
-
-		return $url;
 	}
 
 	/**
