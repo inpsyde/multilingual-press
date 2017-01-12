@@ -93,7 +93,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 	public function get_index_sql() {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
-		return 'KEY (http_name)';
+		return 'KEY http_name (http_name)';
 	}
 
 	/**
@@ -761,7 +761,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'iso_639_1'    => 'fr',
 				'iso_639_2'    => 'fra',
 				'wp_locale'    => '',
-				'http_name'    => 'fr',
+				'http_name'    => 'fr-CH',
 				'priority'     => 1,
 			),
 			'fy'    => array(
@@ -1821,7 +1821,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 				'iso_639_1'    => 'zh',
 				'iso_639_2'    => 'zho',
 				'wp_locale'    => '',
-				'http_name'    => 'zh',
+				'http_name'    => 'zh-SG',
 				'priority'     => 1,
 			),
 			'zh-tw' => array(

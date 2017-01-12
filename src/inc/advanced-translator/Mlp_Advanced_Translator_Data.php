@@ -601,15 +601,12 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 
 		static $called = 0;
 
-		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
-		$called += 1;
-
-		if ( ! empty( $this->post_request_data['original_post_status'] )
-		     && 'auto-draft' === $this->post_request_data['original_post_status']
-		     && 1 < $called
-		) {
+		if ( ms_is_switched() ) {
 			return false;
 		}
+
+		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
+		$called++;
 
 		if ( empty( $this->post_request_data ) ) {
 			return false;
@@ -620,6 +617,14 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		}
 
 		if ( ! is_array( $this->post_request_data[ $this->name_base ] ) ) {
+			return false;
+		}
+
+		if (
+			! empty( $this->post_request_data['original_post_status'] )
+			&& 'auto-draft' === $this->post_request_data['original_post_status']
+			&& 1 < $called
+		) {
 			return false;
 		}
 

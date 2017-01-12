@@ -148,7 +148,6 @@ module.exports = function( grunt ) {
 		 */
 		jsonlint: {
 			options: {
-				format: true,
 				indent: 2
 			},
 

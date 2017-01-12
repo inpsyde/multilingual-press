@@ -320,7 +320,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 				''
 			);
 
-		return site_url( $post_link );
+		return home_url( $post_link );
 	}
 
 	/**

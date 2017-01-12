@@ -63,9 +63,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var _window = window;
-var ajaxurl = _window.ajaxurl;
-var jQuery = _window.jQuery;
+var _window = window,
+    ajaxurl = _window.ajaxurl,
+    jQuery = _window.jQuery;
 
 /**
  * The MultilingualPress admin namespace.
@@ -222,7 +222,6 @@ var Controller = function () {
   * @param {Registry} registry - The registry object.
   * @param {Object} settings - The controller settings.
   */
-
 	function Controller(registry, settings) {
 		_classCallCheck(this, Controller);
 
@@ -249,7 +248,6 @@ var Controller = function () {
   * Initializes the instance.
   * @returns {Object} The module instances registered for the current admin page.
   */
-
 	Controller.prototype.initialize = function initialize() {
 		var modules = _this.registry.initializeRoutes();
 
@@ -288,8 +286,8 @@ var Controller = function () {
 
 
 	Controller.prototype.registerModule = function registerModule(routes, Constructor) {
-		var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-		var callback = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+		var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+		var callback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
 
 		var moduleData = {
 			Constructor: Constructor,
@@ -341,7 +339,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The MultilingualPress Model module.
  */
-
 var Model = function (_Backbone$Model) {
 	_inherits(Model, _Backbone$Model);
 
@@ -349,9 +346,8 @@ var Model = function (_Backbone$Model) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function Model() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, Model);
 
@@ -359,7 +355,6 @@ var Model = function (_Backbone$Model) {
    * The URL root.
    * @type {String}
    */
-
 		var _this = _possibleConstructorReturn(this, _Backbone$Model.call(this, options));
 
 		_this.urlRoot = options.urlRoot;
@@ -405,7 +400,6 @@ var Registry = function () {
   * Constructor. Sets up the properties.
   * @param {Router} router - The router object.
   */
-
 	function Registry(router) {
 		_classCallCheck(this, Registry);
 
@@ -516,7 +510,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * The MultilingualPress Router module.
  */
-
 var Router = function (_Backbone$Router) {
 	_inherits(Router, _Backbone$Router);
 
@@ -524,9 +517,8 @@ var Router = function (_Backbone$Router) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function Router() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, Router);
 
@@ -562,9 +554,8 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function Toggler() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, Toggler);
 
@@ -633,7 +624,7 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 
 exports.__esModule = true;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /**
  * Returns the name of the given module.
@@ -704,9 +695,8 @@ var NavMenus = function (_Backbone$View) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function NavMenus() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, NavMenus);
 
@@ -714,7 +704,6 @@ var NavMenus = function (_Backbone$View) {
    * The jQuery object representing the MultilingualPress language checkboxes.
    * @type {jQuery}
    */
-
 		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.$languages = _this2.$el.find('li [type="checkbox"]');
@@ -763,7 +752,6 @@ var NavMenus = function (_Backbone$View) {
   * Requests the according markup for the checked languages in the Languages meta box.
   * @param {Event} event - The click event of the submit button.
   */
-
 	NavMenus.prototype.sendRequest = function sendRequest(event) {
 		var data = {
 			action: this.settings.action,
@@ -846,8 +834,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var $ = window.jQuery;
-var _window = window;
-var _ = _window._;
+var _window = window,
+    _ = _window._;
 
 // Internal pseudo-namespace for private data.
 // NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
@@ -865,9 +853,8 @@ var AddNewSite = function (_Backbone$View) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function AddNewSite() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, AddNewSite);
 
@@ -876,7 +863,6 @@ var AddNewSite = function (_Backbone$View) {
    * Due to our BC policy, we have to wait for WordPress 4.5.0 + 2 in order to make use of it, though.
    * TODO: Remove the following (and adapt the according PHP parts) with the release of WordPress 4.5.0 + 2.
    */
-
 		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		var markup = $('#mlp-add-new-site-template').html() || '';
@@ -959,8 +945,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var $ = window.jQuery;
-var _window = window;
-var _ = _window._;
+var _window = window,
+    _ = _window._;
 
 // Internal pseudo-namespace for private data.
 // NOTE: _this is shared between ALL instances of this module! So far, there is only one instance, so no problem NOW.
@@ -978,9 +964,8 @@ var CopyPost = function (_Backbone$View) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function CopyPost() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, CopyPost);
 
@@ -988,7 +973,6 @@ var CopyPost = function (_Backbone$View) {
    * The jQuery object representing the input element that contains the currently edited post's content.
    * @type {jQuery}
    */
-
 		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.$content = $('#content');
@@ -1037,7 +1021,6 @@ var CopyPost = function (_Backbone$View) {
   * Copies the post data of the source post to a translation post.
   * @param {Event} event - The click event of a "Copy source post" button.
   */
-
 	CopyPost.prototype.copyPostData = function copyPostData(event) {
 		var remoteSiteID = this.getRemoteSiteID($(event.target));
 
@@ -1289,9 +1272,8 @@ var RelationshipControl = function (_Backbone$View) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function RelationshipControl() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, RelationshipControl);
 
@@ -1299,7 +1281,6 @@ var RelationshipControl = function (_Backbone$View) {
    * The event manager object.
    * @type {EventManager}
    */
-
 		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.EventManager = options.EventManager;
@@ -1327,7 +1308,6 @@ var RelationshipControl = function (_Backbone$View) {
 	/**
   * Initializes the event handlers for all custom relationship control events.
   */
-
 	RelationshipControl.prototype.initializeEventHandlers = function initializeEventHandlers() {
 		_this.EventManager.on({
 			'RelationshipControl:connectExistingPost': this.connectExistingPost,
@@ -1561,9 +1541,8 @@ var RemotePostSearch = function (_Backbone$View) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function RemotePostSearch() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, RemotePostSearch);
 
@@ -1571,7 +1550,6 @@ var RemotePostSearch = function (_Backbone$View) {
    * The settings.
    * @type {Object}
    */
-
 		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.settings = options.settings;
@@ -1596,7 +1574,6 @@ var RemotePostSearch = function (_Backbone$View) {
   * Initializes both the default search result view as well as the result container for the given element.
   * @param {HTMLElement} element - The HTML element.
   */
-
 	RemotePostSearch.prototype.initializeResult = function initializeResult(element) {
 		var $element = $(element),
 		    $resultsContainer = $('#' + $element.data('results-container-id')),
@@ -1744,9 +1721,8 @@ var TermTranslator = function (_Backbone$View) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function TermTranslator() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, TermTranslator);
 
@@ -1754,7 +1730,6 @@ var TermTranslator = function (_Backbone$View) {
    * The jQuery object representing the MultilingualPress term selects.
    * @type {jQuery}
    */
-
 		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.$selects = _this2.$el.find('select');
@@ -1771,7 +1746,6 @@ var TermTranslator = function (_Backbone$View) {
   * Propagates the new value of one term select element to all other term select elements.
   * @param {Event} event - The change event of a term select element.
   */
-
 	TermTranslator.prototype.propagateSelectedTerm = function propagateSelectedTerm(event) {
 		var _this3 = this;
 
@@ -1871,9 +1845,8 @@ var UserBackEndLanguage = function (_Backbone$View) {
   * Constructor. Sets up the properties.
   * @param {Object} [options={}] - Optional. The constructor options. Defaults to an empty object.
   */
-
 	function UserBackEndLanguage() {
-		var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, UserBackEndLanguage);
 
@@ -1881,7 +1854,6 @@ var UserBackEndLanguage = function (_Backbone$View) {
    * The settings.
    * @type {Object}
    */
-
 		var _this2 = _possibleConstructorReturn(this, _Backbone$View.call(this, options));
 
 		_this.settings = options.settings;
@@ -1897,7 +1869,6 @@ var UserBackEndLanguage = function (_Backbone$View) {
 	/**
   * Sets the Site Language value to what it should be.
   */
-
 	UserBackEndLanguage.prototype.updateSiteLanguage = function updateSiteLanguage() {
 		this.$el.val(this.settings.locale);
 	};

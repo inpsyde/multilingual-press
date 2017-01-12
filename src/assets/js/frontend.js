@@ -99,7 +99,6 @@ var Quicklinks = function () {
   * @param {String} selector - The form element selector.
   * @param {Object} Util - The set of utility methods.
   */
-
 	function Quicklinks(selector, Util) {
 		_classCallCheck(this, Quicklinks);
 
@@ -125,7 +124,6 @@ var Quicklinks = function () {
 	/**
   * Initializes the module.
   */
-
 	Quicklinks.prototype.initialize = function initialize() {
 		this.attachSubmitHandler();
 	};
