@@ -82,7 +82,16 @@ class Mlp_Load_Controller {
 	 */
 	private function load_defaults( Inpsyde_Autoload $loader ) {
 
-		$dirs = glob( "$this->plugin_dir/*", GLOB_ONLYDIR );
+		if( extension_loaded('SPL') && class_exists('RegexIterator') ){
+
+			foreach ( new DirectoryIterator($this->plugin_dir) as $dir ) {
+					if( $dir->isDir() && !$dir->isDot() )
+						$dirs[] = $dir->getPathname();
+			}
+
+		}  elseif ( function_exists('glob') ) {
+			$dirs = glob( "$this->plugin_dir/*", GLOB_ONLYDIR );
+		}
 
 		foreach ( $dirs as $dir )
 			$loader->add_rule( new Inpsyde_Directory_Load( $dir ) );
