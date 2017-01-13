@@ -35,15 +35,34 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.accept_language_parser'] = function () {
+
+			return new AcceptLanguageParser();
+		};
+
+		$container['multilingualpress.language_negotiator'] = function ( Container $container ) {
+
+			return new PriorityAwareLanguageNegotiator(
+				$container['multilingualpress.translations'],
+				$container['multilingualpress.accept_language_parser']
+			);
+		};
+
 		$container['multilingualpress.noredirect_permalink_filter'] = function () {
 
 			return new NoredirectPermalinkFilter();
 		};
 
-		$container['multilingualpress.redirect_filter'] = function ( Container $container ) {
+		$container['multilingualpress.noredirect_storage'] = function () {
 
-			return new RedirectFilter(
-				$container['multilingualpress.redirect_settings_repository']
+			return new NoredirectSessionStorage();
+		};
+
+		$container['multilingualpress.redirect_request_validator'] = function ( Container $container ) {
+
+			return new NoredirectAwareRedirectRequestValidator(
+				$container['multilingualpress.redirect_settings_repository'],
+				$container['multilingualpress.noredirect_storage']
 			);
 		};
 
@@ -83,6 +102,14 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			return new SecureUserSettingUpdater(
 				SettingsRepository::META_KEY_USER,
 				$container['multilingualpress.save_redirect_user_setting_nonce']
+			);
+		};
+
+		$container['multilingualpress.redirector'] = function ( Container $container ) {
+
+			return new NoredirectAwareRedirector(
+				$container['multilingualpress.language_negotiator'],
+				$container['multilingualpress.noredirect_storage']
 			);
 		};
 
@@ -141,8 +168,12 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			} else {
 				$container['multilingualpress.noredirect_permalink_filter']->enable();
 
-				// TODO: Maybe integrate filter logic directly into the (to be done) RedirectRequestValidator...?
-				$container['multilingualpress.redirect_filter']->enable();
+				if (
+					! ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+					&& $container['multilingualpress.redirect_request_validator']->is_valid()
+				) {
+					add_action( 'template_redirect', [ $container['multilingualpress.redirector'], 'redirect' ], 1 );
+				}
 			}
 		} );
 	}

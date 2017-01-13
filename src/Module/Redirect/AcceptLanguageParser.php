@@ -1,13 +1,13 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation;
+namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\AcceptHeader\AcceptHeaderParser;
 
 /**
  * Parser for Accept-Language headers, sorting by priority.
  *
- * @package Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiation
+ * @package Inpsyde\MultilingualPress\Module\Redirect
  * @since   3.0.0
  */
 final class AcceptLanguageParser implements AcceptHeaderParser {
@@ -19,7 +19,7 @@ final class AcceptLanguageParser implements AcceptHeaderParser {
 	 *
 	 * @param string $header Accept header string.
 	 *
-	 * @return array Parsed Accept header in array form.
+	 * @return float[] An array with language codes as keys, and priorities as values.
 	 */
 	public function parse( $header ) {
 
