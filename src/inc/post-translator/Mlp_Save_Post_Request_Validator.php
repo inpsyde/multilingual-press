@@ -1,6 +1,7 @@
 <?php
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\RequestValidator;
 
 /**
  * Request validation for the action 'save_post'.
@@ -9,7 +10,7 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
  * @version 2014.03.09
  * @license MIT
  */
-class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface {
+class Mlp_Save_Post_Request_Validator implements RequestValidator {
 
 	/**
 	 * @var Nonce
