@@ -65,11 +65,9 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$container['multilingualpress.term_translator'] = function ( Container $container ) {
 
-			global $wpdb;
-
 			return new TermTranslator(
 				$container['multilingualpress.type_factory'],
-				$wpdb
+				$container['multilingualpress.wpdb']
 			);
 		};
 	}

@@ -15,6 +15,7 @@ namespace Inpsyde\MultilingualPress;
 
 use Inpsyde\MultilingualPress\API\APIServiceProvider;
 use Inpsyde\MultilingualPress\Asset\AssetServiceProvider;
+use Inpsyde\MultilingualPress\Common\WordPressServiceProvider;
 use Inpsyde\MultilingualPress\Core\CoreServiceProvider;
 use Inpsyde\MultilingualPress\Core\ImmutablePluginProperties;
 use Inpsyde\MultilingualPress\Database\DatabaseServiceProvider;
@@ -54,6 +55,7 @@ function bootstrap() {
 	$multilingualpress = new MultilingualPress( $container );
 	$multilingualpress
 		->register_service_provider( new CoreServiceProvider() )
+		->register_service_provider( new WordPressServiceProvider() )
 		->register_service_provider( new APIServiceProvider() )
 		->register_service_provider( new AssetServiceProvider() )
 		->register_service_provider( new DatabaseServiceProvider() )

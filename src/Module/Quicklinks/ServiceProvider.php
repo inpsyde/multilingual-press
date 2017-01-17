@@ -40,9 +40,9 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			);
 		};
 
-		$container['multilingualpress.quicklinks_redirect_hosts_filter'] = function () {
+		$container['multilingualpress.quicklinks_redirect_hosts_filter'] = function ( Container $container ) {
 
-			return new RedirectHostsFilter();
+			return new RedirectHostsFilter( $container['multilingualpress.wpdb'] );
 		};
 
 		$container['multilingualpress.quicklinks_redirector'] = function ( Container $container ) {

@@ -40,16 +40,17 @@ final class WPDBContentRelations implements ContentRelations {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param wpdb          $db             WordPress database object.
 	 * @param Table         $table          Content relations table object.
 	 * @param SiteRelations $site_relations Site relations API object.
 	 */
-	public function __construct( Table $table, SiteRelations $site_relations ) {
+	public function __construct( wpdb $db, Table $table, SiteRelations $site_relations ) {
+
+		$this->db = $db;
 
 		$this->table = $table->name();
 
 		$this->site_relations = $site_relations;
-
-		$this->db = $GLOBALS['wpdb'];
 	}
 
 	/**

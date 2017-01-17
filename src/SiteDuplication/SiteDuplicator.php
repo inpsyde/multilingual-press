@@ -56,6 +56,7 @@ class SiteDuplicator {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param wpdb             $db                WordPress database object.
 	 * @param TableList        $table_list        Table list object.
 	 * @param TableDuplicator  $table_duplicator  Table duplicator object.
 	 * @param TableReplacer    $table_replacer    Table replacer object.
@@ -64,6 +65,7 @@ class SiteDuplicator {
 	 * @param AttachmentCopier $attachment_copier Attachment copier object.
 	 */
 	public function __construct(
+		wpdb $db,
 		TableList $table_list,
 		TableDuplicator $table_duplicator,
 		TableReplacer $table_replacer,
@@ -71,6 +73,8 @@ class SiteDuplicator {
 		ContentRelations $content_relations,
 		AttachmentCopier $attachment_copier
 	) {
+
+		$this->db = $db;
 
 		$this->table_list = $table_list;
 
@@ -83,8 +87,6 @@ class SiteDuplicator {
 		$this->content_relations = $content_relations;
 
 		$this->attachment_copier = $attachment_copier;
-
-		$this->db = $GLOBALS['wpdb'];
 	}
 
 	/**

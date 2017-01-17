@@ -21,10 +21,12 @@ final class WPDBTableList implements TableList {
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
+	 *
+	 * @param wpdb $db WordPress database object.
 	 */
-	public function __construct() {
+	public function __construct( wpdb $db ) {
 
-		$this->db = $GLOBALS['wpdb'];
+		$this->db = $db;
 
 		/**
 		 * WordPress file with the wp_get_db_schema() function.

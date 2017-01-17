@@ -100,6 +100,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.user_admin_language_repository' instanceof \Inpsyde\MultilingualPress\Module\UserAdminLanguage\LanguageRepository,
 			'multilingualpress.user_admin_language_setting' instanceof \Inpsyde\MultilingualPress\Common\Setting\User\UserSettingViewModel,
 			'multilingualpress.user_admin_language_setting_updater' instanceof \Inpsyde\MultilingualPress\Common\Setting\User\UserSettingUpdater,
+			'multilingualpress.wpdb' instanceof \wpdb,
 		],
 		\Inpsyde\MultilingualPress\MultilingualPress::resolve( '' ) => [
 			'' == '@',
@@ -126,6 +127,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.translations' instanceof \Inpsyde\MultilingualPress\API\Translations,
 			'multilingualpress.type_factory' instanceof \Inpsyde\MultilingualPress\Factory\TypeFactory,
 			'multilingualpress.uninstaller' instanceof \Inpsyde\MultilingualPress\Installation\Uninstaller,
+			'multilingualpress.wpdb' instanceof \wpdb,
 		],
 	];
 }

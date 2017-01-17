@@ -28,13 +28,14 @@ final class WPDBSiteRelations implements SiteRelations {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param wpdb  $db    WordPress database object.
 	 * @param Table $table Site relations table object.
 	 */
-	public function __construct( Table $table ) {
+	public function __construct( wpdb $db, Table $table ) {
+
+		$this->db = $db;
 
 		$this->table = $table->name();
-
-		$this->db = $GLOBALS['wpdb'];
 	}
 
 	/**

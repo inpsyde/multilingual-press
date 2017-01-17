@@ -39,9 +39,9 @@ final class NavMenuServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
-		$container['multilingualpress.nav_menu_item_deletor'] = function () {
+		$container['multilingualpress.nav_menu_item_deletor'] = function ( Container $container ) {
 
-			return new ItemDeletor( $GLOBALS['wpdb'] );
+			return new ItemDeletor( $container['multilingualpress.wpdb'] );
 		};
 
 		$container['multilingualpress.nav_menu_item_filter'] = function ( Container $container ) {

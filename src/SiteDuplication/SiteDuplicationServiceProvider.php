@@ -27,6 +27,7 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 		$container['multilingualpress.attachment_copier'] = function ( Container $container ) {
 
 			return new WPDBAttachmentCopier(
+				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.base_path_adapter'],
 				$container['multilingualpress.table_string_replacer']
 			);
@@ -37,14 +38,15 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 			return new ActivePlugins();
 		};
 
-		$container['multilingualpress.site_duplication_settings_view'] = function () {
+		$container['multilingualpress.site_duplication_settings_view'] = function ( Container $container ) {
 
-			return new SettingsView();
+			return new SettingsView( $container['multilingualpress.wpdb'] );
 		};
 
 		$container['multilingualpress.site_duplicator'] = function ( Container $container ) {
 
 			return new SiteDuplicator(
+				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.table_list'],
 				$container['multilingualpress.table_duplicator'],
 				$container['multilingualpress.table_replacer'],

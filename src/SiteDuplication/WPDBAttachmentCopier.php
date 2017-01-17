@@ -39,16 +39,21 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param wpdb                $db                    WordPress database object.
 	 * @param BasePathAdapter     $base_path_adapter     Base path adapter object.
 	 * @param TableStringReplacer $table_string_replacer Table string replacer object.
 	 */
-	public function __construct( BasePathAdapter $base_path_adapter, TableStringReplacer $table_string_replacer ) {
+	public function __construct(
+		wpdb $db,
+		BasePathAdapter $base_path_adapter,
+		TableStringReplacer $table_string_replacer
+	) {
+
+		$this->db = $db;
 
 		$this->base_path_adapter = $base_path_adapter;
 
 		$this->table_string_replacer = $table_string_replacer;
-
-		$this->db = $GLOBALS['wpdb'];
 	}
 
 	/**

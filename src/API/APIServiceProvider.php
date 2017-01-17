@@ -27,6 +27,7 @@ final class APIServiceProvider implements ServiceProvider {
 		$container->share( 'multilingualpress.content_relations', function ( Container $container ) {
 
 			return new WPDBContentRelations(
+				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.content_relations_table'],
 				$container['multilingualpress.site_relations']
 			);
@@ -35,13 +36,17 @@ final class APIServiceProvider implements ServiceProvider {
 		$container->share( 'multilingualpress.languages', function ( Container $container ) {
 
 			return new WPDBLanguages(
+				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.languages_table']
 			);
 		} );
 
 		$container->share( 'multilingualpress.site_relations', function ( Container $container ) {
 
-			return new WPDBSiteRelations( $container['multilingualpress.site_relations_table'] );
+			return new WPDBSiteRelations(
+				$container['multilingualpress.wpdb'],
+				$container['multilingualpress.site_relations_table']
+			);
 		} );
 
 		$container->share( 'multilingualpress.translations', function ( Container $container ) {

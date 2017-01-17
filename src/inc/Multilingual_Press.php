@@ -56,7 +56,7 @@ class Multilingual_Press {
 
 		new Mlp_Language_Manager_Controller(
 			new Mlp_Language_Db_Access( MultilingualPress::resolve( 'multilingualpress.languages_table' )->name() ),
-			$GLOBALS['wpdb']
+			MultilingualPress::resolve( 'multilingualpress.wpdb' )
 		);
 	}
 }

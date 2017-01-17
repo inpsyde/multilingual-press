@@ -25,14 +25,16 @@ final class RedirectHostsFilter implements Filter {
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
+	 *
+	 * @param wpdb $db WordPress database object.
 	 */
-	public function __construct() {
+	public function __construct( wpdb $db ) {
+
+		$this->db = $db;
 
 		$this->accepted_args = 2;
 
 		$this->callback = [ $this, 'filter_hosts' ];
-
-		$this->db = $GLOBALS['wpdb'];
 
 		$this->hook = 'allowed_redirect_hosts';
 	}

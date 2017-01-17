@@ -65,6 +65,7 @@ final class InstallationServiceProvider implements ServiceProvider  {
 		$container['multilingualpress.updater'] = function ( Container $container ) {
 
 			return new Updater(
+				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.table_installer'],
 				$container['multilingualpress.content_relations_table'],
 				$container['multilingualpress.languages_table'],

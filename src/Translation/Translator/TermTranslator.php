@@ -61,6 +61,7 @@ final class TermTranslator implements Translator {
 			return [];
 		}
 
+		// WP_Rewrite is instantiated after the service providers have been bootstrapped, so we can't use the container.
 		if ( ! $this->wp_rewrite ) {
 			global $wp_rewrite;
 

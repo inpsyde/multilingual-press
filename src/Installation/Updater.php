@@ -51,6 +51,7 @@ class Updater {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param wpdb           $db                      WordPress database object.
 	 * @param TableInstaller $table_installer         Table installer object.
 	 * @param Table          $content_relations_table Content relations table object.
 	 * @param Table          $languages_table         Languages table object.
@@ -58,12 +59,15 @@ class Updater {
 	 * @param SiteRelations  $site_relations          Site relations API.
 	 */
 	public function __construct(
+		wpdb $db,
 		TableInstaller $table_installer,
 		Table $content_relations_table,
 		Table $languages_table,
 		Table $site_relations_table,
 		SiteRelations $site_relations
 	) {
+
+		$this->db = $db;
 
 		$this->table_installer = $table_installer;
 
@@ -74,8 +78,6 @@ class Updater {
 		$this->site_relations_table = $site_relations_table;
 
 		$this->site_relations = $site_relations;
-
-		$this->db = $GLOBALS['wpdb'];
 	}
 
 	/**

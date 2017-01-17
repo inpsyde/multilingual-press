@@ -6,7 +6,6 @@ use Inpsyde\MultilingualPress\Common\Locations;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
-use wpdb;
 
 /**
  * Returns the according HTML string representation for the given array of attributes.
@@ -659,12 +658,11 @@ function site_exists( $site_id, $network_id = 0 ) {
 	$network_id = (int) ( $network_id ? $network_id : get_current_site()->id );
 
 	if ( ! isset( $cache[ $network_id ] ) ) {
-		/** @var wpdb $wpdb */
-		global $wpdb;
+		$db = MultilingualPress::resolve( 'multilingualpress.wpdb' );
 
-		$query = $wpdb->prepare( "SELECT blog_id FROM {$wpdb->blogs} WHERE site_id = %d AND deleted = 0", $network_id );
+		$query = $db->prepare( "SELECT blog_id FROM {$db->blogs} WHERE site_id = %d AND deleted = 0", $network_id );
 
-		$cache[ $network_id ] = array_map( 'intval', $wpdb->get_col( $query ) );
+		$cache[ $network_id ] = array_map( 'intval', $db->get_col( $query ) );
 	}
 
 	return in_array( (int) $site_id, $cache[ $network_id ], true );

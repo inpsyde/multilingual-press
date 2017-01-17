@@ -24,44 +24,44 @@ final class DatabaseServiceProvider implements ServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$container->share( 'multilingualpress.content_relations_table', function () {
+		$container->share( 'multilingualpress.content_relations_table', function ( Container $container ) {
 
-			return new Table\ContentRelationsTable( $GLOBALS['wpdb']->base_prefix );
+			return new Table\ContentRelationsTable( $container['multilingualpress.wpdb']->base_prefix );
 		} );
 
-		$container->share( 'multilingualpress.languages_table', function () {
+		$container->share( 'multilingualpress.languages_table', function ( Container $container ) {
 
-			return new Table\LanguagesTable( $GLOBALS['wpdb']->base_prefix );
+			return new Table\LanguagesTable( $container['multilingualpress.wpdb']->base_prefix );
 		} );
 
-		$container->share( 'multilingualpress.site_relations_table', function () {
+		$container->share( 'multilingualpress.site_relations_table', function ( Container $container ) {
 
-			return new Table\SiteRelationsTable( $GLOBALS['wpdb']->base_prefix );
+			return new Table\SiteRelationsTable( $container['multilingualpress.wpdb']->base_prefix );
 		} );
 
-		$container->share( 'multilingualpress.table_duplicator', function () {
+		$container->share( 'multilingualpress.table_duplicator', function ( Container $container ) {
 
-			return new WPDBTableDuplicator();
+			return new WPDBTableDuplicator( $container['multilingualpress.wpdb'] );
 		} );
 
-		$container->share( 'multilingualpress.table_installer', function () {
+		$container->share( 'multilingualpress.table_installer', function ( Container $container ) {
 
-			return new WPDBTableInstaller();
+			return new WPDBTableInstaller( $container['multilingualpress.wpdb'] );
 		} );
 
-		$container->share( 'multilingualpress.table_list', function () {
+		$container->share( 'multilingualpress.table_list', function ( Container $container ) {
 
-			return new WPDBTableList();
+			return new WPDBTableList( $container['multilingualpress.wpdb'] );
 		} );
 
-		$container->share( 'multilingualpress.table_replacer', function () {
+		$container->share( 'multilingualpress.table_replacer', function ( Container $container ) {
 
-			return new WPDBTableReplacer();
+			return new WPDBTableReplacer( $container['multilingualpress.wpdb'] );
 		} );
 
-		$container->share( 'multilingualpress.table_string_replacer', function () {
+		$container->share( 'multilingualpress.table_string_replacer', function ( Container $container ) {
 
-			return new WPDBTableStringReplacer();
+			return new WPDBTableStringReplacer( $container['multilingualpress.wpdb'] );
 		} );
 	}
 }

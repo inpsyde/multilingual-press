@@ -33,13 +33,14 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param wpdb  $db    WordPress database object.
 	 * @param Table $table Optional. Table object. Defaults to null.
 	 */
-	public function __construct( Table $table = null ) {
+	public function __construct( wpdb $db, Table $table = null ) {
 
 		$this->table = $table;
 
-		$this->db = $GLOBALS['wpdb'];
+		$this->db = $db;
 	}
 
 	/**
