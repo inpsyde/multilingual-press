@@ -16,17 +16,6 @@ class AddNewSite extends Backbone.View {
 		super( options );
 
 		/**
-		 * As of WordPress 4.5.0, there is now an appropriate action hook on the Add New Site network admin page.
-		 * Due to our BC policy, we have to wait for WordPress 4.5.0 + 2 in order to make use of it, though.
-		 * TODO: Remove the following (and adapt the according PHP parts) with the release of WordPress 4.5.0 + 2.
-		 */
-		const markup = $( '#mlp-add-new-site-template' ).html() || '';
-		if ( '' !== markup ) {
-			// FIRST render the template, THEN set up the properties using elements that just got injected into the DOM.
-			this.$el.find( '.submit' ).before( _.template( markup )() );
-		}
-
-		/**
 		 * The jQuery object representing the MultilingualPress language select.
 		 * @type {jQuery}
 		 */

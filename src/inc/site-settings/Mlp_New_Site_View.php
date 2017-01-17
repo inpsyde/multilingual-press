@@ -30,29 +30,6 @@ class Mlp_New_Site_View {
 	}
 
 	/**
-	 * Prints the MultilingualPress table as template.
-	 *
-	 * @todo Remove with the release of WordPress 4.5.0 + 2.
-	 *
-	 * @wp-hook admin_footer
-	 *
-	 * @return void
-	 */
-	public function print_template() {
-
-		global $hook_suffix;
-
-		if ( 'site-new.php' !== $hook_suffix ) {
-			return;
-		}
-		?>
-		<script type="text/html" id="mlp-add-new-site-template">
-			<?php $this->render(); ?>
-		</script>
-		<?php
-	}
-
-	/**
 	 * Renders the MultilingualPress table, and fires an action to inject markup.
 	 *
 	 * @wp-hook network_site_new_form
