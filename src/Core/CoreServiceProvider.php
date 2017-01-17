@@ -239,7 +239,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				}
 			} );
 
-			add_filter( 'language_attributes', __NAMESPACE__ . '\\replace_language_in_language_attributes' );
+			add_filter( 'language_attributes', 'Inpsyde\\MultilingualPress\\replace_language_in_language_attributes' );
 		}
 	}
 }
