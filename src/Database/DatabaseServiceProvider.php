@@ -63,5 +63,10 @@ final class DatabaseServiceProvider implements ServiceProvider {
 
 			return new WPDBTableStringReplacer( $container['multilingualpress.wpdb'] );
 		} );
+
+		$container->share( 'multilingualpress.wpdb', function () {
+
+			return $GLOBALS['wpdb'];
+		} );
 	}
 }
