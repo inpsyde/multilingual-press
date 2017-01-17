@@ -52,7 +52,7 @@ trait ContextAwareFilter {
 	 *
 	 * @return bool Whether or not the filter was removed successfully.
 	 */
-	public function disable( $hook = '', $priority = Filter::DEFAULT_PRIORITY ) {
+	public function disable( $hook = null, $priority = null ) {
 
 		if ( ! $this->callback ) {
 			return false;
@@ -80,11 +80,7 @@ trait ContextAwareFilter {
 	 *
 	 * @return bool Whether or not the filter was added successfully.
 	 */
-	public function enable(
-		$hook = '',
-		$priority = Filter::DEFAULT_PRIORITY,
-		$accepted_args = Filter::DEFAULT_ACCEPTED_ARGS
-	) {
+	public function enable( $hook = null, $priority = null, $accepted_args = null ) {
 
 		if ( ! $this->callback ) {
 			return false;
