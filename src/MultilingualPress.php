@@ -66,10 +66,10 @@ final class MultilingualPress {
 	 */
 	private $modules = [];
 
-	/**@todo Migrate from old 'mlp_version' option.
+	/**
 	 * @var string
 	 */
-	private $version_option = 'multilingualpress_version';
+	private $version_option = 'mlp_version';
 
 	/**
 	 * Constructor. Sets up the properties.
