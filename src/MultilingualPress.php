@@ -157,22 +157,13 @@ final class MultilingualPress {
 
 		static::$container->lock();
 
-		// TODO: Eventually remove the following block.
-		class_exists( 'Mlp_Load_Controller' ) or require __DIR__ . '/inc/autoload/Mlp_Load_Controller.php';
-		new \Mlp_Load_Controller( static::$container['multilingualpress.properties']->plugin_dir_path() . '/src/inc' );
-
 		if ( ! $this->check_installation() ) {
 			return false;
 		}
 
 		$this->bootstrap_service_providers();
 
-		$needs_modules = $this->needs_modules();
-		if ( $needs_modules ) {
-			$this->register_modules();
-		}
-
-		unset( $this->modules );
+		$this->register_modules();
 
 		static::$container->bootstrap();
 
@@ -184,14 +175,6 @@ final class MultilingualPress {
 		 * @since 3.0.0
 		 */
 		do_action( static::ACTION_BOOTSTRAPPED );
-
-		// TODO: Eventually remove/refactor according to new architecure as soon as the old controller got replaced.
-		class_exists( 'Multilingual_Press' ) or require __DIR__ . '/inc/Multilingual_Press.php';
-		$old_controller = new \Multilingual_Press();
-		if ( $needs_modules ) {
-			$old_controller->setup();
-		}
-		add_action( 'wp_loaded', [ $old_controller, 'prepare_plugin_data' ] );
 
 		return true;
 	}
@@ -286,23 +269,27 @@ final class MultilingualPress {
 	 */
 	private function register_modules() {
 
-		/**
-		 * Fires right before MultilingualPress registers any modules.
-		 *
-		 * @since 3.0.0
-		 */
-		do_action( static::ACTION_REGISTER_MODULES );
+		if ( $this->needs_modules() ) {
+			/**
+			 * Fires right before MultilingualPress registers any modules.
+			 *
+			 * @since 3.0.0
+			 */
+			do_action( static::ACTION_REGISTER_MODULES );
 
-		$module_manager = static::$container['multilingualpress.module_manager'];
+			$module_manager = static::$container['multilingualpress.module_manager'];
 
-		array_walk( $this->modules, function ( ModuleServiceProvider $module ) use ( $module_manager ) {
+			array_walk( $this->modules, function ( ModuleServiceProvider $module ) use ( $module_manager ) {
 
-			if ( $module->register_module( $module_manager ) ) {
-				if ( $module instanceof ActivationAwareModuleServiceProvider ) {
+				if ( $module->register_module( $module_manager ) ) {
+					if ( $module instanceof ActivationAwareModuleServiceProvider ) {
 
-					$module->activate();
+						$module->activate();
+					}
 				}
-			}
-		} );
+			} );
+		}
+
+		unset( $this->modules );
 	}
 }

@@ -78,3 +78,17 @@ function bootstrap() {
 
 	return $multilingualpress->bootstrap();
 }
+
+// TODO: Eventually remove/refactor according to new architecure as soon as the old controller got replaced.
+add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
+
+	class_exists( 'Mlp_Load_Controller' ) or require __DIR__ . '/src/inc/autoload/Mlp_Load_Controller.php';
+	new \Mlp_Load_Controller(
+		MultilingualPress::resolve( 'multilingualpress.properties' )->plugin_dir_path() . '/src/inc'
+	);
+
+	class_exists( 'Multilingual_Press' ) or require __DIR__ . '/src/inc/Multilingual_Press.php';
+	$old_controller = new \Multilingual_Press();
+	$old_controller->setup();
+	add_action( 'wp_loaded', [ $old_controller, 'prepare_plugin_data' ] );
+} );
