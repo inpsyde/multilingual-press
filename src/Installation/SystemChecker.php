@@ -138,7 +138,7 @@ class SystemChecker {
 	public function check_installation() {
 
 		if ( ! $this->is_plugins_page() ) {
-			return self::WRONG_PAGE_FOR_CHECK;
+			return static::WRONG_PAGE_FOR_CHECK;
 		}
 
 		$this->check_php_version();
@@ -152,7 +152,7 @@ class SystemChecker {
 		if ( ! $this->errors ) {
 			$this->site_relations_checker->check_relations();
 
-			return self::INSTALLATION_OK;
+			return static::INSTALLATION_OK;
 		}
 
 		$deactivator = new PluginDeactivator(
@@ -164,7 +164,7 @@ class SystemChecker {
 		add_action( 'admin_notices', [ $deactivator, 'deactivate_plugin' ], 0 );
 		add_action( 'network_admin_notices', [ $deactivator, 'deactivate_plugin' ], 0 );
 
-		return self::PLUGIN_DEACTIVATED;
+		return static::PLUGIN_DEACTIVATED;
 	}
 
 	/**
@@ -180,16 +180,16 @@ class SystemChecker {
 	public function check_version( VersionNumber $installed_version, VersionNumber $current_version ) {
 
 		if ( version_compare( $installed_version, $current_version, '>=' ) ) {
-			return self::VERSION_OK;
+			return static::VERSION_OK;
 		}
 
 		// TODO: Is this really what we want to check here?
 		$languages = get_network_option( null, 'inpsyde_multilingual', [] );
 		if ( $languages ) {
-			return self::NEEDS_UPGRADE;
+			return static::NEEDS_UPGRADE;
 		}
 
-		return self::NEEDS_INSTALLATION;
+		return static::NEEDS_INSTALLATION;
 	}
 
 	/**
@@ -222,7 +222,7 @@ class SystemChecker {
 		] );
 
 		$required_version = $this->type_factory->create_version_number( [
-			self::MINIMUM_PHP_VERSION,
+			static::MINIMUM_PHP_VERSION,
 		] );
 
 		if ( version_compare( $current_version, $required_version, '>=' ) ) {
@@ -250,7 +250,7 @@ class SystemChecker {
 		] );
 
 		$required_version = $this->type_factory->create_version_number( [
-			self::MINIMUM_WORDPRESS_VERSION,
+			static::MINIMUM_WORDPRESS_VERSION,
 		] );
 
 		if ( version_compare( $current_version, $required_version, '>=' ) ) {

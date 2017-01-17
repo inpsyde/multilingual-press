@@ -64,13 +64,13 @@ class PostTypeSupportSettingsUpdater {
 
 		$custom_post_types = $this->repository->get_custom_post_types();
 
-		if ( ! $custom_post_types || empty( $data[ self::SETTINGS_NAME ] ) ) {
+		if ( ! $custom_post_types || empty( $data[ static::SETTINGS_NAME ] ) ) {
 			return $this->repository->unsupport_all_post_types();
 		}
 
 		$custom_post_types = array_keys( $custom_post_types );
 
-		$settings = (array) $data[ self::SETTINGS_NAME ];
+		$settings = (array) $data[ static::SETTINGS_NAME ];
 
 		$custom_post_types = array_combine( $custom_post_types, array_map( function ( $slug ) use ( $settings ) {
 

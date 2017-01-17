@@ -141,7 +141,7 @@ class RelationshipControlView {
 	 */
 	private function localize_script() {
 
-		if ( self::$is_script_localized ) {
+		if ( static::$is_script_localized ) {
 			return;
 		}
 
@@ -171,7 +171,7 @@ class RelationshipControlView {
 			'threshold' => max( 1, $threshold ),
 		] );
 
-		self::$is_script_localized = true;
+		static::$is_script_localized = true;
 	}
 
 	/**

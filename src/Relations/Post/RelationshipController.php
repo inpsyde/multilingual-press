@@ -249,13 +249,13 @@ class RelationshipController {
 	private function get_callback() {
 
 		switch ( $_REQUEST['action'] ) {
-			case self::ACTION_CONNECT_EXISTING:
+			case static::ACTION_CONNECT_EXISTING:
 				return [ $this, 'handle_connect_existing_post' ];
 
-			case self::ACTION_CONNECT_NEW:
+			case static::ACTION_CONNECT_NEW:
 				return [ $this, 'handle_connect_new_post' ];
 
-			case self::ACTION_DISCONNECT:
+			case static::ACTION_DISCONNECT:
 				return [ $this, 'handle_disconnect_post' ];
 		}
 

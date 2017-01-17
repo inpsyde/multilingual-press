@@ -62,12 +62,12 @@ class SettingsUpdater {
 			return false;
 		}
 
-		if ( empty( $data[ self::SETTINGS_NAME ] ) ) {
+		if ( empty( $data[ static::SETTINGS_NAME ] ) ) {
 			return false;
 		}
 
-		if ( ! empty( $data[ self::SETTINGS_NAME ]['position'] ) ) {
-			return $this->repository->set_position( $data[ self::SETTINGS_NAME ]['position'] );
+		if ( ! empty( $data[ static::SETTINGS_NAME ]['position'] ) ) {
+			return $this->repository->set_position( $data[ static::SETTINGS_NAME ]['position'] );
 		}
 
 		return false;

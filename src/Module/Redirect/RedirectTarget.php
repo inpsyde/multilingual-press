@@ -76,19 +76,19 @@ class RedirectTarget {
 	public function __construct( array $data = [] ) {
 
 		$data = array_merge( [
-			self::KEY_LANGUAGE => '',
-			self::KEY_PRIORITY => 0,
-			self::KEY_SITE_ID  => 0,
-			self::KEY_URL      => '',
+			static::KEY_LANGUAGE => '',
+			static::KEY_PRIORITY => 0,
+			static::KEY_SITE_ID  => 0,
+			static::KEY_URL      => '',
 		], $data );
 
-		$this->language = (string) $data[ self::KEY_LANGUAGE ];
+		$this->language = (string) $data[ static::KEY_LANGUAGE ];
 
-		$this->priority = (int) $data[ self::KEY_PRIORITY ];
+		$this->priority = (int) $data[ static::KEY_PRIORITY ];
 
-		$this->site_id = (int) $data[ self::KEY_SITE_ID ];
+		$this->site_id = (int) $data[ static::KEY_SITE_ID ];
 
-		$this->url = (string) $data[ self::KEY_URL ];
+		$this->url = (string) $data[ static::KEY_URL ];
 	}
 
 	/**

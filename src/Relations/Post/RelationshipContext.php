@@ -69,14 +69,7 @@ class RelationshipContext {
 	/**
 	 * @var array
 	 */
-	private static $default_data = [
-		self::KEY_NEW_POST_ID    => 0,
-		self::KEY_NEW_POST_TITLE => '',
-		self::KEY_REMOTE_POST_ID => 0,
-		self::KEY_REMOTE_SITE_ID => 0,
-		self::KEY_SOURCE_POST_ID => 0,
-		self::KEY_SOURCE_SITE_ID => 0,
-	];
+	private static $default_data;
 
 	/**
 	 * @var array
@@ -91,6 +84,17 @@ class RelationshipContext {
 	 * @param array $data Optional. Initial context data. Defaults to empty array.
 	 */
 	public function __construct( array $data = [] ) {
+
+		if ( ! isset( static::$default_data ) ) {
+			static::$default_data = [
+				static::KEY_NEW_POST_ID    => 0,
+				static::KEY_NEW_POST_TITLE => '',
+				static::KEY_REMOTE_POST_ID => 0,
+				static::KEY_REMOTE_SITE_ID => 0,
+				static::KEY_SOURCE_POST_ID => 0,
+				static::KEY_SOURCE_SITE_ID => 0,
+			];
+		}
 
 		if ( ! isset( $this->data ) ) {
 			$this->data = array_intersect_key( array_merge( static::$default_data, $data ), static::$default_data );
@@ -142,7 +146,7 @@ class RelationshipContext {
 	 */
 	public function new_post_id() {
 
-		return (int) $this->data[ self::KEY_NEW_POST_ID ];
+		return (int) $this->data[ static::KEY_NEW_POST_ID ];
 	}
 
 	/**
@@ -154,7 +158,7 @@ class RelationshipContext {
 	 */
 	public function new_post_title() {
 
-		return (string) $this->data[ self::KEY_NEW_POST_TITLE ];
+		return (string) $this->data[ static::KEY_NEW_POST_TITLE ];
 	}
 
 	/**
@@ -166,7 +170,7 @@ class RelationshipContext {
 	 */
 	public function remote_post_id() {
 
-		return (int) $this->data[ self::KEY_REMOTE_POST_ID ];
+		return (int) $this->data[ static::KEY_REMOTE_POST_ID ];
 	}
 
 	/**
@@ -178,7 +182,7 @@ class RelationshipContext {
 	 */
 	public function remote_site_id() {
 
-		return (int) $this->data[ self::KEY_REMOTE_SITE_ID ];
+		return (int) $this->data[ static::KEY_REMOTE_SITE_ID ];
 	}
 
 	/**
@@ -190,7 +194,7 @@ class RelationshipContext {
 	 */
 	public function source_post_id() {
 
-		return (int) $this->data[ self::KEY_SOURCE_POST_ID ];
+		return (int) $this->data[ static::KEY_SOURCE_POST_ID ];
 	}
 
 	/**
@@ -236,6 +240,6 @@ class RelationshipContext {
 	 */
 	public function source_site_id() {
 
-		return (int) $this->data[ self::KEY_SOURCE_SITE_ID ];
+		return (int) $this->data[ static::KEY_SOURCE_SITE_ID ];
 	}
 }

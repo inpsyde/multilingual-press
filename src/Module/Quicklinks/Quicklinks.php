@@ -177,7 +177,7 @@ class Quicklinks {
 		 */
 		$type = apply_filters(
 			'multilingualpress.quicklinks_type',
-			3 < count( $languages ) ? self::TYPE_LINKS : self::TYPE_SELECT,
+			3 < count( $languages ) ? static::TYPE_LINKS : static::TYPE_SELECT,
 			$languages,
 			$current_position
 		);
@@ -186,7 +186,7 @@ class Quicklinks {
 
 		ob_start();
 
-		if ( self::TYPE_LINKS === $type ) {
+		if ( static::TYPE_LINKS === $type ) {
 			$this->render_links( $languages );
 		} else {
 			$this->render_select( $languages );

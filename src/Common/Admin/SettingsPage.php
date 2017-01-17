@@ -353,15 +353,15 @@ class SettingsPage {
 			$url = add_query_arg( 'page', $this->slug, $this->parent ?: 'admin.php' );
 
 			switch ( $this->admin ) {
-				case self::ADMIN_NETWORK:
+				case static::ADMIN_NETWORK:
 					$this->url = network_admin_url( $url );
 					break;
 
-				case self::ADMIN_SITE:
+				case static::ADMIN_SITE:
 					$this->url = admin_url( $url );
 					break;
 
-				case self::ADMIN_USER:
+				case static::ADMIN_USER:
 					$this->url = user_admin_url( $url );
 					break;
 			}
@@ -378,13 +378,13 @@ class SettingsPage {
 	private function get_action() {
 
 		switch ( $this->admin ) {
-			case self::ADMIN_NETWORK:
+			case static::ADMIN_NETWORK:
 				return 'network_admin_menu';
 
-			case self::ADMIN_SITE:
+			case static::ADMIN_SITE:
 				return 'admin_menu';
 
-			case self::ADMIN_USER:
+			case static::ADMIN_USER:
 				return 'user_admin_menu';
 		}
 

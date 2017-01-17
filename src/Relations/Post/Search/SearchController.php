@@ -47,7 +47,7 @@ class SearchController {
 	 */
 	public function initialize() {
 
-		add_action( 'wp_ajax_' . self::ACTION, function () {
+		add_action( 'wp_ajax_' . static::ACTION, function () {
 
 			$context = RelationshipContext::from_request();
 
