@@ -114,6 +114,4 @@ class AssetFactory {
 			$media
 		);
 	}
-
-	// TODO: Add methods for non-internal assets...
 }

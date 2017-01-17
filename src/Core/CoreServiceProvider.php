@@ -43,7 +43,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new InternalLocations();
 		} );
 
-		// TODO: Make a regular not shared service as soon as everything else has been adapted. Or remove from here?
+		// TODO: Make a regular not shared service as soon as everything else has been adapted.
 		$container->share( 'multilingualpress.module_manager', function () {
 
 			// TODO: Maybe store the option name somewhere? But then again, who else really needs to know it?
