@@ -20,32 +20,7 @@ const createTestee = ( options ) => {
 	return new AddNewSite( _.extend( { settings: {} }, options ) );
 };
 
-test( 'constructor (template) ...', ( assert ) => {
-	const markup = F.getRandomString();
-
-	const $template = new JqueryObject();
-	$template.html.returns( markup );
-
-	$.withArgs( '#mlp-add-new-site-template' ).returns( $template );
-
-	const $el = new JqueryObject();
-	$el.find.returns( new JqueryObject() );
-
-	createTestee( { $el } );
-
-	assert.equal(
-		global._.template.calledWith( markup ),
-		true,
-		'... SHOULD render the expected markup.'
-	);
-
-	// Restore global scope.
-	globalStub.restore();
-
-	assert.end();
-} );
-
-test( 'constructor (no template) ...', ( assert ) => {
+test( 'constructor ...', ( assert ) => {
 	createTestee();
 
 	assert.equal(
