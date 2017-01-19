@@ -26,6 +26,8 @@ class AddNewSite extends Backbone.View {
 		 * @type {jQuery}
 		 */
 		_this.$pluginsRow = $( '#mlp-activate-plugins' ).closest( 'tr' );
+
+		_this.$pluginsRow.hide();
 	}
 
 	/**

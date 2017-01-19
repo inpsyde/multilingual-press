@@ -16,7 +16,7 @@ export default function JqueryObject( customMembers = {} ) {
 		append: sinon.spy(),
 		attr: sinon.stub(),
 		before: sinon.spy(),
-		closest: sinon.stub(),
+		closest: sinon.stub().returns( this ),
 		css: sinon.spy(),
 		data: sinon.stub(),
 		each: ( c ) => {
@@ -25,8 +25,9 @@ export default function JqueryObject( customMembers = {} ) {
 			} );
 		},
 		filter: sinon.stub(),
-		find: sinon.stub(),
-		first: sinon.stub(),
+		find: sinon.stub().returns( this ),
+		first: sinon.stub().returns( this ),
+		hide: sinon.stub(),
 		html: sinon.stub(),
 		is: sinon.stub(),
 		not: sinon.stub(),

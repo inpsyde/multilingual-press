@@ -171,14 +171,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 				</label>
 			</th>
 			<td>
-				<input
-					class="regular-text"
-					type="url"
-					id="inpsyde_multilingual_flag_url"
-					name="inpsyde_multilingual_flag_url"
-					value="<?php echo esc_url( $blogoption_flag ); ?>"
-					placeholder="http://example.com/flag.png"
-				/>
+				<input type="url" class="regular-text" name="inpsyde_multilingual_flag_url" value="<?php echo esc_url( $blogoption_flag ); ?>" id="inpsyde_multilingual_flag_url" placeholder="http://example.com/flag.png">
 			</td>
 		</tr>
 		<?php

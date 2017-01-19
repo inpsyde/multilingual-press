@@ -22,27 +22,25 @@ class Mlp_Network_New_Site_Controller {
 	/**
 	 * @var SiteRelations
 	 */
-	private $site_relation;
+	private $site_relations;
 
 	/**
 	 * Constructor
 	 *
-	 * @param SiteRelations $site_relation Site relations API object.
-	 * @param Languages     $languages     Languages API object.
+	 * @param SiteRelations $site_relations Site relations API object.
+	 * @param Languages     $languages      Languages API object.
 	 */
-	public function __construct( SiteRelations $site_relation, Languages $languages ) {
+	public function __construct( SiteRelations $site_relations, Languages $languages ) {
 
 		if ( ! is_network_admin() ) {
 			return;
 		}
 
-		$this->site_relation = $site_relation;
+		$this->site_relations = $site_relations;
 
 		$this->languages = $languages;
 
 		add_action( 'wpmu_new_blog', [ $this, 'update' ] );
-
-		add_action( 'network_site_new_form', [ new Mlp_New_Site_View( $languages ), 'render' ] );
 	}
 
 	/**
@@ -152,6 +150,6 @@ class Mlp_Network_New_Site_Controller {
 		$new_related = (array) $_POST[ 'related_blogs' ];
 		$related     = array_map( 'intval', $new_related );
 
-		return $this->site_relation->insert_relations( $blog_id, $related );
+		return $this->site_relations->insert_relations( $blog_id, $related );
 	}
 }

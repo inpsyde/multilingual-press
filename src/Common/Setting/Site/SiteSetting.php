@@ -48,17 +48,20 @@ class SiteSetting {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param string $render_hook Action hook for rendering to be triggered.
+	 * @param string $update_hook Optional. Action hook for updating to be triggered. Defaults to empty string.
+	 *
 	 * @return void
 	 */
-	public function register() {
+	public function register( $render_hook, $update_hook = '' ) {
 
-		// TODO: Adapt hook as soon as it is a class constant (see Mlp_Network_Site_Settings_Tab_Content).
-		add_action( 'mlp_blogs_add_fields', function ( $site_id ) {
+		add_action( $render_hook, function ( $site_id ) {
 
-			( new SiteSettingView( $this->model, $this->check_user ) )->render( $site_id );
+			( new SiteSettingSingleView( $this->model, $this->check_user ) )->render( $site_id );
 		} );
 
-		// TODO: Adapt hook as soon as it is a class constant (see Mlp_Network_Site_Settings_Controller).
-		add_action( 'mlp_blogs_save_fields', [ $this->updater, 'update' ], 10, 2 );
+		if ( $update_hook ) {
+			add_action( $update_hook, [ $this->updater, 'update' ], 10, 2 );
+		}
 	}
 }

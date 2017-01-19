@@ -17,6 +17,33 @@ use wpdb;
 class SiteDuplicator {
 
 	/**
+	 * Input name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const NAME_ACTIVATE_PLUGINS = 'activate_plugins';
+
+	/**
+	 * Input name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const NAME_BASED_ON_SITE = 'basedon';
+
+	/**
+	 * Input name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const NAME_SEARCH_ENGINE_VISIBILITY = 'visibility';
+
+	/**
 	 * @var ActivePlugins
 	 */
 	private $active_plugins;
@@ -100,11 +127,14 @@ class SiteDuplicator {
 	 */
 	public function duplicate_site( $new_site_id ) {
 
-		if ( empty( $_POST['blog']['basedon'] ) || 1 > $_POST['blog']['basedon'] ) {
+		if (
+			empty( $_POST['blog'][ static::NAME_BASED_ON_SITE ] )
+			|| 1 > $_POST['blog'][ static::NAME_BASED_ON_SITE ]
+		) {
 			return false;
 		}
 
-		$source_site_id = (int) $_POST['blog']['basedon'];
+		$source_site_id = (int) $_POST['blog'][ static::NAME_BASED_ON_SITE ];
 
 		// Switch to the source site.
 		switch_to_blog( $source_site_id );
@@ -132,8 +162,8 @@ class SiteDuplicator {
 		$this->rename_user_roles_option( $table_prefix );
 
 		// Set the search engine visibility.
-		if ( isset( $_POST['blog']['visibility'] ) ) {
-			update_option( 'blog_public', (bool) $_POST['blog']['visibility'] );
+		if ( isset( $_POST['blog'][ static::NAME_SEARCH_ENGINE_VISIBILITY ] ) ) {
+			update_option( 'blog_public', (bool) $_POST['blog'][ static::NAME_SEARCH_ENGINE_VISIBILITY ] );
 		}
 
 		$this->handle_plugins();
@@ -279,7 +309,7 @@ class SiteDuplicator {
 	 */
 	private function handle_plugins() {
 
-		if ( isset( $_POST['blog']['activate_plugins'] ) ) {
+		if ( isset( $_POST['blog'][ static::NAME_ACTIVATE_PLUGINS ] ) ) {
 			$this->active_plugins->activate();
 		} else {
 			$this->active_plugins->deactivate();

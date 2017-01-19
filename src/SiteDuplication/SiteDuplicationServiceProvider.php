@@ -2,6 +2,9 @@
 
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
+use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingMultiView;
+use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
+use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 
@@ -38,9 +41,28 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 			return new ActivePlugins();
 		};
 
+		$container['multilingualpress.site_duplication_activate_plugins_setting'] = function () {
+
+			return new ActivatePluginsSetting();
+		};
+
+		$container['multilingualpress.site_duplication_based_on_site_setting'] = function ( Container $container ) {
+
+			return new BasedOnSiteSetting( $container['multilingualpress.wpdb'] );
+		};
+
+		$container['multilingualpress.site_duplication_search_engine_visibility_setting'] = function () {
+
+			return new SearchEngineVisibilitySetting();
+		};
+
 		$container['multilingualpress.site_duplication_settings_view'] = function ( Container $container ) {
 
-			return new SettingsView( $container['multilingualpress.wpdb'] );
+			return SiteSettingMultiView::from_view_models( [
+				$container['multilingualpress.site_duplication_based_on_site_setting'],
+				$container['multilingualpress.site_duplication_activate_plugins_setting'],
+				$container['multilingualpress.site_duplication_search_engine_visibility_setting'],
+			] );
 		};
 
 		$container['multilingualpress.site_duplicator'] = function ( Container $container ) {
@@ -71,7 +93,7 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 		add_action( 'wpmu_new_blog', [ $container['multilingualpress.site_duplicator'], 'duplicate_site' ] );
 
 		add_action(
-			'mlp_after_new_blog_fields',
+			SiteSettingsSectionView::ACTION_AFTER . '_' . NewSiteSettings::ID,
 			[ $container['multilingualpress.site_duplication_settings_view'], 'render' ]
 		);
 	}

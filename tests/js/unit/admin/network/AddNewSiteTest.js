@@ -21,12 +21,19 @@ const createTestee = ( options ) => {
 };
 
 test( 'constructor ...', ( assert ) => {
+	const $pluginsRow = new JqueryObject();
+
+	const $activatePluginsCheckbox = new JqueryObject();
+	$activatePluginsCheckbox.closest.returns( $pluginsRow );
+
+	$.withArgs( '#mlp-activate-plugins' ).returns( $activatePluginsCheckbox );
+
 	createTestee();
 
 	assert.equal(
-		global._.template.callCount,
-		0,
-		'... SHOULD NOT render any markup.'
+		$pluginsRow.hide.callCount,
+		1,
+		'... SHOULD hide the plugins row.'
 	);
 
 	assert.end();

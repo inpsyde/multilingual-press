@@ -8,8 +8,15 @@ use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\ConditionalAwareRequest;
+use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingMultiView;
+use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
+use Inpsyde\MultilingualPress\Core\Admin\AlternativeLanguageTitleSiteSetting;
+use Inpsyde\MultilingualPress\Core\Admin\FlagImageURLSiteSetting;
+use Inpsyde\MultilingualPress\Core\Admin\LanguageSiteSetting;
+use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsUpdater;
+use Inpsyde\MultilingualPress\Core\Admin\RelationshipsSiteSetting;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -33,15 +40,30 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.alternative_language_title_site_setting'] = function () {
+
+			return new AlternativeLanguageTitleSiteSetting();
+		};
+
 		$container['multilingualpress.base_path_adapter'] = function () {
 
 			return new CachingBasePathAdapter();
+		};
+
+		$container['multilingualpress.flag_image_url_site_setting'] = function () {
+
+			return new FlagImageURLSiteSetting();
 		};
 
 		$container->share( 'multilingualpress.internal_locations', function () {
 
 			return new InternalLocations();
 		} );
+
+		$container['multilingualpress.language_site_setting'] = function ( Container $container ) {
+
+			return new LanguageSiteSetting( $container['multilingualpress.languages'] );
+		};
 
 		// TODO: Make a regular not shared service as soon as everything else has been adapted.
 		$container->share( 'multilingualpress.module_manager', function () {
@@ -50,6 +72,21 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			// TODO: Migration: The old option name was "state_modules", and it stored "on" and "off" values, no bools.
 			return new Module\NetworkOptionModuleManager( 'multilingualpress_modules' );
 		} );
+
+		$container['multilingualpress.new_site_settings'] = function ( Container $container ) {
+
+			return new NewSiteSettings( $container['multilingualpress.new_site_settings_view'] );
+		};
+
+		$container['multilingualpress.new_site_settings_view'] = function ( Container $container ) {
+
+			return SiteSettingMultiView::from_view_models( [
+				$container['multilingualpress.language_site_setting'],
+				$container['multilingualpress.alternative_language_title_site_setting'],
+				$container['multilingualpress.flag_image_url_site_setting'],
+				$container['multilingualpress.relationships_site_setting'],
+			] );
+		};
 
 		$container['multilingualpress.plugin_settings_page'] = function ( Container $container ) {
 
@@ -80,6 +117,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.update_plugin_settings_nonce'],
 				$container['multilingualpress.plugin_settings_page']
 			);
+		};
+
+		$container['multilingualpress.relationships_site_setting'] = function ( Container $container ) {
+
+			return new RelationshipsSiteSetting( $container['multilingualpress.site_relations'] );
 		};
 
 		$container->share( 'multilingualpress.request', function () {
@@ -222,6 +264,16 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 							);
 					}
 				) )->register();
+			}
+
+			if ( is_network_admin() ) {
+
+				$new_site_settings = $container['multilingualpress.new_site_settings'];
+
+				add_action( 'network_site_new_form', function ( $ite_id ) use ( $new_site_settings ) {
+
+					( new SiteSettingsSectionView( $new_site_settings ) )->render( $ite_id );
+				} );
 			}
 		} else {
 			$translations = $container['multilingualpress.translations'];
