@@ -19,6 +19,11 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	private $id = 'mlp-site-relations';
 
 	/**
+	 * @var SiteSettingsRepository
+	 */
+	private $repository;
+
+	/**
 	 * @var SiteRelations
 	 */
 	private $site_relations;
@@ -28,9 +33,12 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param SiteRelations $site_relations Site relations API object.
+	 * @param SiteSettingsRepository $repository     Site settings repository object.
+	 * @param SiteRelations          $site_relations Site relations API object.
 	 */
-	public function __construct( SiteRelations $site_relations ) {
+	public function __construct( SiteSettingsRepository $repository, SiteRelations $site_relations ) {
+
+		$this->repository = $repository;
 
 		$this->site_relations = $site_relations;
 	}
@@ -46,8 +54,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	 */
 	public function markup( $site_id ) {
 
-		// TODO: Adapt to be used on Edit Site as well.
-		return $this->get_relationships() . sprintf(
+		return $this->get_relationships( $site_id ) . sprintf(
 				'<p class="description">%s</p>',
 				esc_html__(
 					'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
@@ -75,34 +82,37 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	/**
 	 * Returns the markup for all relationships.
 	 *
+	 * @param int $base_site_id Current site ID.
+	 *
 	 * @return string The markup for all relationships.
 	 */
-	private function get_relationships() {
+	private function get_relationships( $base_site_id ) {
 
-		$site_ids = (array) get_network_option( null, 'inpsyde_multilingual', [] );
+		$site_ids = $this->repository->get_site_ids( $base_site_id );
 		if ( ! $site_ids ) {
 			return '';
 		}
 
-		$site_ids = array_unique( array_map( 'intval', array_keys( $site_ids ) ) );
-
-		return array_reduce( $site_ids, function ( $relationships, $site_id ) {
+		return array_reduce( $site_ids, function ( $relationships, $site_id ) use ( $base_site_id ) {
 
 			switch_to_blog( $site_id );
 			$site_name = get_bloginfo( 'name' );
 			restore_current_blog();
 
+			$related_site_ids = $this->site_relations->get_related_site_ids( $site_id );
+
 			return $relationships . sprintf(
-					'<p><label for="%3$s"><input type="checkbox" name="%s[]" value="%2$d" id="%3$s">%1$s</label></p>',
+					'<p><label for="%3$s"><input type="checkbox" name="%4$s[]" value="%2$d" id="%3$s"%5$s>%1$s</label></p>',
 					sprintf(
 						// translators: 1 = site name, 2 = site language
 						esc_html_x( '%1$s - %2$s', 'Site relationships', 'multilingual-press' ),
 						$site_name,
 						\Inpsyde\MultilingualPress\get_site_language( $site_id, false )
 					),
-					esc_attr( '' ),
+					esc_attr( $site_id ),
 					esc_attr( "{$this->id}-{$site_id}" ),
-					esc_attr( SiteSettingsRepository::NAME_RELATIONSHIPS )
+					esc_attr( SiteSettingsRepository::NAME_RELATIONSHIPS ),
+					checked( in_array( $base_site_id, $related_site_ids, true ), true, false )
 				);
 		}, '' );
 	}

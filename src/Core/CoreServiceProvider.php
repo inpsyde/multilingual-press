@@ -17,6 +17,7 @@ use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\RelationshipsSiteSetting;
+use Inpsyde\MultilingualPress\Core\Admin\TypeSafeSiteSettingsRepository;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -40,9 +41,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$container['multilingualpress.alternative_language_title_site_setting'] = function () {
+		$container['multilingualpress.alternative_language_title_site_setting'] = function ( Container $container ) {
 
-			return new AlternativeLanguageTitleSiteSetting();
+			return new AlternativeLanguageTitleSiteSetting(
+				$container['multilingualpress.site_settings_repository']
+			);
 		};
 
 		$container['multilingualpress.base_path_adapter'] = function () {
@@ -50,9 +53,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new CachingBasePathAdapter();
 		};
 
-		$container['multilingualpress.flag_image_url_site_setting'] = function () {
+		$container['multilingualpress.flag_image_url_site_setting'] = function ( Container $container ) {
 
-			return new FlagImageURLSiteSetting();
+			return new FlagImageURLSiteSetting(
+				$container['multilingualpress.site_settings_repository']
+			);
 		};
 
 		$container->share( 'multilingualpress.internal_locations', function () {
@@ -62,7 +67,10 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.language_site_setting'] = function ( Container $container ) {
 
-			return new LanguageSiteSetting( $container['multilingualpress.languages'] );
+			return new LanguageSiteSetting(
+				$container['multilingualpress.site_settings_repository'],
+				$container['multilingualpress.languages']
+			);
 		};
 
 		// TODO: Make a regular not shared service as soon as everything else has been adapted.
@@ -75,7 +83,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.new_site_settings'] = function ( Container $container ) {
 
-			return new NewSiteSettings( $container['multilingualpress.new_site_settings_view'] );
+			return new NewSiteSettings(
+				$container['multilingualpress.new_site_settings_view']
+			);
 		};
 
 		$container['multilingualpress.new_site_settings_view'] = function ( Container $container ) {
@@ -121,12 +131,20 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.relationships_site_setting'] = function ( Container $container ) {
 
-			return new RelationshipsSiteSetting( $container['multilingualpress.site_relations'] );
+			return new RelationshipsSiteSetting(
+				$container['multilingualpress.site_settings_repository'],
+				$container['multilingualpress.site_relations']
+			);
 		};
 
 		$container->share( 'multilingualpress.request', function () {
 
 			return new ConditionalAwareRequest();
+		} );
+
+		$container->share( 'multilingualpress.site_settings_repository', function () {
+
+			return new TypeSafeSiteSettingsRepository();
 		} );
 
 		$container['multilingualpress.update_plugin_settings_nonce'] = function () {
@@ -209,18 +227,18 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		// TODO: Bundle the following block in some PluginDataDeletor or so...
 		$content_relations = $container['multilingualpress.content_relations'];
 		$site_relations = $container['multilingualpress.site_relations'];
-		add_action( 'delete_blog', function ( $site_id ) use ( $content_relations, $site_relations ) {
+		$site_settings_repository = $container['multilingualpress.site_settings_repository'];
+		add_action( 'delete_blog', function ( $site_id ) use ( $content_relations, $site_relations, $site_settings_repository ) {
 
 			$content_relations->delete_relations_for_site( $site_id );
 
 			$site_relations->delete_relation( $site_id );
 
-			// TODO: Refactor to use a repository as soon as available (see Mlp_Network_Site_Settings_Controller).
-			$languages = get_network_option( null, 'inpsyde_multilingual' );
-			if ( isset( $languages[ $site_id ] ) ) {
-				unset( $languages[ $site_id ] );
+			$settings = $site_settings_repository->get_settings();
+			if ( isset( $settings[ $site_id ] ) ) {
+				unset( $settings[ $site_id ] );
 
-				update_site_option( 'inpsyde_multilingual', $languages );
+				$site_settings_repository->set_settings( $settings );
 			}
 		} );
 

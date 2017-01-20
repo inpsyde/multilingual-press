@@ -31,7 +31,9 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 		$container['multilingualpress.alternative_language_title_customizer'] = function ( Container $container ) {
 
-			return new AdminBarCustomizer( $container['multilingualpress.alternative_language_titles'] );
+			return new AdminBarCustomizer(
+				$container['multilingualpress.alternative_language_titles']
+			);
 		};
 
 		$container['multilingualpress.alternative_language_titles'] = function () {

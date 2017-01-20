@@ -18,6 +18,23 @@ final class FlagImageURLSiteSetting implements SiteSettingViewModel {
 	private $id = 'mlp-flag-image-url';
 
 	/**
+	 * @var SiteSettingsRepository
+	 */
+	private $repository;
+
+	/**
+	 * Constructor. Sets up the properties.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param SiteSettingsRepository $repository Site settings repository object.
+	 */
+	public function __construct( SiteSettingsRepository $repository ) {
+
+		$this->repository = $repository;
+	}
+
+	/**
 	 * Returns the markup for the site setting.
 	 *
 	 * @since 3.0.0
@@ -28,10 +45,9 @@ final class FlagImageURLSiteSetting implements SiteSettingViewModel {
 	 */
 	public function markup( $site_id ) {
 
-		// TODO: Adapt to be used on Edit Site as well.
 		return sprintf(
 			'<input type="url" name="%3$s" value="%1$s" class="regular-text" id="%2$s" placeholder="https://example.com/flag.png">',
-			esc_url( '' ),
+			esc_url( $this->repository->get_flag_image_url( $site_id ) ),
 			esc_attr( $this->id ),
 			esc_attr( SiteSettingsRepository::NAME_FLAG_IMAGE_URL )
 		);

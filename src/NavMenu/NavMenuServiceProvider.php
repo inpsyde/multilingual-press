@@ -41,18 +41,24 @@ final class NavMenuServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.nav_menu_item_deletor'] = function ( Container $container ) {
 
-			return new ItemDeletor( $container['multilingualpress.wpdb'] );
+			return new ItemDeletor(
+				$container['multilingualpress.wpdb']
+			);
 		};
 
 		$container['multilingualpress.nav_menu_item_filter'] = function ( Container $container ) {
 
-			return new ItemFilter( $container['multilingualpress.translations'] );
+			return new ItemFilter(
+				$container['multilingualpress.translations']
+			);
 		};
 
-		$container['multilingualpress.nav_menu_item_repository'] = function ( Container $container ) {
+		$container->share( 'multilingualpress.nav_menu_item_repository',  function ( Container $container ) {
 
-			return new ValidatingItemRepository( $container['multilingualpress.translations'] );
-		};
+			return new ValidatingItemRepository(
+				$container['multilingualpress.translations']
+			);
+		} );
 
 		$container['multilingualpress.nav_menu_meta_box_model'] = function () {
 
@@ -61,7 +67,9 @@ final class NavMenuServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.nav_menu_meta_box_view'] = function ( Container $container ) {
 
-			return new LanguagesMetaBoxView( $container['multilingualpress.nav_menu_meta_box_model'] );
+			return new LanguagesMetaBoxView(
+				$container['multilingualpress.nav_menu_meta_box_model']
+			);
 		};
 	}
 

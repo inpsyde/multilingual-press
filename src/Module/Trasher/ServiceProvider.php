@@ -43,10 +43,10 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			return new WPNonce( 'save_trasher_setting' );
 		};
 
-		$container['multilingualpress.trasher_setting_repository'] = function () {
+		$container->share( 'multilingualpress.trasher_setting_repository', function () {
 
 			return new TypeSafeTrasherSettingRepository();
-		};
+		} );
 
 		$container['multilingualpress.trasher_setting_updater'] = function ( Container $container ) {
 

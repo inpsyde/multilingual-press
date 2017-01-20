@@ -42,12 +42,16 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 		$container['multilingualpress.quicklinks_redirect_hosts_filter'] = function ( Container $container ) {
 
-			return new RedirectHostsFilter( $container['multilingualpress.wpdb'] );
+			return new RedirectHostsFilter(
+				$container['multilingualpress.wpdb']
+			);
 		};
 
 		$container['multilingualpress.quicklinks_redirector'] = function ( Container $container ) {
 
-			return new Redirector( $container['multilingualpress.quicklinks_redirect_hosts_filter'] );
+			return new Redirector(
+				$container['multilingualpress.quicklinks_redirect_hosts_filter']
+			);
 		};
 
 		$container['multilingualpress.quicklinks_settings_box'] = function ( Container $container ) {
@@ -63,10 +67,10 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			return new WPNonce( 'update_quicklinks_settings' );
 		};
 
-		$container['multilingualpress.quicklinks_settings_repository'] = function () {
+		$container->share( 'multilingualpress.quicklinks_settings_repository', function () {
 
 			return new TypeSafeSettingsRepository();
-		};
+		} );
 
 		$container['multilingualpress.quicklinks_settings_updater'] = function ( Container $container ) {
 

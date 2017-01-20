@@ -105,8 +105,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		 */
 		do_action( 'mlp_blogs_save_fields', $_POST, $blog_id );
 
-		$url = add_query_arg( 'msg', 'updated', $_POST[ '_wp_http_referer' ] );
-		wp_safe_redirect( $url );
+		wp_safe_redirect( add_query_arg( 'msg', 'updated', $_POST[ '_wp_http_referer' ] ) );
 		\Inpsyde\MultilingualPress\call_exit();
 	}
 
@@ -189,10 +188,8 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$this->show_update_message();
 
 		$view = new Mlp_Network_Site_Settings_Tab_Content(
-			MultilingualPress::resolve( 'multilingualpress.languages' ),
 			$this->setting,
 			$this->get_blog_id(),
-			MultilingualPress::resolve( 'multilingualpress.site_relations' ),
 			$this->nonce
 		);
 		$view->render_content();

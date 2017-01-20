@@ -255,10 +255,10 @@ final class MultilingualPress {
 			return true;
 		}
 
-		return array_key_exists(
+		return in_array(
 			get_current_blog_id(),
-			// TODO: Don't hardcode the option, and also maybe even check some other way.
-			(array) get_network_option( null, 'inpsyde_multilingual', [] )
+			static::$container['multilingualpress.site_settings_repository']->get_site_ids(),
+			true
 		);
 	}
 

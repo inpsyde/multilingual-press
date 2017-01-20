@@ -18,6 +18,23 @@ final class AlternativeLanguageTitleSiteSetting implements SiteSettingViewModel 
 	private $id = 'mlp-alternative-language-title';
 
 	/**
+	 * @var SiteSettingsRepository
+	 */
+	private $repository;
+
+	/**
+	 * Constructor. Sets up the properties.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param SiteSettingsRepository $repository Site settings repository object.
+	 */
+	public function __construct( SiteSettingsRepository $repository ) {
+
+		$this->repository = $repository;
+	}
+
+	/**
 	 * Returns the markup for the site setting.
 	 *
 	 * @since 3.0.0
@@ -28,10 +45,9 @@ final class AlternativeLanguageTitleSiteSetting implements SiteSettingViewModel 
 	 */
 	public function markup( $site_id ) {
 
-		// TODO: Adapt to be used on Edit Site as well.
 		return sprintf(
 			'<input type="text" name="%3$s" value="%1$s" class="regular-text" id="%2$s"><p class="description">%4$s</p>',
-			esc_attr( '' ),
+			esc_attr( $this->repository->get_alternative_language_title( $site_id ) ),
 			esc_attr( $this->id ),
 			esc_attr( SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE ),
 			esc_html__(

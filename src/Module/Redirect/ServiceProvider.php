@@ -68,10 +68,10 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			);
 		};
 
-		$container['multilingualpress.redirect_settings_repository'] = function () {
+		$container->share( 'multilingualpress.redirect_settings_repository', function () {
 
 			return new TypeSafeSettingsRepository();
-		};
+		} );
 
 		$container['multilingualpress.redirect_site_setting'] = function ( Container $container ) {
 

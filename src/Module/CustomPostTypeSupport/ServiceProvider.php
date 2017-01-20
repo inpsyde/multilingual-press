@@ -33,13 +33,15 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 		$container['multilingualpress.post_type_link_url_filter'] = function ( Container $container ) {
 
-			return new URLFilter( $container['multilingualpress.post_type_repository'] );
+			return new URLFilter(
+				$container['multilingualpress.post_type_repository']
+			);
 		};
 
-		$container['multilingualpress.post_type_repository'] = function () {
+		$container->share( 'multilingualpress.post_type_repository', function () {
 
 			return new TypeSafePostTypeRepository();
-		};
+		} );
 
 		$container['multilingualpress.post_type_support_settings_box'] = function ( Container $container ) {
 

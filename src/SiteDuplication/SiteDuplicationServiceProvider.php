@@ -48,7 +48,9 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 
 		$container['multilingualpress.site_duplication_based_on_site_setting'] = function ( Container $container ) {
 
-			return new BasedOnSiteSetting( $container['multilingualpress.wpdb'] );
+			return new BasedOnSiteSetting(
+				$container['multilingualpress.wpdb']
+			);
 		};
 
 		$container['multilingualpress.site_duplication_search_engine_visibility_setting'] = function () {

@@ -39,10 +39,10 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			);
 		};
 
-		$container['multilingualpress.user_admin_language_repository'] = function () {
+		$container->share( 'multilingualpress.user_admin_language_repository', function () {
 
 			return new TypeSafeLanguageRepository();
-		};
+		} );
 
 		$container['multilingualpress.user_admin_language_setting'] = function ( Container $container ) {
 

@@ -41,27 +41,37 @@ final class DatabaseServiceProvider implements ServiceProvider {
 
 		$container->share( 'multilingualpress.table_duplicator', function ( Container $container ) {
 
-			return new WPDBTableDuplicator( $container['multilingualpress.wpdb'] );
+			return new WPDBTableDuplicator(
+				$container['multilingualpress.wpdb']
+			);
 		} );
 
 		$container->share( 'multilingualpress.table_installer', function ( Container $container ) {
 
-			return new WPDBTableInstaller( $container['multilingualpress.wpdb'] );
+			return new WPDBTableInstaller(
+				$container['multilingualpress.wpdb']
+			);
 		} );
 
 		$container->share( 'multilingualpress.table_list', function ( Container $container ) {
 
-			return new WPDBTableList( $container['multilingualpress.wpdb'] );
+			return new WPDBTableList(
+				$container['multilingualpress.wpdb']
+			);
 		} );
 
 		$container->share( 'multilingualpress.table_replacer', function ( Container $container ) {
 
-			return new WPDBTableReplacer( $container['multilingualpress.wpdb'] );
+			return new WPDBTableReplacer(
+				$container['multilingualpress.wpdb']
+			);
 		} );
 
 		$container->share( 'multilingualpress.table_string_replacer', function ( Container $container ) {
 
-			return new WPDBTableStringReplacer( $container['multilingualpress.wpdb'] );
+			return new WPDBTableStringReplacer(
+				$container['multilingualpress.wpdb']
+			);
 		} );
 
 		$container->share( 'multilingualpress.wpdb', function () {

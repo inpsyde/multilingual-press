@@ -2,6 +2,7 @@
 
 namespace Inpsyde\MultilingualPress\API;
 
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
 use wpdb;
 
@@ -40,6 +41,11 @@ final class WPDBLanguages implements Languages {
 	private $fields;
 
 	/**
+	 * @var SiteSettingsRepository
+	 */
+	private $site_settings_repository;
+
+	/**
 	 * @var string
 	 */
 	private $table;
@@ -49,14 +55,17 @@ final class WPDBLanguages implements Languages {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb  $db    WordPress database object.
-	 * @param Table $table Site relations table object.
+	 * @param wpdb                   $db                       WordPress database object.
+	 * @param Table                  $table                    Site relations table object.
+	 * @param SiteSettingsRepository $site_settings_repository Site settings repository object.
 	 */
-	public function __construct( wpdb $db, Table $table ) {
+	public function __construct( wpdb $db, Table $table, SiteSettingsRepository $site_settings_repository ) {
 
 		$this->db = $db;
 
 		$this->table = $table->name();
+
+		$this->site_settings_repository = $site_settings_repository;
 
 		$this->fields = $this->extract_field_specifications_from_table( $table );
 	}
@@ -86,8 +95,8 @@ final class WPDBLanguages implements Languages {
 	 */
 	public function get_all_site_languages() {
 
-		$languages = get_site_option( 'inpsyde_multilingual', [] );
-		if ( ! $languages || ! is_array( $languages ) ) {
+		$languages = $this->site_settings_repository->get_settings();
+		if ( ! $languages ) {
 			return [];
 		}
 

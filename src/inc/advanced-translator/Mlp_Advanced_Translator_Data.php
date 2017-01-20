@@ -112,6 +112,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 			return;
 		}
 
+		// TODO: Check if this is what we want to do here (use site relations vs. sites with a language set)...
 		$available_blogs = get_site_option( 'inpsyde_multilingual' );
 		if ( empty( $available_blogs ) ) {
 			return;
