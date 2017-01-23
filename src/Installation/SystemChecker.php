@@ -84,7 +84,7 @@ class SystemChecker {
 	 *
 	 * @var string
 	 */
-	const MINIMUM_WORDPRESS_VERSION = '4.4.0';
+	const MINIMUM_WORDPRESS_VERSION = '4.5.0';
 
 	/**
 	 * @var string[]
