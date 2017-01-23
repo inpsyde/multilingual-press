@@ -2,7 +2,9 @@ import test from 'tape';
 import * as F from '../../functions';
 import * as Functions from '../../../../../resources/js/admin/core/functions';
 
-const window = global.window = {};
+const window = {};
+
+global.window = window;
 
 test( 'getSettings (settings not found) ...', ( assert ) => {
 	assert.deepEqual(

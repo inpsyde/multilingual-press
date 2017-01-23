@@ -3,7 +3,9 @@ import sinon from 'sinon';
 import * as F from '../../functions';
 import Quicklinks from '../../../../../resources/js/frontend/quicklinks/Quicklinks';
 
-const document = global.document = {};
+const document = {};
+
+global.document = document;
 
 const Util = {};
 

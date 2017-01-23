@@ -24,7 +24,9 @@ Object.keys( globalStub ).forEach( ( key ) => {
 } );
 
 Object.keys( window ).forEach( ( key ) => {
-	global[ key ] = globalStub[ key ] = window[ key ];
+	global[ key ] = window[ key ];
+
+	globalStub[ key ] = window[ key ];
 } );
 
 globalStub.restore = () => {

@@ -3,12 +3,14 @@ import sinon from 'sinon';
 import * as F from '../functions';
 import * as Util from '../../../../resources/js/common/utils';
 
-const window = global.window = {
+const window = {
 	location: {
 		href: '',
 		reload: sinon.spy()
 	}
 };
+
+global.window = window;
 
 test( 'addEventListener (using an IE8 browser) ...', ( assert ) => {
 	const $element = {
