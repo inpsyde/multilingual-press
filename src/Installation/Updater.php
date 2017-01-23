@@ -4,6 +4,7 @@ namespace Inpsyde\MultilingualPress\Installation;
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\TableInstaller;
 use wpdb;
@@ -42,6 +43,11 @@ class Updater {
 	private $site_relations_table;
 
 	/**
+	 * @var SiteSettingsRepository
+	 */
+	private $site_settings_repository;
+
+	/**
 	 * @var TableInstaller
 	 */
 	private $table_installer;
@@ -51,15 +57,17 @@ class Updater {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb           $db                      WordPress database object.
-	 * @param TableInstaller $table_installer         Table installer object.
-	 * @param Table          $content_relations_table Content relations table object.
-	 * @param Table          $languages_table         Languages table object.
-	 * @param Table          $site_relations_table    Site relations table object.
-	 * @param SiteRelations  $site_relations          Site relations API.
+	 * @param wpdb                   $db                       WordPress database object.
+	 * @param SiteSettingsRepository $site_settings_repository Site settings repository object.
+	 * @param TableInstaller         $table_installer          Table installer object.
+	 * @param Table                  $content_relations_table  Content relations table object.
+	 * @param Table                  $languages_table          Languages table object.
+	 * @param Table                  $site_relations_table     Site relations table object.
+	 * @param SiteRelations          $site_relations           Site relations API.
 	 */
 	public function __construct(
 		wpdb $db,
+		SiteSettingsRepository $site_settings_repository,
 		TableInstaller $table_installer,
 		Table $content_relations_table,
 		Table $languages_table,
@@ -68,6 +76,8 @@ class Updater {
 	) {
 
 		$this->db = $db;
+
+		$this->site_settings_repository = $site_settings_repository;
 
 		$this->table_installer = $table_installer;
 
@@ -154,7 +164,7 @@ class Updater {
 	 */
 	private function import_active_languages() {
 
-		$languages = (array) get_network_option( null, 'inpsyde_multilingual', [] );
+		$languages = $this->site_settings_repository->get_settings();
 		if ( ! $languages ) {
 			return;
 		}
@@ -165,18 +175,18 @@ class Updater {
 
 		array_walk( $languages, function ( array $language ) use ( $table, $query ) {
 
-			$language_id = $this->db->get_var( $this->db->prepare( $query, $language['lang'], $language['lang'] ) );
-			if ( $language_id ) {
-				$this->db->update(
-					$table,
-					[ 'priority' => 10 ],
-					[ 'ID' => $language_id ]
-				);
+			if ( ! empty( $language['lang'] ) ) {
+				$language_id = $this->db->get_var( $this->db->prepare( $query, $language['lang'], $language['lang'] ) );
+				if ( $language_id ) {
+					$this->db->update(
+						$table,
+						[ 'priority' => 10 ],
+						[ 'ID' => $language_id ]
+					);
 
-				return;
-			}
-
-			if ( ! isset( $language['lang'] ) ) {
+					return;
+				}
+			} else {
 				$language['lang'] = '';
 			}
 

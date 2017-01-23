@@ -99,14 +99,11 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 			return '';
 		}
 
-		$settings = (array) get_site_option( 'inpsyde_multilingual_cpt', [] );
-		$settings = empty( $settings['post_types'] ) ? [] : (array) $settings['post_types'];
-
 		$markup = \Inpsyde\MultilingualPress\nonce_field( $this->nonce ) . '<table><tbody>';
 
 		ob_start();
 
-		array_walk( $this->post_types, [ $this, 'render_table_row' ], $settings );
+		array_walk( $this->post_types, [ $this, 'render_table_row' ], $this->repository->get_supported_post_types() );
 
 		$markup .= ob_get_clean() . '</tbody></table>';
 
@@ -128,19 +125,19 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	/**@todo With WordPress 4.6 + 2, use WP_Post_Type as type hint.
 	 * Renders a table row element according to the given data.
 	 *
-	 * @param object $post_type Post type object.
-	 * @param string $slug      Post type slug.
-	 * @param int[]  $settings  Post type settings.
+	 * @param object $post_type            Post type object.
+	 * @param string $slug                 Post type slug.
+	 * @param int[]  $supported_post_types Supported post type settings.
 	 *
 	 * @return void
 	 */
-	private function render_table_row( $post_type, $slug, array $settings ) {
+	private function render_table_row( $post_type, $slug, array $supported_post_types ) {
 
 		$name = PostTypeSupportSettingsUpdater::SETTINGS_NAME;
 
 		$id = "mlp-cpt-{$slug}";
 
-		$setting = empty( $settings[ $slug ] ) ? 0 : (int) $settings[ $slug ];
+		$post_type_setting = empty( $supported_post_types[ $slug ] ) ? 0 : (int) $supported_post_types[ $slug ];
 		?>
 		<tr>
 			<td>
@@ -149,7 +146,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 					$this->render_checkbox(
 						"{$name}[{$slug}]",
 						$id,
-						PostTypeRepository::CPT_INACTIVE !== $setting
+						PostTypeRepository::CPT_INACTIVE !== $post_type_setting
 					);
 					?>
 					<?php echo esc_html( $post_type->labels->name ); ?>
@@ -161,7 +158,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 					$this->render_checkbox(
 						"{$name}[{$slug}|links]",
 						"{$id}|links",
-						PostTypeRepository::CPT_QUERY_BASED === $setting
+						PostTypeRepository::CPT_QUERY_BASED === $post_type_setting
 					);
 					?>
 					<?php esc_html_e( 'Use dynamic permalinks', 'multilingual-press' ); ?>

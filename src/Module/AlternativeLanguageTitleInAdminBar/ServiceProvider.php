@@ -36,9 +36,11 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			);
 		};
 
-		$container['multilingualpress.alternative_language_titles'] = function () {
+		$container['multilingualpress.alternative_language_titles'] = function ( Container $container ) {
 
-			return new AlternativeLanguageTitles();
+			return new AlternativeLanguageTitles(
+				$container['multilingualpress.site_settings_repository']
+			);
 		};
 	}
 

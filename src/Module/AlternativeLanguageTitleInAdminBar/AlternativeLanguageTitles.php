@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Module\AlternativeLanguageTitleInAdminBar;
 
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
+
 /**
  * Cached access to alternative language titles.
  *
@@ -19,6 +21,23 @@ class AlternativeLanguageTitles {
 	 * @var string
 	 */
 	private $cache_key = 'mlp_alternative_language_titles';
+
+	/**
+	 * @var SiteSettingsRepository
+	 */
+	private $site_settings_repository;
+
+	/**
+	 * Constructor. Sets up the properties.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param SiteSettingsRepository $site_settings_repository Site settings repository object.
+	 */
+	public function __construct( SiteSettingsRepository $site_settings_repository ) {
+
+		$this->site_settings_repository = $site_settings_repository;
+	}
 
 	/**
 	 * Returns the alternative language title for the site with the given ID.
@@ -42,14 +61,10 @@ class AlternativeLanguageTitles {
 			return $titles[ $site_id ];
 		}
 
-		// TODO: Don't hardcode the option name.
-		$languages = get_site_option( 'inpsyde_multilingual' );
-		// TODO: Maybe also don't hardcode the 'text' key...?
-		if ( ! isset( $languages[ $site_id ]['text'] ) ) {
+		$title = $this->site_settings_repository->get_alternative_language_title();
+		if ( ! $title ) {
 			return '';
 		}
-
-		$title = $languages[ $site_id ]['text'];
 
 		$titles[ $site_id ] = $title;
 

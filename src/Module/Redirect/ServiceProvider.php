@@ -161,13 +161,14 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 					);
 
 					if ( 'sites.php' === $pagenow ) {
+						$redirect_settings_repository = $container['multilingualpress.redirect_settings_repository'];
+
 						( new SitesListTableColumn(
 							'multilingualpress.redirect',
 							__( 'Redirect', 'multilingual-press' ),
-							function ( $id, $site_id ) {
+							function ( $id, $site_id ) use ( $redirect_settings_repository ) {
 
-								// TODO: Don't hard-code option name, use repository or class constant.
-								return get_blog_option( $site_id, 'inpsyde_multilingual_redirect' )
+								return $redirect_settings_repository->get_site_setting( $site_id )
 									? '<span class="dashicons dashicons-yes"></span>'
 									: '';
 							}

@@ -51,7 +51,8 @@ final class InstallationServiceProvider implements ServiceProvider  {
 			return new SystemChecker(
 				$container['multilingualpress.properties'],
 				$container['multilingualpress.type_factory'],
-				$container['multilingualpress.site_relations_checker']
+				$container['multilingualpress.site_relations_checker'],
+				$container['multilingualpress.site_settings_repository']
 			);
 		};
 
@@ -66,6 +67,7 @@ final class InstallationServiceProvider implements ServiceProvider  {
 
 			return new Updater(
 				$container['multilingualpress.wpdb'],
+				$container['multilingualpress.site_settings_repository'],
 				$container['multilingualpress.table_installer'],
 				$container['multilingualpress.content_relations_table'],
 				$container['multilingualpress.languages_table'],

@@ -150,8 +150,8 @@ function get_available_language_names( $related = true, $include_current_site = 
 		}
 	}
 
-	$language_settings = get_site_option( 'inpsyde_multilingual', [] );
-	if ( ! $language_settings || ! is_array( $language_settings ) ) {
+	$language_settings = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_settings();
+	if ( ! $language_settings ) {
 		return [];
 	}
 
@@ -195,8 +195,7 @@ function get_available_language_names( $related = true, $include_current_site = 
  */
 function get_available_languages( $related_sites_only = true ) {
 
-	// TODO: Do not hard-code the option name, and maybe even get the languages some other way.
-	$languages = (array) get_network_option( null, 'inpsyde_multilingual', [] );
+	$languages = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_settings();
 	if ( ! $languages ) {
 		return [];
 	}
@@ -267,10 +266,10 @@ function get_flag_url_for_site( $site_id = 0 ) {
 
 	$type_factory = MultilingualPress::resolve( 'multilingualpress.type_factory' );
 
-	$custom_flag = get_blog_option( $site_id, 'inpsyde_multilingual_flag_url' );
-	if ( $custom_flag ) {
+	$url = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_flag_image_url( $site_id );
+	if ( $url ) {
 		return $type_factory->create_url( [
-			$custom_flag,
+			$url,
 		] );
 	}
 
@@ -443,19 +442,16 @@ function get_linked_elements( array $args = [] ) {
  */
 function get_site_language( $site_id = 0, $language_only = false ) {
 
-	$site_id = $site_id ?: get_current_blog_id();
-
-	// TODO: Don't hardcode the option name.
-	$languages = get_network_option( null, 'inpsyde_multilingual', [] );
-
-	// TODO: Maybe also don't hardcode the 'lang' key...?
-	if ( ! isset( $languages[ $site_id ]['lang'] ) ) {
+	$lang = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_site_language( $site_id );
+	if ( ! $lang ) {
 		return '';
 	}
 
-	return $language_only
-		? strtok( $languages[ $site_id ]['lang'], '_' )
-		: (string) $languages[ $site_id ]['lang'];
+	if ( $language_only ) {
+		return strtok( $lang, '_' );
+	}
+
+	return $lang;
 }
 
 /**
@@ -561,8 +557,7 @@ function is_debug_mode() {
  */
 function is_redirect_enabled( $site_id = 0 ) {
 
-	// TODO: Don't hard-code the option name.
-	return (bool) get_blog_option( $site_id ?: get_current_blog_id(), 'inpsyde_multilingual_redirect' );
+	return MultilingualPress::resolve( 'multilingualpress.redirect_settings_repository' )->get_site_setting( $site_id );
 }
 
 /**

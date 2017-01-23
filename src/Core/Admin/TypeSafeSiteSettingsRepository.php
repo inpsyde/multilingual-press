@@ -10,8 +10,6 @@ namespace Inpsyde\MultilingualPress\Core\Admin;
  */
 final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
-	// TODO: Use repository throughout codebase instead of referencing the according (network) options.
-
 	/**
 	 * @var string
 	 */

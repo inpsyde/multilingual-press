@@ -4,6 +4,7 @@ namespace Inpsyde\MultilingualPress\Installation;
 
 use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
@@ -102,6 +103,11 @@ class SystemChecker {
 	private $site_relations_checker;
 
 	/**
+	 * @var SiteSettingsRepository
+	 */
+	private $site_settings_repository;
+
+	/**
 	 * @var TypeFactory
 	 */
 	private $type_factory;
@@ -111,14 +117,16 @@ class SystemChecker {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param PluginProperties     $plugin_properties      Plugin properties object.
-	 * @param TypeFactory          $type_factory           Type factory object.
-	 * @param SiteRelationsChecker $site_relations_checker Site relations checkerobject.
+	 * @param PluginProperties       $plugin_properties        Plugin properties object.
+	 * @param TypeFactory            $type_factory             Type factory object.
+	 * @param SiteRelationsChecker   $site_relations_checker   Site relations checker object.
+	 * @param SiteSettingsRepository $site_settings_repository Site settings repository object.
 	 */
 	public function __construct(
 		PluginProperties $plugin_properties,
 		TypeFactory $type_factory,
-		SiteRelationsChecker $site_relations_checker
+		SiteRelationsChecker $site_relations_checker,
+		SiteSettingsRepository $site_settings_repository
 	) {
 
 		$this->plugin_properties = $plugin_properties;
@@ -126,6 +134,8 @@ class SystemChecker {
 		$this->type_factory = $type_factory;
 
 		$this->site_relations_checker = $site_relations_checker;
+
+		$this->site_settings_repository = $site_settings_repository;
 	}
 
 	/**
@@ -183,9 +193,7 @@ class SystemChecker {
 			return static::VERSION_OK;
 		}
 
-		// TODO: Is this really what we want to check here?
-		$languages = get_network_option( null, 'inpsyde_multilingual', [] );
-		if ( $languages ) {
+		if ( ! $this->site_settings_repository->get_settings() ) {
 			return static::NEEDS_UPGRADE;
 		}
 
