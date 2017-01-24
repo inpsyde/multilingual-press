@@ -33,7 +33,7 @@ install:
   - yarn
 
 script:
-  - gulp ci
+  - yarn test
 
 notifications:
   email: false

@@ -4,6 +4,7 @@ const autoprefixer = require( 'autoprefixer' );
 const babel = require( 'gulp-babel' );
 const childProcess = require( 'child_process' );
 const cssnano = require( 'cssnano' );
+const del = require( 'del' );
 const eslint = require( 'gulp-eslint' );
 const exec = require( 'gulp-exec' );
 const imagemin = require( 'gulp-imagemin' );
@@ -12,6 +13,7 @@ const newer = require( 'gulp-newer' );
 const phplint = require( 'phplint' ).lint;
 const postcss = require( 'gulp-postcss' );
 const rename = require( 'gulp-rename' );
+const runSequence = require( 'run-sequence' );
 const sass = require( 'gulp-sass' );
 const uglify = require( 'gulp-uglify' );
 const zip = require( 'gulp-zip' );
@@ -33,6 +35,8 @@ const config = {
 		src: 'resources/js/',
 		dest: 'assets/js/'
 	},
+
+	slug: 'multilingual-press',
 
 	src: 'src/',
 
@@ -58,6 +62,15 @@ gulp.task( 'assets', () => {
 		.pipe( gulp.dest( dest ) );
 } );
 
+gulp.task( 'clean', () => {
+	return del( [
+		config.assets.dest,
+		config.images.dest,
+		config.scripts.dest,
+		config.styles.dest,
+	] );
+} );
+
 gulp.task( 'lint-configs', () => {
 	return gulp.src( [
 			'*.json',
@@ -77,7 +90,10 @@ gulp.task( 'lint-javascript-tests', [
 	const src = `${config.tests.js}**/*.js`;
 
 	return gulp.src( src )
-		.pipe( newer( src ) )
+		.pipe( newer( {
+			dest: src,
+			extra: '.eslintrc'
+		} ) )
 		.pipe( eslint( {
 			rules: {
 				'no-native-reassign': 0
@@ -105,7 +121,10 @@ gulp.task( 'lint-scripts', [
 	const src = `${config.scripts.src}*.js`;
 
 	return gulp.src( src )
-		.pipe( newer( src ) )
+		.pipe( newer( {
+			dest: src,
+			extra: '.eslintrc'
+		} ) )
 		.pipe( eslint() )
 		.pipe( eslint.format() );
 } );
@@ -180,59 +199,77 @@ gulp.task( 'styles', () => {
 		.pipe( gulp.dest( dest ) );
 } );
 
-// TODO: Make tape great again! I don't quite like this as it is right now... :(
 gulp.task( 'tape', [
 	'lint-configs',
 	'lint-javascript-tests',
+	'lint-scripts',
 ], () => {
 	return gulp.src( `${config.tests.js}**/*Test.js`, {
 			read: false
 		} )
-		.pipe( exec( '"./node_modules/.bin/babel-node" --plugins rewire <%= file.path %>' ) )
+		.pipe( exec(
+			'"./node_modules/.bin/babel-node" --plugins rewire <%= file.path %> | "./node_modules/.bin/faucet"'
+		) )
 		.pipe( exec.reporter() );
 } );
 
-gulp.task( 'zip', [
-	'pre-commit',
-], () => {
+gulp.task( 'zip', () => {
 	return gulp.src( [
 			'*.{php,txt}',
-			'assets/**',
+			`${config.images.dest}**/*.{gif,jpeg,jpg,png}`,
+			`${config.scripts.dest}*.js`,
+			`${config.styles.dest}*.css`,
 			`${config.src}**/*.php`,
 		], {
 			base: '.'
 		} )
 		.pipe( rename( ( path ) => {
-			path.dirname = `multilingual-press/${path.dirname}`
+			path.dirname = `${path.slug}/${path.dirname}`
 		} ) )
 		.pipe( zip( `${config.name}.zip` ) )
 		.pipe( gulp.dest( '.' ) );
 } );
 
-gulp.task( 'ci', [
+gulp.task( 'common', [
+	'lint-configs',
+	'lint-javascript-tests',
+	'lint-php',
 	'lint-scripts',
+] );
+
+gulp.task( 'test', [
+	'common',
 	'phpunit',
 	'tape',
 ] );
 
 gulp.task( 'develop', [
-	'lint-javascript-tests',
-	'lint-php',
+	'common',
 	'images',
 	'scripts',
 	'styles',
 ] );
 
-gulp.task( 'pre-commit', [
-	'ci',
-	'assets',
-	'images',
-	'scripts',
-	'styles',
-] );
+gulp.task( 'pre-commit', ( cb ) => {
+	runSequence(
+		'clean',
+		[
+			'test',
+			'assets',
+			'images',
+			'scripts',
+			'styles',
+		],
+		cb
+	);
+} );
 
-gulp.task( 'release', [
-	'zip',
-] );
+gulp.task( 'release', ( cb ) => {
+	runSequence(
+		'pre-commit',
+		'zip',
+		cb
+	);
+} );
 
 gulp.task( 'default', [ 'develop' ] );
