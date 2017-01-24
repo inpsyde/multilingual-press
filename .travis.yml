@@ -29,11 +29,11 @@ install:
   - gem install sass
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - npm i -g yarn
-  - yarn add grunt-cli --dev
+  - yarn add gulp-cli --dev
   - yarn
 
 script:
-  - grunt ci
+  - gulp ci
 
 notifications:
   email: false
