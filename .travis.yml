@@ -20,16 +20,13 @@ env:
 
 install:
   - composer install --no-interaction
-#  - gem install sass
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - npm i -g yarn
   - yarn add gulp-cli --dev
   - npm rebuild node-sass
-  - ls -l /home/travis/build/inpsyde/multilingual-press/node_modules/node-sass
   - yarn
 
 script:
-  - ls -l /home/travis/build/inpsyde/multilingual-press/node_modules/node-sass
   - yarn test
 
 notifications:
