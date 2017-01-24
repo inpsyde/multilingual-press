@@ -27,7 +27,7 @@ install:
   - yarn
 
 script:
-  - yarn test
+  - gulp test
 
 notifications:
   email: false
