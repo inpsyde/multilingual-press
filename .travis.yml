@@ -18,12 +18,6 @@ php:
 env:
   - TRAVIS_NODE_VERSION=5
 
-matrix:
-  fast_finish: true
-
-before_install:
-  - composer self-update
-
 install:
   - composer install --no-interaction
   - gem install sass
