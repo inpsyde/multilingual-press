@@ -1,7 +1,9 @@
 const gulp = require( 'gulp' );
 
 const autoprefixer = require( 'autoprefixer' );
-const babel = require( 'gulp-babel' );
+const babelify = require( 'babelify' );
+const browserify = require( 'browserify' );
+const buffer = require( 'gulp-buffer' );
 const childProcess = require( 'child_process' );
 const cssnano = require( 'cssnano' );
 const del = require( 'del' );
@@ -15,6 +17,7 @@ const postcss = require( 'gulp-postcss' );
 const rename = require( 'gulp-rename' );
 const runSequence = require( 'run-sequence' );
 const sass = require( 'gulp-sass' );
+const tap = require( 'gulp-tap' );
 const uglify = require( 'gulp-uglify' );
 const zip = require( 'gulp-zip' );
 
@@ -155,13 +158,23 @@ gulp.task( 'scripts', [
 	'lint-scripts',
 ], () => {
 	const dest = config.scripts.dest;
+	const browserifyOptions = {
+		debug: true,
+		transform: [
+			babelify,
+		]
+	};
 
-	return gulp.src( `${config.scripts.src}*.js` )
-		.pipe( newer( dest ) )
-		.pipe( babel() )
+	return gulp.src( `${config.scripts.src}*.js`, {
+		read: false
+	} )
+		.pipe( tap( ( file ) => {
+			file.contents = browserify( file.path, browserifyOptions ).bundle();
+		} ) )
+		.pipe( buffer() )
 		.pipe( gulp.dest( dest ) )
 		.pipe( rename( {
-			suffix: '.min'
+			extname: '.min.js'
 		} ) )
 		.pipe( uglify( {
 			output: {
@@ -191,7 +204,7 @@ gulp.task( 'styles', () => {
 		] ) )
 		.pipe( gulp.dest( dest ) )
 		.pipe( rename( {
-			suffix: '.min'
+			extname: '.min.css'
 		} ) )
 		.pipe( postcss( [
 			cssnano(),
