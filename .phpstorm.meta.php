@@ -84,6 +84,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.site_relations_checker' instanceof \Inpsyde\MultilingualPress\Installation\SiteRelationsChecker,
 			'multilingualpress.site_relations_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.site_settings_repository' instanceof \Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository,
+			'multilingualpress.site_settings_updater' instanceof \Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater,
 			'multilingualpress.system_checker' instanceof \Inpsyde\MultilingualPress\Installation\SystemChecker,
 			'multilingualpress.table_duplicator' instanceof \Inpsyde\MultilingualPress\Database\TableDuplicator,
 			'multilingualpress.table_installer' instanceof \Inpsyde\MultilingualPress\Database\TableInstaller,

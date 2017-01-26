@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
+use Inpsyde\MultilingualPress\API\SiteRelations;
+
 /**
  * Type-safe site settings repository implementation.
  *
@@ -14,6 +16,23 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 * @var string
 	 */
 	private $default_site_language = 'en_US';
+
+	/**
+	 * @var SiteRelations
+	 */
+	private $site_relations;
+
+	/**
+	 * Constructor. Sets up the properties.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param SiteRelations $site_relations Site relations API object.
+	 */
+	public function __construct( SiteRelations $site_relations ) {
+
+		$this->site_relations = $site_relations;
+	}
 
 	/**
 	 * Returns the alternative language title of the site with the given ID, or the current site.
@@ -110,6 +129,78 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	}
 
 	/**
+	 * Sets the alternative language title for the site with the given ID, or the current site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $title   Alternative language title.
+	 * @param int    $site_id Optional. Site ID. Defaults to 0.
+	 *
+	 * @return bool Whether or not the alternative language title was set successfully.
+	 */
+	public function set_alternative_language_title( $title, $site_id = 0 ) {
+
+		return $this->update_setting(
+			SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE,
+			(string) $title,
+			$site_id
+		);
+	}
+
+	/**
+	 * Sets the flag image URL for the site with the given ID, or the current site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $url     Flag image URL.
+	 * @param int    $site_id Optional. Site ID. Defaults to 0.
+	 *
+	 * @return bool Whether or not the flag image URL was set successfully.
+	 */
+	public function set_flag_image_url( $url, $site_id = 0 ) {
+
+		$site_id = (int) ( $site_id ?: get_current_blog_id() );
+
+		return update_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, esc_url( (string) $url ) );
+	}
+
+	/**
+	 * Sets the language for the site with the given ID, or the current site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $language Language.
+	 * @param int    $site_id  Optional. Site ID. Defaults to 0.
+	 *
+	 * @return bool Whether or not the language was set successfully.
+	 */
+	public function set_language( $language, $site_id = 0 ) {
+
+		return $this->update_setting(
+			SiteSettingsRepository::KEY_LANGUAGE,
+			(string) $language,
+			$site_id
+		);
+	}
+
+	/**
+	 * Sets the relationships for the site with the given ID, or the current site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int[] $site_ids     Site IDs.
+	 * @param int   $base_site_id Optional. Base site ID. Defaults to 0.
+	 *
+	 * @return bool Whether or not the language was set successfully.
+	 */
+	public function set_relationships( array $site_ids, $base_site_id = 0 ) {
+
+		$base_site_id = (int) ( $base_site_id ?: get_current_blog_id() );
+
+		return (bool) $this->site_relations->set_relationships( $base_site_id, $site_ids );
+	}
+
+	/**
 	 * Sets the given settings data.
 	 *
 	 * @since 3.0.0
@@ -121,5 +212,29 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	public function set_settings( array $settings ) {
 
 		return update_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, $settings );
+	}
+
+	/**
+	 * Updates the given setting for the site with the given ID, or the current site.
+	 *
+	 * @param string $key     Setting key.
+	 * @param mixed  $value   Setting value.
+	 * @param int    $site_id Optional. Site ID. Defaults to 0.
+	 *
+	 * @return bool Whether or not the setting was upadted successfully.
+	 */
+	private function update_setting( $key, $value, $site_id = 0 ) {
+
+		$site_id = (int) ( $site_id ?: get_current_blog_id() );
+
+		$settings = $this->get_settings();
+
+		if ( ! isset( $settings[ $site_id ] ) || ! is_array( $settings[ $site_id ] ) ) {
+			$settings[ $site_id ] = [];
+		}
+
+		$settings[ $site_id ][ $key ] = $value;
+
+		return $this->set_settings( $settings );
 	}
 }

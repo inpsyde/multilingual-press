@@ -112,10 +112,6 @@ add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
 			MultilingualPress::resolve( 'multilingualpress.type_factory' )
 		);
 		new \Mlp_Network_Site_Settings_Controller( $setting, new Common\Nonce\WPNonce( $setting->action() ) );
-		new \Mlp_Network_New_Site_Controller(
-			MultilingualPress::resolve( 'multilingualpress.site_relations' ),
-			MultilingualPress::resolve( 'multilingualpress.languages' )
-		);
 	}
 
 	add_action( 'wp_loaded', function () {

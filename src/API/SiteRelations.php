@@ -54,4 +54,16 @@ interface SiteRelations {
 	 * @return int The number of rows affected.
 	 */
 	public function insert_relations( $base_site_id, array $site_ids );
+
+	/**
+	 * Sets the relations for the site with the given ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int   $base_site_id Base site ID.
+	 * @param int[] $site_ids     Site IDs.
+	 *
+	 * @return int The number of rows affected.
+	 */
+	public function set_relationships( $base_site_id, array $site_ids );
 }

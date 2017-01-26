@@ -17,6 +17,7 @@ use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\RelationshipsSiteSetting;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\TypeSafeSiteSettingsRepository;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -142,10 +143,20 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new ConditionalAwareRequest();
 		} );
 
-		$container->share( 'multilingualpress.site_settings_repository', function () {
+		$container->share( 'multilingualpress.site_settings_repository', function ( Container $container ) {
 
-			return new TypeSafeSiteSettingsRepository();
+			return new TypeSafeSiteSettingsRepository(
+				$container['multilingualpress.site_relations']
+			);
 		} );
+
+		$container['multilingualpress.site_settings_updater'] = function ( Container $container ) {
+
+			return new SiteSettingsUpdater(
+				$container['multilingualpress.site_settings_repository'],
+				$container['multilingualpress.languages']
+			);
+		};
 
 		$container['multilingualpress.update_plugin_settings_nonce'] = function () {
 
@@ -245,6 +256,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		if ( is_admin() ) {
 			global $pagenow;
 
+			$site_settings_updater = $container['multilingualpress.site_settings_updater'];
+			// TODO: Handle site settings update via AJAX (once implemented).
+
 			if ( 'sites.php' === $pagenow ) {
 				( new SitesListTableColumn(
 					'multilingualpress.relationships',
@@ -292,6 +306,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 					( new SiteSettingsSectionView( $new_site_settings ) )->render( $ite_id );
 				} );
+
+				add_action( 'wpmu_new_blog', [ $site_settings_updater, 'define_initial_settings' ] );
 			}
 		} else {
 			$translations = $container['multilingualpress.translations'];

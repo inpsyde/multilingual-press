@@ -159,6 +159,41 @@ ORDER BY site_id ASC";
 	}
 
 	/**
+	 * Sets the relations for the site with the given ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int   $base_site_id Base site ID.
+	 * @param int[] $site_ids     Site IDs.
+	 *
+	 * @return int The number of rows affected.
+	 */
+	public function set_relationships( $base_site_id, array $site_ids ) {
+
+		$related_site_ids = $this->get_related_site_ids( $base_site_id );
+		if ( $related_site_ids === $site_ids ) {
+			return 0;
+		}
+
+		if ( ! $site_ids ) {
+			return $this->delete_relation( $base_site_id );
+		}
+
+		$to_delete = array_diff( $related_site_ids, $site_ids );
+
+		$changed = array_reduce( $to_delete, function ( $changed, $site_id ) use ( $base_site_id ) {
+
+			return $changed + $this->delete_relation( $base_site_id, $site_id );
+		}, 0 );
+
+		$to_insert = $to_delete ? array_diff( $site_ids, $to_delete ) : $site_ids;
+
+		$changed += $this->insert_relations( $base_site_id, $to_insert );
+
+		return $changed;
+	}
+
+	/**
 	 * Returns a (value1, value2) syntax string according to the given site IDs.
 	 *
 	 * @param int $site_1 Site ID.
