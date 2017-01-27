@@ -36,8 +36,8 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 *
 	 * @wp-hook plugins_loaded
 	 *
-	 * @param Setting                         $setting     Setting object.
-	 * @param Nonce                           $nonce       Nonce object.
+	 * @param Setting $setting Setting object.
+	 * @param Nonce   $nonce   Nonce object.
 	 */
 	public function __construct( Setting $setting, Nonce $nonce ) {
 

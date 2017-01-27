@@ -57,8 +57,6 @@ class Mlp_Network_Site_Settings {
 
 		$this->watcher = $watcher;
 
-		$this->set_pagenow();
-
 		if ( ! empty( $pagenow ) && in_array( $pagenow, $this->targets, true ) ) {
 			add_action( 'network_admin_notices', [ $this, 'start_buffer' ] );
 		}
@@ -171,27 +169,5 @@ class Mlp_Network_Site_Settings {
 			$this->config->get_tab_id(),
 			$this->config->get_tab_title()
 		);
-	}
-
-	/**
-	 * Changes the global pagenow to prevent wrong classes on the tab navigation.
-	 *
-	 * @return void
-	 */
-	private function set_pagenow() {
-
-		$name = $this->config->get_param_name();
-
-		if ( ! isset( $_GET[ $name ] ) ) {
-			return;
-		}
-
-		$value = $this->config->get_param_value();
-
-		if ( $value !== $_GET[ $name ] ) {
-			return;
-		}
-
-		$GLOBALS['pagenow'] = $value;
 	}
 }

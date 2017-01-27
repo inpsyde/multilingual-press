@@ -6,8 +6,7 @@
  * @author  Inpsyde GmbH, toscho
  * @license GPL
  */
-class Mlp_Network_Site_Settings_Properties
-	implements Mlp_Network_Site_Settings_Properties_Interface {
+class Mlp_Network_Site_Settings_Properties {
 
 	/**
 	 * @return string
@@ -24,7 +23,7 @@ class Mlp_Network_Site_Settings_Properties
 	}
 
 	/**
-	 * @return string|void
+	 * @return string
 	 */
 	public function get_tab_title() {
 		return __( 'MultilingualPress', 'multilingual-press' );
