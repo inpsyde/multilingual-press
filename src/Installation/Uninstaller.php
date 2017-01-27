@@ -126,21 +126,7 @@ class Uninstaller {
 	private function site_ids() {
 
 		if ( ! isset( $this->site_ids ) ) {
-			// TODO: With WordPress 4.6 + 2, just use `get_sites()` and `$site->id`.
-			// Get the unaltered WordPress version.
-			require ABSPATH . WPINC . '/version.php';
-			/** @var string $wp_version */
-			$is_pre_4_6 = version_compare( $wp_version, '4.6-RC1', '<' );
-
-			$sites = $is_pre_4_6 ? wp_get_sites() : get_sites();
-			foreach ( $sites as $site ) {
-				switch_to_blog( $is_pre_4_6 ? $site['blog_id'] : $site->id );
-			}
-
-			$this->site_ids = array_map( function ( $site ) use ( $is_pre_4_6 ) {
-
-				return $is_pre_4_6 ? $site['blog_id'] : $site->id;
-			}, $sites );
+			$this->site_ids = wp_list_pluck( get_sites(), 'id' );
 		}
 
 		return $this->site_ids;

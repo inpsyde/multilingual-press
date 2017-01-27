@@ -127,14 +127,8 @@ class Updater {
 	 */
 	private function import_site_relations() {
 
-		// TODO: With WordPress 4.6 + 2, just use `get_sites()`, and remove `$is_pre_4_6`.
-
-		$is_pre_4_6 = version_compare( $GLOBALS['wp_version'], '4.6-RC1', '<' );
-
-		$all_sites = $is_pre_4_6 ? wp_get_sites() : get_sites();
-		foreach ( $all_sites as $site ) {
-			// TODO: With WordPress 4.6 + 2, just use `$site->id`.
-			$site_id = $is_pre_4_6 ? $site['blog_id'] : $site->id;
+		foreach ( get_sites() as $site ) {
+			$site_id = $site->id;
 
 			$linked = get_blog_option( $site_id, 'inpsyde_multilingual_blog_relationship', [] );
 			if ( $linked ) {

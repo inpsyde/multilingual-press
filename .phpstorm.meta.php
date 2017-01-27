@@ -23,6 +23,8 @@ namespace PHPSTORM_META {
 			'multilingualpress.internal_locations' instanceof \Inpsyde\MultilingualPress\Core\InternalLocations,
 			'multilingualpress.language_negotiator' instanceof \Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiator,
 			'multilingualpress.language_site_setting' instanceof \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel,
+			'multilingualpress.language_switcher_widget' instanceof \WP_Widget,
+			'multilingualpress.language_switcher_widget_view' instanceof \Inpsyde\MultilingualPress\Widget\Sidebar\View,
 			'multilingualpress.languages' instanceof \Inpsyde\MultilingualPress\API\Languages,
 			'multilingualpress.languages_table' instanceof \Inpsyde\MultilingualPress\Database\Table,
 			'multilingualpress.module_manager' instanceof \Inpsyde\MultilingualPress\Module\ModuleManager,

@@ -649,8 +649,7 @@ function site_exists( $site_id, $network_id = 0 ) {
 		return true;
 	}
 
-	// TODO: With WordPress 4.6 + 2, use get_current_network_id() instead of "get_current_site()->id".
-	$network_id = (int) ( $network_id ? $network_id : get_current_site()->id );
+	$network_id = (int) ( $network_id ?: get_current_network_id() );
 
 	if ( ! isset( $cache[ $network_id ] ) ) {
 		$db = MultilingualPress::resolve( 'multilingualpress.wpdb' );

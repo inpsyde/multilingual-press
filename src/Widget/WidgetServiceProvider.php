@@ -25,6 +25,20 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.language_switcher_widget'] = function ( Container $container ) {
+
+			return new Sidebar\LanguageSwitcher\Widget(
+				$container['multilingualpress.language_switcher_widget_view']
+			);
+		};
+
+		$container['multilingualpress.language_switcher_widget_view'] = function ( Container $container ) {
+
+			return new Sidebar\LanguageSwitcher\WidgetView(
+				$container['multilingualpress.asset_manager']
+			);
+		};
+
 		$container['multilingualpress.translation_completed_setting_nonce'] = function () {
 
 			return new WPNonce( 'save_translation_completed_setting' );
@@ -95,6 +109,8 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.untranslated_posts_dashboard_widget']->register();
 
+		$container['multilingualpress.language_switcher_widget']->register();
+
 		add_action(
 			'post_submitbox_misc_actions',
 			[ $container['multilingualpress.translation_completed_setting_view'], 'render' ]
@@ -106,17 +122,5 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 			10,
 			2
 		);
-
-		add_action( 'widgets_init', function () {
-
-			/* TODO: With WordPress 4.6 + 2, do the following (via Container?):
-			register_widget( new \Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher\Widget(
-				new \Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher\WidgetView(),
-				$container->get( 'multilingualpress.asset_manager' )
-			) );
-			*/
-
-			register_widget( '\Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher\Widget' );
-		} );
 	}
 }

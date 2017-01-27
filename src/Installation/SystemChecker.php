@@ -85,7 +85,7 @@ class SystemChecker {
 	 *
 	 * @var string
 	 */
-	const MINIMUM_WORDPRESS_VERSION = '4.5.0';
+	const MINIMUM_WORDPRESS_VERSION = '4.6.0';
 
 	/**
 	 * @var string[]
@@ -253,8 +253,10 @@ class SystemChecker {
 	 */
 	private function check_wordpress_version() {
 
+		global $wp_version;
+
 		$current_version = $this->type_factory->create_version_number( [
-			$GLOBALS['wp_version'],
+			$wp_version,
 		] );
 
 		$required_version = $this->type_factory->create_version_number( [

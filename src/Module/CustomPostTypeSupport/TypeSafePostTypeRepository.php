@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
+use WP_Post_Type;
+
 /**
  * Type-safe post type repository implementation.
  *
@@ -10,17 +12,17 @@ namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
  */
 final class TypeSafePostTypeRepository implements PostTypeRepository {
 
-	/**@todo With WordPress 4.6 + 2, use WP_Post_Type[] as type hint.
-	 * @var object[]
+	/**
+	 * @var WP_Post_Type[]
 	 */
 	private $custom_post_types;
 
-	/**@todo With WordPress 4.6 + 2, use WP_Post_Type[] as return type hint.
+	/**
 	 * Returns all custom post types that MultilingualPress is able to support.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return object[] All custom post types that MultilingualPress is able to support.
+	 * @return WP_Post_Type[] All custom post types that MultilingualPress is able to support.
 	 */
 	public function get_custom_post_types() {
 
@@ -33,7 +35,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 			'show_ui'  => true,
 		], 'objects' );
 		if ( $this->custom_post_types ) {
-			uasort( $this->custom_post_types, function ( $a, $b ) {
+			uasort( $this->custom_post_types, function ( WP_Post_Type $a, WP_Post_Type $b ) {
 
 				return strcasecmp( $a->labels->name, $b->labels->name );
 			} );

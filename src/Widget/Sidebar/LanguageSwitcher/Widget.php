@@ -2,8 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher;
 
-use Inpsyde\MultilingualPress\Asset\AssetManager;
-use Inpsyde\MultilingualPress\MultilingualPress;
+use Inpsyde\MultilingualPress\Widget\Sidebar\RegistrableWidget;
+use Inpsyde\MultilingualPress\Widget\Sidebar\SelfRegisteringWidget;
 use Inpsyde\MultilingualPress\Widget\Sidebar\View;
 use WP_Widget;
 
@@ -13,12 +13,9 @@ use WP_Widget;
  * @package Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher
  * @since   3.0.0
  */
-final class Widget extends WP_Widget {
+final class Widget extends WP_Widget implements RegistrableWidget {
 
-	/**
-	 * @var AssetManager
-	 */
-	private $asset_manager;
+	use SelfRegisteringWidget;
 
 	/**
 	 * @var View
@@ -29,8 +26,10 @@ final class Widget extends WP_Widget {
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
+	 *
+	 * @param View         $view          Widget view object.
 	 */
-	public function __construct() {
+	public function __construct( View $view ) {
 
 		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingual-press' ), [
 			'classname'                   => 'mlp_widget',
@@ -38,20 +37,7 @@ final class Widget extends WP_Widget {
 			'customize_selective_refresh' => true,
 		] );
 
-		// TODO: With WordPress 4.6 + 2, inject an asset manager instance.
-		if ( ! isset( $this->asset_manager ) ) {
-			$this->asset_manager = MultilingualPress::resolve( 'multilingualpress.asset_manager' );
-		}
-
-		// TODO: With WordPress 4.6 + 2, inject a view instance.
-		if ( ! isset( $this->view ) ) {
-			$this->view = new WidgetView();
-		}
-
-		// Enqueue style if front end and widget is active (ei.e., it appears in a sidebar) or if in Customizer preview.
-		if ( ( ! is_admin() && is_active_widget( false, false, $this->id_base ) ) || is_customize_preview() ) {
-			$this->enqueue_style();
-		}
+		$this->view = $view;
 	}
 
 	/**
@@ -200,18 +186,5 @@ final class Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 
 		$this->view->render( (array) $args, (array) $instance, $this->id_base );
-	}
-
-	/**
-	 * Enqueues the front-end styles.
-	 *
-	 * @return void
-	 */
-	private function enqueue_style() {
-
-		$theme_support = get_theme_support( 'multilingualpress' );
-		if ( empty( $theme_support[0]['language_switcher_widget_style'] ) ) {
-			$this->asset_manager->enqueue_style( 'multilingualpress' );
-		}
 	}
 }

@@ -4,6 +4,7 @@ namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxViewModel;
+use WP_Post_Type;
 
 /**
  * Custom post type support settings box.
@@ -18,8 +19,8 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 */
 	private $nonce;
 
-	/**@todo With WordPress 4.6 + 2, use WP_Post_Type[] as type hint.
-	 * @var object[]
+	/**
+	 * @var WP_Post_Type[]
 	 */
 	private $post_types;
 
@@ -28,7 +29,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 */
 	private $repository;
 
-	/**@todo With WordPress 4.6 + 2, use WP_Post_Type[] as return type hint.
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -122,16 +123,16 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 		return __( 'Custom Post Type Support', 'multilingual-press' );
 	}
 
-	/**@todo With WordPress 4.6 + 2, use WP_Post_Type as type hint.
+	/**
 	 * Renders a table row element according to the given data.
 	 *
-	 * @param object $post_type            Post type object.
-	 * @param string $slug                 Post type slug.
-	 * @param int[]  $supported_post_types Supported post type settings.
+	 * @param WP_Post_Type $post_type            Post type object.
+	 * @param string       $slug                 Post type slug.
+	 * @param int[]        $supported_post_types Supported post type settings.
 	 *
 	 * @return void
 	 */
-	private function render_table_row( $post_type, $slug, array $supported_post_types ) {
+	private function render_table_row( WP_Post_Type $post_type, $slug, array $supported_post_types ) {
 
 		$name = PostTypeSupportSettingsUpdater::SETTINGS_NAME;
 
