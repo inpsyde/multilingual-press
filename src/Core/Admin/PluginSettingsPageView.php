@@ -64,6 +64,7 @@ final class PluginSettingsPageView implements SettingsPageView {
 		?>
 		<div class="wrap">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+			<?php settings_errors(); ?>
 			<form method="post" action="<?php echo admin_url( "admin-post.php?action={$action}" ); ?>"
 				id="multilingualpress-modules">
 				<?php echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce ); ?>

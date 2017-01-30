@@ -10,6 +10,8 @@ use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
 use Inpsyde\MultilingualPress\Common\Setting\User\SecureUserSettingUpdater;
 use Inpsyde\MultilingualPress\Common\Setting\User\UserSetting;
 use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettings;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ActivationAwareness;
 use Inpsyde\MultilingualPress\Module\Module;
@@ -147,17 +149,20 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			if ( is_admin() ) {
 				global $pagenow;
 
-				if ( is_network_admin() ) {
-					$redirect_site_setting = new SiteSetting(
-						$container['multilingualpress.redirect_site_setting'],
-						$container['multilingualpress.redirect_site_setting_updater']
-					);
+				$redirect_site_setting = new SiteSetting(
+					$container['multilingualpress.redirect_site_setting'],
+					$container['multilingualpress.redirect_site_setting_updater']
+				);
 
-					// TODO: Adapt to make it display and save on Edit Site as well.
+				$redirect_site_setting->register(
+					SiteSettingsSectionView::ACTION_AFTER . '_' . SiteSettings::ID,
+					SiteSettingsUpdater::ACTION_UPDATE_SETTINGS
+				);
+
+				if ( is_network_admin() ) {
 					$redirect_site_setting->register(
 						SiteSettingsSectionView::ACTION_AFTER . '_' . NewSiteSettings::ID,
-						// TODO: Adapt hook as soon as it is a class constant (see Mlp_Network_Site_Settings_Controller).
-						'mlp_blogs_save_fields'
+						SiteSettingsUpdater::ACTION_DEFINE_INITIAL_SETTINGS
 					);
 
 					if ( 'sites.php' === $pagenow ) {

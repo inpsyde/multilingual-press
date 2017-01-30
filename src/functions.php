@@ -8,6 +8,33 @@ use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 
 /**
+ * Adds a "Settings saved." message for the given setting.
+ *
+ * @since 3.0.0
+ *
+ * @param string $setting Optional. Setting slug. Defaults to 'mlp-setting'.
+ * @param string $code    Optional. Setting code for identification. Defaults to 'mlp-setting'.
+ *
+ * @return void
+ */
+function add_settings_updated_message( $setting = 'mlp-setting', $code = 'mlp-setting' ) {
+
+	$messages = get_transient( 'settings_errors' );
+	if ( ! is_array( $messages ) ) {
+		$messages = [];
+	}
+
+	$messages[ $code ] = [
+		'setting' => $setting,
+		'code'    => $code,
+		'message' => __( 'Settings saved.', 'multilingual-press' ),
+		'type'    => 'updated',
+	];
+
+	set_transient( 'settings_errors', $messages );
+}
+
+/**
  * Returns the according HTML string representation for the given array of attributes.
  *
  * @since 3.0.0
@@ -373,7 +400,7 @@ function get_linked_elements( array $args = [] ) {
 						return 0;
 					}
 
-					return ( $a['priority'] < $b['priority'] ) ? 1 : -1;
+					return ( $a['priority'] < $b['priority'] ) ? 1 : - 1;
 				} );
 				break;
 
@@ -602,6 +629,42 @@ function nonce_field( Nonce $nonce, $with_referer = true ) {
 		esc_attr( (string) $nonce ),
 		$with_referer ? wp_referer_field( false ) : ''
 	);
+}
+
+/**
+ * Redirects to the given URL (or the referer) after a settings update request.
+ *
+ * @since 3.0.0
+ *
+ * @param string $url     Optional. URL. Defaults to empty string.
+ * @param string $setting Optional. Setting slug. Defaults to 'mlp-setting'.
+ * @param string $code    Optional. Setting code for identification. Defaults to 'mlp-setting'.
+ *
+ * @return void
+ */
+function redirect_after_settings_update( $url = '', $setting = 'mlp-setting', $code = 'mlp-setting' ) {
+
+	if ( $setting ) {
+		add_settings_updated_message( $setting, $code );
+	}
+
+	if ( ! $url ) {
+		if (
+			isset( $_SERVER['REQUEST_METHOD'] )
+			&& 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] )
+			&& isset( $_POST['_wp_http_referer'] )
+		) {
+			$url = (string) $_POST['_wp_http_referer'];
+		}
+
+		if ( ! $url && isset( $_REQUEST['_wp_http_referer'] ) ) {
+			$url = (string) $_REQUEST['_wp_http_referer'];
+		}
+	}
+
+	wp_safe_redirect( add_query_arg( 'settings-updated', true, $url ) );
+
+	call_exit();
 }
 
 /**

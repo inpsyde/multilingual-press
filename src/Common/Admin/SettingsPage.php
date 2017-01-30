@@ -309,6 +309,18 @@ class SettingsPage {
 	}
 
 	/**
+	 * Returns the capability.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The capability.
+	 */
+	public function capability() {
+
+		return $this->capability;
+	}
+
+	/**
 	 * Returns the hookname.
 	 *
 	 * @since 3.0.0
@@ -338,6 +350,30 @@ class SettingsPage {
 
 			$this->hookname = call_user_func_array( $this->get_callback(), $this->get_callback_args() );
 		} );
+	}
+
+	/**
+	 * Returns the slug.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The slug.
+	 */
+	public function slug() {
+
+		return $this->slug;
+	}
+
+	/**
+	 * Returns the title.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string The title.
+	 */
+	public function title() {
+
+		return $this->title;
 	}
 
 	/**

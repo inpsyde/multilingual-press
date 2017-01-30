@@ -13,6 +13,24 @@ use Inpsyde\MultilingualPress\API\Languages;
 class SiteSettingsUpdater {
 
 	/**
+	 * Action hook.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_DEFINE_INITIAL_SETTINGS = 'multilingualpress.define_initial_site_settings';
+
+	/**
+	 * Action hook.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_UPDATE_SETTINGS = 'multilingualpress.update_site_settings';
+
+	/**
 	 * @var Languages
 	 */
 	private $languages;
@@ -45,23 +63,57 @@ class SiteSettingsUpdater {
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return bool Whether or not the initial settings were defined successfully.
+	 * @return void
 	 */
 	public function define_initial_settings( $site_id ) {
 
-		$success = true;
+		$this->update_wplang( $site_id );
 
-		$success = $success && $this->update_wplang( $site_id );
+		$this->update_language( $site_id );
 
-		$success = $success && $this->update_language( $site_id );
+		$this->update_alternative_language_title( $site_id );
 
-		$success = $success && $this->update_alternative_language_title( $site_id );
+		$this->update_flag_image_url( $site_id );
 
-		$success = $success && $this->update_flag_image_url( $site_id );
+		$this->update_relationships( $site_id );
 
-		$success = $success && $this->update_relationships( $site_id );
+		/**
+		 * Fires right after the initial settings of a new site have been defined.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param int $site_id Site ID.
+		 */
+		do_action( self::ACTION_DEFINE_INITIAL_SETTINGS, (int) $site_id );
+	}
 
-		return $success;
+	/**
+	 * Updates the settings of an existing site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $site_id Site ID.
+	 *
+	 * @return void
+	 */
+	public function update_settings( $site_id ) {
+
+		$this->update_language( $site_id );
+
+		$this->update_alternative_language_title( $site_id );
+
+		$this->update_flag_image_url( $site_id );
+
+		$this->update_relationships( $site_id );
+
+		/**
+		 * Fires right after the initial settings of an existing site have been updated.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param int $site_id Site ID.
+		 */
+		do_action( self::ACTION_UPDATE_SETTINGS, (int) $site_id );
 	}
 
 	/**
@@ -72,14 +124,14 @@ class SiteSettingsUpdater {
 	private function get_language() {
 
 		if (
-			empty( $_POST[ SiteSettingsRepository::NAME_LANGUAGE ] )
-			|| ! is_string( $_POST[ SiteSettingsRepository::NAME_LANGUAGE ] )
-			|| '-1' === $_POST[ SiteSettingsRepository::NAME_LANGUAGE ]
+			empty( $_POST['blog'][ SiteSettingsRepository::NAME_LANGUAGE ] )
+			|| ! is_string( $_POST['blog'][ SiteSettingsRepository::NAME_LANGUAGE ] )
+			|| '-1' === $_POST['blog'][ SiteSettingsRepository::NAME_LANGUAGE ]
 		) {
 			return '';
 		}
 
-		return $_POST[ SiteSettingsRepository::NAME_LANGUAGE ];
+		return $_POST['blog'][ SiteSettingsRepository::NAME_LANGUAGE ];
 	}
 
 	/**
@@ -87,7 +139,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return bool Whether or not the alternative language title was updated successfully.
+	 * @return void
 	 */
 	private function update_alternative_language_title( $site_id ) {
 
@@ -95,7 +147,7 @@ class SiteSettingsUpdater {
 			? ''
 			: (string) $_POST[ SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE ];
 
-		return $this->repository->set_alternative_language_title( $title, $site_id );
+		$this->repository->set_alternative_language_title( $title, $site_id );
 	}
 
 	/**
@@ -103,7 +155,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return bool Whether or not the flag image URL was updated successfully.
+	 * @return void
 	 */
 	private function update_flag_image_url( $site_id ) {
 
@@ -111,7 +163,7 @@ class SiteSettingsUpdater {
 			? ''
 			: (string) $_POST[ SiteSettingsRepository::NAME_FLAG_IMAGE_URL ];
 
-		return $this->repository->set_flag_image_url( $url, $site_id );
+		$this->repository->set_flag_image_url( $url, $site_id );
 	}
 
 	/**
@@ -119,11 +171,11 @@ class SiteSettingsUpdater {
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return bool Whether or not the language was updated successfully.
+	 * @return void
 	 */
 	private function update_language( $site_id ) {
 
-		return $this->repository->set_language( $this->get_language(), $site_id );
+		$this->repository->set_language( $this->get_language(), $site_id );
 	}
 
 	/**
@@ -131,7 +183,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return bool Whether or not the relationships were updated successfully.
+	 * @return void
 	 */
 	private function update_relationships( $site_id ) {
 
@@ -139,7 +191,7 @@ class SiteSettingsUpdater {
 			? []
 			: array_map( 'intval', (array) $_POST[ SiteSettingsRepository::NAME_RELATIONSHIPS ] );
 
-		return $this->repository->set_relationships( $relationships, $site_id );
+		$this->repository->set_relationships( $relationships, $site_id );
 	}
 
 	/**
@@ -147,13 +199,13 @@ class SiteSettingsUpdater {
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return bool Whether or not the WordPress language was updated successfully.
+	 * @return void
 	 */
 	private function update_wplang( $site_id ) {
 
 		$language = $this->get_language();
 		if ( ! $language ) {
-			return true;
+			return;
 		}
 
 		$language = reset( $this->languages->get_languages( [
@@ -166,15 +218,13 @@ class SiteSettingsUpdater {
 			],
 		] ) );
 		if ( ! $language ) {
-			return true;
+			return;
 		}
 
 		$wplang = $language->wp_locale;
 
 		if ( in_array( $wplang, get_available_languages(), true ) ) {
-			return update_blog_option( $site_id, 'WPLANG', $wplang );
+			update_blog_option( $site_id, 'WPLANG', $wplang );
 		}
-
-		return true;
 	}
 }

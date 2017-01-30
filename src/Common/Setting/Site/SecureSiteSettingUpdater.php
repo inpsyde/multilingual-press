@@ -42,12 +42,11 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param array $data    Data to be saved.
-	 * @param int   $site_id Site ID.
+	 * @param int $site_id Site ID.
 	 *
 	 * @return bool Whether or not the site setting was updated successfully.
 	 */
-	public function update( array $data, $site_id ) {
+	public function update( $site_id ) {
 
 		if ( ! current_user_can( 'manage_sites' ) ) {
 			return false;
@@ -57,7 +56,7 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 			return false;
 		}
 
-		$value = $this->get_value( $data );
+		$value = $this->get_value();
 
 		return $value
 			? update_blog_option( $site_id, $this->option, $value )
@@ -65,16 +64,22 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 	}
 
 	/**
-	 * Returns the value included in the data array.
+	 * Returns the value included in the request.
 	 *
-	 * @param array $data Data to be saved.
-	 *
-	 * @return string The value included in the data array.
+	 * @return string The value included in the request.
 	 */
-	private function get_value( array $data ) {
+	private function get_value() {
 
-		return array_key_exists( $this->option, $data ) && is_string( $data[ $this->option ] )
-			? $data[ $this->option ]
+		$value = array_key_exists( $this->option, $_GET ) && is_string( $_GET[ $this->option ] )
+			? $_GET[ $this->option ]
+			: '';
+
+		if ( empty( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+			return $value;
+		}
+
+		return array_key_exists( $this->option, $_POST ) && is_string( $_POST[ $this->option ] )
+			? $_POST[ $this->option ]
 			: '';
 	}
 }

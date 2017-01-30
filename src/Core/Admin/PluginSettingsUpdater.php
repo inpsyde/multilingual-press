@@ -80,8 +80,7 @@ class PluginSettingsUpdater {
 		 */
 		do_action( 'multilingualpress.save_modules', $_POST );
 
-		wp_safe_redirect( add_query_arg( 'message', 'updated', $this->settings_page->url() ) );
-		\Inpsyde\MultilingualPress\call_exit();
+		\Inpsyde\MultilingualPress\redirect_after_settings_update( $this->settings_page->url() );
 	}
 
 	/**

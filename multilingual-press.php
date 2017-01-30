@@ -106,12 +106,6 @@ add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
 				new Common\Nonce\WPNonce( "save_{$taxonomy}_translations_$term_taxonomy_id" )
 			) )->setup();
 		}, 0 );
-
-		// Site Settings
-		$setting = new \Mlp_Network_Site_Settings_Tab_Data(
-			MultilingualPress::resolve( 'multilingualpress.type_factory' )
-		);
-		new \Mlp_Network_Site_Settings_Controller( $setting, new Common\Nonce\WPNonce( $setting->action() ) );
 	}
 
 	add_action( 'wp_loaded', function () {

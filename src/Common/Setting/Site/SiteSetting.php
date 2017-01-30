@@ -61,7 +61,7 @@ class SiteSetting {
 		} );
 
 		if ( $update_hook ) {
-			add_action( $update_hook, [ $this->updater, 'update' ], 10, 2 );
+			add_action( $update_hook, [ $this->updater, 'update' ] );
 		}
 	}
 }

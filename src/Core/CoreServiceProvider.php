@@ -4,6 +4,8 @@ namespace Inpsyde\MultilingualPress\Core;
 
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
+use Inpsyde\MultilingualPress\Common\Admin\EditSiteTab;
+use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
@@ -17,7 +19,10 @@ use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\RelationshipsSiteSetting;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettings;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsTabView;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdateRequestHandler;
 use Inpsyde\MultilingualPress\Core\Admin\TypeSafeSiteSettingsRepository;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -85,18 +90,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.new_site_settings'] = function ( Container $container ) {
 
 			return new NewSiteSettings(
-				$container['multilingualpress.new_site_settings_view']
+				$container['multilingualpress.site_settings_view']
 			);
-		};
-
-		$container['multilingualpress.new_site_settings_view'] = function ( Container $container ) {
-
-			return SiteSettingMultiView::from_view_models( [
-				$container['multilingualpress.language_site_setting'],
-				$container['multilingualpress.alternative_language_title_site_setting'],
-				$container['multilingualpress.flag_image_url_site_setting'],
-				$container['multilingualpress.relationships_site_setting'],
-			] );
 		};
 
 		$container['multilingualpress.plugin_settings_page'] = function ( Container $container ) {
@@ -116,7 +111,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new PluginSettingsPageView(
 				$container['multilingualpress.module_manager'],
-				$container['multilingualpress.update_plugin_settings_nonce'],
+				$container['multilingualpress.save_plugin_settings_nonce'],
 				$container['multilingualpress.asset_manager']
 			);
 		};
@@ -125,7 +120,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new PluginSettingsUpdater(
 				$container['multilingualpress.module_manager'],
-				$container['multilingualpress.update_plugin_settings_nonce'],
+				$container['multilingualpress.save_plugin_settings_nonce'],
 				$container['multilingualpress.plugin_settings_page']
 			);
 		};
@@ -143,12 +138,63 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new ConditionalAwareRequest();
 		} );
 
+		$container['multilingualpress.save_plugin_settings_nonce'] = function () {
+
+			return new WPNonce( 'save_plugin_settings' );
+		};
+
+		$container['multilingualpress.save_site_settings_nonce'] = function () {
+
+			return new WPNonce( 'save_site_settings' );
+		};
+
+		$container['multilingualpress.site_settings'] = function ( Container $container ) {
+
+			return new SiteSettings(
+				$container['multilingualpress.site_settings_view']
+			);
+		};
+
 		$container->share( 'multilingualpress.site_settings_repository', function ( Container $container ) {
 
 			return new TypeSafeSiteSettingsRepository(
 				$container['multilingualpress.site_relations']
 			);
 		} );
+
+		$container['multilingualpress.site_settings_tab'] = function ( Container $container ) {
+
+			return new EditSiteTab(
+				$container['multilingualpress.site_settings_tab_data'],
+				$container['multilingualpress.site_settings_tab_view']
+			);
+		};
+
+		$container['multilingualpress.site_settings_tab_data'] = function () {
+
+			return new EditSiteTabData(
+				'multilingualpress',
+				__( 'MultilingualPress', 'multilingual-press' ),
+				'multilingualpress'
+			);
+		};
+
+		$container['multilingualpress.site_settings_tab_view'] = function ( Container $container ) {
+
+			return new SiteSettingsTabView(
+				$container['multilingualpress.site_settings_tab_data'],
+				new SiteSettingsSectionView( $container['multilingualpress.site_settings'] ),
+				$container['multilingualpress.save_site_settings_nonce']
+			);
+		};
+
+		$container['multilingualpress.site_settings_update_request_handler'] = function ( Container $container ) {
+
+			return new SiteSettingsUpdateRequestHandler(
+				$container['multilingualpress.site_settings_updater'],
+				$container['multilingualpress.save_site_settings_nonce']
+			);
+		};
 
 		$container['multilingualpress.site_settings_updater'] = function ( Container $container ) {
 
@@ -158,9 +204,14 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
-		$container['multilingualpress.update_plugin_settings_nonce'] = function () {
+		$container['multilingualpress.site_settings_view'] = function ( Container $container ) {
 
-			return new WPNonce( 'update_plugin_settings' );
+			return SiteSettingMultiView::from_view_models( [
+				$container['multilingualpress.language_site_setting'],
+				$container['multilingualpress.alternative_language_title_site_setting'],
+				$container['multilingualpress.flag_image_url_site_setting'],
+				$container['multilingualpress.relationships_site_setting'],
+			] );
 		};
 	}
 
@@ -219,45 +270,37 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			[ $container['multilingualpress.plugin_settings_updater'], 'update_settings' ]
 		);
 
-		add_action( 'network_admin_notices', function () use ( $setting_page ) {
-
-			if (
-				isset( $_GET['message'] )
-				&& isset( $GLOBALS['hook_suffix'] )
-				&& $setting_page->hookname() === $GLOBALS['hook_suffix']
-			) {
-				( new AdminNotice( '<p>' . __( 'Settings saved.', 'multilingual-press' ) . '</p>' ) )->render();
-			}
-		} );
-
 		( new ActionLink(
 			'settings',
 			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>'
 		) )->register( 'network_admin_plugin_action_links_' . $properties->plugin_base_name() );
 
 		// TODO: Bundle the following block in some PluginDataDeletor or so...
-		$content_relations = $container['multilingualpress.content_relations'];
-		$site_relations = $container['multilingualpress.site_relations'];
+		$content_relations        = $container['multilingualpress.content_relations'];
+		$site_relations           = $container['multilingualpress.site_relations'];
 		$site_settings_repository = $container['multilingualpress.site_settings_repository'];
-		add_action( 'delete_blog', function ( $site_id ) use ( $content_relations, $site_relations, $site_settings_repository ) {
+		add_action( 'delete_blog',
+			function ( $site_id ) use ( $content_relations, $site_relations, $site_settings_repository ) {
 
-			$content_relations->delete_relations_for_site( $site_id );
+				$content_relations->delete_relations_for_site( $site_id );
 
-			$site_relations->delete_relation( $site_id );
+				$site_relations->delete_relation( $site_id );
 
-			$settings = $site_settings_repository->get_settings();
-			if ( isset( $settings[ $site_id ] ) ) {
-				unset( $settings[ $site_id ] );
+				$settings = $site_settings_repository->get_settings();
+				if ( isset( $settings[ $site_id ] ) ) {
+					unset( $settings[ $site_id ] );
 
-				$site_settings_repository->set_settings( $settings );
-			}
-		} );
+					$site_settings_repository->set_settings( $settings );
+				}
+			} );
 
 		if ( is_admin() ) {
 			global $pagenow;
 
-			$site_settings_updater = $container['multilingualpress.site_settings_updater'];
-			// TODO: Handle site settings update via AJAX (once implemented).
+			add_action(
+				'admin_post_' . SiteSettingsUpdateRequestHandler::ACTION,
+				[ $container['multilingualpress.site_settings_update_request_handler'], 'handle_post_request' ]
+			);
 
 			if ( 'sites.php' === $pagenow ) {
 				( new SitesListTableColumn(
@@ -299,15 +342,16 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			}
 
 			if ( is_network_admin() ) {
+				$container['multilingualpress.site_settings_tab']->register();
 
 				$new_site_settings = $container['multilingualpress.new_site_settings'];
 
-				add_action( 'network_site_new_form', function ( $ite_id ) use ( $new_site_settings ) {
+				add_action( 'network_site_new_form', function ( $site_id ) use ( $new_site_settings ) {
 
-					( new SiteSettingsSectionView( $new_site_settings ) )->render( $ite_id );
+					( new SiteSettingsSectionView( $new_site_settings ) )->render( $site_id );
 				} );
 
-				add_action( 'wpmu_new_blog', [ $site_settings_updater, 'define_initial_settings' ] );
+				add_action( 'wpmu_new_blog', [ $container['multilingualpress.site_settings_updater'], 'define_initial_settings' ] );
 			}
 		} else {
 			$translations = $container['multilingualpress.translations'];
