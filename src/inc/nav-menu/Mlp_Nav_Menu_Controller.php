@@ -152,7 +152,7 @@ class Mlp_Nav_Menu_Controller {
 	private function add_actions() {
 
 		add_action(
-			'wp_loaded',
+			'load-nav-menus.php',
 			array ( $this->data, 'register_script' )
 		);
 

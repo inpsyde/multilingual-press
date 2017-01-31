@@ -76,7 +76,7 @@ class Mlp_General_Settingspage {
 			array( $view, 'render_page' )
 		);
 
-		$this->assets->provide( array( 'mlp-admin', 'mlp_admin_css' ) );
+		add_action( "load-{$this->page_hook}", array( $this, 'provide_assets' ) );
 	}
 
 	/**
@@ -101,4 +101,13 @@ class Mlp_General_Settingspage {
 		$notice->show();
 	}
 
+	/**
+	 * Takes care of the required assets being provided.
+	 *
+	 * @return void
+	 */
+	public function provide_assets() {
+
+		$this->assets->provide( array( 'mlp-admin', 'mlp_admin_css' ) );
+	}
 }
