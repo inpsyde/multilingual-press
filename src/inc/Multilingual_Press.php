@@ -390,7 +390,8 @@ class Multilingual_Press {
 
 		new Mlp_Network_New_Site_Controller(
 			$this->plugin_data->get( 'language_api' ),
-			$this->plugin_data->get( 'site_relations' )
+			$this->plugin_data->get( 'site_relations' ),
+			$this->plugin_data->get( 'assets' )
 		);
 	}
 

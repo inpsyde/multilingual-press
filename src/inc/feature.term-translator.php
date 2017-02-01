@@ -11,7 +11,10 @@ if ( is_admin() ) {
  */
 function mlp_feature_term_translator( Inpsyde_Property_List_Interface $data ) {
 
-	$controller = new Mlp_Term_Translation_Controller( $data->get( 'content_relations' ) );
+	$controller = new Mlp_Term_Translation_Controller(
+		$data->get( 'content_relations' ),
+		$data->get( 'assets' )
+	);
 
 	return $controller->setup();
 }

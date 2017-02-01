@@ -10,6 +10,11 @@
 class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 	/**
+	 * @var Mlp_Assets_Interface
+	 */
+	private $assets;
+
+	/**
 	 * @var Mlp_Term_Translation_Selector
 	 */
 	private $view = NULL;
@@ -36,10 +41,13 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 	/**
 	 * @param Mlp_Content_Relations_Interface $content_relations
+	 * @param Mlp_Assets_Interface            $assets
 	 */
-	public function __construct( Mlp_Content_Relations_Interface $content_relations ) {
+	public function __construct( Mlp_Content_Relations_Interface $content_relations, Mlp_Assets_Interface $assets ) {
 
 		$this->content_relations = $content_relations;
+
+		$this->assets = $assets;
 
 		$this->nonce = Mlp_Nonce_Validator_Factory::create( $this->get_nonce_action(), get_current_blog_id() );
 	}
@@ -72,6 +80,8 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		$fields = new Mlp_Term_Fields( $taxonomies, $this );
 		add_action( 'load-edit-tags.php', array( $fields, 'setup' ) );
+
+		add_action( 'load-edit-tags.php', array( $this, 'provide_assets' ) );
 
 		$post_data = $this->get_post_data();
 
@@ -217,4 +227,13 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 		}
 	}
 
+	/**
+	 * Takes care of the required assets being provided.
+	 *
+	 * @return void
+	 */
+	public function provide_assets() {
+
+		$this->assets->provide( 'mlp-admin' );
+	}
 }

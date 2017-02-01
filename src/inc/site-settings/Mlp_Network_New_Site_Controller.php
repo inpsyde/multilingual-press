@@ -11,6 +11,11 @@
 class Mlp_Network_New_Site_Controller {
 
 	/**
+	 * @var Mlp_Assets_Interface
+	 */
+	private $assets;
+
+	/**
 	 * Language API
 	 *
 	 * @var Mlp_Language_Api_Interface
@@ -29,10 +34,12 @@ class Mlp_Network_New_Site_Controller {
 	 * @wp-hook plugins_loaded
 	 * @param Mlp_Language_Api_Interface   $language_api
 	 * @param Mlp_Site_Relations_Interface $site_relation
+	 * @param Mlp_Assets_Interface         $assets
 	 */
 	public function __construct(
 		Mlp_Language_Api_Interface   $language_api,
-		Mlp_Site_Relations_Interface $site_relation
+		Mlp_Site_Relations_Interface $site_relation,
+		Mlp_Assets_Interface         $assets
 	) {
 
 		if ( ! is_network_admin() )
@@ -40,8 +47,11 @@ class Mlp_Network_New_Site_Controller {
 
 		$this->language_api  = $language_api;
 		$this->site_relation = $site_relation;
+		$this->assets        = $assets;
 
 		add_action( 'wpmu_new_blog', array ( $this, 'update' ) );
+
+		add_action( 'load-site-new.php', array( $this, 'provide_assets' ) );
 
 		// TODO: Simplify, by deleting the template stuff, with the release of WordPress 4.5.0 + 2.
 		$view = new Mlp_New_Site_View( $this->language_api );
@@ -168,5 +178,15 @@ class Mlp_Network_New_Site_Controller {
 		$related     = array_map( 'intval', $new_related );
 
 		return $this->site_relation->set_relation( $blog_id, $related );
+	}
+
+	/**
+	 * Takes care of the required assets being provided.
+	 *
+	 * @return void
+	 */
+	public function provide_assets() {
+
+		$this->assets->provide( 'mlp-admin' );
 	}
 }
