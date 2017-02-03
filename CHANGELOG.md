@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.5.1
+- Assets: Fix assets being provided on pages where they are not needed, see
+[issue #249](https://github.com/inpsyde/multilingual-press/issues/249).
+
 ## 2.5.0
 - Installation: Fix _Incorrect index name ''_ errors, see
 [issue #246](https://github.com/inpsyde/multilingual-press/issues/246).

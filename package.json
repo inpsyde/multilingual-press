@@ -1,7 +1,7 @@
 {
   "name": "multilingualpress",
-  "version": "2.5.0",
-  "description": "Create a fast translation network on WordPress multisite. Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget to link to all sites.",
+  "version": "2.5.1",
+  "description": "Simply THE multisite-based free open source plugin for your multilingual websites.",
   "keywords": [
     "bilingual",
     "i18n",
@@ -24,7 +24,7 @@
   "author": {
     "name": "Inpsyde GmbH",
     "email": "hello@inpsyde.com",
-    "url": "http://inpsyde.com"
+    "url": "https://inpsyde.com"
   },
   "repository": {
     "type": "git",
