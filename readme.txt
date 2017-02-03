@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 2.5.0
+Stable tag: 2.5.1
 
 Simply THE multisite-based free open source plugin for your multilingual websites.
 
@@ -113,6 +113,10 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.5.1 =
+- Assets: Fix assets being provided on pages where they are not needed, see
+[issue #249](https://github.com/inpsyde/multilingual-press/issues/249).
 
 = 2.5.0 =
 - Installation: Fix _Incorrect index name ''_ errors, see
