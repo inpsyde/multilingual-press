@@ -3,7 +3,6 @@
 namespace Inpsyde\MultilingualPress\Core;
 
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
-use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTab;
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
@@ -148,6 +147,15 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new WPNonce( 'save_site_settings' );
 		};
 
+		$container['multilingualpress.site_data_deletor'] = function ( Container $container ) {
+
+			return new SiteDataDeletor(
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.site_relations'],
+				$container['multilingualpress.site_settings_repository']
+			);
+		};
+
 		$container['multilingualpress.site_settings'] = function ( Container $container ) {
 
 			return new SiteSettings(
@@ -275,24 +283,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>'
 		) )->register( 'network_admin_plugin_action_links_' . $properties->plugin_base_name() );
 
-		// TODO: Bundle the following block in some PluginDataDeletor or so...
-		$content_relations        = $container['multilingualpress.content_relations'];
-		$site_relations           = $container['multilingualpress.site_relations'];
-		$site_settings_repository = $container['multilingualpress.site_settings_repository'];
-		add_action( 'delete_blog',
-			function ( $site_id ) use ( $content_relations, $site_relations, $site_settings_repository ) {
-
-				$content_relations->delete_relations_for_site( $site_id );
-
-				$site_relations->delete_relation( $site_id );
-
-				$settings = $site_settings_repository->get_settings();
-				if ( isset( $settings[ $site_id ] ) ) {
-					unset( $settings[ $site_id ] );
-
-					$site_settings_repository->set_settings( $settings );
-				}
-			} );
+		add_action( 'delete_blog', [ $container['multilingualpress.site_data_deletor'], 'delete_site_data' ] );
 
 		if ( is_admin() ) {
 			global $pagenow;
@@ -351,7 +342,10 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 					( new SiteSettingsSectionView( $new_site_settings ) )->render( $site_id );
 				} );
 
-				add_action( 'wpmu_new_blog', [ $container['multilingualpress.site_settings_updater'], 'define_initial_settings' ] );
+				add_action(
+					'wpmu_new_blog',
+					[ $container['multilingualpress.site_settings_updater'], 'define_initial_settings' ]
+				);
 			}
 		} else {
 			$translations = $container['multilingualpress.translations'];

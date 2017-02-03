@@ -78,6 +78,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.save_site_settings_nonce' instanceof \Inpsyde\MultilingualPress\Common\Nonce\Nonce,
 			'multilingualpress.save_user_admin_language_setting_nonce' instanceof \Inpsyde\MultilingualPress\Common\Nonce\Nonce,
 			'multilingualpress.search_translator' instanceof \Inpsyde\MultilingualPress\Translation\Translator,
+			'multilingualpress.site_data_deletor' instanceof \Inpsyde\MultilingualPress\Core\SiteDataDeletor,
 			'multilingualpress.site_duplication_activate_plugins_setting' instanceof \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel,
 			'multilingualpress.site_duplication_based_on_site_setting' instanceof \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel,
 			'multilingualpress.site_duplication_search_engine_visibility_setting' instanceof \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel,
