@@ -55,7 +55,6 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 			printf(
 				'<li><label for="%4$s"><input type="radio" name="%2$s" value="%3$d" id="%4$s"> %1$s</label></li>',
 				$this->get_post_title( $post ),
-				// TODO: Make "mlp_add_post" a constant on an appropriate class.
 				esc_attr( "mlp_add_post[{$site_id}]" ),
 				esc_attr( $post->ID ),
 				esc_attr( "mlp-rc-search-result-{$site_id}-{$post->ID}" )

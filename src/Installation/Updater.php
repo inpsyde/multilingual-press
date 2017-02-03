@@ -103,6 +103,7 @@ class Updater {
 
 		if ( VersionNumber::FALLBACK_VERSION === $installed_version ) {
 			// TODO: Move either to separate class or method on an existing class in the Language API namespace.
+			// TODO: Check if this is needed exactly like this (or similar and compatible) in the language manager.
 			$this->import_active_languages();
 		}
 

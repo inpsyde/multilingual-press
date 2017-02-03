@@ -9,6 +9,8 @@
 
 namespace Inpsyde\MultilingualPress;
 
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
+
 defined( 'ABSPATH' ) or die();
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
@@ -55,11 +57,15 @@ $uninstaller->uninstall_tables( [
 
 // TODO: Use class constants instead of hard-coded strings.
 $uninstaller->delete_network_options( [
-	'inpsyde_multilingual',
+	SiteSettingsRepository::OPTION_SETTINGS,
 	'inpsyde_multilingual_cpt',
 	'inpsyde_multilingual_quicklink_options',
+	// Currently defined in a private property on ~\MultilingualPress.
 	'mlp_version',
+	// Currently defined in ~\Core\CoreServiceProvider.
+	'multilingualpress_modules',
 	'multilingual_press_check_db',
+	// Old option, replaced by 'multilingualpress_modules'.
 	'state_modules',
 ] );
 
