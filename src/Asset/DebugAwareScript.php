@@ -13,7 +13,7 @@ final class DebugAwareScript implements Script {
 	/**
 	 * @var array[]
 	 */
-	private $data;
+	private $data = [];
 
 	/**
 	 * @var string[]
