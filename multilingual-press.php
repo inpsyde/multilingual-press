@@ -20,6 +20,7 @@ use Inpsyde\MultilingualPress\Core\ImmutablePluginProperties;
 use Inpsyde\MultilingualPress\Database\DatabaseServiceProvider;
 use Inpsyde\MultilingualPress\Factory\FactoryProvider;
 use Inpsyde\MultilingualPress\Installation\InstallationServiceProvider;
+use Inpsyde\MultilingualPress\Integration\IntegrationProvider;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\NavMenu\NavMenuServiceProvider;
 use Inpsyde\MultilingualPress\Relations\RelationsServiceProvider;
@@ -28,6 +29,15 @@ use Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicationServiceProvider;
 use Inpsyde\MultilingualPress\Translation\TranslationServiceProvider;
 
 defined( 'ABSPATH' ) or die();
+
+/**
+ * Action name.
+ *
+ * @since 3.0.0
+ *
+ * @var string
+ */
+const ACTION_ACTIVATION = 'multilingualpress.activation';
 
 if ( is_readable( __DIR__ . '/src/autoload.php' ) ) {
 	/**
@@ -59,6 +69,7 @@ function bootstrap() {
 		->register_service_provider( new DatabaseServiceProvider() )
 		->register_service_provider( new FactoryProvider() )
 		->register_service_provider( new InstallationServiceProvider() )
+		->register_service_provider( new IntegrationProvider() )
 		->register_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() )
 		->register_service_provider( new Module\CustomPostTypeSupport\ServiceProvider() )
 		->register_service_provider( new Module\Quicklinks\ServiceProvider() )
@@ -77,6 +88,34 @@ function bootstrap() {
 	require_once __DIR__ . '/src/functions.php';
 
 	return $multilingualpress->bootstrap();
+}
+
+register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
+
+/**
+ * Triggers a plugin-specific activation action third parties can listen to.
+ *
+ * @since   3.0.0
+ * @wp-hook activate_{$plugin}
+ *
+ * @return void
+ */
+function activate() {
+
+	/**
+	 * Fires when MultilingualPress is about to be activated.
+	 *
+	 * @since 3.0.0
+	 */
+	do_action( ACTION_ACTIVATION );
+
+	add_action( 'activated_plugin', function ( $plugin ) {
+
+		if ( plugin_basename( __FILE__ ) === $plugin ) {
+			// Bootstrap MultilingualPress right now to take care of installation or upgrade routines.
+			bootstrap();
+		}
+	}, 0 );
 }
 
 // TODO: Eventually remove/refactor according to new architecure as soon as the old controller got replaced.
