@@ -9,6 +9,7 @@ use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Service\IntegrationServiceProvider;
 use Inpsyde\MultilingualPress\Service\ServiceProvider;
 
 /**
@@ -55,6 +56,11 @@ final class MultilingualPress {
 	 * @var BootstrappableServiceProvider[]
 	 */
 	private $bootstrappables = [];
+
+	/**
+	 * @var IntegrationServiceProvider[]
+	 */
+	private $integrations = [];
 
 	/**
 	 * @var bool
@@ -118,6 +124,10 @@ final class MultilingualPress {
 
 		$provider->register( static::$container );
 
+		if ( $provider instanceof IntegrationServiceProvider ) {
+			$this->integrations[] = $provider;
+		}
+
 		if ( $provider instanceof BootstrappableServiceProvider ) {
 			$this->bootstrappables[] = $provider;
 
@@ -157,6 +167,8 @@ final class MultilingualPress {
 
 		static::$container->lock();
 
+		$this->integrate_services();
+
 		if ( ! $this->check_installation() ) {
 			return false;
 		}
@@ -177,6 +189,21 @@ final class MultilingualPress {
 		do_action( static::ACTION_BOOTSTRAPPED );
 
 		return true;
+	}
+
+	/**
+	 * Integrates all third-party services that need to run early.
+	 *
+	 * @return void
+	 */
+	private function integrate_services() {
+
+		array_walk( $this->integrations, function ( IntegrationServiceProvider $provider ) {
+
+			$provider->integrate( static::$container );
+		} );
+
+		unset( $this->integrations );
 	}
 
 	/**
@@ -206,7 +233,7 @@ final class MultilingualPress {
 			] );
 
 			switch ( $system_checker->check_version( $installed_version, $current_version ) ) {
-				case SystemChecker::INSTALLATION_OK:
+				case SystemChecker::VERSION_OK:
 					return true;
 
 				case SystemChecker::NEEDS_INSTALLATION:
