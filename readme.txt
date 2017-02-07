@@ -114,6 +114,9 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 
 == Changelog ==
 
+= 2.5.2 =
+- Language Switcher: Fix widget not passing on the `strict` flag`.
+
 = 2.5.1 =
 - Assets: Fix assets being provided on pages where they are not needed, see
 [issue #249](https://github.com/inpsyde/multilingual-press/issues/249).
