@@ -16,6 +16,15 @@ use Inpsyde\MultilingualPress\Factory\TypeFactory;
 class SystemChecker {
 
 	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_FORCE_CHECK = 'multilingualpress.force_system_check';
+
+	/**
 	 * Installation check status.
 	 *
 	 * @since 3.0.0
@@ -147,7 +156,16 @@ class SystemChecker {
 	 */
 	public function check_installation() {
 
-		if ( ! $this->is_plugins_page() ) {
+		/**
+		 * Filters if the system check should be forced regardless of the context.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param bool $force Whether or not the system check should be forced
+		 */
+		$force_check = (bool) apply_filters( static::ACTION_FORCE_CHECK, false );
+
+		if ( ! $force_check && ! $this->is_context_valid() ) {
 			return static::WRONG_PAGE_FOR_CHECK;
 		}
 
@@ -201,11 +219,11 @@ class SystemChecker {
 	}
 
 	/**
-	 * Checks if this is the plugins page in the (Network) Admin.
+	 * Checks if the context is valid.
 	 *
-	 * @return bool Whether or not this is the plugins page in the (Network) Admin.
+	 * @return bool Whether or not the context is valid.
 	 */
-	private function is_plugins_page() {
+	private function is_context_valid() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			return false;
