@@ -1,7 +1,7 @@
 # Changelog
 
 ## 2.5.2
-- Language Switcher: Fix widget not passing on the `strict` flag`.
+- Language Switcher: Fix widget not passing on the `strict` flag.
 
 ## 2.5.1
 - Assets: Fix assets being provided on pages where they are not needed, see
