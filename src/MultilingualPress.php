@@ -203,7 +203,7 @@ final class MultilingualPress {
 			$provider->integrate( static::$container );
 		} );
 
-		unset( $this->integrations );
+		$this->integrations = [];
 	}
 
 	/**
@@ -268,7 +268,7 @@ final class MultilingualPress {
 			$provider->bootstrap( static::$container );
 		} );
 
-		unset( $this->bootstrappables );
+		$this->bootstrappables = [];
 	}
 
 	/**
@@ -317,6 +317,6 @@ final class MultilingualPress {
 			} );
 		}
 
-		unset( $this->modules );
+		$this->modules = [];
 	}
 }
