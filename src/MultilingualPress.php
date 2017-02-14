@@ -7,10 +7,9 @@ use Inpsyde\MultilingualPress\Core\Exception\CannotResolveName;
 use Inpsyde\MultilingualPress\Installation\SystemChecker;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
-use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
-use Inpsyde\MultilingualPress\Service\IntegrationServiceProvider;
 use Inpsyde\MultilingualPress\Service\ServiceProvider;
+use Inpsyde\MultilingualPress\Service\ServiceProviderHandling;
 
 /**
  * MultilingualPress front controller.
@@ -19,6 +18,10 @@ use Inpsyde\MultilingualPress\Service\ServiceProvider;
  * @since   3.0.0
  */
 final class MultilingualPress {
+
+	use ServiceProviderHandling {
+		register_service_provider as _register_service_provider;
+	}
 
 	/**
 	 * Action name.
@@ -51,16 +54,6 @@ final class MultilingualPress {
 	 * @var Container
 	 */
 	private static $container;
-
-	/**
-	 * @var BootstrappableServiceProvider[]
-	 */
-	private $bootstrappables = [];
-
-	/**
-	 * @var IntegrationServiceProvider[]
-	 */
-	private $integrations = [];
 
 	/**
 	 * @var bool
@@ -104,7 +97,7 @@ final class MultilingualPress {
 	 */
 	public static function resolve( $name ) {
 
-		if ( ! static::$container instanceof Container ) {
+		if ( ! static::$container ) {
 			throw CannotResolveName::for_name( $name );
 		}
 
@@ -122,18 +115,11 @@ final class MultilingualPress {
 	 */
 	public function register_service_provider( ServiceProvider $provider ) {
 
-		$provider->register( static::$container );
+		// Call the (renamed) method provided by the service trait.
+		$this->_register_service_provider( $provider );
 
-		if ( $provider instanceof IntegrationServiceProvider ) {
-			$this->integrations[] = $provider;
-		}
-
-		if ( $provider instanceof BootstrappableServiceProvider ) {
-			$this->bootstrappables[] = $provider;
-
-			if ( $provider instanceof ModuleServiceProvider ) {
-				$this->modules[] = $provider;
-			}
+		if ( $provider instanceof ModuleServiceProvider ) {
+			$this->modules[] = $provider;
 		}
 
 		return $this;
@@ -167,7 +153,7 @@ final class MultilingualPress {
 
 		static::$container->lock();
 
-		$this->integrate_services();
+		$this->integrate_service_providers();
 
 		if ( ! $this->check_installation() ) {
 			return false;
@@ -189,21 +175,6 @@ final class MultilingualPress {
 		do_action( static::ACTION_BOOTSTRAPPED );
 
 		return true;
-	}
-
-	/**
-	 * Integrates all third-party services that need to run early.
-	 *
-	 * @return void
-	 */
-	private function integrate_services() {
-
-		array_walk( $this->integrations, function ( IntegrationServiceProvider $provider ) {
-
-			$provider->integrate( static::$container );
-		} );
-
-		$this->integrations = [];
 	}
 
 	/**
@@ -254,21 +225,6 @@ final class MultilingualPress {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Bootstraps all registered bootstrappable service providers.
-	 *
-	 * @return void
-	 */
-	private function bootstrap_service_providers() {
-
-		array_walk( $this->bootstrappables, function ( BootstrappableServiceProvider $provider ) {
-
-			$provider->bootstrap( static::$container );
-		} );
-
-		$this->bootstrappables = [];
 	}
 
 	/**
