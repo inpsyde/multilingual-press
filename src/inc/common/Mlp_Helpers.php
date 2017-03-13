@@ -306,13 +306,13 @@ class Mlp_Helpers {
 
 		$languages = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty ( $languages[ $site_id ] ) )
+		if ( empty ( $languages[ $site_id ]['lang'] ) )
 			return '';
 
 		/** @var Mlp_Language_Api $api */
 		$api = self::$dependencies[ 'language_api' ];
 
-		$url = (string) $api->get_flag_by_language( $languages[ $site_id ], $site_id );
+		$url = (string) $api->get_flag_by_language( $languages[ $site_id ]['lang'], $site_id );
 
 		return $url;
 	}
