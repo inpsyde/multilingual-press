@@ -59,7 +59,9 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 		$container['multilingualpress.noredirect_storage'] = function () {
 
-			return new NoredirectSessionStorage();
+			return is_user_logged_in() && wp_using_ext_object_cache()
+				? new NoredirectObjectCacheStorage()
+				: new NoredirectSessionStorage();
 		};
 
 		$container['multilingualpress.redirect_request_validator'] = function ( Container $container ) {

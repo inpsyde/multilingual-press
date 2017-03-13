@@ -11,6 +11,15 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
 interface NoredirectStorage {
 
 	/**
+	 * Cache lifetime.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var int
+	 */
+	const LIFETIME_IN_SECONDS = 'noredirect';
+
+	/**
 	 * Noredirect key.
 	 *
 	 * @since 3.0.0
