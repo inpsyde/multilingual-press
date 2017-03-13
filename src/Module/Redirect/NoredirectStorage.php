@@ -11,7 +11,7 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
 interface NoredirectStorage {
 
 	/**
-	 * Cache lifetime (5 minutes).
+	 * Lifetime for all stored languages (5 minutes).
 	 *
 	 * @since 3.0.0
 	 *
