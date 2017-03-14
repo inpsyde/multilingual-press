@@ -39,7 +39,7 @@ final class ContextAwareSiteRelationsChecker implements SiteRelationsChecker {
 	 */
 	public function check_relations() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( wp_doing_ajax() ) {
 			return true;
 		}
 

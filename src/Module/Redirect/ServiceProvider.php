@@ -186,7 +186,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 				$container['multilingualpress.noredirect_permalink_filter']->enable();
 
 				if (
-					! ( defined( 'DOING_AJAX' ) && DOING_AJAX )
+					! wp_doing_ajax()
 					&& $container['multilingualpress.redirect_request_validator']->is_valid()
 				) {
 					add_action( 'template_redirect', [ $container['multilingualpress.redirector'], 'redirect' ], 1 );

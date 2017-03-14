@@ -36,7 +36,7 @@ class Mlp_Advanced_Translator {
 			return;
 		}
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( wp_doing_ajax() ) {
 			add_action( "wp_ajax_{$this->ajax_action}", [ $this, 'process_post_data' ] );
 		}
 

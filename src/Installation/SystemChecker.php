@@ -225,7 +225,7 @@ class SystemChecker {
 	 */
 	private function is_context_valid() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( wp_doing_ajax() ) {
 			return false;
 		}
 

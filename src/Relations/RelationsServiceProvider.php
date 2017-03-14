@@ -99,7 +99,7 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 				3
 			);
 
-			if ( defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_REQUEST['action'] ) ) {
+			if ( wp_doing_ajax() && ! empty( $_REQUEST['action'] ) ) {
 				switch ( $_REQUEST['action'] ) {
 					case SearchController::ACTION:
 						$container['multilingualpress.relationship_control_search_controller']->initialize();

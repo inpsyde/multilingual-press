@@ -117,7 +117,7 @@ function check_ajax_referer( Nonce $nonce, $terminate = true ) {
 	$is_nonce_valid = $nonce->is_valid();
 
 	if ( $terminate && ! $is_nonce_valid ) {
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( wp_doing_ajax() ) {
 			wp_die( '-1' );
 		} else {
 			call_exit( '-1' );
