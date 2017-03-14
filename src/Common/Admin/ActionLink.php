@@ -69,7 +69,9 @@ class ActionLink {
 	public function add( array $links ) {
 
 		if ( is_callable( $this->add_callback ) ) {
-			return (array) call_user_func( [ $this, 'add_callback' ], $links, $this->id, $this->html );
+			$callback = $this->add_callback;
+
+			return (array) $callback( $links, $this->id, $this->html );
 		}
 
 		return array_merge( $links, [ $this->id => $this->html ] );

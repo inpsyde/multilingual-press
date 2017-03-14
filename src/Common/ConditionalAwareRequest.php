@@ -87,7 +87,7 @@ final class ConditionalAwareRequest implements Request {
 		$this->type = '';
 
 		foreach ( $this->callbacks as $type => $callback ) {
-			if ( call_user_func( $callback ) ) {
+			if ( $callback() ) {
 				$this->type = $type;
 				break;
 			}

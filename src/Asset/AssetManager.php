@@ -264,11 +264,13 @@ class AssetManager {
 
 		$enqueue_action = $this->get_enqueue_action();
 
-		if ( ! did_action( $enqueue_action ) ) {
-			add_action( $enqueue_action, $callback );
-		} else {
-			call_user_func( $callback );
+		if ( did_action( $enqueue_action ) ) {
+			$callback();
+
+			return;
 		}
+
+		add_action( $enqueue_action, $callback );
 	}
 
 	/**

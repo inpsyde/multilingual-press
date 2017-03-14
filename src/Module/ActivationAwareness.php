@@ -28,7 +28,9 @@ trait ActivationAwareness {
 			return false;
 		}
 
-		call_user_func( $this->on_activation_callback );
+		$callback = $this->on_activation_callback;
+
+		$callback();
 
 		return true;
 	}

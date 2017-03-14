@@ -83,7 +83,9 @@ class SitesListTableColumn {
 	public function add( array $columns ) {
 
 		if ( is_callable( $this->add_callback ) ) {
-			return (array) call_user_func( [ $this, 'add_callback' ], $columns, $this->id, $this->name );
+			$callback = $this->add_callback;
+
+			return (array) $callback( $columns, $this->id, $this->name );
 		}
 
 		return array_merge( $columns, [ $this->id => $this->name ] );
@@ -103,7 +105,9 @@ class SitesListTableColumn {
 	public function render_content( $id, $site_id ) {
 
 		if ( $id === $this->id ) {
-			echo call_user_func( $this->render_callback, $id, $site_id );
+			$callback = $this->render_callback;
+
+			echo $callback( $id, $site_id );
 
 			return true;
 		}
