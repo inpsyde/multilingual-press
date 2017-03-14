@@ -74,16 +74,16 @@ final class WidgetView implements View {
 							</strong>
 						</th>
 					</tr>
-					<?php foreach ( $untranslated_posts as $post ) : ?>
+					<?php foreach ( array_column( $untranslated_posts, 'ID' ) as $post_id ) : ?>
 						<tr>
 							<td style="width: 20%;">
-								<?php edit_post_link( __( 'Translate', 'multilingual-press' ), '', '', $post->ID ); ?>
+								<?php edit_post_link( __( 'Translate', 'multilingual-press' ), '', '', $post_id ); ?>
 							</td>
 							<td style="width: 55%;">
-								<?php echo esc_html( get_the_title( $post->ID ) ); ?>
+								<?php echo esc_html( get_the_title( $post_id ) ); ?>
 							</td>
 							<td style="width: 25%;">
-								<?php echo esc_html( get_the_time( get_option( 'date_format' ), $post->ID ) ); ?>
+								<?php echo esc_html( get_the_time( get_option( 'date_format' ), $post_id ) ); ?>
 							</td>
 						</tr>
 					<?php endforeach; ?>
