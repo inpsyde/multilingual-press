@@ -30,10 +30,10 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/inpsyde/multilingual-press/issues",
+    "issues": "https://github.com/inpsyde/MultilingualPress/issues",
     "forum": "https://wordpress.org/support/plugin/multilingual-press",
-    "wiki": "https://github.com/inpsyde/multilingual-press/wiki",
-    "source": "https://github.com/inpsyde/multilingual-press",
+    "wiki": "https://github.com/inpsyde/MultilingualPress/wiki",
+    "source": "https://github.com/inpsyde/MultilingualPress",
     "docs": "http://docs.multilingualpress.org"
   },
   "require": {

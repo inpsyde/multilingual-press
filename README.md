@@ -1,8 +1,8 @@
 # MultilingualPress
 
 [![Version](https://img.shields.io/packagist/v/inpsyde/multilingual-press.svg)](https://packagist.org/packages/inpsyde/multilingual-press)
-[![Status](https://img.shields.io/badge/status-active-brightgreen.svg)](https://github.com/inpsyde/multilingual-press)
-[![Build](https://img.shields.io/travis/inpsyde/multilingual-press.svg)](http://travis-ci.org/inpsyde/multilingual-press)
+[![Status](https://img.shields.io/badge/status-active-brightgreen.svg)](https://github.com/inpsyde/MultilingualPress)
+[![Build](https://img.shields.io/travis/inpsyde/MultilingualPress.svg)](https://travis-ci.org/inpsyde/MultilingualPress)
 [![Downloads](https://img.shields.io/packagist/dt/inpsyde/multilingual-press.svg)](https://packagist.org/packages/inpsyde/multilingual-press)
 [![License](https://img.shields.io/packagist/l/inpsyde/multilingual-press.svg)](https://packagist.org/packages/inpsyde/multilingual-press)
 
@@ -142,7 +142,7 @@ Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher
 
 If you want to translate MultilingualPress, you best do so by means of the official
 [WordPress.org GlotPress](https://translate.wordpress.org/projects/wp-plugins/multilingual-press). You can, of course,
-just [create a pull request](https://github.com/inpsyde/multilingual-press/compare) to our repository if you already
+just [create a pull request](https://github.com/inpsyde/MultilingualPress/compare) to our repository if you already
 have the translation files ready. In that case, please review the [guidelines for contributing](.github/CONTRIBUTING.md)
 to this repository.
 
