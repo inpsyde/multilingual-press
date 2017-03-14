@@ -2,8 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Factory;
 
-use Exception;
 use Inpsyde\MultilingualPress\Common\Factory;
+use Throwable;
 use WP_Error;
 
 /**
@@ -42,13 +42,13 @@ final class FallbackErrorFactory implements ErrorFactory {
 	 *
 	 * @return WP_Error WordPress error object.
 	 *
-	 * @throws Exception if caught any and WP_DEBUG is set to true.
+	 * @throws Throwable if caught any and WP_DEBUG is set to true.
 	 */
 	public function create( array $args = [], $class = '' ) {
 
 		try {
 			$object = $this->factory->create( $args, (string) $class );
-		} catch ( Exception $e ) {
+		} catch ( Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				throw $e;
 			}

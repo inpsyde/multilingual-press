@@ -2,9 +2,9 @@
 
 namespace Inpsyde\MultilingualPress\Factory;
 
-use Exception;
 use Inpsyde\MultilingualPress\Common\Factory;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Throwable;
 
 /**
  * Factory for nonce objects performing a fallback to WPNonce.
@@ -42,13 +42,13 @@ final class FallbackNonceFactory implements NonceFactory {
 	 *
 	 * @return Nonce Nonce object.
 	 *
-	 * @throws Exception if caught any and WP_DEBUG is set to true.
+	 * @throws Throwable if caught any and WP_DEBUG is set to true.
 	 */
 	public function create( array $args = [], $class = '' ) {
 
 		try {
 			$object = $this->factory->create( $args, (string) $class );
-		} catch ( Exception $e ) {
+		} catch ( Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				throw $e;
 			}
