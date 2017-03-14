@@ -3,7 +3,11 @@
 namespace Inpsyde\MultilingualPress\Factory;
 
 use Inpsyde\MultilingualPress\Common\Factory;
+use Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage;
+use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
+use Inpsyde\MultilingualPress\Common\Type\FilterableTranslation;
 use Inpsyde\MultilingualPress\Common\Type\Language;
+use Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
@@ -33,10 +37,9 @@ class TypeFactory {
 	 */
 	public function create_language( array $args = [], $class = '' ) {
 
-		return $this->get_factory(
-			'\Inpsyde\MultilingualPress\Common\Type\Language',
-			$default_class = '\Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage'
-		)->create( $args, $class ?: $default_class );
+		$default_class = AliasAwareLanguage::class;
+
+		return $this->get_factory( Language::class, $default_class )->create( $args, $class ?: $default_class );
 	}
 
 	/**
@@ -51,10 +54,9 @@ class TypeFactory {
 	 */
 	public function create_translation( array $args = [], $class = '' ) {
 
-		return $this->get_factory(
-			'\Inpsyde\MultilingualPress\Common\Type\Translation',
-			$default_class = '\Inpsyde\MultilingualPress\Common\Type\FilterableTranslation'
-		)->create( $args, $class ?: $default_class );
+		$default_class = FilterableTranslation::class;
+
+		return $this->get_factory( Translation::class, $default_class )->create( $args, $class ?: $default_class );
 	}
 
 	/**
@@ -69,10 +71,9 @@ class TypeFactory {
 	 */
 	public function create_url( array $args = [], $class = '' ) {
 
-		return $this->get_factory(
-			'\Inpsyde\MultilingualPress\Common\Type\URL',
-			$default_class = '\Inpsyde\MultilingualPress\Common\Type\EscapedURL'
-		)->create( $args, $class ?: $default_class );
+		$default_class = EscapedURL::class;
+
+		return $this->get_factory( URL::class, $default_class )->create( $args, $class ?: $default_class );
 	}
 
 	/**
@@ -88,10 +89,9 @@ class TypeFactory {
 	 */
 	public function create_version_number( array $args = [], $class = '' ) {
 
-		return $this->get_factory(
-			'\Inpsyde\MultilingualPress\Common\Type\VersionNumber',
-			$default_class = '\Inpsyde\MultilingualPress\Common\Type\SemanticVersionNumber'
-		)->create( $args, $class ?: $default_class );
+		$default_class = SemanticVersionNumber::class;
+
+		return $this->get_factory( VersionNumber::class, $default_class )->create( $args, $class ?: $default_class );
 	}
 
 	/**

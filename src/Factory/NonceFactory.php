@@ -4,6 +4,7 @@ namespace Inpsyde\MultilingualPress\Factory;
 
 use Inpsyde\MultilingualPress\Common\Factory;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 
 /**
  * Interface for all factory implementations for nonce objects.
@@ -20,7 +21,7 @@ interface NonceFactory extends Factory {
 	 *
 	 * @var string
 	 */
-	const BASE = '\Inpsyde\MultilingualPress\Common\Nonce\Nonce';
+	const BASE = Nonce::class;
 
 	/**
 	 * Fully qualified name of the default class.
@@ -29,7 +30,7 @@ interface NonceFactory extends Factory {
 	 *
 	 * @var string
 	 */
-	const DEFAULT_CLASS = '\Inpsyde\MultilingualPress\Common\Nonce\WPNonce';
+	const DEFAULT_CLASS = WPNonce::class;
 
 	/**
 	 * Returns a new nonce object, instantiated with the given arguments.

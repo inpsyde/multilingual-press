@@ -20,7 +20,7 @@ interface ErrorFactory extends Factory {
 	 *
 	 * @var string
 	 */
-	const BASE = '\WP_Error';
+	const BASE = WP_Error::class;
 
 	/**
 	 * Fully qualified name of the default class.
