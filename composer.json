@@ -40,7 +40,7 @@
   "require-dev": {
     "brain/monkey": "^1.4.0",
     "mockery/mockery": "~0.9",
-    "phpunit/phpunit": "~5.1|~6.0"
+    "phpunit/phpunit": "~5.0"
   },
   "autoload": {
     "files": [
