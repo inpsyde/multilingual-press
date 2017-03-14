@@ -89,7 +89,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 
 		uasort( $targets, function ( RedirectTarget $a, RedirectTarget $b ) {
 
-			return $a->priority() - $b->priority();
+			return $b->priority() <=> $a->priority();
 		} );
 
 		return reset( $targets );
