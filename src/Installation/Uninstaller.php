@@ -126,7 +126,7 @@ class Uninstaller {
 	private function site_ids() {
 
 		if ( ! isset( $this->site_ids ) ) {
-			$this->site_ids = wp_list_pluck( get_sites(), 'id' );
+			$this->site_ids = array_column( get_sites(), 'id' );
 		}
 
 		return $this->site_ids;
