@@ -2,7 +2,7 @@
 /*
  * Plugin Name: MultilingualPress
  * Plugin URI:  https://wordpress.org/plugins/multilingual-press/
- * Description: Simply <strong>the</strong> multisite-based free open source plugin for your multilingual websites.
+ * Description: The multisite-based free open source plugin for your multilingual WordPress websites.
  * Author:      Inpsyde GmbH
  * Author URI:  https://inpsyde.com
  * Version:     3.0.0-dev

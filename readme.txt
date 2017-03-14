@@ -5,7 +5,7 @@ Requires at least: 4.7
 Tested up to: 4.7
 Stable tag: 2.5.1
 
-Simply THE multisite-based free open source plugin for your multilingual websites.
+The multisite-based free open source plugin for your multilingual WordPress websites.
 
 == Description ==
 
@@ -62,13 +62,13 @@ If you would like to switch from the WPML plugin to MultilingualPress, you can u
 an existing WPML multilingual site via XLIFF export/import for MultilingualPress.
 
 = Crafted by Inpsyde =
-The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006.
+The team at [Inpsyde](https://inpsyde.com) is engineering the Web since 2006.
 
 == Installation ==
 
 = Requirements =
 - WordPress multisite 4.7 or higher.
-- PHP 7.0.0 or higher.
+- PHP 7 or higher.
 
 If you're new to WordPress multisite, you might find our [WordPress multisite installation
 tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/) helpful.

@@ -1,6 +1,12 @@
-# MultilingualPress [![Latest Stable Version](https://poser.pugx.org/inpsyde/multilingual-press/v/stable)](https://packagist.org/packages/inpsyde/multilingual-press) [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges) [![Build Status](https://travis-ci.org/inpsyde/multilingual-press.svg?branch=master)](http://travis-ci.org/inpsyde/multilingual-press) [![License](https://poser.pugx.org/inpsyde/multilingual-press/license)](https://packagist.org/packages/inpsyde/multilingual-press)
+# MultilingualPress
 
-> Simply **the** multisite-based free open source plugin for your multilingual websites.
+[![Version](https://img.shields.io/packagist/v/inpsyde/multilingual-press.svg)](https://packagist.org/packages/inpsyde/multilingual-press)
+[![Status](https://img.shields.io/badge/status-active-brightgreen.svg)](https://github.com/inpsyde/multilingual-press)
+[![Build](https://img.shields.io/travis/inpsyde/multilingual-press.svg)](http://travis-ci.org/inpsyde/multilingual-press)
+[![Downloads](https://img.shields.io/packagist/dt/inpsyde/multilingual-press.svg)](https://packagist.org/packages/inpsyde/multilingual-press)
+[![License](https://img.shields.io/packagist/l/inpsyde/multilingual-press.svg)](https://packagist.org/packages/inpsyde/multilingual-press)
+
+> The multisite-based free open source plugin for your multilingual WordPress websites.
 
 ![MultilingualPress](resources/assets/banner-1544x500.png)
 
@@ -63,7 +69,7 @@ an existing WPML multilingual site via XLIFF export/import for MultilingualPress
 ### Requirements
 
 * WordPress multisite 4.7 or higher.
-* PHP 7.0.0 or higher.
+* PHP 7 or higher.
 
 If you're new to WordPress multisite, you might find our [WordPress multisite installation
 tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/) helpful.
