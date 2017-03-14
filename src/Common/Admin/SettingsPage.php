@@ -348,7 +348,7 @@ class SettingsPage {
 
 		return add_action( $action, function () {
 
-			$this->hookname = call_user_func_array( $this->get_callback(), $this->get_callback_args() );
+			$this->hookname = ( $this->get_callback() )( ...$this->get_callback_args() );
 		} );
 	}
 
@@ -444,7 +444,7 @@ class SettingsPage {
 	 */
 	private function get_callback_args() {
 
-		return array_diff_key(
+		return array_values( array_diff_key(
 			[
 				'parent'     => $this->parent,
 				'title'      => $this->title,
@@ -456,6 +456,6 @@ class SettingsPage {
 				'position'   => $this->position,
 			],
 			$this->parent ? [ 'icon', 'position' ] : [ 'parent' ]
-		);
+		) );
 	}
 }
