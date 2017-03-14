@@ -112,10 +112,6 @@ namespace PHPSTORM_META {
 			'multilingualpress.untranslated_posts_dashboard_widget_view' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\View,
 			'multilingualpress.untranslated_posts_repository' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostRepository,
 			'multilingualpress.updater' instanceof \Inpsyde\MultilingualPress\Installation\Updater,
-			'multilingualpress.user_admin_language_locale_filter' instanceof \Inpsyde\MultilingualPress\Common\Filter,
-			'multilingualpress.user_admin_language_repository' instanceof \Inpsyde\MultilingualPress\Module\UserAdminLanguage\LanguageRepository,
-			'multilingualpress.user_admin_language_setting' instanceof \Inpsyde\MultilingualPress\Common\Setting\User\UserSettingViewModel,
-			'multilingualpress.user_admin_language_setting_updater' instanceof \Inpsyde\MultilingualPress\Common\Setting\User\UserSettingUpdater,
 			'multilingualpress.wpdb' instanceof \wpdb,
 		],
 		\Inpsyde\MultilingualPress\MultilingualPress::resolve( '' ) => [
@@ -150,7 +146,6 @@ namespace PHPSTORM_META {
 			'multilingualpress.type_factory' instanceof \Inpsyde\MultilingualPress\Factory\TypeFactory,
 			'multilingualpress.uninstaller' instanceof \Inpsyde\MultilingualPress\Installation\Uninstaller,
 			'multilingualpress.untranslated_posts_repository' instanceof \Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostRepository,
-			'multilingualpress.user_admin_language_repository' instanceof \Inpsyde\MultilingualPress\Module\UserAdminLanguage\LanguageRepository,
 			'multilingualpress.wpdb' instanceof \wpdb,
 		],
 	];

@@ -75,7 +75,6 @@ function bootstrap() {
 		->register_service_provider( new Module\Quicklinks\ServiceProvider() )
 		->register_service_provider( new Module\Redirect\ServiceProvider() )
 		->register_service_provider( new Module\Trasher\ServiceProvider() )
-		->register_service_provider( new Module\UserAdminLanguage\ServiceProvider() )
 		->register_service_provider( new NavMenuServiceProvider() )
 		->register_service_provider( new RelationsServiceProvider() )
 		->register_service_provider( new SiteDuplicationServiceProvider() )
