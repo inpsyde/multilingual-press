@@ -3,6 +3,8 @@
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
 
+use function Inpsyde\MultilingualPress\site_exists;
+
 /**
  * Data model for post translation. Handles inserts of new posts only.
  */
@@ -87,7 +89,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	public function get_remote_post( WP_Post $source_post, $blog_id ) {
 
 		$linked = \Inpsyde\MultilingualPress\get_translation_ids( $source_post->ID );
-		if ( ! empty( $linked[ $blog_id ] ) && \Inpsyde\MultilingualPress\site_exists( $blog_id ) ) {
+		if ( ! empty( $linked[ $blog_id ] ) && site_exists( $blog_id ) ) {
 			$post = get_blog_post( $blog_id, $linked[ $blog_id ] );
 			if ( $post ) {
 				return $post;

@@ -5,6 +5,8 @@ namespace Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Widget\Sidebar\View;
 
+use function Inpsyde\MultilingualPress\get_linked_elements;
+
 /**
  * Interrface for all widget view implementations.
  *
@@ -43,7 +45,7 @@ final class WidgetView implements View {
 	 */
 	public function render( array $args, array $instance, $id_base ) {
 
-		$output = \Inpsyde\MultilingualPress\get_linked_elements( [
+		$output = get_linked_elements( [
 			'link_text'         => empty( $instance['widget_link_type'] ) ? 'text' : $instance['widget_link_type'],
 			'show_current_blog' => ! empty( $instance['widget_show_current_blog'] ),
 			'display_flag'      => ! empty( $instance['widget_display_flag'] ),

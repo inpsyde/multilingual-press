@@ -8,6 +8,8 @@ use Inpsyde\MultilingualPress\Translation\Translator\NullTranslator;
 use Inpsyde\MultilingualPress\Common\Request;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
+use function Inpsyde\MultilingualPress\get_flag_url_for_site;
+
 /**
  * Caching translations API implementation.
  *
@@ -213,7 +215,7 @@ final class CachingTranslations implements Translations {
 						}
 
 						$translation['icon_url'] = $language['http_name']
-							? \Inpsyde\MultilingualPress\get_flag_url_for_site( $site_id )
+							? get_flag_url_for_site( $site_id )
 							: $this->type_factory->create_url( [
 								'',
 							] );
