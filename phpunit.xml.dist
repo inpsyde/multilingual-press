@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
-	backupGlobals="false"
-	backupStaticAttributes="false"
+	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.0/phpunit.xsd"
 	bootstrap="vendor/autoload.php"
-	colors="true"
-	convertErrorsToExceptions="true"
-	convertNoticesToExceptions="true"
-	convertWarningsToExceptions="true"
-	processIsolation="false"
-	stopOnFailure="false">
+	verbose="true">
 	<testsuites>
 		<testsuite name="Unit">
 			<directory suffix="Test.php">tests/php/Unit</directory>
@@ -23,8 +16,11 @@
 		<listener class="Listener" file="tests/php/Listener.php"/>
 	</listeners>
 	<filter>
-		<whitelist addUncoveredFilesFromWhitelist="true">
+		<whitelist processUncoveredFilesFromWhitelist="true">
 			<directory suffix=".php">src</directory>
+			<exclude>
+				<file>src/autoload.php</file>
+			</exclude>
 		</whitelist>
 	</filter>
 </phpunit>

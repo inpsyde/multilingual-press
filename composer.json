@@ -16,14 +16,16 @@
     "multilingual",
     "multisite",
     "network",
-    "translation"
+    "translation",
+    "wordpress",
+    "wp"
   ],
   "license": "MIT",
   "authors": [
     {
       "name": "Inpsyde GmbH",
       "email": "hello@inpsyde.com",
-      "homepage": "http://inpsyde.com",
+      "homepage": "https://inpsyde.com",
       "role": "Company"
     }
   ],
@@ -35,12 +37,12 @@
     "docs": "http://docs.multilingualpress.org"
   },
   "require": {
-    "php": ">=7.0.0"
+    "php": "^7.0"
   },
   "require-dev": {
-    "brain/monkey": "^1.4.0",
+    "brain/monkey": "^1.4",
     "mockery/mockery": "~0.9",
-    "phpunit/phpunit": "~5.0"
+    "phpunit/phpunit": "^6.0"
   },
   "autoload": {
     "files": [
@@ -50,6 +52,11 @@
   "autoload-dev": {
     "psr-4": {
       "Inpsyde\\MultilingualPress\\Tests\\": "tests/php"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.0.x-dev"
     }
   }
 }

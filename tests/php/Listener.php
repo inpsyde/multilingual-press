@@ -1,22 +1,21 @@
 <?php # -*- coding: utf-8 -*-
 
+use PHPUnit\Framework\BaseTestListener;
+use PHPUnit\Framework\TestSuite;
+
 /**
- * Test listener implementation taking care test-suite-specific tasks.
- *
- * @since 1.0.0
+ * Test listener implementation taking care of test-suite-specific tasks.
  */
-class Listener extends PHPUnit_Framework_BaseTestListener {
+final class Listener extends BaseTestListener {
 
 	/**
 	 * Performs individual test-suite-specific actions.
 	 *
-	 * This gets triggered by PHPUnit when a new test suite gets run.
+	 * This gets triggered by PHPUnit whenever a new test suite gets run.
 	 *
-	 * @since 1.0.0
-	 *
-	 * @param PHPUnit_Framework_TestSuite $suite Test suite object.
+	 * @param TestSuite $suite
 	 */
-	public function startTestSuite( PHPUnit_Framework_TestSuite $suite ) {
+	public function startTestSuite( TestSuite $suite ) {
 
 		switch ( $suite->getName() ) {
 			case 'Unit':
