@@ -11,7 +11,7 @@ cache:
 php:
   - 7.0
   - 7.1
- - nightly
+  - nightly
 
 env:
   - TRAVIS_NODE_VERSION=5
