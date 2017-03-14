@@ -1,7 +1,7 @@
 === MultilingualPress ===
 Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont, ChriCo, dnaber-de, paddelboot
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
-Requires at least: 4.6
+Requires at least: 4.7
 Tested up to: 4.7
 Stable tag: 2.5.1
 
@@ -67,8 +67,8 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006.
 == Installation ==
 
 = Requirements =
-- WordPress Multisite 4.2+.
-- PHP 5.4.0, newer PHP versions will work faster.
+- WordPress multisite 4.7 or higher.
+- PHP 7.0.0 or higher.
 
 If you're new to WordPress multisite, you might find our [WordPress multisite installation
 tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/) helpful.

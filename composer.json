@@ -35,12 +35,12 @@
     "docs": "http://docs.multilingualpress.org"
   },
   "require": {
-    "php": ">=5.4.0"
+    "php": ">=7.0.0"
   },
   "require-dev": {
     "brain/monkey": "^1.4.0",
-    "mockery/mockery": "0.9.*",
-    "phpunit/phpunit": "~4.8|~5.1"
+    "mockery/mockery": "~0.9",
+    "phpunit/phpunit": "~5.1|~6.0"
   },
   "autoload": {
     "files": [
