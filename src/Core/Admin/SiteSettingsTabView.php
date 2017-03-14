@@ -58,7 +58,7 @@ final class SiteSettingsTabView implements SettingsPageView {
 	 */
 	public function render() {
 
-		$site_id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
+		$site_id = (int) ( $_REQUEST['id'] ?? 0 );
 		if ( ! $site_id ) {
 			wp_die( __( 'Invalid site ID.', 'multilingual-press' ) );
 		}

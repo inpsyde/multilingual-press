@@ -99,6 +99,6 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 			$cache = get_post_statuses();
 		}
 
-		return isset( $cache[ $status ] ) ? $cache[ $status ] : esc_html( $status );
+		return (string) ( $cache[ $status ] ?? esc_html( $status ) );
 	}
 }

@@ -42,15 +42,11 @@ class Module {
 
 		$this->id = (string) $id;
 
-		$this->description = isset( $data['description'] )
-			? (string) $data['description']
-			: '';
+		$this->description = (string) ( $data['description'] ?? '' );
 
-		$this->is_active = isset( $data['active'] ) && $data['active'];
+		$this->is_active = (bool) ( $data['active'] ?? false );
 
-		$this->name = isset( $data['name'] )
-			? (string) $data['name']
-			: '';
+		$this->name = (string) ( $data['name'] ?? '' );
 	}
 
 	/**

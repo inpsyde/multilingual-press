@@ -169,7 +169,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 */
 	public function is_module_active( $id ) {
 
-		return isset( $this->states[ $id ] ) && $this->states[ $id ];
+		return (bool) ( $this->states[ $id ] ?? false );
 	}
 
 	/**

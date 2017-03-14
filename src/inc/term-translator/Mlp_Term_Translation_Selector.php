@@ -143,9 +143,8 @@ class Mlp_Term_Translation_Selector {
 		$url = esc_url( $taxonomy_edit_url );
 
 		$taxonomy_object = get_taxonomy( $taxonomy_name );
-		$text = isset( $taxonomy_object->labels->not_found )
-			? esc_html( $taxonomy_object->labels->not_found )
-			: esc_html__( 'No terms found.', 'multilingual-press' );
+
+		$text = esc_html( $taxonomy_object->labels->not_found ?? __( 'No terms found.', 'multilingual-press' ) );
 
 		return sprintf( '<p><a href="%1$s">%2$s</a></p>', $url, $text );
 	}

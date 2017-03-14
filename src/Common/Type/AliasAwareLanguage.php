@@ -134,7 +134,7 @@ final class AliasAwareLanguage implements Language {
 		$names = [
 			'english_name' => '',
 			'native_name'  => '',
-			'custom_name'  => isset( $data['text'] ) ? $data['text'] : '',
+			'custom_name'  => $data['text'] ?? '',
 			'text'         => '',
 			'http_name'    => '',
 			'wp_locale'    => '',

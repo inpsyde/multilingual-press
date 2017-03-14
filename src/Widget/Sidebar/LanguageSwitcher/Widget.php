@@ -58,7 +58,7 @@ final class Widget extends WP_Widget implements RegistrableWidget {
 			?>
 			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Title', 'multilingual-press' ); ?></label><br>
 			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_title' ) ); ?>"
-				value="<?php echo esc_attr( isset( $instance['widget_title'] ) ? $instance['widget_title'] : '' ); ?>"
+				value="<?php echo esc_attr( $instance['widget_title'] ?? '' ); ?>"
 				class="widefat" id="<?php echo esc_attr( $id ); ?>">
 		</p>
 		<p>
@@ -74,7 +74,7 @@ final class Widget extends WP_Widget implements RegistrableWidget {
 				'language_short' => __( 'Language code (short)', 'multilingual-press' ),
 			];
 
-			$link_type = isset( $instance['widget_link_type'] ) ? $instance['widget_link_type'] : '';
+			$link_type = $instance['widget_link_type'] ?? '';
 			?>
 			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Link text', 'multilingual-press' ); ?></label>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_link_type' ) ); ?>" class="widefat"

@@ -289,7 +289,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 
 		return array_map( function ( $field ) {
 
-			return isset( $this->fields[ $field ] ) ? $this->fields[ $field ] : '%s';
+			return $this->fields[ $field ] ?? '%s';
 		}, array_keys( $language ) );
 	}
 

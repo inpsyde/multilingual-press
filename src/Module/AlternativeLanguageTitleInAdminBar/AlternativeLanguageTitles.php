@@ -83,7 +83,7 @@ class AlternativeLanguageTitles {
 	 */
 	public function update() {
 
-		$site_id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : get_current_blog_id();
+		$site_id = (int) ( $_REQUEST['id'] ?? get_current_blog_id() );
 		if ( 1 > $site_id ) {
 			return false;
 		}

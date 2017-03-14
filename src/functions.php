@@ -193,11 +193,7 @@ function get_available_language_names( $related = true, $include_current_site = 
 			continue;
 		}
 
-		$value = '';
-
-		if ( isset( $language_data['text'] ) ) {
-			$value = $language_data['text'];
-		}
+		$value = $language_data['text'] ?? '';
 
 		if ( ! $value && isset( $language_data['lang'] ) ) {
 			$value = get_language_by_http_name( str_replace( '_', '-', $language_data['lang'] ) );
@@ -645,16 +641,12 @@ function redirect_after_settings_update( $url = '', $setting = 'mlp-setting', $c
 	}
 
 	if ( ! $url ) {
-		if (
-			isset( $_SERVER['REQUEST_METHOD'] )
-			&& 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] )
-			&& isset( $_POST['_wp_http_referer'] )
-		) {
-			$url = (string) $_POST['_wp_http_referer'];
+		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+			$url = $_POST['_wp_http_referer'] ?? '';
 		}
 
-		if ( ! $url && isset( $_REQUEST['_wp_http_referer'] ) ) {
-			$url = (string) $_REQUEST['_wp_http_referer'];
+		if ( ! $url ) {
+			$url = $_REQUEST['_wp_http_referer'] ?? '';
 		}
 	}
 

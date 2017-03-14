@@ -65,7 +65,7 @@ final class ConditionalAwareRequest implements Request {
 		if ( is_category() || is_tag() || is_tax() ) {
 			$queried_object = get_queried_object();
 
-			return isset( $queried_object->term_taxonomy_id ) ? (int) $queried_object->term_taxonomy_id : 0;
+			return (int) ( $queried_object->term_taxonomy_id ?? 0 );
 		}
 
 		return (int) get_queried_object_id();
