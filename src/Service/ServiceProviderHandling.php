@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Service;
 
 use Inpsyde\MultilingualPress\Service\Exception\ContainerNotSet;
@@ -51,7 +53,7 @@ trait ServiceProviderHandling {
 	 *
 	 * @param ServiceProvider $provider Service provider object.
 	 *
-	 * @return static Current instance.
+	 * @return mixed Current instance.
 	 */
 	public function register_service_provider( ServiceProvider $provider ) {
 
@@ -96,7 +98,7 @@ trait ServiceProviderHandling {
 	 *
 	 * @return void
 	 */
-	private function bootstrap_service_providers( $unset = true ) {
+	private function bootstrap_service_providers( bool $unset = true ) {
 
 		array_walk( $this->bootstrappables, function ( BootstrappableServiceProvider $provider ) {
 
@@ -119,14 +121,14 @@ trait ServiceProviderHandling {
 	 *
 	 * @throws ContainerNotSet if there is no container available.
 	 */
-	private function ensure_container( $action = 'register' ) {
+	private function ensure_container( string $action = 'register' ) {
 
 		if ( $this->_container instanceof Container ) {
 			return;
 		}
 
 		if ( property_exists( $this, 'container' ) ) {
-			$container = ( new ReflectionProperty( __CLASS__, 'container' ) );
+			$container = new ReflectionProperty( __CLASS__, 'container' );
 			$container->setAccessible( true );
 
 			$container = $container->getValue( $this );

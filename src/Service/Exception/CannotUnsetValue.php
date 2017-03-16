@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Service\Exception;
 
 use Exception;
@@ -19,9 +21,9 @@ class CannotUnsetValue extends Exception {
 	 *
 	 * @param string $name The name of the value or factory callback.
 	 *
-	 * @return static Exception object.
+	 * @return CannotUnsetValue Exception object.
 	 */
-	public static function for_name( $name ) {
+	public static function for_name( string $name ): CannotUnsetValue {
 
 		return new static( sprintf(
 			'Cannot unset "%1$s". Removing values or factory callbacks is not allowed.',

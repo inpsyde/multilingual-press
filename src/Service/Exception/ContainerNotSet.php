@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Service\Exception;
 
 use Exception;
@@ -19,9 +21,9 @@ class ContainerNotSet extends Exception {
 	 *
 	 * @param string $action Optional. Action to be performed. Defaults to 'register'.
 	 *
-	 * @return static Exception object.
+	 * @return ContainerNotSet Exception object.
 	 */
-	public static function for_action( $action = 'register' ) {
+	public static function for_action( string $action = 'register' ): ContainerNotSet {
 
 		return new static( sprintf(
 			'Cannot %1$s. No container available.',

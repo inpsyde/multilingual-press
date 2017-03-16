@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Service\Exception;
 
 use Exception;
@@ -20,9 +22,9 @@ class ContainerBootstrapped extends Exception {
 	 * @param string $name   The name of the value or factory callback.
 	 * @param string $action Optional. Action to be performed. Defaults to 'read'.
 	 *
-	 * @return static Exception object.
+	 * @return ContainerBootstrapped Exception object.
 	 */
-	public static function for_name( $name, $action = 'read' ) {
+	public static function for_name( string $name, string $action = 'read' ): ContainerBootstrapped {
 
 		return new static( sprintf(
 			'Cannot %2$s not shared "%1$s". The container has already been bootstrapped.',

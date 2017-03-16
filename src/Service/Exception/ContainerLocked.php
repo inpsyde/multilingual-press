@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Service\Exception;
 
 use Exception;
@@ -20,9 +22,9 @@ class ContainerLocked extends Exception {
 	 * @param string $name   The name of the value or factory callback.
 	 * @param string $action Optional. Action to be performed. Defaults to 'set'.
 	 *
-	 * @return static Exception object.
+	 * @return ContainerLocked Exception object.
 	 */
-	public static function for_name( $name, $action = 'set' ) {
+	public static function for_name( string $name, string $action = 'set' ): ContainerLocked {
 
 		return new static( sprintf(
 			'Cannot %2$s "%1$s". Manipulating a locked container is not allowed.',

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Service;
 
 use Inpsyde\MultilingualPress\Service\Exception\ContainerBootstrapped;
@@ -192,13 +194,13 @@ final class AddOnlyContainer implements Container {
 	 * @param string   $name        The name of an existing factory callback.
 	 * @param callable $new_factory The new factory callback.
 	 *
-	 * @return static Container instance.
+	 * @return Container Container instance.
 	 *
 	 * @throws ContainerLocked if the container is locked.
 	 * @throws ValueNotSet     if there is no value or factory callback with the given name.
 	 * @throws ValueAlreadySet if there already is a value with the given name.
 	 */
-	public function extend( $name, callable $new_factory ) {
+	public function extend( string $name, callable $new_factory ): Container {
 
 		if ( $this->is_locked ) {
 			throw ContainerLocked::for_name( $name, 'extend' );
@@ -245,9 +247,9 @@ final class AddOnlyContainer implements Container {
 	 * @param string $name  The name of a value or factory callback.
 	 * @param mixed  $value The value or factory callback.
 	 *
-	 * @return static Container instance.
+	 * @return Container Container instance.
 	 */
-	public function share( $name, $value ) {
+	public function share( string $name, $value ): Container {
 
 		$this->offsetSet( $name, $value );
 
