@@ -65,7 +65,7 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 	 *
 	 * @return bool Whether or not any attachment files were copied.
 	 */
-	public function copy_attachments( $source_site_id ) {
+	public function copy_attachments( int $source_site_id ): bool {
 
 		$destination_dir = $this->base_path_adapter->basedir();
 
@@ -178,15 +178,10 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 
 		array_walk( $paths, function ( $path ) use ( $source_dir, $destination_dir ) {
 
-			$source = "$source_dir/$path";
-
-			$destination = "$destination_dir/$path";
-
-			if ( file_exists( $source ) && ! file_exists( $destination ) ) {
-				if ( copy( $source, $destination ) ) {
-					$this->found_files = true;
-				}
-			}
+			$this->found_files =
+				file_exists( "$source_dir/$path" )
+				&& ! file_exists( "$destination_dir/$path" )
+				&& copy( "$source_dir/$path", "$destination_dir/$path" );
 		} );
 	}
 
@@ -215,7 +210,7 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 			],
 		];
 
-		array_walk( $tables, function ( array $columns, $table ) use ( &$upated, $source_url, $destination_url ) {
+		array_walk( $tables, function ( array $columns, $table ) use ( $source_url, $destination_url ) {
 
 			$this->table_string_replacer->replace_string(
 				$table,

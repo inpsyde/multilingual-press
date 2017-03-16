@@ -483,7 +483,7 @@ WHERE s.ml_blogid = %d
 	 *
 	 * @return bool Whether or not the site with the given ID has any relations of the given (or any) content type.
 	 */
-	public function has_site_relations( $site_id, $type = '' ) {
+	public function has_site_relations( int $site_id, string $type = '' ) {
 
 		$args = [ $site_id ];
 
@@ -551,7 +551,7 @@ WHERE ml_blogid = %d";
 	 *
 	 * @return int The number of relations inserted.
 	 */
-	public function relate_all_posts( $source_site_id, $destination_site_id ) {
+	public function relate_all_posts( int $source_site_id, int $destination_site_id ) {
 
 		$inserted = 0;
 
@@ -588,7 +588,7 @@ WHERE post_status IN ('publish', 'future', 'draft', 'pending', 'private')";
 	 *
 	 * @return int The number of relations inserted.
 	 */
-	public function relate_all_terms( $source_site_id, $destination_site_id ) {
+	public function relate_all_terms( int $source_site_id, int $destination_site_id ) {
 
 		$inserted = 0;
 

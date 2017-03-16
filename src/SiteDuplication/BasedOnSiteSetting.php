@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
@@ -44,7 +46,7 @@ final class BasedOnSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function markup( $site_id ) {
+	public function markup( int $site_id ): string {
 
 		return sprintf(
 			'<select id="%2$s" name="blog[%3$s]" autocomplete="off">%1$s</select>',
@@ -61,7 +63,7 @@ final class BasedOnSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
@@ -75,7 +77,7 @@ final class BasedOnSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for all option tags.
 	 */
-	private function get_options() {
+	private function get_options(): string {
 
 		$options = '<option value="0">' . esc_html__( 'Choose site', 'multilingual-press' ) . '</option>';
 
@@ -97,11 +99,11 @@ final class BasedOnSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string[][] An array with site data arrays.
 	 */
-	private function get_all_sites() {
+	private function get_all_sites(): array {
 
 		$query = "SELECT blog_id AS id, domain, path FROM {$this->db->blogs} WHERE deleted = 0 AND site_id = %s";
 		$query = $this->db->prepare( $query, $this->db->siteid );
 
-		return $this->db->get_results( $query, ARRAY_A );
+		return (array) $this->db->get_results( $query, ARRAY_A );
 	}
 }

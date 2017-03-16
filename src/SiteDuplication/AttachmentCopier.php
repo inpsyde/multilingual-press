@@ -19,5 +19,5 @@ interface AttachmentCopier {
 	 *
 	 * @return bool Whether or not any attachment files were copied.
 	 */
-	public function copy_attachments( $source_site_id );
+	public function copy_attachments( int $source_site_id ): bool;
 }

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
@@ -26,7 +28,7 @@ final class ActivatePluginsSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function markup( $site_id ) {
+	public function markup( int $site_id ): string {
 
 		return sprintf(
 			'<label for="%2$s"><input type="checkbox" value="1" id="%2$s" name="blog[%3$s]" checked="checked">%1$s</label>',
@@ -43,7 +45,7 @@ final class ActivatePluginsSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',

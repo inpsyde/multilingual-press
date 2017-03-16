@@ -137,7 +137,7 @@ interface ContentRelations {
 	 *
 	 * @return bool Whether or not the site with the given ID has any relations of the given (or any) content type.
 	 */
-	public function has_site_relations( $site_id, $type = '' );
+	public function has_site_relations( int $site_id, string $type = '' );
 
 	/**
 	 * Copies all relations of the given (or any) content type from the given source site to the given destination site.
@@ -168,7 +168,7 @@ interface ContentRelations {
 	 *
 	 * @return int The number of relations inserted.
 	 */
-	public function relate_all_posts( $source_site_id, $destination_site_id );
+	public function relate_all_posts( int $source_site_id, int $destination_site_id );
 
 	/**
 	 * Relates all terms between the given source site and the given destination site.
@@ -183,5 +183,5 @@ interface ContentRelations {
 	 *
 	 * @return int The number of relations inserted.
 	 */
-	public function relate_all_terms( $source_site_id, $destination_site_id );
+	public function relate_all_terms( int $source_site_id, int $destination_site_id );
 }

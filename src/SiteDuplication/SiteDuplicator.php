@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
@@ -125,7 +127,7 @@ class SiteDuplicator {
 	 *
 	 * @return bool Whether or not a site was duplicated successfully.
 	 */
-	public function duplicate_site( $new_site_id ) {
+	public function duplicate_site( $new_site_id ): bool {
 
 		if (
 			empty( $_POST['blog'][ static::NAME_BASED_ON_SITE ] )
@@ -133,6 +135,8 @@ class SiteDuplicator {
 		) {
 			return false;
 		}
+
+		$new_site_id = (int) $new_site_id;
 
 		$source_site_id = (int) $_POST['blog'][ static::NAME_BASED_ON_SITE ];
 
@@ -146,9 +150,9 @@ class SiteDuplicator {
 		// Switch to the new site.
 		switch_to_blog( $new_site_id );
 
-		$admin_email = get_option( 'admin_email' );
+		$admin_email = (string) get_option( 'admin_email', '' );
 
-		$siteurl = get_option( 'siteurl' );
+		$siteurl = (string) get_option( 'siteurl', '' );
 
 		// Important: FIRST, duplicate the tables, and THEN overwrite things. ;)
 		$this->duplicate_tables( $source_site_id, $table_prefix );
@@ -196,7 +200,7 @@ class SiteDuplicator {
 	 *
 	 * @return string The primary domain if domain mapping is active, and an empty string if not.
 	 */
-	private function get_mapped_domain() {
+	private function get_mapped_domain(): string {
 
 		if ( empty( $this->db->dmtable ) ) {
 			return '';
@@ -223,7 +227,7 @@ class SiteDuplicator {
 	 *
 	 * @return void
 	 */
-	private function duplicate_tables( $source_site_id, $table_prefix ) {
+	private function duplicate_tables( int $source_site_id, string $table_prefix ) {
 
 		$tables = $this->table_list->site_tables( (int) $source_site_id );
 		/**
@@ -254,7 +258,7 @@ class SiteDuplicator {
 	 *
 	 * @return void
 	 */
-	private function set_urls( $url, $domain ) {
+	private function set_urls( string $url, string $domain ) {
 
 		update_option( 'home', $url );
 
@@ -277,7 +281,7 @@ class SiteDuplicator {
 	 *
 	 * @return void
 	 */
-	private function set_admin_email( $admin_email ) {
+	private function set_admin_email( string $admin_email ) {
 
 		$this->db->update(
 			$this->db->options,
@@ -293,7 +297,7 @@ class SiteDuplicator {
 	 *
 	 * @return void
 	 */
-	private function rename_user_roles_option( $table_prefix ) {
+	private function rename_user_roles_option( string $table_prefix ) {
 
 		$this->db->update(
 			$this->db->options,
@@ -336,7 +340,7 @@ class SiteDuplicator {
 	 *
 	 * @return void
 	 */
-	private function handle_content_relations( $source_site_id, $destination_site_id ) {
+	private function handle_content_relations( int $source_site_id, int $destination_site_id ) {
 
 		if ( $this->content_relations->has_site_relations( $source_site_id ) ) {
 			$this->content_relations->duplicate_relations( $source_site_id, $destination_site_id );

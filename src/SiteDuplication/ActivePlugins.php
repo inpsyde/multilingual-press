@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
 /**
@@ -22,9 +24,9 @@ class ActivePlugins {
 	 *
 	 * @return int Number of plugins activated.
 	 */
-	public function activate() {
+	public function activate(): int {
 
-		$plugins = get_option( $this-$this->option );
+		$plugins = get_option( $this->option );
 		if ( ! $plugins ) {
 			return 0;
 		}
@@ -49,10 +51,10 @@ class ActivePlugins {
 	 *
 	 * @since  3.0.0
 	 *
-	 * @retuvn bool Whether or not all plugins were deactivated successfully.
+	 * @return bool Whether or not all plugins were deactivated successfully.
 	 */
-	public function deactivate() {
+	public function deactivate(): bool {
 
-		return update_option( $this->option, [] );
+		return get_option( $this->option ) === [] || update_option( $this->option, [] );
 	}
 }
