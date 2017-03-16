@@ -125,7 +125,7 @@ interface ContentRelations {
 		$source_content_id,
 		$target_content_id,
 		$type = 'post'
-	);
+	): bool;
 
 	/**
 	 * Checks if the site with the given ID has any relations of the given (or any) content type.

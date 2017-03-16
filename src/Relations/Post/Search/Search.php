@@ -31,5 +31,5 @@ interface Search {
 	 *
 	 * @return WP_Post[] The latest/best-matching posts.
 	 */
-	public function get_posts( RelationshipContext $context );
+	public function get_posts( RelationshipContext $context ): array;
 }

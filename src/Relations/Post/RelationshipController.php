@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Relations\Post;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
@@ -137,9 +139,9 @@ class RelationshipController {
 	/**
 	 * Connects the current post with a new remote one.
 	 *
-	 * @return bool|WP_Error Whether or not the relationship was updated successfully, or an error object.
+	 * @return bool Whether or not the relationship was updated successfully, or an error object.
 	 */
-	private function connect_new_post() {
+	private function connect_new_post(): bool {
 
 		$source_post = $this->context->source_post();
 		if ( ! $source_post ) {
@@ -191,7 +193,7 @@ class RelationshipController {
 	 *
 	 * @return bool Whether or not the relationship was updated successfully.
 	 */
-	private function connect_existing_post() {
+	private function connect_existing_post(): bool {
 
 		$this->disconnect_post();
 
@@ -271,7 +273,7 @@ class RelationshipController {
 	 *
 	 * @return string Post type.
 	 */
-	private function get_real_post_type( WP_Post $post ) {
+	private function get_real_post_type( WP_Post $post ): string {
 
 		if ( 'revision' !== $post->post_type ) {
 			return $post->post_type;

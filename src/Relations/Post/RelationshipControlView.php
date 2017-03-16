@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Relations\Post;
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
@@ -183,7 +185,7 @@ class RelationshipControlView {
 	 *
 	 * @return void
 	 */
-	private function render_radio_input( $label, $value, $remote_site_id ) {
+	private function render_radio_input( string $label, string $value, int $remote_site_id ) {
 
 		$id = "mlp-rc-action-{$remote_site_id}-{$value}";
 		?>

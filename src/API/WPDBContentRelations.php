@@ -313,7 +313,7 @@ WHERE s.ml_blogid = %d
 		$source_content_id,
 		$target_content_id,
 		$type = 'post'
-	) {
+	): bool {
 
 		$translation_ids = $this->get_translation_ids(
 			$source_site_id,

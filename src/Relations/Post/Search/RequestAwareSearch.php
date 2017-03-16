@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Relations\Post\Search;
 
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
@@ -22,7 +24,7 @@ final class RequestAwareSearch implements Search {
 	 *
 	 * @return WP_Post[] The latest/best-matching posts.
 	 */
-	public function get_posts( RelationshipContext $context ) {
+	public function get_posts( RelationshipContext $context ): array {
 
 		$remote_site_id = $context->remote_site_id();
 		if ( ! $remote_site_id ) {
@@ -70,10 +72,8 @@ final class RequestAwareSearch implements Search {
 	 *
 	 * @return string Search query.
 	 */
-	private function get_search_query() {
+	private function get_search_query(): string {
 
-		return empty( $_REQUEST[ Search::ARG_NAME ] )
-			? ''
-			: (string) $_REQUEST[ Search::ARG_NAME ];
+		return (string) ( $_REQUEST[ Search::ARG_NAME ] ?? '' );
 	}
 }

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Relations\Post\Search;
 
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
@@ -69,7 +71,7 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 	 *
 	 * @return string Post title, including status if not published.
 	 */
-	private function get_post_title( WP_Post $post ) {
+	private function get_post_title( WP_Post $post ): string {
 
 		if ( 'publish' === $post->post_status ) {
 			return esc_html( $post->post_title );
@@ -92,7 +94,7 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 	 *
 	 * @return string The according translation of the given post status.
 	 */
-	private function get_translated_status( $status ) {
+	private function get_translated_status( string $status ): string {
 
 		static $cache;
 		if ( ! $cache ) {

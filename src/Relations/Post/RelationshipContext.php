@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Relations\Post;
 
 use WP_Post;
@@ -111,7 +113,7 @@ class RelationshipContext {
 	 *
 	 * @return RelationshipContext Context object.
 	 */
-	public static function from_existing( RelationshipContext $context, array $data ) {
+	public static function from_existing( RelationshipContext $context, array $data ): RelationshipContext {
 
 		$clone = clone $context;
 
@@ -130,9 +132,9 @@ class RelationshipContext {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return static Context object.
+	 * @return RelationshipContext Context object.
 	 */
-	public static function from_request() {
+	public static function from_request(): RelationshipContext {
 
 		return new static( $_REQUEST );
 	}
@@ -144,7 +146,7 @@ class RelationshipContext {
 	 *
 	 * @return int New post ID.
 	 */
-	public function new_post_id() {
+	public function new_post_id(): int {
 
 		return (int) $this->data[ static::KEY_NEW_POST_ID ];
 	}
@@ -156,7 +158,7 @@ class RelationshipContext {
 	 *
 	 * @return string New post title.
 	 */
-	public function new_post_title() {
+	public function new_post_title(): string {
 
 		return (string) $this->data[ static::KEY_NEW_POST_TITLE ];
 	}
@@ -168,7 +170,7 @@ class RelationshipContext {
 	 *
 	 * @return int Remote post ID.
 	 */
-	public function remote_post_id() {
+	public function remote_post_id(): int {
 
 		return (int) $this->data[ static::KEY_REMOTE_POST_ID ];
 	}
@@ -180,7 +182,7 @@ class RelationshipContext {
 	 *
 	 * @return int Remote site ID.
 	 */
-	public function remote_site_id() {
+	public function remote_site_id(): int {
 
 		return (int) $this->data[ static::KEY_REMOTE_SITE_ID ];
 	}
@@ -192,7 +194,7 @@ class RelationshipContext {
 	 *
 	 * @return int Source post ID.
 	 */
-	public function source_post_id() {
+	public function source_post_id(): int {
 
 		return (int) $this->data[ static::KEY_SOURCE_POST_ID ];
 	}
@@ -238,7 +240,7 @@ class RelationshipContext {
 	 *
 	 * @return int Source site ID.
 	 */
-	public function source_site_id() {
+	public function source_site_id(): int {
 
 		return (int) $this->data[ static::KEY_SOURCE_SITE_ID ];
 	}
