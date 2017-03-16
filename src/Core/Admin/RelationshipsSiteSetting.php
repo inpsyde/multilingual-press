@@ -99,7 +99,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 			$site_name = get_bloginfo( 'name' );
 			restore_current_blog();
 
-			$related_site_ids = $this->site_relations->get_related_site_ids( $site_id );
+			$related_site_ids = $this->site_relations->get_related_site_ids( (int) $site_id );
 
 			return $relationships . sprintf(
 					'<p><label for="%3$s"><input type="checkbox" name="%4$s[]" value="%2$d" id="%3$s"%5$s>%1$s</label></p>',

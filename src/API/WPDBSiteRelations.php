@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\API;
 
 use Inpsyde\MultilingualPress\Database\Table;
@@ -48,15 +50,15 @@ final class WPDBSiteRelations implements SiteRelations {
 	 *
 	 * @return int The number of rows affected.
 	 */
-	public function delete_relation( $site_1, $site_2 = 0 ) {
+	public function delete_relation( $site_1, $site_2 = 0 ): int {
 
 		$query = "DELETE FROM {$this->table}";
 
 		if ( ! $site_2 ) {
-			$query .= " WHERE site_1 = %d OR site_2 = %d";
+			$query .= ' WHERE site_1 = %d OR site_2 = %d';
 			$args = [ $site_1, $site_1 ];
 		} else {
-			$query .= " WHERE (site_1 = %d AND site_2 = %d) OR (site_1 = %d AND site_2 = %d)";
+			$query .= ' WHERE (site_1 = %d AND site_2 = %d) OR (site_1 = %d AND site_2 = %d)';
 			$args = [ $site_1, $site_2, $site_2, $site_1 ];
 		}
 
@@ -72,7 +74,7 @@ final class WPDBSiteRelations implements SiteRelations {
 	 *
 	 * @return int[] The array with site IDs as keys and arrays with the IDs of all related sites as values.
 	 */
-	public function get_all_relations() {
+	public function get_all_relations(): array {
 
 		$query = "SELECT site_1, site_2 FROM {$this->table} ORDER BY site_1 ASC, site_2 ASC";
 
@@ -93,7 +95,7 @@ final class WPDBSiteRelations implements SiteRelations {
 	 *
 	 * @return int[] The array holding the IDs of all sites related to the site with the given (or current) ID.
 	 */
-	public function get_related_site_ids( $site_id = 0, $include_site = false ) {
+	public function get_related_site_ids( int $site_id = 0, $include_site = false ): array {
 
 		$site_id = $site_id ?: get_current_blog_id();
 		if ( ! absint( $site_id ) ) {
@@ -121,7 +123,7 @@ ORDER BY site_id ASC";
 		}
 
 		if ( $include_site ) {
-			$rows[] = $site_id;
+			$rows[] = (int) $site_id;
 		}
 
 		return array_map( 'intval', $rows );
@@ -137,7 +139,7 @@ ORDER BY site_id ASC";
 	 *
 	 * @return int The number of rows affected.
 	 */
-	public function insert_relations( $base_site_id, array $site_ids ) {
+	public function insert_relations( int $base_site_id, array $site_ids ): int {
 
 		// We don't want to relate a site with itself.
 		$site_ids = array_diff( $site_ids, [ $base_site_id ] );
@@ -147,13 +149,13 @@ ORDER BY site_id ASC";
 
 		$values = array_map( function ( $site_id ) use ( $base_site_id ) {
 
-			return $this->get_value_pair( $base_site_id, $site_id );
+			return $this->get_value_pair( $base_site_id, (int) $site_id );
 		}, $site_ids );
 		if ( ! $values ) {
 			return 0;
 		}
 
-		$values = join( ',', $values );
+		$values = implode( ',', $values );
 
 		return (int) $this->db->query( "INSERT IGNORE INTO {$this->table} (site_1, site_2) VALUES $values" );
 	}
@@ -168,7 +170,7 @@ ORDER BY site_id ASC";
 	 *
 	 * @return int The number of rows affected.
 	 */
-	public function set_relationships( $base_site_id, array $site_ids ) {
+	public function set_relationships( int $base_site_id, array $site_ids ): int {
 
 		$related_site_ids = $this->get_related_site_ids( $base_site_id );
 		if ( $related_site_ids === $site_ids ) {
@@ -201,11 +203,7 @@ ORDER BY site_id ASC";
 	 *
 	 * @return string The (value1, value2) syntax string according to the given site IDs.
 	 */
-	private function get_value_pair( $site_1, $site_2 ) {
-
-		$site_1 = (int) $site_1;
-
-		$site_2 = (int) $site_2;
+	private function get_value_pair( int $site_1, int $site_2 ): string {
 
 		// Swap values to make sure the lower value is the first.
 		if ( $site_1 > $site_2 ) {
@@ -222,7 +220,7 @@ ORDER BY site_id ASC";
 	 *
 	 * @return int[] The formatted array with the given site relations data.
 	 */
-	private function get_site_relations_from_query_results( array $rows ) {
+	private function get_site_relations_from_query_results( array $rows ): array {
 
 		$relations = array_reduce( $rows, function ( array $relations, array $row ) {
 

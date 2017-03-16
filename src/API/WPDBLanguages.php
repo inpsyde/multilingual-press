@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\API;
 
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
@@ -17,7 +19,7 @@ final class WPDBLanguages implements Languages {
 	/**
 	 * @var string[]
 	 */
-	private $comparison_operators = [
+	const COMPARISON_OPERATORS = [
 		'=',
 		'<=>',
 		'>',
@@ -77,7 +79,7 @@ final class WPDBLanguages implements Languages {
 	 *
 	 * @return object[] The array with objects of all available languages.
 	 */
-	public function get_all_languages() {
+	public function get_all_languages(): array {
 
 		$query = "SELECT * FROM {$this->table} ORDER BY priority DESC, english_name ASC";
 
@@ -93,7 +95,7 @@ final class WPDBLanguages implements Languages {
 	 *
 	 * @return array[] The array with site IDs as keys and arrays with all language data as values.
 	 */
-	public function get_all_site_languages() {
+	public function get_all_site_languages(): array {
 
 		$languages = $this->site_settings_repository->get_settings();
 		if ( ! $languages ) {
@@ -120,16 +122,20 @@ final class WPDBLanguages implements Languages {
 			unset( $languages[ $site_id ]['lang'] );
 		}
 
-		$query = "
-SELECT *
-FROM {$this->table}
-WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names ) ) ) . "')";
+		$names_string = "'" . implode( "','", array_map( 'esc_sql', $names ) ) . "'";
 
+		$iso_codes_string = '';
 		if ( $iso_codes ) {
-			$query .= "\n\tOR iso_639_1 IN ('" . join( "','", array_map( 'esc_sql', array_values( $iso_codes ) ) ) . "')";
+			$iso_codes_string .= "'" . implode( "','", array_map( 'esc_sql', $iso_codes ) ) . "'";
 		}
 
-		foreach ( $this->db->get_results( $query, ARRAY_A ) as $language ) {
+		$query = "SELECT * FROM {$this->table} WHERE http_name IN($names_string)";
+
+		if ( $iso_codes ) {
+			$query .= "\n\tOR iso_639_1 IN ($iso_codes_string)";
+		}
+
+		foreach ( (array) $this->db->get_results( $query, ARRAY_A ) as $language ) {
 			foreach ( $names as $site_id => $name ) {
 				if (
 					in_array( $name, $language, true )
@@ -150,7 +156,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @param string          $http_code Language HTTP code.
 	 * @param string          $field     Optional. The field which should be queried. Defaults to 'native_name'.
-	 * @param string|string[] $fallbacks Optional. Falback language fields. Defaults to native and English name.
+	 * @param string|string[] $fallbacks Optional. Fallback language fields. Defaults to native and English name.
 	 *
 	 * @return string|string[] The desired field value, an empty string on failure, or an array for field 'all'.
 	 */
@@ -189,7 +195,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @return object[] The array with objects of all languages according to the given arguments.
 	 */
-	public function get_languages( array $args = [] ) {
+	public function get_languages( array $args = [] ): array {
 
 		$args = array_merge( [
 			'conditions' => [],
@@ -232,7 +238,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @return int The number of updated languages.
 	 */
-	public function update_languages_by_id( array $languages ) {
+	public function update_languages_by_id( array $languages ): int {
 
 		$updated = 0;
 
@@ -258,7 +264,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @return string[] The array with column names as keys and the individual printf conversion specification as value.
 	 */
-	private function extract_field_specifications_from_table( Table $table ) {
+	private function extract_field_specifications_from_table( Table $table ): array {
 
 		$numeric_types = implode( '|', [
 			'BIT',
@@ -285,7 +291,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @return array The array with the according specifications for all fields included in the given language.
 	 */
-	private function get_field_specifications( array $language ) {
+	private function get_field_specifications( array $language ): array {
 
 		return array_map( function ( $field ) {
 
@@ -300,7 +306,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @return string The according string with all valid fields included in the given arguments, or '*' if none.
 	 */
-	private function get_fields( array $args ) {
+	private function get_fields( array $args ): string {
 
 		if ( ! empty( $args['fields'] ) ) {
 			$allowed_fields = array_intersect( (array) $args['fields'], array_keys( $this->fields ) );
@@ -319,7 +325,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @return string The according LIMIT string for the number and page values included in the given arguments.
 	 */
-	private function get_limit( array $args ) {
+	private function get_limit( array $args ): string {
 
 		if ( ! empty( $args['number'] ) && 0 < $args['number'] ) {
 			$number = (int) $args['number'];
@@ -343,7 +349,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @return string The according ORDER BY string for all valid fields included in the given arguments.
 	 */
-	private function get_order_by( array $args ) {
+	private function get_order_by( array $args ): string {
 
 		if ( ! empty( $args['order_by'] ) ) {
 			$order_by = array_filter( (array) $args['order_by'], [ $this, 'is_array_with_valid_field' ] );
@@ -371,7 +377,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @return string The according WHERE string for all valid conditions included in the given arguments.
 	 */
-	private function get_where( array $args ) {
+	private function get_where( array $args ): string {
 
 		if ( ! empty( $args['conditions'] ) ) {
 			$conditions = array_filter( (array) $args['conditions'], function ( $condition ) {
@@ -380,7 +386,7 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 					$this->is_array_with_valid_field( $condition )
 					&& (
 						empty( $condition['compare'] )
-						|| in_array( $condition['compare'], $this->comparison_operators, true )
+						|| in_array( $condition['compare'], self::COMPARISON_OPERATORS, true )
 					)
 					&& ! empty( $condition['value'] );
 			} );
@@ -407,11 +413,12 @@ WHERE http_name IN('" . join( "','", array_map( 'esc_sql', array_values( $names 
 	 *
 	 * @return bool Whether or not the given element is an array that has a valid field element.
 	 */
-	private function is_array_with_valid_field( $maybe_array ) {
+	private function is_array_with_valid_field( $maybe_array ): bool {
 
 		return
 			is_array( $maybe_array )
 			&& ! empty( $maybe_array['field'] )
-			&& in_array( $maybe_array['field'], array_keys( $this->fields ) );
+			&& is_scalar( $maybe_array['field'] )
+			&& array_key_exists( $maybe_array['field'], $this->fields );
 	}
 }

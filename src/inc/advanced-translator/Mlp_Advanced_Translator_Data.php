@@ -122,7 +122,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		$post_id   = $this->basic_data->get_real_post_id( $post_id );
 		$post_type = $this->basic_data->get_real_post_type( $post );
 
-		$source_blog_id = get_current_blog_id();
+		$source_blog_id = (int) get_current_blog_id();
 
 		$featured_image_path = $this->get_featured_image_path( $post_id );
 

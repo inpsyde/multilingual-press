@@ -17,7 +17,7 @@ interface Languages {
 	 *
 	 * @return object[] The array with objects of all available languages.
 	 */
-	public function get_all_languages();
+	public function get_all_languages(): array;
 
 	/**
 	 * Returns the complete language data of all sites.
@@ -26,7 +26,7 @@ interface Languages {
 	 *
 	 * @return array[] The array with site IDs as keys and arrays with all language data as values.
 	 */
-	public function get_all_site_languages();
+	public function get_all_site_languages(): array;
 
 	/**
 	 * Returns the desired field value of the language with the given HTTP code.
@@ -35,7 +35,7 @@ interface Languages {
 	 *
 	 * @param string          $http_code Language HTTP code.
 	 * @param string          $field     Optional. The field which should be queried. Defaults to 'native_name'.
-	 * @param string|string[] $fallbacks Optional. Falback language fields. Defaults to native and English name.
+	 * @param string|string[] $fallbacks Optional. Fallback language fields. Defaults to native and English name.
 	 *
 	 * @return string|string[] The desired field value, an empty string on failure, or an array for field 'all'.
 	 */
@@ -57,7 +57,7 @@ interface Languages {
 	 *
 	 * @return object[] The array with objects of all languages according to the given arguments.
 	 */
-	public function get_languages( array $args = [] );
+	public function get_languages( array $args = [] ): array;
 
 	/**
 	 * Updates the given languages.
@@ -68,5 +68,5 @@ interface Languages {
 	 *
 	 * @return int The number of updated languages.
 	 */
-	public function update_languages_by_id( array $languages );
+	public function update_languages_by_id( array $languages ): int;
 }

@@ -43,5 +43,5 @@ interface Translations {
 	 *
 	 * @return bool Whether or not the translator was registered successfully.
 	 */
-	public function register_translator( Translator $translator, $type );
+	public function register_translator( Translator $translator, string $type );
 }

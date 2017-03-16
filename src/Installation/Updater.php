@@ -131,7 +131,7 @@ class Updater {
 		foreach ( array_column( get_sites(), 'id' ) as $site_id ) {
 			$linked = get_blog_option( $site_id, 'inpsyde_multilingual_blog_relationship', [] );
 			if ( $linked ) {
-				$this->site_relations->insert_relations( $site_id, $linked );
+				$this->site_relations->insert_relations( (int) $site_id, $linked );
 			}
 
 			delete_blog_option( $site_id, 'inpsyde_multilingual_blog_relationship' );

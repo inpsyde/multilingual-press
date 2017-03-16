@@ -163,7 +163,7 @@ function debug( $message ) {
  */
 function get_available_language_names( $related = true, $include_current_site = true ) {
 
-	$current_site_id = get_current_blog_id();
+	$current_site_id = (int) get_current_blog_id();
 
 	$related_sites = [];
 

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\API;
 
 use Inpsyde\MultilingualPress\Common\Type\Translation;
@@ -97,7 +99,7 @@ final class CachingTranslations implements Translations {
 	 *
 	 * @return Translation[] An array with site IDs as keys and Translation objects as values.
 	 */
-	public function get_translations( array $args = [] ) {
+	public function get_translations( array $args = [] ): array {
 
 		$args = $this->normalize_arguments( $args );
 
@@ -110,7 +112,7 @@ final class CachingTranslations implements Translations {
 
 		$translations = [];
 
-		$sites = $this->site_relations->get_related_site_ids( $args['site_id'], $args['include_base'] );
+		$sites = $this->site_relations->get_related_site_ids( (int) $args['site_id'], $args['include_base'] );
 		if ( $sites ) {
 			$content_relations = 0 < $args['content_id']
 				? $this->content_relations->get_relations( $args['site_id'], $args['content_id'], $args['type'] )
@@ -164,8 +166,8 @@ final class CachingTranslations implements Translations {
 							}
 
 							if (
-								( ! $translation['remote_url'] && ! $args['strict'] )
-								|| Request::TYPE_FRONT_PAGE === $type
+								Request::TYPE_FRONT_PAGE === $type
+								|| ( ! $translation['remote_url'] && ! $args['strict'] )
 							) {
 								$translation = array_merge(
 									$translation,
@@ -251,7 +253,7 @@ final class CachingTranslations implements Translations {
 	 *
 	 * @return string[] Array with HTTP language codes as keys and URLs as values.
 	 */
-	public function get_unfiltered_translations() {
+	public function get_unfiltered_translations(): array {
 
 		if ( isset( $this->unfiltered_translations ) ) {
 			return $this->unfiltered_translations;
@@ -288,7 +290,7 @@ final class CachingTranslations implements Translations {
 	 *
 	 * @return bool Whether or not the translator was registered successfully.
 	 */
-	public function register_translator( Translator $translator, $type ) {
+	public function register_translator( Translator $translator, string $type ): bool {
 
 		if ( isset( $this->translators[ $type ] ) ) {
 			return false;
@@ -306,7 +308,7 @@ final class CachingTranslations implements Translations {
 	 *
 	 * @return array Arguments required to fetch the translations.
 	 */
-	private function normalize_arguments( array $args ) {
+	private function normalize_arguments( array $args ): array {
 
 		$args = wp_parse_args( $args, [
 			'content_id'       => $this->request->queried_object_id(),
@@ -336,7 +338,7 @@ final class CachingTranslations implements Translations {
 	 *
 	 * @return NullTranslator Translator object.
 	 */
-	private function null_translator() {
+	private function null_translator(): NullTranslator {
 
 		if ( ! $this->null_translator ) {
 			$this->null_translator = new NullTranslator();
@@ -352,10 +354,8 @@ final class CachingTranslations implements Translations {
 	 *
 	 * @return Translator Translator object.
 	 */
-	private function translator( $type ) {
+	private function translator( $type ): Translator {
 
-		return isset( $this->translators[ $type ] )
-			? $this->translators[ $type ]
-			: $this->null_translator();
+		return $this->translators[ $type ] ?? $this->null_translator();
 	}
 }

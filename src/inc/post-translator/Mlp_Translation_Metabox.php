@@ -103,7 +103,7 @@ class Mlp_Translation_Metabox {
 
 		$site_relations = MultilingualPress::resolve( 'multilingualpress.site_relations' );
 
-		$related_blogs = $site_relations->get_related_site_ids( $current_blog_id, false );
+		$related_blogs = $site_relations->get_related_site_ids( (int) $current_blog_id, false );
 
 		if ( empty( $related_blogs ) ) {
 			return;
