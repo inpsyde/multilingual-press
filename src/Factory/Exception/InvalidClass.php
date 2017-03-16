@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Factory\Exception;
 
 use Exception;
@@ -20,9 +22,9 @@ class InvalidClass extends Exception {
 	 * @param string $class Fully qualified name of the class.
 	 * @param string $base  Fully qualified name of the base class or interface.
 	 *
-	 * @return static
+	 * @return InvalidClass
 	 */
-	public static function for_base( $class, $base ) {
+	public static function for_base( string $class, string $base ): InvalidClass {
 
 		return new static( sprintf(
 			'The class "%1$s" is invalid with respect to the defined base "%2$s".',

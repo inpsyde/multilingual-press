@@ -35,10 +35,11 @@ class TypeFactory {
 	 *
 	 * @return Language Language object of the given (or default) class, instantiated with the given arguments.
 	 */
-	public function create_language( array $args = [], $class = '' ) {
+	public function create_language( array $args = [], string $class = '' ): Language {
 
 		$default_class = AliasAwareLanguage::class;
 
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $this->get_factory( Language::class, $default_class )->create( $args, $class ?: $default_class );
 	}
 
@@ -52,10 +53,11 @@ class TypeFactory {
 	 *
 	 * @return Translation Translation object of the given (or default) class, instantiated with the given arguments.
 	 */
-	public function create_translation( array $args = [], $class = '' ) {
+	public function create_translation( array $args = [], string $class = '' ): Translation {
 
 		$default_class = FilterableTranslation::class;
 
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $this->get_factory( Translation::class, $default_class )->create( $args, $class ?: $default_class );
 	}
 
@@ -69,10 +71,11 @@ class TypeFactory {
 	 *
 	 * @return URL URL object of the given (or default) class, instantiated with the given arguments.
 	 */
-	public function create_url( array $args = [], $class = '' ) {
+	public function create_url( array $args = [], string $class = '' ): URL {
 
 		$default_class = EscapedURL::class;
 
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $this->get_factory( URL::class, $default_class )->create( $args, $class ?: $default_class );
 	}
 
@@ -87,10 +90,11 @@ class TypeFactory {
 	 * @return VersionNumber Version number object of the given (or default) class, instantiated with the given
 	 *                       arguments.
 	 */
-	public function create_version_number( array $args = [], $class = '' ) {
+	public function create_version_number( array $args = [], string $class = '' ): VersionNumber {
 
 		$default_class = SemanticVersionNumber::class;
 
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $this->get_factory( VersionNumber::class, $default_class )->create( $args, $class ?: $default_class );
 	}
 
@@ -99,15 +103,15 @@ class TypeFactory {
 	 *
 	 * If the according factory doesn't exist yet, it will be created first, with the given class as default class.
 	 *
-	 * @param string $base  Fully qualified name of the base class or interface.
-	 * @param string $class Fully qualified class name.
+	 * @param string $base          Fully qualified name of the base class or interface.
+	 * @param string $default_class Fully qualified class name.
 	 *
 	 * @return Factory Factory instance.
 	 */
-	private function get_factory( $base, $class ) {
+	private function get_factory( string $base, string $default_class ) {
 
 		if ( empty( $this->factories[ $base ] ) ) {
-			$this->factories[ $base ] = GenericFactory::with_default_class( $base, $class );
+			$this->factories[ $base ] = GenericFactory::with_default_class( $base, $default_class );
 		}
 
 		return $this->factories[ $base ];

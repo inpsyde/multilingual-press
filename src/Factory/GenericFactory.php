@@ -6,7 +6,6 @@ use Inpsyde\MultilingualPress\Common\Factory;
 use Inpsyde\MultilingualPress\Factory\Exception\InvalidClass;
 use BadMethodCallException;
 use InvalidArgumentException;
-use ReflectionClass;
 
 /**
  * Generic factory to be used by other factories.
@@ -41,8 +40,9 @@ final class GenericFactory implements Factory {
 	 *
 	 * @throws InvalidArgumentException if the given base is not a valid fully qualified class or interface name.
 	 * @throws BadMethodCallException   if no default class is given and the base is an interface.
+	 * @throws InvalidClass             if default class is provided but it is invalid
 	 */
-	public function __construct( $base, $default_class = '' ) {
+	public function __construct( string $base, string $default_class = '' ) {
 
 		$this->base_is_class = class_exists( $base );
 
@@ -83,10 +83,14 @@ final class GenericFactory implements Factory {
 	 * @param string $default_class Fully qualified name of the default class.
 	 *
 	 * @return static Factory object.
+	 *
+	 * @throws InvalidArgumentException if the given base is not a valid fully qualified class or interface name.
+	 * @throws BadMethodCallException   if no default class is given and the base is an interface.
+	 * @throws InvalidClass             if default class is provided but it is invalid
 	 */
-	public static function with_default_class( $base, $default_class ) {
+	public static function with_default_class( string $base, string $default_class ) {
 
-		return new static( (string) $base, (string) $default_class );
+		return new static( $base, $default_class );
 	}
 
 	/**
@@ -98,25 +102,18 @@ final class GenericFactory implements Factory {
 	 * @param string $class Optional. Fully qualified class name. Defaults to empty string.
 	 *
 	 * @return object Object of the given (or default) class, instantiated with the given arguments.
+	 *
+	 * @throws InvalidClass if class is provided but it is invalid
 	 */
-	public function create( array $args = [], $class = '' ) {
+	public function create( array $args = [], string $class = '' ) {
 
 		if ( $class ) {
 			$this->check_class( $class );
-			$class = (string) $class;
 		} else {
 			$class = $this->default_class;
 		}
 
-		switch ( count( $args ) ) {
-			case 0:
-				return new $class();
-
-			case 1:
-				return new $class( $args[0] );
-		}
-
-		return ( new ReflectionClass( $class ) )->newInstanceArgs( $args );
+		return new $class( ...$args );
 	}
 
 	/**
@@ -128,11 +125,11 @@ final class GenericFactory implements Factory {
 	 *
 	 * @throws InvalidClass if the class with the given name is invalid with respect to the defined base.
 	 */
-	private function check_class( $class ) {
+	private function check_class( string $class ) {
 
 		if (
-			! is_subclass_of( $class, $this->base, true )
-			&& ( ! $this->base_is_class || $class !== $this->base )
+			( ! $this->base_is_class || $class !== $this->base )
+			&& is_subclass_of( $class, $this->base, true )
 		) {
 			throw InvalidClass::for_base( $class, $this->base );
 		}

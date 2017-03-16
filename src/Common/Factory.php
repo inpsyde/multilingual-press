@@ -20,5 +20,5 @@ interface Factory {
 	 *
 	 * @return object Object of the given (or default) class, instantiated with the given arguments.
 	 */
-	public function create( array $args = [], $class = '' );
+	public function create( array $args = [], string $class = '' );
 }

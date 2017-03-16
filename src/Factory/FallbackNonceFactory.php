@@ -44,7 +44,7 @@ final class FallbackNonceFactory implements NonceFactory {
 	 *
 	 * @throws Throwable if caught any and WP_DEBUG is set to true.
 	 */
-	public function create( array $args = [], $class = '' ) {
+	public function create( array $args = [], string $class = '' ): Nonce {
 
 		try {
 			$object = $this->factory->create( $args, (string) $class );
@@ -53,9 +53,11 @@ final class FallbackNonceFactory implements NonceFactory {
 				throw $e;
 			}
 
+			/** @noinspection PhpIncompatibleReturnTypeInspection */
 			return $this->factory->create( $args, NonceFactory::DEFAULT_CLASS );
 		}
 
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $object;
 	}
 }

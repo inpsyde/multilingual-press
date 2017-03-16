@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Factory;
 
 use Inpsyde\MultilingualPress\Common\Factory;
@@ -27,7 +29,7 @@ final class FallbackErrorFactory implements ErrorFactory {
 	 * @param string $default_class Optional. Fully qualified name of the default class. Defaults to
 	 *                              ErrorFactory::DEFAULT_CLASS.
 	 */
-	public function __construct( $default_class = ErrorFactory::DEFAULT_CLASS ) {
+	public function __construct( string $default_class = ErrorFactory::DEFAULT_CLASS ) {
 
 		$this->factory = GenericFactory::with_default_class( ErrorFactory::BASE, (string) $default_class );
 	}
@@ -44,7 +46,7 @@ final class FallbackErrorFactory implements ErrorFactory {
 	 *
 	 * @throws Throwable if caught any and WP_DEBUG is set to true.
 	 */
-	public function create( array $args = [], $class = '' ) {
+	public function create( array $args = [], string $class = '' ): \WP_Error {
 
 		try {
 			$object = $this->factory->create( $args, (string) $class );
@@ -53,9 +55,11 @@ final class FallbackErrorFactory implements ErrorFactory {
 				throw $e;
 			}
 
+			/** @noinspection PhpIncompatibleReturnTypeInspection */
 			return $this->factory->create( $args, ErrorFactory::DEFAULT_CLASS );
 		}
 
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $object;
 	}
 }
