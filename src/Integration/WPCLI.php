@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Integration;
 
 use Inpsyde\MultilingualPress\Installation\SystemChecker;
@@ -19,7 +21,7 @@ final class WPCLI implements Integration {
 	 *
 	 * @return bool Whether or not the service was integrated successfully.
 	 */
-	public function integrate() {
+	public function integrate(): bool {
 
 		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 			return false;

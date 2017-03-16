@@ -17,5 +17,5 @@ interface Integration {
 	 *
 	 * @return bool Whether or not the service was integrated successfully.
 	 */
-	public function integrate();
+	public function integrate(): bool;
 }
