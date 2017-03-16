@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;

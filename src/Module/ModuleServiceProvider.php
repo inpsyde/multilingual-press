@@ -19,7 +19,7 @@ interface ModuleServiceProvider extends BootstrappableServiceProvider {
 	 *
 	 * @param ModuleManager $module_manager Module manager object.
 	 *
-	 * @return bool Whether or not the module was registerd successfully AND has been activated.
+	 * @return bool Whether or not the module was registered successfully AND has been activated.
 	 */
-	public function register_module( ModuleManager $module_manager );
+	public function register_module( ModuleManager $module_manager ): bool;
 }

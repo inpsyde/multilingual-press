@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\API\Translations;
@@ -73,7 +75,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 *
 	 * @return RedirectTarget Redirect target object.
 	 */
-	public function get_redirect_target() {
+	public function get_redirect_target(): RedirectTarget {
 
 		$translations = $this->translations->get_translations( [
 			'include_base' => true,
@@ -104,7 +106,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 *
 	 * @return RedirectTarget[] An array of redirect target objects.
 	 */
-	private function get_redirect_targets( array $translations ) {
+	private function get_redirect_targets( array $translations ): array {
 
 		$user_languages = $this->get_user_languages();
 		if ( ! $user_languages ) {
@@ -142,7 +144,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 *
 	 * @return float[] An array with language codes as keys, and priorities as values.
 	 */
-	private function get_user_languages() {
+	private function get_user_languages(): array {
 
 		$fields = $this->parser->parse( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
 		if ( ! $fields ) {
@@ -174,20 +176,20 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 *
 	 * @return float User priority.
 	 */
-	private function get_language_priority( Language $language, array $languages ) {
+	private function get_language_priority( Language $language, array $languages ): float {
 
 		$lang_http = strtolower( $language->name( 'http_name' ) );
 
 		if ( isset( $languages[ $lang_http ] ) ) {
-			return $languages[ $lang_http ];
+			return (float) $languages[ $lang_http ];
 		}
 
 		$lang_short = strtolower( $language->name( 'language_short' ) );
 
 		if ( isset( $languages[ $lang_short ] ) ) {
-			return $this->language_only_priority_factor * $languages[ $lang_short ];
+			return (float) $this->language_only_priority_factor * $languages[ $lang_short ];
 		}
 
-		return 0;
+		return 0.0;
 	}
 }

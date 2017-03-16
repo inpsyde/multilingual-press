@@ -26,5 +26,5 @@ interface Redirector {
 	 *
 	 * @return bool Whether or not the user got redirected (for testing only).
 	 */
-	public function redirect();
+	public function redirect(): bool;
 }

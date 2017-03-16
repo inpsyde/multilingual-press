@@ -17,5 +17,5 @@ interface LanguageNegotiator {
 	 *
 	 * @return RedirectTarget Redirect target object.
 	 */
-	public function get_redirect_target();
+	public function get_redirect_target(): RedirectTarget;
 }

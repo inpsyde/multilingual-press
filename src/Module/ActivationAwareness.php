@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module;
 
 /**
@@ -22,7 +24,7 @@ trait ActivationAwareness {
 	 *
 	 * @return bool Whether or not the callback was executed.
 	 */
-	public function activate() {
+	public function activate(): bool {
 
 		if ( ! is_callable( $this->on_activation_callback ) ) {
 			return false;

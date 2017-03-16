@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 /**
@@ -19,7 +21,7 @@ final class NoredirectSessionStorage implements NoredirectStorage {
 	 *
 	 * @return bool Whether or not the language was stored right now (i.e., returns false if it was already in storage).
 	 */
-	public function add_language( $language ) {
+	public function add_language( string $language ): bool {
 
 		$this->ensure_session();
 
@@ -47,7 +49,7 @@ final class NoredirectSessionStorage implements NoredirectStorage {
 	 *
 	 * @return bool Whether or not the given language has been stored before.
 	 */
-	public function has_language( $language ) {
+	public function has_language( string $language ): bool {
 
 		$this->ensure_session();
 
@@ -65,7 +67,7 @@ final class NoredirectSessionStorage implements NoredirectStorage {
 	 */
 	private function ensure_session() {
 
-		if ( ! isset( $_SESSION ) && ! session_id() ) {
+		if ( PHP_SESSION_NONE === session_status() ) {
 			session_start();
 		}
 	}

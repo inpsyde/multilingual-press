@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
@@ -62,7 +64,7 @@ class TrasherSettingUpdater {
 	 *
 	 * @return int The number of posts updated.
 	 */
-	public function update_settings( $post_id, WP_Post $post ) {
+	public function update_settings( $post_id, WP_Post $post ): int {
 
 		if ( ! $this->nonce->is_valid() )  {
 			return 0;
@@ -76,13 +78,13 @@ class TrasherSettingUpdater {
 			? (bool) $_POST[ TrasherSettingRepository::META_KEY ]
 			: false;
 
-		if ( ! $this->setting_repository->update_setting( $post_id, $value ) ) {
+		if ( ! $this->setting_repository->update_setting( (int) $post_id, $value ) ) {
 			return 0;
 		}
 
-		$current_site_id = get_current_blog_id();
+		$current_site_id = (int) get_current_blog_id();
 
-		$related_posts = $this->content_relations->get_relations( $current_site_id, $post_id, 'post' );
+		$related_posts = $this->content_relations->get_relations( (int) $current_site_id, (int) $post_id, 'post' );
 
 		unset( $related_posts[ $current_site_id ] );
 
@@ -95,7 +97,7 @@ class TrasherSettingUpdater {
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$updated_posts, $value ) {
 
 			switch_to_blog( $site_id );
-			$updated_posts += $this->setting_repository->update_setting( $post_id, $value );
+			$updated_posts += $this->setting_repository->update_setting( (int) $post_id, $value );
 			restore_current_blog();
 		} );
 

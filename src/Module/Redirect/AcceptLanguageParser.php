@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\AcceptHeader\AcceptHeaderParser;
@@ -21,7 +23,7 @@ final class AcceptLanguageParser implements AcceptHeaderParser {
 	 *
 	 * @return float[] An array with language codes as keys, and priorities as values.
 	 */
-	public function parse( $header ) {
+	public function parse( string $header ): array {
 
 		$header = $this->remove_comment( $header );
 		if ( '' === $header ) {
@@ -50,7 +52,7 @@ final class AcceptLanguageParser implements AcceptHeaderParser {
 	 *
 	 * @return string Accept header without comment.
 	 */
-	private function remove_comment( $header ) {
+	private function remove_comment( string $header ): string {
 
 		$delimiter = '~';
 
@@ -75,7 +77,7 @@ final class AcceptLanguageParser implements AcceptHeaderParser {
 	 *
 	 * @return string[] Array of values.
 	 */
-	private function get_values( $header ) {
+	private function get_values( string $header ): array {
 
 		$values = explode( ',', $header );
 		$values = array_map( 'trim', $values );
@@ -90,7 +92,7 @@ final class AcceptLanguageParser implements AcceptHeaderParser {
 	 *
 	 * @return array Array with language and priority, or empty array in case of invalid language.
 	 */
-	private function split_value( $value ) {
+	private function split_value( string $value ): array {
 
 		$language = strtok( $value, ';' );
 		if ( ! preg_match( '~[a-zA-Z_-]~', $language ) ) {
@@ -116,12 +118,8 @@ final class AcceptLanguageParser implements AcceptHeaderParser {
 	 *
 	 * @return float Normalized priority.
 	 */
-	private function normalize_priority( $priority ) {
+	private function normalize_priority( string $priority ): float {
 
-		$priority = (float) $priority;
-		$priority = max( 0, $priority );
-		$priority = min( 1, $priority );
-
-		return $priority;
+		return (float) min( 1, max( 0, (float) $priority ) );
 	}
 }

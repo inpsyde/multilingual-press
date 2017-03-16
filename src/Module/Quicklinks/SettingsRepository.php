@@ -62,7 +62,7 @@ interface SettingsRepository {
 	 *
 	 * @return string[] An array with position setting values as keys and position names as values.
 	 */
-	public function get_available_positions();
+	public function get_available_positions(): array;
 
 	/**
 	 * Returns the currently selected position.
@@ -71,7 +71,7 @@ interface SettingsRepository {
 	 *
 	 * @return string The currently selected position.
 	 */
-	public function get_current_position();
+	public function get_current_position(): string;
 
 	/**
 	 * Sets the position to the given value.
@@ -82,5 +82,5 @@ interface SettingsRepository {
 	 *
 	 * @return bool Whether or not the position was set successfully.
 	 */
-	public function set_position( $position );
+	public function set_position( string $position ): bool;
 }

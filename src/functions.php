@@ -578,7 +578,8 @@ function is_debug_mode() {
  */
 function is_redirect_enabled( $site_id = 0 ) {
 
-	return MultilingualPress::resolve( 'multilingualpress.redirect_settings_repository' )->get_site_setting( $site_id );
+	return MultilingualPress::resolve( 'multilingualpress.redirect_settings_repository' )
+		->get_site_setting( (int) $site_id );
 }
 
 /**

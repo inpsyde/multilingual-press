@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -37,9 +39,9 @@ class RedirectSiteSetting implements SiteSettingViewModel {
 	 * @param Nonce              $nonce      Nonce object.
 	 * @param SettingsRepository $repository Settings repository object.
 	 */
-	public function __construct( $option, Nonce $nonce, SettingsRepository $repository ) {
+	public function __construct( string $option, Nonce $nonce, SettingsRepository $repository ) {
 
-		$this->option = (string) $option;
+		$this->option = $option;
 
 		$this->nonce = $nonce;
 
@@ -55,7 +57,7 @@ class RedirectSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function markup( $site_id ) {
+	public function markup( int $site_id ): string {
 
 		return sprintf(
 			'<label for="%2$s"><input type="checkbox" name="%2$s" value="1" id="%2$s"%3$s>%1$s</label>%4$s',
@@ -73,7 +75,7 @@ class RedirectSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',

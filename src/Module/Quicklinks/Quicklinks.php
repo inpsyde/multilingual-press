@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 use Inpsyde\MultilingualPress\API\Translations;
@@ -97,9 +99,9 @@ class Quicklinks {
 	 *
 	 * @return string Post content.
 	 */
-	public function add_to_content( $content ) {
+	public function add_to_content( string $content ): string {
 
-		$translations = $this->get_translations( get_current_blog_id() );
+		$translations = $this->get_translations( (int) get_current_blog_id() );
 		if ( ! $translations ) {
 			return $content;
 		}
@@ -142,7 +144,7 @@ class Quicklinks {
 	 *
 	 * @return Translation[] An array of translation objects
 	 */
-	private function get_translations( $skip = '' ) {
+	private function get_translations( $skip = '' ): array {
 
 		if ( is_singular() ) {
 			return array_diff_key(
@@ -164,7 +166,7 @@ class Quicklinks {
 	 *
 	 * @return string Quicklinks HTML.
 	 */
-	private function quicklinks( array $languages, $current_position ) {
+	private function quicklinks( array $languages, string $current_position ): string {
 
 		/**
 		 * Filters the type of the quicklinks output (i.e., a single select element, or individual links).

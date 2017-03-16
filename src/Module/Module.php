@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module;
 
 /**
@@ -38,9 +40,9 @@ class Module {
 	 * @param string $id   Module ID.
 	 * @param array  $data Optional. Module data. Defaults to empty array.
 	 */
-	public function __construct( $id, array $data = [] ) {
+	public function __construct( string $id, array $data = [] ) {
 
-		$this->id = (string) $id;
+		$this->id = $id;
 
 		$this->description = (string) ( $data['description'] ?? '' );
 
@@ -54,9 +56,9 @@ class Module {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return static Module instance.
+	 * @return Module Module instance.
 	 */
-	public function activate() {
+	public function activate(): Module {
 
 		$this->is_active = true;
 
@@ -68,9 +70,9 @@ class Module {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return static Module instance.
+	 * @return Module Module instance.
 	 */
-	public function deactivate() {
+	public function deactivate(): Module {
 
 		$this->is_active = false;
 
@@ -84,7 +86,7 @@ class Module {
 	 *
 	 * @return string The description of the module.
 	 */
-	public function description() {
+	public function description(): string {
 
 		return $this->description;
 	}
@@ -96,7 +98,7 @@ class Module {
 	 *
 	 * @return string The ID of the module.
 	 */
-	public function id() {
+	public function id(): string {
 
 		return $this->id;
 	}
@@ -108,7 +110,7 @@ class Module {
 	 *
 	 * @return bool Whether or not the module is active.
 	 */
-	public function is_active() {
+	public function is_active(): bool {
 
 		return $this->is_active;
 	}
@@ -120,7 +122,7 @@ class Module {
 	 *
 	 * @return string The name of the module.
 	 */
-	public function name() {
+	public function name(): string {
 
 		return $this->name;
 	}

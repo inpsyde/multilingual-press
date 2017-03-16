@@ -37,7 +37,7 @@ interface SettingsRepository {
 	 *
 	 * @return bool The redirect setting for the site with the given ID.
 	 */
-	public function get_site_setting( $site_id = 0 );
+	public function get_site_setting( int $site_id = 0 ): bool;
 
 	/**
 	 * Returns the redirect setting for the user with the given ID.
@@ -48,5 +48,5 @@ interface SettingsRepository {
 	 *
 	 * @return bool The redirect setting for the user with the given ID.
 	 */
-	public function get_user_setting( $user_id = 0 );
+	public function get_user_setting( int $user_id = 0 ): bool;
 }

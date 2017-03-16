@@ -17,7 +17,7 @@ interface SettingsBoxViewModel {
 	 *
 	 * @return string The description.
 	 */
-	public function description();
+	public function description(): string;
 
 	/**
 	 * Returns the ID of the container element.
@@ -26,7 +26,7 @@ interface SettingsBoxViewModel {
 	 *
 	 * @return string The ID of the container element.
 	 */
-	public function id();
+	public function id(): string;
 
 	/**
 	 * Returns the ID of the form element to be used by the label in order to make it accessible for screen readers.
@@ -35,7 +35,7 @@ interface SettingsBoxViewModel {
 	 *
 	 * @return string The ID of the primary form element.
 	 */
-	public function label_id();
+	public function label_id(): string;
 
 	/**
 	 * Returns the markup for the settings box.
@@ -44,7 +44,7 @@ interface SettingsBoxViewModel {
 	 *
 	 * @return string The markup for the settings box.
 	 */
-	public function markup();
+	public function markup(): string;
 
 	/**
 	 * Returns the title of the settings box.
@@ -53,5 +53,5 @@ interface SettingsBoxViewModel {
 	 *
 	 * @return string The title of the settings box.
 	 */
-	public function title();
+	public function title(): string;
 }

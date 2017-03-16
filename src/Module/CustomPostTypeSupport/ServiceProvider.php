@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
@@ -110,9 +112,9 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 *
 	 * @param ModuleManager $module_manager Module manager object.
 	 *
-	 * @return bool Whether or not the module was registerd successfully AND has been activated.
+	 * @return bool Whether or not the module was registered successfully AND has been activated.
 	 */
-	public function register_module( ModuleManager $module_manager ) {
+	public function register_module( ModuleManager $module_manager ): bool {
 
 		return $module_manager->register_module( new Module( 'custom_post_type_support', [
 			'description' => __(

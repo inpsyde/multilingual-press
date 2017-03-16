@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 /**
@@ -26,7 +28,7 @@ final class NoredirectObjectCacheStorage implements NoredirectStorage {
 	 *
 	 * @return bool Whether or not the language was stored right now (i.e., returns false if it was already in storage).
 	 */
-	public function add_language( $language ) {
+	public function add_language( string $language ): bool {
 
 		$languages = $this->get_languages();
 
@@ -50,7 +52,7 @@ final class NoredirectObjectCacheStorage implements NoredirectStorage {
 	 *
 	 * @return bool Whether or not the given language has been stored before.
 	 */
-	public function has_language( $language ) {
+	public function has_language( string $language ): bool {
 
 		$languages = $this->get_languages();
 		if ( ! $languages ) {
@@ -65,7 +67,7 @@ final class NoredirectObjectCacheStorage implements NoredirectStorage {
 	 *
 	 * @return string[] Languages.
 	 */
-	private function get_languages() {
+	private function get_languages(): array {
 
 		$languages = wp_cache_get( $this->key() );
 		if ( ! $languages || ! is_array( $languages ) ) {
@@ -80,7 +82,7 @@ final class NoredirectObjectCacheStorage implements NoredirectStorage {
 	 *
 	 * @return string Cache key.
 	 */
-	private function key() {
+	private function key(): string {
 
 		if ( ! $this->key ) {
 			$this->key = 'multilingualpress.' . NoredirectStorage::KEY . '.' . get_current_user_id();

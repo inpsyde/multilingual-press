@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\AlternativeLanguageTitleInAdminBar;
 
 use WP_Admin_Bar;
@@ -39,7 +41,7 @@ class AdminBarCustomizer {
 	 *
 	 * @return WP_Admin_Bar The manipulated WordPress admin bar object.
 	 */
-	public function replace_site_name( WP_Admin_Bar $wp_admin_bar ) {
+	public function replace_site_name( WP_Admin_Bar $wp_admin_bar ): WP_Admin_Bar {
 
 		$title = $this->titles->get();
 		if ( ! $title ) {
@@ -64,7 +66,7 @@ class AdminBarCustomizer {
 	 *
 	 * @return WP_Admin_Bar The manipulated WordPress admin bar object.
 	 */
-	public function replace_site_nodes( WP_Admin_Bar $wp_admin_bar ) {
+	public function replace_site_nodes( WP_Admin_Bar $wp_admin_bar ): WP_Admin_Bar {
 
 		if ( empty( $wp_admin_bar->user->blogs ) ) {
 			return $wp_admin_bar;
@@ -75,7 +77,7 @@ class AdminBarCustomizer {
 				continue;
 			}
 
-			$title = $this->titles->get( $site->userblog_id );
+			$title = $this->titles->get( (int) $site->userblog_id );
 			if ( ! $title ) {
 				continue;
 			}

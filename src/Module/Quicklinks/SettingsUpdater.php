@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -56,7 +58,7 @@ class SettingsUpdater {
 	 *
 	 * @return bool Whether or not the settings were updated successfully.
 	 */
-	public function update_settings( array $data ) {
+	public function update_settings( array $data ): bool {
 
 		if ( ! $this->nonce->is_valid() ) {
 			return false;

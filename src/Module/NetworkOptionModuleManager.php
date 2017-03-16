@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module;
 
 use Inpsyde\MultilingualPress\Module\Exception\InvalidModule;
@@ -35,9 +37,9 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @param string $option The name of the network option used for storage.
 	 */
-	public function __construct( $option ) {
+	public function __construct( string $option ) {
 
-		$this->option = (string) $option;
+		$this->option = $option;
 
 		$this->states = (array) get_network_option( null, $this->option, [] );
 	}
@@ -53,7 +55,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @throws InvalidModule if there is no module with the given ID.
 	 */
-	public function activate_module( $id ) {
+	public function activate_module( string $id ): Module {
 
 		if ( ! $this->has_module( $id ) ) {
 			throw InvalidModule::for_id( $id, 'activate' );
@@ -75,7 +77,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @throws InvalidModule if there is no module with the given ID.
 	 */
-	public function deactivate_module( $id ) {
+	public function deactivate_module( string $id ): Module {
 
 		if ( ! $this->has_module( $id ) ) {
 			throw InvalidModule::for_id( $id, 'deactivate' );
@@ -97,7 +99,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @throws InvalidModule if there is no module with the given ID.
 	 */
-	public function get_module( $id ) {
+	public function get_module( string $id ): Module {
 
 		if ( ! $this->has_module( $id ) ) {
 			throw InvalidModule::for_id( $id, 'read' );
@@ -115,7 +117,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return Module[] Array of module objects.
 	 */
-	public function get_modules( $state = ModuleManager::MODULE_STATE_ALL ) {
+	public function get_modules( int $state = ModuleManager::MODULE_STATE_ALL ): array {
 
 		if ( ! $this->modules ) {
 			return [];
@@ -141,7 +143,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return bool Whether or not the module with the given ID has been registered.
 	 */
-	public function has_module( $id ) {
+	public function has_module( string $id ): bool {
 
 		return isset( $this->modules[ $id ] );
 	}
@@ -153,7 +155,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return bool Whether or not any modules have been registered.
 	 */
-	public function has_modules() {
+	public function has_modules(): bool {
 
 		return ! empty( $this->modules );
 	}
@@ -167,7 +169,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return bool Whether or not the module with the given ID is active.
 	 */
-	public function is_module_active( $id ) {
+	public function is_module_active( string $id ): bool {
 
 		return (bool) ( $this->states[ $id ] ?? false );
 	}
@@ -183,7 +185,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @throws ModuleAlreadyRegistered if a module with the ID of the given module already has been registered.
 	 */
-	public function register_module( Module $module ) {
+	public function register_module( Module $module ): bool {
 
 		$id = $module->id();
 
@@ -215,9 +217,9 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return bool Whether or not the modules were saved successfully.
 	 */
-	public function save_modules() {
+	public function save_modules(): bool {
 
-		return update_network_option( null, $this->option, $this->states );
+		return (bool) update_network_option( null, $this->option, $this->states );
 	}
 
 	/**
@@ -229,10 +231,9 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return Module[] Array of all registered module objects.
 	 */
-	public function unregister_module( $id ) {
+	public function unregister_module( string $id ): array {
 
-		unset( $this->modules[ $id ] );
-		unset( $this->states[ $id ] );
+		unset( $this->modules[ $id ], $this->states[ $id ] );
 
 		return $this->modules;
 	}

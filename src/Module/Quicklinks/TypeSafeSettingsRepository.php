@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 /**
@@ -22,7 +24,7 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 	 *
 	 * @return string[] An array with position setting values as keys and position names as values.
 	 */
-	public function get_available_positions() {
+	public function get_available_positions(): array {
 
 		if ( ! $this->available_positions ) {
 			$this->available_positions = [
@@ -43,7 +45,7 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 	 *
 	 * @return string The currently selected position.
 	 */
-	public function get_current_position() {
+	public function get_current_position(): string {
 
 		$settings = get_site_option( SettingsRepository::OPTION );
 
@@ -70,7 +72,7 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 	 *
 	 * @return bool Whether or not the position was set successfully.
 	 */
-	public function set_position( $position ) {
+	public function set_position( string $position ): bool {
 
 		$settings = get_site_option( SettingsRepository::OPTION );
 

@@ -64,7 +64,7 @@ interface PostTypeRepository {
 	 *
 	 * @return WP_Post_Type[] All custom post types that MultilingualPress is able to support.
 	 */
-	public function get_custom_post_types();
+	public function get_custom_post_types(): array;
 
 	/**
 	 * Returns the slugs of all currently supported post types.
@@ -73,7 +73,7 @@ interface PostTypeRepository {
 	 *
 	 * @return string[] The slugs of all currently supported post types.
 	 */
-	public function get_supported_post_types();
+	public function get_supported_post_types(): array;
 
 	/**
 	 * Checks if the given post type is active and set to be query-based.
@@ -84,7 +84,7 @@ interface PostTypeRepository {
 	 *
 	 * @return bool Whether or not the given post type is active and set to be query-based.
 	 */
-	public function is_post_type_active_and_query_based( $post_type );
+	public function is_post_type_active_and_query_based( string $post_type ): bool;
 
 	/**
 	 * Sets post type support to the given post types.
@@ -95,7 +95,7 @@ interface PostTypeRepository {
 	 *
 	 * @return bool Whether the support for all given post types was set successfully.
 	 */
-	public function set_supported_post_types( array $post_types );
+	public function set_supported_post_types( array $post_types ): bool;
 
 	/**
 	 * Removes the support for all post types.
@@ -104,5 +104,5 @@ interface PostTypeRepository {
 	 *
 	 * @return bool Whether the support for all post types was removed successfully.
 	 */
-	public function unsupport_all_post_types();
+	public function unsupport_all_post_types(): bool;
 }

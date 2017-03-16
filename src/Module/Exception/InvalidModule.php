@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Exception;
 
 use Exception;
@@ -20,9 +22,9 @@ class InvalidModule extends Exception {
 	 * @param string $id     Module ID.
 	 * @param string $action Optional. Action to be performed. Defaults to 'read'.
 	 *
-	 * @return static Exception object.
+	 * @return InvalidModule Exception object.
 	 */
-	public static function for_id( $id, $action = 'read' ) {
+	public static function for_id( string $id, string $action = 'read' ): InvalidModule {
 
 		return new static( sprintf(
 			'Cannot %2$s "%1$s". There is no module with this ID.',

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 use Inpsyde\MultilingualPress\Common\ContextAwareFilter;
@@ -50,7 +52,7 @@ final class RedirectHostsFilter implements Filter {
 	 *
 	 * @return string[] Filtered hosts.
 	 */
-	public function filter_hosts( array $home_hosts, $remote_host ) {
+	public function filter_hosts( array $home_hosts, string $remote_host ): array {
 
 		// Network with sub directories.
 		if ( in_array( $remote_host, $home_hosts, true ) ) {

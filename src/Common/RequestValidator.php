@@ -19,5 +19,5 @@ interface RequestValidator {
 	 *
 	 * @return bool Whether or not the request is valid.
 	 */
-	public function is_valid( $context = null );
+	public function is_valid( $context = null ): bool;
 }

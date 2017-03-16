@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
@@ -175,7 +177,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 							__( 'Redirect', 'multilingual-press' ),
 							function ( $id, $site_id ) use ( $redirect_settings_repository ) {
 
-								return $redirect_settings_repository->get_site_setting( $site_id )
+								return $redirect_settings_repository->get_site_setting( (int) $site_id )
 									? '<span class="dashicons dashicons-yes"></span>'
 									: '';
 							}
@@ -202,9 +204,9 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 *
 	 * @param ModuleManager $module_manager Module manager object.
 	 *
-	 * @return bool Whether or not the module was registerd successfully AND has been activated.
+	 * @return bool Whether or not the module was registered successfully AND has been activated.
 	 */
-	public function register_module( ModuleManager $module_manager ) {
+	public function register_module( ModuleManager $module_manager ): bool {
 
 		return $module_manager->register_module( new Module( 'redirect', [
 			'description' => __( 'Redirect visitors according to browser language settings.', 'multilingual-press' ),

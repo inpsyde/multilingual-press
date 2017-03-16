@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\ContextAwareFilter;
@@ -55,7 +57,7 @@ final class NoredirectPermalinkFilter implements Filter {
 	 *
 	 * @return string The (filtered) URL.
 	 */
-	public function add_noredirect_query_argument( $url, $site_id ) {
+	public function add_noredirect_query_argument( $url, $site_id ): string {
 
 		$url = (string) $url;
 		if ( ! $url ) {
@@ -77,7 +79,7 @@ final class NoredirectPermalinkFilter implements Filter {
 	 *
 	 * @return string[] An array with site IDs as keys and the individual MultilingualPress language code as values.
 	 */
-	private function languages() {
+	private function languages(): array {
 
 		if ( ! isset( $this->languages ) ) {
 			$this->languages = \Inpsyde\MultilingualPress\get_available_languages();

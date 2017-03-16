@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -38,9 +40,9 @@ final class RedirectUserSetting implements UserSettingViewModel {
 	 * @param Nonce              $nonce      Nonce object.
 	 * @param SettingsRepository $repository Settings repository object.
 	 */
-	public function __construct( $meta_key, Nonce $nonce, SettingsRepository $repository ) {
+	public function __construct( string $meta_key, Nonce $nonce, SettingsRepository $repository ) {
 
-		$this->meta_key = (string) $meta_key;
+		$this->meta_key = $meta_key;
 
 		$this->nonce = $nonce;
 
@@ -56,13 +58,13 @@ final class RedirectUserSetting implements UserSettingViewModel {
 	 *
 	 * @return string The markup for the user setting.
 	 */
-	public function markup( WP_User $user ) {
+	public function markup( WP_User $user ): string {
 
 		return sprintf(
 			'<label for="%2$s"><input type="checkbox" name="%2$s" value="1" id="%2$s"%3$s>%1$s</label>%4$s',
 			esc_html__( 'Do not redirect me to the best matching language version.', 'multilingual-press' ),
 			esc_attr( $this->meta_key ),
-			checked( $this->repository->get_user_setting( $user->ID ), true, false ),
+			checked( $this->repository->get_user_setting( (int) $user->ID ), true, false ),
 			\Inpsyde\MultilingualPress\nonce_field( $this->nonce )
 		);
 	}
@@ -74,7 +76,7 @@ final class RedirectUserSetting implements UserSettingViewModel {
 	 *
 	 * @return string The markup for the user setting.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',

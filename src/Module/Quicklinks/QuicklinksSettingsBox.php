@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -45,7 +47,7 @@ final class QuicklinksSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The description.
 	 */
-	public function description() {
+	public function description(): string {
 
 		return '';
 	}
@@ -57,7 +59,7 @@ final class QuicklinksSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The ID of the container element.
 	 */
-	public function id() {
+	public function id(): string {
 
 		return 'mlp-quicklinks-settings';
 	}
@@ -69,7 +71,7 @@ final class QuicklinksSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The ID of the primary form element.
 	 */
-	public function label_id() {
+	public function label_id(): string {
 
 		return '';
 	}
@@ -81,7 +83,7 @@ final class QuicklinksSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The markup for the settings box.
 	 */
-	public function markup() {
+	public function markup(): string {
 
 		$available_positions = $this->repository->get_available_positions();
 
@@ -103,7 +105,7 @@ final class QuicklinksSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The title of the settings box.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return __( 'Quicklinks', 'multilingual-press' );
 	}
@@ -117,7 +119,7 @@ final class QuicklinksSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return void
 	 */
-	private function render_position( $name, $key, $current ) {
+	private function render_position( string $name, string $key, string $current ) {
 
 		?>
 		<label for="mlp-<?php echo esc_attr( $key ); ?>-id"

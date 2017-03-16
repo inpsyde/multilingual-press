@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
@@ -47,15 +49,15 @@ class Trasher {
 	 *
 	 * @return int The number of related posts trashed.
 	 */
-	public function trash_related_posts( $post_id ) {
+	public function trash_related_posts( $post_id ): int {
 
-		if ( ! $this->setting_repository->get_setting( $post_id ) ) {
+		if ( ! $this->setting_repository->get_setting( (int) $post_id ) ) {
 			return 0;
 		}
 
 		$current_site_id = get_current_blog_id();
 
-		$related_posts = $this->content_relations->get_relations( $current_site_id, $post_id, 'post' );
+		$related_posts = $this->content_relations->get_relations( $current_site_id, (int) $post_id, 'post' );
 
 		unset( $related_posts[ $current_site_id ] );
 
@@ -72,7 +74,8 @@ class Trasher {
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$trashed_post ) {
 
 			switch_to_blog( $site_id );
-			$trashed_post += (bool) wp_trash_post( $post_id );
+			$trashed = wp_trash_post( $post_id );
+			$trashed_post += (int) ( false !== $trashed && ! is_wp_error( $trashed ) );
 			restore_current_blog();
 		} );
 

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\AlternativeLanguageTitleInAdminBar;
 
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
@@ -48,10 +50,10 @@ class AlternativeLanguageTitles {
 	 *
 	 * @return string The alternative language title for the site with the given ID.
 	 */
-	public function get( $site_id = 0 ) {
+	public function get( int $site_id = 0 ): string {
 
 		if ( ! $site_id ) {
-			$site_id = get_current_blog_id();
+			$site_id = (int) get_current_blog_id();
 		}
 
 		$titles = wp_cache_get( $this->cache_key, $this->cache_group );
@@ -81,7 +83,7 @@ class AlternativeLanguageTitles {
 	 *
 	 * @return bool Whether or not any alternative language titles were updated.
 	 */
-	public function update() {
+	public function update(): bool {
 
 		$site_id = (int) ( $_REQUEST['id'] ?? get_current_blog_id() );
 		if ( 1 > $site_id ) {

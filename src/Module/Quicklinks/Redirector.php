@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 use Inpsyde\MultilingualPress\Common\Filter;
@@ -38,7 +40,7 @@ class Redirector {
 	 *
 	 * @return bool Whether or not the redirection was successful.
 	 */
-	public function maybe_redirect( $url ) {
+	public function maybe_redirect( string $url ): bool {
 
 		$this->redirect_hosts_filter->enable();
 

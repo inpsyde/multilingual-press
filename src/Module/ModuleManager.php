@@ -46,7 +46,7 @@ interface ModuleManager {
 	 *
 	 * @return Module Module object.
 	 */
-	public function activate_module( $id );
+	public function activate_module( string $id ): Module;
 
 	/**
 	 * Deactivates the module with the given ID.
@@ -57,7 +57,7 @@ interface ModuleManager {
 	 *
 	 * @return Module Module object.
 	 */
-	public function deactivate_module( $id );
+	public function deactivate_module( string $id ): Module;
 
 	/**
 	 * Returns the module with the given ID.
@@ -68,7 +68,7 @@ interface ModuleManager {
 	 *
 	 * @return Module Module object.
 	 */
-	public function get_module( $id );
+	public function get_module( string $id ): Module;
 
 	/**
 	 * Returns all modules with the given state.
@@ -79,7 +79,7 @@ interface ModuleManager {
 	 *
 	 * @return Module[] Array of module objects.
 	 */
-	public function get_modules( $state = self::MODULE_STATE_ALL );
+	public function get_modules( int $state = self::MODULE_STATE_ALL ): array;
 
 	/**
 	 * Checks if the module with the given ID has been registered.
@@ -90,7 +90,7 @@ interface ModuleManager {
 	 *
 	 * @return bool Whether or not the module with the given ID has been registered.
 	 */
-	public function has_module( $id );
+	public function has_module( string $id ): bool;
 
 	/**
 	 * Checks if any modules have been registered.
@@ -99,7 +99,7 @@ interface ModuleManager {
 	 *
 	 * @return bool Whether or not any modules have been registered.
 	 */
-	public function has_modules();
+	public function has_modules(): bool;
 
 	/**
 	 * Checks if the module with the given ID is active.
@@ -110,7 +110,7 @@ interface ModuleManager {
 	 *
 	 * @return bool Whether or not the module with the given ID is active.
 	 */
-	public function is_module_active( $id );
+	public function is_module_active( string $id ): bool;
 
 	/**
 	 * Registers the given module.
@@ -121,7 +121,7 @@ interface ModuleManager {
 	 *
 	 * @return bool Whether or not the module is active.
 	 */
-	public function register_module( Module $module );
+	public function register_module( Module $module ): bool;
 
 	/**
 	 * Saves the modules persistently.
@@ -130,7 +130,7 @@ interface ModuleManager {
 	 *
 	 * @return bool Whether or not the modules were saved successfully.
 	 */
-	public function save_modules();
+	public function save_modules(): bool;
 
 	/**
 	 * Unregisters the module with the given.
@@ -141,5 +141,5 @@ interface ModuleManager {
 	 *
 	 * @return Module[] Array of all registered module objects.
 	 */
-	public function unregister_module( $id );
+	public function unregister_module( string $id ): array;
 }

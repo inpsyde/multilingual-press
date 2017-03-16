@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 /**
@@ -42,7 +44,7 @@ final class NoredirectAwareRedirector implements Redirector {
 	 *
 	 * @return bool Whether or not the user got redirected (for testing only).
 	 */
-	public function redirect() {
+	public function redirect(): bool {
 
 		if ( array_key_exists( NoredirectStorage::KEY, $_GET ) ) {
 			$this->storage->add_language( $_GET[ NoredirectStorage::KEY ] );

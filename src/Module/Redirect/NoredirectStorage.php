@@ -37,7 +37,7 @@ interface NoredirectStorage {
 	 *
 	 * @return bool Whether or not the language was stored right now (i.e., returns false if it was already in storage).
 	 */
-	public function add_language( $language );
+	public function add_language( string $language ): bool;
 
 	/**
 	 * Checks if the given language has been stored before.
@@ -48,5 +48,5 @@ interface NoredirectStorage {
 	 *
 	 * @return bool Whether or not the given language has been stored before.
 	 */
-	public function has_language( $language );
+	public function has_language( string $language ): bool;
 }

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
 use WP_Post_Type;
@@ -24,7 +26,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	 *
 	 * @return WP_Post_Type[] All custom post types that MultilingualPress is able to support.
 	 */
-	public function get_custom_post_types() {
+	public function get_custom_post_types(): array {
 
 		if ( isset( $this->custom_post_types ) ) {
 			return $this->custom_post_types;
@@ -51,7 +53,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	 *
 	 * @return string[] The slugs of all currently supported post types.
 	 */
-	public function get_supported_post_types() {
+	public function get_supported_post_types(): array {
 
 		$settings = $this->get_settings();
 		if ( empty( $settings[ PostTypeRepository::SETTINGS_KEY ] ) ) {
@@ -76,7 +78,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	 *
 	 * @return bool Whether or not the given post type is active and set to be query-based.
 	 */
-	public function is_post_type_active_and_query_based( $post_type ) {
+	public function is_post_type_active_and_query_based( string $post_type ): bool {
 
 		$settings = $this->get_settings();
 		if ( empty( $settings[ PostTypeRepository::SETTINGS_KEY ][ $post_type ] ) ) {
@@ -95,7 +97,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	 *
 	 * @return bool Whether the support for all given post types was set successfully.
 	 */
-	public function set_supported_post_types( array $post_types ) {
+	public function set_supported_post_types( array $post_types ): bool {
 
 		$settings = $this->get_settings();
 
@@ -111,7 +113,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	 *
 	 * @return bool Whether the support for all post types was removed successfully.
 	 */
-	public function unsupport_all_post_types() {
+	public function unsupport_all_post_types(): bool {
 
 		return $this->set_supported_post_types( [] );
 	}
@@ -121,7 +123,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	 *
 	 * @return array[] Post type support settings.
 	 */
-	private function get_settings() {
+	private function get_settings(): array {
 
 		return (array) get_site_option( PostTypeRepository::OPTION, [] );
 	}

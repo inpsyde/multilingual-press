@@ -17,5 +17,5 @@ interface ActivationAwareModuleServiceProvider extends ModuleServiceProvider {
 	 *
 	 * @return bool Whether or not the callback was executed.
 	 */
-	public function activate();
+	public function activate(): bool;
 }

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\RequestValidator;
@@ -55,7 +57,7 @@ final class NoredirectAwareRedirectRequestValidator implements RequestValidator 
 	 *
 	 * @return bool Whether or not the request is valid.
 	 */
-	public function is_valid( $context = null ) {
+	public function is_valid( $context = null ): bool {
 
 		if ( empty( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
 			return false;

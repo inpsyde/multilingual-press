@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 /**
@@ -98,7 +100,7 @@ class RedirectTarget {
 	 *
 	 * @return string The target language.
 	 */
-	public function language() {
+	public function language(): string {
 
 		return $this->language;
 	}
@@ -110,7 +112,7 @@ class RedirectTarget {
 	 *
 	 * @return int The target language priority.
 	 */
-	public function priority() {
+	public function priority(): int {
 
 		return $this->priority;
 	}
@@ -122,7 +124,7 @@ class RedirectTarget {
 	 *
 	 * @return int The target site ID.
 	 */
-	public function site_id() {
+	public function site_id(): int {
 
 		return $this->site_id;
 	}
@@ -134,7 +136,7 @@ class RedirectTarget {
 	 *
 	 * @return string The target URL.
 	 */
-	public function url() {
+	public function url(): string {
 
 		return $this->url;
 	}

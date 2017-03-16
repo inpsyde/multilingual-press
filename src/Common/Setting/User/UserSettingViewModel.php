@@ -21,7 +21,7 @@ interface UserSettingViewModel {
 	 *
 	 * @return string The markup for the user setting.
 	 */
-	public function markup( WP_User $user );
+	public function markup( WP_User $user ): string;
 
 	/**
 	 * Returns the title of the user setting.
@@ -30,5 +30,5 @@ interface UserSettingViewModel {
 	 *
 	 * @return string The markup for the user setting.
 	 */
-	public function title();
+	public function title(): string;
 }

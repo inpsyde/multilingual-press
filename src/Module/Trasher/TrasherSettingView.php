@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -57,7 +59,7 @@ class TrasherSettingView {
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( TrasherSettingRepository::META_KEY ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>"
-					<?php checked( $this->setting_repository->get_setting( $post->ID ) ); ?>>
+					<?php checked( $this->setting_repository->get_setting( (int) $post->ID ) ); ?>>
 				<?php _e( 'Send all the translations to trash when this post is trashed.', 'multilingual-press' ); ?>
 			</label>
 		</div>

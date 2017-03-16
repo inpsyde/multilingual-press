@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
 use Inpsyde\MultilingualPress\Common\ContextAwareFilter;
@@ -50,7 +52,7 @@ final class URLFilter implements Filter {
 	 *
 	 * @return string The (filtered) post type link URL.
 	 */
-	public function unprettify_permalink( $post_link, WP_Post $post ) {
+	public function unprettify_permalink( string $post_link, WP_Post $post ): string {
 
 		if ( ! $this->post_type_repository->is_post_type_active_and_query_based( $post->post_type ) ) {
 			return $post_link;
@@ -78,7 +80,7 @@ final class URLFilter implements Filter {
 	 *
 	 * @return bool Whether or not the given post is a draft or pending.
 	 */
-	private function is_draft_or_pending( $post ) {
+	private function is_draft_or_pending( \WP_Post $post ): bool {
 
 		if ( empty( $post->post_status ) ) {
 			return false;

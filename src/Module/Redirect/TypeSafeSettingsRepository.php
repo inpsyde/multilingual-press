@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 /**
@@ -19,7 +21,7 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 	 *
 	 * @return bool The redirect setting for the site with the given ID.
 	 */
-	public function get_site_setting( $site_id = 0 ) {
+	public function get_site_setting( int $site_id = 0 ): bool {
 
 		return (bool) get_blog_option( $site_id ?: get_current_blog_id(), SettingsRepository::OPTION_SITE );
 	}
@@ -33,7 +35,7 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 	 *
 	 * @return bool The redirect setting for the user with the given ID.
 	 */
-	public function get_user_setting( $user_id = 0 ) {
+	public function get_user_setting( int $user_id = 0 ): bool {
 
 		return (bool) get_user_meta( $user_id ?: get_current_user_id(), SettingsRepository::META_KEY_USER );
 	}

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -51,7 +53,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The description.
 	 */
-	public function description() {
+	public function description(): string {
 
 		return __(
 			'In some cases the correct pretty permalinks are not available across multiple sites. Test it, and activate dynamic permalinks for those post types to avoid 404 errors. This will not change the permalink settings, just the URLs in MultilingualPress.',
@@ -66,7 +68,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The ID of the container element.
 	 */
-	public function id() {
+	public function id(): string {
 
 		return 'mlp-cpt-support-settings';
 	}
@@ -78,7 +80,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The ID of the primary form element.
 	 */
-	public function label_id() {
+	public function label_id(): string {
 
 		return '';
 	}
@@ -90,7 +92,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The markup for the settings box.
 	 */
-	public function markup() {
+	public function markup(): string {
 
 		if ( ! isset( $this->post_types ) ) {
 			$this->post_types = $this->repository->get_custom_post_types();
@@ -118,7 +120,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return string The title of the settings box.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return __( 'Custom Post Type Support', 'multilingual-press' );
 	}
@@ -132,7 +134,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return void
 	 */
-	private function render_table_row( WP_Post_Type $post_type, $slug, array $supported_post_types ) {
+	private function render_table_row( WP_Post_Type $post_type, string $slug, array $supported_post_types ) {
 
 		$name = PostTypeSupportSettingsUpdater::SETTINGS_NAME;
 
@@ -178,7 +180,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 *
 	 * @return void
 	 */
-	private function render_checkbox( $name, $id, $checked ) {
+	private function render_checkbox( string $name, string $id, bool $checked ) {
 
 		printf(
 			'<input type="checkbox" name="%1$s" value="1" id="%2$s"%3$s>',
