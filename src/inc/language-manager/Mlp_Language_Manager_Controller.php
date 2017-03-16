@@ -212,7 +212,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		$table = new LanguagesTable( $table_prefix );
 
-		$installer = new WPDBTableInstaller( $table );
+		$installer = new WPDBTableInstaller( $this->wpdb, $table );
 		$installer->uninstall();
 		$installer->install();
 

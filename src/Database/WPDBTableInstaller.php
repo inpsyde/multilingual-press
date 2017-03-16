@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Database;
 
 use Inpsyde\MultilingualPress\Database\Exception\InvalidTable;
@@ -54,7 +56,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @throws InvalidTable if a table was neither passed, nor injected via the constructor.
 	 */
-	public function install( Table $table = null ) {
+	public function install( Table $table = null ): bool {
 
 		$table = $table ?: $this->table;
 		if ( ! $table ) {
@@ -98,7 +100,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @throws InvalidTable if a table was neither passed, nor injected via the constructor.
 	 */
-	public function uninstall( Table $table = null ) {
+	public function uninstall( Table $table = null ): bool {
 
 		$table = $table ?: $this->table;
 		if ( ! $table ) {
@@ -115,7 +117,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return string The SQL string for the columns in the given table schema.
 	 */
-	private function get_columns( array $schema ) {
+	private function get_columns( array $schema ): string {
 
 		$sql = '';
 
@@ -135,7 +137,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return string The SQL string for the keys of the given table.
 	 */
-	private function get_keys( Table $table ) {
+	private function get_keys( Table $table ): string {
 
 		$keys = '';
 
@@ -158,7 +160,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return string
 	 */
-	private function get_options() {
+	private function get_options(): string {
 
 		if ( isset( $this->options ) ) {
 			return $this->options;
@@ -187,7 +189,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return bool Whether or not a table with the given name exists in the database.
 	 */
-	private function table_exists( $table_name ) {
+	private function table_exists( string $table_name ): bool {
 
 		$query = $this->db->prepare( 'SHOW TABLES LIKE %s', $table_name );
 

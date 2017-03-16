@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Database;
 
 use wpdb;
@@ -37,16 +39,16 @@ final class WPDBTableStringReplacer implements TableStringReplacer {
 	 * @param string   $table       The name of the table to replace the string in.
 	 * @param string[] $columns     The names of all columns to replace the string in.
 	 * @param string   $search      The string to replace.
-	 * @param string   $replacement The replacment.
+	 * @param string   $replacement The replacement.
 	 *
 	 * @return int The number of affected rows.
 	 */
 	public function replace_string(
-		$table,
+		string $table,
 		array $columns,
-		$search,
-		$replacement
-	) {
+		string $search,
+		string $replacement
+	): int {
 
 		if ( preg_match( '|[^a-z0-9_]|i', $table ) ) {
 			return 0;
@@ -73,16 +75,13 @@ final class WPDBTableStringReplacer implements TableStringReplacer {
 	 *
 	 * @param string[] $columns     The names of all columns to replace the string in.
 	 * @param string   $search      The string to replace.
-	 * @param string   $replacement The replacment.
+	 * @param string   $replacement The replacement.
 	 *
 	 * @return string The SQL string for replacing the given string with the given replacement in the given columns.
 	 */
-	private function get_replacements_sql( array $columns, $search, $replacement ) {
+	private function get_replacements_sql( array $columns, string $search, string $replacement ): string {
 
-		$columns = array_filter( $columns, function ( $column ) {
-
-			return (bool) preg_match( '~^[a-zA-Z_][a-zA-Z0-9_]*$~', $column );
-		} );
+		$columns = preg_filter( '~^[a-zA-Z_][a-zA-Z0-9_]*$~', '$0', $columns );
 
 		$replacements_sql = array_reduce( $columns, function ( $sql, $column ) use ( $search, $replacement ) {
 

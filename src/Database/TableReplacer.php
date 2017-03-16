@@ -20,5 +20,5 @@ interface TableReplacer {
 	 *
 	 * @return bool Whether or not the table was replaced successfully.
 	 */
-	public function replace_table( $source, $destination );
+	public function replace_table( string $source, string $destination ): bool;
 }

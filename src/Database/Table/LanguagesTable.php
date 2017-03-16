@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Database\Table;
 
 use Inpsyde\MultilingualPress\Database\Table;
@@ -24,7 +26,7 @@ final class LanguagesTable implements Table {
 	 *
 	 * @param string $prefix Optional Table name prefix. Defaults to empty string.
 	 */
-	public function __construct( $prefix = '' ) {
+	public function __construct( string $prefix = '' ) {
 
 		$this->prefix = (string) $prefix;
 	}
@@ -36,7 +38,7 @@ final class LanguagesTable implements Table {
 	 *
 	 * @return string[] All columns that do not have any default content.
 	 */
-	public function columns_without_default_content() {
+	public function columns_without_default_content(): array {
 
 		return [
 			'ID',
@@ -51,7 +53,7 @@ final class LanguagesTable implements Table {
 	 *
 	 * @return string The SQL string for the default content.
 	 */
-	public function default_content_sql() {
+	public function default_content_sql(): string {
 
 		$rows = [
 			'aa'    => [
@@ -1808,7 +1810,7 @@ final class LanguagesTable implements Table {
 
 		$rows = array_map( function ( array $row ) {
 
-			return '(\'' . join( '\',\'', $row ) . '\')';
+			return '(\'' . implode( '\',\'', $row ) . '\')';
 		}, $rows );
 
 		return implode( ',', $rows );
@@ -1821,7 +1823,7 @@ final class LanguagesTable implements Table {
 	 *
 	 * @return string The SQL string for all (unique) keys.
 	 */
-	public function keys_sql() {
+	public function keys_sql():string {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
 		return 'KEY http_name (http_name)';
@@ -1834,7 +1836,7 @@ final class LanguagesTable implements Table {
 	 *
 	 * @return string The table name.
 	 */
-	public function name() {
+	public function name(): string {
 
 		return "{$this->prefix}mlp_languages";
 	}
@@ -1846,7 +1848,7 @@ final class LanguagesTable implements Table {
 	 *
 	 * @return string The primary key.
 	 */
-	public function primary_key() {
+	public function primary_key(): string {
 
 		return 'ID';
 	}
@@ -1858,7 +1860,7 @@ final class LanguagesTable implements Table {
 	 *
 	 * @return string[] An array with fields as keys and the according SQL definitions as values.
 	 */
-	public function schema() {
+	public function schema(): array {
 
 		return [
 			'ID'           => 'bigint(20) unsigned NOT NULL auto_increment',

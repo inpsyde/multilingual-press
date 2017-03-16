@@ -225,7 +225,7 @@ class SiteDuplicator {
 	 */
 	private function duplicate_tables( $source_site_id, $table_prefix ) {
 
-		$tables = $this->table_list->site_tables( $source_site_id );
+		$tables = $this->table_list->site_tables( (int) $source_site_id );
 		/**
 		 * Filters the tables to duplicate from the source site for the current site.
 		 *
@@ -238,9 +238,9 @@ class SiteDuplicator {
 
 		array_walk( $tables, function ( $table ) use ( $table_prefix ) {
 
-			$new_table = preg_replace( "~^{$table_prefix}~", $this->db->prefix, $table );
+			$new_table = is_string( $table ) ? preg_replace( "~^{$table_prefix}~", $this->db->prefix, $table ) : '';
 
-			if ( $this->table_duplicator->duplicate_table( $table, $new_table ) ) {
+			if ( $table && $this->table_duplicator->duplicate_table( $table, $new_table ) ) {
 				$this->table_replacer->replace_table( $new_table, $table );
 			}
 		} );

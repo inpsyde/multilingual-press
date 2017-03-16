@@ -19,7 +19,7 @@ interface TableInstaller {
 	 *
 	 * @return bool Whether or not the table was installed successfully.
 	 */
-	public function install( Table $table = null );
+	public function install( Table $table = null ): bool;
 
 	/**
 	 * Uninstalls the given table.
@@ -30,5 +30,5 @@ interface TableInstaller {
 	 *
 	 * @return bool Whether or not the table was uninstalled successfully.
 	 */
-	public function uninstall( Table $table = null );
+	public function uninstall( Table $table = null ): bool;
 }

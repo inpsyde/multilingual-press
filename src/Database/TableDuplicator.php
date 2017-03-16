@@ -20,5 +20,5 @@ interface TableDuplicator {
 	 *
 	 * @return bool Whether or not the table was duplicated successfully.
 	 */
-	public function duplicate_table( $existing_table, $new_table );
+	public function duplicate_table( string $existing_table, string $new_table ): bool;
 }

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Database;
 
 use wpdb;
@@ -41,7 +43,7 @@ final class WPDBTableList implements TableList {
 	 *
 	 * @return string[] The names of all tables.
 	 */
-	public function all_tables() {
+	public function all_tables(): array {
 
 		$cache_key = 'all_tables';
 
@@ -54,7 +56,7 @@ final class WPDBTableList implements TableList {
 
 		$query = $this->db->prepare( "SHOW TABLES LIKE '%s'", $this->db->esc_like( "{$this->db->base_prefix}%" ) );
 
-		$all_tables = $this->db->get_col( $query );;
+		$all_tables = $this->db->get_col( $query );
 
 		wp_cache_set( $cache_key, $all_tables, $cache_group );
 
@@ -68,7 +70,7 @@ final class WPDBTableList implements TableList {
 	 *
 	 * @return string[] The names of all network tables.
 	 */
-	public function network_tables() {
+	public function network_tables(): array {
 
 		$all_tables = $this->all_tables();
 
@@ -86,7 +88,7 @@ final class WPDBTableList implements TableList {
 	 *
 	 * @return string[] The names of all tables for the site with the given ID.
 	 */
-	public function site_tables( $site_id ) {
+	public function site_tables( int $site_id ): array {
 
 		$prefix = $this->db->get_blog_prefix( $site_id );
 
@@ -101,7 +103,7 @@ final class WPDBTableList implements TableList {
 	 *
 	 * @return string[] The table names included in the given schema.
 	 */
-	private function extract_tables_from_schema( $schema, $prefix = '' ) {
+	private function extract_tables_from_schema( string $schema, string $prefix = '' ): array {
 
 		preg_match_all( '~CREATE TABLE (' . $prefix . '.*) \(~', $schema, $matches );
 

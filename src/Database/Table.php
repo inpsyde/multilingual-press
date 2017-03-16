@@ -17,7 +17,7 @@ interface Table {
 	 *
 	 * @return string[] All columns that do not have any default content.
 	 */
-	public function columns_without_default_content();
+	public function columns_without_default_content(): array;
 
 	/**
 	 * Returns the SQL string for the default content.
@@ -26,7 +26,7 @@ interface Table {
 	 *
 	 * @return string The SQL string for the default content.
 	 */
-	public function default_content_sql();
+	public function default_content_sql(): string;
 
 	/**
 	 * Returns the SQL string for all (unique) keys.
@@ -35,7 +35,7 @@ interface Table {
 	 *
 	 * @return string The SQL string for all (unique) keys.
 	 */
-	public function keys_sql();
+	public function keys_sql(): string;
 
 	/**
 	 * Returns the table name.
@@ -44,7 +44,7 @@ interface Table {
 	 *
 	 * @return string The table name.
 	 */
-	public function name();
+	public function name(): string;
 
 	/**
 	 * Returns the primary key.
@@ -53,7 +53,7 @@ interface Table {
 	 *
 	 * @return string The primary key.
 	 */
-	public function primary_key();
+	public function primary_key(): string;
 
 	/**
 	 * Returns the table schema.
@@ -62,5 +62,5 @@ interface Table {
 	 *
 	 * @return string[] An array with fields as keys and the according SQL definitions as values.
 	 */
-	public function schema();
+	public function schema(): array;
 }

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Database;
 
 use wpdb;
@@ -39,7 +41,7 @@ final class WPDBTableReplacer implements TableReplacer {
 	 *
 	 * @return bool Whether or not the table was replaced successfully.
 	 */
-	public function replace_table( $destination, $source ) {
+	public function replace_table( string $destination, string $source ): bool {
 
 		$has_primary_key = (bool) $this->db->get_results( "SHOW KEYS FROM $destination WHERE Key_name = 'PRIMARY'" );
 		if ( $has_primary_key ) {

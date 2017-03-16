@@ -18,14 +18,14 @@ interface TableStringReplacer {
 	 * @param string   $table       The name of the table to replace the string in.
 	 * @param string[] $columns     The names of all columns to replace the string in.
 	 * @param string   $search      The string to replace.
-	 * @param string   $replacement The replacment.
+	 * @param string   $replacement The replacement.
 	 *
 	 * @return int The number of affected rows.
 	 */
 	public function replace_string(
-		$table,
+		string $table,
 		array $columns,
-		$search,
-		$replacement
-	);
+		string $search,
+		string $replacement
+	) : int;
 }

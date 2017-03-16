@@ -17,7 +17,7 @@ interface TableList {
 	 *
 	 * @return string[] The names of all tables.
 	 */
-	public function all_tables();
+	public function all_tables(): array;
 
 	/**
 	 * Returns an array with the names of all network tables.
@@ -26,7 +26,7 @@ interface TableList {
 	 *
 	 * @return string[] The names of all network tables.
 	 */
-	public function network_tables();
+	public function network_tables(): array;
 
 	/**
 	 * Returns an array with the names of all tables for the site with the given ID.
@@ -37,5 +37,5 @@ interface TableList {
 	 *
 	 * @return string[] The names of all tables for the site with the given ID.
 	 */
-	public function site_tables( $site_id );
+	public function site_tables( int $site_id ): array;
 }

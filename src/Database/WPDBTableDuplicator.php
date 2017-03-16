@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Database;
 
 use wpdb;
@@ -39,7 +41,7 @@ final class WPDBTableDuplicator implements TableDuplicator {
 	 *
 	 * @return bool Whether or not the table was duplicated successfully.
 	 */
-	public function duplicate_table( $existing_table, $new_table ) {
+	public function duplicate_table( string $existing_table, string $new_table ): bool {
 
 		return (bool) $this->db->query( "CREATE TABLE IF NOT EXISTS $new_table LIKE $existing_table" );
 	}

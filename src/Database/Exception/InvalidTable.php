@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Database\Exception;
 
 use Exception;
@@ -19,9 +21,9 @@ class InvalidTable extends Exception {
 	 *
 	 * @param string $action Optional. The action to be performed. Defaults to 'install'.
 	 *
-	 * @return static Exception object.
+	 * @return InvalidTable Exception object.
 	 */
-	public static function for_action( $action = 'install' ) {
+	public static function for_action( string $action = 'install' ): InvalidTable {
 
 		return new static( sprintf(
 			'Cannot %s. Table invalid.',

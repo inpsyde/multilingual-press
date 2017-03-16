@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Database\Table;
 
 use Inpsyde\MultilingualPress\Database\Table;
@@ -26,9 +28,9 @@ final class ContentRelationsTable implements Table {
 	 *
 	 * @param string $prefix Optional Table name prefix. Defaults to empty string.
 	 */
-	public function __construct( $prefix = '' ) {
+	public function __construct( string $prefix = '' ) {
 
-		$this->prefix = (string) $prefix;
+		$this->prefix = $prefix;
 	}
 
 	/**
@@ -38,7 +40,7 @@ final class ContentRelationsTable implements Table {
 	 *
 	 * @return string[] All columns that do not have any default content.
 	 */
-	public function columns_without_default_content() {
+	public function columns_without_default_content(): array {
 
 		return [
 			'ml_id',
@@ -52,7 +54,7 @@ final class ContentRelationsTable implements Table {
 	 *
 	 * @return string The SQL string for the default content.
 	 */
-	public function default_content_sql() {
+	public function default_content_sql(): string {
 
 		return '';
 	}
@@ -64,7 +66,7 @@ final class ContentRelationsTable implements Table {
 	 *
 	 * @return string The SQL string for all (unique) keys.
 	 */
-	public function keys_sql() {
+	public function keys_sql(): string {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
 		return "KEY blog_element (ml_blogid,ml_elementid)";
@@ -77,7 +79,7 @@ final class ContentRelationsTable implements Table {
 	 *
 	 * @return string The table name.
 	 */
-	public function name() {
+	public function name(): string {
 
 		return "{$this->prefix}multilingual_linked";
 	}
@@ -89,7 +91,7 @@ final class ContentRelationsTable implements Table {
 	 *
 	 * @return string The primary key.
 	 */
-	public function primary_key() {
+	public function primary_key(): string {
 
 		return 'ml_id';
 	}
@@ -101,7 +103,7 @@ final class ContentRelationsTable implements Table {
 	 *
 	 * @return string[] An array with fields as keys and the according SQL definitions as values.
 	 */
-	public function schema() {
+	public function schema(): array {
 
 		return [
 			'ml_id'               => 'int unsigned NOT NULL AUTO_INCREMENT',
