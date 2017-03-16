@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Asset;
 
 /**
@@ -33,7 +35,7 @@ final class DebugAwareStyle implements Style {
 	/**
 	 * @var string|null
 	 */
-	private $version = null;
+	private $version;
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -43,25 +45,25 @@ final class DebugAwareStyle implements Style {
 	 * @param string      $handle       The handle.
 	 * @param string      $url          The public URL for the directory containing the file.
 	 * @param string[]    $dependencies Optional. The dependencies. Defaults to empty array.
-	 * @param string|null $version      Optional. Version of the file. Defaults to empty string.
+	 * @param string|null $version      Optional. Version of the file. Defaults to null.
 	 * @param string      $media        Optional. Style media data. Defaults to 'all'.
 	 */
 	public function __construct(
-		$handle,
-		$url,
+		string $handle,
+		string $url,
 		array $dependencies = [],
-		$version = '',
-		$media = 'all'
+		string $version = null,
+		string $media = 'all'
 	) {
 
-		$this->handle = (string) $handle;
+		$this->handle = $handle;
 
-		$this->url = (string) $url;
+		$this->url = $url;
 
 		$this->dependencies = array_map( 'strval', $dependencies );
 
 		if ( null !== $version ) {
-			$this->version = (string) $version;
+			$this->version = $version;
 		}
 
 		$this->media = (string) $media;
@@ -110,7 +112,7 @@ final class DebugAwareStyle implements Style {
 	 *
 	 * @return string[] The dependencies.
 	 */
-	public function dependencies() {
+	public function dependencies(): array {
 
 		return $this->dependencies;
 	}
@@ -122,7 +124,7 @@ final class DebugAwareStyle implements Style {
 	 *
 	 * @return string The handle.
 	 */
-	public function handle() {
+	public function handle(): string {
 
 		return $this->handle;
 	}
@@ -134,7 +136,7 @@ final class DebugAwareStyle implements Style {
 	 *
 	 * @return string The file URL.
 	 */
-	public function url() {
+	public function url(): string {
 
 		return $this->url;
 	}
@@ -158,7 +160,7 @@ final class DebugAwareStyle implements Style {
 	 *
 	 * @return string The handle.
 	 */
-	public function __toString() {
+	public function __toString(): string {
 
 		return $this->handle;
 	}
@@ -170,9 +172,9 @@ final class DebugAwareStyle implements Style {
 	 *
 	 * @param string $conditional Conditional string.
 	 *
-	 * @return static Style instance.
+	 * @return Style Style instance.
 	 */
-	public function add_conditional( $conditional ) {
+	public function add_conditional( string $conditional ): Style {
 
 		wp_style_add_data( $this->handle, 'conditional', (string) $conditional );
 
@@ -186,7 +188,7 @@ final class DebugAwareStyle implements Style {
 	 *
 	 * @return string The style media data.
 	 */
-	public function media() {
+	public function media(): string {
 
 		return $this->media;
 	}

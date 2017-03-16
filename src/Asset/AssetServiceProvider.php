@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Asset;
 
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;

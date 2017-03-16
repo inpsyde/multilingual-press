@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Asset;
 
 use Inpsyde\MultilingualPress\Common\Locations;
@@ -63,11 +65,11 @@ class AssetFactory {
 	 * @return Script Script object.
 	 */
 	public function create_internal_script(
-		$handle,
-		$file,
+		string $handle,
+		string $file,
 		array $dependencies = [],
-		$version = ''
-	) {
+		string $version = null
+	): Script {
 
 		return DebugAwareScript::from_location(
 			$handle,
@@ -95,12 +97,12 @@ class AssetFactory {
 	 * @return Style Style object.
 	 */
 	public function create_internal_style(
-		$handle,
-		$file,
+		string $handle,
+		string $file,
 		array $dependencies = [],
-		$version = '',
-		$media = 'all'
-	) {
+		string $version = null,
+		string $media = 'all'
+	): Style {
 
 		return DebugAwareStyle::from_location(
 			$handle,

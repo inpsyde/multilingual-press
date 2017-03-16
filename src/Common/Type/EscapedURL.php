@@ -39,7 +39,7 @@ final class EscapedURL implements URL {
 	 *
 	 * @return string URL string.
 	 */
-	public function __toString() {
+	public function __toString(): string {
 
 		return $this->url;
 	}

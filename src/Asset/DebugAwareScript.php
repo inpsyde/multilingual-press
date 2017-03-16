@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Asset;
 
 /**
@@ -33,7 +35,7 @@ final class DebugAwareScript implements Script {
 	/**
 	 * @var string|null
 	 */
-	private $version = null;
+	private $version;
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -43,23 +45,23 @@ final class DebugAwareScript implements Script {
 	 * @param string      $handle       The handle.
 	 * @param string      $url          The public URL for the directory containing the file.
 	 * @param string[]    $dependencies Optional. The dependencies. Defaults to empty array.
-	 * @param string|null $version      Optional. Version of the file. Defaults to empty string.
+	 * @param string|null $version      Optional. Version of the file. Defaults to null.
 	 */
 	public function __construct(
-		$handle,
-		$url,
+		string $handle,
+		string $url,
 		array $dependencies = [],
-		$version = ''
+		string $version = null
 	) {
 
-		$this->handle = (string) $handle;
+		$this->handle = $handle;
 
-		$this->url = (string) $url;
+		$this->url = $url;
 
 		$this->dependencies = array_map( 'strval', $dependencies );
 
 		if ( null !== $version ) {
-			$this->version = (string) $version;
+			$this->version = $version;
 		}
 	}
 
@@ -73,14 +75,14 @@ final class DebugAwareScript implements Script {
 	 * @param string[]      $dependencies Optional. The dependencies. Defaults to empty array.
 	 * @param string|null   $version      Optional. Version of the file. Defaults to empty string.
 	 *
-	 * @return static Script object.
+	 * @return Script Script object.
 	 */
 	public static function from_location(
-		$handle,
+		string $handle,
 		AssetLocation $location,
 		array $dependencies = [],
-		$version = ''
-	) {
+		string $version = null
+	): Script {
 
 		$url = DebugAwareAssetURL::from_location( $location );
 
@@ -103,7 +105,7 @@ final class DebugAwareScript implements Script {
 	 *
 	 * @return string[] The dependencies.
 	 */
-	public function dependencies() {
+	public function dependencies(): array {
 
 		return $this->dependencies;
 	}
@@ -115,7 +117,7 @@ final class DebugAwareScript implements Script {
 	 *
 	 * @return string The handle.
 	 */
-	public function handle() {
+	public function handle(): string {
 
 		return $this->handle;
 	}
@@ -127,7 +129,7 @@ final class DebugAwareScript implements Script {
 	 *
 	 * @return string The file URL.
 	 */
-	public function url() {
+	public function url(): string {
 
 		return $this->url;
 	}
@@ -151,7 +153,7 @@ final class DebugAwareScript implements Script {
 	 *
 	 * @return string The handle.
 	 */
-	public function __toString() {
+	public function __toString(): string {
 
 		return $this->handle;
 	}
@@ -164,9 +166,9 @@ final class DebugAwareScript implements Script {
 	 * @param string $object_name The name of the JavaScript variable holding the data.
 	 * @param array  $data        The data to be made available for the script.
 	 *
-	 * @return static Script instance.
+	 * @return Script Script instance.
 	 */
-	public function add_data( $object_name, array $data ) {
+	public function add_data( string $object_name, array $data ): Script {
 
 		$this->data[ $object_name ] = $data;
 
@@ -178,9 +180,9 @@ final class DebugAwareScript implements Script {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return static Script instance.
+	 * @return Script Script instance.
 	 */
-	public function clear_data() {
+	public function clear_data(): Script {
 
 		$this->data = [];
 
@@ -194,7 +196,7 @@ final class DebugAwareScript implements Script {
 	 *
 	 * @return array[] Data to be made available for the script.
 	 */
-	public function data() {
+	public function data(): array {
 
 		return $this->data;
 	}

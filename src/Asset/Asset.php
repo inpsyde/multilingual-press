@@ -17,7 +17,7 @@ interface Asset {
 	 *
 	 * @return string[] The dependencies.
 	 */
-	public function dependencies();
+	public function dependencies(): array;
 
 	/**
 	 * Returns the handle.
@@ -26,7 +26,7 @@ interface Asset {
 	 *
 	 * @return string The handle.
 	 */
-	public function handle();
+	public function handle(): string;
 
 	/**
 	 * Returns the file URL.
@@ -35,7 +35,7 @@ interface Asset {
 	 *
 	 * @return string The file URL.
 	 */
-	public function url();
+	public function url(): string;
 
 	/**
 	 * Returns the file version.
@@ -53,5 +53,5 @@ interface Asset {
 	 *
 	 * @return string The handle.
 	 */
-	public function __toString();
+	public function __toString(): string;
 }

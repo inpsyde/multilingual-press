@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Asset;
 
 /**
@@ -29,7 +31,7 @@ final class DebugAwareAssetURL implements AssetURL {
 	 * @param string $dir_path Local path to the directory containing the file.
 	 * @param string $dir_url  Public URL for the directory containing the file.
 	 */
-	public function __construct( $file, $dir_path, $dir_url ) {
+	public function __construct( string $file, string $dir_path, string $dir_url ) {
 
 		$dir_path = rtrim( $dir_path, '/' );
 
@@ -50,9 +52,9 @@ final class DebugAwareAssetURL implements AssetURL {
 	 *
 	 * @param AssetLocation $location Asset location object.
 	 *
-	 * @return static URL object.
+	 * @return DebugAwareAssetURL URL object.
 	 */
-	public static function from_location( AssetLocation $location ) {
+	public static function from_location( AssetLocation $location ): DebugAwareAssetURL {
 
 		return new static( $location->file(), $location->path(), $location->url() );
 	}
@@ -64,7 +66,7 @@ final class DebugAwareAssetURL implements AssetURL {
 	 *
 	 * @return string URL string.
 	 */
-	public function __toString() {
+	public function __toString(): string {
 
 		return $this->url;
 	}
@@ -76,7 +78,7 @@ final class DebugAwareAssetURL implements AssetURL {
 	 *
 	 * @return string File version.
 	 */
-	public function version() {
+	public function version(): string {
 
 		return $this->version;
 	}
@@ -90,7 +92,7 @@ final class DebugAwareAssetURL implements AssetURL {
 	 *
 	 * @return string Name of the minified or unmodified file, depending on debugging settings.
 	 */
-	private function get_file( $file, $dir_path ) {
+	private function get_file( string $file, string $dir_path ): string {
 
 		if ( \Inpsyde\MultilingualPress\is_script_debug_mode() ) {
 			return $file;
@@ -104,7 +106,7 @@ final class DebugAwareAssetURL implements AssetURL {
 
 		if ( is_readable( "$dir_path/$minified_file" ) ) {
 			return $minified_file;
-		};
+		}
 
 		return $file;
 	}
@@ -116,7 +118,7 @@ final class DebugAwareAssetURL implements AssetURL {
 	 *
 	 * @return string Minified file.
 	 */
-	private function get_minified_file( $file ) {
+	private function get_minified_file( string $file ): string {
 
 		// Check for already minified file.
 		if ( preg_match( '~\.min\.[^.]+$~', $file ) ) {

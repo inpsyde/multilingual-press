@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Asset;
 
 /**
@@ -43,9 +45,9 @@ class AssetManager {
 	 *
 	 * @param Style $style Style object.
 	 *
-	 * @return static Asset manager instance.
+	 * @return AssetManager Asset manager instance.
 	 */
-	public function register_style( Style $style ) {
+	public function register_style( Style $style ): AssetManager {
 
 		$this->styles[ $style->handle() ] = $style;
 
@@ -61,7 +63,7 @@ class AssetManager {
 	 *
 	 * @return Script Script object.
 	 */
-	public function get_script( $handle ) {
+	public function get_script( string $handle ): Script {
 
 		$handle = (string) $handle;
 
@@ -81,7 +83,7 @@ class AssetManager {
 	 *
 	 * @return Style Style object.
 	 */
-	public function get_style( $handle ) {
+	public function get_style( string $handle ): Style {
 
 		$handle = (string) $handle;
 
@@ -102,7 +104,7 @@ class AssetManager {
 	 *
 	 * @return bool Whether or not the script was enqueued successfully.
 	 */
-	public function enqueue_script( $script, $in_footer = true ) {
+	public function enqueue_script( $script, bool $in_footer = true ): bool {
 
 		$handle = (string) $script;
 
@@ -147,11 +149,11 @@ class AssetManager {
 	 * @return bool Whether or not the script was enqueued successfully.
 	 */
 	public function enqueue_script_with_data(
-		$script,
-		$object_name,
+		string $script,
+		string $object_name,
 		array $data,
 		$in_footer = true
-	) {
+	): bool {
 
 		$handle = (string) $script;
 
@@ -175,7 +177,7 @@ class AssetManager {
 	 *
 	 * @return bool Whether or not the style was enqueued successfully.
 	 */
-	public function enqueue_style( $style ) {
+	public function enqueue_style( $style ): bool {
 
 		$handle = (string) $style;
 
@@ -214,7 +216,7 @@ class AssetManager {
 	 *
 	 * @return Script|null Script object if it exists, null if not.
 	 */
-	public function add_script_data( $script, $object_name, array $data ) {
+	public function add_script_data( $script, string $object_name, array $data ): Script {
 
 		if ( ! $script instanceof Script ) {
 			$script = $this->get_script( (string) $script );
@@ -278,9 +280,9 @@ class AssetManager {
 	 *
 	 * @return string Action for enqueueing assets.
 	 */
-	private function get_enqueue_action() {
+	private function get_enqueue_action(): string {
 
-		if ( 0 === strpos( $_SERVER['REQUEST_URI'], '/wp-login.php' ) ) {
+		if ( 0 === strpos( ltrim( add_query_arg( [] ) , '/' ), 'wp-login.php' ) ) {
 			return empty( $GLOBALS['interim_login'] )
 				? 'login_enqueue_scripts'
 				: '';

@@ -18,18 +18,18 @@ interface Script extends Asset {
 	 * @param string $object_name The name of the JavaScript variable holding the data.
 	 * @param array  $data        The data to be made available for the script.
 	 *
-	 * @return static Script instance.
+	 * @return Script Script instance.
 	 */
-	public function add_data( $object_name, array $data );
+	public function add_data( string $object_name, array $data ): Script;
 
 	/**
 	 * Clears the data so it won't be output another time.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return static Script instance.
+	 * @return Script Script instance.
 	 */
-	public function clear_data();
+	public function clear_data(): Script;
 
 	/**
 	 * Returns all data to be made available for the script.
@@ -38,5 +38,5 @@ interface Script extends Asset {
 	 *
 	 * @return array[] Data to be made available for the script.
 	 */
-	public function data();
+	public function data(): array;
 }

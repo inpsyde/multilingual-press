@@ -13,12 +13,12 @@ interface Style extends Asset {
 	/**
 	 * @param string $conditional
 	 *
-	 * @return static Style instance.
+	 * @return Style Style instance.
 	 */
-	public function add_conditional( $conditional );
+	public function add_conditional( string $conditional ): Style;
 
 	/**
 	 * @return string
 	 */
-	public function media();
+	public function media(): string;
 }

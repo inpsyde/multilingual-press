@@ -19,5 +19,5 @@ interface AssetURL extends URL {
 	 *
 	 * @return string File version.
 	 */
-	public function version();
+	public function version(): string;
 }

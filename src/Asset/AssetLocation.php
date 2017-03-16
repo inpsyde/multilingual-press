@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Asset;
 
 /**
@@ -34,13 +36,13 @@ class AssetLocation {
 	 * @param string $path The local path to the directory containing the file.
 	 * @param string $url  The public URL for the directory containing the file.
 	 */
-	public function __construct( $file, $path, $url ) {
+	public function __construct( string $file, string $path, string $url ) {
 
-		$this->file = (string) $file;
+		$this->file = $file;
 
-		$this->path = (string) $path;
+		$this->path = $path;
 
-		$this->url = (string) $url;
+		$this->url = $url;
 	}
 
 	/**
@@ -50,7 +52,7 @@ class AssetLocation {
 	 *
 	 * @return string The relative file name (or path).
 	 */
-	public function file() {
+	public function file(): string {
 
 		return $this->file;
 	}
@@ -62,7 +64,7 @@ class AssetLocation {
 	 *
 	 * @return string The local path to the directory containing the file.
 	 */
-	public function path() {
+	public function path(): string {
 
 		return $this->path;
 	}
@@ -74,7 +76,7 @@ class AssetLocation {
 	 *
 	 * @return string The public URL for the directory containing the file.
 	 */
-	public function url() {
+	public function url(): string {
 
 		return $this->url;
 	}
