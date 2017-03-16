@@ -17,7 +17,7 @@ interface MetaBoxModel {
 	 *
 	 * @return string Meta box ID.
 	 */
-	public function id();
+	public function id(): string;
 
 	/**
 	 * Returns the meta box title.
@@ -26,5 +26,5 @@ interface MetaBoxModel {
 	 *
 	 * @return string Meta box title.
 	 */
-	public function title();
+	public function title(): string;
 }

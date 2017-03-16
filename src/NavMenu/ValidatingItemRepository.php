@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\NavMenu;
 
 use WP_Post;
@@ -21,7 +23,7 @@ final class ValidatingItemRepository implements ItemRepository {
 	 *
 	 * @return object[] The items for the sites with the given IDs.
 	 */
-	public function get_items_for_sites( array $site_ids ) {
+	public function get_items_for_sites( array $site_ids ): array {
 
 		if ( ! $site_ids ) {
 			return [];
@@ -38,11 +40,14 @@ final class ValidatingItemRepository implements ItemRepository {
 		$items = [];
 
 		foreach ( $site_ids as $site_id ) {
+
+			$site_id = (int) $site_id;
+
 			if ( empty( $language_names[ $site_id ] ) || ! \Inpsyde\MultilingualPress\site_exists( $site_id ) ) {
 				continue;
 			}
 
-			$item = $this->ensure_item( $menu_id, $site_id, $language_names[ $site_id ] );
+			$item = $this->ensure_item( $menu_id, (int) $site_id, $language_names[ $site_id ] );
 			if ( $item instanceof WP_Post ) {
 				$items[] = $this->prepare_item( $item, $site_id );
 			}
@@ -60,7 +65,7 @@ final class ValidatingItemRepository implements ItemRepository {
 	 *
 	 * @return WP_Post|null Post object on success, and null on failure.
 	 */
-	private function ensure_item( $menu_id, $site_id, $language_name ) {
+	private function ensure_item( int $menu_id, int $site_id, string $language_name ) {
 
 		return get_post( wp_update_nav_menu_item( $menu_id, 0, [
 			'menu-item-title'      => esc_attr( $language_name ),
@@ -79,7 +84,7 @@ final class ValidatingItemRepository implements ItemRepository {
 	 *
 	 * @return object Menu item object.
 	 */
-	private function prepare_item( WP_Post $item, $site_id ) {
+	private function prepare_item( WP_Post $item, int $site_id ) {
 
 		$item->object = 'mlp_language';
 

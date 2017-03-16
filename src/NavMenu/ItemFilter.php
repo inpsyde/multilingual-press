@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\NavMenu;
 
 use Inpsyde\MultilingualPress\API\Translations;
@@ -47,7 +49,7 @@ class ItemFilter {
 	 *
 	 * @return WP_Post[] Filtered nav menu items.
 	 */
-	public function filter_items( array $items ) {
+	public function filter_items( array $items ): array {
 
 		$translations = $this->translations->get_translations( [
 			'strict'       => false,
@@ -76,7 +78,7 @@ class ItemFilter {
 	 *
 	 * @return bool Whether or not the item was deleted.
 	 */
-	private function maybe_delete_obsolete_item( WP_Post $item ) {
+	private function maybe_delete_obsolete_item( WP_Post $item ): bool {
 
 		$site_id = $this->get_site_id( $item );
 		if ( ! $site_id ) {
@@ -101,11 +103,15 @@ class ItemFilter {
 	 *
 	 * @return bool Whether or not the item was prepared successfully.
 	 */
-	private function prepare_item( WP_Post $item, array $translations ) {
+	private function prepare_item( WP_Post $item, array $translations ): bool {
 
 		$site_id = $this->get_site_id( $item );
 		if ( ! $site_id ) {
 			return false;
+		}
+
+		if ( ! isset( $item->classes ) ) {
+			$item->classes = [];
 		}
 
 		if ( get_current_blog_id() === $site_id ) {
@@ -138,7 +144,7 @@ class ItemFilter {
 	 *
 	 * @return array The remote URL and the translation object for the according item.
 	 */
-	private function get_item_details( array $translations, $site_id ) {
+	private function get_item_details( array $translations, int $site_id ): array {
 
 		if ( empty( $translations[ $site_id ] ) ) {
 			return [
@@ -162,18 +168,20 @@ class ItemFilter {
 	 *
 	 * @return int Site ID.
 	 */
-	private function get_site_id( WP_Post $item ) {
+	private function get_site_id( WP_Post $item ): int {
+
+		$item_id = (int) $item->ID;
 
 		// TODO: Refactor to use a real cache.
-		if ( isset( $this->site_ids[ $item->ID ] ) ) {
-			return $this->site_ids[ $item->ID ];
+		if ( isset( $this->site_ids[ $item_id ] ) ) {
+			return $this->site_ids[ $item_id ];
 		}
 
 		$site_id = in_array( $item->type, [ 'language', 'custom' ], true )
 			? (int) get_post_meta( $item->ID, ItemRepository::META_KEY_SITE_ID, true )
 			: 0;
 
-		$this->site_ids[ $item->ID ] = $site_id;
+		$this->site_ids[ $item_id ] = $site_id;
 
 		return $site_id;
 	}

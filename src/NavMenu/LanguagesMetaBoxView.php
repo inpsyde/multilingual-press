@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\NavMenu;
 
 use Inpsyde\MultilingualPress\Common\Admin\MetaBoxModel;
@@ -44,7 +46,7 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 
 		?>
 		<div id="<?php echo esc_attr( $this->id ); ?>-container">
-			<?php $this->render_items(); ?>
+			<?php $this->render_language_checkboxes(); ?>
 			<?php $this->render_button_controls(); ?>
 		</div>
 		<?php
@@ -55,10 +57,10 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 	 *
 	 * @return void
 	 */
-	private function render_items() {
+	private function render_language_checkboxes() {
 
-		$items = \Inpsyde\MultilingualPress\get_available_language_names();
-		if ( ! $items ) {
+		$language_names = \Inpsyde\MultilingualPress\get_available_language_names();
+		if ( ! $language_names ) {
 			esc_html_e( 'No items.', 'multilingual-press' );
 
 			return;
@@ -66,7 +68,7 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 		?>
 		<div id="tabs-panel-<?php echo esc_attr( $this->id ); ?>" class="tabs-panel tabs-panel-active">
 			<ul id="<?php echo esc_attr( $this->id ); ?>" class="form-no-clear">
-				<?php array_walk( $items, [ $this, 'render_item' ] ); ?>
+				<?php array_walk( $language_names, [ $this, 'render_language_checkbox' ] ); ?>
 			</ul>
 		</div>
 		<?php
@@ -75,18 +77,18 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 	/**
 	 * Renders a single item according to the given arguments.
 	 *
-	 * @param string $title Item title.
-	 * @param string $value Item value.
+	 * @param string $language_name Language name.
+	 * @param int    $site_id       Site ID.
 	 *
 	 * @return void
 	 */
-	private function render_item( $title, $value ) {
+	private function render_language_checkbox( string $language_name, int $site_id ) {
 
 		?>
 		<li>
 			<label class="menu-item-title">
-				<input type="checkbox" value="<?php echo esc_attr( $value ); ?>" class="menu-item-checkbox">
-				&nbsp;<?php echo esc_attr( $title ); ?>
+				<input type="checkbox" value="<?php printf( '%d', $site_id ) ?>" class="menu-item-checkbox">
+				&nbsp;<?php echo esc_attr( $language_name ); ?>
 			</label>
 		</li>
 		<?php
@@ -134,7 +136,7 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 	 *
 	 * @return string URL.
 	 */
-	private function get_select_all_url() {
+	private function get_select_all_url(): string {
 
 		$url = add_query_arg( [
 			// Remove...

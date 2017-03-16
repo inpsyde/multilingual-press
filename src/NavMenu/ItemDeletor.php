@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\NavMenu;
 
 use wpdb;
@@ -38,7 +40,7 @@ class ItemDeletor {
 	 *
 	 * @return int Number of deleted nav items.
 	 */
-	public function delete_items_for_deleted_site( $deleted_site_id ) {
+	public function delete_items_for_deleted_site( $deleted_site_id ): int {
 
 		$deleted = 0;
 

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\NavMenu;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -82,7 +84,7 @@ class AJAXHandler {
 	 *
 	 * @return bool Whether or not the request is valid.
 	 */
-	private function is_request_valid() {
+	private function is_request_valid(): bool {
 
 		return (
 			current_user_can( 'edit_theme_options' )

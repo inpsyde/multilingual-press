@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\NavMenu;
 
 use Inpsyde\MultilingualPress\Common\Admin\MetaBoxModel;
@@ -19,7 +21,7 @@ final class LanguagesMetaBoxModel implements MetaBoxModel {
 	 *
 	 * @return string Meta box ID.
 	 */
-	public function id() {
+	public function id(): string {
 
 		return 'mlp-languages';
 	}
@@ -31,7 +33,7 @@ final class LanguagesMetaBoxModel implements MetaBoxModel {
 	 *
 	 * @return string Meta box title.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return __( 'Languages', 'multilingual-press' );
 	}

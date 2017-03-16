@@ -28,5 +28,5 @@ interface ItemRepository {
 	 *
 	 * @return object[] The items for the sites with the given IDs.
 	 */
-	public function get_items_for_sites( array $site_ids );
+	public function get_items_for_sites( array $site_ids ): array;
 }

@@ -189,7 +189,10 @@ function get_available_language_names( $related = true, $include_current_site = 
 	$languages = [];
 
 	foreach ( $language_settings as $site_id => $language_data ) {
-		if ( $related_sites && ! in_array( $site_id, $related_sites ) ) {
+
+		$site_id  = (int) $site_id;
+
+		if ( $related_sites && ! in_array( $site_id, $related_sites, true ) ) {
 			continue;
 		}
 
@@ -692,7 +695,7 @@ function replace_language_in_language_attributes( $language_attributes ) {
  * @param int $site_id    Site ID.
  * @param int $network_id Optional. Network ID. Defaults to 0.
  *
- * @return bool Wheter or not the site with the given ID exists and is not marked as deleted.
+ * @return bool Whether or not the site with the given ID exists and is not marked as deleted.
  */
 function site_exists( $site_id, $network_id = 0 ) {
 
