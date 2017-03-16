@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionViewModel;
@@ -46,7 +48,7 @@ final class SiteSettings implements SiteSettingsSectionViewModel {
 	 *
 	 * @return string The ID for the site settings section.
 	 */
-	public function id() {
+	public function id(): string {
 
 		return static::ID;
 	}
@@ -60,7 +62,7 @@ final class SiteSettings implements SiteSettingsSectionViewModel {
 	 *
 	 * @return bool Whether or not the site setting markup was rendered successfully.
 	 */
-	public function render_view( $site_id ) {
+	public function render_view( int $site_id ): bool {
 
 		return $this->view->render( $site_id );
 	}
@@ -72,7 +74,7 @@ final class SiteSettings implements SiteSettingsSectionViewModel {
 	 *
 	 * @return string The markup for the site settings section.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return '';
 	}

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\Languages;
@@ -52,7 +54,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function markup( $site_id ) {
+	public function markup( int $site_id ): string {
 
 		return sprintf(
 			'<select id="%2$s" name="blog[%3$s]" autocomplete="off">%1$s</select>',
@@ -69,7 +71,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
@@ -85,7 +87,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for all option tags.
 	 */
-	private function get_options( $site_id ) {
+	private function get_options( int $site_id ): string {
 
 		$options = '<option value="-1">' . esc_html__( 'Choose language', 'multilingual-press' ) . '</option>';
 
@@ -123,7 +125,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The name of the given language.
 	 */
-	private function get_language_name( $language ) {
+	private function get_language_name( $language ): string {
 
 		return implode( '/', array_filter( array_unique( [
 			empty( $language->english_name ) ? '' : $language->english_name,

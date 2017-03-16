@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core;
 
 use Inpsyde\MultilingualPress\Common\BasePathAdapter;
@@ -26,7 +28,7 @@ final class CachingBasePathAdapter implements BasePathAdapter {
 	 *
 	 * @return string The correct basedir path of the current site's uploads folder.
 	 */
-	public function basedir() {
+	public function basedir(): string {
 
 		$uploads = $this->get_uploads_dir();
 
@@ -40,7 +42,7 @@ final class CachingBasePathAdapter implements BasePathAdapter {
 	 *
 	 * @return string The correct baseurl path of the current site's uploads folder.
 	 */
-	public function baseurl() {
+	public function baseurl(): string {
 
 		$uploads = $this->get_uploads_dir();
 
@@ -64,7 +66,7 @@ final class CachingBasePathAdapter implements BasePathAdapter {
 	 *
 	 * @return string[] The current site's uploads folder paths.
 	 */
-	private function get_uploads_dir() {
+	private function get_uploads_dir(): array {
 
 		$current_site_id = get_current_blog_id();
 

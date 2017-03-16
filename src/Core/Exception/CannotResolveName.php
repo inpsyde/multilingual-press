@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core\Exception;
 
 use Exception;
@@ -19,9 +21,9 @@ class CannotResolveName extends Exception {
 	 *
 	 * @param string $name The name of the value or factory callback.
 	 *
-	 * @return static Exception object.
+	 * @return CannotResolveName Exception object.
 	 */
-	public static function for_name( $name ) {
+	public static function for_name( string $name ): CannotResolveName {
 
 		return new static( sprintf(
 			'Cannot resolve "%s". MultilingualPress has not yet been initialised.',

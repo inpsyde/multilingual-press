@@ -57,7 +57,7 @@ class SiteSetting {
 
 		add_action( $render_hook, function ( $site_id ) {
 
-			( new SiteSettingSingleView( $this->model, $this->check_user ) )->render( $site_id );
+			( new SiteSettingSingleView( $this->model, $this->check_user ) )->render( (int) $site_id );
 		} );
 
 		if ( $update_hook ) {

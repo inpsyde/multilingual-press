@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
@@ -90,7 +92,7 @@ class PluginSettingsUpdater {
 	 *
 	 * @return void
 	 */
-	private function update_module( $id ) {
+	private function update_module( string $id ) {
 
 		if ( empty( $_POST['multilingualpress_modules'][ $id ] ) ) {
 			$this->module_manager->deactivate_module( $id );

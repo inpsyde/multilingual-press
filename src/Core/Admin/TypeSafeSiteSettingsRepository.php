@@ -45,9 +45,9 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return string The alternative language title of the site with the given ID, or the current site.
 	 */
-	public function get_alternative_language_title( $site_id = 0 ) {
+	public function get_alternative_language_title( int $site_id = 0 ): string {
 
-		$site_id = (int) ( $site_id ?: get_current_blog_id() );
+		$site_id = $site_id ?: (int) get_current_blog_id();
 
 		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 
@@ -63,9 +63,9 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return string The flag image URL of the site with the given ID, or the current site.
 	 */
-	public function get_flag_image_url( $site_id = 0 ) {
+	public function get_flag_image_url( int $site_id = 0 ): string {
 
-		$site_id = (int) ( $site_id ?: get_current_blog_id() );
+		$site_id =  $site_id ?: (int) get_current_blog_id();
 
 		return (string) get_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, '' );
 	}
@@ -77,7 +77,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return array The settings data.
 	 */
-	public function get_settings() {
+	public function get_settings(): array {
 
 		return (array) get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 	}
@@ -91,7 +91,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return int[] An array with the IDs of all sites with an assigned language
 	 */
-	public function get_site_ids( $exclude = [] ) {
+	public function get_site_ids( $exclude = [] ): array {
 
 		$settings = (array) get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 		if ( ! $settings ) {
@@ -113,9 +113,9 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return string The site language of the site with the given ID, or the current site.
 	 */
-	public function get_site_language( $site_id = 0 ) {
+	public function get_site_language( int $site_id = 0 ): string {
 
-		$site_id = (int) ( $site_id ?: get_current_blog_id() );
+		$site_id =  $site_id ?: (int) get_current_blog_id();
 
 		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 
@@ -140,11 +140,11 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the alternative language title was set successfully.
 	 */
-	public function set_alternative_language_title( $title, $site_id = 0 ) {
+	public function set_alternative_language_title( string $title, int $site_id = 0 ): bool {
 
 		return $this->update_setting(
 			SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE,
-			(string) $title,
+			$title,
 			$site_id
 		);
 	}
@@ -159,11 +159,15 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the flag image URL was set successfully.
 	 */
-	public function set_flag_image_url( $url, $site_id = 0 ) {
+	public function set_flag_image_url( string $url, int $site_id = 0 ): bool {
 
 		$site_id = (int) ( $site_id ?: get_current_blog_id() );
 
-		return update_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, esc_url( (string) $url ) );
+		return (bool) update_blog_option(
+			$site_id,
+			SiteSettingsRepository::OPTION_FLAG_IMAGE_URL,
+			esc_url( $url )
+		);
 	}
 
 	/**
@@ -176,11 +180,11 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the language was set successfully.
 	 */
-	public function set_language( $language, $site_id = 0 ) {
+	public function set_language( string $language, int $site_id = 0 ): bool {
 
 		return $this->update_setting(
 			SiteSettingsRepository::KEY_LANGUAGE,
-			(string) $language,
+			$language,
 			$site_id
 		);
 	}
@@ -195,9 +199,9 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the language was set successfully.
 	 */
-	public function set_relationships( array $site_ids, $base_site_id = 0 ) {
+	public function set_relationships( array $site_ids, int $base_site_id = 0 ): bool {
 
-		$base_site_id = (int) ( $base_site_id ?: get_current_blog_id() );
+		$base_site_id = $base_site_id ?: (int) get_current_blog_id();
 
 		return (bool) $this->site_relations->set_relationships( $base_site_id, $site_ids );
 	}
@@ -211,9 +215,9 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the settings data was set successfully.
 	 */
-	public function set_settings( array $settings ) {
+	public function set_settings( array $settings ): bool {
 
-		return update_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, $settings );
+		return (bool) update_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, $settings );
 	}
 
 	/**
@@ -223,11 +227,11 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 * @param mixed  $value   Setting value.
 	 * @param int    $site_id Optional. Site ID. Defaults to 0.
 	 *
-	 * @return bool Whether or not the setting was upadted successfully.
+	 * @return bool Whether or not the setting was updated successfully.
 	 */
-	private function update_setting( $key, $value, $site_id = 0 ) {
+	private function update_setting( string $key, $value, int $site_id = 0 ): bool {
 
-		$site_id = (int) ( $site_id ?: get_current_blog_id() );
+		$site_id = $site_id ?: (int) get_current_blog_id();
 
 		$settings = $this->get_settings();
 

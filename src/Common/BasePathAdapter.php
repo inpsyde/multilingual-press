@@ -17,7 +17,7 @@ interface BasePathAdapter {
 	 *
 	 * @return string The correct basedir path of the current site's uploads folder.
 	 */
-	public function basedir();
+	public function basedir(): string;
 
 	/**
 	 * Returns the correct baseurl path of the current site's uploads folder.
@@ -26,5 +26,5 @@ interface BasePathAdapter {
 	 *
 	 * @return string The correct baseurl path of the current site's uploads folder.
 	 */
-	public function baseurl();
+	public function baseurl(): string;
 }

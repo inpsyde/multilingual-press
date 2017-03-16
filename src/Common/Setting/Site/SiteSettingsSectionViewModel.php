@@ -17,7 +17,7 @@ interface SiteSettingsSectionViewModel {
 	 *
 	 * @return string The ID for the site settings section.
 	 */
-	public function id();
+	public function id(): string;
 
 	/**
 	 * Returns the markup for the site settings section.
@@ -28,7 +28,7 @@ interface SiteSettingsSectionViewModel {
 	 *
 	 * @return bool Whether or not the site setting markup was rendered successfully.
 	 */
-	public function render_view( $site_id );
+	public function render_view( int $site_id ): bool;
 
 	/**
 	 * Returns the title of the site settings section.
@@ -37,5 +37,5 @@ interface SiteSettingsSectionViewModel {
 	 *
 	 * @return string The markup for the site settings section.
 	 */
-	public function title();
+	public function title(): string;
 }

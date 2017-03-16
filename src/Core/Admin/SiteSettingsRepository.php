@@ -91,7 +91,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @return string The alternative language title of the site with the given ID, or the current site.
 	 */
-	public function get_alternative_language_title( $site_id = 0 );
+	public function get_alternative_language_title( int $site_id = 0 ): string;
 
 	/**
 	 * Returns the flag image URL of the site with the given ID, or the current site.
@@ -102,7 +102,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @return string The flag image URL of the site with the given ID, or the current site.
 	 */
-	public function get_flag_image_url( $site_id = 0 );
+	public function get_flag_image_url( int $site_id = 0 ): string;
 
 	/**
 	 * Returns the complete settings data.
@@ -111,7 +111,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @return array The settings data.
 	 */
-	public function get_settings();
+	public function get_settings(): array;
 
 	/**
 	 * Returns an array with the IDs of all sites with an assigned language, minus the given IDs, if any.
@@ -122,7 +122,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @return int[] An array with the IDs of all sites with an assigned language
 	 */
-	public function get_site_ids( $exclude = [] );
+	public function get_site_ids( $exclude = [] ): array;
 
 	/**
 	 * Returns the site language of the site with the given ID, or the current site.
@@ -133,7 +133,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @return string The site language of the site with the given ID, or the current site.
 	 */
-	public function get_site_language( $site_id = 0 );
+	public function get_site_language( int $site_id = 0 ): string;
 
 	/**
 	 * Sets the alternative language title for the site with the given ID, or the current site.
@@ -145,7 +145,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the alternative language title was set successfully.
 	 */
-	public function set_alternative_language_title( $title, $site_id = 0 );
+	public function set_alternative_language_title( string $title, int $site_id = 0 ): bool;
 
 	/**
 	 * Sets the flag image URL for the site with the given ID, or the current site.
@@ -157,7 +157,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the flag image URL was set successfully.
 	 */
-	public function set_flag_image_url( $url, $site_id = 0 );
+	public function set_flag_image_url( string $url, int $site_id = 0 ): bool;
 
 	/**
 	 * Sets the language for the site with the given ID, or the current site.
@@ -169,7 +169,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the language was set successfully.
 	 */
-	public function set_language( $language, $site_id = 0 );
+	public function set_language( string $language, int $site_id = 0 ): bool;
 
 	/**
 	 * Sets the relationships for the site with the given ID, or the current site.
@@ -181,7 +181,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the relationships were set successfully.
 	 */
-	public function set_relationships( array $site_ids, $base_site_id = 0 );
+	public function set_relationships( array $site_ids, int $base_site_id = 0 ): bool;
 
 	/**
 	 * Sets the given settings data.
@@ -192,5 +192,5 @@ interface SiteSettingsRepository {
 	 *
 	 * @return bool Whether or not the settings data was set successfully.
 	 */
-	public function set_settings( array $settings );
+	public function set_settings( array $settings ): bool;
 }

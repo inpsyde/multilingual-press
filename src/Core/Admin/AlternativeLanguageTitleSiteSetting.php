@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
@@ -43,7 +45,7 @@ final class AlternativeLanguageTitleSiteSetting implements SiteSettingViewModel 
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function markup( $site_id ) {
+	public function markup( int $site_id ): string {
 
 		return sprintf(
 			'<input type="text" name="%3$s" value="%1$s" class="regular-text" id="%2$s"><p class="description">%4$s</p>',
@@ -64,7 +66,7 @@ final class AlternativeLanguageTitleSiteSetting implements SiteSettingViewModel 
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',

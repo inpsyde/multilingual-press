@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core;
 
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
@@ -307,7 +309,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 						return $sites
 							? sprintf(
 								'<div class="mlp-site-relations">%s</div>',
-								join( '<br>', array_map( 'esc_html', $sites ) )
+								implode( '<br>', array_map( 'esc_html', $sites ) )
 							)
 							: __( 'none', 'multilingual-press' );
 					}

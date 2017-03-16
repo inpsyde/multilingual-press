@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
@@ -62,6 +64,8 @@ class SiteDataDeletor {
 	 * @return void
 	 */
 	public function delete_site_data( $site_id ) {
+
+		$site_id = (int) $site_id;
 
 		$this->content_relations->delete_relations_for_site( $site_id );
 

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core\Exception;
 
 use Exception;
@@ -20,9 +22,9 @@ class PropertyManipulationNotAllowed extends Exception {
 	 * @param string $name   The name of the property.
 	 * @param string $action Optional. Action to be performed. Defaults to 'set'.
 	 *
-	 * @return static Exception object.
+	 * @return PropertyManipulationNotAllowed Exception object.
 	 */
-	public static function for_name( $name, $action = 'set' ) {
+	public static function for_name( string $name, string $action = 'set' ): PropertyManipulationNotAllowed {
 
 		return new static( sprintf(
 			'Cannot %2$s "%1$s". Manipulating a property is not allowed.',

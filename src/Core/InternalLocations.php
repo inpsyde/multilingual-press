@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core;
 
 use Inpsyde\MultilingualPress\Common\Locations;
@@ -26,9 +28,9 @@ final class InternalLocations implements Locations {
 	 * @param string $path Path data.
 	 * @param string $url  URL data.
 	 *
-	 * @return static Locations instance.
+	 * @return Locations Locations instance.
 	 */
-	public function add( $name, $path, $url ) {
+	public function add( string $name, string $path, string $url ): Locations {
 
 		$this->locations[ $name ] = [
 			Locations::TYPE_PATH => rtrim( $path, '/' ),
@@ -46,7 +48,7 @@ final class InternalLocations implements Locations {
 	 *
 	 * @return string Location data.
 	 */
-	public function get( $name, $type ) {
+	public function get( string $name, string $type ): string {
 
 		return empty( $this->locations[ $name ][ $type ] )
 			? ''
@@ -62,7 +64,7 @@ final class InternalLocations implements Locations {
 	 *
 	 * @return bool Whether or not a location with the given name exists.
 	 */
-	public function has( $name ) {
+	public function has( string $name ): bool {
 
 		return array_key_exists( $name, $this->locations );
 	}

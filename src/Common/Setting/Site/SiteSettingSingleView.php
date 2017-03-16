@@ -55,7 +55,7 @@ final class SiteSettingSingleView implements SiteSettingView  {
 				<?php echo $this->model->title(); ?>
 			</th>
 			<td>
-				<?php echo $this->model->markup( $site_id ); ?>
+				<?php echo $this->model->markup( (int) $site_id ); ?>
 			</td>
 		</tr>
 		<?php

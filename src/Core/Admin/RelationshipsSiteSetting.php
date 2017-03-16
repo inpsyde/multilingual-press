@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
@@ -52,7 +54,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function markup( $site_id ) {
+	public function markup( int $site_id ): string {
 
 		return $this->get_relationships( $site_id ) . sprintf(
 				'<p class="description">%s</p>',
@@ -70,7 +72,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
@@ -86,7 +88,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @return string The markup for all relationships.
 	 */
-	private function get_relationships( $base_site_id ) {
+	private function get_relationships( int $base_site_id ): string {
 
 		$site_ids = $this->repository->get_site_ids( $base_site_id );
 		if ( ! $site_ids ) {

@@ -81,7 +81,7 @@ final class SiteSettingsSectionView implements SiteSettingView {
 			 */
 			do_action( static::ACTION_BEFORE . "_{$model_id}", $site_id );
 
-			$this->model->render_view( $site_id );
+			$this->model->render_view( (int) $site_id );
 
 			/**
 			 * Fires right after the settings have been rendered.

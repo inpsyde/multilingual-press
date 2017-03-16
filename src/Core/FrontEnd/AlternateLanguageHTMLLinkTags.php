@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core\FrontEnd;
 
 use Inpsyde\MultilingualPress\API\Translations;
@@ -37,7 +39,7 @@ class AlternateLanguageHTMLLinkTags {
 	 *
 	 * @return bool Whether or not link tags have been rendered.
 	 */
-	public function render() {
+	public function render(): bool {
 
 		$translations = $this->translations->get_unfiltered_translations();
 		if ( ! $translations ) {

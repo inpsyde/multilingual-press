@@ -285,7 +285,7 @@ function get_default_content_id( $content_id ) {
  */
 function get_flag_url_for_site( $site_id = 0 ) {
 
-	$site_id = (int) $site_id ?: get_current_blog_id();
+	$site_id = (int) ( $site_id ?: get_current_blog_id() );
 
 	$type_factory = MultilingualPress::resolve( 'multilingualpress.type_factory' );
 
@@ -460,6 +460,8 @@ function get_linked_elements( array $args = [] ) {
  * @return string The MultilingualPress language for the site with the given ID.
  */
 function get_site_language( $site_id = 0, $language_only = false ) {
+
+	$site_id = (int) $site_id;
 
 	$lang = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_site_language( $site_id );
 	if ( ! $lang ) {

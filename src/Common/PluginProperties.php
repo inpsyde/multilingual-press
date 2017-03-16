@@ -19,7 +19,7 @@ interface PluginProperties extends ArrayAccess {
 	 *
 	 * @return string The base name of the plugin.
 	 */
-	public function plugin_base_name();
+	public function plugin_base_name(): string;
 
 	/**
 	 * Returns the absolute path of the plugin root folder.
@@ -28,7 +28,7 @@ interface PluginProperties extends ArrayAccess {
 	 *
 	 * @return string The absolute path of the plugin root folder.
 	 */
-	public function plugin_dir_path();
+	public function plugin_dir_path(): string;
 
 	/**
 	 * Returns the URL of the plugin root folder.
@@ -37,7 +37,7 @@ interface PluginProperties extends ArrayAccess {
 	 *
 	 * @return string The URL of the plugin root folder.
 	 */
-	public function plugin_dir_url();
+	public function plugin_dir_url(): string;
 
 	/**
 	 * Returns the absolute path of main plugin file.
@@ -46,7 +46,7 @@ interface PluginProperties extends ArrayAccess {
 	 *
 	 * @return string The absolute path of main plugin file.
 	 */
-	public function plugin_file_path();
+	public function plugin_file_path(): string;
 
 	/**
 	 * Returns the plugin name as given in the plugin headers.
@@ -55,7 +55,7 @@ interface PluginProperties extends ArrayAccess {
 	 *
 	 * @return string The plugin name.
 	 */
-	public function plugin_name();
+	public function plugin_name(): string;
 
 	/**
 	 * Returns the URL of the plugin website.
@@ -64,7 +64,7 @@ interface PluginProperties extends ArrayAccess {
 	 *
 	 * @return string The URL of the plugin website
 	 */
-	public function plugin_website();
+	public function plugin_website(): string;
 
 	/**
 	 * Returns the plugin version.
@@ -73,7 +73,7 @@ interface PluginProperties extends ArrayAccess {
 	 *
 	 * @return string The plugin version.
 	 */
-	public function version();
+	public function version(): string;
 
 	/**
 	 * Returns the plugin text domain.
@@ -82,7 +82,7 @@ interface PluginProperties extends ArrayAccess {
 	 *
 	 * @return string The plugin text domain.
 	 */
-	public function text_domain();
+	public function text_domain(): string;
 
 	/**
 	 * Returns the absolute path of the folder with the plugin translation files.
@@ -91,5 +91,5 @@ interface PluginProperties extends ArrayAccess {
 	 *
 	 * @return string The absolute path of the folder with the plugin translation files.
 	 */
-	public function text_domain_path();
+	public function text_domain_path(): string;
 }

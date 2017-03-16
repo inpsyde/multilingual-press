@@ -98,7 +98,7 @@ final class MultilingualPress {
 	public static function resolve( $name ) {
 
 		if ( ! static::$container ) {
-			throw CannotResolveName::for_name( $name );
+			throw CannotResolveName::for_name( (string) $name );
 		}
 
 		return static::$container[ $name ];

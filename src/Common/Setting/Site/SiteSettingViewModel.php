@@ -19,7 +19,7 @@ interface SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function markup( $site_id );
+	public function markup( int $site_id ): string;
 
 	/**
 	 * Returns the title of the site setting.
@@ -28,5 +28,5 @@ interface SiteSettingViewModel {
 	 *
 	 * @return string The markup for the site setting.
 	 */
-	public function title();
+	public function title(): string;
 }

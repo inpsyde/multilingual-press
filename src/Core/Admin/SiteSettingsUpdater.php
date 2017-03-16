@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\Languages;
@@ -65,7 +67,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @return void
 	 */
-	public function define_initial_settings( $site_id ) {
+	public function define_initial_settings( int $site_id ) {
 
 		$this->update_wplang( $site_id );
 
@@ -96,7 +98,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @return void
 	 */
-	public function update_settings( $site_id ) {
+	public function update_settings( int $site_id ) {
 
 		$this->update_language( $site_id );
 
@@ -121,7 +123,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @return string Language.
 	 */
-	private function get_language() {
+	private function get_language(): string {
 
 		if (
 			empty( $_POST['blog'][ SiteSettingsRepository::NAME_LANGUAGE ] )
@@ -141,7 +143,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @return void
 	 */
-	private function update_alternative_language_title( $site_id ) {
+	private function update_alternative_language_title( int $site_id ) {
 
 		$title = empty( $_POST[ SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE ] )
 			? ''
@@ -157,7 +159,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @return void
 	 */
-	private function update_flag_image_url( $site_id ) {
+	private function update_flag_image_url( int $site_id ) {
 
 		$url = empty( $_POST[ SiteSettingsRepository::NAME_FLAG_IMAGE_URL ] )
 			? ''
@@ -173,7 +175,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @return void
 	 */
-	private function update_language( $site_id ) {
+	private function update_language( int $site_id ) {
 
 		$this->repository->set_language( $this->get_language(), $site_id );
 	}
@@ -185,7 +187,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @return void
 	 */
-	private function update_relationships( $site_id ) {
+	private function update_relationships( int $site_id ) {
 
 		$relationships = empty( $_POST[ SiteSettingsRepository::NAME_RELATIONSHIPS ] )
 			? []
@@ -201,7 +203,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @return void
 	 */
-	private function update_wplang( $site_id ) {
+	private function update_wplang( int $site_id ) {
 
 		$language = $this->get_language();
 		if ( ! $language ) {

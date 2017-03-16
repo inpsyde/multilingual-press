@@ -37,9 +37,9 @@ interface Locations {
 	 * @param string $path Path data.
 	 * @param string $url  URL data.
 	 *
-	 * @return static Locations instance.
+	 * @return Locations Locations instance.
 	 */
-	public function add( $name, $path, $url );
+	public function add( string $name, string $path, string $url ): Locations;
 
 	/**
 	 * Returns the location data according to the given arguments.
@@ -49,7 +49,7 @@ interface Locations {
 	 *
 	 * @return string Location data.
 	 */
-	public function get( $name, $type );
+	public function get( string $name, string $type ): string;
 
 	/**
 	 * Checks if a location with the given name exists.
@@ -60,5 +60,5 @@ interface Locations {
 	 *
 	 * @return bool Whether or not a location with the given name exists.
 	 */
-	public function has( $name );
+	public function has( string $name ): bool;
 }

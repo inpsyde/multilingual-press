@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Core;
 
 use Inpsyde\MultilingualPress\Common\PluginProperties;
@@ -57,9 +59,9 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return bool Whether or not a property with the given name exists.
 	 */
-	public function offsetExists( $name ) {
+	public function offsetExists( $name ): bool {
 
-		return array_key_exists( $name, $this->properties );
+		return array_key_exists( (string) $name, $this->properties );
 	}
 
 	/**
@@ -98,7 +100,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 */
 	public function offsetSet( $name, $value ) {
 
-		throw PropertyManipulationNotAllowed::for_name( $name, 'set' );
+		throw PropertyManipulationNotAllowed::for_name( (string) $name, 'set' );
 	}
 
 	/**
@@ -116,7 +118,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 */
 	public function offsetUnset( $name ) {
 
-		throw PropertyManipulationNotAllowed::for_name( $name, 'unset' );
+		throw PropertyManipulationNotAllowed::for_name( (string) $name, 'unset' );
 	}
 
 	/**
@@ -126,7 +128,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return string The base name of the plugin.
 	 */
-	public function plugin_base_name() {
+	public function plugin_base_name(): string {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}
@@ -138,7 +140,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return string The absolute path of the plugin root folder.
 	 */
-	public function plugin_dir_path() {
+	public function plugin_dir_path(): string {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}
@@ -150,7 +152,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return string The URL of the plugin root folder.
 	 */
-	public function plugin_dir_url() {
+	public function plugin_dir_url(): string {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}
@@ -162,7 +164,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return string The absolute path of main plugin file.
 	 */
-	public function plugin_file_path() {
+	public function plugin_file_path(): string {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}
@@ -174,7 +176,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return string The plugin name.
 	 */
-	public function plugin_name() {
+	public function plugin_name(): string {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}
@@ -186,7 +188,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return string The URL of the plugin website
 	 */
-	public function plugin_website() {
+	public function plugin_website(): string {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}
@@ -198,7 +200,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return string The plugin version.
 	 */
-	public function version() {
+	public function version(): string {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}
@@ -210,7 +212,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return string The plugin text domain.
 	 */
-	public function text_domain() {
+	public function text_domain(): string {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}
@@ -222,7 +224,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return string The absolute path of the folder with the plugin translation files.
 	 */
-	public function text_domain_path() {
+	public function text_domain_path(): string {
 
 		return $this->offsetGet( __FUNCTION__ );
 	}
