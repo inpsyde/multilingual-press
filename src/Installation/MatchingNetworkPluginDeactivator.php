@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Installation;
 
 /**
@@ -19,7 +21,7 @@ final class MatchingNetworkPluginDeactivator implements NetworkPluginDeactivator
 	 *
 	 * @return string[] An array with all plugins that were deactivated.
 	 */
-	public function deactivate_plugins( array $plugins ) {
+	public function deactivate_plugins( array $plugins ): array {
 
 		$active_plugins = (array) get_network_option( null, NetworkPluginDeactivator::OPTION, [] );
 
@@ -43,7 +45,7 @@ final class MatchingNetworkPluginDeactivator implements NetworkPluginDeactivator
 	 *
 	 * @return array The base names of plugins that are to be deactivated.
 	 */
-	private function get_plugins_to_deactivate( array $active_plugins, array $plugins ) {
+	private function get_plugins_to_deactivate( array $active_plugins, array $plugins ): array {
 
 		return array_filter( $active_plugins, function ( $active_plugin ) use ( $plugins ) {
 

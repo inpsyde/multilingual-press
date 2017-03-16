@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Installation;
 
 use Inpsyde\MultilingualPress\Common\PluginProperties;
@@ -154,7 +156,7 @@ class SystemChecker {
 	 *
 	 * @return int The status of the installation check.
 	 */
-	public function check_installation() {
+	public function check_installation(): int {
 
 		/**
 		 * Filters if the system check should be forced regardless of the context.
@@ -205,7 +207,7 @@ class SystemChecker {
 	 *
 	 * @return int The status of the version check.
 	 */
-	public function check_version( VersionNumber $installed_version, VersionNumber $current_version ) {
+	public function check_version( VersionNumber $installed_version, VersionNumber $current_version ): int {
 
 		if ( version_compare( $installed_version, $current_version, '>=' ) ) {
 			return static::VERSION_OK;
@@ -223,7 +225,7 @@ class SystemChecker {
 	 *
 	 * @return bool Whether or not the context is valid.
 	 */
-	private function is_context_valid() {
+	private function is_context_valid(): bool {
 
 		if ( wp_doing_ajax() ) {
 			return false;
@@ -244,7 +246,7 @@ class SystemChecker {
 	private function check_php_version() {
 
 		$current_version = $this->type_factory->create_version_number( [
-			phpversion(),
+			PHP_VERSION,
 		] );
 
 		$required_version = $this->type_factory->create_version_number( [

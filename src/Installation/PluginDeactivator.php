@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Installation;
 
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
@@ -36,7 +38,7 @@ class PluginDeactivator {
 	 * @param string $plugin_name      The name of the plugin.
 	 * @param string[] $errors         Optional. Error messages. Defaults to empty array.
 	 */
-	public function __construct( $plugin_base_name, $plugin_name, array $errors = [] ) {
+	public function __construct( string $plugin_base_name, string $plugin_name, array $errors = [] ) {
 
 		$this->plugin_base_name = (string) $plugin_base_name;
 
@@ -88,17 +90,7 @@ class PluginDeactivator {
 	 *
 	 * @return string Error messages.
 	 */
-	private function get_errors_as_string() {
-
-		if ( ! $this->errors ) {
-			return '';
-		}
-
-		$errors = array_map( function ( $error ) {
-
-			return "<p>$error</p>";
-		}, $this->errors );
-
-		return implode( '', $errors );
+	private function get_errors_as_string(): string {
+		return $this->errors ? '<p>' . implode( '</p><p>', $this->errors ) . '</p>' : '';
 	}
 }

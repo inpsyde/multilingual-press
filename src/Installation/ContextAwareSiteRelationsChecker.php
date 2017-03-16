@@ -1,12 +1,14 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Installation;
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Admin\AdminNotice;
 
 /**
- * Context-aware site relations chcker implementation.
+ * Context-aware site relations checker implementation.
  *
  * @package Inpsyde\MultilingualPress\Installation
  * @since   3.0.0
@@ -37,7 +39,7 @@ final class ContextAwareSiteRelationsChecker implements SiteRelationsChecker {
 	 *
 	 * @return bool Whether or not there are at least two sites related to each other.
 	 */
-	public function check_relations() {
+	public function check_relations(): bool {
 
 		if ( wp_doing_ajax() ) {
 			return true;

@@ -17,5 +17,5 @@ interface SiteRelationsChecker {
 	 *
 	 * @return bool Whether or not there are at least two sites related to each other.
 	 */
-	public function check_relations();
+	public function check_relations(): bool;
 }

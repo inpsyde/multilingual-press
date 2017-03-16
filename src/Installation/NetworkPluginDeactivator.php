@@ -28,5 +28,5 @@ interface NetworkPluginDeactivator {
 	 *
 	 * @return string[] An array with all plugins that were deactivated.
 	 */
-	public function deactivate_plugins( array $plugins );
+	public function deactivate_plugins( array $plugins ): array;
 }
