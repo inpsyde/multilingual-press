@@ -313,7 +313,7 @@ final class CachingTranslations implements Translations {
 	 */
 	private function normalize_arguments( array $args ): array {
 
-		$args = wp_parse_args( $args, [
+		$args = array_merge( [
 			'content_id'       => $this->request->queried_object_id(),
 			'include_base'     => false,
 			'post_type'        => $this->request->post_type(),
@@ -322,7 +322,7 @@ final class CachingTranslations implements Translations {
 			'strict'           => true,
 			'suppress_filters' => false,
 			'type'             => $this->request->type(),
-		] );
+		], $args );
 
 		/**
 		 * Filters the arguments required to fetch the translations.

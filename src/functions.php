@@ -352,13 +352,13 @@ function get_language_by_http_name(
  */
 function get_linked_elements( array $args = [] ) {
 
-	$args = wp_parse_args( $args, [
+	$args = array_merge( [
 		'link_text'         => 'native',
 		'display_flag'      => false,
 		'sort'              => 'priority',
 		'show_current_blog' => false,
 		'strict'            => false,
-	] );
+	], $args );
 
 	$output = '';
 
