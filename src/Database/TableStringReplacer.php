@@ -27,5 +27,5 @@ interface TableStringReplacer {
 		array $columns,
 		string $search,
 		string $replacement
-	) : int;
+	): int;
 }

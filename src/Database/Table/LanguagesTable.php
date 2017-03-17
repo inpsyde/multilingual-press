@@ -1823,7 +1823,7 @@ final class LanguagesTable implements Table {
 	 *
 	 * @return string The SQL string for all (unique) keys.
 	 */
-	public function keys_sql():string {
+	public function keys_sql(): string {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
 		return 'KEY http_name (http_name)';

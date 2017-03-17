@@ -29,7 +29,7 @@ final class FallbackNonceFactory implements NonceFactory {
 	 */
 	public function __construct( $default_class = NonceFactory::DEFAULT_CLASS ) {
 
-		$this->factory = GenericFactory::with_default_class( NonceFactory::BASE, (string) $default_class );
+		$this->factory = GenericFactory::with_default_class( NonceFactory::BASE, $default_class );
 	}
 
 	/**
@@ -47,7 +47,7 @@ final class FallbackNonceFactory implements NonceFactory {
 	public function create( array $args = [], string $class = '' ): Nonce {
 
 		try {
-			$object = $this->factory->create( $args, (string) $class );
+			$object = $this->factory->create( $args, $class );
 		} catch ( Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				throw $e;

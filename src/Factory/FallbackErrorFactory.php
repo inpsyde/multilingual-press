@@ -31,7 +31,7 @@ final class FallbackErrorFactory implements ErrorFactory {
 	 */
 	public function __construct( string $default_class = ErrorFactory::DEFAULT_CLASS ) {
 
-		$this->factory = GenericFactory::with_default_class( ErrorFactory::BASE, (string) $default_class );
+		$this->factory = GenericFactory::with_default_class( ErrorFactory::BASE, $default_class );
 	}
 
 	/**
@@ -46,10 +46,10 @@ final class FallbackErrorFactory implements ErrorFactory {
 	 *
 	 * @throws Throwable if caught any and WP_DEBUG is set to true.
 	 */
-	public function create( array $args = [], string $class = '' ): \WP_Error {
+	public function create( array $args = [], string $class = '' ): WP_Error {
 
 		try {
-			$object = $this->factory->create( $args, (string) $class );
+			$object = $this->factory->create( $args, $class );
 		} catch ( Throwable $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				throw $e;

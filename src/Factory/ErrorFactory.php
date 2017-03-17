@@ -41,5 +41,5 @@ interface ErrorFactory extends Factory {
 	 *
 	 * @return WP_Error WordPress error object.
 	 */
-	public function create( array $args = [], string $class = '' ) : \WP_Error;
+	public function create( array $args = [], string $class = '' ): WP_Error;
 }

@@ -42,5 +42,5 @@ interface NonceFactory extends Factory {
 	 *
 	 * @return Nonce Nonce object.
 	 */
-	public function create( array $args = [], string $class = '' ) : Nonce;
+	public function create( array $args = [], string $class = '' ): Nonce;
 }
