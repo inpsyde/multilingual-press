@@ -40,9 +40,9 @@ class PluginDeactivator {
 	 */
 	public function __construct( string $plugin_base_name, string $plugin_name, array $errors = [] ) {
 
-		$this->plugin_base_name = (string) $plugin_base_name;
+		$this->plugin_base_name = $plugin_base_name;
 
-		$this->plugin_name = (string) $plugin_name;
+		$this->plugin_name = $plugin_name;
 
 		$this->errors = $errors;
 	}
@@ -91,6 +91,7 @@ class PluginDeactivator {
 	 * @return string Error messages.
 	 */
 	private function get_errors_as_string(): string {
+
 		return $this->errors ? '<p>' . implode( '</p><p>', $this->errors ) . '</p>' : '';
 	}
 }
