@@ -80,7 +80,7 @@ final class URLFilter implements Filter {
 	 *
 	 * @return bool Whether or not the given post is a draft or pending.
 	 */
-	private function is_draft_or_pending( \WP_Post $post ): bool {
+	private function is_draft_or_pending( WP_Post $post ): bool {
 
 		if ( empty( $post->post_status ) ) {
 			return false;
