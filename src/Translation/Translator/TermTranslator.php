@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Translation\Translator;
 
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
@@ -55,7 +57,7 @@ final class TermTranslator implements Translator {
 	 *
 	 * @return array Translation data.
 	 */
-	public function get_translation( $site_id, array $args = [] ) {
+	public function get_translation( int $site_id, array $args = [] ): array {
 
 		if ( empty( $args['content_id'] ) ) {
 			return [];
@@ -95,7 +97,7 @@ final class TermTranslator implements Translator {
 	 *
 	 * @return array Translation data.
 	 */
-	private function get_translation_data( $term_taxonomy_id ) {
+	private function get_translation_data( int $term_taxonomy_id ): array {
 
 		$term = $this->get_term_by_term_taxonomy_id( $term_taxonomy_id );
 		if ( ! $term ) {
@@ -115,7 +117,7 @@ final class TermTranslator implements Translator {
 
 		return [
 			'remote_url'   => $this->type_factory->create_url( [
-				$this->get_public_url( (int) $term['term_id'], $term['taxonomy'] ),
+				$this->get_public_url( (int) $term['term_id'], (string) $term['taxonomy'] ),
 			] ),
 			'remote_title' => $term['name'],
 		];
@@ -128,7 +130,7 @@ final class TermTranslator implements Translator {
 	 *
 	 * @return array Term data.
 	 */
-	private function get_term_by_term_taxonomy_id( $term_taxonomy_id ) {
+	private function get_term_by_term_taxonomy_id( int $term_taxonomy_id ): array {
 
 		$cache_key = "term_with_ttid_$term_taxonomy_id";
 
@@ -158,11 +160,11 @@ LIMIT 1";
 	 * Prepares the taxonomy base before the URL is fetched.
 	 *
 	 * @param int    $term_id  Term taxonomy ID.
-	 * @param string $taxonomy Taxnomy slug.
+	 * @param string $taxonomy Taxonomy slug.
 	 *
 	 * @return string Term archive URL.
 	 */
-	private function get_public_url( $term_id, $taxonomy ) {
+	private function get_public_url( int $term_id, string $taxonomy ): string {
 
 		$changed = $this->fix_term_base( $taxonomy );
 
@@ -183,16 +185,16 @@ LIMIT 1";
 	 *
 	 * @param string $taxonomy Taxonomy slug.
 	 *
-	 * @return bool|string Either false, or the original string for later restore.
+	 * @return string Either false, or the original string for later restore.
 	 */
-	private function fix_term_base( $taxonomy ) {
+	private function fix_term_base( string $taxonomy ): string {
 
 		$expected = $this->get_expected_base( $taxonomy );
 
-		$existing = $this->wp_rewrite->get_extra_permastruct( $taxonomy );
+		$existing = $this->wp_rewrite->get_extra_permastruct( $taxonomy ) ?: '';
 
 		if ( ! $this->is_update_required( $expected, $existing ) ) {
-			return false;
+			return '';
 		}
 
 		$this->set_permastruct( $taxonomy, $expected );
@@ -203,23 +205,23 @@ LIMIT 1";
 	/**
 	 * Finds a custom taxonomy base.
 	 *
-	 * @param string $taxonomy Taxnomy slug.
+	 * @param string $taxonomy Taxonomy slug.
 	 *
-	 * @return bool|string FALSE or the prepared string
+	 * @return string the prepared string or an empty one
 	 */
-	private function get_expected_base( $taxonomy ) {
+	private function get_expected_base( string $taxonomy ): string {
 
 		$taxonomies = [
 			'category' => 'category_base',
 			'post_tag' => 'tag_base',
 		];
 		if ( empty( $taxonomies[ $taxonomy ] ) ) {
-			return false;
+			return '';
 		}
 
 		$option = get_option( $taxonomies[ $taxonomy ] );
 		if ( ! $option ) {
-			return false;
+			return '';
 		}
 
 		return $option . '/%' . $taxonomy . '%';
@@ -228,33 +230,25 @@ LIMIT 1";
 	/**
 	 * Checks if the given taxonomy bases require an update.
 	 *
-	 * @param bool|string $expected Expected taxonomy base.
-	 * @param bool|string $existing Existing taxonomy base.
+	 * @param string $expected Expected taxonomy base.
+	 * @param string $existing Existing taxonomy base.
 	 *
-	 * @return bool Wheter or not the taxonomy bases require an update.
+	 * @return bool Whether or not the taxonomy bases require an update.
 	 */
-	private function is_update_required( $expected, $existing ) {
+	private function is_update_required( string $expected, string $existing ): bool {
 
-		if ( ! $expected ) {
-			return false;
-		}
-
-		if ( ! $existing ) {
-			return false;
-		}
-
-		return $existing !== $expected;
+		return $expected && $existing && $existing !== $expected;
 	}
 
 	/**
 	 * Updates the global WordPress rewrite instance for the given custom taxonomy.
 	 *
 	 * @param string $taxonomy Taxonomy slug.
-	 * @param string $struct   Rewritestruct.
+	 * @param string $struct   Rewrite struct.
 	 *
 	 * @return void
 	 */
-	private function set_permastruct( $taxonomy, $struct ) {
+	private function set_permastruct( string $taxonomy, string $struct ) {
 
 		$this->wp_rewrite->extra_permastructs[ $taxonomy ]['struct'] = $struct;
 	}

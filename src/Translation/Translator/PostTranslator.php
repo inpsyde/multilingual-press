@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Translation\Translator;
 
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
@@ -40,7 +42,7 @@ final class PostTranslator implements Translator {
 	 *
 	 * @return array Translation data.
 	 */
-	public function get_translation( $site_id, array $args = [] ) {
+	public function get_translation( int $site_id, array $args = [] ): array {
 
 		if ( empty( $args['content_id'] ) ) {
 			return [];
@@ -63,7 +65,7 @@ final class PostTranslator implements Translator {
 	 *
 	 * @return array Translation data.
 	 */
-	private function get_translation_data( $post_id, $strict ) {
+	private function get_translation_data( int $post_id, bool $strict ): array {
 
 		$post = get_post( $post_id );
 		if ( ! $post ) {

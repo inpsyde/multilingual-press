@@ -20,5 +20,5 @@ interface Translator {
 	 *
 	 * @return array Translation data.
 	 */
-	public function get_translation( $site_id, array $args = [] );
+	public function get_translation( int $site_id, array $args = [] ): array;
 }

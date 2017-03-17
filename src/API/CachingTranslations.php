@@ -132,6 +132,9 @@ final class CachingTranslations implements Translations {
 					$type = $args['type'];
 
 					foreach ( $sites as $site_id ) {
+
+						$site_id = (int) $site_id;
+
 						$translation = [
 							'remote_title'      => '',
 							'remote_url'        => '',

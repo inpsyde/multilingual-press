@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Translation\Translator;
 
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
@@ -40,7 +42,7 @@ final class FrontPageTranslator implements Translator {
 	 *
 	 * @return array Translation data.
 	 */
-	public function get_translation( $site_id, array $args = [] ) {
+	public function get_translation( int $site_id, array $args = [] ): array {
 
 		return [
 			'remote_url' => $this->type_factory->create_url( [

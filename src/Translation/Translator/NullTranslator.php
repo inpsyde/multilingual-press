@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Translation\Translator;
 
 use Inpsyde\MultilingualPress\Translation\Translator;
@@ -22,7 +24,7 @@ final class NullTranslator implements Translator {
 	 *
 	 * @return array Translation data.
 	 */
-	public function get_translation( $site_id, array $args = [] ) {
+	public function get_translation( int $site_id, array $args = [] ): array {
 
 		return [];
 	}

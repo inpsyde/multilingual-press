@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Translation;
 
 /**
@@ -27,7 +29,7 @@ final class FullRequestDataManipulator implements RequestDataManipulator {
 	 *
 	 * @param string $request_method Optional. Request method. Defaults to RequestDataManipulator::METHOD_POST.
 	 */
-	public function __construct( $request_method = RequestDataManipulator::METHOD_POST ) {
+	public function __construct( string $request_method = RequestDataManipulator::METHOD_POST ) {
 
 		$this->request_method = RequestDataManipulator::METHOD_POST === strtoupper( $request_method )
 			? RequestDataManipulator::METHOD_POST
@@ -41,7 +43,7 @@ final class FullRequestDataManipulator implements RequestDataManipulator {
 	 *
 	 * @return int Number of cleared elements.
 	 */
-	public function clear_data() {
+	public function clear_data(): int {
 
 		if ( empty( $GLOBALS["_{$this->request_method}"] ) ) {
 			return 0;
@@ -63,7 +65,7 @@ final class FullRequestDataManipulator implements RequestDataManipulator {
 	 *
 	 * @return int Number of restored elements.
 	 */
-	public function restore_data() {
+	public function restore_data(): int  {
 
 		if ( ! $this->storage ) {
 			return 0;
