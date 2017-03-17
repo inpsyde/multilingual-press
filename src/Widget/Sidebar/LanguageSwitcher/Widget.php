@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher;
 
 use Inpsyde\MultilingualPress\Widget\Sidebar\RegistrableWidget;
@@ -27,15 +29,19 @@ final class Widget extends WP_Widget implements RegistrableWidget {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param View         $view          Widget view object.
+	 * @param View $view Widget view object.
 	 */
 	public function __construct( View $view ) {
 
-		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingual-press' ), [
-			'classname'                   => 'mlp_widget',
-			'description'                 => __( 'MultilingualPress Translations', 'multilingual-press' ),
-			'customize_selective_refresh' => true,
-		] );
+		parent::__construct(
+			'Mlp_Widget',
+			__( 'Language Switcher', 'multilingual-press' ),
+			[
+				'classname'                   => 'mlp_widget',
+				'description'                 => __( 'MultilingualPress Translations', 'multilingual-press' ),
+				'customize_selective_refresh' => true,
+			]
+		);
 
 		$this->view = $view;
 	}
@@ -51,6 +57,7 @@ final class Widget extends WP_Widget implements RegistrableWidget {
 	 */
 	public function form( $instance ) {
 
+		$instance = (array) $instance;
 		?>
 		<p>
 			<?php
@@ -151,23 +158,26 @@ final class Widget extends WP_Widget implements RegistrableWidget {
 	 */
 	public function update( $new_instance, $instance ) {
 
-		$instance['widget_title'] = esc_html( $new_instance['mlp_widget_title'] );
+		$new_instance = (array) $new_instance;
+		$instance     = (array) $instance;
 
-		$instance['widget_link_type'] = esc_attr( $new_instance['mlp_widget_link_type'] );
+		$instance['widget_title'] = esc_html( $new_instance['mlp_widget_title'] ?? '' );
+
+		$instance['widget_link_type'] = esc_attr( $new_instance['mlp_widget_link_type'] ?? '' );
 
 		$instance['widget_display_flag'] = (int) (
 			isset( $new_instance['mlp_widget_display_flag'] )
-			&& '1' === $new_instance['mlp_widget_display_flag']
+			&& 1 === (int) $new_instance['mlp_widget_display_flag']
 		);
 
 		$instance['widget_show_current_blog'] = (int) (
 			isset( $new_instance['mlp_widget_show_current_blog'] )
-			&& '1' === $new_instance['mlp_widget_show_current_blog']
+			&& 1 === (int) $new_instance['mlp_widget_show_current_blog']
 		);
 
 		$instance['widget_toggle_view_on_translated_posts'] = (int) (
 			isset( $new_instance['mlp_widget_toggle_view_on_translated_posts'] )
-			&& '1' === $new_instance['mlp_widget_toggle_view_on_translated_posts']
+			&& 1 === (int) $new_instance['mlp_widget_toggle_view_on_translated_posts']
 		);
 
 		return $instance;

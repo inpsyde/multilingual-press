@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -52,7 +54,7 @@ class TranslationCompletedSettingView {
 	 */
 	public function render( WP_Post $post ) {
 
-		$post_id = $post->ID;
+		$post_id = (int) $post->ID;
 
 		$translated = $this->post_repository->is_post_translated( $post_id );
 

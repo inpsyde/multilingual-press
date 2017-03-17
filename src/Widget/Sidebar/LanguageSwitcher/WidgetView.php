@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher;
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
@@ -8,7 +10,7 @@ use Inpsyde\MultilingualPress\Widget\Sidebar\View;
 use function Inpsyde\MultilingualPress\get_linked_elements;
 
 /**
- * Interrface for all widget view implementations.
+ * Interface for all widget view implementations.
  *
  * @package Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher
  * @since   3.0.0
@@ -43,7 +45,7 @@ final class WidgetView implements View {
 	 *
 	 * @return void
 	 */
-	public function render( array $args, array $instance, $id_base ) {
+	public function render( array $args, array $instance, string $id_base ) {
 
 		$output = get_linked_elements( [
 			'link_text'         => empty( $instance['widget_link_type'] ) ? 'text' : $instance['widget_link_type'],
@@ -57,18 +59,18 @@ final class WidgetView implements View {
 
 		$this->enqueue_style();
 
-		echo $args['before_widget'];
+		echo $args['before_widget'] ?? '';
 
 		if ( ! empty( $instance['widget_title'] ) ) {
 			/** This filter is documented in wp-includes/default-widgets.php */
 			$title = (string) apply_filters( 'widget_title', (string) $instance['widget_title'], $instance, $id_base );
 
-			echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
+			echo $args['before_title'] ?? '', esc_html( $title ), $args['after_title'] ?? '';
 		}
 
 		echo $output;
 
-		echo $args['after_widget'];
+		echo $args['after_widget'] ?? '';
 	}
 
 	/**

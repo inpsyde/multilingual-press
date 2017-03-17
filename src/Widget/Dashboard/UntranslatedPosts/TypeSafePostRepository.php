@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
 use WP_Post;
@@ -19,7 +21,7 @@ final class TypeSafePostRepository implements PostRepository {
 	 *
 	 * @return WP_Post[] All untranslated posts for the current site.
 	 */
-	public function get_untranslated_posts() {
+	public function get_untranslated_posts(): array {
 
 		return get_posts( [
 			// Not suppressing filters (which is done by default when using get_posts()) makes caching possible.
@@ -51,9 +53,9 @@ final class TypeSafePostRepository implements PostRepository {
 	 *
 	 * @return bool Whether or not the post with the given ID has been translated.
 	 */
-	public function is_post_translated( $post_id = 0 ) {
+	public function is_post_translated( int $post_id = 0 ): bool {
 
-		$post_id = (int) ( $post_id ?: get_the_ID() );
+		$post_id = $post_id ?: (int) get_the_ID();
 
 		if ( get_post_meta( $post_id, PostRepository::META_KEY, true ) ) {
 			return true;
@@ -78,7 +80,7 @@ final class TypeSafePostRepository implements PostRepository {
 	 *
 	 * @return bool Whether or not the translation complete setting value was updated successfully.
 	 */
-	public function update_post( $post_id, $value ) {
+	public function update_post( int $post_id, bool $value ): bool {
 
 		return (bool) update_post_meta( $post_id, PostRepository::META_KEY, (bool) $value );
 	}
@@ -90,7 +92,7 @@ final class TypeSafePostRepository implements PostRepository {
 	 *
 	 * @return void
 	 */
-	private function update_deprecated_post_meta( $post_id ) {
+	private function update_deprecated_post_meta( int $post_id ) {
 
 		if ( update_post_meta( $post_id, PostRepository::META_KEY, true ) ) {
 			delete_post_meta( $post_id, PostRepository::DEPRECATED_META_KEY );

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -59,10 +61,8 @@ class TranslationCompletedSettingUpdater {
 			return false;
 		}
 
-		$value = array_key_exists( PostRepository::META_KEY, $_POST )
-			? (bool) $_POST[ PostRepository::META_KEY ]
-			: false;
+		$value = ! empty( $_POST[ PostRepository::META_KEY ] );
 
-		return $this->post_repository->update_post( $post_id, $value );
+		return $this->post_repository->update_post( (int) $post_id, $value );
 	}
 }

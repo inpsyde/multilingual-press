@@ -37,7 +37,7 @@ interface PostRepository {
 	 *
 	 * @return WP_Post[] All untranslated posts for the current site.
 	 */
-	public function get_untranslated_posts();
+	public function get_untranslated_posts(): array;
 
 	/**
 	 * Checks if the post with the given ID has been translated.
@@ -48,7 +48,7 @@ interface PostRepository {
 	 *
 	 * @return bool Whether or not the post with the given ID has been translated.
 	 */
-	public function is_post_translated( $post_id = 0 );
+	public function is_post_translated( int $post_id = 0 ): bool;
 
 	/**
 	 * Updates the translation complete setting value for the post with the given ID.
@@ -60,5 +60,5 @@ interface PostRepository {
 	 *
 	 * @return bool Whether or not the translation complete setting value was updated successfully.
 	 */
-	public function update_post( $post_id, $value );
+	public function update_post( int $post_id, bool $value ): bool;
 }

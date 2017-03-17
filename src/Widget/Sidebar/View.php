@@ -21,5 +21,5 @@ interface View {
 	 *
 	 * @return void
 	 */
-	public function render( array $args, array $instance, $id_base );
+	public function render( array $args, array $instance, string $id_base );
 }
