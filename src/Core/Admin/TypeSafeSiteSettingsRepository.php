@@ -142,11 +142,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function set_alternative_language_title( string $title, int $site_id = 0 ): bool {
 
-		return $this->update_setting(
-			SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE,
-			$title,
-			$site_id
-		);
+		return $this->update_setting( SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE, $title, $site_id );
 	}
 
 	/**
@@ -163,11 +159,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 		$site_id = $site_id ?: get_current_blog_id();
 
-		return update_blog_option(
-			$site_id,
-			SiteSettingsRepository::OPTION_FLAG_IMAGE_URL,
-			esc_url( $url )
-		);
+		return update_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, esc_url( $url ) );
 	}
 
 	/**
@@ -182,11 +174,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function set_language( string $language, int $site_id = 0 ): bool {
 
-		return $this->update_setting(
-			SiteSettingsRepository::KEY_LANGUAGE,
-			$language,
-			$site_id
-		);
+		return $this->update_setting( SiteSettingsRepository::KEY_LANGUAGE, $language, $site_id );
 	}
 
 	/**
