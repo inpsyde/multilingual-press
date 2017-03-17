@@ -65,7 +65,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 		 */
 		$factor = (float) apply_filters( static::FILTER_PRIORITY_FACTOR, .7 );
 
-		$this->language_only_priority_factor = max( 0, min( 1, $factor ) );
+		$this->language_only_priority_factor = (float) max( 0, min( 1, $factor ) );
 	}
 
 	/**
@@ -155,12 +155,12 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 
 		array_walk( $fields, function ( $priority, $code ) use ( &$user_languages ) {
 
-			$out[ strtolower( $code ) ] = $priority;
+			$user_languages[ strtolower( $code ) ] = $priority;
 
 			if ( strpos( $code, '-' ) ) {
 				$code = strtolower( strtok( $code, '-' ) );
-				if ( ! isset( $out[ $code ] ) ) {
-					$out[ $code ] = $priority;
+				if ( ! isset( $user_languages[ $code ] ) ) {
+					$user_languages[ $code ] = $priority;
 				}
 			}
 		} );
