@@ -104,5 +104,5 @@ interface PostTypeRepository {
 	 *
 	 * @return bool Whether the support for all post types was removed successfully.
 	 */
-	public function unsupport_all_post_types(): bool;
+	public function unset_supported_post_types(): bool;
 }

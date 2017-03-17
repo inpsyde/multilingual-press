@@ -58,7 +58,7 @@ class PostTypeSupportSettingsUpdater {
 	 *
 	 * @return bool Whether or not the settings were updated successfully.
 	 */
-	public function update_settings( array $data ) {
+	public function update_settings( array $data ): bool {
 
 		if ( ! $this->nonce->is_valid() ) {
 			return false;
@@ -67,7 +67,7 @@ class PostTypeSupportSettingsUpdater {
 		$custom_post_types = $this->repository->get_custom_post_types();
 
 		if ( ! $custom_post_types || empty( $data[ static::SETTINGS_NAME ] ) ) {
-			return $this->repository->unsupport_all_post_types();
+			return $this->repository->unset_supported_post_types();
 		}
 
 		$custom_post_types = array_keys( $custom_post_types );
