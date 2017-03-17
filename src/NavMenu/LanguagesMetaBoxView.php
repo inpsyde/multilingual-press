@@ -89,8 +89,8 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 		?>
 		<li>
 			<label class="menu-item-title">
-				<input type="checkbox" value="<?php printf( '%d', $site_id ) ?>" class="menu-item-checkbox">
-				&nbsp;<?php echo esc_attr( $language_name ); ?>
+				<input type="checkbox" value="<?php printf( '%d', $site_id ); ?>" class="menu-item-checkbox">
+				<?php echo esc_attr( $language_name ); ?>
 			</label>
 		</li>
 		<?php
