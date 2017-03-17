@@ -115,7 +115,7 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 	 *
 	 * @return string[] The array with directories relative to uploads as keys, and arrays of file paths as values.
 	 */
-	private function get_attachment_paths() {
+	private function get_attachment_paths(): array {
 
 		$metadata = $this->db->get_results(
 			"SELECT meta_value FROM {$this->db->postmeta} WHERE meta_key = '_wp_attachment_metadata'"
@@ -166,7 +166,7 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 	 *
 	 * @return void
 	 */
-	private function copy_dir( array $paths, $source_dir, $destination_dir ) {
+	private function copy_dir( array $paths, string $source_dir, string $destination_dir ) {
 
 		if ( ! is_dir( $source_dir ) ) {
 			return;
@@ -193,7 +193,7 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 	 *
 	 * @return void
 	 */
-	private function update_attachment_urls( $source_url, $destination_url ) {
+	private function update_attachment_urls( string $source_url, string $destination_url ) {
 
 		$tables = [
 			$this->db->comments      => [
