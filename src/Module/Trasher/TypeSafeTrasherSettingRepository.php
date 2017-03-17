@@ -36,6 +36,6 @@ final class TypeSafeTrasherSettingRepository implements TrasherSettingRepository
 	 */
 	public function update_setting( int $post_id, bool $value ): bool {
 
-		return (bool) update_post_meta( $post_id, TrasherSettingRepository::META_KEY, (bool) $value );
+		return (bool) update_post_meta( $post_id, TrasherSettingRepository::META_KEY, $value );
 	}
 }
