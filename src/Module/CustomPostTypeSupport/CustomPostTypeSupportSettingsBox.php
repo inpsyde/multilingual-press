@@ -188,7 +188,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 			'<input type="checkbox" name="%1$s" value="1" id="%2$s"%3$s>',
 			esc_attr( $name ),
 			esc_attr( $id ),
-			checked( (bool) $checked, true, false )
+			checked( $checked, true, false )
 		);
 	}
 }

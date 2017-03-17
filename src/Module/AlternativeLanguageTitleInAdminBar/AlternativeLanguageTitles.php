@@ -53,7 +53,7 @@ class AlternativeLanguageTitles {
 	public function get( int $site_id = 0 ): string {
 
 		if ( ! $site_id ) {
-			$site_id = (int) get_current_blog_id();
+			$site_id = get_current_blog_id();
 		}
 
 		$titles = wp_cache_get( $this->cache_key, $this->cache_group );
