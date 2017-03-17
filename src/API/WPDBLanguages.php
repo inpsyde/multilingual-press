@@ -379,31 +379,51 @@ final class WPDBLanguages implements Languages {
 	 */
 	private function get_where( array $args ): string {
 
-		if ( ! empty( $args['conditions'] ) ) {
-			$conditions = array_filter( (array) $args['conditions'], function ( $condition ) {
-
-				return
-					$this->is_array_with_valid_field( $condition )
-					&& (
-						empty( $condition['compare'] )
-						|| in_array( $condition['compare'], self::COMPARISON_OPERATORS, true )
-					)
-					&& ! empty( $condition['value'] );
-			} );
-			if ( $conditions ) {
-				$conditions = array_map( function ( array $condition ) {
-
-					return $this->db->prepare(
-						"{$condition['field']} {$condition['compare']} {$this->fields[ $condition['field'] ]}",
-						$condition['value']
-					);
-				}, $conditions );
-
-				return 'WHERE ' . implode( ' AND ', $conditions );
-			}
+		if ( empty( $args['conditions'] ) ) {
+			return '';
 		}
 
-		return '';
+		$conditions = array_filter( (array) $args['conditions'], [ $this, 'is_condition_valid' ] );
+		if ( ! $conditions ) {
+			return '';
+		}
+
+		$conditions = array_map( function ( array $condition ) {
+
+			return $this->db->prepare(
+				"{$condition['field']} {$condition['compare']} {$this->fields[ $condition['field'] ]}",
+				$condition['value']
+			);
+		}, $conditions );
+
+		return 'WHERE ' . implode( ' AND ', $conditions );
+	}
+
+	/**
+	 * Checks if the given condition is valid with respect to the defined fields and comparison operators.
+	 *
+	 * @param mixed $condition Condition.
+	 *
+	 * @return bool Whether or not the condition is valid with respect to the defined fields and comparison operators.
+	 */
+	private function is_condition_valid( $condition ): bool {
+
+		if ( ! $this->is_array_with_valid_field( $condition ) ) {
+			return false;
+		}
+
+		if ( empty( $condition['value'] ) ) {
+			return false;
+		}
+
+		if (
+			! empty( $condition['compare'] )
+			&& ! in_array( $condition['compare'], self::COMPARISON_OPERATORS, true )
+		) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
