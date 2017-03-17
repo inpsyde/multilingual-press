@@ -50,7 +50,7 @@ final class ValidatingItemRepository implements ItemRepository {
 				continue;
 			}
 
-			$item = $this->ensure_item( $menu_id, (int) $site_id, $language_names[ $site_id ] );
+			$item = $this->ensure_item( $menu_id, $site_id, $language_names[ $site_id ] );
 			if ( $item instanceof WP_Post ) {
 				$items[] = $this->prepare_item( $item, $site_id );
 			}
