@@ -28,14 +28,14 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @param string $plugin_file_path Main plugin file path.
 	 */
-	public function __construct( $plugin_file_path ) {
+	public function __construct( string $plugin_file_path ) {
 
 		if ( ! isset( $this->properties ) ) {
 			$file_data = [
 				'plugin_base_name' => plugin_basename( $plugin_file_path ),
 				'plugin_dir_path'  => plugin_dir_path( $plugin_file_path ),
 				'plugin_dir_url'   => plugins_url( '/', $plugin_file_path ),
-				'plugin_file_path' => (string) $plugin_file_path,
+				'plugin_file_path' => $plugin_file_path,
 			];
 
 			$header_data = get_file_data( $plugin_file_path, [
