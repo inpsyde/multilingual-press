@@ -163,7 +163,7 @@ function debug( $message ) {
  */
 function get_available_language_names( $related = true, $include_current_site = true ) {
 
-	$current_site_id = (int) get_current_blog_id();
+	$current_site_id = get_current_blog_id();
 
 	$related_sites = [];
 
@@ -274,7 +274,7 @@ function get_current_site_language( $language_only = false ) {
  */
 function get_default_content_id( $content_id ) {
 
-	return (int) $content_id ?: get_queried_object_id();
+	return (int) ( $content_id ?: get_queried_object_id() );
 }
 
 /**
