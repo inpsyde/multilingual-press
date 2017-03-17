@@ -79,7 +79,7 @@ trait ServiceProviderHandling {
 	 *
 	 * @return void
 	 */
-	private function integrate_service_providers( $unset = true ) {
+	private function integrate_service_providers( bool $unset = true ) {
 
 		array_walk( $this->integrations, function ( IntegrationServiceProvider $provider ) {
 
