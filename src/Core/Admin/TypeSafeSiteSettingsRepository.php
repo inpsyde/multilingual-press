@@ -47,7 +47,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_alternative_language_title( int $site_id = 0 ): string {
 
-		$site_id = $site_id ?: (int) get_current_blog_id();
+		$site_id = $site_id ?: get_current_blog_id();
 
 		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 
@@ -65,7 +65,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_flag_image_url( int $site_id = 0 ): string {
 
-		$site_id =  $site_id ?: (int) get_current_blog_id();
+		$site_id =  $site_id ?: get_current_blog_id();
 
 		return (string) get_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, '' );
 	}
@@ -115,7 +115,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_site_language( int $site_id = 0 ): string {
 
-		$site_id =  $site_id ?: (int) get_current_blog_id();
+		$site_id =  $site_id ?: get_current_blog_id();
 
 		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 
@@ -161,9 +161,9 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function set_flag_image_url( string $url, int $site_id = 0 ): bool {
 
-		$site_id = (int) ( $site_id ?: get_current_blog_id() );
+		$site_id = $site_id ?: get_current_blog_id();
 
-		return (bool) update_blog_option(
+		return update_blog_option(
 			$site_id,
 			SiteSettingsRepository::OPTION_FLAG_IMAGE_URL,
 			esc_url( $url )
@@ -201,7 +201,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function set_relationships( array $site_ids, int $base_site_id = 0 ): bool {
 
-		$base_site_id = $base_site_id ?: (int) get_current_blog_id();
+		$base_site_id = $base_site_id ?: get_current_blog_id();
 
 		return (bool) $this->site_relations->set_relationships( $base_site_id, $site_ids );
 	}
@@ -217,7 +217,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function set_settings( array $settings ): bool {
 
-		return (bool) update_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, $settings );
+		return update_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, $settings );
 	}
 
 	/**
@@ -231,7 +231,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	private function update_setting( string $key, $value, int $site_id = 0 ): bool {
 
-		$site_id = $site_id ?: (int) get_current_blog_id();
+		$site_id = $site_id ?: get_current_blog_id();
 
 		$settings = $this->get_settings();
 
