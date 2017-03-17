@@ -40,7 +40,6 @@ final class GenericFactory implements Factory {
 	 *
 	 * @throws InvalidArgumentException if the given base is not a valid fully qualified class or interface name.
 	 * @throws BadMethodCallException   if no default class is given and the base is an interface.
-	 * @throws InvalidClass             if default class is provided but it is invalid
 	 */
 	public function __construct( string $base, string $default_class = '' ) {
 
@@ -53,17 +52,17 @@ final class GenericFactory implements Factory {
 			) );
 		}
 
-		$this->base = (string) $base;
+		$this->base = $base;
 
 		if ( $default_class ) {
 			$this->check_class( $default_class );
-			$this->default_class = (string) $default_class;
+			$this->default_class = $default_class;
 
 			return;
 		}
 
 		if ( $this->base_is_class ) {
-			$this->default_class = (string) $base;
+			$this->default_class = $base;
 
 			return;
 		}
@@ -83,10 +82,6 @@ final class GenericFactory implements Factory {
 	 * @param string $default_class Fully qualified name of the default class.
 	 *
 	 * @return static Factory object.
-	 *
-	 * @throws InvalidArgumentException if the given base is not a valid fully qualified class or interface name.
-	 * @throws BadMethodCallException   if no default class is given and the base is an interface.
-	 * @throws InvalidClass             if default class is provided but it is invalid
 	 */
 	public static function with_default_class( string $base, string $default_class ) {
 
@@ -102,8 +97,6 @@ final class GenericFactory implements Factory {
 	 * @param string $class Optional. Fully qualified class name. Defaults to empty string.
 	 *
 	 * @return object Object of the given (or default) class, instantiated with the given arguments.
-	 *
-	 * @throws InvalidClass if class is provided but it is invalid
 	 */
 	public function create( array $args = [], string $class = '' ) {
 
@@ -129,7 +122,7 @@ final class GenericFactory implements Factory {
 
 		if (
 			( ! $this->base_is_class || $class !== $this->base )
-			&& is_subclass_of( $class, $this->base, true )
+			&& ! is_subclass_of( $class, $this->base, true )
 		) {
 			throw InvalidClass::for_base( $class, $this->base );
 		}
