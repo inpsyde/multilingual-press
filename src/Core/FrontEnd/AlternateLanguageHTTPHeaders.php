@@ -39,7 +39,7 @@ class AlternateLanguageHTTPHeaders {
 	 *
 	 * @return bool Whether or not headers have been sent.
 	 */
-	public function send() {
+	public function send(): bool {
 
 		$translations = $this->translations->get_unfiltered_translations();
 		if ( ! $translations ) {
