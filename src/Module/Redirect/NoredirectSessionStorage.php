@@ -35,7 +35,7 @@ final class NoredirectSessionStorage implements NoredirectStorage {
 			}
 		}
 
-		$_SESSION[ NoredirectStorage::KEY ][] = (string) $language;
+		$_SESSION[ NoredirectStorage::KEY ][] = $language;
 
 		return true;
 	}

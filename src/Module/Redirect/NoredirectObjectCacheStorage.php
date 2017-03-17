@@ -36,7 +36,7 @@ final class NoredirectObjectCacheStorage implements NoredirectStorage {
 			return false;
 		}
 
-		$languages[] = (string) $language;
+		$languages[] = $language;
 
 		wp_cache_set( $this->key(), $languages, '', NoredirectStorage::LIFETIME_IN_SECONDS );
 
