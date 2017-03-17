@@ -75,8 +75,11 @@ class Trasher {
 
 			switch_to_blog( $site_id );
 			$trashed = wp_trash_post( $post_id );
-			$trashed_post += (int) ( false !== $trashed && ! is_wp_error( $trashed ) );
 			restore_current_blog();
+
+			if ( false !== $trashed && ! is_wp_error( $trashed ) ) {
+				$trashed_post++;
+			}
 		} );
 
 		// Add the function back again.
