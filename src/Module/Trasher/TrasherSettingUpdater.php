@@ -78,13 +78,15 @@ class TrasherSettingUpdater {
 			? (bool) $_POST[ TrasherSettingRepository::META_KEY ]
 			: false;
 
-		if ( ! $this->setting_repository->update_setting( (int) $post_id, $value ) ) {
+		$post_id = (int) $post_id;
+
+		if ( ! $this->setting_repository->update_setting( $post_id, $value ) ) {
 			return 0;
 		}
 
 		$current_site_id = (int) get_current_blog_id();
 
-		$related_posts = $this->content_relations->get_relations( (int) $current_site_id, (int) $post_id, 'post' );
+		$related_posts = $this->content_relations->get_relations( (int) $current_site_id, $post_id, 'post' );
 
 		unset( $related_posts[ $current_site_id ] );
 
