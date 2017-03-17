@@ -7,6 +7,9 @@ use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 use Inpsyde\MultilingualPress\MultilingualPress;
 
+use function Inpsyde\MultilingualPress\call_exit;
+use function Inpsyde\MultilingualPress\check_admin_referer;
+
 /**
  * Class Mlp_Language_Manager_Controller
  *
@@ -206,7 +209,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	public function reset_table() {
 
-		\Inpsyde\MultilingualPress\check_admin_referer( $this->nonce );
+		check_admin_referer( $this->nonce );
 
 		$table_prefix = $this->wpdb->base_prefix;
 
@@ -225,7 +228,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		$url = add_query_arg( 'msg', 'resettable', $_REQUEST[ '_wp_http_referer' ] );
 		wp_safe_redirect( $url );
-		\Inpsyde\MultilingualPress\call_exit();
+		call_exit();
 	}
 
 	/**

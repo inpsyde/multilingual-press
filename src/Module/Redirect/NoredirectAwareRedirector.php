@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
+use function Inpsyde\MultilingualPress\call_exit;
+
 /**
  * Interface for all redirector implementations.
  *
@@ -77,7 +79,7 @@ final class NoredirectAwareRedirector implements Redirector {
 		$this->storage->add_language( $target->language() );
 
 		wp_redirect( $url );
-		\Inpsyde\MultilingualPress\call_exit();
+		call_exit();
 
 		return true;
 	}

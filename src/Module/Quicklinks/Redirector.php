@@ -6,6 +6,8 @@ namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 use Inpsyde\MultilingualPress\Common\Filter;
 
+use function Inpsyde\MultilingualPress\call_exit;
+
 /**
  * Handles redirects issued by quicklinks.
  *
@@ -53,7 +55,7 @@ class Redirector {
 		}
 
 		wp_redirect( $url, 303 );
-		\Inpsyde\MultilingualPress\call_exit();
+		call_exit();
 
 		return true;
 	}

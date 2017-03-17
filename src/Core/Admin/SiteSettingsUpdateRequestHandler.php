@@ -6,6 +6,9 @@ namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
+use function Inpsyde\MultilingualPress\check_admin_referer;
+use function Inpsyde\MultilingualPress\redirect_after_settings_update;
+
 /**
  * Request handler for site settings update requests.
  *
@@ -58,7 +61,7 @@ class SiteSettingsUpdateRequestHandler {
 	 */
 	public function handle_post_request() {
 
-		if ( ! \Inpsyde\MultilingualPress\check_admin_referer( $this->nonce ) ) {
+		if ( ! check_admin_referer( $this->nonce ) ) {
 			wp_die( 'Invalid', 'Invalid', 403 );
 		}
 
@@ -68,6 +71,6 @@ class SiteSettingsUpdateRequestHandler {
 
 		$this->updater->update_settings( (int) $_REQUEST['id'] );
 
-		\Inpsyde\MultilingualPress\redirect_after_settings_update();
+		redirect_after_settings_update();
 	}
 }

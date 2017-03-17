@@ -6,6 +6,8 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\RequestValidator;
 
+use function Inpsyde\MultilingualPress\get_current_site_language;
+
 /**
  * Noredirect-aware request validator implementation to be used for (potential) redirect requests.
  *
@@ -71,7 +73,7 @@ final class NoredirectAwareRedirectRequestValidator implements RequestValidator 
 			return false;
 		}
 
-		if ( $this->noredirect_storage->has_language( \Inpsyde\MultilingualPress\get_current_site_language() ) ) {
+		if ( $this->noredirect_storage->has_language( get_current_site_language() ) ) {
 			return false;
 		}
 

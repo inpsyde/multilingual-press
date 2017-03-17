@@ -10,6 +10,8 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingView;
 use WP_Site;
 
+use function Inpsyde\MultilingualPress\nonce_field;
+
 /**
  * Settings page view for the MultilingualPress site settings tab.
  *
@@ -76,7 +78,7 @@ final class SiteSettingsTabView implements SettingsPageView {
 				<input type="hidden" name="action"
 					value="<?php echo esc_attr( SiteSettingsUpdateRequestHandler::ACTION ); ?>">
 				<input type="hidden" name="id" value="<?php echo esc_attr( $site_id ); ?>">
-				<?php echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce ); ?>
+				<?php echo nonce_field( $this->nonce ); ?>
 				<table class="form-table mlp-admin-settings-table">
 					<?php $this->view->render( $site_id ); ?>
 				</table>

@@ -7,6 +7,8 @@ namespace Inpsyde\MultilingualPress\NavMenu;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBoxModel;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBoxView;
 
+use function Inpsyde\MultilingualPress\get_available_language_names;
+
 /**
  * Languages meta box view.
  *
@@ -59,7 +61,7 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 	 */
 	private function render_language_checkboxes() {
 
-		$language_names = \Inpsyde\MultilingualPress\get_available_language_names();
+		$language_names = get_available_language_names();
 		if ( ! $language_names ) {
 			esc_html_e( 'No items.', 'multilingual-press' );
 

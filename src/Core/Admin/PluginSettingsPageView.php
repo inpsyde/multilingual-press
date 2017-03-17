@@ -10,6 +10,8 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
+use function Inpsyde\MultilingualPress\nonce_field;
+
 /**
  * Plugin settings page view.
  *
@@ -69,7 +71,7 @@ final class PluginSettingsPageView implements SettingsPageView {
 			<?php settings_errors(); ?>
 			<form method="post" action="<?php echo admin_url( "admin-post.php?action={$action}" ); ?>"
 				id="multilingualpress-modules">
-				<?php echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce ); ?>
+				<?php echo nonce_field( $this->nonce ); ?>
 				<table class="mlp-module-list">
 					<?php
 					foreach ( $this->module_manager->get_modules() as $id => $module ) {

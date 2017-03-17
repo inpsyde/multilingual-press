@@ -8,6 +8,8 @@ use Inpsyde\MultilingualPress\Common\ContextAwareFilter;
 use Inpsyde\MultilingualPress\Common\Filter;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 
+use function Inpsyde\MultilingualPress\get_available_languages;
+
 /**
  * Permalink filter adding the noredirect query argument.
  *
@@ -82,7 +84,7 @@ final class NoredirectPermalinkFilter implements Filter {
 	private function languages(): array {
 
 		if ( ! isset( $this->languages ) ) {
-			$this->languages = \Inpsyde\MultilingualPress\get_available_languages();
+			$this->languages = get_available_languages();
 		}
 
 		return $this->languages;

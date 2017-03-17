@@ -2,6 +2,8 @@
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
+use function Inpsyde\MultilingualPress\nonce_field;
+
 /**
  * Mlp_Term_Translation_Selector
  *
@@ -84,7 +86,7 @@ class Mlp_Term_Translation_Selector {
 			return FALSE;
 		}
 
-		echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce );
+		echo nonce_field( $this->nonce );
 
 		$this->print_style();
 		?>

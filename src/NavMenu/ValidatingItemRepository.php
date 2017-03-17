@@ -6,6 +6,9 @@ namespace Inpsyde\MultilingualPress\NavMenu;
 
 use WP_Post;
 
+use function Inpsyde\MultilingualPress\get_available_language_names;
+use function Inpsyde\MultilingualPress\site_exists;
+
 /**
  * Item repository implementation validating sites and menu.
  *
@@ -33,7 +36,7 @@ final class ValidatingItemRepository implements ItemRepository {
 			return [];
 		}
 
-		$language_names = \Inpsyde\MultilingualPress\get_available_language_names();
+		$language_names = get_available_language_names();
 
 		$menu_id = (int) $_GET['menu'];
 
@@ -43,7 +46,7 @@ final class ValidatingItemRepository implements ItemRepository {
 
 			$site_id = (int) $site_id;
 
-			if ( empty( $language_names[ $site_id ] ) || ! \Inpsyde\MultilingualPress\site_exists( $site_id ) ) {
+			if ( empty( $language_names[ $site_id ] ) || ! site_exists( $site_id ) ) {
 				continue;
 			}
 

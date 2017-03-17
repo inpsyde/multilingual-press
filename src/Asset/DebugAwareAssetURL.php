@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Asset;
 
+use function Inpsyde\MultilingualPress\is_script_debug_mode;
+
 /**
  * Asset URL data type implementation aware of debug mode and thus potentially minified asset files.
  *
@@ -94,7 +96,7 @@ final class DebugAwareAssetURL implements AssetURL {
 	 */
 	private function get_file( string $file, string $dir_path ): string {
 
-		if ( \Inpsyde\MultilingualPress\is_script_debug_mode() ) {
+		if ( is_script_debug_mode() ) {
 			return $file;
 		}
 

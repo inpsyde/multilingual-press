@@ -8,6 +8,8 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxViewModel;
 use WP_Post_Type;
 
+use function Inpsyde\MultilingualPress\nonce_field;
+
 /**
  * Custom post type support settings box.
  *
@@ -102,7 +104,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 			return '';
 		}
 
-		$markup = \Inpsyde\MultilingualPress\nonce_field( $this->nonce ) . '<table><tbody>';
+		$markup = nonce_field( $this->nonce ) . '<table><tbody>';
 
 		ob_start();
 

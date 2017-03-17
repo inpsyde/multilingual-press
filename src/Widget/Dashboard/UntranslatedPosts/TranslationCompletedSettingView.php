@@ -5,6 +5,8 @@ namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use WP_Post;
 
+use function Inpsyde\MultilingualPress\nonce_field;
+
 /**
  * Translation completed setting view.
  *
@@ -70,7 +72,7 @@ class TranslationCompletedSettingView {
 		$id = 'mlp-translation-completed';
 		?>
 		<div class="misc-pub-section misc-pub-mlp-translation-completed">
-			<?php echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce ); ?>
+			<?php echo nonce_field( $this->nonce ); ?>
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( PostRepository::META_KEY ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>" <?php checked( $translated ); ?>>

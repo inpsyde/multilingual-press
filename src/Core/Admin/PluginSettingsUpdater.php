@@ -8,6 +8,9 @@ use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
+use function Inpsyde\MultilingualPress\check_admin_referer;
+use function Inpsyde\MultilingualPress\redirect_after_settings_update;
+
 /**
  * Plugin settings updater.
  *
@@ -67,7 +70,7 @@ class PluginSettingsUpdater {
 	 */
 	public function update_settings() {
 
-		\Inpsyde\MultilingualPress\check_admin_referer( $this->nonce );
+		check_admin_referer( $this->nonce );
 
 		array_walk( array_keys( $this->module_manager->get_modules() ), [ $this, 'update_module' ] );
 
@@ -82,7 +85,7 @@ class PluginSettingsUpdater {
 		 */
 		do_action( 'multilingualpress.save_modules', $_POST );
 
-		\Inpsyde\MultilingualPress\redirect_after_settings_update( $this->settings_page->url() );
+		redirect_after_settings_update( $this->settings_page->url() );
 	}
 
 	/**

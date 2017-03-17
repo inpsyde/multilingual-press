@@ -29,6 +29,10 @@ use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 
+use function Inpsyde\MultilingualPress\get_available_language_names;
+use function Inpsyde\MultilingualPress\get_language_by_http_name;
+use function Inpsyde\MultilingualPress\get_site_language;
+
 /**
  * Service provider for all Core objects.
  *
@@ -302,7 +306,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 					function ( $id, $site_id ) {
 
 						switch_to_blog( $site_id );
-						$sites = \Inpsyde\MultilingualPress\get_available_language_names();
+						$sites = get_available_language_names();
 						restore_current_blog();
 						unset( $sites[ $site_id ] );
 
@@ -320,13 +324,13 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 					__( 'Site Language', 'multilingual-press' ),
 					function ( $id, $site_id ) {
 
-						$language = \Inpsyde\MultilingualPress\get_site_language( $site_id );
+						$language = get_site_language( $site_id );
 
 						return '' === $language
 							? __( 'none', 'multilingual-press' )
 							: sprintf(
 								'<div class="mlp-site-language">%s</div>',
-								esc_html( \Inpsyde\MultilingualPress\get_language_by_http_name(
+								esc_html( get_language_by_http_name(
 									str_replace( '_', '-', $language )
 								) )
 							);

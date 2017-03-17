@@ -7,6 +7,8 @@ namespace Inpsyde\MultilingualPress\Core\Admin;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
 
+use function Inpsyde\MultilingualPress\get_site_language;
+
 /**
  * MultilingualPress "Relationships" site setting.
  *
@@ -109,7 +111,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 						// translators: 1 = site name, 2 = site language
 						esc_html_x( '%1$s - %2$s', 'Site relationships', 'multilingual-press' ),
 						$site_name,
-						\Inpsyde\MultilingualPress\get_site_language( $site_id, false )
+						get_site_language( $site_id, false )
 					),
 					esc_attr( $site_id ),
 					esc_attr( "{$this->id}-{$site_id}" ),

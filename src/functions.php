@@ -673,7 +673,7 @@ function redirect_after_settings_update( $url = '', $setting = 'mlp-setting', $c
  */
 function replace_language_in_language_attributes( $language_attributes ) {
 
-	$site_language = \Inpsyde\MultilingualPress\get_current_site_language();
+	$site_language = get_current_site_language();
 	if ( ! $site_language ) {
 		return $language_attributes;
 	}

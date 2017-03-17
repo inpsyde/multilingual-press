@@ -2,6 +2,8 @@
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
+use function Inpsyde\MultilingualPress\nonce_field;
+
 /**
  * Meta box output.
  *
@@ -126,7 +128,7 @@ class Mlp_Translation_Metabox_View {
 			$data->remote_post
 		);
 
-		echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce );
+		echo nonce_field( $this->nonce );
 		?>
 		</div>
 		<!-- /MultilingualPress Translation Box -->

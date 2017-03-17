@@ -7,6 +7,8 @@ namespace Inpsyde\MultilingualPress\API;
 use Inpsyde\MultilingualPress\Database\Table;
 use wpdb;
 
+use function Inpsyde\MultilingualPress\debug;
+
 // TODO: For now, this is just a copy of the old API. Functionally refactor this as soon as the structural one is done.
 
 /**
@@ -100,7 +102,7 @@ final class WPDBContentRelations implements ContentRelations {
 		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
 		wp_cache_delete( $cache_key, $this->cache_group );
 
-		\Inpsyde\MultilingualPress\debug(
+		debug(
 			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->db->last_query}"
 		);
 
@@ -350,7 +352,7 @@ WHERE s.ml_blogid = %d
 		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
 		wp_cache_delete( $cache_key, $this->cache_group );
 
-		\Inpsyde\MultilingualPress\debug(
+		debug(
 			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->db->last_query}"
 		);
 
@@ -389,7 +391,7 @@ WHERE s.ml_blogid = %d
 			]
 		);
 
-		\Inpsyde\MultilingualPress\debug(
+		debug(
 			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->db->last_query}"
 		);
 
@@ -429,7 +431,7 @@ WHERE s.ml_blogid = %d
 			$type
 		);
 
-		\Inpsyde\MultilingualPress\debug(
+		debug(
 			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->db->last_query}"
 		);
 
@@ -466,7 +468,7 @@ WHERE s.ml_blogid = %d
 			'ml_type'             => $type,
 		] );
 
-		\Inpsyde\MultilingualPress\debug(
+		debug(
 			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->db->last_query}"
 		);
 

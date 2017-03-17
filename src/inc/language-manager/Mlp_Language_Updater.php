@@ -3,6 +3,9 @@
 use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
+use function Inpsyde\MultilingualPress\call_exit;
+use function Inpsyde\MultilingualPress\check_admin_referer;
+
 /**
  * Update changed languages for the language manager.
  *
@@ -78,7 +81,7 @@ class Mlp_Language_Updater {
 		$amount = $this->update_changed_items( $diff );
 
 		wp_safe_redirect( $this->get_url( $amount ) );
-		\Inpsyde\MultilingualPress\call_exit();
+		call_exit();
 	}
 
 	/**
@@ -88,10 +91,10 @@ class Mlp_Language_Updater {
 	 */
 	private function validate_request() {
 
-		\Inpsyde\MultilingualPress\check_admin_referer( $this->nonce );
+		check_admin_referer( $this->nonce );
 
 		if ( empty ( $_POST[ 'languages' ] ) )
-			\Inpsyde\MultilingualPress\call_exit( 'invalid request' );
+			call_exit( 'invalid request' );
 
 		return (array) $_POST[ 'languages' ];
 	}

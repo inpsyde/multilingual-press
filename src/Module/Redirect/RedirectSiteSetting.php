@@ -7,6 +7,8 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
 
+use function Inpsyde\MultilingualPress\nonce_field;
+
 /**
  * Redirect site setting.
  *
@@ -64,7 +66,7 @@ class RedirectSiteSetting implements SiteSettingViewModel {
 			esc_html__( 'Enable automatic redirect', 'multilingual-press' ),
 			esc_attr( $this->option ),
 			checked( $this->repository->get_site_setting( $site_id ), true, false ),
-			\Inpsyde\MultilingualPress\nonce_field( $this->nonce )
+			nonce_field( $this->nonce )
 		);
 	}
 

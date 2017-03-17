@@ -8,6 +8,8 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\User\UserSettingViewModel;
 use WP_User;
 
+use function Inpsyde\MultilingualPress\nonce_field;
+
 /**
  * Redirect user setting.
  *
@@ -65,7 +67,7 @@ final class RedirectUserSetting implements UserSettingViewModel {
 			esc_html__( 'Do not redirect me to the best matching language version.', 'multilingual-press' ),
 			esc_attr( $this->meta_key ),
 			checked( $this->repository->get_user_setting( (int) $user->ID ), true, false ),
-			\Inpsyde\MultilingualPress\nonce_field( $this->nonce )
+			nonce_field( $this->nonce )
 		);
 	}
 

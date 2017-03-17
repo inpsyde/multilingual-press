@@ -7,6 +7,8 @@ namespace Inpsyde\MultilingualPress\Module\Trasher;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use WP_Post;
 
+use function Inpsyde\MultilingualPress\nonce_field;
+
 /**
  * Trasher setting view.
  *
@@ -55,7 +57,7 @@ class TrasherSettingView {
 		$id = 'mlp-trasher';
 		?>
 		<div class="misc-pub-section misc-pub-mlp-trasher">
-			<?php echo \Inpsyde\MultilingualPress\nonce_field( $this->nonce ); ?>
+			<?php echo nonce_field( $this->nonce ); ?>
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( TrasherSettingRepository::META_KEY ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>"

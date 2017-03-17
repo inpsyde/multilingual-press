@@ -9,6 +9,8 @@ use Inpsyde\MultilingualPress\Common\Type\NullTranslation;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use WP_Post;
 
+use function Inpsyde\MultilingualPress\site_exists;
+
 /**
  * Filters nav menu items and passes the proper URL.
  *
@@ -85,7 +87,7 @@ class ItemFilter {
 			return false;
 		}
 
-		if ( \Inpsyde\MultilingualPress\site_exists( $site_id ) ) {
+		if ( site_exists( $site_id ) ) {
 			return false;
 		}
 

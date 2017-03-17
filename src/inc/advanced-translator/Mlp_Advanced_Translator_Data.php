@@ -3,6 +3,8 @@
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
 
+use function Inpsyde\MultilingualPress\site_exists;
+
 /**
  * Data model for advanced post translation. Handles inserts and updates.
  */
@@ -161,7 +163,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		foreach ( $this->post_request_data[ $this->name_base ] as $remote_blog_id => $post_data ) {
 			if (
 				! in_array( $remote_blog_id, $related_blogs )
-				|| ! \Inpsyde\MultilingualPress\site_exists( $remote_blog_id )
+				|| ! site_exists( $remote_blog_id )
 			) {
 				continue;
 			}

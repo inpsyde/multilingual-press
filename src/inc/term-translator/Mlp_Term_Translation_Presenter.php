@@ -2,6 +2,8 @@
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 
+use function Inpsyde\MultilingualPress\get_available_language_names;
+
 /**
  * Prepare data for the term edit form.
  *
@@ -120,7 +122,7 @@ class Mlp_Term_Translation_Presenter {
 	 */
 	public function get_site_languages() {
 
-		$languages = \Inpsyde\MultilingualPress\get_available_language_names();
+		$languages = get_available_language_names();
 		unset( $languages[ get_current_blog_id() ] );
 
 		return $languages;

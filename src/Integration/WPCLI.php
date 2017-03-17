@@ -6,6 +6,8 @@ namespace Inpsyde\MultilingualPress\Integration;
 
 use Inpsyde\MultilingualPress\Installation\SystemChecker;
 
+use const Inpsyde\MultilingualPress\ACTION_ACTIVATION;
+
 /**
  * WP-CLI integration controller.
  *
@@ -27,7 +29,7 @@ final class WPCLI implements Integration {
 			return false;
 		}
 
-		if ( did_action( \Inpsyde\MultilingualPress\ACTION_ACTIVATION ) ) {
+		if ( did_action( ACTION_ACTIVATION ) ) {
 			// Force installation check and thus allow to execute installation or upgrade routines.
 			add_filter( SystemChecker::ACTION_FORCE_CHECK, '__return_true' );
 		}

@@ -2,6 +2,8 @@
 
 use Inpsyde\MultilingualPress\API\Languages;
 
+use function Inpsyde\MultilingualPress\attributes_array_to_string;
+
 /**
  * Class Mlp_Admin_Table_View
  *
@@ -213,7 +215,7 @@ class Mlp_Admin_Table_View {
 
 		return [
 			$this->get_input_name( $id, $col ),
-			\Inpsyde\MultilingualPress\attributes_array_to_string( $attributes ),
+			attributes_array_to_string( $attributes ),
 			$value,
 		];
 	}
