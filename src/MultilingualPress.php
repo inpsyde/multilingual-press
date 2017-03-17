@@ -95,10 +95,10 @@ final class MultilingualPress {
 	 *
 	 * @throws CannotResolveName if there is no container available (i.e., MultilingualPress has not been intitialised).
 	 */
-	public static function resolve( $name ) {
+	public static function resolve( string $name ) {
 
 		if ( ! static::$container ) {
-			throw CannotResolveName::for_name( (string) $name );
+			throw CannotResolveName::for_name( $name );
 		}
 
 		return static::$container[ $name ];
@@ -111,9 +111,9 @@ final class MultilingualPress {
 	 *
 	 * @param ServiceProvider $provider Service provider object.
 	 *
-	 * @return static MultilingualPress instance.
+	 * @return MultilingualPress MultilingualPress instance.
 	 */
-	public function register_service_provider( ServiceProvider $provider ) {
+	public function register_service_provider( ServiceProvider $provider ): MultilingualPress {
 
 		// Call the (renamed) method provided by the service trait.
 		$this->_register_service_provider( $provider );
@@ -134,7 +134,7 @@ final class MultilingualPress {
 	 *
 	 * @throws InstanceAlreadyBootstrapped if called on a MultilingualPress instance that has already been bootstrapped.
 	 */
-	public function bootstrap() {
+	public function bootstrap(): bool {
 
 		if ( $this->is_bootstrapped ) {
 			throw new InstanceAlreadyBootstrapped();
@@ -182,7 +182,7 @@ final class MultilingualPress {
 	 *
 	 * @return bool Whether or not MultilingualPress is installed properly.
 	 */
-	private function check_installation() {
+	private function check_installation(): bool {
 
 		$system_checker = static::$container['multilingualpress.system_checker'];
 
@@ -232,7 +232,7 @@ final class MultilingualPress {
 	 *
 	 * @return bool Whether or not MultilingualPress should register any modules.
 	 */
-	private function needs_modules() {
+	private function needs_modules(): bool {
 
 		if ( is_network_admin() || in_array( $GLOBALS['pagenow'], [ 'admin-ajax.php', 'admin-post.php' ], true ) ) {
 			return true;
