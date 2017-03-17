@@ -124,12 +124,9 @@ final class WPDBLanguages implements Languages {
 
 		$names_string = "'" . implode( "','", array_map( 'esc_sql', $names ) ) . "'";
 
-		$iso_codes_string = '';
-		if ( $iso_codes ) {
-			$iso_codes_string .= "'" . implode( "','", array_map( 'esc_sql', $iso_codes ) ) . "'";
-		}
+		$iso_codes_string = $iso_codes ? "'" . implode( "','", array_map( 'esc_sql', $iso_codes ) ) . "'" : '';
 
-		$query = "SELECT * FROM {$this->table} WHERE http_name IN($names_string)";
+		$query = "SELECT * FROM {$this->table} WHERE http_name IN ($names_string)";
 
 		if ( $iso_codes ) {
 			$query .= "\n\tOR iso_639_1 IN ($iso_codes_string)";
@@ -161,8 +158,8 @@ final class WPDBLanguages implements Languages {
 	 * @return string|string[] The desired field value, an empty string on failure, or an array for field 'all'.
 	 */
 	public function get_language_by_http_code(
-		$http_code,
-		$field = 'native_name',
+		string $http_code,
+		string $field = 'native_name',
 		$fallbacks = [
 			'native_name',
 			'english_name',

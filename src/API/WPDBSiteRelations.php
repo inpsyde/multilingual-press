@@ -50,7 +50,7 @@ final class WPDBSiteRelations implements SiteRelations {
 	 *
 	 * @return int The number of rows affected.
 	 */
-	public function delete_relation( $site_1, $site_2 = 0 ): int {
+	public function delete_relation( int $site_1, int $site_2 = 0 ): int {
 
 		$query = "DELETE FROM {$this->table}";
 
@@ -95,7 +95,7 @@ final class WPDBSiteRelations implements SiteRelations {
 	 *
 	 * @return int[] The array holding the IDs of all sites related to the site with the given (or current) ID.
 	 */
-	public function get_related_site_ids( int $site_id = 0, $include_site = false ): array {
+	public function get_related_site_ids( int $site_id = 0, bool $include_site = false ): array {
 
 		$site_id = $site_id ?: get_current_blog_id();
 		if ( ! absint( $site_id ) ) {

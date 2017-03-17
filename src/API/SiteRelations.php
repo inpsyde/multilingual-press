@@ -20,7 +20,7 @@ interface SiteRelations {
 	 *
 	 * @return int The number of rows affected.
 	 */
-	public function delete_relation( $site_1, $site_2 = 0 ): int;
+	public function delete_relation( int $site_1, int $site_2 = 0 ): int;
 
 	/**
 	 * Returns an array with site IDs as keys and arrays with the IDs of all related sites as values.
@@ -41,7 +41,7 @@ interface SiteRelations {
 	 *
 	 * @return int[] The array holding the IDs of all sites related to the site with the given (or current) ID.
 	 */
-	public function get_related_site_ids( int $site_id = 0, $include_site = false ): array;
+	public function get_related_site_ids( int $site_id = 0, bool $include_site = false ): array;
 
 	/**
 	 * Creates relations between one site and one or more other sites.

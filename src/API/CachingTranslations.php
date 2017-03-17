@@ -112,7 +112,7 @@ final class CachingTranslations implements Translations {
 
 		$translations = [];
 
-		$sites = $this->site_relations->get_related_site_ids( (int) $args['site_id'], $args['include_base'] );
+		$sites = $this->site_relations->get_related_site_ids( (int) $args['site_id'], (bool) $args['include_base'] );
 		if ( $sites ) {
 			$content_relations = 0 < $args['content_id']
 				? $this->content_relations->get_relations( $args['site_id'], $args['content_id'], $args['type'] )
@@ -357,7 +357,7 @@ final class CachingTranslations implements Translations {
 	 *
 	 * @return Translator Translator object.
 	 */
-	private function translator( $type ): Translator {
+	private function translator( string $type ): Translator {
 
 		return $this->translators[ $type ] ?? $this->null_translator();
 	}

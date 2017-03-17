@@ -40,8 +40,8 @@ interface Languages {
 	 * @return string|string[] The desired field value, an empty string on failure, or an array for field 'all'.
 	 */
 	public function get_language_by_http_code(
-		$http_code,
-		$field = 'native_name',
+		string $http_code,
+		string $field = 'native_name',
 		$fallbacks = [
 			'native_name',
 			'english_name',

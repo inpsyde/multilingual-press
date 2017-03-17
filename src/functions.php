@@ -170,7 +170,7 @@ function get_available_language_names( $related = true, $include_current_site = 
 	if ( $related ) {
 		$related_sites = MultilingualPress::resolve( 'multilingualpress.site_relations' )->get_related_site_ids(
 			$current_site_id,
-			$include_current_site
+			(bool) $include_current_site
 		);
 		if ( ! $related_sites ) {
 			return [];
@@ -335,8 +335,8 @@ function get_language_by_http_name(
 ) {
 
 	return MultilingualPress::resolve( 'multilingualpress.languages' )->get_language_by_http_code(
-		$http_code,
-		$field,
+		(string) $http_code,
+		(string) $field,
 		$fallbacks
 	);
 }
