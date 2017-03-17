@@ -24,7 +24,7 @@ class ModuleAlreadyRegistered extends Exception {
 	 *
 	 * @return ModuleAlreadyRegistered Exception object.
 	 */
-	public static function for_id( string $id, $action = 'register' ): ModuleAlreadyRegistered {
+	public static function for_id( string $id, string $action = 'register' ): ModuleAlreadyRegistered {
 
 		return new static( sprintf(
 			'Cannot %2$s "%1$s". There already is a module with this ID.',
