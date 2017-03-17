@@ -149,7 +149,7 @@ class AssetManager {
 	 * @return bool Whether or not the script was enqueued successfully.
 	 */
 	public function enqueue_script_with_data(
-		string $script,
+		$script,
 		string $object_name,
 		array $data,
 		$in_footer = true
