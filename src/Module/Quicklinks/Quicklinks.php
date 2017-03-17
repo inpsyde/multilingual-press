@@ -101,7 +101,7 @@ class Quicklinks {
 	 */
 	public function add_to_content( string $content ): string {
 
-		$translations = $this->get_translations( (int) get_current_blog_id() );
+		$translations = $this->get_translations( get_current_blog_id() );
 		if ( ! $translations ) {
 			return $content;
 		}
