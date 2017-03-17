@@ -108,7 +108,7 @@ class TypeFactory {
 	 *
 	 * @return Factory Factory instance.
 	 */
-	private function get_factory( string $base, string $default_class ) {
+	private function get_factory( string $base, string $default_class ): Factory {
 
 		if ( empty( $this->factories[ $base ] ) ) {
 			$this->factories[ $base ] = GenericFactory::with_default_class( $base, $default_class );
