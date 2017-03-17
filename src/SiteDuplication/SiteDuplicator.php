@@ -229,7 +229,7 @@ class SiteDuplicator {
 	 */
 	private function duplicate_tables( int $source_site_id, string $table_prefix ) {
 
-		$tables = $this->table_list->site_tables( (int) $source_site_id );
+		$tables = $this->table_list->site_tables( $source_site_id );
 		/**
 		 * Filters the tables to duplicate from the source site for the current site.
 		 *

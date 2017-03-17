@@ -84,8 +84,6 @@ final class PostTranslator implements Translator {
 		}
 
 		if ( 'publish' === $post->post_status || current_user_can( 'edit_post', $post_id ) ) {
-			$post_id = (int) $post_id;
-
 			/**
 			 * Fires right before MultilingualPress generates a permalink.
 			 *
