@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Admin;
 
 use WP_Screen;
@@ -50,17 +52,17 @@ class MetaBox {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string|array|WP_Screen $screen        Optional. Screen identifier. Defaulst to empty string.
-	 * @param string                 $context       Optional. Meta box context. Defaulst to 'advanced'.
-	 * @param string                 $priority      Optional. Meta box priority. Defaulst to 'default'.
+	 * @param string|array|WP_Screen $screen        Optional. Screen identifier. Defaults to empty string.
+	 * @param string                 $context       Optional. Meta box context. Defaults to 'advanced'.
+	 * @param string                 $priority      Optional. Meta box priority. Defaults to 'default'.
 	 * @param array                  $callback_args Optional. Render callback arguments. Defaults to empty array.
 	 *
 	 * @return void
 	 */
 	public function register(
 		$screen = '',
-		$context = 'advanced',
-		$priority = 'default',
+		string $context = 'advanced',
+		string $priority = 'default',
 		array $callback_args = []
 	) {
 

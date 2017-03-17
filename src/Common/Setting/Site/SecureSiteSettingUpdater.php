@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Setting\Site;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -30,9 +32,9 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 	 * @param string $option Site option name.
 	 * @param Nonce  $nonce  Optional. Nonce object. Defaults to null.
 	 */
-	public function __construct( $option, Nonce $nonce = null ) {
+	public function __construct( string $option, Nonce $nonce = null ) {
 
-		$this->option = (string) $option;
+		$this->option = $option;
 
 		$this->nonce = $nonce;
 	}
@@ -46,7 +48,7 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 	 *
 	 * @return bool Whether or not the site setting was updated successfully.
 	 */
-	public function update( $site_id ) {
+	public function update( int $site_id ): bool {
 
 		if ( ! current_user_can( 'manage_sites' ) ) {
 			return false;
@@ -68,18 +70,15 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 	 *
 	 * @return string The value included in the request.
 	 */
-	private function get_value() {
+	private function get_value(): string {
 
-		$value = array_key_exists( $this->option, $_GET ) && is_string( $_GET[ $this->option ] )
-			? $_GET[ $this->option ]
-			: '';
+		$value = is_string( $_GET[ $this->option ] ?? null ) ? $_GET[ $this->option ] : '';
 
-		if ( empty( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+		$request_method = $_SERVER['REQUEST_METHOD'] ?? '';
+		if ( ! $request_method || 'POST' !== strtoupper( $request_method ) ) {
 			return $value;
 		}
 
-		return array_key_exists( $this->option, $_POST ) && is_string( $_POST[ $this->option ] )
-			? $_POST[ $this->option ]
-			: '';
+		return is_string( $_POST[ $this->option ] ?? null ) ? $_POST[ $this->option ] : '';
 	}
 }

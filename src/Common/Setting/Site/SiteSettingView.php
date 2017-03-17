@@ -19,5 +19,5 @@ interface SiteSettingView {
 	 *
 	 * @return bool Whether or not the site setting markup was rendered successfully.
 	 */
-	public function render( $site_id );
+	public function render( int $site_id ): bool;
 }

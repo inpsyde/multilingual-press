@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Nonce;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueManipulationNotAllowed;
@@ -31,7 +33,8 @@ final class OriginalRequestContext implements Context {
 	public function __construct() {
 
 		if ( ! isset( $this->types ) ) {
-			$this->types = ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) )
+			$method = $_SERVER['REQUEST_METHOD'] ?? '';
+			$this->types = $method && 'POST' === strtoupper( $method )
 				? [ INPUT_GET, INPUT_POST ]
 				: [ INPUT_GET ];
 		}

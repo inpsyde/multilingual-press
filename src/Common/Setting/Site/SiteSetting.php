@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Setting\Site;
 
 /**
@@ -34,13 +36,13 @@ class SiteSetting {
 	 * @param SiteSettingUpdater   $updater    Updater object.
 	 * @param bool                 $check_user Optional. Only render for users capable of editing? Defaults to true.
 	 */
-	public function __construct( SiteSettingViewModel $model, SiteSettingUpdater $updater, $check_user = true ) {
+	public function __construct( SiteSettingViewModel $model, SiteSettingUpdater $updater, bool $check_user = true ) {
 
 		$this->model = $model;
 
 		$this->updater = $updater;
 
-		$this->check_user = (bool) $check_user;
+		$this->check_user = $check_user;
 	}
 
 	/**
@@ -53,7 +55,7 @@ class SiteSetting {
 	 *
 	 * @return void
 	 */
-	public function register( $render_hook, $update_hook = '' ) {
+	public function register( string $render_hook, string $update_hook = '' ) {
 
 		add_action( $render_hook, function ( $site_id ) {
 

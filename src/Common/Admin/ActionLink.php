@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Admin;
 
 /**
@@ -34,7 +36,7 @@ class ActionLink {
 	 * @param string   $html            Link HTML.
 	 * @param callable $add_callback    Optional. Callback to handle adding the link. Defaults to null.
 	 */
-	public function __construct( $id, $html, callable $add_callback = null ) {
+	public function __construct( string $id, string $html, callable $add_callback = null ) {
 
 		$this->id = (string) $id;
 
@@ -52,7 +54,7 @@ class ActionLink {
 	 *
 	 * @return void
 	 */
-	public function register( $hook ) {
+	public function register( string $hook ) {
 
 		add_filter( $hook, [ $this, 'add' ] );
 	}
@@ -66,7 +68,7 @@ class ActionLink {
 	 *
 	 * @return array All links.
 	 */
-	public function add( array $links ) {
+	public function add( array $links ): array {
 
 		if ( is_callable( $this->add_callback ) ) {
 			$callback = $this->add_callback;

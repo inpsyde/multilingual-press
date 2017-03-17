@@ -19,5 +19,5 @@ interface SiteSettingUpdater {
 	 *
 	 * @return bool Whether or not the site setting was updated successfully.
 	 */
-	public function update( $site_id );
+	public function update( int $site_id ): bool;
 }

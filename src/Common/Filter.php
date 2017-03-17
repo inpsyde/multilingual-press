@@ -35,7 +35,7 @@ interface Filter {
 	 *
 	 * @return int The number of accepted arguments.
 	 */
-	public function accepted_args();
+	public function accepted_args(): int;
 
 	/**
 	 * Removes the filter.
@@ -47,7 +47,7 @@ interface Filter {
 	 *
 	 * @return bool Whether or not the filter was removed successfully.
 	 */
-	public function disable( $hook = '', $priority = self::DEFAULT_PRIORITY );
+	public function disable( string $hook = '', int $priority = self::DEFAULT_PRIORITY ): bool;
 
 	/**
 	 * Adds the filter.
@@ -61,10 +61,10 @@ interface Filter {
 	 * @return bool Whether or not the filter was added successfully.
 	 */
 	public function enable(
-		$hook = '',
-		$priority = self::DEFAULT_PRIORITY,
-		$accepted_args = self::DEFAULT_ACCEPTED_ARGS
-	);
+		string $hook = '',
+		int $priority = self::DEFAULT_PRIORITY,
+		int $accepted_args = self::DEFAULT_ACCEPTED_ARGS
+	): bool;
 
 	/**
 	 * Returns the hook name.
@@ -73,7 +73,7 @@ interface Filter {
 	 *
 	 * @return string The hook name.
 	 */
-	public function hook();
+	public function hook(): string;
 
 	/**
 	 * Returns the callback priority.
@@ -82,5 +82,5 @@ interface Filter {
 	 *
 	 * @return int The callback priority.
 	 */
-	public function priority();
+	public function priority(): int;
 }

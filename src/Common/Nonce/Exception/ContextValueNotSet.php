@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Nonce\Exception;
 
 use Exception;
@@ -20,9 +22,9 @@ class ContextValueNotSet extends Exception {
 	 * @param string $name   The name of the nonce context value.
 	 * @param string $action Optional. Action to be performed. Defaults to 'read'.
 	 *
-	 * @return static Exception object.
+	 * @return ContextValueNotSet Exception object.
 	 */
-	public static function for_name( $name, $action = 'read' ) {
+	public static function for_name( string $name, string $action = 'read' ): ContextValueNotSet {
 
 		return new static( sprintf(
 			'Cannot %2$s "%1$s". There is no nonce context value with this name.',

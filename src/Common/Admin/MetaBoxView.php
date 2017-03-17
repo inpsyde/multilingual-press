@@ -15,8 +15,8 @@ interface MetaBoxView {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param object $object Object.
-	 * @param array  $args   Arguments.
+	 * @param \WP_Post|\WP_Comment $object Metabox subject object.
+	 * @param array                $args   Arguments.
 	 *
 	 * @return void
 	 */

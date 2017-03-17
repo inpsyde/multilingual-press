@@ -20,5 +20,5 @@ interface ArrayDiffer {
 	 *
 	 * @return array The array holding the differences only.
 	 */
-	public function diff( array $a, array $b );
+	public function diff( array $a, array $b ): array;
 }

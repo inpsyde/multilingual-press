@@ -41,7 +41,7 @@ class Mlp_Language_Manager_Options_Page_Data implements Setting {
 	 *
 	 * @return string Action name.
 	 */
-	public function action() {
+	public function action(): string {
 
 		return 'update_multilingualpress_languages';
 	}
@@ -53,7 +53,7 @@ class Mlp_Language_Manager_Options_Page_Data implements Setting {
 	 *
 	 * @return string Setting title.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return $this->page_title;
 	}
@@ -65,7 +65,7 @@ class Mlp_Language_Manager_Options_Page_Data implements Setting {
 	 *
 	 * @return URL URL to submit updates to.
 	 */
-	public function url() {
+	public function url(): URL {
 
 		return $this->type_factory->create_url( [
 			admin_url( 'admin-post.php' ),

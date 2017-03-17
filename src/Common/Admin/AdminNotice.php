@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Admin;
 
 /**
@@ -28,9 +30,9 @@ class AdminNotice {
 	 * @param string $content Admin notice content.
 	 * @param array  $args    Optional. Configuration arguments. Defaults to empty array.
 	 */
-	public function __construct( $content, array $args = [] ) {
+	public function __construct( string $content, array $args = [] ) {
 
-		$this->content = (string) $content;
+		$this->content = $content;
 
 		$args = array_merge( [
 			'type'        => 'success',

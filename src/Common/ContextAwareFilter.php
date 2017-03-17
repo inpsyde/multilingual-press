@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common;
 
 /**
@@ -7,6 +9,8 @@ namespace Inpsyde\MultilingualPress\Common;
  *
  * @package Inpsyde\MultilingualPress\Common
  * @since   3.0.0
+ *
+ * @see Filter
  */
 trait ContextAwareFilter {
 
@@ -37,7 +41,7 @@ trait ContextAwareFilter {
 	 *
 	 * @return int The number of accepted arguments.
 	 */
-	public function accepted_args() {
+	public function accepted_args(): int {
 
 		return (int) ( $this->accepted_args ?: Filter::DEFAULT_ACCEPTED_ARGS );
 	}
@@ -52,7 +56,7 @@ trait ContextAwareFilter {
 	 *
 	 * @return bool Whether or not the filter was removed successfully.
 	 */
-	public function disable( $hook = null, $priority = null ) {
+	public function disable( string $hook = '', int $priority = Filter::DEFAULT_PRIORITY ): bool {
 
 		if ( ! $this->callback ) {
 			return false;
@@ -61,10 +65,10 @@ trait ContextAwareFilter {
 		$hook = $hook ?: $this->hook();
 
 		if ( has_filter( $hook, $this->callback ) ) {
-			remove_filter( $hook, $this->callback, $priority ?: $this->priority() );
+			remove_filter( $hook, $this->callback, $priority ?? $this->priority() );
 
 			return true;
-		};
+		}
 
 		return false;
 	}
@@ -80,7 +84,11 @@ trait ContextAwareFilter {
 	 *
 	 * @return bool Whether or not the filter was added successfully.
 	 */
-	public function enable( $hook = null, $priority = null, $accepted_args = null ) {
+	public function enable(
+		string $hook = '',
+		int $priority = Filter::DEFAULT_PRIORITY,
+		int $accepted_args = Filter::DEFAULT_PRIORITY
+	): bool {
 
 		if ( ! $this->callback ) {
 			return false;
@@ -90,9 +98,9 @@ trait ContextAwareFilter {
 
 		if ( has_filter( $hook, $this->callback ) ) {
 			return false;
-		};
+		}
 
-		add_filter( $hook, $this->callback, $priority ?: $this->priority(), $accepted_args ?: $this->accepted_args() );
+		add_filter( $hook, $this->callback, $priority ?? $this->priority(), $accepted_args ?? $this->accepted_args() );
 
 		return true;
 	}
@@ -104,7 +112,7 @@ trait ContextAwareFilter {
 	 *
 	 * @return string The hook name.
 	 */
-	public function hook() {
+	public function hook(): string {
 
 		return (string) $this->hook;
 	}
@@ -116,8 +124,8 @@ trait ContextAwareFilter {
 	 *
 	 * @return int The callback priority.
 	 */
-	public function priority() {
+	public function priority(): int {
 
-		return (int) ( $this->priority ?: Filter::DEFAULT_PRIORITY );
+		return is_int( $this->priority ) ? $this->priority : Filter::DEFAULT_PRIORITY;
 	}
 }

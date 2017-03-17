@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Type;
 
 /**
@@ -17,7 +19,7 @@ final class NullTranslation implements Translation {
 	 *
 	 * @return URL Icon URL object.
 	 */
-	public function icon_url() {
+	public function icon_url(): URL {
 
 		return new EscapedURL( '' );
 	}
@@ -29,7 +31,7 @@ final class NullTranslation implements Translation {
 	 *
 	 * @return Language Language object.
 	 */
-	public function language() {
+	public function language(): Language {
 
 		return new NullLanguage();
 	}
@@ -41,7 +43,7 @@ final class NullTranslation implements Translation {
 	 *
 	 * @return string Remote title.
 	 */
-	public function remote_title() {
+	public function remote_title(): string {
 
 		return '';
 	}
@@ -53,7 +55,7 @@ final class NullTranslation implements Translation {
 	 *
 	 * @return string Remote URL.
 	 */
-	public function remote_url() {
+	public function remote_url(): string {
 
 		return '';
 	}
@@ -65,7 +67,7 @@ final class NullTranslation implements Translation {
 	 *
 	 * @return int Source site ID.
 	 */
-	public function source_site_id() {
+	public function source_site_id(): int {
 
 		return 0;
 	}
@@ -77,7 +79,7 @@ final class NullTranslation implements Translation {
 	 *
 	 * @return int Target content ID.
 	 */
-	public function target_content_id() {
+	public function target_content_id(): int {
 
 		return 0;
 	}
@@ -89,7 +91,7 @@ final class NullTranslation implements Translation {
 	 *
 	 * @return int Target site ID.
 	 */
-	public function target_site_id() {
+	public function target_site_id(): int {
 
 		return 0;
 	}
@@ -101,7 +103,7 @@ final class NullTranslation implements Translation {
 	 *
 	 * @return string Content type.
 	 */
-	public function type() {
+	public function type(): string {
 
 		return '';
 	}

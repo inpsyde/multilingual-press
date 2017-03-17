@@ -33,7 +33,7 @@ class Mlp_Save_Post_Request_Validator implements RequestValidator {
 	 * @param  int $context Post id
 	 * @return bool
 	 */
-	public function is_valid( $context = NULL )
+	public function is_valid( $context = null ): bool
 	{
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			return FALSE;

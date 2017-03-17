@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Admin;
 
 /**
@@ -185,7 +187,7 @@ class SettingsPage {
 	/**
 	 * @var string
 	 */
-	private $hookname = '';
+	private $hook_name = '';
 
 	/**
 	 * @var string
@@ -238,35 +240,35 @@ class SettingsPage {
 	 * @param string           $capability Capability required to view the settings page.
 	 * @param string           $slug       Page slug used in the URL.
 	 * @param SettingsPageView $view       View object.
-	 * @param string           $icon       Optinoal. Icon URL. Defaults to empty string.
+	 * @param string           $icon       Optional. Icon URL. Defaults to empty string.
 	 * @param int|null         $position   Optional. Position in the admin menu. Defaults to null.
 	 */
 	public function __construct(
-		$admin,
-		$title,
-		$menu_title,
-		$capability,
-		$slug,
+		int $admin,
+		string $title,
+		string $menu_title,
+		string $capability,
+		string $slug,
 		SettingsPageView $view,
-		$icon = '',
-		$position = null
+		string $icon = '',
+		int $position = null
 	) {
 
-		$this->admin = (int) $admin;
+		$this->admin = $admin;
 
-		$this->title = (string) $title;
+		$this->title = $title;
 
-		$this->menu_title = (string) $menu_title;
+		$this->menu_title = $menu_title;
 
-		$this->capability = (string) $capability;
+		$this->capability = $capability;
 
-		$this->slug = (string) $slug;
+		$this->slug = $slug;
 
 		$this->view = $view;
 
-		$this->icon = (string) $icon;
+		$this->icon = $icon;
 
-		$this->position = is_numeric( $position ) ? (int) $position : null;
+		$this->position = $position;
 	}
 
 	/**
@@ -282,17 +284,17 @@ class SettingsPage {
 	 * @param string           $slug       Page slug used in the URL.
 	 * @param SettingsPageView $view       View object.
 	 *
-	 * @return static Settings page object.
+	 * @return SettingsPage Settings page object.
 	 */
 	public static function with_parent(
-		$admin,
-		$parent,
-		$title,
-		$menu_title,
-		$capability,
-		$slug,
+		int $admin,
+		string $parent,
+		string $title,
+		string $menu_title,
+		string $capability,
+		string $slug,
 		SettingsPageView $view
-	) {
+	): SettingsPage {
 
 		$settings_page = new static(
 			$admin,
@@ -303,7 +305,7 @@ class SettingsPage {
 			$view
 		);
 
-		$settings_page->parent = (string) $parent;
+		$settings_page->parent = $parent;
 
 		return $settings_page;
 	}
@@ -315,21 +317,21 @@ class SettingsPage {
 	 *
 	 * @return string The capability.
 	 */
-	public function capability() {
+	public function capability(): string {
 
 		return $this->capability;
 	}
 
 	/**
-	 * Returns the hookname.
+	 * Returns the hook name.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string The hookname.
+	 * @return string The hook name.
 	 */
-	public function hookname() {
+	public function hookname(): string {
 
-		return $this->hookname;
+		return $this->hook_name;
 	}
 
 	/**
@@ -339,17 +341,11 @@ class SettingsPage {
 	 *
 	 * @return bool Whether or not the settings page was registered successfully.
 	 */
-	public function register() {
+	public function register(): bool {
 
 		$action = $this->get_action();
-		if ( ! $action ) {
-			return false;
-		}
 
-		return add_action( $action, function () {
-
-			$this->hookname = ( $this->get_callback() )( ...$this->get_callback_args() );
-		} );
+		return $action ? add_action( $action, $this->get_callback() ) : false;
 	}
 
 	/**
@@ -359,7 +355,7 @@ class SettingsPage {
 	 *
 	 * @return string The slug.
 	 */
-	public function slug() {
+	public function slug(): string {
 
 		return $this->slug;
 	}
@@ -371,7 +367,7 @@ class SettingsPage {
 	 *
 	 * @return string The title.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return $this->title;
 	}
@@ -383,7 +379,7 @@ class SettingsPage {
 	 *
 	 * @return string URL.
 	 */
-	public function url() {
+	public function url(): string {
 
 		if ( ! isset( $this->url ) ) {
 			$url = add_query_arg( 'page', $this->slug, $this->parent ?: 'admin.php' );
@@ -411,7 +407,7 @@ class SettingsPage {
 	 *
 	 * @return string.
 	 */
-	private function get_action() {
+	private function get_action(): string {
 
 		switch ( $this->admin ) {
 			case static::ADMIN_NETWORK:
@@ -432,30 +428,34 @@ class SettingsPage {
 	 *
 	 * @return callable Callback for adding the page to the admin menu.
 	 */
-	private function get_callback() {
+	private function get_callback(): callable {
 
-		return $this->parent ? 'add_submenu_page' : 'add_menu_page';
-	}
+		if ( $this->parent ) {
 
-	/**
-	 * Returns the callback args for adding the page to the admin menu.
-	 *
-	 * @return array Callback args for adding the page to the admin menu.
-	 */
-	private function get_callback_args() {
+			return function () {
 
-		return array_values( array_diff_key(
-			[
-				'parent'     => $this->parent,
-				'title'      => $this->title,
-				'menu_title' => $this->menu_title,
-				'capability' => $this->capability,
-				'slug'       => $this->slug,
-				'callback'   => [ $this->view, 'render' ],
-				'icon'       => $this->icon,
-				'position'   => $this->position,
-			],
-			$this->parent ? [ 'icon', 'position' ] : [ 'parent' ]
-		) );
+				$this->hook_name = add_submenu_page(
+					$this->parent,
+					$this->title,
+					$this->menu_title,
+					$this->capability,
+					$this->slug,
+					[ $this->view, 'render' ]
+				);
+			};
+		}
+
+		return function () {
+
+			$this->hook_name = add_menu_page(
+				$this->title,
+				$this->menu_title,
+				$this->capability,
+				$this->slug,
+				[ $this->view, 'render' ],
+				$this->icon,
+				$this->position
+			);
+		};
 	}
 }

@@ -17,7 +17,7 @@ interface Setting {
 	 *
 	 * @return string Action name.
 	 */
-	public function action();
+	public function action(): string;
 
 	/**
 	 * Returns the title of the setting.
@@ -26,7 +26,7 @@ interface Setting {
 	 *
 	 * @return string Setting title.
 	 */
-	public function title();
+	public function title(): string;
 
 	/**
 	 * Returns the URL to be used in the according form.
@@ -35,5 +35,5 @@ interface Setting {
 	 *
 	 * @return URL URL to submit updates to.
 	 */
-	public function url();
+	public function url(): URL;
 }

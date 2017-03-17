@@ -17,7 +17,7 @@ interface Nonce {
 	 *
 	 * @return string Nonce value.
 	 */
-	public function __toString();
+	public function __toString(): string;
 
 	/**
 	 * Returns the nonce action.
@@ -26,7 +26,7 @@ interface Nonce {
 	 *
 	 * @return string Nonce action.
 	 */
-	public function action();
+	public function action(): string;
 
 	/**
 	 * Checks if the nonce is valid with respect to the current context.
@@ -35,5 +35,5 @@ interface Nonce {
 	 *
 	 * @return bool Whether or not the nonce is valid.
 	 */
-	public function is_valid();
+	public function is_valid(): bool;
 }

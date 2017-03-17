@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Type;
 
 /**
@@ -40,7 +42,7 @@ final class SemanticVersionNumber implements VersionNumber {
 	 *
 	 * @return string Version string.
 	 */
-	public function __toString() {
+	public function __toString(): string {
 
 		return $this->version;
 	}
@@ -52,7 +54,7 @@ final class SemanticVersionNumber implements VersionNumber {
 	 *
 	 * @return string Sanitized semantic version number string.
 	 */
-	private function get_semantic_version_number( $version ) {
+	private function get_semantic_version_number( string $version ): string {
 
 		$version = $this->sanitize_version( $version );
 		if ( '' === $version ) {
@@ -71,29 +73,13 @@ final class SemanticVersionNumber implements VersionNumber {
 	 *
 	 * @return string Sanitized version number string.
 	 */
-	private function sanitize_version( $version ) {
+	private function sanitize_version( string $version ): string {
 
-		$version = strtolower( $version );
-
-		// Normalize separators.
-		$version = str_replace( [ '_', '-', '+' ], '.', $version );
-
-		// Remove invalid characters.
-		$version = preg_replace( '~[^a-z0-9\.]*~', '', $version );
-		if ( '' === $version ) {
-			return '';
-		}
-
-		// Reduce repeating dots to one dot only.
-		$version = preg_replace( '~\.\.+~', '.', $version );
-
-		// Insert a dot between a numeric character followed by a non-numeric one (i.e., "2beta1" becomes "2.beta1").
-		$version = preg_replace( '~([0-9])([a-z])~', '$1.$2', $version );
-
-		// Insert a dot between a non-numeric character followed by a numeric one (i.e., "2beta1" becomes "2beta.1").
-		$version = preg_replace( '~([a-z])([0-9])~', '$1.$2', $version );
-
-		return $version;
+		return preg_replace(
+			[ '~[_\.\-\+]+~', '~([0-9])([a-z])~', '~([a-z])([0-9])~', '~[^a-z0-9\.\-\+]*~' ],
+			[ '.', '$1.$2', '$1.$2', '' ],
+			strtolower( $version )
+		);
 	}
 
 	/**
@@ -105,32 +91,22 @@ final class SemanticVersionNumber implements VersionNumber {
 	 *
 	 * @return string Semantic version number string.
 	 */
-	private function format_version( $version ) {
+	private function format_version( string $version ): string {
 
-		if ( preg_match( '~^\d+\.\d+\.\d+~', $version ) ) {
-			return $version;
-		}
+		// filter because `$version` coming from sanitization could be just `'.'` and `explode('.', '.')` is `['', '']`
+		$all_parts = array_filter( explode( '.', $version ) );
 
-		// Semantic Versioning at least requires the format "X.Y.Z" with X, Y and Z being non-negative integers.
-		$parts = [ 0, 0, 0 ];
+		$digit_parts = array_filter( $all_parts, 'ctype_digit' );
 
-		$replace = true;
+		$count_digit_parts = count( $digit_parts );
 
-		foreach ( explode( '.', $version ) as $index => $level ) {
-			if ( $index < 3 && $replace ) {
-				if ( is_numeric( $level ) ) {
-					$parts[ $index ] = (int) $level;
+		$additional_parts = array_slice( $all_parts, $count_digit_parts );
 
-					continue;
-				}
+		// Ensure at least 3 digit parts, filling with 0 if some is missing
+		$digit_string = $count_digit_parts < 3
+			? implode( '.', array_replace( [ 0, 0, 0 ], $digit_parts ) )
+			: implode( '.', $digit_parts );
 
-				// Since this is a non-numeric part, all other parts will be appended (and not update existing levels).
-				$replace = false;
-			}
-
-			$parts[] = $level;
-		}
-
-		return join( '.', $parts );
+		return $additional_parts ? "$digit_string." . implode( '.', $additional_parts ) : $digit_string;
 	}
 }

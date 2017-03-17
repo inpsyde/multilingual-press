@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Setting\Site;
 
 /**
@@ -28,7 +30,7 @@ final class SiteSettingMultiView implements SiteSettingView {
 	 * @param SiteSettingView[] $views      Setting view objects.
 	 * @param bool              $check_user Optional. Only render for users capable of editing? Defaults to true.
 	 */
-	public function __construct( array $views, $check_user = true ) {
+	public function __construct( array $views, bool $check_user = true ) {
 
 		$this->views = array_filter( $views, function ( $view ) {
 
@@ -46,9 +48,9 @@ final class SiteSettingMultiView implements SiteSettingView {
 	 * @param SiteSettingViewModel[] $settings   Setting view model objects.
 	 * @param bool                   $check_user Optional. Only render for users capable of editing? Defaults to true.
 	 *
-	 * @return static
+	 * @return SiteSettingMultiView
 	 */
-	public static function from_view_models( array $settings, $check_user = true ) {
+	public static function from_view_models( array $settings, $check_user = true ): SiteSettingMultiView {
 
 		$settings = array_filter( $settings, function ( $setting ) {
 
@@ -72,7 +74,7 @@ final class SiteSettingMultiView implements SiteSettingView {
 	 *
 	 * @return bool Whether or not the site settings markup was rendered successfully.
 	 */
-	public function render( $site_id ) {
+	public function render( int $site_id ): bool {
 
 		if ( $this->check_user && ! current_user_can( 'manage_sites' ) ) {
 			return false;

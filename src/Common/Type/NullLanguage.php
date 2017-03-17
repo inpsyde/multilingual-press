@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Type;
 
 /**
@@ -17,7 +19,7 @@ final class NullLanguage implements Language {
 	 *
 	 * @return bool Whether or not the language is written right-to-left (RTL).
 	 */
-	public function is_rtl() {
+	public function is_rtl(): bool {
 
 		return false;
 	}
@@ -31,7 +33,7 @@ final class NullLanguage implements Language {
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
-	public function name( $output = 'native' ) {
+	public function name( string $output = 'native' ): string {
 
 		return '';
 	}
@@ -43,7 +45,7 @@ final class NullLanguage implements Language {
 	 *
 	 * @return int Language priority.
 	 */
-	public function priority() {
+	public function priority(): int {
 
 		return 0;
 	}

@@ -17,7 +17,7 @@ interface Language {
 	 *
 	 * @return bool Whether or not the language is written right-to-left (RTL).
 	 */
-	public function is_rtl();
+	public function is_rtl(): bool;
 
 	/**
 	 * Returns the language name (or code) according to the given argument.
@@ -28,7 +28,7 @@ interface Language {
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
-	public function name( $output = 'native' );
+	public function name( string $output = 'native' ): string;
 
 	/**
 	 * Returns the language priority.
@@ -37,5 +37,5 @@ interface Language {
 	 *
 	 * @return int Language priority.
 	 */
-	public function priority();
+	public function priority(): int;
 }

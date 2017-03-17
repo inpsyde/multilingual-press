@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Admin;
 
 /**
@@ -41,15 +43,15 @@ class SitesListTableColumn {
 	 * @param callable $add_callback    Optional. Callback to handle adding the column. Defaults to null.
 	 */
 	public function __construct(
-		$id,
-		$name,
+		string $id,
+		string $name,
 		callable $render_callback,
 		callable $add_callback = null
 	) {
 
-		$this->id = (string) $id;
+		$this->id = $id;
 
-		$this->name = (string) $name;
+		$this->name = $name;
 
 		$this->render_callback = $render_callback;
 
@@ -80,7 +82,7 @@ class SitesListTableColumn {
 	 *
 	 * @return array All columns.
 	 */
-	public function add( array $columns ) {
+	public function add( array $columns ): array {
 
 		if ( is_callable( $this->add_callback ) ) {
 			$callback = $this->add_callback;
@@ -102,12 +104,12 @@ class SitesListTableColumn {
 	 *
 	 * @return bool Whether or not the content was rendered successfully.
 	 */
-	public function render_content( $id, $site_id ) {
+	public function render_content( $id, $site_id ): bool {
 
 		if ( $id === $this->id ) {
 			$callback = $this->render_callback;
 
-			echo $callback( $id, $site_id );
+			echo $callback( $id, (int) $site_id );
 
 			return true;
 		}

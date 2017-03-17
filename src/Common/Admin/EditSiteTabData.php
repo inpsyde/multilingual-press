@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Admin;
 
 /**
@@ -41,10 +43,10 @@ class EditSiteTabData {
 	 * @param string $capability Optional. Capability required to view the tab. Defaults to "manage_sites".
 	 */
 	public function __construct(
-		$id,
-		$title,
-		$slug,
-		$capability = 'manage_sites'
+		string $id,
+		string $title,
+		string $slug,
+		string $capability = 'manage_sites'
 	) {
 
 		$this->id = (string) $id;
@@ -63,7 +65,7 @@ class EditSiteTabData {
 	 *
 	 * @return string The capability.
 	 */
-	public function capability() {
+	public function capability(): string {
 
 		return $this->capability;
 	}
@@ -75,7 +77,7 @@ class EditSiteTabData {
 	 *
 	 * @return string The ID.
 	 */
-	public function id() {
+	public function id(): string {
 
 		return $this->id;
 	}
@@ -87,7 +89,7 @@ class EditSiteTabData {
 	 *
 	 * @return string The slug.
 	 */
-	public function slug() {
+	public function slug(): string {
 
 		return $this->slug;
 	}
@@ -99,7 +101,7 @@ class EditSiteTabData {
 	 *
 	 * @return string The title.
 	 */
-	public function title() {
+	public function title(): string {
 
 		return $this->title;
 	}

@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Type;
 
 /**
@@ -26,7 +28,7 @@ final class AliasAwareLanguage implements Language {
 	private $priority = 1;
 
 	/**
-	 * Constructor. Sets up the properies.
+	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
@@ -50,7 +52,7 @@ final class AliasAwareLanguage implements Language {
 	 *
 	 * @return bool Whether or not the language is written right-to-left (RTL).
 	 */
-	public function is_rtl() {
+	public function is_rtl(): bool {
 
 		return $this->is_rtl;
 	}
@@ -62,7 +64,7 @@ final class AliasAwareLanguage implements Language {
 	 *
 	 * @param string $output Optional. Output type. Defaults to 'native'.
 	 *
-	 * TODO: Check/Adapt formatting to provide best possible readibility for both inline and rendered documentation.
+	 * TODO: Check/Adapt formatting to provide best possible readability for both inline and rendered documentation.
 	 * Possible values:
 	 *
 	 * * native:         Native name of the language (default, e.g., "Deutsch" for German).
@@ -78,7 +80,7 @@ final class AliasAwareLanguage implements Language {
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
-	public function name( $output = 'native' ) {
+	public function name( string $output = 'native' ): string {
 
 		if ( ! empty( $this->names[ $output ] ) ) {
 			return (string) $this->names[ $output ];
@@ -117,7 +119,7 @@ final class AliasAwareLanguage implements Language {
 	 *
 	 * @return int Language priority.
 	 */
-	public function priority() {
+	public function priority(): int {
 
 		return $this->priority;
 	}
@@ -129,7 +131,7 @@ final class AliasAwareLanguage implements Language {
 	 *
 	 * @return string[] Language names and codes.
 	 */
-	private function get_names( array $data ) {
+	private function get_names( array $data ): array {
 
 		$names = [
 			'english_name' => '',

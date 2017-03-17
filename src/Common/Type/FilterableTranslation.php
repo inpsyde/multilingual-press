@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Type;
 
 /**
@@ -26,7 +28,7 @@ final class FilterableTranslation implements Translation {
 	private $remote_title;
 
 	/**
-	 * @var URL
+	 * @var string
 	 */
 	private $remote_url;
 
@@ -67,21 +69,22 @@ final class FilterableTranslation implements Translation {
 
 		// TODO: Passing all the (different) stuff via an array really should be improved! Use fluent setters instead?!
 
-		$this->icon_url = $args['icon_url'];
+		$url            = $args['icon_url'] ?? new EscapedURL( '' );
+		$this->icon_url = $url instanceof URL ? $url : new EscapedURL( '' );
 
-		$this->remote_title = (string) $args['remote_title'];
+		$this->remote_title = (string) ( $args['remote_title'] ?? '' );
 
-		$this->remote_url = $args['remote_url'];
+		$this->remote_url = (string) ( $args['remote_url'] ?? '' );
 
-		$this->source_site_id = (int) $args['source_site_id'];
+		$this->source_site_id = (int) ( $args['source_site_id'] ?? 0 );
 
 		$this->suppress_filters = ! empty( $args['suppress_filters'] );
 
-		$this->target_content_id = (int) $args['target_content_id'];
+		$this->target_content_id = (int) ( $args['target_content_id'] ?? 0 );
 
-		$this->target_site_id = (int) $args['target_site_id'];
+		$this->target_site_id = (int) ( $args['target_site_id'] ?? 0 );
 
-		$this->type = (string) $args['type'];
+		$this->type = (string) ( $args['type'] ?? '' );
 
 		$this->language = $language;
 	}
@@ -93,7 +96,7 @@ final class FilterableTranslation implements Translation {
 	 *
 	 * @return URL Icon URL object.
 	 */
-	public function icon_url() {
+	public function icon_url(): URL {
 
 		return $this->icon_url;
 	}
@@ -105,7 +108,7 @@ final class FilterableTranslation implements Translation {
 	 *
 	 * @return Language Language object.
 	 */
-	public function language() {
+	public function language(): Language {
 
 		return $this->language;
 	}
@@ -117,7 +120,7 @@ final class FilterableTranslation implements Translation {
 	 *
 	 * @return string Remote title.
 	 */
-	public function remote_title() {
+	public function remote_title(): string {
 
 		return $this->remote_title;
 	}
@@ -129,10 +132,10 @@ final class FilterableTranslation implements Translation {
 	 *
 	 * @return string Remote URL.
 	 */
-	public function remote_url() {
+	public function remote_url(): string {
 
 		if ( $this->suppress_filters ) {
-			return (string) $this->remote_url;
+			return $this->remote_url;
 		}
 
 		/**
@@ -147,7 +150,7 @@ final class FilterableTranslation implements Translation {
 		 */
 		$remote_url = (string) apply_filters(
 			Translation::FILTER_URL,
-			(string) $this->remote_url,
+			$this->remote_url,
 			$this->target_site_id(),
 			$this->target_content_id(),
 			$this
@@ -163,7 +166,7 @@ final class FilterableTranslation implements Translation {
 	 *
 	 * @return int Source site ID.
 	 */
-	public function source_site_id() {
+	public function source_site_id(): int {
 
 		return $this->source_site_id;
 	}
@@ -175,7 +178,7 @@ final class FilterableTranslation implements Translation {
 	 *
 	 * @return int Target content ID.
 	 */
-	public function target_content_id() {
+	public function target_content_id(): int {
 
 		return $this->target_content_id;
 	}
@@ -187,7 +190,7 @@ final class FilterableTranslation implements Translation {
 	 *
 	 * @return int Target site ID.
 	 */
-	public function target_site_id() {
+	public function target_site_id(): int {
 
 		return $this->target_site_id;
 	}
@@ -199,7 +202,7 @@ final class FilterableTranslation implements Translation {
 	 *
 	 * @return string Content type.
 	 */
-	public function type() {
+	public function type(): string {
 
 		return $this->type;
 	}

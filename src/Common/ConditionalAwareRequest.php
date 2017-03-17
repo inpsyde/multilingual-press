@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common;
 
 /**
@@ -24,6 +26,9 @@ final class ConditionalAwareRequest implements Request {
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
+	 *
+	 * @see ConditionalAwareRequest::is_singular()
+	 * @see ConditionalAwareRequest::is_term_archive()
 	 */
 	public function __construct() {
 
@@ -44,7 +49,7 @@ final class ConditionalAwareRequest implements Request {
 	 *
 	 * @return string The (first) post type, or empty string if not applicable.
 	 */
-	public function post_type() {
+	public function post_type(): string {
 
 		$post_type = (array) get_query_var( 'post_type' );
 
@@ -60,7 +65,7 @@ final class ConditionalAwareRequest implements Request {
 	 *
 	 * @return int The ID of the queried object.
 	 */
-	public function queried_object_id() {
+	public function queried_object_id(): int {
 
 		if ( is_category() || is_tag() || is_tax() ) {
 			$queried_object = get_queried_object();
@@ -78,7 +83,7 @@ final class ConditionalAwareRequest implements Request {
 	 *
 	 * @return string Request type, or empty string on failure.
 	 */
-	public function type() {
+	public function type(): string {
 
 		if ( isset( $this->type ) ) {
 			return $this->type;
@@ -96,32 +101,32 @@ final class ConditionalAwareRequest implements Request {
 		return $this->type;
 	}
 
-	/** @noinspection PhpUnusedPrivateMethodInspection
+	/**
 	 * Checks if the current request is for the page for posts.
 	 *
 	 * @return bool Whether or not the current request is for the page for posts.
 	 */
-	private function is_page_for_posts() {
+	private function is_page_for_posts(): bool {
 
 		return is_home() && ! is_front_page();
 	}
 
-	/** @noinspection PhpUnusedPrivateMethodInspection
+	/**
 	 * Checks if the current request is for a single post or the page for posts.
 	 *
 	 * @return bool Whether or not the current request is for a single post or the page for posts.
 	 */
-	private function is_singular() {
+	private function is_singular(): bool {
 
 		return is_singular() || $this->is_page_for_posts();
 	}
 
-	/** @noinspection PhpUnusedPrivateMethodInspection
+	/**
 	 * Checks if the current request is for a term archive.
 	 *
 	 * @return bool Whether or not the current request is for a term archive.
 	 */
-	private function is_term_archive() {
+	private function is_term_archive(): bool {
 
 		$queried_object = get_queried_object();
 

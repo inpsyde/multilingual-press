@@ -20,5 +20,5 @@ interface UserSettingUpdater {
 	 *
 	 * @return bool Whether or not the user setting was updated successfully.
 	 */
-	public function update( $user_id );
+	public function update( $user_id ): bool;
 }

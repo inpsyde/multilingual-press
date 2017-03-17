@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Nonce;
 
 /**
@@ -28,9 +30,9 @@ final class WPNonce implements Nonce {
 	 * @param string  $action  Nonce action.
 	 * @param Context $context Optional. Nonce context object. Defaults to null.
 	 */
-	public function __construct( $action, Context $context = null ) {
+	public function __construct( string $action, Context $context = null ) {
 
-		$this->action = (string) $action;
+		$this->action = $action;
 
 		$this->context = $context;
 	}
@@ -42,7 +44,7 @@ final class WPNonce implements Nonce {
 	 *
 	 * @return string Nonce value.
 	 */
-	public function __toString() {
+	public function __toString(): string {
 
 		return (string) wp_create_nonce( $this->get_hash() );
 	}
@@ -54,7 +56,7 @@ final class WPNonce implements Nonce {
 	 *
 	 * @return string Nonce action.
 	 */
-	public function action() {
+	public function action(): string {
 
 		return $this->action;
 	}
@@ -66,7 +68,7 @@ final class WPNonce implements Nonce {
 	 *
 	 * @return bool Whether or not the nonce is valid.
 	 */
-	public function is_valid() {
+	public function is_valid(): bool {
 
 		if ( ! $this->context ) {
 			$this->context = new OriginalRequestContext();

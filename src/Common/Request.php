@@ -71,7 +71,7 @@ interface Request {
 	 *
 	 * @return string The (first) post type, or empty string if not applicable.
 	 */
-	public function post_type();
+	public function post_type(): string;
 
 	/**
 	 * Returns the ID of the queried object.
@@ -82,7 +82,7 @@ interface Request {
 	 *
 	 * @return int The ID of the queried object.
 	 */
-	public function queried_object_id();
+	public function queried_object_id(): int;
 
 	/**
 	 * Returns the type of the current request.
@@ -91,5 +91,5 @@ interface Request {
 	 *
 	 * @return string Request type, or empty string on failure.
 	 */
-	public function type();
+	public function type(): string;
 }

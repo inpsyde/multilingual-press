@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Setting\Site;
 
 /**
@@ -52,9 +54,9 @@ final class SiteSettingsSectionView implements SiteSettingView {
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return void
+	 * @return bool Whether or not the section setting markup was rendered successfully.
 	 */
-	public function render( $site_id ) {
+	public function render( int $site_id ): bool {
 
 		echo $this->model->title();
 		?>
@@ -104,5 +106,7 @@ final class SiteSettingsSectionView implements SiteSettingView {
 			?>
 		</table>
 		<?php
+
+		return true;
 	}
 }

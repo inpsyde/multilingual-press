@@ -1,5 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
 namespace Inpsyde\MultilingualPress\Common\Admin;
 
 /**
@@ -25,7 +27,7 @@ class EditSiteTab {
 	 *
 	 * @sine 3.0.0
 	 *
-	 * @param EditSiteTabData  $data Taba data object.
+	 * @param EditSiteTabData  $data Tab data object.
 	 * @param SettingsPageView $view Settings page view object.
 	 */
 	public function __construct( EditSiteTabData $data, SettingsPageView $view ) {
@@ -50,7 +52,7 @@ class EditSiteTab {
 	 *
 	 * @return bool Whether or not the tab was registered successfully.
 	 */
-	public function register() {
+	public function register(): bool {
 
 		if ( did_action( 'adminmenu' ) ) {
 			return false;
