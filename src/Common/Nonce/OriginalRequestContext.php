@@ -34,6 +34,7 @@ final class OriginalRequestContext implements Context {
 
 		if ( ! isset( $this->types ) ) {
 			$method = $_SERVER['REQUEST_METHOD'] ?? '';
+
 			$this->types = $method && 'POST' === strtoupper( $method )
 				? [ INPUT_GET, INPUT_POST ]
 				: [ INPUT_GET ];
