@@ -33,15 +33,11 @@ final class Widget extends WP_Widget implements RegistrableWidget {
 	 */
 	public function __construct( View $view ) {
 
-		parent::__construct(
-			'Mlp_Widget',
-			__( 'Language Switcher', 'multilingual-press' ),
-			[
-				'classname'                   => 'mlp_widget',
-				'description'                 => __( 'MultilingualPress Translations', 'multilingual-press' ),
-				'customize_selective_refresh' => true,
-			]
-		);
+		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingual-press' ), [
+			'classname'                   => 'mlp_widget',
+			'description'                 => __( 'MultilingualPress Translations', 'multilingual-press' ),
+			'customize_selective_refresh' => true,
+		] );
 
 		$this->view = $view;
 	}
@@ -159,7 +155,8 @@ final class Widget extends WP_Widget implements RegistrableWidget {
 	public function update( $new_instance, $instance ) {
 
 		$new_instance = (array) $new_instance;
-		$instance     = (array) $instance;
+
+		$instance = (array) $instance;
 
 		$instance['widget_title'] = esc_html( $new_instance['mlp_widget_title'] ?? '' );
 
