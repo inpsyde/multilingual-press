@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when a property that has not yet been set is to be read.
  *
  * @package Inpsyde\MultilingualPress\Core\Exception
  * @since   3.0.0
  */
-class PropertyNotSet extends Exception {
+class PropertyNotSet extends \Exception {
 
 	/**
 	 * Returns a new exception object.

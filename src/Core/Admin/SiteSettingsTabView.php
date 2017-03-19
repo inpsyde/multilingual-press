@@ -8,7 +8,6 @@ use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageView;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingView;
-use WP_Site;
 
 use function Inpsyde\MultilingualPress\nonce_field;
 
@@ -91,11 +90,11 @@ final class SiteSettingsTabView implements SettingsPageView {
 	/**
 	 * Renders the title, action links and the tabs.
 	 *
-	 * @param WP_Site $site Site object.
+	 * @param \WP_Site $site Site object.
 	 *
 	 * @return void
 	 */
-	private function render_head( WP_Site $site ) {
+	private function render_head( \WP_Site $site ) {
 
 		$site_id = $site->id;
 

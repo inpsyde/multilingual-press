@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown an instance is to be bootstrapped that has already been bootstrapped.
  *
  * @package Inpsyde\MultilingualPress\Core\Exception
  * @since   3.0.0
  */
-class InstanceAlreadyBootstrapped extends Exception {
+class InstanceAlreadyBootstrapped extends \Exception {
 
 	/**
 	 * Constructor. Sets up the properties.

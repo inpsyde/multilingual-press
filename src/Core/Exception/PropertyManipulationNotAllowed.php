@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when a property is to be manipulated.
  *
  * @package Inpsyde\MultilingualPress\Core\Exception
  * @since   3.0.0
  */
-class PropertyManipulationNotAllowed extends Exception {
+class PropertyManipulationNotAllowed extends \Exception {
 
 	/**
 	 * Returns a new exception object.
