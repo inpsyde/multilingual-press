@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\API;
 
 use Inpsyde\MultilingualPress\Database\Table;
-use wpdb;
 
 /**
  * Site relations API implementation using the WordPress database object.
@@ -16,7 +15,7 @@ use wpdb;
 final class WPDBSiteRelations implements SiteRelations {
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -30,10 +29,10 @@ final class WPDBSiteRelations implements SiteRelations {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb  $db    WordPress database object.
+	 * @param \wpdb $db    WordPress database object.
 	 * @param Table $table Site relations table object.
 	 */
-	public function __construct( wpdb $db, Table $table ) {
+	public function __construct( \wpdb $db, Table $table ) {
 
 		$this->db = $db;
 

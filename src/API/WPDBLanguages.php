@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\API;
 
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
-use wpdb;
 
 /**
  * Languages API implementation using the WordPress database object.
@@ -33,7 +32,7 @@ final class WPDBLanguages implements Languages {
 	];
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -57,11 +56,11 @@ final class WPDBLanguages implements Languages {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb                   $db                       WordPress database object.
+	 * @param \wpdb                  $db                       WordPress database object.
 	 * @param Table                  $table                    Site relations table object.
 	 * @param SiteSettingsRepository $site_settings_repository Site settings repository object.
 	 */
-	public function __construct( wpdb $db, Table $table, SiteSettingsRepository $site_settings_repository ) {
+	public function __construct( \wpdb $db, Table $table, SiteSettingsRepository $site_settings_repository ) {
 
 		$this->db = $db;
 

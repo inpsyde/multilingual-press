@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\API;
 
 use Inpsyde\MultilingualPress\Database\Table;
-use wpdb;
 
 use function Inpsyde\MultilingualPress\debug;
 
@@ -25,7 +24,7 @@ final class WPDBContentRelations implements ContentRelations {
 	private $cache_group = 'mlp';
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -44,11 +43,11 @@ final class WPDBContentRelations implements ContentRelations {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb          $db             WordPress database object.
+	 * @param \wpdb         $db             WordPress database object.
 	 * @param Table         $table          Content relations table object.
 	 * @param SiteRelations $site_relations Site relations API object.
 	 */
-	public function __construct( wpdb $db, Table $table, SiteRelations $site_relations ) {
+	public function __construct( \wpdb $db, Table $table, SiteRelations $site_relations ) {
 
 		$this->db = $db;
 
