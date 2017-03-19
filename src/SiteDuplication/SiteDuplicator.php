@@ -8,7 +8,6 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Database\TableDuplicator;
 use Inpsyde\MultilingualPress\Database\TableList;
 use Inpsyde\MultilingualPress\Database\TableReplacer;
-use wpdb;
 
 /**
  * Handles duplication of a site.
@@ -61,7 +60,7 @@ class SiteDuplicator {
 	private $content_relations;
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -85,7 +84,7 @@ class SiteDuplicator {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb             $db                WordPress database object.
+	 * @param \wpdb            $db                WordPress database object.
 	 * @param TableList        $table_list        Table list object.
 	 * @param TableDuplicator  $table_duplicator  Table duplicator object.
 	 * @param TableReplacer    $table_replacer    Table replacer object.
@@ -94,7 +93,7 @@ class SiteDuplicator {
 	 * @param AttachmentCopier $attachment_copier Attachment copier object.
 	 */
 	public function __construct(
-		wpdb $db,
+		\wpdb $db,
 		TableList $table_list,
 		TableDuplicator $table_duplicator,
 		TableReplacer $table_replacer,

@@ -4,7 +4,6 @@ namespace Inpsyde\MultilingualPress\SiteDuplication;
 
 use Inpsyde\MultilingualPress\Common\BasePathAdapter;
 use Inpsyde\MultilingualPress\Database\TableStringReplacer;
-use wpdb;
 
 /**
  * Attachment copier implementation respecting attachments referenced in the post meta table only.
@@ -20,7 +19,7 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 	private $base_path_adapter;
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -39,12 +38,12 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb                $db                    WordPress database object.
+	 * @param \wpdb               $db                    WordPress database object.
 	 * @param BasePathAdapter     $base_path_adapter     Base path adapter object.
 	 * @param TableStringReplacer $table_string_replacer Table string replacer object.
 	 */
 	public function __construct(
-		wpdb $db,
+		\wpdb $db,
 		BasePathAdapter $base_path_adapter,
 		TableStringReplacer $table_string_replacer
 	) {

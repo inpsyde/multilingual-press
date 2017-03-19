@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
-use wpdb;
 
 /**
  * Site duplication "Based on site" setting.
@@ -16,7 +15,7 @@ use wpdb;
 final class BasedOnSiteSetting implements SiteSettingViewModel {
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -30,9 +29,9 @@ final class BasedOnSiteSetting implements SiteSettingViewModel {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb $db WordPress database object.
+	 * @param \wpdb $db WordPress database object.
 	 */
-	public function __construct( wpdb $db ) {
+	public function __construct( \wpdb $db ) {
 
 		$this->db = $db;
 	}
