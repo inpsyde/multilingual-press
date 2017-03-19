@@ -83,11 +83,11 @@ final class DebugAwareStyle implements Style {
 	 * @return static Style object.
 	 */
 	public static function from_location(
-		$handle,
+		string $handle,
 		AssetLocation $location,
 		array $dependencies = [],
-		$version = '',
-		$media = 'all'
+		string $version = '',
+		string $media = 'all'
 	) {
 
 		$url = DebugAwareAssetURL::from_location( $location );
