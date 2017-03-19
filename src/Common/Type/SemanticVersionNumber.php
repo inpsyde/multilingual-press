@@ -107,6 +107,8 @@ final class SemanticVersionNumber implements VersionNumber {
 			? implode( '.', array_replace( [ 0, 0, 0 ], $digit_parts ) )
 			: implode( '.', $digit_parts );
 
-		return $additional_parts ? "$digit_string." . implode( '.', $additional_parts ) : $digit_string;
+		return $additional_parts
+			? "$digit_string." . implode( '.', $additional_parts )
+			: $digit_string;
 	}
 }
