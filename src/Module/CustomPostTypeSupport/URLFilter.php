@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
 use Inpsyde\MultilingualPress\Common\ContextAwareFilter;
 use Inpsyde\MultilingualPress\Common\Filter;
-use WP_Post;
 
 /**
  * Post type link URL filter.
@@ -47,12 +46,12 @@ final class URLFilter implements Filter {
 	 * @since   3.0.0
 	 * @wp-hook post_type_link
 	 *
-	 * @param string  $post_link Post URL.
-	 * @param WP_Post $post      Post object.
+	 * @param string   $post_link Post URL.
+	 * @param \WP_Post $post      Post object.
 	 *
 	 * @return string The (filtered) post type link URL.
 	 */
-	public function unprettify_permalink( string $post_link, WP_Post $post ): string {
+	public function unprettify_permalink( string $post_link, \WP_Post $post ): string {
 
 		if ( ! $this->post_type_repository->is_post_type_active_and_query_based( $post->post_type ) ) {
 			return $post_link;
@@ -76,11 +75,11 @@ final class URLFilter implements Filter {
 	/**
 	 * Checks if the given post is a draft or pending.
 	 *
-	 * @param WP_Post $post Post object.
+	 * @param \WP_Post $post Post object.
 	 *
 	 * @return bool Whether or not the given post is a draft or pending.
 	 */
-	private function is_draft_or_pending( WP_Post $post ): bool {
+	private function is_draft_or_pending( \WP_Post $post ): bool {
 
 		if ( empty( $post->post_status ) ) {
 			return false;

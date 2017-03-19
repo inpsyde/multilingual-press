@@ -2,8 +2,6 @@
 
 namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
-use WP_Post_Type;
-
 /**
  * Interface for all post type repository implementations.
  *
@@ -62,7 +60,7 @@ interface PostTypeRepository {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return WP_Post_Type[] All custom post types that MultilingualPress is able to support.
+	 * @return \WP_Post_Type[] All custom post types that MultilingualPress is able to support.
 	 */
 	public function get_custom_post_types(): array;
 

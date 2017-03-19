@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxViewModel;
-use WP_Post_Type;
 
 use function Inpsyde\MultilingualPress\nonce_field;
 
@@ -24,7 +23,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	private $nonce;
 
 	/**
-	 * @var WP_Post_Type[]
+	 * @var \WP_Post_Type[]
 	 */
 	private $post_types;
 
@@ -130,13 +129,13 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	/**
 	 * Renders a table row element according to the given data.
 	 *
-	 * @param WP_Post_Type $post_type            Post type object.
-	 * @param string       $slug                 Post type slug.
-	 * @param int[]        $supported_post_types Supported post type settings.
+	 * @param \WP_Post_Type $post_type            Post type object.
+	 * @param string        $slug                 Post type slug.
+	 * @param int[]         $supported_post_types Supported post type settings.
 	 *
 	 * @return void
 	 */
-	private function render_table_row( WP_Post_Type $post_type, string $slug, array $supported_post_types ) {
+	private function render_table_row( \WP_Post_Type $post_type, string $slug, array $supported_post_types ) {
 
 		$name = PostTypeSupportSettingsUpdater::SETTINGS_NAME;
 

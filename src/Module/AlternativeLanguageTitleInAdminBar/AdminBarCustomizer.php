@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\AlternativeLanguageTitleInAdminBar;
 
-use WP_Admin_Bar;
-
 /**
  * Replaces the site names in the admin bar with the respective alternative language titles.
  *
@@ -37,11 +35,11 @@ class AdminBarCustomizer {
 	 * @since   3.0.0
 	 * @wp-hook admin_bar_menu
 	 *
-	 * @param WP_Admin_Bar $wp_admin_bar The WordPress admin bar object.
+	 * @param \WP_Admin_Bar $wp_admin_bar The WordPress admin bar object.
 	 *
-	 * @return WP_Admin_Bar The manipulated WordPress admin bar object.
+	 * @return \WP_Admin_Bar The manipulated WordPress admin bar object.
 	 */
-	public function replace_site_name( WP_Admin_Bar $wp_admin_bar ): WP_Admin_Bar {
+	public function replace_site_name( \WP_Admin_Bar $wp_admin_bar ): \WP_Admin_Bar {
 
 		$title = $this->titles->get();
 		if ( ! $title ) {
@@ -62,11 +60,11 @@ class AdminBarCustomizer {
 	 * @since   3.0.0
 	 * @wp-hook admin_bar_menu
 	 *
-	 * @param WP_Admin_Bar $wp_admin_bar The WordPress admin bar object.
+	 * @param \WP_Admin_Bar $wp_admin_bar The WordPress admin bar object.
 	 *
-	 * @return WP_Admin_Bar The manipulated WordPress admin bar object.
+	 * @return \WP_Admin_Bar The manipulated WordPress admin bar object.
 	 */
-	public function replace_site_nodes( WP_Admin_Bar $wp_admin_bar ): WP_Admin_Bar {
+	public function replace_site_nodes( \WP_Admin_Bar $wp_admin_bar ): \WP_Admin_Bar {
 
 		if ( empty( $wp_admin_bar->user->blogs ) ) {
 			return $wp_admin_bar;

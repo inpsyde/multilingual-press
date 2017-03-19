@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
-use WP_Post;
 
 /**
  * Trasher setting updater.
@@ -59,12 +58,12 @@ class TrasherSettingUpdater {
 	 * @since   3.0.0
 	 * @wp-hook save_post
 	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_post $post    Post object.
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
 	 *
 	 * @return int The number of posts updated.
 	 */
-	public function update_settings( $post_id, WP_Post $post ): int {
+	public function update_settings( $post_id, \WP_Post $post ): int {
 
 		if ( ! $this->nonce->is_valid() )  {
 			return 0;

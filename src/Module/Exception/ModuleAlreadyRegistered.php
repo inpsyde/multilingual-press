@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when a module that has already been registered is to be manipulated.
  *
  * @package Inpsyde\MultilingualPress\Module\Exception
  * @since   3.0.0
  */
-class ModuleAlreadyRegistered extends Exception {
+class ModuleAlreadyRegistered extends \Exception {
 
 	/**
 	 * Returns a new exception object.

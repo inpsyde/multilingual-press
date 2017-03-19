@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\User\UserSettingViewModel;
-use WP_User;
 
 use function Inpsyde\MultilingualPress\nonce_field;
 
@@ -56,11 +55,11 @@ final class RedirectUserSetting implements UserSettingViewModel {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param WP_User $user User object.
+	 * @param \WP_User $user User object.
 	 *
 	 * @return string The markup for the user setting.
 	 */
-	public function markup( WP_User $user ): string {
+	public function markup( \WP_User $user ): string {
 
 		return sprintf(
 			'<label for="%2$s"><input type="checkbox" name="%2$s" value="1" id="%2$s"%3$s>%1$s</label>%4$s',

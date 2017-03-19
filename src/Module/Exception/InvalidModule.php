@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when a module that does not exist is to be manipulated.
  *
  * @package Inpsyde\MultilingualPress\Module\Exception
  * @since   3.0.0
  */
-class InvalidModule extends Exception {
+class InvalidModule extends \Exception {
 
 	/**
 	 * Returns a new exception object.

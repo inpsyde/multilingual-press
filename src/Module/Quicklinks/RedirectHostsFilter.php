@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 use Inpsyde\MultilingualPress\Common\ContextAwareFilter;
 use Inpsyde\MultilingualPress\Common\Filter;
-use wpdb;
 
 /**
  * Extends the allowed hosts for redirection.
@@ -19,7 +18,7 @@ final class RedirectHostsFilter implements Filter {
 	use ContextAwareFilter;
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -28,9 +27,9 @@ final class RedirectHostsFilter implements Filter {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb $db WordPress database object.
+	 * @param \wpdb $db WordPress database object.
 	 */
-	public function __construct( wpdb $db ) {
+	public function __construct( \wpdb $db ) {
 
 		$this->db = $db;
 
