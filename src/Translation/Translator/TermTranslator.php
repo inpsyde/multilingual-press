@@ -6,8 +6,6 @@ namespace Inpsyde\MultilingualPress\Translation\Translator;
 
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
 use Inpsyde\MultilingualPress\Translation\Translator;
-use WP_Rewrite;
-use wpdb;
 
 /**
  * Translator implementation for terms.
@@ -23,12 +21,12 @@ final class TermTranslator implements Translator {
 	private $type_factory;
 
 	/**
-	 * @var WP_Rewrite
+	 * @var \WP_Rewrite
 	 */
 	private $wp_rewrite;
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -38,9 +36,9 @@ final class TermTranslator implements Translator {
 	 * @since 3.0.0
 	 *
 	 * @param TypeFactory $type_factory Type factory object.
-	 * @param wpdb        $db           Database object.
+	 * @param \wpdb       $db           Database object.
 	 */
-	public function __construct( TypeFactory $type_factory, wpdb $db ) {
+	public function __construct( TypeFactory $type_factory, \wpdb $db ) {
 
 		$this->type_factory = $type_factory;
 
