@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Service\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when a value or factory callback is to be unset from the container.
  *
  * @package Inpsyde\MultilingualPress\Service\Exception
  * @since   3.0.0
  */
-class CannotUnsetValue extends Exception {
+class CannotUnsetValue extends \Exception {
 
 	/**
 	 * Returns a new exception object.

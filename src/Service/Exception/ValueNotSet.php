@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Service\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when a value or factory callback that has not yet been set is to be read from the container.
  *
  * @package Inpsyde\MultilingualPress\Service\Exception
  * @since   3.0.0
  */
-class ValueNotSet extends Exception {
+class ValueNotSet extends \Exception {
 
 	/**
 	 * Returns a new exception object.

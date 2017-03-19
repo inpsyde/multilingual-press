@@ -2,15 +2,13 @@
 
 namespace Inpsyde\MultilingualPress\Service;
 
-use ArrayAccess;
-
 /**
  * Interface for all container implementations to be used for dependency management.
  *
  * @package Inpsyde\MultilingualPress\Service
  * @since   3.0.0
  */
-interface Container extends ArrayAccess {
+interface Container extends \ArrayAccess {
 
 	/**
 	 * Bootstraps (and locks) the container.

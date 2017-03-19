@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Service;
 
 use Inpsyde\MultilingualPress\Service\Exception\ContainerNotSet;
-use ReflectionProperty;
 
 /**
  * Trait for handling service providers.
@@ -128,7 +127,7 @@ trait ServiceProviderHandling {
 		}
 
 		if ( property_exists( $this, 'container' ) ) {
-			$container = new ReflectionProperty( __CLASS__, 'container' );
+			$container = new \ReflectionProperty( __CLASS__, 'container' );
 			$container->setAccessible( true );
 
 			$container = $container->getValue( $this );

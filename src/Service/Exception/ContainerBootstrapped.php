@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Service\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when a not shared value or factory callback is to be accessed on a bootstrapped container.
  *
  * @package Inpsyde\MultilingualPress\Service\Exception
  * @since   3.0.0
  */
-class ContainerBootstrapped extends Exception {
+class ContainerBootstrapped extends \Exception {
 
 	/**
 	 * Returns a new exception object.

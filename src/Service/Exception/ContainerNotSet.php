@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Service\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when an action is to be performed with no container available.
  *
  * @package Inpsyde\MultilingualPress\Service\Exception
  * @since   3.0.0
  */
-class ContainerNotSet extends Exception {
+class ContainerNotSet extends \Exception {
 
 	/**
 	 * Returns a new exception object.
