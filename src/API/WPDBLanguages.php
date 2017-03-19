@@ -124,7 +124,9 @@ final class WPDBLanguages implements Languages {
 
 		$names_string = "'" . implode( "','", array_map( 'esc_sql', $names ) ) . "'";
 
-		$iso_codes_string = $iso_codes ? "'" . implode( "','", array_map( 'esc_sql', $iso_codes ) ) . "'" : '';
+		$iso_codes_string = $iso_codes
+			? "'" . implode( "','", array_map( 'esc_sql', $iso_codes ) ) . "'"
+			: '';
 
 		$query = "SELECT * FROM {$this->table} WHERE http_name IN ($names_string)";
 
