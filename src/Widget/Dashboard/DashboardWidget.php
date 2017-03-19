@@ -55,21 +55,21 @@ class DashboardWidget {
 	 * @param callable $control_callback Optional. Control callback. Defaults to null.
 	 */
 	public function __construct(
-		$id,
-		$name,
+		string $id,
+		string $name,
 		View $view,
-		$capability = '',
+		string $capability = '',
 		array $callback_args = [],
 		callable $control_callback = null
 	) {
 
-		$this->id = (string) $id;
+		$this->id = $id;
 
-		$this->name = (string) $name;
+		$this->name = $name;
 
 		$this->view = $view;
 
-		$this->capability = (string) $capability;
+		$this->capability = $capability;
 
 		$this->callback_args = $callback_args;
 
