@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
-use WP_Post;
-
 /**
  * Type-safe untranslated posts repository implementation.
  *
@@ -19,7 +17,7 @@ final class TypeSafePostRepository implements PostRepository {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return WP_Post[] All untranslated posts for the current site.
+	 * @return \WP_Post[] All untranslated posts for the current site.
 	 */
 	public function get_untranslated_posts(): array {
 

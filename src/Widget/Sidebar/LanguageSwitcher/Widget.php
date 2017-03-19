@@ -7,7 +7,6 @@ namespace Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher;
 use Inpsyde\MultilingualPress\Widget\Sidebar\RegistrableWidget;
 use Inpsyde\MultilingualPress\Widget\Sidebar\SelfRegisteringWidget;
 use Inpsyde\MultilingualPress\Widget\Sidebar\View;
-use WP_Widget;
 
 /**
  * Language switcher widget.
@@ -15,7 +14,7 @@ use WP_Widget;
  * @package Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher
  * @since   3.0.0
  */
-final class Widget extends WP_Widget implements RegistrableWidget {
+final class Widget extends \WP_Widget implements RegistrableWidget {
 
 	use SelfRegisteringWidget;
 

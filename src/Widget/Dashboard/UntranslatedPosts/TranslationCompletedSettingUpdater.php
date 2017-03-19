@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
-use WP_Post;
 
 /**
  * Translation completed setting updater.
@@ -46,12 +45,12 @@ class TranslationCompletedSettingUpdater {
 	 * @since   3.0.0
 	 * @wp-hook save_post
 	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post    Post object.
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
 	 *
 	 * @return bool Whether or not the translation completed setting was updated successfully.
 	 */
-	public function update_setting( $post_id, WP_Post $post ) {
+	public function update_setting( $post_id, \WP_Post $post ) {
 
 		if ( ! $this->nonce->is_valid() )  {
 			return false;

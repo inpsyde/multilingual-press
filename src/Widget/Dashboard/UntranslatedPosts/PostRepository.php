@@ -2,8 +2,6 @@
 
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
-use WP_Post;
-
 /**
  * Interface for all untranslated posts repository implementations.
  *
@@ -35,7 +33,7 @@ interface PostRepository {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return WP_Post[] All untranslated posts for the current site.
+	 * @return \WP_Post[] All untranslated posts for the current site.
 	 */
 	public function get_untranslated_posts(): array;
 

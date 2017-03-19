@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
-use WP_Post;
 
 use function Inpsyde\MultilingualPress\nonce_field;
 
@@ -48,11 +47,11 @@ class TranslationCompletedSettingView {
 	 * @since   3.0.0
 	 * @wp-hook post_submitbox_misc_actions
 	 *
-	 * @param WP_Post $post Post object.
+	 * @param \WP_Post $post Post object.
 	 *
 	 * @return void
 	 */
-	public function render( WP_Post $post ) {
+	public function render( \WP_Post $post ) {
 
 		$post_id = (int) $post->ID;
 
