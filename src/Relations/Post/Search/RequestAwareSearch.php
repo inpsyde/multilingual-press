@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Relations\Post\Search;
 
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
-use WP_Post;
 
 /**
  * Request-aware search implementation.
@@ -22,7 +21,7 @@ final class RequestAwareSearch implements Search {
 	 *
 	 * @param RelationshipContext $context Relationship context data object.
 	 *
-	 * @return WP_Post[] The latest/best-matching posts.
+	 * @return \WP_Post[] The latest/best-matching posts.
 	 */
 	public function get_posts( RelationshipContext $context ): array {
 

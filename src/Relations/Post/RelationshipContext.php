@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Relations\Post;
 
-use WP_Post;
-
 /**
  * Relationship context data object.
  *
@@ -204,7 +202,7 @@ class RelationshipContext {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return WP_Post|null Source post object.
+	 * @return \WP_Post|null Source post object.
 	 */
 	public function source_post() {
 

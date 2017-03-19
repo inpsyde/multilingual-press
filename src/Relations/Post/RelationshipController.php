@@ -5,8 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Relations\Post;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
-use WP_Error;
-use WP_Post;
 
 /**
  * Relationship controller.
@@ -54,7 +52,7 @@ class RelationshipController {
 	private $context;
 
 	/**
-	 * @var WP_Error
+	 * @var \WP_Error
 	 */
 	private $last_error = null;
 
@@ -269,11 +267,11 @@ class RelationshipController {
 	 *
 	 * This includes a workaround for auto-drafts.
 	 *
-	 * @param WP_Post $post Post object.
+	 * @param \WP_Post $post Post object.
 	 *
 	 * @return string Post type.
 	 */
-	private function get_real_post_type( WP_Post $post ): string {
+	private function get_real_post_type( \WP_Post $post ): string {
 
 		if ( 'revision' !== $post->post_type ) {
 			return $post->post_type;

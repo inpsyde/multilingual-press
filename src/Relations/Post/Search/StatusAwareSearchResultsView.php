@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Relations\Post\Search;
 
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
-use WP_Post;
 
 /**
  * Relationship control search results view implementation displaying the post status of unpublished posts.
@@ -52,7 +51,7 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 
 		$site_id = $context->remote_site_id();
 
-		array_walk( $posts, function ( WP_Post $post ) use ( $site_id ) {
+		array_walk( $posts, function ( \WP_Post $post ) use ( $site_id ) {
 
 			printf(
 				'<li><label for="%4$s"><input type="radio" name="%2$s" value="%3$d" id="%4$s"> %1$s</label></li>',
@@ -67,11 +66,11 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 	/**
 	 * Returns the title of the given post, including the status if not published.
 	 *
-	 * @param WP_Post $post Post object.
+	 * @param \WP_Post $post Post object.
 	 *
 	 * @return string Post title, including status if not published.
 	 */
-	private function get_post_title( WP_Post $post ): string {
+	private function get_post_title( \WP_Post $post ): string {
 
 		if ( 'publish' === $post->post_status ) {
 			return esc_html( $post->post_title );

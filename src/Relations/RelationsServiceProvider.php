@@ -12,7 +12,6 @@ use Inpsyde\MultilingualPress\Relations\Post\Search\SearchController;
 use Inpsyde\MultilingualPress\Relations\Post\Search\StatusAwareSearchResultsView;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
-use WP_Post;
 
 /**
  * Service provider for all relations objects.
@@ -85,7 +84,7 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 
 			add_action(
 				'mlp_translation_meta_box_bottom',
-				function ( WP_Post $post, $remote_site_id, WP_Post $remote_post ) use ( $relationship_control_view ) {
+				function ( \WP_Post $post, $remote_site_id, \WP_Post $remote_post ) use ( $relationship_control_view ) {
 
 					global $pagenow;
 					if ( 'post.php' === $pagenow ) {

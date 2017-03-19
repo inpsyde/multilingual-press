@@ -3,7 +3,6 @@
 namespace Inpsyde\MultilingualPress\Relations\Post\Search;
 
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
-use WP_Post;
 
 /**
  * Interface for all search implementations.
@@ -29,7 +28,7 @@ interface Search {
 	 *
 	 * @param RelationshipContext $context Relationship context data object.
 	 *
-	 * @return WP_Post[] The latest/best-matching posts.
+	 * @return \WP_Post[] The latest/best-matching posts.
 	 */
 	public function get_posts( RelationshipContext $context ): array;
 }
