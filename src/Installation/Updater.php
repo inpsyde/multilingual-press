@@ -9,7 +9,6 @@ use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\TableInstaller;
-use wpdb;
 
 /**
  * Updates any installed plugin data to the current version.
@@ -25,7 +24,7 @@ class Updater {
 	private $content_relations_table;
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -59,7 +58,7 @@ class Updater {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb                   $db                       WordPress database object.
+	 * @param \wpdb                  $db                       WordPress database object.
 	 * @param SiteSettingsRepository $site_settings_repository Site settings repository object.
 	 * @param TableInstaller         $table_installer          Table installer object.
 	 * @param Table                  $content_relations_table  Content relations table object.
@@ -68,7 +67,7 @@ class Updater {
 	 * @param SiteRelations          $site_relations           Site relations API.
 	 */
 	public function __construct(
-		wpdb $db,
+		\wpdb $db,
 		SiteSettingsRepository $site_settings_repository,
 		TableInstaller $table_installer,
 		Table $content_relations_table,
