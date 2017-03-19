@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Database;
 
-use wpdb;
-
 /**
  * Table duplicator implementation using the WordPress database object.
  *
@@ -15,7 +13,7 @@ use wpdb;
 final class WPDBTableDuplicator implements TableDuplicator {
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -24,9 +22,9 @@ final class WPDBTableDuplicator implements TableDuplicator {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb $db WordPress database object.
+	 * @param \wpdb $db WordPress database object.
 	 */
-	public function __construct( wpdb $db ) {
+	public function __construct( \wpdb $db ) {
 
 		$this->db = $db;
 	}

@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Database;
 
 use Inpsyde\MultilingualPress\Database\Exception\InvalidTable;
-use wpdb;
 
 /**
  * Table installer implementation using the WordPress database object.
@@ -16,7 +15,7 @@ use wpdb;
 final class WPDBTableInstaller implements TableInstaller {
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -35,10 +34,10 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb  $db    WordPress database object.
+	 * @param \wpdb $db    WordPress database object.
 	 * @param Table $table Optional. Table object. Defaults to null.
 	 */
-	public function __construct( wpdb $db, Table $table = null ) {
+	public function __construct( \wpdb $db, Table $table = null ) {
 
 		$this->table = $table;
 

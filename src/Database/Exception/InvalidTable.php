@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Database\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when an action is to be performed on an invalid table.
  *
  * @package Inpsyde\MultilingualPress\Database\Exception
  * @since   3.0.0
  */
-class InvalidTable extends Exception {
+class InvalidTable extends \Exception {
 
 	/**
 	 * Returns a new exception object.
