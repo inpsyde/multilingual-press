@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\NavMenu;
 
-use WP_Post;
-
 use function Inpsyde\MultilingualPress\get_available_language_names;
 use function Inpsyde\MultilingualPress\site_exists;
 
@@ -51,7 +49,7 @@ final class ValidatingItemRepository implements ItemRepository {
 			}
 
 			$item = $this->ensure_item( $menu_id, $site_id, $language_names[ $site_id ] );
-			if ( $item instanceof WP_Post ) {
+			if ( $item instanceof \WP_Post ) {
 				$items[] = $this->prepare_item( $item, $site_id );
 			}
 		}
@@ -66,7 +64,7 @@ final class ValidatingItemRepository implements ItemRepository {
 	 * @param int    $site_id       Site ID.
 	 * @param string $language_name Language name.
 	 *
-	 * @return WP_Post|null Post object on success, and null on failure.
+	 * @return \WP_Post|null Post object on success, and null on failure.
 	 */
 	private function ensure_item( int $menu_id, int $site_id, string $language_name ) {
 
@@ -82,12 +80,12 @@ final class ValidatingItemRepository implements ItemRepository {
 	/**
 	 * Prepares the given item for use.
 	 *
-	 * @param WP_Post $item    Menu item object.
-	 * @param int     $site_id Site ID.
+	 * @param \WP_Post $item    Menu item object.
+	 * @param int      $site_id Site ID.
 	 *
 	 * @return object Menu item object.
 	 */
-	private function prepare_item( WP_Post $item, int $site_id ) {
+	private function prepare_item( \WP_Post $item, int $site_id ) {
 
 		$item->object = 'mlp_language';
 

@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\NavMenu;
 
-use wpdb;
-
 /**
  * Deletes nav menu items.
  *
@@ -15,7 +13,7 @@ use wpdb;
 class ItemDeletor {
 
 	/**
-	 * @var wpdb
+	 * @var \wpdb
 	 */
 	private $db;
 
@@ -24,9 +22,9 @@ class ItemDeletor {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param wpdb $db Database object.
+	 * @param \wpdb $db Database object.
 	 */
-	public function __construct( wpdb $db ) {
+	public function __construct( \wpdb $db ) {
 
 		$this->db = $db;
 	}

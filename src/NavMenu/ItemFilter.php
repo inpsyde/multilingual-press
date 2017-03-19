@@ -7,7 +7,6 @@ namespace Inpsyde\MultilingualPress\NavMenu;
 use Inpsyde\MultilingualPress\API\Translations;
 use Inpsyde\MultilingualPress\Common\Type\NullTranslation;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
-use WP_Post;
 
 use function Inpsyde\MultilingualPress\site_exists;
 
@@ -47,9 +46,9 @@ class ItemFilter {
 	 * @since   3.0.0
 	 * @wp-hook wp_nav_menu_objects
 	 *
-	 * @param WP_Post[] $items Nav menu items.
+	 * @param \WP_Post[] $items Nav menu items.
 	 *
-	 * @return WP_Post[] Filtered nav menu items.
+	 * @return \WP_Post[] Filtered nav menu items.
 	 */
 	public function filter_items( array $items ): array {
 
@@ -76,11 +75,11 @@ class ItemFilter {
 	/**
 	 * Checks if the site with the given item's remote site ID still exists, and deletes the item if not.
 	 *
-	 * @param WP_Post $item Nav menu item.
+	 * @param \WP_Post $item Nav menu item.
 	 *
 	 * @return bool Whether or not the item was deleted.
 	 */
-	private function maybe_delete_obsolete_item( WP_Post $item ): bool {
+	private function maybe_delete_obsolete_item( \WP_Post $item ): bool {
 
 		$site_id = $this->get_site_id( $item );
 		if ( ! $site_id ) {
@@ -100,12 +99,12 @@ class ItemFilter {
 	/**
 	 * Assigns the remote URL and fires an action hook.
 	 *
-	 * @param WP_Post       $item         Nav menu item object.
+	 * @param \WP_Post      $item         Nav menu item object.
 	 * @param Translation[] $translations Translation objects.
 	 *
 	 * @return bool Whether or not the item was prepared successfully.
 	 */
-	private function prepare_item( WP_Post $item, array $translations ): bool {
+	private function prepare_item( \WP_Post $item, array $translations ): bool {
 
 		$site_id = $this->get_site_id( $item );
 		if ( ! $site_id ) {
@@ -130,7 +129,7 @@ class ItemFilter {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param WP_Post     $item        Nav menu item object.
+		 * @param \WP_Post    $item        Nav menu item object.
 		 * @param Translation $translation Translation object.
 		 */
 		do_action( 'multilingualpress.prepare_nav_menu_item', $item, $translation );
@@ -166,11 +165,11 @@ class ItemFilter {
 	/**
 	 * Returns the site ID for the given nav menu item object.
 	 *
-	 * @param WP_Post $item Nav menu item object.
+	 * @param \WP_Post $item Nav menu item object.
 	 *
 	 * @return int Site ID.
 	 */
-	private function get_site_id( WP_Post $item ): int {
+	private function get_site_id( \WP_Post $item ): int {
 
 		$item_id = (int) $item->ID;
 

@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\NavMenu;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
-use Walker_Nav_Menu_Edit;
 
 /**
  * Handler for nav menu AJAX requests.
@@ -75,7 +74,7 @@ class AJAXHandler {
 			'before'      => '',
 			'link_after'  => '',
 			'link_before' => '',
-			'walker'      => new Walker_Nav_Menu_Edit(),
+			'walker'      => new \Walker_Nav_Menu_Edit(),
 		] ) );
 	}
 
