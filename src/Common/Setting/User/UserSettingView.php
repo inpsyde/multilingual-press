@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\Setting\User;
 
-use WP_User;
-
 /**
  * User setting view.
  *
@@ -45,11 +43,11 @@ class UserSettingView {
 	 * @since   3.0.0
 	 * @wp-hook personal_options
 	 *
-	 * @param WP_User $user User object.
+	 * @param \WP_User $user User object.
 	 *
 	 * @return bool Whether or not the user setting markup was rendered successfully.
 	 */
-	public function render( WP_User $user ) {
+	public function render( \WP_User $user ) {
 
 		if ( $this->check_user && ! current_user_can( 'edit_user', $user->ID ) ) {
 			return false;

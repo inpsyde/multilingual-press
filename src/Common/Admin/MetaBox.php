@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\Admin;
 
-use WP_Screen;
-
 /**
  * Generic meta box implementation.
  *
@@ -52,10 +50,10 @@ class MetaBox {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string|array|WP_Screen $screen        Optional. Screen identifier. Defaults to empty string.
-	 * @param string                 $context       Optional. Meta box context. Defaults to 'advanced'.
-	 * @param string                 $priority      Optional. Meta box priority. Defaults to 'default'.
-	 * @param array                  $callback_args Optional. Render callback arguments. Defaults to empty array.
+	 * @param string|array|\WP_Screen $screen        Optional. Screen identifier. Defaults to empty string.
+	 * @param string                  $context       Optional. Meta box context. Defaults to 'advanced'.
+	 * @param string                  $priority      Optional. Meta box priority. Defaults to 'default'.
+	 * @param array                   $callback_args Optional. Render callback arguments. Defaults to empty array.
 	 *
 	 * @return void
 	 */

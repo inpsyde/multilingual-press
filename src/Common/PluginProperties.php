@@ -2,15 +2,13 @@
 
 namespace Inpsyde\MultilingualPress\Common;
 
-use ArrayAccess;
-
 /**
  * Interface for all plugin properties implementations.
  *
  * @package Inpsyde\MultilingualPress\Common
  * @since   3.0.0
  */
-interface PluginProperties extends ArrayAccess {
+interface PluginProperties extends \ArrayAccess {
 
 	/**
 	 * Returns the base name of the plugin.

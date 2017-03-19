@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\Nonce\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when a nonce context value is to be manipulated.
  *
  * @package Inpsyde\MultilingualPress\Common\Nonce\Exception
  * @since   3.0.0
  */
-class ContextValueManipulationNotAllowed extends Exception {
+class ContextValueManipulationNotAllowed extends \Exception {
 
 	/**
 	 * Returns a new exception object.

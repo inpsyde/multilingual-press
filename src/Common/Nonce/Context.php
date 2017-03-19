@@ -2,14 +2,12 @@
 
 namespace Inpsyde\MultilingualPress\Common\Nonce;
 
-use ArrayAccess;
-
 /**
  * Interface for all nonce context implementations.
  *
  * @package Inpsyde\MultilingualPress\Common\Nonce
  * @since   3.0.0
  */
-interface Context extends ArrayAccess {
+interface Context extends \ArrayAccess {
 
 }

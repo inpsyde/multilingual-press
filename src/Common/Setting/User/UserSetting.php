@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\Setting\User;
 
-use WP_User;
-
 /**
  * User setting.
  *
@@ -56,7 +54,7 @@ class UserSetting {
 	 */
 	public function register() {
 
-		add_action( 'personal_options', function ( WP_User $user ) {
+		add_action( 'personal_options', function ( \WP_User $user ) {
 
 			( new UserSettingView( $this->model, $this->check_user ) )->render( $user );
 		} );
