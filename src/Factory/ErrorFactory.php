@@ -3,7 +3,6 @@
 namespace Inpsyde\MultilingualPress\Factory;
 
 use Inpsyde\MultilingualPress\Common\Factory;
-use WP_Error;
 
 /**
  * Interface for all factory implementations for WordPress error objects.
@@ -20,7 +19,7 @@ interface ErrorFactory extends Factory {
 	 *
 	 * @var string
 	 */
-	const BASE = WP_Error::class;
+	const BASE = \WP_Error::class;
 
 	/**
 	 * Fully qualified name of the default class.
@@ -39,7 +38,7 @@ interface ErrorFactory extends Factory {
 	 * @param array  $args  Optional. Constructor arguments. Defaults to empty array.
 	 * @param string $class Optional. Fully qualified class name. Defaults to empty string.
 	 *
-	 * @return WP_Error WordPress error object.
+	 * @return \WP_Error WordPress error object.
 	 */
-	public function create( array $args = [], string $class = '' ): WP_Error;
+	public function create( array $args = [], string $class = '' ): \WP_Error;
 }

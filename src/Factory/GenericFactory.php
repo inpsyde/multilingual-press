@@ -4,8 +4,6 @@ namespace Inpsyde\MultilingualPress\Factory;
 
 use Inpsyde\MultilingualPress\Common\Factory;
 use Inpsyde\MultilingualPress\Factory\Exception\InvalidClass;
-use BadMethodCallException;
-use InvalidArgumentException;
 
 /**
  * Generic factory to be used by other factories.
@@ -38,15 +36,15 @@ final class GenericFactory implements Factory {
 	 * @param string $base          Fully qualified name of the base class or interface.
 	 * @param string $default_class Optional. Fully qualified name of the default class. Defaults to empty string.
 	 *
-	 * @throws InvalidArgumentException if the given base is not a valid fully qualified class or interface name.
-	 * @throws BadMethodCallException   if no default class is given and the base is an interface.
+	 * @throws \InvalidArgumentException if the given base is not a valid fully qualified class or interface name.
+	 * @throws \BadMethodCallException   if no default class is given and the base is an interface.
 	 */
 	public function __construct( string $base, string $default_class = '' ) {
 
 		$this->base_is_class = class_exists( $base );
 
 		if ( ! ( $this->base_is_class || interface_exists( $base ) ) ) {
-			throw new InvalidArgumentException( sprintf(
+			throw new \InvalidArgumentException( sprintf(
 				'"%s"" requires a valid fully qualified class or interface name as first argument.',
 				__METHOD__
 			) );
@@ -67,7 +65,7 @@ final class GenericFactory implements Factory {
 			return;
 		}
 
-		throw new BadMethodCallException( sprintf(
+		throw new \BadMethodCallException( sprintf(
 			'"%s"" requires a fully qualified class name as first or second argument.',
 			__METHOD__
 		) );

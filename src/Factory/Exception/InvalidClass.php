@@ -4,15 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Factory\Exception;
 
-use Exception;
-
 /**
  * Exception to be thrown when trying to create an object of an invalid class.
  *
  * @package Inpsyde\MultilingualPress\Factory\Exception
  * @since   3.0.0
  */
-class InvalidClass extends Exception {
+class InvalidClass extends \Exception {
 
 	/**
 	 * Returns a new exception object.
