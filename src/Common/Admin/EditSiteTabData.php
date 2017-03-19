@@ -49,13 +49,13 @@ class EditSiteTabData {
 		string $capability = 'manage_sites'
 	) {
 
-		$this->id = (string) $id;
+		$this->id = $id;
 
-		$this->title = (string) $title;
+		$this->title = $title;
 
-		$this->slug = (string) $slug;
+		$this->slug = $slug;
 
-		$this->capability = (string) $capability;
+		$this->capability = $capability;
 	}
 
 	/**

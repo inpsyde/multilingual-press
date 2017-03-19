@@ -32,15 +32,15 @@ class ActionLink {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string   $id              Link ID.
-	 * @param string   $html            Link HTML.
-	 * @param callable $add_callback    Optional. Callback to handle adding the link. Defaults to null.
+	 * @param string   $id           Link ID.
+	 * @param string   $html         Link HTML.
+	 * @param callable $add_callback Optional. Callback to handle adding the link. Defaults to null.
 	 */
 	public function __construct( string $id, string $html, callable $add_callback = null ) {
 
-		$this->id = (string) $id;
+		$this->id = $id;
 
-		$this->html = (string) $html;
+		$this->html = $html;
 
 		$this->add_callback = $add_callback;
 	}
