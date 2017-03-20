@@ -25,6 +25,11 @@ class Trasher {
 	private $setting_repository;
 
 	/**
+	 * @var bool
+	 */
+	private static $trashing_related_posts = false;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -51,9 +56,12 @@ class Trasher {
 	 */
 	public function trash_related_posts( $post_id ): int {
 
-		if ( ! $this->setting_repository->get_setting( (int) $post_id ) ) {
+		if ( self::$trashing_related_posts || ! $this->setting_repository->get_setting( (int) $post_id ) ) {
 			return 0;
 		}
+
+		// prevent recursions
+		self::$trashing_related_posts = true;
 
 		$current_site_id = get_current_blog_id();
 
@@ -67,10 +75,6 @@ class Trasher {
 
 		$trashed_post = 0;
 
-		// Temporarily remove the function to avoid recursion.
-		$action = current_action();
-		remove_action( $action, [ $this, __FUNCTION__ ] );
-
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$trashed_post ) {
 
 			switch_to_blog( $site_id );
@@ -82,8 +86,8 @@ class Trasher {
 			}
 		} );
 
-		// Add the function back again.
-		add_action( $action, [ $this, __FUNCTION__ ] );
+		// allow to call again
+		self::$trashing_related_posts = false;
 
 		return $trashed_post;
 	}
