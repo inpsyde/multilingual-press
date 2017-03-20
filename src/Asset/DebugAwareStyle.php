@@ -52,7 +52,7 @@ final class DebugAwareStyle implements Style {
 		string $handle,
 		string $url,
 		array $dependencies = [],
-		string $version = null,
+		$version = null,
 		string $media = 'all'
 	) {
 
@@ -77,7 +77,7 @@ final class DebugAwareStyle implements Style {
 	 * @param string        $handle       The handle.
 	 * @param AssetLocation $location     Location object.
 	 * @param string[]      $dependencies Optional. The dependencies. Defaults to empty array.
-	 * @param string|null   $version      Optional. Version of the file. Defaults to empty string.
+	 * @param string|null   $version      Optional. Version of the file. Defaults to null.
 	 * @param string        $media        Optional. Style media data. Defaults to 'all'.
 	 *
 	 * @return static Style object.
@@ -86,7 +86,7 @@ final class DebugAwareStyle implements Style {
 		string $handle,
 		AssetLocation $location,
 		array $dependencies = [],
-		string $version = '',
+		$version = null,
 		string $media = 'all'
 	) {
 

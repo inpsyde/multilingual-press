@@ -60,7 +60,7 @@ class AssetFactory {
 	 * @param string      $handle       The handle.
 	 * @param string      $file         File name.
 	 * @param string[]    $dependencies Optional. The dependencies.
-	 * @param string|null $version      Optional. Version of the file. Defaults to empty string.
+	 * @param string|null $version      Optional. Version of the file. Defaults to null.
 	 *
 	 * @return Script Script object.
 	 */
@@ -68,7 +68,7 @@ class AssetFactory {
 		string $handle,
 		string $file,
 		array $dependencies = [],
-		string $version = null
+		$version = null
 	): Script {
 
 		return DebugAwareScript::from_location(
@@ -91,7 +91,7 @@ class AssetFactory {
 	 * @param string      $handle       The handle.
 	 * @param string      $file         File name.
 	 * @param string[]    $dependencies Optional. The dependencies.
-	 * @param string|null $version      Optional. Version of the file. Defaults to empty string.
+	 * @param string|null $version      Optional. Version of the file. Defaults to null.
 	 * @param string      $media        Optional. Style media data. Defaults to 'all'.
 	 *
 	 * @return Style Style object.
@@ -100,7 +100,7 @@ class AssetFactory {
 		string $handle,
 		string $file,
 		array $dependencies = [],
-		string $version = null,
+		$version = null,
 		string $media = 'all'
 	): Style {
 

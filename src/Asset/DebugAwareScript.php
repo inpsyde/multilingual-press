@@ -51,7 +51,7 @@ final class DebugAwareScript implements Script {
 		string $handle,
 		string $url,
 		array $dependencies = [],
-		string $version = null
+		$version = null
 	) {
 
 		$this->handle = $handle;
@@ -73,7 +73,7 @@ final class DebugAwareScript implements Script {
 	 * @param string        $handle       The handle.
 	 * @param AssetLocation $location     Location object.
 	 * @param string[]      $dependencies Optional. The dependencies. Defaults to empty array.
-	 * @param string|null   $version      Optional. Version of the file. Defaults to empty string.
+	 * @param string|null   $version      Optional. Version of the file. Defaults to null.
 	 *
 	 * @return Script Script object.
 	 */
@@ -81,7 +81,7 @@ final class DebugAwareScript implements Script {
 		string $handle,
 		AssetLocation $location,
 		array $dependencies = [],
-		string $version = null
+		$version = null
 	): Script {
 
 		$url = DebugAwareAssetURL::from_location( $location );
