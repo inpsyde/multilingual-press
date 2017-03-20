@@ -91,7 +91,7 @@ final class CachingTranslations implements Translations {
 	}
 
 	/**
-	 * Returns all translation according to the given arguments.
+	 * Returns all translations according to the given arguments.
 	 *
 	 * @since 3.0.0
 	 *
@@ -110,131 +110,7 @@ final class CachingTranslations implements Translations {
 			return $translations;
 		}
 
-		$translations = [];
-
-		$sites = $this->site_relations->get_related_site_ids( (int) $args['site_id'], (bool) $args['include_base'] );
-		if ( $sites ) {
-			$content_relations = 0 < $args['content_id']
-				? $this->content_relations->get_relations( $args['site_id'], $args['content_id'], $args['type'] )
-				: [];
-
-			if ( $content_relations || ! $args['strict'] ) {
-				$languages = $this->languages->get_all_site_languages();
-
-				$sites = array_intersect( $sites, array_keys( $languages ) );
-				if ( $sites ) {
-					$post_type = $args['post_type'];
-
-					$source_site_id = $args['site_id'];
-
-					$suppress_filters = $args['suppress_filters'];
-
-					$type = $args['type'];
-
-					foreach ( $sites as $site_id ) {
-
-						$site_id = (int) $site_id;
-
-						$translation = [
-							'remote_title'      => '',
-							'remote_url'        => '',
-							'source_site_id'    => $source_site_id,
-							'suppress_filters'  => $suppress_filters,
-							'target_site_id'    => $site_id,
-							'target_content_id' => 0,
-							'type'              => $type,
-						];
-
-						if ( empty( $content_relations[ $site_id ] ) ) {
-							$translator = $this->translator( $type );
-
-							$data = [];
-
-							switch ( $type ) {
-								case Request::TYPE_POST_TYPE_ARCHIVE:
-									$data = $translator->get_translation( $site_id, [
-										'post_type' => $post_type,
-									] );
-									break;
-
-								case Request::TYPE_SEARCH:
-									$data = $translator->get_translation( $site_id, [
-										'query' => (string) $args['search_term'],
-									] );
-									break;
-							}
-
-							if ( $data ) {
-								$translation = array_merge( $translation, $data );
-							}
-
-							if (
-								Request::TYPE_FRONT_PAGE === $type
-								|| ( ! $translation['remote_url'] && ! $args['strict'] )
-							) {
-								$translation = array_merge(
-									$translation,
-									$this->translator( Request::TYPE_FRONT_PAGE )->get_translation( $site_id )
-								);
-							}
-
-							if ( ! $translation['remote_url'] ) {
-								continue;
-							}
-						} else {
-							$content_id = $content_relations[ $site_id ];
-
-							$translation['target_content_id'] = $content_id;
-
-							if ( in_array( $type, [ Request::TYPE_SINGULAR, Request::TYPE_TERM_ARCHIVE ], true ) ) {
-								$translator = $this->translator( $type );
-
-								$data = [];
-
-								switch ( $type ) {
-									case Request::TYPE_SINGULAR:
-										$data = $translator->get_translation( $site_id, [
-											'content_id' => $content_id,
-											'strict'     => $args['strict'],
-										] );
-										break;
-
-									case Request::TYPE_TERM_ARCHIVE:
-										$data = $translator->get_translation( $site_id, [
-											'content_id' => $content_id,
-										] );
-										break;
-								}
-
-								if ( ! $data ) {
-									continue;
-								}
-
-								$translation = array_merge( $translation, $data );
-							}
-						}
-
-						$language = $languages[ $site_id ];
-						if ( empty( $language['http_name'] ) ) {
-							$language['http_name'] = empty( $language['lang'] ) ? '' : $language['lang'];
-						}
-
-						$translation['icon_url'] = $language['http_name']
-							? get_flag_url_for_site( $site_id )
-							: $this->type_factory->create_url( [
-								'',
-							] );
-
-						$translations[ $site_id ] = $this->type_factory->create_translation( [
-							$translation,
-							$this->type_factory->create_language( [
-								$language,
-							] ),
-						] );
-					}
-				}
-			}
-		}
+		$translations = $this->build_translations( $args );
 
 		/**
 		 * Filter the translations before they are used.
@@ -247,6 +123,176 @@ final class CachingTranslations implements Translations {
 		wp_cache_set( $key, $translations, 'mlp' );
 
 		return $translations;
+	}
+
+	/**
+	 * Actually builds and then returns all translations according to the given arguments.
+	 *
+	 * @param array $args
+	 *
+	 * @return Translation[] An array with site IDs as keys and Translation objects as values.
+	 */
+	private function build_translations( array $args = [] ): array {
+
+		$source_site_id = (int) $args['site_id'];
+
+		$sites = $this->site_relations->get_related_site_ids( $source_site_id, (bool) $args['include_base'] );
+		if ( ! $sites ) {
+			return [];
+		}
+
+		$type = (string) $args['type'];
+
+		$content_relations = 0 < $args['content_id']
+			? $this->content_relations->get_relations( $source_site_id, (int) $args['content_id'], $type )
+			: [];
+
+		if ( ! $content_relations && $args['strict'] ) {
+			return [];
+		}
+
+		$languages = $this->languages->get_all_site_languages();
+
+		$sites = array_intersect( $sites, array_keys( $languages ) );
+		if ( ! $sites ) {
+			return [];
+		}
+
+		$suppress_filters = (bool) $args['suppress_filters'];
+
+		$translations = [];
+
+		foreach ( $sites as $site_id ) {
+			$site_id = (int) $site_id;
+
+			$default = [
+				'remote_title'      => '',
+				'remote_url'        => '',
+				'source_site_id'    => $source_site_id,
+				'suppress_filters'  => $suppress_filters,
+				'target_site_id'    => $site_id,
+				'target_content_id' => 0,
+				'type'              => $type,
+			];
+
+			if ( empty( $content_relations[ $site_id ] ) ) {
+				$translation = $this->get_translation_for_no_related_content( $site_id, $args );
+				if ( ! $translation['remote_url'] ) {
+					continue;
+				}
+
+				$translation = array_merge( $default, $translation );
+			} else {
+				$content_id = (int) $content_relations[ $site_id ];
+
+				if ( in_array( $type, [ Request::TYPE_SINGULAR, Request::TYPE_TERM_ARCHIVE ], true ) ) {
+					$translation = $this->get_translation_for_related_content( $site_id, $content_id, $args );
+					if ( ! $translation ) {
+						continue;
+					}
+
+					$translation = array_merge( $default, [ 'target_content_id' => $content_id ], $translation );
+				}
+			}
+
+			$language = $languages[ $site_id ];
+			if ( empty( $language['http_name'] ) ) {
+				$language['http_name'] = empty( $language['lang'] ) ? '' : $language['lang'];
+			}
+
+			$translation['icon_url'] = $language['http_name']
+				? get_flag_url_for_site( $site_id )
+				: $this->type_factory->create_url( [
+					'',
+				] );
+
+			$translations[ $site_id ] = $this->type_factory->create_translation( [
+				$translation,
+				$this->type_factory->create_language( [
+					$language,
+				] ),
+			] );
+		}
+
+		return $translations;
+	}
+
+	/**
+	 * Returns the translation data for a request that IS for a related content element.
+	 *
+	 * @param int   $site_id    Site ID.
+	 * @param int   $content_id Content ID.
+	 * @param array $args       Arguments required to fetch the translations.
+	 *
+	 * @return array Translation data.
+	 */
+	private function get_translation_for_related_content( int $site_id, int $content_id, array $args ): array {
+
+		$type = (string) $args['type'];
+
+		$translator = $this->translator( $type );
+
+		$translation = [];
+
+		switch ( $type ) {
+			case Request::TYPE_SINGULAR:
+				$translation = $translator->get_translation( $site_id, [
+					'content_id' => $content_id,
+					'strict'     => (bool) $args['strict'],
+				] );
+				break;
+
+			case Request::TYPE_TERM_ARCHIVE:
+				$translation = $translator->get_translation( $site_id, [
+					'content_id' => $content_id,
+				] );
+				break;
+		}
+
+		return $translation;
+	}
+
+	/**
+	 * Returns the translation data for a request that is NOT for a related content element.
+	 *
+	 * @param int   $site_id Site ID.
+	 * @param array $args    Arguments required to fetch the translations.
+	 *
+	 * @return array Translation data.
+	 */
+	private function get_translation_for_no_related_content( int $site_id, array $args ): array {
+
+		$type = (string) $args['type'];
+
+		$translator = $this->translator( $type );
+
+		$translation = [];
+
+		switch ( $type ) {
+			case Request::TYPE_POST_TYPE_ARCHIVE:
+				$translation = $translator->get_translation( $site_id, [
+					'post_type' => (string) $args['post_type'],
+				] );
+				break;
+
+			case Request::TYPE_SEARCH:
+				$translation = $translator->get_translation( $site_id, [
+					'query' => (string) $args['search_term'],
+				] );
+				break;
+		}
+
+		if (
+			Request::TYPE_FRONT_PAGE === $type
+			|| ( empty( $translation['remote_url'] ) && ! $args['strict'] )
+		) {
+			$translation = array_merge(
+				$translation,
+				$this->translator( Request::TYPE_FRONT_PAGE )->get_translation( $site_id )
+			);
+		}
+
+		return $translation;
 	}
 
 	/**
