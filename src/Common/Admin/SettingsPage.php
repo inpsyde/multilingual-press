@@ -344,8 +344,13 @@ class SettingsPage {
 	public function register(): bool {
 
 		$action = $this->get_action();
+		if ( ! $action ) {
+			return false;
+		}
 
-		return $action ? add_action( $action, $this->get_callback() ) : false;
+		add_action( $action, $this->get_callback() );
+
+		return true;
 	}
 
 	/**
