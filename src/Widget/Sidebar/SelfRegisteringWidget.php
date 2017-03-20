@@ -9,6 +9,8 @@ namespace Inpsyde\MultilingualPress\Widget\Sidebar;
  *
  * @package Inpsyde\MultilingualPress\Widget\Sidebar
  * @since   3.0.0
+ *
+ * @see RegistrableWidget
  */
 trait SelfRegisteringWidget {
 

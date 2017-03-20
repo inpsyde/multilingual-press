@@ -9,6 +9,8 @@ namespace Inpsyde\MultilingualPress\Module;
  *
  * @package Inpsyde\MultilingualPress\Module
  * @since   3.0.0
+ *
+ * @see ActivationAwareModuleServiceProvider
  */
 trait ActivationAwareness {
 
