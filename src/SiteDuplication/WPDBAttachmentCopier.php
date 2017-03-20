@@ -19,14 +19,14 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 	private $base_path_adapter;
 
 	/**
+	 * @var bool
+	 */
+	private $copied_files;
+
+	/**
 	 * @var \wpdb
 	 */
 	private $db;
-
-	/**
-	 * @var bool
-	 */
-	private $found_files;
 
 	/**
 	 * @var TableStringReplacer
@@ -85,14 +85,14 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 			return false;
 		}
 
-		$this->found_files = false;
+		$this->copied_files = false;
 
 		array_walk( $attachment_paths, function ( array $paths, $dir ) use ( $source_dir, $destination_dir ) {
 
 			$this->copy_dir( $paths, "$source_dir/$dir", "$destination_dir/$dir" );
 		} );
 
-		if ( $this->found_files ) {
+		if ( $this->copied_files ) {
 			$source_url = $this->base_path_adapter->baseurl();
 
 			restore_current_blog();
@@ -177,10 +177,13 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 
 		array_walk( $paths, function ( $path ) use ( $source_dir, $destination_dir ) {
 
-			$this->found_files =
+			if (
 				file_exists( "$source_dir/$path" )
 				&& ! file_exists( "$destination_dir/$path" )
-				&& copy( "$source_dir/$path", "$destination_dir/$path" );
+				&& copy( "$source_dir/$path", "$destination_dir/$path" )
+			) {
+				$this->copied_files = true;
+			}
 		} );
 	}
 
