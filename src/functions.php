@@ -351,7 +351,7 @@ function get_language_field_by_http_code(
 
 	$language = get_language_by_http_code( $http_code );
 	if ( $language ) {
-		foreach ( array_unique( array_merge( (array) $field, (array) $fallbacks ) ) as $key ) {
+		foreach ( array_unique( array_merge( (array) $field, $fallbacks ) ) as $key ) {
 			if ( ! empty( $language[ $key ] ) ) {
 				return (string) $language[ $key ];
 			}
