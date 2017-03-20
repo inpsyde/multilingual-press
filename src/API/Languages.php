@@ -29,24 +29,15 @@ interface Languages {
 	public function get_all_site_languages(): array;
 
 	/**
-	 * Returns the desired field value of the language with the given HTTP code.
+	 * Returns all data of the language with the given HTTP code.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string          $http_code Language HTTP code.
-	 * @param string          $field     Optional. The field which should be queried. Defaults to 'native_name'.
-	 * @param string|string[] $fallbacks Optional. Fallback language fields. Defaults to native and English name.
+	 * @param string $http_code Language HTTP code.
 	 *
-	 * @return string|string[] The desired field value, an empty string on failure, or an array for field 'all'.
+	 * @return array Language data.
 	 */
-	public function get_language_by_http_code(
-		string $http_code,
-		string $field = 'native_name',
-		$fallbacks = [
-			'native_name',
-			'english_name',
-		]
-	);
+	public function get_language_by_http_code( string $http_code ): array;
 
 	/**
 	 * Returns all languages according to the given arguments.

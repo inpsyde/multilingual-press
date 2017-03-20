@@ -30,7 +30,7 @@ use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 
 use function Inpsyde\MultilingualPress\get_available_language_names;
-use function Inpsyde\MultilingualPress\get_language_by_http_name;
+use function Inpsyde\MultilingualPress\get_language_field_by_http_code;
 use function Inpsyde\MultilingualPress\get_site_language;
 
 /**
@@ -330,7 +330,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 							? __( 'none', 'multilingual-press' )
 							: sprintf(
 								'<div class="mlp-site-language">%s</div>',
-								esc_html( get_language_by_http_name(
+								esc_html( get_language_field_by_http_code(
 									str_replace( '_', '-', $language )
 								) )
 							);

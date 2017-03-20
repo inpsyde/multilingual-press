@@ -43,7 +43,7 @@ function add_settings_updated_message( $setting = 'mlp-setting', $code = 'mlp-se
  *
  * @return string The according HTML string representation for the given array of attributes.
  */
-function attributes_array_to_string( array $attributes ) {
+function attributes_array_to_string( array $attributes ): string {
 
 	if ( ! $attributes ) {
 		return '';
@@ -86,7 +86,7 @@ function call_exit( $status = '' ) {
  *
  * @return bool Whether or not the nonce is valid.
  */
-function check_admin_referer( Nonce $nonce ) {
+function check_admin_referer( Nonce $nonce ): bool {
 
 	if ( $nonce->is_valid() ) {
 		return true;
@@ -112,7 +112,7 @@ function check_admin_referer( Nonce $nonce ) {
  *
  * @return bool Whether or not the nonce is valid.
  */
-function check_ajax_referer( Nonce $nonce, $terminate = true ) {
+function check_ajax_referer( Nonce $nonce, $terminate = true ): bool {
 
 	$is_nonce_valid = $nonce->is_valid();
 
@@ -161,7 +161,7 @@ function debug( $message ) {
  *
  * @return string[] The names of all available languages.
  */
-function get_available_language_names( $related = true, $include_current_site = true ) {
+function get_available_language_names( $related = true, $include_current_site = true ): array {
 
 	$current_site_id = get_current_blog_id();
 
@@ -199,7 +199,7 @@ function get_available_language_names( $related = true, $include_current_site = 
 		$value = $language_data['text'] ?? '';
 
 		if ( ! $value && isset( $language_data['lang'] ) ) {
-			$value = get_language_by_http_name( str_replace( '_', '-', $language_data['lang'] ) );
+			$value = get_language_field_by_http_code( str_replace( '_', '-', $language_data['lang'] ) );
 		}
 
 		if ( $value ) {
@@ -219,7 +219,7 @@ function get_available_language_names( $related = true, $include_current_site = 
  *
  * @return string[] An array with site IDs as keys and the individual MultilingualPress language code as values.
  */
-function get_available_languages( $related_sites_only = true ) {
+function get_available_languages( $related_sites_only = true ): array {
 
 	$languages = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_settings();
 	if ( ! $languages ) {
@@ -258,7 +258,7 @@ function get_available_languages( $related_sites_only = true ) {
  *
  * @return string The MultilingualPress language for the current site.
  */
-function get_current_site_language( $language_only = false ) {
+function get_current_site_language( $language_only = false ): string {
 
 	return get_site_language( get_current_blog_id(), $language_only );
 }
@@ -272,7 +272,7 @@ function get_current_site_language( $language_only = false ) {
  *
  * @return int The given content ID, if valid, and the ID of the queried object otherwise.
  */
-function get_default_content_id( $content_id ) {
+function get_default_content_id( $content_id ): int {
 
 	return (int) ( $content_id ?: get_queried_object_id() );
 }
@@ -286,7 +286,7 @@ function get_default_content_id( $content_id ) {
  *
  * @return URL Flag URL object.
  */
-function get_flag_url_for_site( $site_id = 0 ) {
+function get_flag_url_for_site( $site_id = 0 ): URL {
 
 	$site_id = (int) ( $site_id ?: get_current_blog_id() );
 
@@ -315,30 +315,50 @@ function get_flag_url_for_site( $site_id = 0 ) {
 }
 
 /**
+ * Returns all data of the language with the given HTTP code.
+ *
+ * @since 3.0.0
+ *
+ * @param string $http_code Language HTTP code.
+ *
+ * @return array Language data.
+ */
+function get_language_by_http_code( $http_code ) {
+
+	return MultilingualPress::resolve( 'multilingualpress.languages' )
+		->get_language_by_http_code( (string) $http_code );
+}
+
+/**
  * Returns the desired field value of the language with the given HTTP code.
  *
  * @since 3.0.0
  *
- * @param string          $http_code Language HTTP code.
- * @param string          $field     Optional. The field which should be queried. Defaults to 'native_name'.
- * @param string|string[] $fallbacks Optional. Falback language fields. Defaults to native and English name.
+ * @param string   $http_code Language HTTP code.
+ * @param string   $field     Optional. The field which should be queried. Defaults to 'native_name'.
+ * @param string[] $fallbacks Optional. Falback language fields. Defaults to native and English name.
  *
- * @return string|string[] The desired field value, an empty string on failure, or an array for field 'all'.
+ * @return string The desired field value, or an empty string on failure.
  */
-function get_language_by_http_name(
+function get_language_field_by_http_code(
 	$http_code,
 	$field = 'native_name',
-	$fallbacks = [
+	array $fallbacks = [
 		'native_name',
 		'english_name',
 	]
-) {
+): string {
 
-	return MultilingualPress::resolve( 'multilingualpress.languages' )->get_language_by_http_code(
-		(string) $http_code,
-		(string) $field,
-		$fallbacks
-	);
+	$language = get_language_by_http_code( $http_code );
+	if ( $language ) {
+		foreach ( array_unique( array_merge( (array) $field, (array) $fallbacks ) ) as $key ) {
+			if ( ! empty( $language[ $key ] ) ) {
+				return (string) $language[ $key ];
+			}
+		}
+	}
+
+	return '';
 }
 
 /**
@@ -350,7 +370,7 @@ function get_language_by_http_name(
  *
  * @return string The generated HTML.
  */
-function get_linked_elements( array $args = [] ) {
+function get_linked_elements( array $args = [] ): string {
 
 	$args = array_merge( [
 		'link_text'         => 'native',
@@ -462,7 +482,7 @@ function get_linked_elements( array $args = [] ) {
  *
  * @return string The MultilingualPress language for the site with the given ID.
  */
-function get_site_language( $site_id = 0, $language_only = false ) {
+function get_site_language( $site_id = 0, $language_only = false ): string {
 
 	$site_id = (int) $site_id;
 
@@ -489,7 +509,7 @@ function get_site_language( $site_id = 0, $language_only = false ) {
  *
  * @return int[] An array with site IDs as keys and content IDs as values.
  */
-function get_translation_ids( $content_id = 0, $type = 'post', $site_id = 0 ) {
+function get_translation_ids( $content_id = 0, $type = 'post', $site_id = 0 ): array {
 
 	$content_id = get_default_content_id( $content_id );
 	if ( ! $content_id ) {
@@ -512,7 +532,7 @@ function get_translation_ids( $content_id = 0, $type = 'post', $site_id = 0 ) {
  *
  * @return array[] An array with site IDs as keys and arrays with translation data as values.
  */
-function get_translations( $content_id = 0 ) {
+function get_translations( $content_id = 0 ): array {
 
 	if ( ! is_singular() && ! is_tag() && ! is_category() && ! is_tax() ) {
 		return [];
@@ -563,7 +583,7 @@ function get_translations( $content_id = 0 ) {
  *
  * @return bool Whether or not MultilingualPress debug mode is on.
  */
-function is_debug_mode() {
+function is_debug_mode(): bool {
 
 	return defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG;
 }
@@ -579,7 +599,7 @@ function is_debug_mode() {
  *
  * @return bool Whether or not the site with the given ID has HTTP redirection enabled.
  */
-function is_redirect_enabled( $site_id = 0 ) {
+function is_redirect_enabled( $site_id = 0 ): bool {
 
 	return MultilingualPress::resolve( 'multilingualpress.redirect_settings_repository' )
 		->get_site_setting( (int) $site_id );
@@ -592,7 +612,7 @@ function is_redirect_enabled( $site_id = 0 ) {
  *
  * @return bool Whether or not MultilingualPress or WordPress script debug mode is on.
  */
-function is_script_debug_mode() {
+function is_script_debug_mode(): bool {
 
 	return is_debug_mode() || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
 }
@@ -604,7 +624,7 @@ function is_script_debug_mode() {
  *
  * @return bool Whether or not MultilingualPress or WordPress debug mode is on.
  */
-function is_wp_debug_mode() {
+function is_wp_debug_mode(): bool {
 
 	return is_debug_mode() || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
 }
@@ -619,7 +639,7 @@ function is_wp_debug_mode() {
  *
  * @return string The HTML string for the hidden nonce field according to the given nonce object.
  */
-function nonce_field( Nonce $nonce, $with_referer = true ) {
+function nonce_field( Nonce $nonce, $with_referer = true ): string {
 
 	return sprintf(
 		'<input type="hidden" name="%s" value="%s">%s',
@@ -671,11 +691,11 @@ function redirect_after_settings_update( $url = '', $setting = 'mlp-setting', $c
  *
  * @return string The language attributes for the html tag.
  */
-function replace_language_in_language_attributes( $language_attributes ) {
+function replace_language_in_language_attributes( $language_attributes ): string {
 
 	$site_language = get_current_site_language();
 	if ( ! $site_language ) {
-		return $language_attributes;
+		return (string) $language_attributes;
 	}
 
 	$language_attributes = preg_replace(
@@ -697,7 +717,7 @@ function replace_language_in_language_attributes( $language_attributes ) {
  *
  * @return bool Whether or not the site with the given ID exists and is not marked as deleted.
  */
-function site_exists( $site_id, $network_id = 0 ) {
+function site_exists( $site_id, $network_id = 0 ): bool {
 
 	static $cache = [];
 
