@@ -329,7 +329,7 @@ class SettingsPage {
 	 *
 	 * @return string The hook name.
 	 */
-	public function hookname(): string {
+	public function hook_name(): string {
 
 		return $this->hook_name;
 	}

@@ -66,7 +66,7 @@ class EditSiteTab {
 
 			remove_submenu_page( SettingsPage::PARENT_SITES, $this->settings_page->slug() );
 
-			add_action( 'load-' . $this->settings_page->hookname(), function () {
+			add_action( 'load-' . $this->settings_page->hook_name(), function () {
 
 				$GLOBALS['parent_file'] = $GLOBALS['submenu_file'] = SettingsPage::PARENT_SITES;
 			} );
