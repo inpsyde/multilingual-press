@@ -75,11 +75,17 @@ final class SemanticVersionNumber implements VersionNumber {
 	 */
 	private function sanitize_version( string $version ): string {
 
-		return preg_replace(
-			[ '~[_\.\-\+]+~', '~([0-9])([a-z])~', '~([a-z])([0-9])~', '~[^a-z0-9\.\-\+]*~' ],
-			[ '.', '$1.$2', '$1.$2', '' ],
-			strtolower( $version )
-		);
+		return preg_replace( [
+			'~[_\.\-\+]+~',
+			'~([0-9])([a-z])~',
+			'~([a-z])([0-9])~',
+			'~[^a-z0-9\.\-\+]*~',
+		], [
+			'.',
+			'$1.$2',
+			'$1.$2',
+			'',
+		], strtolower( $version ) );
 	}
 
 	/**
@@ -93,7 +99,7 @@ final class SemanticVersionNumber implements VersionNumber {
 	 */
 	private function format_version( string $version ): string {
 
-		// filter because `$version` coming from sanitization could be just `'.'` and `explode('.', '.')` is `['', '']`
+		// Filter because (sanitized) `$version` could be just `'.'` and `explode('.', '.')` is `['', '']`.
 		$all_parts = array_filter( explode( '.', $version ) );
 
 		$digit_parts = array_filter( $all_parts, 'ctype_digit' );
@@ -102,7 +108,7 @@ final class SemanticVersionNumber implements VersionNumber {
 
 		$additional_parts = array_slice( $all_parts, $count_digit_parts );
 
-		// Ensure at least 3 digit parts, filling with 0 if some is missing
+		// Ensure at least 3 digit parts, filling with 0 if some are missing.
 		$digit_string = $count_digit_parts < 3
 			? implode( '.', array_replace( [ 0, 0, 0 ], $digit_parts ) )
 			: implode( '.', $digit_parts );
