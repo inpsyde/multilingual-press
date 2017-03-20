@@ -87,11 +87,11 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int[]|int $exclude Optional. Site IDs to exclude. Defaults to empty array.
+	 * @param int[] $exclude Optional. Site IDs to exclude. Defaults to empty array.
 	 *
 	 * @return int[] An array with the IDs of all sites with an assigned language
 	 */
-	public function get_site_ids( $exclude = [] ): array {
+	public function get_site_ids( array $exclude = [] ): array {
 
 		$settings = (array) get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 		if ( ! $settings ) {
@@ -100,7 +100,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 		return array_unique( array_diff(
 			array_map( 'intval', array_keys( $settings ) ),
-			array_map( 'intval', (array) $exclude )
+			array_map( 'intval', $exclude )
 		) );
 	}
 

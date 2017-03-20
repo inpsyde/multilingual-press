@@ -118,11 +118,11 @@ interface SiteSettingsRepository {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int[]|int $exclude Optional. Site IDs to exclude. Defaults to empty array.
+	 * @param int[] $exclude Optional. Site IDs to exclude. Defaults to empty array.
 	 *
 	 * @return int[] An array with the IDs of all sites with an assigned language
 	 */
-	public function get_site_ids( $exclude = [] ): array;
+	public function get_site_ids( array $exclude = [] ): array;
 
 	/**
 	 * Returns the site language of the site with the given ID, or the current site.

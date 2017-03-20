@@ -92,7 +92,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	 */
 	private function get_relationships( int $base_site_id ): string {
 
-		$site_ids = $this->repository->get_site_ids( $base_site_id );
+		$site_ids = $this->repository->get_site_ids( [ $base_site_id ] );
 		if ( ! $site_ids ) {
 			return '';
 		}
