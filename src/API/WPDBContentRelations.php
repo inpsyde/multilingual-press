@@ -171,7 +171,7 @@ LIMIT 1";
 	 * @param int    $target_content_id Target post ID or term taxonomy ID.
 	 * @param string $type              Content type.
 	 *
-	 * @return array
+	 * @return array[]
 	 */
 	public function get_existing_translation_ids(
 		$source_site_id,

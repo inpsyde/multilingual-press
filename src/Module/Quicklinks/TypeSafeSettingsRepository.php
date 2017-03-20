@@ -78,6 +78,6 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 
 		$settings['mlp_quicklink_position'] = $position;
 
-		return update_site_option( SettingsRepository::OPTION, $settings );
+		return (bool) update_site_option( SettingsRepository::OPTION, $settings );
 	}
 }

@@ -60,7 +60,7 @@ final class RequestAwareSearch implements Search {
 		}
 
 		switch_to_blog( $remote_site_id );
-		$posts = get_posts( $args );
+		$posts = (array) get_posts( $args );
 		restore_current_blog();
 
 		return $posts;

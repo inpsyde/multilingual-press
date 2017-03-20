@@ -204,7 +204,7 @@ class Quicklinks {
 		 * @param string     $current_position Current quicklinks position.
 		 * @param string     $type             The type of the quicklinks output.
 		 */
-		$quicklinks .= apply_filters(
+		$quicklinks .= (string) apply_filters(
 			'multilingualpress.quicklinks_html',
 			ob_get_clean() . '</div>',
 			$languages,

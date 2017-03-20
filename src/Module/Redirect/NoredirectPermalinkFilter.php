@@ -71,7 +71,7 @@ final class NoredirectPermalinkFilter implements Filter {
 			return $url;
 		}
 
-		$url = add_query_arg( static::QUERY_ARGUMENT, $languages[ $site_id ], $url );
+		$url = (string) add_query_arg( static::QUERY_ARGUMENT, $languages[ $site_id ], $url );
 
 		return $url;
 	}

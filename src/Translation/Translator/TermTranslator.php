@@ -144,7 +144,7 @@ WHERE tt.term_id = t.term_id AND tt.term_taxonomy_id = %d
 LIMIT 1";
 		$query = $this->db->prepare( $query, $term_taxonomy_id );
 
-		$term = $this->db->get_row( $query, ARRAY_A );
+		$term = (array) $this->db->get_row( $query, ARRAY_A );
 		if ( ! $term ) {
 			$term = [];
 		}
@@ -175,7 +175,7 @@ LIMIT 1";
 			$this->set_permastruct( $taxonomy, $changed );
 		}
 
-		return $url;
+		return (string) $url;
 	}
 
 	/**
@@ -189,7 +189,7 @@ LIMIT 1";
 
 		$expected = $this->get_expected_base( $taxonomy );
 
-		$existing = $this->wp_rewrite->get_extra_permastruct( $taxonomy ) ?: '';
+		$existing = (string) ( $this->wp_rewrite->get_extra_permastruct( $taxonomy ) ?: '' );
 
 		if ( ! $this->is_update_required( $expected, $existing ) ) {
 			return '';

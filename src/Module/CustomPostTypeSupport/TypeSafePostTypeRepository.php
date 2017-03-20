@@ -101,7 +101,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 
 		$settings[ PostTypeRepository::SETTINGS_KEY ] = $post_types;
 
-		return update_site_option( PostTypeRepository::OPTION, $settings );
+		return (bool) update_site_option( PostTypeRepository::OPTION, $settings );
 	}
 
 	/**

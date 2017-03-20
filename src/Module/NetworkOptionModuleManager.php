@@ -219,7 +219,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 */
 	public function save_modules(): bool {
 
-		return update_network_option( null, $this->option, $this->states );
+		return (bool) update_network_option( null, $this->option, $this->states );
 	}
 
 	/**

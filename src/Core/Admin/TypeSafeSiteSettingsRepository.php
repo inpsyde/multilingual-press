@@ -159,7 +159,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 		$site_id = $site_id ?: get_current_blog_id();
 
-		return update_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, esc_url( $url ) );
+		return (bool) update_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, esc_url( $url ) );
 	}
 
 	/**
@@ -205,7 +205,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function set_settings( array $settings ): bool {
 
-		return update_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, $settings );
+		return (bool) update_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, $settings );
 	}
 
 	/**

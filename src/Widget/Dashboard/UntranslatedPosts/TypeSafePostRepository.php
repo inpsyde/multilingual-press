@@ -21,7 +21,7 @@ final class TypeSafePostRepository implements PostRepository {
 	 */
 	public function get_untranslated_posts(): array {
 
-		return get_posts( [
+		return (array) get_posts( [
 			// Not suppressing filters (which is done by default when using get_posts()) makes caching possible.
 			'suppress_filters' => false,
 			// Post status 'any' automatically excludes both 'auto-draft' and 'trash'.

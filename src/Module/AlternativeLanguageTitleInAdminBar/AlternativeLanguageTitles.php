@@ -60,7 +60,7 @@ class AlternativeLanguageTitles {
 		if ( ! is_array( $titles ) ) {
 			$titles = [];
 		} elseif ( isset( $titles[ $site_id ] ) ) {
-			return $titles[ $site_id ];
+			return (string) $titles[ $site_id ];
 		}
 
 		$title = $this->site_settings_repository->get_alternative_language_title();

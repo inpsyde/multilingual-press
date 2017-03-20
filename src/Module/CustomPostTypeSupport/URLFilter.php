@@ -69,7 +69,7 @@ final class URLFilter implements Filter {
 			];
 		}
 
-		return home_url( add_query_arg( $args, '' ) );
+		return (string) home_url( add_query_arg( $args, '' ) );
 	}
 
 	/**

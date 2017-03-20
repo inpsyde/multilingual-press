@@ -73,7 +73,7 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 	private function get_post_title( \WP_Post $post ): string {
 
 		if ( 'publish' === $post->post_status ) {
-			return esc_html( $post->post_title );
+			return (string) esc_html( $post->post_title );
 		}
 
 		/* translators: 1: post title, 2: post status */

@@ -54,7 +54,7 @@ final class WPDBTableList implements TableList {
 
 		$query = $this->db->prepare( "SHOW TABLES LIKE '%s'", $this->db->esc_like( "{$this->db->base_prefix}%" ) );
 
-		$all_tables = $this->db->get_col( $query );
+		$all_tables = (array) $this->db->get_col( $query );
 
 		wp_cache_set( $cache_key, $all_tables, $cache_group );
 
