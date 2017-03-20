@@ -60,7 +60,7 @@ class Trasher {
 			return 0;
 		}
 
-		// prevent recursions
+		// Set static flag to prevent recursion.
 		self::$trashing_related_posts = true;
 
 		$current_site_id = get_current_blog_id();
@@ -73,22 +73,22 @@ class Trasher {
 			return 0;
 		}
 
-		$trashed_post = 0;
+		$trashed_posts = 0;
 
-		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$trashed_post ) {
+		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$trashed_posts ) {
 
 			switch_to_blog( $site_id );
 			$trashed = wp_trash_post( $post_id );
 			restore_current_blog();
 
 			if ( false !== $trashed && ! is_wp_error( $trashed ) ) {
-				$trashed_post++;
+				$trashed_posts ++;
 			}
 		} );
 
-		// allow to call again
+		// Reset static flag.
 		self::$trashing_related_posts = false;
 
-		return $trashed_post;
+		return $trashed_posts;
 	}
 }
