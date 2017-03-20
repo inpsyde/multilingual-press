@@ -436,7 +436,6 @@ class SettingsPage {
 	private function get_callback(): callable {
 
 		if ( $this->parent ) {
-
 			return function () {
 
 				$this->hook_name = add_submenu_page(
