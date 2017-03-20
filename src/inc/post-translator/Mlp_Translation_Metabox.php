@@ -227,7 +227,7 @@ class Mlp_Translation_Metabox {
 			/**
 			 * Filter the post translator activation checkbox callback.
 			 *
-			 * @param array|string $callback Callback name or class-method array.
+			 * @param callable $callback Callback name or class-method array.
 			 */
 			$checkbox_callback = apply_filters( 'mlp_post_translator_activation_checkbox', $callback );
 

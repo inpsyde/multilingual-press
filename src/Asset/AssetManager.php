@@ -61,17 +61,11 @@ class AssetManager {
 	 *
 	 * @param string $handle Script handle.
 	 *
-	 * @return Script Script object.
+	 * @return Script|null Script object, or null.
 	 */
-	public function get_script( string $handle ): Script {
+	public function get_script( string $handle ) {
 
-		$handle = (string) $handle;
-
-		if ( empty( $this->scripts[ $handle ] ) ) {
-			return null;
-		}
-
-		return $this->scripts[ $handle ];
+		return $this->scripts[ $handle ] ?? null;
 	}
 
 	/**
@@ -81,17 +75,11 @@ class AssetManager {
 	 *
 	 * @param string $handle Script handle.
 	 *
-	 * @return Style Style object.
+	 * @return Style|null Style object, or null.
 	 */
-	public function get_style( string $handle ): Style {
+	public function get_style( string $handle ) {
 
-		$handle = (string) $handle;
-
-		if ( empty( $this->styles[ $handle ] ) ) {
-			return null;
-		}
-
-		return $this->styles[ $handle ];
+		return $this->styles[ $handle ] ?? null;
 	}
 
 	/**
@@ -99,14 +87,12 @@ class AssetManager {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Script|string $script    Script object or handle.
-	 * @param bool          $in_footer Optional. Enqueue in the footer? Defaults to true.
+	 * @param string $handle    Script handle.
+	 * @param bool   $in_footer Optional. Enqueue in the footer? Defaults to true.
 	 *
 	 * @return bool Whether or not the script was enqueued successfully.
 	 */
-	public function enqueue_script( $script, bool $in_footer = true ): bool {
-
-		$handle = (string) $script;
+	public function enqueue_script( string $handle, bool $in_footer = true ): bool {
 
 		if ( empty( $this->scripts[ $handle ] ) ) {
 			return false;
@@ -127,7 +113,7 @@ class AssetManager {
 				$script->url(),
 				$script->dependencies(),
 				$script->version(),
-				(bool) $in_footer
+				$in_footer
 			);
 
 			$this->handle_script_data( $script );
@@ -141,27 +127,25 @@ class AssetManager {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Script|string $script      Script object or handle.
-	 * @param string        $object_name The name of the JavaScript variable holding the data.
-	 * @param array         $data        The data to be made available for the script.
-	 * @param bool          $in_footer   Optional. Enqueue in the footer? Defaults to true.
+	 * @param string $handle      Script handle.
+	 * @param string $object_name The name of the JavaScript variable holding the data.
+	 * @param array  $data        The data to be made available for the script.
+	 * @param bool   $in_footer   Optional. Enqueue in the footer? Defaults to true.
 	 *
 	 * @return bool Whether or not the script was enqueued successfully.
 	 */
 	public function enqueue_script_with_data(
-		$script,
+		string $handle,
 		string $object_name,
 		array $data,
-		$in_footer = true
+		bool $in_footer = true
 	): bool {
-
-		$handle = (string) $script;
 
 		if ( empty( $this->scripts[ $handle ] ) ) {
 			return false;
 		}
 
-		if ( ! $this->add_script_data( $this->scripts[ $handle ], $object_name, $data ) ) {
+		if ( ! $this->add_script_data( $handle, $object_name, $data ) ) {
 			return false;
 		}
 
@@ -173,13 +157,11 @@ class AssetManager {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Style|string $style Style object or handle.
+	 * @param string $handle Style handle.
 	 *
 	 * @return bool Whether or not the style was enqueued successfully.
 	 */
-	public function enqueue_style( $style ): bool {
-
-		$handle = (string) $style;
+	public function enqueue_style( string $handle ): bool {
 
 		if ( empty( $this->styles[ $handle ] ) ) {
 			return false;
@@ -210,24 +192,22 @@ class AssetManager {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Script|string $script      Script object or handle.
-	 * @param string        $object_name The name of the JavaScript variable holding the data.
-	 * @param array         $data        The data to be made available for the script.
+	 * @param string $handle      Script handle.
+	 * @param string $object_name The name of the JavaScript variable holding the data.
+	 * @param array  $data        The data to be made available for the script.
 	 *
-	 * @return Script|null Script object if it exists, null if not.
+	 * @return Script|null Script object, or null.
 	 */
-	public function add_script_data( $script, string $object_name, array $data ): Script {
+	public function add_script_data( string $handle, string $object_name, array $data ) {
 
-		if ( ! $script instanceof Script ) {
-			$script = $this->get_script( (string) $script );
-			if ( ! $script ) {
-				return null;
-			}
+		$script = $this->get_script( $handle );
+		if ( ! $script ) {
+			return null;
 		}
 
 		$script->add_data( $object_name, $data );
 
-		if ( wp_script_is( $script->handle() ) ) {
+		if ( wp_script_is( $handle ) ) {
 			$this->handle_script_data( $script );
 		}
 
