@@ -99,6 +99,15 @@ class SystemChecker {
 	const MINIMUM_WORDPRESS_VERSION = '4.7.0';
 
 	/**
+	 * Action name triggered after system check has been done.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_AFTER_CHECK = 'multilingual_press.system_checker_checked';
+
+	/**
 	 * @var string[]
 	 */
 	private $errors = [];

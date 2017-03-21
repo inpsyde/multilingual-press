@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Installation;
 
+use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
+use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\ServiceProvider;
 
@@ -13,7 +15,7 @@ use Inpsyde\MultilingualPress\Service\ServiceProvider;
  * @package Inpsyde\MultilingualPress\Installation
  * @since   3.0.0
  */
-final class InstallationServiceProvider implements ServiceProvider  {
+final class InstallationServiceProvider implements BootstrappableServiceProvider {
 
 	/**
 	 * Registers the provided services on the given container.
@@ -58,6 +60,15 @@ final class InstallationServiceProvider implements ServiceProvider  {
 			);
 		};
 
+		$container['multilingualpress.installation_checker'] = function ( Container $container ) {
+
+			return new InstallationChecker(
+				$container['multilingualpress.system_checker'],
+				$container['multilingualpress.properties'],
+				$container['multilingualpress.type_factory']
+			);
+		};
+
 		$container->share( 'multilingualpress.uninstaller', function ( Container $container ) {
 
 			return new Uninstaller(
@@ -77,5 +88,45 @@ final class InstallationServiceProvider implements ServiceProvider  {
 				$container['multilingualpress.site_relations']
 			);
 		};
+	}
+
+	/**
+	 * Bootstraps the registered services.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	public function bootstrap( Container $container ) {
+
+		add_action(
+			SystemChecker::ACTION_AFTER_CHECK,
+			function ( int $result, VersionNumber $installed_version ) use ( $container ) {
+				
+				if ( did_action( SystemChecker::ACTION_AFTER_CHECK ) > 1 ) {
+					return;
+				}
+
+				remove_all_actions( SystemChecker::ACTION_AFTER_CHECK );
+
+				switch ( $result ) {
+					
+					case SystemChecker::NEEDS_INSTALLATION:
+						$container['multilingualpress.installer']->install();
+						break;
+
+					case SystemChecker::NEEDS_UPGRADE:
+						$container['multilingualpress.network_plugin_deactivator']->deactivate_plugins( [
+							'disable-acf.php',
+							'mlp-wp-seo-compat.php',
+						] );
+
+						$container['multilingualpress.updater']->update( $installed_version );
+						break;
+				}
+			}
+		);
 	}
 }

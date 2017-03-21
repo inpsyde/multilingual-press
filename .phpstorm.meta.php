@@ -91,6 +91,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.site_settings_updater' instanceof \Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater,
 			'multilingualpress.site_settings_view' instanceof \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingView,
 			'multilingualpress.system_checker' instanceof \Inpsyde\MultilingualPress\Installation\SystemChecker,
+			'multilingualpress.installation_checker' instanceof \Inpsyde\MultilingualPress\Installation\InstallationChecker,
 			'multilingualpress.table_duplicator' instanceof \Inpsyde\MultilingualPress\Database\TableDuplicator,
 			'multilingualpress.table_installer' instanceof \Inpsyde\MultilingualPress\Database\TableInstaller,
 			'multilingualpress.table_list' instanceof \Inpsyde\MultilingualPress\Database\TableList,
