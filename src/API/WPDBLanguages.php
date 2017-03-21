@@ -16,22 +16,6 @@ use Inpsyde\MultilingualPress\Database\Table;
 final class WPDBLanguages implements Languages {
 
 	/**
-	 * @var string[]
-	 */
-	const COMPARISON_OPERATORS = [
-		'=',
-		'<=>',
-		'>',
-		'>=',
-		'<',
-		'<=',
-		'LIKE',
-		'!=',
-		'<>',
-		'NOT LIKE',
-	];
-
-	/**
 	 * @var \wpdb
 	 */
 	private $db;
@@ -395,14 +379,23 @@ final class WPDBLanguages implements Languages {
 			return false;
 		}
 
-		if (
-			! empty( $condition['compare'] )
-			&& ! in_array( $condition['compare'], self::COMPARISON_OPERATORS, true )
-		) {
-			return false;
+		static $comparison_operators;
+		if ( ! $comparison_operators ) {
+			$comparison_operators = [
+				'=',
+				'<=>',
+				'>',
+				'>=',
+				'<',
+				'<=',
+				'LIKE',
+				'!=',
+				'<>',
+				'NOT LIKE',
+			];
 		}
 
-		return true;
+		return empty( $condition['value'] ) || in_array( $condition['compare'], $comparison_operators, true );
 	}
 
 	/**
