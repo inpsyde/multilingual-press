@@ -1,7 +1,12 @@
 <?php # -*- coding: utf-8 -*-
 
+declare( strict_types = 1 );
+
+namespace Inpsyde\MultilingualPress\Tests;
+
 use PHPUnit\Framework\BaseTestListener;
 use PHPUnit\Framework\TestSuite;
+use PHPUnit\Runner\Exception;
 
 /**
  * Test listener implementation taking care of test-suite-specific tasks.
@@ -16,6 +21,12 @@ final class Listener extends BaseTestListener {
 	 * @param TestSuite $suite
 	 */
 	public function startTestSuite( TestSuite $suite ) {
+
+		if ( ! class_exists( TestCase::class ) ) {
+			throw new Exception( 'Please install plugin via Composer before running tests.' );
+		}
+
+		putenv( 'TESTS_FILES_PATH=' . __DIR__ );
 
 		switch ( $suite->getName() ) {
 			case 'Unit':
