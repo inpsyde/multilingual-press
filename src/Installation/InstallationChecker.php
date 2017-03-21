@@ -4,13 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Installation;
 
+use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
-use Inpsyde\MultilingualPress\Common\PluginProperties;
 use Inpsyde\MultilingualPress\MultilingualPress;
 
 /**
- * MultilingualPress Installation checker.
+ * MultilingualPress installation checker.
  *
  * @package Inpsyde\MultilingualPress\Installation
  * @since   3.0.0
@@ -23,31 +23,39 @@ class InstallationChecker {
 	private $checker;
 
 	/**
-	 * @var TypeFactory
-	 */
-	private $type_factory;
-
-	/**
 	 * @var PluginProperties
 	 */
 	private $properties;
 
 	/**
-	 * Constructor.
+	 * @var TypeFactory
+	 */
+	private $type_factory;
+
+	/**
+	 * Constructor. Sets up the properties.
 	 *
-	 * @param SystemChecker    $checker
-	 * @param PluginProperties $properties
-	 * @param TypeFactory      $type_factory
+	 * @since 3.0.0
+	 *
+	 * @param SystemChecker    $checker      System checker object.
+	 * @param PluginProperties $properties   Plugin properties object.
+	 * @param TypeFactory      $type_factory Type factory object.
 	 */
 	public function __construct( SystemChecker $checker, PluginProperties $properties, TypeFactory $type_factory ) {
 
-		$this->checker      = $checker;
+		$this->checker = $checker;
+
+		$this->properties = $properties;
+
 		$this->type_factory = $type_factory;
-		$this->properties   = $properties;
 	}
 
 	/**
-	 * @return int
+	 * Checks the installation for compliance with the system requirements.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return int The status of the installation check.
 	 */
 	public function check(): int {
 
@@ -62,26 +70,38 @@ class InstallationChecker {
 
 		list( $installed_version, $current_version ) = $this->get_versions();
 
-		$check_result = $this->checker->check_version( $installed_version, $current_version );
+		$version_check = $this->checker->check_version( $installed_version, $current_version );
 
-		update_network_option( null, MultilingualPress::VERSION_OPTION, $current_version );
+		update_network_option( null, MultilingualPress::OPTION_VERSION, $current_version );
 
-		do_action( SystemChecker::ACTION_AFTER_CHECK, $check_result, $installed_version );
+		/**
+		 * Fires right after the MultilingualPress version check.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param int           $version_check     The status of the version check.
+		 * @param VersionNumber $installed_version Installed MultilingualPress version.
+		 */
+		do_action( SystemChecker::ACTION_CHECKED_VERSION, $version_check, $installed_version );
 
 		return $installation_check;
 	}
 
 	/**
-	 * @return VersionNumber[]
+	 * Returns an array with the installed and the current version of MultilingualPress.
+	 *
+	 * @return VersionNumber[] Version objects.
 	 */
 	private function get_versions(): array {
 
-		$option = get_network_option( null, MultilingualPress::VERSION_OPTION );
+		$installed_version = $this->type_factory->create_version_number( [
+			(string) get_network_option( null, MultilingualPress::OPTION_VERSION ),
+		] );
 
-		$installed_version = $this->type_factory->create_version_number( $option );
-		$current_version   = $this->type_factory->create_version_number( [ $this->properties->version() ] );
+		$current_version = $this->type_factory->create_version_number( [
+			$this->properties->version(),
+		] );
 
 		return [ $installed_version, $current_version ];
-
 	}
 }

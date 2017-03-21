@@ -57,7 +57,7 @@ final class MultilingualPress {
 	 *
 	 * @var string
 	 */
-	const VERSION_OPTION = 'mlp_version';
+	const OPTION_VERSION = 'mlp_version';
 
 	/**
 	 * @var Container
@@ -182,12 +182,9 @@ final class MultilingualPress {
 	}
 
 	/**
-	 * Checks (and adapts) the current MultilingualPress installation.
+	 * Checks the current MultilingualPress installation.
 	 *
 	 * @return bool Whether or not MultilingualPress is installed properly.
-	 *
-	 * @see Installation\InstallationChecker::check()             That triggers SystemChecker::ACTION_AFTER_CHECK action
-	 * @see Installation\InstallationServiceProvider::bootstrap() That handle SystemChecker::ACTION_AFTER_CHECK action
 	 */
 	private function check_installation(): bool {
 

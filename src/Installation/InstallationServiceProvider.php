@@ -7,7 +7,6 @@ namespace Inpsyde\MultilingualPress\Installation;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
-use Inpsyde\MultilingualPress\Service\ServiceProvider;
 
 /**
  * Service provider for all Installation objects.
@@ -27,6 +26,15 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 	 * @return void
 	 */
 	public function register( Container $container ) {
+
+		$container['multilingualpress.installation_checker'] = function ( Container $container ) {
+
+			return new InstallationChecker(
+				$container['multilingualpress.system_checker'],
+				$container['multilingualpress.properties'],
+				$container['multilingualpress.type_factory']
+			);
+		};
 
 		$container['multilingualpress.installer'] = function ( Container $container ) {
 
@@ -57,15 +65,6 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 				$container['multilingualpress.type_factory'],
 				$container['multilingualpress.site_relations_checker'],
 				$container['multilingualpress.site_settings_repository']
-			);
-		};
-
-		$container['multilingualpress.installation_checker'] = function ( Container $container ) {
-
-			return new InstallationChecker(
-				$container['multilingualpress.system_checker'],
-				$container['multilingualpress.properties'],
-				$container['multilingualpress.type_factory']
 			);
 		};
 
@@ -101,32 +100,31 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 	 */
 	public function bootstrap( Container $container ) {
 
-		add_action(
-			SystemChecker::ACTION_AFTER_CHECK,
-			function ( int $result, VersionNumber $installed_version ) use ( $container ) {
-				
-				if ( did_action( SystemChecker::ACTION_AFTER_CHECK ) > 1 ) {
-					return;
-				}
+		add_action( SystemChecker::ACTION_CHECKED_VERSION, function (
+			int $result,
+			VersionNumber $installed_version
+		) use ( $container ) {
 
-				remove_all_actions( SystemChecker::ACTION_AFTER_CHECK );
-
-				switch ( $result ) {
-					
-					case SystemChecker::NEEDS_INSTALLATION:
-						$container['multilingualpress.installer']->install();
-						break;
-
-					case SystemChecker::NEEDS_UPGRADE:
-						$container['multilingualpress.network_plugin_deactivator']->deactivate_plugins( [
-							'disable-acf.php',
-							'mlp-wp-seo-compat.php',
-						] );
-
-						$container['multilingualpress.updater']->update( $installed_version );
-						break;
-				}
+			if ( did_action( SystemChecker::ACTION_CHECKED_VERSION ) > 1 ) {
+				return;
 			}
-		);
+
+			remove_all_actions( SystemChecker::ACTION_CHECKED_VERSION );
+
+			switch ( $result ) {
+				case SystemChecker::NEEDS_INSTALLATION:
+					$container['multilingualpress.installer']->install();
+					break;
+
+				case SystemChecker::NEEDS_UPGRADE:
+					$container['multilingualpress.network_plugin_deactivator']->deactivate_plugins( [
+						'disable-acf.php',
+						'mlp-wp-seo-compat.php',
+					] );
+
+					$container['multilingualpress.updater']->update( $installed_version );
+					break;
+			}
+		} );
 	}
 }
