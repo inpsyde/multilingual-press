@@ -13,7 +13,7 @@ namespace Inpsyde\MultilingualPress\Common\Admin;
 class ActionLink {
 
 	/**
-	 * @var callable
+	 * @var callable|null
 	 */
 	private $add_callback;
 
@@ -32,11 +32,11 @@ class ActionLink {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string   $id           Link ID.
-	 * @param string   $html         Link HTML.
-	 * @param callable $add_callback Optional. Callback to handle adding the link. Defaults to null.
+	 * @param string        $id           Link ID.
+	 * @param string        $html         Link HTML.
+	 * @param callable|null $add_callback Optional. Callback to handle adding the link. Defaults to null.
 	 */
-	public function __construct( string $id, string $html, callable $add_callback = null ) {
+	public function __construct( string $id, string $html, $add_callback = null ) {
 
 		$this->id = $id;
 
@@ -70,7 +70,7 @@ class ActionLink {
 	 */
 	public function add( array $links ): array {
 
-		if ( is_callable( $this->add_callback ) ) {
+		if ( $this->add_callback && is_callable( $this->add_callback ) ) {
 			$callback = $this->add_callback;
 
 			return (array) $callback( $links, $this->id, $this->html );

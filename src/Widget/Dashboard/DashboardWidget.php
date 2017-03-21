@@ -23,7 +23,7 @@ class DashboardWidget {
 	private $capability;
 
 	/**
-	 * @var callable
+	 * @var callable|null
 	 */
 	private $control_callback;
 
@@ -47,12 +47,12 @@ class DashboardWidget {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string   $id               Widget ID.
-	 * @param string   $name             Widget name.
-	 * @param View     $view             View object.
-	 * @param string   $capability       Optional. Capability required to view the widget. Defaults to empty string.
-	 * @param array    $callback_args    Optional. Callback arguments. Defaults to empty array.
-	 * @param callable $control_callback Optional. Control callback. Defaults to null.
+	 * @param string        $id               Widget ID.
+	 * @param string        $name             Widget name.
+	 * @param View          $view             View object.
+	 * @param string        $capability       Optional. Capability required to see the widget. Defaults to empty string.
+	 * @param array         $callback_args    Optional. Callback arguments. Defaults to empty array.
+	 * @param callable|null $control_callback Optional. Control callback. Defaults to null.
 	 */
 	public function __construct(
 		string $id,
@@ -60,7 +60,7 @@ class DashboardWidget {
 		View $view,
 		string $capability = '',
 		array $callback_args = [],
-		callable $control_callback = null
+		$control_callback = null
 	) {
 
 		$this->id = $id;

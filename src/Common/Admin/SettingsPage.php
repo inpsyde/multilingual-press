@@ -251,7 +251,7 @@ class SettingsPage {
 		string $slug,
 		SettingsPageView $view,
 		string $icon = '',
-		int $position = null
+		$position = null
 	) {
 
 		$this->admin = $admin;

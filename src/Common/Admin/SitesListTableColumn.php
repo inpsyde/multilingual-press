@@ -13,7 +13,7 @@ namespace Inpsyde\MultilingualPress\Common\Admin;
 class SitesListTableColumn {
 
 	/**
-	 * @var callable
+	 * @var callable|null
 	 */
 	private $add_callback;
 
@@ -37,16 +37,16 @@ class SitesListTableColumn {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string   $id              Column ID.
-	 * @param string   $name            Column name.
-	 * @param callable $render_callback Callback for rendering the column content.
-	 * @param callable $add_callback    Optional. Callback to handle adding the column. Defaults to null.
+	 * @param string        $id              Column ID.
+	 * @param string        $name            Column name.
+	 * @param callable      $render_callback Callback for rendering the column content.
+	 * @param callable|null $add_callback    Optional. Callback to handle adding the column. Defaults to null.
 	 */
 	public function __construct(
 		string $id,
 		string $name,
 		callable $render_callback,
-		callable $add_callback = null
+		$add_callback = null
 	) {
 
 		$this->id = $id;
@@ -84,7 +84,7 @@ class SitesListTableColumn {
 	 */
 	public function add( array $columns ): array {
 
-		if ( is_callable( $this->add_callback ) ) {
+		if ( $this->add_callback && is_callable( $this->add_callback ) ) {
 			$callback = $this->add_callback;
 
 			return (array) $callback( $columns, $this->id, $this->name );
