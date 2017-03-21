@@ -101,7 +101,7 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 	public function bootstrap( Container $container ) {
 
 		add_action( SystemChecker::ACTION_CHECKED_VERSION, function (
-			int $result,
+			int $version_check,
 			VersionNumber $installed_version
 		) use ( $container ) {
 
@@ -111,7 +111,7 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 
 			remove_all_actions( SystemChecker::ACTION_CHECKED_VERSION );
 
-			switch ( $result ) {
+			switch ( $version_check ) {
 				case SystemChecker::NEEDS_INSTALLATION:
 					$container['multilingualpress.installer']->install();
 					break;
@@ -125,6 +125,6 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 					$container['multilingualpress.updater']->update( $installed_version );
 					break;
 			}
-		} );
+		}, 10, 2 );
 	}
 }
