@@ -403,7 +403,7 @@ function get_linked_elements( array $args = [] ): string {
 				'http'     => $language->name( 'http' ),
 				'name'     => $language->name( $link_text ),
 				'priority' => $language->priority(),
-				'icon'     => (string) $translation->icon_url(),
+				'icon'     => $translation->icon_url(),
 			];
 		}, $translations );
 
