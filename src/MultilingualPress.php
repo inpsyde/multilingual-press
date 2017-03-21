@@ -97,7 +97,7 @@ final class MultilingualPress {
 	 *
 	 * @return mixed The value or factory callback.
 	 *
-	 * @throws CannotResolveName if there is no container available (i.e., MultilingualPress has not been intitialised).
+	 * @throws CannotResolveName if there is no container available (i.e., MultilingualPress has not been intitialized).
 	 */
 	public static function resolve( string $name ) {
 

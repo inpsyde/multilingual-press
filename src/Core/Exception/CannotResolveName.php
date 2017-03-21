@@ -24,7 +24,7 @@ class CannotResolveName extends \Exception {
 	public static function for_name( string $name ): CannotResolveName {
 
 		return new static( sprintf(
-			'Cannot resolve "%s". MultilingualPress has not yet been initialised.',
+			'Cannot resolve "%s". MultilingualPress has not yet been initialized.',
 			$name
 		) );
 	}
