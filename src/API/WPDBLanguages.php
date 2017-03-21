@@ -379,6 +379,10 @@ final class WPDBLanguages implements Languages {
 			return false;
 		}
 
+		if ( empty( $condition['compare'] ) ) {
+			return true;
+		}
+
 		static $comparison_operators;
 		if ( ! $comparison_operators ) {
 			$comparison_operators = [
@@ -395,7 +399,7 @@ final class WPDBLanguages implements Languages {
 			];
 		}
 
-		return empty( $condition['value'] ) || in_array( $condition['compare'], $comparison_operators, true );
+		return in_array( $condition['compare'], $comparison_operators, true );
 	}
 
 	/**
