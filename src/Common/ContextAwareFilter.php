@@ -43,7 +43,7 @@ trait ContextAwareFilter {
 	 */
 	public function accepted_args(): int {
 
-		return (int) ( $this->accepted_args ?: Filter::DEFAULT_ACCEPTED_ARGS );
+		return (int) ( $this->accepted_args ?? Filter::DEFAULT_ACCEPTED_ARGS );
 	}
 
 	/**
@@ -51,12 +51,12 @@ trait ContextAwareFilter {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $hook     Optional. Hook name. Defaults to empty string.
-	 * @param int    $priority Optional. Callback priority. Defaults to 10.
+	 * @param string   $hook     Optional. Hook name. Defaults to empty string.
+	 * @param int|null $priority Optional. Callback priority. Defaults to null.
 	 *
 	 * @return bool Whether or not the filter was removed successfully.
 	 */
-	public function disable( string $hook = '', int $priority = Filter::DEFAULT_PRIORITY ): bool {
+	public function disable( string $hook = '', $priority = null ): bool {
 
 		if ( ! $this->callback ) {
 			return false;
@@ -78,17 +78,13 @@ trait ContextAwareFilter {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $hook          Optional. Hook name. Defaults to empty string.
-	 * @param int    $priority      Optional. Callback priority. Defaults to 10.
-	 * @param int    $accepted_args Optional. Number of accepted arguments. Defaults to 1.
+	 * @param string   $hook          Optional. Hook name. Defaults to empty string.
+	 * @param int|null $priority      Optional. Callback priority. Defaults to null.
+	 * @param int|null $accepted_args Optional. Number of accepted arguments. Defaults to null.
 	 *
 	 * @return bool Whether or not the filter was added successfully.
 	 */
-	public function enable(
-		string $hook = '',
-		int $priority = Filter::DEFAULT_PRIORITY,
-		int $accepted_args = Filter::DEFAULT_PRIORITY
-	): bool {
+	public function enable( string $hook = '', $priority = null, $accepted_args = null ): bool {
 
 		if ( ! $this->callback ) {
 			return false;
@@ -126,6 +122,6 @@ trait ContextAwareFilter {
 	 */
 	public function priority(): int {
 
-		return is_int( $this->priority ) ? $this->priority : Filter::DEFAULT_PRIORITY;
+		return (int) ( $this->priority ?? Filter::DEFAULT_PRIORITY );
 	}
 }

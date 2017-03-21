@@ -42,29 +42,25 @@ interface Filter {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $hook     Optional. Hook name. Defaults to empty string.
-	 * @param int    $priority Optional. Callback priority. Defaults to 10.
+	 * @param string   $hook     Optional. Hook name. Defaults to empty string.
+	 * @param int|null $priority Optional. Callback priority. Defaults to null.
 	 *
 	 * @return bool Whether or not the filter was removed successfully.
 	 */
-	public function disable( string $hook = '', int $priority = self::DEFAULT_PRIORITY ): bool;
+	public function disable( string $hook = '', $priority = null ): bool;
 
 	/**
 	 * Adds the filter.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $hook          Optional. Hook name. Defaults to empty string.
-	 * @param int    $priority      Optional. Callback priority. Defaults to 10.
-	 * @param int    $accepted_args Optional. Number of accepted arguments. Defaults to 2.
+	 * @param string   $hook          Optional. Hook name. Defaults to empty string.
+	 * @param int|null $priority      Optional. Callback priority. Defaults to null.
+	 * @param int|null $accepted_args Optional. Number of accepted arguments. Defaults to null.
 	 *
 	 * @return bool Whether or not the filter was added successfully.
 	 */
-	public function enable(
-		string $hook = '',
-		int $priority = self::DEFAULT_PRIORITY,
-		int $accepted_args = self::DEFAULT_ACCEPTED_ARGS
-	): bool;
+	public function enable( string $hook = '', $priority = null, $accepted_args = null ): bool;
 
 	/**
 	 * Returns the hook name.
