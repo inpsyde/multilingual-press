@@ -136,8 +136,8 @@ final class CachingTranslations implements Translations {
 
 		$source_site_id = (int) $args['site_id'];
 
-		$sites = $this->site_relations->get_related_site_ids( $source_site_id, (bool) $args['include_base'] );
-		if ( ! $sites ) {
+		$site_ids = $this->site_relations->get_related_site_ids( $source_site_id, (bool) $args['include_base'] );
+		if ( ! $site_ids ) {
 			return [];
 		}
 
@@ -153,58 +153,53 @@ final class CachingTranslations implements Translations {
 
 		$languages = $this->languages->get_all_site_languages();
 
-		$sites = array_intersect( $sites, array_keys( $languages ) );
-		if ( ! $sites ) {
+		$site_ids = array_intersect( $site_ids, array_keys( $languages ) );
+		if ( ! $site_ids ) {
 			return [];
 		}
 
-		$suppress_filters = (bool) $args['suppress_filters'];
+		$default_translation = [
+			'remote_title'      => '',
+			'remote_url'        => '',
+			'source_site_id'    => $source_site_id,
+			'suppress_filters'  => (bool) $args['suppress_filters'],
+			'target_content_id' => 0,
+			'type'              => $type,
+		];
 
 		$translations = [];
 
-		foreach ( $sites as $site_id ) {
+		foreach ( $site_ids as $site_id ) {
 			$site_id = (int) $site_id;
 
-			$default = [
-				'remote_title'      => '',
-				'remote_url'        => '',
-				'source_site_id'    => $source_site_id,
-				'suppress_filters'  => $suppress_filters,
-				'target_site_id'    => $site_id,
-				'target_content_id' => 0,
-				'type'              => $type,
-			];
+			$translation = [];
 
 			if ( empty( $content_relations[ $site_id ] ) ) {
 				$translation = $this->get_translation_for_no_related_content( $site_id, $args );
 				if ( ! $translation['remote_url'] ) {
 					continue;
 				}
-
-				$translation = array_merge( $default, $translation );
 			} else {
-				$content_id = (int) $content_relations[ $site_id ];
-
 				if ( in_array( $type, [ Request::TYPE_SINGULAR, Request::TYPE_TERM_ARCHIVE ], true ) ) {
+					$content_id = (int) $content_relations[ $site_id ];
+
 					$translation = $this->get_translation_for_related_content( $site_id, $content_id, $args );
 					if ( ! $translation ) {
 						continue;
 					}
 
-					$translation = array_merge( $default, [ 'target_content_id' => $content_id ], $translation );
+					$translation = array_merge( [ 'target_content_id' => $content_id ], $translation );
 				}
 			}
+
+			$translation = array_merge( $default_translation, [ 'target_site_id' => $site_id ], $translation );
 
 			$language = $languages[ $site_id ];
 			if ( empty( $language['http_name'] ) ) {
 				$language['http_name'] = empty( $language['lang'] ) ? '' : $language['lang'];
 			}
 
-			$translation['icon_url'] = $language['http_name']
-				? get_flag_url_for_site( $site_id )
-				: $this->type_factory->create_url( [
-					'',
-				] );
+			$translation['icon_url'] = $language['http_name'] ? get_flag_url_for_site( $site_id ) : '';
 
 			$translations[ $site_id ] = $this->type_factory->create_translation( [
 				$translation,

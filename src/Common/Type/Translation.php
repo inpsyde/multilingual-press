@@ -20,13 +20,13 @@ interface Translation {
 	const FILTER_URL = 'multilingualpress.translation_url';
 
 	/**
-	 * Returns the icon URL object.
+	 * Returns the icon URL.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return URL Icon URL object.
+	 * @return string Icon URL.
 	 */
-	public function icon_url(): URL;
+	public function icon_url(): string;
 
 	/**
 	 * Returns the language object.
