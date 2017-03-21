@@ -27,6 +27,15 @@ class SystemChecker {
 	const ACTION_FORCE_CHECK = 'multilingualpress.force_system_check';
 
 	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_CHECKED_VERSION = 'multilingual_press.checked_version';
+
+	/**
 	 * Installation check status.
 	 *
 	 * @since 3.0.0
@@ -87,7 +96,7 @@ class SystemChecker {
 	 *
 	 * @var string
 	 */
-	const MINIMUM_PHP_VERSION = '5.4.0';
+	const MINIMUM_PHP_VERSION = '7.0.0';
 
 	/**
 	 * Required minimum WordPress version.

@@ -19,6 +19,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.error_factory' instanceof \Inpsyde\MultilingualPress\Factory\ErrorFactory,
 			'multilingualpress.flag_image_url_site_setting' instanceof \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel,
 			'multilingualpress.front_page_translator' instanceof \Inpsyde\MultilingualPress\Translation\Translator,
+			'multilingualpress.installation_checker' instanceof \Inpsyde\MultilingualPress\Installation\InstallationChecker,
 			'multilingualpress.installer' instanceof \Inpsyde\MultilingualPress\Installation\Installer,
 			'multilingualpress.internal_locations' instanceof \Inpsyde\MultilingualPress\Core\InternalLocations,
 			'multilingualpress.language_negotiator' instanceof \Inpsyde\MultilingualPress\Module\Redirect\LanguageNegotiator,
