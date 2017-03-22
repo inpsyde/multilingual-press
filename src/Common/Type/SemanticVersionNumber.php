@@ -48,73 +48,99 @@ final class SemanticVersionNumber implements VersionNumber {
 	}
 
 	/**
-	 * Returns a sanitized semantic version number string for the given version.
+	 * Formats the given number according to the Semantic Versioning specification.
+	 *
+	 * @see http://semver.org/#semantic-versioning-specification-semver
 	 *
 	 * @param string $version Raw version number string.
 	 *
-	 * @return string Sanitized semantic version number string.
+	 * @return string Semantic version number string.
 	 */
 	private function get_semantic_version_number( string $version ): string {
 
-		$version = $this->sanitize_version( $version );
-		if ( '' === $version ) {
+		list( $numeric, $pre_release, $metadata ) = $this->match_semver_pattern( $version );
+
+		if ( ! $numeric ) {
 			return VersionNumber::FALLBACK_VERSION;
 		}
 
-		$version = $this->format_version( $version );
+		$version = $numeric;
+
+		if ( $pre_release ) {
+			$version .= "-$pre_release";
+		}
+
+		if ( $metadata ) {
+			$version .= "+$metadata";
+		}
 
 		return $version;
 	}
 
 	/**
-	 * Removes invalid characters, and inserts dots between numeric and non-numeric characters.
+	 * @param string $version
 	 *
-	 * @param string $version Raw version number string.
-	 *
-	 * @return string Sanitized version number string.
+	 * @return string[] A 3 items array with the 3 parts of SemVer specs, in order:
+	 *                  - The numeric part of SemVer specs
+	 *                  - The pre-release part of SemVer specs, could be empty
+	 *                  - The meta part of SemVer specs, could be empty
 	 */
-	private function sanitize_version( string $version ): string {
+	private function match_semver_pattern( string $version ): array {
 
-		return preg_replace( [
-			'~[_\.\-\+]+~',
-			'~([0-9])([a-z])~',
-			'~([a-z])([0-9])~',
-			'~[^a-z0-9\.\-\+]*~',
-		], [
-			'.',
-			'$1.$2',
-			'$1.$2',
-			'',
-		], strtolower( $version ) );
+		$pattern = '~^(?P<numbers>(?:[0-9]+)+(?:[0-9\.]+)?)+(?P<anything>.*?)?$~';
+
+		$matched = preg_match( $pattern, $version, $matches );
+
+		if ( ! $matched ) {
+			return [ '', '', '' ];
+		}
+
+		$numbers = explode( '.', trim( $matches['numbers'], '.' ) );
+
+		// if less than 3 numbers, we ensure at least 3 numbers are there, filling with zeroes
+		$numeric = implode( '.', array_replace( [ '0', '0', '0' ], array_slice( $numbers, 0, 3 ) ) );
+
+		// if more than 3 numbers are there, we store additional numbers as build
+		$build = implode( '.', array_slice( $numbers, 3 ) );
+
+		// if there's no anything else, we already know what to return
+		if ( ! $matches['anything'] ) {
+			return [ $numeric, $build, '' ];
+		}
+
+		$pre  = ltrim( $matches['anything'], '-' );
+		$meta = '';
+
+		// seems we have some metadata
+		if ( substr_count( $matches['anything'], '+' ) > 0 ) {
+			$parts = explode( '+', $pre );
+			// pre is what's before the first +, which could actually be empty when version has meta but not pre-release
+			$pre = array_shift( $parts );
+			// everything comes after first + is meta. If there were more +, we replace them with dots
+			$meta = $this->sanitize_identifier( trim( implode( '.', $parts ), '-' ) );
+		}
+
+		if ( $build ) {
+			$pre = "$build.$pre";
+		}
+
+		return [ $numeric, $this->sanitize_identifier( $pre ), $meta ];
 	}
 
 	/**
-	 * Formats the given number according to the Semantic Versioning specification.
+	 * Sanitizes given identifier according to SemVer specs. Allow for underscores, replacing them with hyphens.
 	 *
-	 * @see http://semver.org/#semantic-versioning-specification-semver
+	 * @param string $identifier The identifier to be sanitized.
 	 *
-	 * @param string $version Version number string.
-	 *
-	 * @return string Semantic version number string.
+	 * @return string The sanitized identifier.
 	 */
-	private function format_version( string $version ): string {
+	private function sanitize_identifier( string $identifier ): string {
 
-		// Filter because (sanitized) `$version` could be just `'.'` and `explode('.', '.')` is `['', '']`.
-		$all_parts = array_filter( explode( '.', $version ) );
+		// the condition will be false for both "" and "0", which are both valid so don't need any replace
+		if ( $identifier ) {
+			$identifier = preg_replace( '~[^a-zA-Z0-9\-\.]~', '', str_replace( '_', '-', $identifier ) );
+		}
 
-		$digit_parts = array_filter( $all_parts, 'ctype_digit' );
-
-		$count_digit_parts = count( $digit_parts );
-
-		$additional_parts = array_slice( $all_parts, $count_digit_parts );
-
-		// Ensure at least 3 digit parts, filling with 0 if some are missing.
-		$digit_string = $count_digit_parts < 3
-			? implode( '.', array_replace( [ 0, 0, 0 ], $digit_parts ) )
-			: implode( '.', $digit_parts );
-
-		return $additional_parts
-			? "$digit_string." . implode( '.', $additional_parts )
-			: $digit_string;
+		return $identifier;
 	}
 }

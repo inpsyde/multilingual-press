@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Tests;
+namespace Inpsyde\MultilingualPress\Tests\Unit;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Brain\Monkey;
@@ -12,7 +12,7 @@ use Brain\Monkey;
  *
  * @package Inpsyde\MultilingualPress\Tests
  */
-abstract class UnitTestCase extends PHPUnitTestCase {
+abstract class TestCase extends PHPUnitTestCase {
 
 	/**
 	 * Prepares the test environment before each test.
