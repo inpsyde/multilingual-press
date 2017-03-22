@@ -51,7 +51,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Inpsyde\\MultilingualPress\\Tests\\": "tests/php"
+      "Inpsyde\\MultilingualPress\\Tests\\Unit": "tests/php/unit"
     }
   },
   "extra": {

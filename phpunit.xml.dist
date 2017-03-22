@@ -13,7 +13,7 @@
 		</testsuite>
 	</testsuites>
 	<listeners>
-		<listener class="\Inpsyde\MultilingualPress\Tests\Listener" file="tests/php/Listener.php"/>
+		<listener class="\Inpsyde\TestListener" file="tests/php/TestListener.php"/>
 	</listeners>
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
