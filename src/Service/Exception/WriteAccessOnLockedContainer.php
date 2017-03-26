@@ -10,7 +10,7 @@ namespace Inpsyde\MultilingualPress\Service\Exception;
  * @package Inpsyde\MultilingualPress\Service\Exception
  * @since   3.0.0
  */
-class ContainerLocked extends \Exception {
+class WriteAccessOnLockedContainer extends InvalidValueWriteAccess {
 
 	/**
 	 * Returns a new exception object.
@@ -20,9 +20,9 @@ class ContainerLocked extends \Exception {
 	 * @param string $name   The name of the value or factory callback.
 	 * @param string $action Optional. Action to be performed. Defaults to 'set'.
 	 *
-	 * @return ContainerLocked Exception object.
+	 * @return WriteAccessOnLockedContainer Exception object.
 	 */
-	public static function for_name( string $name, string $action = 'set' ): ContainerLocked {
+	public static function for_name( string $name, string $action = 'set' ): WriteAccessOnLockedContainer {
 
 		return new static( sprintf(
 			'Cannot %2$s "%1$s". Manipulating a locked container is not allowed.',

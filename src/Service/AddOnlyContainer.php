@@ -4,19 +4,23 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Service;
 
-use Inpsyde\MultilingualPress\Service\Exception\ContainerBootstrapped;
-use Inpsyde\MultilingualPress\Service\Exception\ContainerLocked;
-use Inpsyde\MultilingualPress\Service\Exception\CannotUnsetValue;
-use Inpsyde\MultilingualPress\Service\Exception\ValueAlreadySet;
-use Inpsyde\MultilingualPress\Service\Exception\ValueNotSet;
+use Inpsyde\MultilingualPress\Service\Exception\InvalidValueWriteAccess;
+use Inpsyde\MultilingualPress\Service\Exception\LateAccessToNotSharedService;
+use Inpsyde\MultilingualPress\Service\Exception\ValueNotFound;
+use Inpsyde\MultilingualPress\Service\Exception\WriteAccessOnLockedContainer;
 
 /**
- * Simple add-only container implementation to be used for dependency management.
+ * Add-only container implementation to be used for dependency management.
  *
  * @package Inpsyde\MultilingualPress\Service
  * @since   3.0.0
  */
 final class AddOnlyContainer implements Container {
+
+	/**
+	 * @var AddOnlyContainer
+	 */
+	private static $mlp_instance;
 
 	/**
 	 * @var callable[]
@@ -41,7 +45,18 @@ final class AddOnlyContainer implements Container {
 	/**
 	 * @var array
 	 */
-	private $values;
+	private $values = [];
+
+	/**
+	 * @return Container
+	 */
+	public static function for_mlp() : Container {
+		if ( ! self::$mlp_instance ) {
+			self::$mlp_instance = new static();
+		}
+
+		return self::$mlp_instance;
+	}
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -52,13 +67,35 @@ final class AddOnlyContainer implements Container {
 	 */
 	public function __construct( array $values = [] ) {
 
-		if ( ! isset( $this->values ) ) {
-			$this->values = [];
-
-			foreach ( $values as $name => $value ) {
-				$this->offsetSet( $name, $value );
-			}
+		foreach ( $values as $name => $value ) {
+			$this->offsetSet( $name, $value );
 		}
+	}
+
+	/**
+	 * Alias offsetGet for PSR-11 compatibility
+	 *
+	 * @param string $name
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return mixed
+	 */
+	public function get( $name ) {
+		return $this->offsetGet( $name );
+	}
+
+	/**
+	 * Alias offsetExists for PSR-11 compatibility
+	 *
+	 * @param string $name
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool
+	 */
+	public function has( $name ) {
+		return $this->offsetExists( $name );
 	}
 
 	/**
@@ -84,24 +121,23 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @return mixed The value or factory callback with the given name.
 	 *
-	 * @throws ValueNotSet           if there is no value or factory callback with the given name.
-	 * @throws ContainerBootstrapped if a not shared value or factory callback is to be accessed on a bootstrapped
-	 *                               container.
+	 * @throws ValueNotFound                if there is no value or factory callback with the given name.
+	 * @throws LateAccessToNotSharedService if a not shared value or factory callback is to be accessed on a bootstrapped
+	 *                                      container.
 	 */
 	public function offsetGet( $name ) {
 
 		if ( ! $this->offsetExists( $name ) ) {
-			throw ValueNotSet::for_name( $name, 'read' );
+			throw ValueNotFound::for_name( $name, 'read' );
 		}
 
 		if ( $this->is_bootstrapped && ! array_key_exists( $name, $this->shared ) ) {
-			throw ContainerBootstrapped::for_name( $name, 'read' );
+			throw LateAccessToNotSharedService::for_name( $name, 'read' );
 		}
 
 		if ( ! array_key_exists( $name, $this->values ) ) {
-			$factory = $this->factories[ $name ];
 
-			$this->values[ $name ] = $factory( $this );
+			$this->values[ $name ] = $this->factories[ $name ]( $this );
 
 			if ( $this->is_locked ) {
 				unset( $this->factories[ $name ] );
@@ -123,17 +159,17 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @return void
 	 *
-	 * @throws ContainerLocked if the container is locked.
-	 * @throws ValueAlreadySet if there already is a value with the given name.
+	 * @throws WriteAccessOnLockedContainer if the container is locked.
+	 * @throws InvalidValueWriteAccess      if there already is a value with the given name.
 	 */
 	public function offsetSet( $name, $value ) {
 
 		if ( $this->is_locked ) {
-			throw ContainerLocked::for_name( $name, 'set' );
+			throw WriteAccessOnLockedContainer::for_name( $name );
 		}
 
 		if ( array_key_exists( $name, $this->values ) ) {
-			throw ValueAlreadySet::for_name( $name, 'set' );
+			throw InvalidValueWriteAccess::immutable_write_attempt( $name, 'set' );
 		}
 
 		if ( is_callable( $value ) ) {
@@ -160,11 +196,11 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @return void
 	 *
-	 * @throws CannotUnsetValue
+	 * @throws InvalidValueWriteAccess
 	 */
 	public function offsetUnset( $name ) {
 
-		throw CannotUnsetValue::for_name( $name );
+		throw InvalidValueWriteAccess::immutable_unset_attempt( $name );
 	}
 
 	/**
@@ -196,22 +232,22 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @return Container Container instance.
 	 *
-	 * @throws ContainerLocked if the container is locked.
-	 * @throws ValueNotSet     if there is no value or factory callback with the given name.
-	 * @throws ValueAlreadySet if there already is a value with the given name.
+	 * @throws WriteAccessOnLockedContainer if the container is locked.
+	 * @throws ValueNotFound                if there is no value or factory callback with the given name.
+	 * @throws InvalidValueWriteAccess      if there already is a value with the given name.
 	 */
 	public function extend( string $name, callable $new_factory ): Container {
 
 		if ( $this->is_locked ) {
-			throw ContainerLocked::for_name( $name, 'extend' );
+			throw WriteAccessOnLockedContainer::for_name( $name, 'extend' );
 		}
 
 		if ( ! array_key_exists( $name, $this->factories ) ) {
-			throw ValueNotSet::for_name( $name, 'extend' );
+			throw ValueNotFound::for_name( $name, 'extend' );
 		}
 
 		if ( array_key_exists( $name, $this->values ) ) {
-			throw ValueAlreadySet::for_name( $name, 'extend' );
+			throw InvalidValueWriteAccess::immutable_write_attempt( $name, 'extend' );
 		}
 
 		$current_factory = $this->factories[ $name ];

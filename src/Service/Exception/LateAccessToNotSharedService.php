@@ -10,7 +10,7 @@ namespace Inpsyde\MultilingualPress\Service\Exception;
  * @package Inpsyde\MultilingualPress\Service\Exception
  * @since   3.0.0
  */
-class ContainerBootstrapped extends \Exception {
+class LateAccessToNotSharedService extends InvalidValueReadAccess {
 
 	/**
 	 * Returns a new exception object.
@@ -20,9 +20,9 @@ class ContainerBootstrapped extends \Exception {
 	 * @param string $name   The name of the value or factory callback.
 	 * @param string $action Optional. Action to be performed. Defaults to 'read'.
 	 *
-	 * @return ContainerBootstrapped Exception object.
+	 * @return LateAccessToNotSharedService Exception object.
 	 */
-	public static function for_name( string $name, string $action = 'read' ): ContainerBootstrapped {
+	public static function for_name( string $name, string $action = 'read' ): LateAccessToNotSharedService {
 
 		return new static( sprintf(
 			'Cannot %2$s not shared "%1$s". The container has already been bootstrapped.',
