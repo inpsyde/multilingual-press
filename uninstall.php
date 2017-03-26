@@ -10,6 +10,8 @@
 namespace Inpsyde\MultilingualPress;
 
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
+use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Installation\Uninstaller;
 
 defined( 'ABSPATH' ) or die();
 
@@ -47,12 +49,12 @@ if ( bootstrap() ) {
 	return;
 }
 
-$uninstaller = MultilingualPress::resolve( 'multilingualpress.uninstaller' );
+$uninstaller = resolve( 'multilingualpress.uninstaller', Uninstaller::class );
 
 $uninstaller->uninstall_tables( [
-	MultilingualPress::resolve( 'multilingualpress.content_relations_table' ),
-	MultilingualPress::resolve( 'multilingualpress.languages_table' ),
-	MultilingualPress::resolve( 'multilingualpress.site_relations_table' ),
+	resolve( 'multilingualpress.content_relations_table', Table::class ),
+	resolve( 'multilingualpress.languages_table', Table::class ),
+	resolve( 'multilingualpress.site_relations_table', Table::class ),
 ] );
 
 // TODO: Use class constants instead of hard-coded strings.

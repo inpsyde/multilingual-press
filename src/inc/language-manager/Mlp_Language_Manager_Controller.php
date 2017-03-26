@@ -5,8 +5,8 @@ use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
-use Inpsyde\MultilingualPress\MultilingualPress;
-
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
+use function Inpsyde\MultilingualPress\resolve;
 use function Inpsyde\MultilingualPress\call_exit;
 use function Inpsyde\MultilingualPress\check_admin_referer;
 
@@ -82,7 +82,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		$this->pagination_data = new Mlp_Language_Manager_Pagination_Data( $database );
 		$this->setting         = new Mlp_Language_Manager_Options_Page_Data(
 			$this->page_title,
-			MultilingualPress::resolve( 'multilingualpress.type_factory' )
+			resolve( 'multilingualpress.type_factory', TypeFactory::class )
 		);
 
 		$this->nonce = new WPNonce( $this->setting->action() );
@@ -94,7 +94,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			$this->nonce
 		);
 
-		$this->languages = MultilingualPress::resolve( 'multilingualpress.languages' );
+		$this->languages = resolve( 'multilingualpress.languages', Languages::class );
 
 		$updater               = new Mlp_Language_Updater(
 			$this->pagination_data,

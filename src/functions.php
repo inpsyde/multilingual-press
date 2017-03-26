@@ -2,10 +2,61 @@
 
 namespace Inpsyde\MultilingualPress;
 
+use Inpsyde\MultilingualPress\API;
 use Inpsyde\MultilingualPress\Common\Locations;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
+use Inpsyde\MultilingualPress\Core\InternalLocations;
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
+use Inpsyde\MultilingualPress\Module\Redirect;
+use Inpsyde\MultilingualPress\Service;
+
+/**
+ * @param string   $name           Name of value to resolve in the container
+ * @param string[] $expected_types Optional. One or more type (scalar type, interface or class) that the returned value
+ *                                 has to satisfy.
+ * @return mixed
+ *
+ * @throws Service\Exception\ContainerException if something goes wrong in container
+ * @throws \UnexpectedValueException            if expectation on types are not satisfied. If more types are provided,
+ *                                              the value must to satisfy all of them.
+ */
+function resolve( $name, string ...$expected_types ) {
+
+	$value = Service\AddOnlyContainer::for_mlp()[ $name ];
+
+	if ( ! $expected_types ) {
+		return $value;
+	}
+
+	if ( ! is_object( $value ) && [ gettype( $value ) ] !== $expected_types ) {
+		throw new \UnexpectedValueException(
+			sprintf(
+				'Container was expected to return type "%s" for "%s", but returned "%s" instead.',
+				implode( ', ', $expected_types ),
+				$name,
+				gettype( $value )
+			)
+		);
+	}
+
+	foreach ( $expected_types as $type ) {
+		if ( ! is_a( $value, $type ) ) {
+			throw new \UnexpectedValueException(
+				sprintf(
+					'Container was expected to return an instance of "%s" for "%s", but returned "%s" instead.',
+					$type,
+					$name,
+					get_class( $value )
+				)
+			);
+		}
+	}
+
+	return $value;
+}
 
 /**
  * Adds a "Settings saved." message for the given setting.
@@ -168,16 +219,18 @@ function get_available_language_names( $related = true, $include_current_site = 
 	$related_sites = [];
 
 	if ( $related ) {
-		$related_sites = MultilingualPress::resolve( 'multilingualpress.site_relations' )->get_related_site_ids(
-			$current_site_id,
-			(bool) $include_current_site
-		);
+		$related_sites = resolve( 'multilingualpress.site_relations', API\SiteRelations::class )
+			->get_related_site_ids(
+				$current_site_id,
+				(bool) $include_current_site
+			);
 		if ( ! $related_sites ) {
 			return [];
 		}
 	}
 
-	$language_settings = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_settings();
+	$language_settings = resolve( 'multilingualpress.site_settings_repository', SiteSettingsRepository::class )
+		->get_settings();
 	if ( ! $language_settings ) {
 		return [];
 	}
@@ -190,7 +243,7 @@ function get_available_language_names( $related = true, $include_current_site = 
 
 	foreach ( $language_settings as $site_id => $language_data ) {
 
-		$site_id  = (int) $site_id;
+		$site_id = (int) $site_id;
 
 		if ( $related_sites && ! in_array( $site_id, $related_sites, true ) ) {
 			continue;
@@ -221,13 +274,15 @@ function get_available_language_names( $related = true, $include_current_site = 
  */
 function get_available_languages( $related_sites_only = true ): array {
 
-	$languages = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_settings();
+	$languages = resolve( 'multilingualpress.site_settings_repository', SiteSettingsRepository::class )
+		->get_settings();
 	if ( ! $languages ) {
 		return [];
 	}
 
 	if ( $related_sites_only ) {
-		$related_site_ids = MultilingualPress::resolve( 'multilingualpress.site_relations' )->get_related_site_ids();
+		$related_site_ids = resolve( 'multilingualpress.site_relations', API\SiteRelations::class )
+			->get_related_site_ids();
 		if ( ! $related_site_ids ) {
 			return [];
 		}
@@ -290,16 +345,16 @@ function get_flag_url_for_site( $site_id = 0 ): URL {
 
 	$site_id = (int) ( $site_id ?: get_current_blog_id() );
 
-	$type_factory = MultilingualPress::resolve( 'multilingualpress.type_factory' );
+	$type_factory = resolve( 'multilingualpress.type_factory', TypeFactory::class );
 
-	$url = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_flag_image_url( $site_id );
+	$url = resolve( 'multilingualpress.site_settings_repository' )->get_flag_image_url( $site_id );
 	if ( $url ) {
 		return $type_factory->create_url( [
 			$url,
 		] );
 	}
 
-	$internal_locations = MultilingualPress::resolve( 'multilingualpress.internal_locations' );
+	$internal_locations = resolve( 'multilingualpress.internal_locations', InternalLocations::class );
 
 	$file_name = get_site_language( $site_id, true ) . '.gif';
 
@@ -325,7 +380,7 @@ function get_flag_url_for_site( $site_id = 0 ): URL {
  */
 function get_language_by_http_code( $http_code ) {
 
-	return MultilingualPress::resolve( 'multilingualpress.languages' )
+	return resolve( 'multilingualpress.languages', API\Languages::class )
 		->get_language_by_http_code( (string) $http_code );
 }
 
@@ -336,7 +391,7 @@ function get_language_by_http_code( $http_code ) {
  *
  * @param string   $http_code Language HTTP code.
  * @param string   $field     Optional. The field which should be queried. Defaults to 'native_name'.
- * @param string[] $fallbacks Optional. Falback language fields. Defaults to native and English name.
+ * @param string[] $fallbacks Optional. Fallback language fields. Defaults to native and English name.
  *
  * @return string The desired field value, or an empty string on failure.
  */
@@ -382,7 +437,7 @@ function get_linked_elements( array $args = [] ): string {
 
 	$output = '';
 
-	$translations = MultilingualPress::resolve( 'multilingualpress.translations' )->get_translations( [
+	$translations = resolve( 'multilingualpress.translations', API\Translations::class )->get_translations( [
 		'strict'       => $args['strict'],
 		'include_base' => $args['show_current_blog'],
 	] );
@@ -486,7 +541,8 @@ function get_site_language( $site_id = 0, $language_only = false ): string {
 
 	$site_id = (int) $site_id;
 
-	$lang = MultilingualPress::resolve( 'multilingualpress.site_settings_repository' )->get_site_language( $site_id );
+	$lang = resolve( 'multilingualpress.site_settings_repository', SiteSettingsRepository::class )
+		->get_site_language( $site_id );
 	if ( ! $lang ) {
 		return '';
 	}
@@ -516,7 +572,7 @@ function get_translation_ids( $content_id = 0, $type = 'post', $site_id = 0 ): a
 		return [];
 	}
 
-	return MultilingualPress::resolve( 'multilingualpress.content_relations' )->get_relations(
+	return resolve( 'multilingualpress.content_relations', API\ContentRelations::class )->get_relations(
 		$site_id ?: get_current_blog_id(),
 		$content_id,
 		(string) $type
@@ -542,7 +598,7 @@ function get_translations( $content_id = 0 ): array {
 
 	$content_id = get_default_content_id( $content_id );
 
-	$translations = MultilingualPress::resolve( 'multilingualpress.translations' )->get_translations( [
+	$translations = resolve( 'multilingualpress.translations', API\Translations::class )->get_translations( [
 		'site_id'    => $site_id,
 		'content_id' => $content_id,
 	] );
@@ -601,7 +657,7 @@ function is_debug_mode(): bool {
  */
 function is_redirect_enabled( $site_id = 0 ): bool {
 
-	return MultilingualPress::resolve( 'multilingualpress.redirect_settings_repository' )
+	return resolve( 'multilingualpress.redirect_settings_repository', Redirect\SettingsRepository::class )
 		->get_site_setting( (int) $site_id );
 }
 
@@ -729,7 +785,7 @@ function site_exists( $site_id, $network_id = 0 ): bool {
 	$network_id = (int) ( $network_id ?: get_current_network_id() );
 
 	if ( ! isset( $cache[ $network_id ] ) ) {
-		$db = MultilingualPress::resolve( 'multilingualpress.wpdb' );
+		$db = resolve( 'multilingualpress.wpdb', \wpdb::class );
 
 		$query = $db->prepare( "SELECT blog_id FROM {$db->blogs} WHERE site_id = %d AND deleted = 0", $network_id );
 

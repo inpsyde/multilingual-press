@@ -14,10 +14,12 @@
 namespace Inpsyde\MultilingualPress;
 
 use Inpsyde\MultilingualPress\API\APIServiceProvider;
+use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Asset\AssetServiceProvider;
 use Inpsyde\MultilingualPress\Core\CoreServiceProvider;
 use Inpsyde\MultilingualPress\Core\ImmutablePluginProperties;
 use Inpsyde\MultilingualPress\Database\DatabaseServiceProvider;
+use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Factory\FactoryProvider;
 use Inpsyde\MultilingualPress\Installation\InstallationServiceProvider;
 use Inpsyde\MultilingualPress\Integration\IntegrationProvider;
@@ -58,7 +60,7 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap', 0 );
  */
 function bootstrap() {
 
-	$container = new AddOnlyContainer();
+	$container = AddOnlyContainer::for_mlp();
 	$container->share( 'multilingualpress.properties', new ImmutablePluginProperties( __FILE__ ) );
 
 	$multilingualpress = new MultilingualPress( $container );
@@ -117,12 +119,12 @@ function activate() {
 	}, 0 );
 }
 
-// TODO: Eventually remove/refactor according to new architecure as soon as the old controller got replaced.
+// TODO: Eventually remove/refactor according to new architecture as soon as the old controller got replaced.
 add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
 
 	class_exists( 'Mlp_Load_Controller' ) or require __DIR__ . '/src/inc/autoload/Mlp_Load_Controller.php';
 	new \Mlp_Load_Controller(
-		MultilingualPress::resolve( 'multilingualpress.properties' )->plugin_dir_path() . '/src/inc'
+		resolve( 'multilingualpress.properties' )->plugin_dir_path() . '/src/inc'
 	);
 
 	// Advanced Translator
@@ -140,7 +142,7 @@ add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
 			$term_taxonomy_id = empty( $_REQUEST['tag_ID'] ) ? 0 : (int) $_REQUEST['tag_ID'];
 
 			( new \Mlp_Term_Translation_Controller(
-				MultilingualPress::resolve( 'multilingualpress.content_relations' ),
+				resolve( 'multilingualpress.content_relations', ContentRelations::class ),
 				new Common\Nonce\WPNonce( "save_{$taxonomy}_translations_$term_taxonomy_id" )
 			) )->setup();
 		}, 0 );
@@ -149,8 +151,8 @@ add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
 	add_action( 'wp_loaded', function () {
 
 		new \Mlp_Language_Manager_Controller(
-			new \Mlp_Language_Db_Access( MultilingualPress::resolve( 'multilingualpress.languages_table' )->name() ),
-			MultilingualPress::resolve( 'multilingualpress.wpdb' )
+			new \Mlp_Language_Db_Access( resolve( 'multilingualpress.languages_table', Table::class )->name() ),
+			resolve( 'multilingualpress.wpdb', \wpdb::class )
 		);
 	} );
 } );

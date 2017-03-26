@@ -2,7 +2,10 @@
 
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
-use Inpsyde\MultilingualPress\MultilingualPress;
+use Inpsyde\MultilingualPress\API\SiteRelations;
+use Inpsyde\MultilingualPress\Asset\AssetManager;
+use Inpsyde\MultilingualPress\Factory\NonceFactory;
+use function Inpsyde\MultilingualPress\resolve;
 
 /**
  * Advanced translator.
@@ -61,8 +64,8 @@ class Mlp_Advanced_Translator {
 			null,
 			$base_data['basic_data'],
 			$base_data['allowed_post_types'],
-			MultilingualPress::resolve( 'multilingualpress.site_relations' ),
-			MultilingualPress::resolve( 'multilingualpress.nonce_factory' )
+			resolve( 'multilingualpress.site_relations', SiteRelations::class ),
+			resolve( 'multilingualpress.nonce_factory', NonceFactory::BASE )
 		);
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
@@ -142,7 +145,7 @@ class Mlp_Advanced_Translator {
 	private function register_setting() {
 
 		/** @var ModuleManager $module_manager */
-		$module_manager = MultilingualPress::resolve( 'multilingualpress.module_manager' );
+		$module_manager = resolve( 'multilingualpress.module_manager', ModuleManager::class );
 
 		return $module_manager->register_module( new Module( 'advanced_translator', [
 			'description' => __(
@@ -163,7 +166,7 @@ class Mlp_Advanced_Translator {
 	 */
 	public function localize_script() {
 
-		MultilingualPress::resolve( 'multilingualpress.asset_manager' )->add_script_data(
+		resolve( 'multilingualpress.asset_manager', AssetManager::class )->add_script_data(
 			'multilingualpress-admin',
 			'mlpCopyPostSettings', [
 				'action' => $this->ajax_action,

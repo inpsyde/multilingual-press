@@ -28,7 +28,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	 */
 	public function get_total_items_number() {
 
-		return (int) \Inpsyde\MultilingualPress\MultilingualPress::resolve( 'multilingualpress.wpdb' )->get_var(
+		return (int) \Inpsyde\MultilingualPress\resolve( 'multilingualpress.wpdb', \wpdb::class )->get_var(
 			"SELECT COUNT(*) as amount FROM `{$this->table_name}`"
 		);
 	}

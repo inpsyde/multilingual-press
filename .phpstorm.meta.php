@@ -115,7 +115,7 @@ namespace PHPSTORM_META {
 			'multilingualpress.updater' instanceof \Inpsyde\MultilingualPress\Installation\Updater,
 			'multilingualpress.wpdb' instanceof \wpdb,
 		],
-		\Inpsyde\MultilingualPress\MultilingualPress::resolve( '' ) => [
+		\Inpsyde\MultilingualPress\MultilingualPress\resolve( '' ) => [
 			'' == '@',
 
 			'multilingualpress.asset_factory' instanceof \Inpsyde\MultilingualPress\Asset\AssetFactory,

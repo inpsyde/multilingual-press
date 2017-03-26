@@ -3,7 +3,6 @@
 namespace Inpsyde\MultilingualPress;
 
 use Inpsyde\MultilingualPress\Core\Exception\InstanceAlreadyBootstrapped;
-use Inpsyde\MultilingualPress\Core\Exception\CannotResolveName;
 use Inpsyde\MultilingualPress\Installation;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
@@ -62,7 +61,7 @@ final class MultilingualPress {
 	/**
 	 * @var Container
 	 */
-	private static $container;
+	private $container;
 
 	/**
 	 * @var bool
@@ -82,30 +81,7 @@ final class MultilingualPress {
 	 * @param Container $container Container object.
 	 */
 	public function __construct( Container $container ) {
-
-		if ( ! static::$container ) {
-			static::$container = $container;
-		}
-	}
-
-	/**
-	 * Resolve a shared value or factory callback from the container.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param string $name The name of a value or factory callback.
-	 *
-	 * @return mixed The value or factory callback.
-	 *
-	 * @throws CannotResolveName if there is no container available (i.e., MultilingualPress has not been intitialized).
-	 */
-	public static function resolve( string $name ) {
-
-		if ( ! static::$container ) {
-			throw CannotResolveName::for_name( $name );
-		}
-
-		return static::$container[ $name ];
+		$this->container = $container;
 	}
 
 	/**
@@ -155,7 +131,7 @@ final class MultilingualPress {
 		 */
 		do_action( static::ACTION_BOOTSTRAP, $this );
 
-		static::$container->lock();
+		$this->container->lock();
 
 		$this->integrate_service_providers();
 
@@ -167,7 +143,7 @@ final class MultilingualPress {
 
 		$this->register_modules();
 
-		static::$container->bootstrap();
+		$this->container->bootstrap();
 
 		$this->is_bootstrapped = true;
 
@@ -188,7 +164,7 @@ final class MultilingualPress {
 	 */
 	private function check_installation(): bool {
 
-		$installation_check = static::$container['multilingualpress.installation_checker']->check();
+		$installation_check = $this->container['multilingualpress.installation_checker']->check();
 
 		return Installation\SystemChecker::PLUGIN_DEACTIVATED !== $installation_check;
 	}
@@ -206,7 +182,7 @@ final class MultilingualPress {
 
 		return in_array(
 			get_current_blog_id(),
-			static::$container['multilingualpress.site_settings_repository']->get_site_ids(),
+			$this->container['multilingualpress.site_settings_repository']->get_site_ids(),
 			true
 		);
 	}
@@ -226,7 +202,7 @@ final class MultilingualPress {
 			 */
 			do_action( static::ACTION_REGISTER_MODULES );
 
-			$module_manager = static::$container['multilingualpress.module_manager'];
+			$module_manager = $this->container['multilingualpress.module_manager'];
 
 			array_walk( $this->modules, function ( ModuleServiceProvider $module ) use ( $module_manager ) {
 

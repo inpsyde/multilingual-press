@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Service;
 
-use Inpsyde\MultilingualPress\Service\Exception\ContainerNotSet;
-
 /**
  * Trait for handling service providers.
  *
@@ -13,11 +11,6 @@ use Inpsyde\MultilingualPress\Service\Exception\ContainerNotSet;
  * @since   3.0.0
  */
 trait ServiceProviderHandling {
-
-	/**
-	 * @var Container
-	 */
-	private $_container;
 
 	/**
 	 * @var BootstrappableServiceProvider[]
@@ -30,22 +23,6 @@ trait ServiceProviderHandling {
 	private $integrations = [];
 
 	/**
-	 * Sets the container to be used.
-	 *
-	 * This is necessary to enable usage of the trait regardless of how/where the container is managed by the object.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param Container $container Container object.
-	 *
-	 * @return void
-	 */
-	public function set_container( Container $container ) {
-
-		$this->_container = $container;
-	}
-
-	/**
 	 * Registers the given service provider.
 	 *
 	 * @since 3.0.0
@@ -56,9 +33,7 @@ trait ServiceProviderHandling {
 	 */
 	public function register_service_provider( ServiceProvider $provider ) {
 
-		$this->ensure_container( 'register' );
-
-		$provider->register( $this->_container );
+		$provider->register( $this->container );
 
 		if ( $provider instanceof IntegrationServiceProvider ) {
 			$this->integrations[] = $provider;
@@ -82,7 +57,7 @@ trait ServiceProviderHandling {
 
 		array_walk( $this->integrations, function ( IntegrationServiceProvider $provider ) {
 
-			$provider->integrate( $this->_container );
+			$provider->integrate( $this->container );
 		} );
 
 		if ( $unset ) {
@@ -101,43 +76,11 @@ trait ServiceProviderHandling {
 
 		array_walk( $this->bootstrappables, function ( BootstrappableServiceProvider $provider ) {
 
-			$provider->bootstrap( $this->_container );
+			$provider->bootstrap( $this->container );
 		} );
 
 		if ( $unset ) {
 			$this->bootstrappables = [];
 		}
-	}
-
-	/**
-	 * Ensures a valid container object.
-	 *
-	 * If there is no container set, try to get it from a property with the name "container".
-	 *
-	 * @param string $action Optional. Action to be performed. Defaults to 'register'.
-	 *
-	 * @return void
-	 *
-	 * @throws ContainerNotSet if there is no container available.
-	 */
-	private function ensure_container( string $action = 'register' ) {
-
-		if ( $this->_container instanceof Container ) {
-			return;
-		}
-
-		if ( property_exists( $this, 'container' ) ) {
-			$container = new \ReflectionProperty( __CLASS__, 'container' );
-			$container->setAccessible( true );
-
-			$container = $container->getValue( $this );
-			if ( $container instanceof Container ) {
-				$this->set_container( $container );
-
-				return;
-			}
-		}
-
-		throw ContainerNotSet::for_action( $action );
 	}
 }

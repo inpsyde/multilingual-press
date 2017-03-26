@@ -1,7 +1,10 @@
 <?php # -*- coding: utf-8 -*-
 
+use Inpsyde\MultilingualPress\API;
+use Inpsyde\MultilingualPress\Asset\AssetManager;
+use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
-use Inpsyde\MultilingualPress\MultilingualPress;
+use function Inpsyde\MultilingualPress\resolve;
 
 /**
  * Controller for the basic translation meta box.
@@ -35,7 +38,7 @@ class Mlp_Translation_Metabox {
 			return;
 		}
 
-		$this->nonce_factory = MultilingualPress::resolve( 'multilingualpress.nonce_factory' );
+		$this->nonce_factory = resolve( 'multilingualpress.nonce_factory', NonceFactory::class );
 
 		/**
 		 * Filter the allowed post types.
@@ -52,8 +55,8 @@ class Mlp_Translation_Metabox {
 		$this->data = new Mlp_Translatable_Post_Data(
 			null,
 			$this->allowed_post_types,
-			MultilingualPress::resolve( 'multilingualpress.content_relations_table' ),
-			MultilingualPress::resolve( 'multilingualpress.content_relations' ),
+			resolve( 'multilingualpress.content_relations_table', Table::class ),
+			resolve( 'multilingualpress.content_relations', API\ContentRelations::class ),
 			$this->nonce_factory
 		);
 
@@ -101,7 +104,7 @@ class Mlp_Translation_Metabox {
 
 		$current_blog_id = get_current_blog_id();
 
-		$site_relations = MultilingualPress::resolve( 'multilingualpress.site_relations' );
+		$site_relations = resolve( 'multilingualpress.site_relations', API\SiteRelations::class );
 
 		$related_blogs = $site_relations->get_related_site_ids( (int) $current_blog_id, false );
 
@@ -120,7 +123,7 @@ class Mlp_Translation_Metabox {
 			}
 		}
 
-		$asset_manager = MultilingualPress::resolve( 'multilingualpress.asset_manager' );
+		$asset_manager = resolve( 'multilingualpress.asset_manager', AssetManager::class );
 		$asset_manager->enqueue_script( 'multilingualpress-admin' );
 		$asset_manager->enqueue_style( 'multilingualpress-admin' );
 	}
