@@ -5,10 +5,13 @@ namespace Inpsyde\MultilingualPress;
 use Inpsyde\MultilingualPress\Core\Exception\InstanceAlreadyBootstrapped;
 use Inpsyde\MultilingualPress\Installation;
 use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
+use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Service\IntegrationServiceProvider;
 use Inpsyde\MultilingualPress\Service\ServiceProvider;
-use Inpsyde\MultilingualPress\Service\ServiceProviderHandling;
+use Inpsyde\MultilingualPress\Service\ServiceProviderCollection;
 
 /**
  * MultilingualPress front controller.
@@ -17,19 +20,6 @@ use Inpsyde\MultilingualPress\Service\ServiceProviderHandling;
  * @since   3.0.0
  */
 final class MultilingualPress {
-
-	use ServiceProviderHandling {
-		register_service_provider as _register_service_provider;
-	}
-
-	/**
-	 * Action name.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string
-	 */
-	const ACTION_BOOTSTRAP = 'multilingualpress.bootstrap';
 
 	/**
 	 * Action name.
@@ -64,45 +54,22 @@ final class MultilingualPress {
 	private $container;
 
 	/**
-	 * @var bool
+	 * @var ServiceProviderCollection
 	 */
-	private $is_bootstrapped = false;
-
-	/**
-	 * @var ModuleServiceProvider[]
-	 */
-	private $modules = [];
+	private $service_providers;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Container $container Container object.
+	 * @param Container                      $container
+	 * @param ServiceProviderCollection|null $service_providers
 	 */
-	public function __construct( Container $container ) {
-		$this->container = $container;
-	}
+	public function __construct( Container $container, ServiceProviderCollection $service_providers ) {
 
-	/**
-	 * Registers the given service provider.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param ServiceProvider $provider Service provider object.
-	 *
-	 * @return MultilingualPress MultilingualPress instance.
-	 */
-	public function register_service_provider( ServiceProvider $provider ): MultilingualPress {
-
-		// Call the (renamed) method provided by the service trait.
-		$this->_register_service_provider( $provider );
-
-		if ( $provider instanceof ModuleServiceProvider ) {
-			$this->modules[] = $provider;
-		}
-
-		return $this;
+		$this->container         = $container;
+		$this->service_providers = $service_providers;
 	}
 
 	/**
@@ -116,36 +83,36 @@ final class MultilingualPress {
 	 */
 	public function bootstrap(): bool {
 
-		if ( $this->is_bootstrapped ) {
+		if ( did_action( self::ACTION_BOOTSTRAPPED ) ) {
 			throw new InstanceAlreadyBootstrapped();
 		}
 
-		/**
-		 * Fires right before MultilingualPress gets bootstrapped.
-		 *
-		 * Hook here to register custom service providers.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param static $multilingualpress MultilingualPress instance.
-		 */
-		do_action( static::ACTION_BOOTSTRAP, $this );
+		// first let's register all providers
+		$this->service_providers->apply_method( 'register', $this->container );
 
+		// lock the container, nothing can be registered after that
 		$this->container->lock();
 
-		$this->integrate_service_providers();
+		// integrate integration providers
+		$this->service_providers->filter( function ( ServiceProvider $provider ) {
+			return $provider instanceof IntegrationServiceProvider;
+		} )->apply_method( 'integrate', $this->container );
 
+		// if installation check failed, do nothing else
 		if ( ! $this->check_installation() ) {
 			return false;
 		}
 
-		$this->bootstrap_service_providers();
+		// bootstrap all bootstrappable providers
+		$this->service_providers->filter( function ( ServiceProvider $provider ) {
+			return $provider instanceof BootstrappableServiceProvider;
+		} )->apply_method( 'bootstrap', $this->container );
 
+		// register all modules
 		$this->register_modules();
 
+		// and bootstrap the container
 		$this->container->bootstrap();
-
-		$this->is_bootstrapped = true;
 
 		/**
 		 * Fires right after MultilingualPress was bootstrapped.
@@ -194,27 +161,26 @@ final class MultilingualPress {
 	 */
 	private function register_modules() {
 
-		if ( $this->needs_modules() ) {
-			/**
-			 * Fires right before MultilingualPress registers any modules.
-			 *
-			 * @since 3.0.0
-			 */
-			do_action( static::ACTION_REGISTER_MODULES );
-
-			$module_manager = $this->container['multilingualpress.module_manager'];
-
-			array_walk( $this->modules, function ( ModuleServiceProvider $module ) use ( $module_manager ) {
-
-				if ( $module->register_module( $module_manager ) ) {
-					if ( $module instanceof ActivationAwareModuleServiceProvider ) {
-
-						$module->activate();
-					}
-				}
-			} );
+		if ( ! $this->needs_modules() ) {
+			return;
 		}
 
-		$this->modules = [];
+		$activation = function ( ModuleServiceProvider $module, ModuleManager $module_manager ) {
+
+			$module->register_module( $module_manager )
+			&& $module instanceof ActivationAwareModuleServiceProvider
+			&& $module->activate();
+		};
+
+		/**
+		 * Fires right before MultilingualPress registers any modules.
+		 *
+		 * @since 3.0.0
+		 */
+		do_action( static::ACTION_REGISTER_MODULES );
+
+		$this->service_providers->filter( function ( ServiceProvider $provider ) {
+			return $provider instanceof ModuleServiceProvider;
+		} )->apply_callback( $activation, $this->container['multilingualpress.module_manager'] );
 	}
 }

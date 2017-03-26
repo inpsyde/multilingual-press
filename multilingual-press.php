@@ -27,6 +27,8 @@ use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\NavMenu\NavMenuServiceProvider;
 use Inpsyde\MultilingualPress\Relations\RelationsServiceProvider;
 use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
+use Inpsyde\MultilingualPress\Service\DistinctServiceProviderCollection;
+use Inpsyde\MultilingualPress\Service\ServiceProviderCollection;
 use Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicationServiceProvider;
 use Inpsyde\MultilingualPress\Translation\TranslationServiceProvider;
 
@@ -41,14 +43,21 @@ defined( 'ABSPATH' ) or die();
  */
 const ACTION_ACTIVATION = 'multilingualpress.activation';
 
+/**
+ * Action name.
+ *
+ * @since 3.0.0
+ *
+ * @var string
+ */
+const ACTION_ADD_SERVICE_PROVIDERS = 'multilingualpress.add_service_providers';
+
 if ( is_readable( __DIR__ . '/src/autoload.php' ) ) {
 	/**
 	 * MultilingualPress autoload file.
 	 */
 	require_once __DIR__ . '/src/autoload.php';
 }
-
-add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap', 0 );
 
 /**
  * Bootstraps MultilingualPress.
@@ -58,40 +67,55 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap', 0 );
  *
  * @return bool Whether or not MultilingualPress was bootstrapped successfully.
  */
-function bootstrap() {
+function bootstrap(): bool {
 
 	$container = AddOnlyContainer::for_mlp();
 	$container->share( 'multilingualpress.properties', new ImmutablePluginProperties( __FILE__ ) );
 
-	$multilingualpress = new MultilingualPress( $container );
-	$multilingualpress
-		->register_service_provider( new CoreServiceProvider() )
-		->register_service_provider( new APIServiceProvider() )
-		->register_service_provider( new AssetServiceProvider() )
-		->register_service_provider( new DatabaseServiceProvider() )
-		->register_service_provider( new FactoryProvider() )
-		->register_service_provider( new InstallationServiceProvider() )
-		->register_service_provider( new IntegrationProvider() )
-		->register_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() )
-		->register_service_provider( new Module\CustomPostTypeSupport\ServiceProvider() )
-		->register_service_provider( new Module\Quicklinks\ServiceProvider() )
-		->register_service_provider( new Module\Redirect\ServiceProvider() )
-		->register_service_provider( new Module\Trasher\ServiceProvider() )
-		->register_service_provider( new NavMenuServiceProvider() )
-		->register_service_provider( new RelationsServiceProvider() )
-		->register_service_provider( new SiteDuplicationServiceProvider() )
-		->register_service_provider( new TranslationServiceProvider() )
-		->register_service_provider( new Widget\WidgetServiceProvider() );
+	$providers = new DistinctServiceProviderCollection();
+	$providers
+		->add_service_provider( new CoreServiceProvider() )
+		->add_service_provider( new APIServiceProvider() )
+		->add_service_provider( new AssetServiceProvider() )
+		->add_service_provider( new DatabaseServiceProvider() )
+		->add_service_provider( new FactoryProvider() )
+		->add_service_provider( new InstallationServiceProvider() )
+		->add_service_provider( new IntegrationProvider() )
+		->add_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() )
+		->add_service_provider( new Module\CustomPostTypeSupport\ServiceProvider() )
+		->add_service_provider( new Module\Quicklinks\ServiceProvider() )
+		->add_service_provider( new Module\Redirect\ServiceProvider() )
+		->add_service_provider( new Module\Trasher\ServiceProvider() )
+		->add_service_provider( new NavMenuServiceProvider() )
+		->add_service_provider( new RelationsServiceProvider() )
+		->add_service_provider( new SiteDuplicationServiceProvider() )
+		->add_service_provider( new TranslationServiceProvider() )
+		->add_service_provider( new Widget\WidgetServiceProvider() );
+
+	$multilingualpress = new MultilingualPress( $container, $providers );
 
 	/**
 	 * MultilingualPress functions.
 	 */
 	require_once __DIR__ . '/src/functions.php';
 
-	return $multilingualpress->bootstrap();
-}
+	/**
+	 * Fires right before MultilingualPress gets bootstrapped.
+	 *
+	 * Hook here to add custom service providers via `ServiceProviderCollection::add_service_provider()`.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param ServiceProviderCollection $providers Service provider collection instance.
+	 */
+	do_action( ACTION_ADD_SERVICE_PROVIDERS, $providers );
 
-register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
+	$bootstrapped = $multilingualpress->bootstrap();
+
+	unset( $providers );
+
+	return $bootstrapped;
+}
 
 /**
  * Triggers a plugin-specific activation action third parties can listen to.
@@ -118,6 +142,10 @@ function activate() {
 		}
 	}, 0 );
 }
+
+add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap', 0 );
+
+register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 
 // TODO: Eventually remove/refactor according to new architecture as soon as the old controller got replaced.
 add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
