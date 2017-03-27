@@ -3,8 +3,7 @@
 namespace Inpsyde\MultilingualPress\Service;
 
 /**
- * Service providers collection implementation that ensure same instance of provider is not present more than once
- * in the collection.
+ * Service provider collection implementation that ensures each provider is not present more than once.
  *
  * @package Inpsyde\MultilingualPress\Service
  * @since   3.0.0
@@ -17,7 +16,9 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	private $storage;
 
 	/**
-	 * Constructor. Initialize the properties.
+	 * Constructor. Sets up the properties.
+	 *
+	 * @since 3.0.0
 	 */
 	public function __construct() {
 
@@ -25,9 +26,13 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	}
 
 	/**
+	 * Adds the given service provider to the collection.
+	 *
+	 * @since 3.0.0
+	 *
 	 * @param ServiceProvider $provider The provider to be registered
 	 *
-	 * @return ServiceProviderCollection Itself.
+	 * @return ServiceProviderCollection The instance that also contains the given provider.
 	 */
 	public function add_service_provider( ServiceProvider $provider ): ServiceProviderCollection {
 
@@ -37,9 +42,13 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	}
 
 	/**
+	 * Removes the given service provider from the collection.
+	 *
+	 * @since 3.0.0
+	 *
 	 * @param ServiceProvider $provider The provider to be registered
 	 *
-	 * @return ServiceProviderCollection Itself.
+	 * @return ServiceProviderCollection The instance that does not contain the given provider.
 	 */
 	public function remove_service_provider( ServiceProvider $provider ): ServiceProviderCollection {
 
@@ -49,9 +58,11 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	}
 
 	/**
-	 * Call the given method name on all the contained providers.
+	 * Calls the method with the given name on all registered providers, and passes on potential further arguments.
 	 *
-	 * @param string $method_name Name of the method to call on each provider
+	 * @since 3.0.0
+	 *
+	 * @param string $method_name Name of the method to call on each provider.
 	 * @param array  $args        Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return void
@@ -63,15 +74,19 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 		while ( $this->storage->valid() ) {
 			/** @var callable $method */
 			$method = [ $this->storage->current(), $method_name ];
+			// TODO: Check if is_callable() first?
 			$method( ...$args );
+
 			$this->storage->next();
 		}
 	}
 
 	/**
-	 * Call the given callback passing as first argument each contained provider.
+	 * Executes the given callback for all registered providers, and passes along potential further arguments.
 	 *
-	 * @param callable $callback Callback to call
+	 * @since 3.0.0
+	 *
+	 * @param callable $callback Callback to execute.
 	 * @param array    $args     Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return void
@@ -80,39 +95,38 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 
 		$this->storage->rewind();
 
-		// adds null as a placeholder that will be replaced by each provider in the loop
-		array_unshift( $args, null );
-
 		while ( $this->storage->valid() ) {
-			$args[0] = $this->storage->current();
-			$callback( ...$args );
+			$callback( $this->storage->current(), ...$args );
+
 			$this->storage->next();
 		}
 	}
 
 	/**
-	 * Call the given callback passing as first argument each registered provider.
-	 * Return an instance of ServiceProviderCollection that contains the providers that passed the filter.
+	 * Executes the given callback for all registered providers, and returns the instance that contains the providers
+	 * that passed the filtering.
 	 *
-	 * @param callable $callback Callback to call
-	 * @param array    $args     Variadic array of arguments tha twill be passed to provider method.
+	 * @since 3.0.0
 	 *
-	 * @return ServiceProviderCollection A new filtered ServiceProviderCollection instance.
+	 * @param callable $callback Callback to execute.
+	 * @param array    $args     Variadic array of arguments that will be passed to provider method.
+	 *
+	 * @return ServiceProviderCollection The filtered instance.
 	 */
 	public function filter( callable $callback, ...$args ): ServiceProviderCollection {
 
 		$collection = new static();
-		$this->storage->rewind();
 
-		array_unshift( $args, null ); // adds null as a placeholder that will be replaced by each provider in the loop
+		$this->storage->rewind();
 
 		while ( $this->storage->valid() ) {
 			/** @var ServiceProvider $provider */
 			$provider = $this->storage->current();
-			$args[0]  = $provider;
-			if ( $callback( ...$args ) ) {
+
+			if ( $callback( $provider, ...$args ) ) {
 				$collection->add_service_provider( $provider );
 			}
+
 			$this->storage->next();
 		}
 
@@ -120,36 +134,32 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	}
 
 	/**
-	 * Call the given callback passing as first argument each registered provider.
-	 * Return an instance of ServiceProviderCollection that contains the providers obtained calling the callback.
+	 * Executes the given callback for all registered providers, and returns the instance that contains the providers
+	 * obtained.
 	 *
-	 * @param callable $callback Callback to call
-	 * @param array    $args     Variadic array of arguments tha twill be passed to provider method.
+	 * @since 3.0.0
 	 *
-	 * @return ServiceProviderCollection A new transformed ServiceProviderCollection instance.
+	 * @param callable $callback Callback to execute.
+	 * @param array    $args     Variadic array of arguments that will be passed to provider method.
+	 *
+	 * @return ServiceProviderCollection The transformed instance.
 	 */
 	public function map( callable $callback, ...$args ): ServiceProviderCollection {
 
 		$collection = new static();
+
 		$this->storage->rewind();
 
-		array_unshift( $args, null ); // adds null as a placeholder that will be replaced by each provider in the loop
-
 		while ( $this->storage->valid() ) {
-			/** @var ServiceProvider $provider */
-			$provider = $this->storage->current();
-			$args[0]  = $provider;
-			$provider = $callback( ...$args );
+			$provider = $callback( $this->storage->current(), ...$args );
 			if ( ! $provider instanceof ServiceProvider ) {
 				throw new \UnexpectedValueException(
-					sprintf(
-						'Transformation callbacks in %s must return and instance of ServiceProvider.',
-						__METHOD__
-					)
+					__METHOD__ . ' expects transformation callbacks to return a service provider instance.'
 				);
 			}
 
 			$collection->add_service_provider( $provider );
+
 			$this->storage->next();
 		}
 
@@ -157,21 +167,24 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	}
 
 	/**
-	 * Call the given callback passing as second argument each registered provider and as first argument the return
-	 * value of previous callback call.
+	 * Executes the given callback for all registered providers, and passes along the result of previous callback.
 	 *
-	 * @param callable $callback Callback to call
-	 * @param array    $initial  Passed as first argument to callback when its second argument is the first provider.
+	 * @since 3.0.0
 	 *
-	 * @return mixed The return value of given callback when called with last provider.
+	 * @param callable $callback Callback to execute.
+	 * @param mixed    $initial  Initial value passed as second argument to the callback.
+	 *
+	 * @return mixed The return value of final callback execution.
 	 */
 	public function reduce( callable $callback, $initial = null ) {
 
 		$this->storage->rewind();
+
 		$carry = $initial;
 
 		while ( $this->storage->valid() ) {
 			$carry = $callback( $carry, $this->storage->current() );
+
 			$this->storage->next();
 		}
 
@@ -179,7 +192,11 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	}
 
 	/**
-	 * Return the number of providers contained in the collection.
+	 * Returns the number of providers in the collection.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return int The number of providers in the collection.
 	 */
 	public function count(): int {
 
