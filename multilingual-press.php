@@ -31,6 +31,7 @@ use Inpsyde\MultilingualPress\Service\DistinctServiceProviderCollection;
 use Inpsyde\MultilingualPress\Service\ServiceProviderCollection;
 use Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicationServiceProvider;
 use Inpsyde\MultilingualPress\Translation\TranslationServiceProvider;
+use Inpsyde\MultilingualPress\Widget\WidgetServiceProvider;
 
 defined( 'ABSPATH' ) or die();
 
@@ -91,7 +92,7 @@ function bootstrap(): bool {
 		->add_service_provider( new RelationsServiceProvider() )
 		->add_service_provider( new SiteDuplicationServiceProvider() )
 		->add_service_provider( new TranslationServiceProvider() )
-		->add_service_provider( new Widget\WidgetServiceProvider() );
+		->add_service_provider( new WidgetServiceProvider() );
 
 	$multilingualpress = new MultilingualPress( $container, $providers );
 
