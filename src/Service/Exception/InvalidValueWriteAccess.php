@@ -22,7 +22,7 @@ class InvalidValueWriteAccess extends InvalidValueAccess {
 	 *
 	 * @return InvalidValueWriteAccess Exception object.
 	 */
-	public static function immutable_write_attempt( string $name, string $action = 'extend' ): InvalidValueWriteAccess {
+	public static function for_immutable_write_attempt( string $name, string $action = 'extend' ): InvalidValueWriteAccess {
 
 		return new static( sprintf(
 			'Cannot %2$s "%1$s". A service with this name exists and is immutable.',
@@ -40,7 +40,7 @@ class InvalidValueWriteAccess extends InvalidValueAccess {
 	 *
 	 * @return InvalidValueWriteAccess Exception object.
 	 */
-	public static function immutable_unset_attempt( string $name ): InvalidValueWriteAccess {
+	public static function for_immutable_unset_attempt( string $name ): InvalidValueWriteAccess {
 
 		return new static( sprintf(
 			'Cannot unset "%1$s". Removing values or factory callbacks is not allowed for target Container.',

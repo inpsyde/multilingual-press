@@ -153,7 +153,7 @@ final class AddOnlyContainer implements Container {
 		}
 
 		if ( array_key_exists( $name, $this->values ) ) {
-			throw InvalidValueWriteAccess::immutable_write_attempt( $name, 'set' );
+			throw InvalidValueWriteAccess::for_immutable_write_attempt( $name, 'set' );
 		}
 
 		if ( is_callable( $value ) ) {
@@ -184,7 +184,7 @@ final class AddOnlyContainer implements Container {
 	 */
 	public function offsetUnset( $name ) {
 
-		throw InvalidValueWriteAccess::immutable_unset_attempt( $name );
+		throw InvalidValueWriteAccess::for_immutable_unset_attempt( $name );
 	}
 
 	/**
@@ -231,7 +231,7 @@ final class AddOnlyContainer implements Container {
 		}
 
 		if ( array_key_exists( $name, $this->values ) ) {
-			throw InvalidValueWriteAccess::immutable_write_attempt( $name, 'extend' );
+			throw InvalidValueWriteAccess::for_immutable_write_attempt( $name, 'extend' );
 		}
 
 		$current_factory = $this->factories[ $name ];
