@@ -4,15 +4,18 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Tests\Unit;
 
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Brain\Monkey;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 /**
  * Abstract base class for all test case implementations.
  *
- * @package Inpsyde\MultilingualPress\Tests
+ * @package Inpsyde\MultilingualPress\Tests\Unit
  */
 abstract class TestCase extends PHPUnitTestCase {
+
+	use MockeryPHPUnitIntegration;
 
 	/**
 	 * Prepares the test environment before each test.
@@ -33,7 +36,6 @@ abstract class TestCase extends PHPUnitTestCase {
 	protected function tearDown() {
 
 		Monkey::tearDownWP();
-		\Mockery::close();
 		parent::tearDown();
 	}
 }
