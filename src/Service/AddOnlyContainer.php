@@ -57,32 +57,6 @@ final class AddOnlyContainer implements Container {
 	}
 
 	/**
-	 * Alias offsetGet for PSR-11 compatibility
-	 *
-	 * @param string $name
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return mixed
-	 */
-	public function get( $name ) {
-		return $this->offsetGet( $name );
-	}
-
-	/**
-	 * Alias offsetExists for PSR-11 compatibility
-	 *
-	 * @param string $name
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool
-	 */
-	public function has( $name ) {
-		return $this->offsetExists( $name );
-	}
-
-	/**
 	 * Checks if a value or factory callback with the given name exists.
 	 *
 	 * @since 3.0.0
@@ -97,6 +71,20 @@ final class AddOnlyContainer implements Container {
 	}
 
 	/**
+	 * Alias offsetExists for PSR-11 compatibility.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $name The name of a value or factory callback.
+	 *
+	 * @return bool Whether or not a value or factory callback with the given name exists.
+	 */
+	public function has( $name ) {
+
+		return $this->offsetExists( $name );
+	}
+
+	/**
 	 * Returns the value or factory callback with the given name.
 	 *
 	 * @since 3.0.0
@@ -106,8 +94,8 @@ final class AddOnlyContainer implements Container {
 	 * @return mixed The value or factory callback with the given name.
 	 *
 	 * @throws ValueNotFound                if there is no value or factory callback with the given name.
-	 * @throws LateAccessToNotSharedService if a not shared value or factory callback is to be accessed on a bootstrapped
-	 *                                      container.
+	 * @throws LateAccessToNotSharedService if a not shared value or factory callback is to be accessed on a
+	 *                                      bootstrapped container.
 	 */
 	public function offsetGet( $name ) {
 
@@ -121,7 +109,7 @@ final class AddOnlyContainer implements Container {
 
 		if ( ! array_key_exists( $name, $this->values ) ) {
 
-			$this->values[ $name ] = $this->factories[ $name ]( $this );
+			$this->values[ $name ] = $this->factories[$name]( $this );
 
 			if ( $this->is_locked ) {
 				unset( $this->factories[ $name ] );
@@ -129,6 +117,20 @@ final class AddOnlyContainer implements Container {
 		}
 
 		return $this->values[ $name ];
+	}
+
+	/**
+	 * Alias offsetGet for PSR-11 compatibility.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $name The name of a value or factory callback.
+	 *
+	 * @return mixed The value or factory callback with the given name.
+	 */
+	public function get( $name ) {
+
+		return $this->offsetGet( $name );
 	}
 
 	/**
