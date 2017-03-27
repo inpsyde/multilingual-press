@@ -3,8 +3,7 @@
 namespace Inpsyde\MultilingualPress\Service;
 
 /**
- * Interface for collections of service providers that allows to perform operation on set of providers interacting
- * with an unique front interface.
+ * Interface for all service provider collection implementations.
  *
  * @package Inpsyde\MultilingualPress\Service
  * @since   3.0.0
@@ -12,26 +11,33 @@ namespace Inpsyde\MultilingualPress\Service;
 interface ServiceProviderCollection extends \Countable {
 
 	/**
+	 * Adds the given service provider to the collection.
+	 *
+	 * @since 3.0.0
+	 *
 	 * @param ServiceProvider $provider The provider to be registered
 	 *
-	 * @return ServiceProviderCollection The ServiceProviderCollection instance that also contains the given provider.
-	 *                                   Implementations might return a different instance.
+	 * @return ServiceProviderCollection The instance that also contains the given provider.
 	 */
 	public function add_service_provider( ServiceProvider $provider ): ServiceProviderCollection;
 
 	/**
+	 * Removes the given service provider from the collection.
+	 *
+	 * @since 3.0.0
+	 *
 	 * @param ServiceProvider $provider The provider to be registered
 	 *
-	 * @return ServiceProviderCollection The ServiceProviderCollection instance that does not contain the given provider.
-	 *                                   Implementations might return a different instance.
+	 * @return ServiceProviderCollection The instance that does not contain the given provider.
 	 */
 	public function remove_service_provider( ServiceProvider $provider ): ServiceProviderCollection;
 
 	/**
-	 * Call the given method name on all the registered providers, or to the providers that implement the type given as
-	 * second argument.
+	 * Calls the method with the given name on all registered providers, and passes on potential further arguments.
 	 *
-	 * @param string $method_name Name of the method to call on each provider
+	 * @since 3.0.0
+	 *
+	 * @param string $method_name Name of the method to call on each provider.
 	 * @param array  $args        Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return void
@@ -39,51 +45,52 @@ interface ServiceProviderCollection extends \Countable {
 	public function apply_method( string $method_name, ...$args );
 
 	/**
-	 * Call the given callback passing as first argument each registered provider. If provider type is given, all
-	 * providers not implementing that type are skipped.
+	 * Executes the given callback for all registered providers, and passes along potential further arguments.
 	 *
-	 * @param callable $callback Callback to call
-	 * @param array    $args     Variadic array of arguments tha twill be passed to provider method.
+	 * @since 3.0.0
+	 *
+	 * @param callable $callback Callback to execute.
+	 * @param array    $args     Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return void
 	 */
 	public function apply_callback( callable $callback, ...$args );
 
 	/**
-	 * Call the given callback passing as first argument each registered provider.
-	 * Return an instance of ServiceProviderCollection that contains the providers that passed the filter.
+	 * Executes the given callback for all registered providers, and returns the instance that contains the providers
+	 * that passed the filtering.
 	 *
-	 * @param callable $callback Callback to call
-	 * @param array    $args     Variadic array of arguments tha twill be passed to provider method.
+	 * @since 3.0.0
 	 *
-	 * @return ServiceProviderCollection The filtered ServiceProviderCollection instance.
-	 *                                   Implementations might return a different instance.
+	 * @param callable $callback Callback to execute.
+	 * @param array    $args     Variadic array of arguments that will be passed to provider method.
+	 *
+	 * @return ServiceProviderCollection The filtered instance.
 	 */
 	public function filter( callable $callback, ...$args ): ServiceProviderCollection;
 
 	/**
-	 * Call the given callback passing as first argument each registered provider.
-	 * Return an instance of ServiceProviderCollection that contains the providers obtained calling the callback.
+	 * Executes the given callback for all registered providers, and returns the instance that contains the providers
+	 * obtained.
 	 *
-	 * @param callable $callback Callback to call
-	 * @param array    $args     Variadic array of arguments tha twill be passed to provider method.
+	 * @since 3.0.0
 	 *
-	 * @return ServiceProviderCollection The transformed ServiceProviderCollection instance.
-	 *                                   Implementations must ensure that returned collection only contains providers
-	 *                                   objects and might return a different instance.
+	 * @param callable $callback Callback to execute.
+	 * @param array    $args     Variadic array of arguments that will be passed to provider method.
+	 *
+	 * @return ServiceProviderCollection The transformed instance.
 	 */
 	public function map( callable $callback, ...$args ): ServiceProviderCollection;
 
 	/**
-	 * Call the given callback passing as first argument each registered provider and as second argument the result
-	 * of previous callback call.
-	 * The first provider receives
+	 * Executes the given callback for all registered providers, and passes along the result of previous callback.
 	 *
-	 * @param callable $callback Callback to call
-	 * @param array    $initial  Passed as second argument to callback when first argument is the first provider.
+	 * @since 3.0.0
 	 *
-	 * @return mixed The return value of given callback when called with las provider.
-	 *               If collection is empty implementation must return given initial value.
+	 * @param callable $callback Callback to execute.
+	 * @param mixed    $initial  Initial value passed as second argument to the callback.
+	 *
+	 * @return mixed The return value of final callback execution.
 	 */
 	public function reduce( callable $callback, $initial = null );
 }
