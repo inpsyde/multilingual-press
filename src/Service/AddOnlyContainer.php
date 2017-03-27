@@ -149,7 +149,7 @@ final class AddOnlyContainer implements Container {
 	public function offsetSet( $name, $value ) {
 
 		if ( $this->is_locked ) {
-			throw WriteAccessOnLockedContainer::for_name( $name );
+			throw WriteAccessOnLockedContainer::for_name( $name, 'set' );
 		}
 
 		if ( array_key_exists( $name, $this->values ) ) {
