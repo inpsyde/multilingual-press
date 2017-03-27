@@ -6,9 +6,10 @@ use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 use Inpsyde\MultilingualPress\Database\WPDBTableInstaller;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
-use function Inpsyde\MultilingualPress\resolve;
+
 use function Inpsyde\MultilingualPress\call_exit;
 use function Inpsyde\MultilingualPress\check_admin_referer;
+use function Inpsyde\MultilingualPress\resolve;
 
 /**
  * Class Mlp_Language_Manager_Controller

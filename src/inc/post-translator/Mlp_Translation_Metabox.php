@@ -1,9 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\API;
+use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
+
 use function Inpsyde\MultilingualPress\resolve;
 
 /**
@@ -56,7 +58,7 @@ class Mlp_Translation_Metabox {
 			null,
 			$this->allowed_post_types,
 			resolve( 'multilingualpress.content_relations_table', Table::class ),
-			resolve( 'multilingualpress.content_relations', API\ContentRelations::class ),
+			resolve( 'multilingualpress.content_relations', ContentRelations::class ),
 			$this->nonce_factory
 		);
 
@@ -104,7 +106,7 @@ class Mlp_Translation_Metabox {
 
 		$current_blog_id = get_current_blog_id();
 
-		$site_relations = resolve( 'multilingualpress.site_relations', API\SiteRelations::class );
+		$site_relations = resolve( 'multilingualpress.site_relations', SiteRelations::class );
 
 		$related_blogs = $site_relations->get_related_site_ids( (int) $current_blog_id, false );
 

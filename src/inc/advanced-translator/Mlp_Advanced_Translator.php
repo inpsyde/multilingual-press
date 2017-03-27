@@ -5,6 +5,7 @@ use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
+
 use function Inpsyde\MultilingualPress\resolve;
 
 /**
