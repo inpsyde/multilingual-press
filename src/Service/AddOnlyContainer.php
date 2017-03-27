@@ -18,11 +18,6 @@ use Inpsyde\MultilingualPress\Service\Exception\WriteAccessOnLockedContainer;
 final class AddOnlyContainer implements Container {
 
 	/**
-	 * @var AddOnlyContainer
-	 */
-	private static $mlp_instance;
-
-	/**
 	 * @var callable[]
 	 */
 	private $factories = [];
@@ -46,17 +41,6 @@ final class AddOnlyContainer implements Container {
 	 * @var array
 	 */
 	private $values = [];
-
-	/**
-	 * @return Container
-	 */
-	public static function for_mlp() : Container {
-		if ( ! self::$mlp_instance ) {
-			self::$mlp_instance = new static();
-		}
-
-		return self::$mlp_instance;
-	}
 
 	/**
 	 * Constructor. Sets up the properties.

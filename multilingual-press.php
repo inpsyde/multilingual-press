@@ -26,7 +26,7 @@ use Inpsyde\MultilingualPress\Integration\IntegrationProvider;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\NavMenu\NavMenuServiceProvider;
 use Inpsyde\MultilingualPress\Relations\RelationsServiceProvider;
-use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
+use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\DistinctServiceProviderCollection;
 use Inpsyde\MultilingualPress\Service\ServiceProviderCollection;
 use Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicationServiceProvider;
@@ -69,7 +69,8 @@ if ( is_readable( __DIR__ . '/src/autoload.php' ) ) {
  */
 function bootstrap(): bool {
 
-	$container = AddOnlyContainer::for_mlp();
+	/** @var Container $container */
+	$container = resolve( null );
 	$container->share( 'multilingualpress.properties', new ImmutablePluginProperties( __FILE__ ) );
 
 	$providers = new DistinctServiceProviderCollection();

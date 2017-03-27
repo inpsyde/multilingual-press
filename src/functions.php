@@ -14,9 +14,10 @@ use Inpsyde\MultilingualPress\Module\Redirect;
 use Inpsyde\MultilingualPress\Service;
 
 /**
- * @param string   $name           Name of value to resolve in the container
- * @param string[] $expected_types Optional. One or more type (scalar type, interface or class) that the returned value
- *                                 has to satisfy.
+ * @param string|null $name        Name of value to resolve in the container or null to get the whole container.
+ * @param string[] $expected_types Optional. One or more type (scalar type, interface or class) that returned value has
+ *                                 to satisfy.
+ *
  * @return mixed
  *
  * @throws Service\Exception\ContainerException if something goes wrong in container
@@ -25,7 +26,14 @@ use Inpsyde\MultilingualPress\Service;
  */
 function resolve( $name, string ...$expected_types ) {
 
-	$value = Service\AddOnlyContainer::for_mlp()[ $name ];
+	static $container;
+	$container or $container = new Service\AddOnlyContainer();
+
+	if ( null === $name ) {
+		return $container;
+	}
+
+	$value = $container[ $name ];
 
 	if ( ! $expected_types ) {
 		return $value;
