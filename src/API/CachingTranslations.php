@@ -196,16 +196,14 @@ final class CachingTranslations implements Translations {
 
 			$language = $languages[ $site_id ];
 			if ( empty( $language['http_name'] ) ) {
-				$language['http_name'] = empty( $language['lang'] ) ? '' : $language['lang'];
+				$language['http_name'] = $language['lang'] ?? '';
 			}
 
 			$translation['icon_url'] = $language['http_name'] ? get_flag_url_for_site( $site_id ) : '';
 
 			$translations[ $site_id ] = $this->type_factory->create_translation( [
 				$translation,
-				$this->type_factory->create_language( [
-					$language,
-				] ),
+				$language,
 			] );
 		}
 

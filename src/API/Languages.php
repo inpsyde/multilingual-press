@@ -26,7 +26,7 @@ interface Languages {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return array[] The array with site IDs as keys and arrays with all language data as values.
+	 * @return Language[] The array with site IDs as keys and language objects as values.
 	 */
 	public function get_all_site_languages(): array;
 
