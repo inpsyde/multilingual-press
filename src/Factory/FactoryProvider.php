@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Factory;
 
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\ServiceProvider;
 
@@ -28,12 +29,12 @@ final class FactoryProvider implements ServiceProvider {
 
 		$container->share( 'multilingualpress.error_factory', function () {
 
-			return new FallbackErrorFactory();
+			return new ErrorFactory();
 		} );
 
 		$container->share( 'multilingualpress.nonce_factory', function () {
 
-			return new FallbackNonceFactory();
+			return new NonceFactory( WPNonce::class );
 		} );
 
 		$container->share( 'multilingualpress.type_factory', function () {

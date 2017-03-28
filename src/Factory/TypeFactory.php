@@ -2,7 +2,6 @@
 
 namespace Inpsyde\MultilingualPress\Factory;
 
-use Inpsyde\MultilingualPress\Common\Factory;
 use Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage;
 use Inpsyde\MultilingualPress\Common\Type\EscapedURL;
 use Inpsyde\MultilingualPress\Common\Type\FilterableTranslation;
@@ -21,7 +20,7 @@ use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 class TypeFactory {
 
 	/**
-	 * @var Factory[]
+	 * @var GenericFactory[]
 	 */
 	private $factories = [];
 
@@ -106,9 +105,9 @@ class TypeFactory {
 	 * @param string $base          Fully qualified name of the base class or interface.
 	 * @param string $default_class Fully qualified class name.
 	 *
-	 * @return Factory Factory instance.
+	 * @return GenericFactory Factory instance.
 	 */
-	private function get_factory( string $base, string $default_class ): Factory {
+	private function get_factory( string $base, string $default_class ): GenericFactory {
 
 		if ( empty( $this->factories[ $base ] ) ) {
 			$this->factories[ $base ] = GenericFactory::with_default_class( $base, $default_class );
