@@ -91,7 +91,13 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 
 		$options = '<option value="-1">' . esc_html__( 'Choose language', 'multilingual-press' ) . '</option>';
 
-		$languages = $this->languages->get_all_languages();
+		$languages = $this->languages->get_languages( [
+			'fields' => [
+				'english_name',
+				'http_name',
+				'native_name',
+			],
+		] );
 		if ( $languages ) {
 			$current_site_language = $this->repository->get_site_language( $site_id );
 
