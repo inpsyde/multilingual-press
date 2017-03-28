@@ -59,7 +59,7 @@ class GenericFactory {
 	 */
 	public function create( array $args = [], string $class = '' ) {
 
-		$class = $this->class_resolver->resolve_class( $class );
+		$class = $this->class_resolver->resolve( $class );
 
 		return new $class( ...$args );
 	}

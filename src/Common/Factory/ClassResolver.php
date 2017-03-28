@@ -67,7 +67,7 @@ class ClassResolver {
 	 *
 	 * @throws \InvalidArgumentException if no class is given and no default class is available.
 	 */
-	public function resolve_class( string $class = '' ): string {
+	public function resolve( string $class = '' ): string {
 
 		if ( $class && $this->default_class !== $class ) {
 			return $this->check_class( $class );
