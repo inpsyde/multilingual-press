@@ -168,7 +168,7 @@ class Mlp_Translation_Metabox_View {
 		$rows  = min( $lines, 10 );
 
 		printf(
-			'<textarea class="large-text" cols="80" rows="%d$1" placeholder="%2$s" readonly>%3$s</textarea>',
+			'<textarea class="large-text" cols="80" rows="%1$d" placeholder="%2$s" readonly>%3$s</textarea>',
 			esc_attr( $rows ),
 			esc_attr_x( 'No content yet.', 'placeholder for empty translation textarea', 'multilingual-press' ),
 			esc_textarea( $remote_post->post_content )
