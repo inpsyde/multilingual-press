@@ -70,6 +70,11 @@ if ( is_readable( __DIR__ . '/src/autoload.php' ) ) {
  */
 function bootstrap(): bool {
 
+	/**
+	 * MultilingualPress functions.
+	 */
+	require_once __DIR__ . '/src/functions.php';
+
 	/** @var Container $container */
 	$container = resolve( null );
 	$container->share( 'multilingualpress.properties', new ImmutablePluginProperties( __FILE__ ) );
@@ -95,11 +100,6 @@ function bootstrap(): bool {
 		->add_service_provider( new WidgetServiceProvider() );
 
 	$multilingualpress = new MultilingualPress( $container, $providers );
-
-	/**
-	 * MultilingualPress functions.
-	 */
-	require_once __DIR__ . '/src/functions.php';
 
 	/**
 	 * Fires right before MultilingualPress gets bootstrapped.
