@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Database\TableDuplicator;
 use Inpsyde\MultilingualPress\Database\TableList;
 use Inpsyde\MultilingualPress\Database\TableReplacer;
@@ -139,6 +140,8 @@ class SiteDuplicator {
 
 		$source_site_id = (int) $_POST['blog'][ static::NAME_BASED_ON_SITE ];
 
+		$network_state = NetworkState::from_globals();
+
 		// Switch to the source site.
 		switch_to_blog( $source_site_id );
 
@@ -177,9 +180,8 @@ class SiteDuplicator {
 
 		$this->attachment_copier->copy_attachments( $source_site_id );
 
-		// Switch all the way back to the original site.
-		restore_current_blog();
-		restore_current_blog();
+		// Switch back to the original site.
+		$network_state->restore();
 
 		/**
 		 * Fires after successful site duplication.

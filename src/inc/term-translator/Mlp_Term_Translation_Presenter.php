@@ -98,6 +98,7 @@ class Mlp_Term_Translation_Presenter {
 			}
 			$out[ $term->term_taxonomy_id ] = esc_html( $term->name );
 		}
+
 		restore_current_blog();
 
 		uasort( $out, 'strcasecmp' );

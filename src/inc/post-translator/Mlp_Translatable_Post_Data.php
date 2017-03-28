@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
 
 use function Inpsyde\MultilingualPress\get_translation_ids;
@@ -167,6 +168,8 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_before_post_synchronization', $this->save_context );
 
+		$network_state = NetworkState::from_globals();
+
 		// Create a copy of the item for every related blog
 		foreach ( $to_translate as $blog_id ) {
 			if ( $blog_id == get_current_blog_id() or ! site_exists( $blog_id ) ) {
@@ -229,9 +232,9 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 				}
 			}
 			$this->set_linked_element( $post_id, $blog_id, $remote_post_id );
-
-			restore_current_blog();
 		}
+
+		$network_state->restore();
 
 		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_after_post_synchronization', $this->save_context );

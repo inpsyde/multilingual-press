@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
@@ -95,12 +96,16 @@ class TrasherSettingUpdater {
 
 		$updated_posts = 1;
 
+		$network_state = NetworkState::from_globals();
+
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$updated_posts, $value ) {
 
 			switch_to_blog( $site_id );
+
 			$updated_posts += $this->setting_repository->update_setting( (int) $post_id, $value );
-			restore_current_blog();
 		} );
+
+		$network_state->restore();
 
 		return $updated_posts;
 	}

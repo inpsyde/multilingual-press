@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
 
 use function Inpsyde\MultilingualPress\site_exists;
@@ -160,6 +161,8 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 
 		// TODO: Fire also a typeless action that has the type (i.e., post) as second argument.
 
+		$network_state = NetworkState::from_globals();
+
 		foreach ( $this->post_request_data[ $this->name_base ] as $remote_blog_id => $post_data ) {
 			if (
 				! in_array( $remote_blog_id, $related_blogs )
@@ -199,9 +202,9 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 				$tax_data = empty( $post_data['tax'] ) ? [] : (array) $post_data['tax'];
 				$this->set_remote_tax_terms( $new_id, $tax_data );
 			}
-
-			restore_current_blog();
 		}
+
+		$network_state->restore();
 
 		/**
 		 * Runs after all save_post actions have been called for the remote blogs.

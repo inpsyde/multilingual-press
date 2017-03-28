@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Widget\Dashboard\View;
 
 /**
@@ -58,6 +59,8 @@ final class WidgetView implements View {
 		}
 
 		$have_untranslated_posts = false;
+
+		$network_state = NetworkState::from_globals();
 		?>
 		<table class="widefat">
 			<?php foreach ( $related_site_ids as $related_site_id ) : ?>
@@ -90,8 +93,8 @@ final class WidgetView implements View {
 						</tr>
 					<?php endforeach; ?>
 				<?php endif; ?>
-				<?php restore_current_blog(); ?>
 			<?php endforeach; ?>
+			<?php $network_state->restore(); ?>
 			<?php if ( ! $have_untranslated_posts ) : ?>
 				<tr>
 					<td colspan="3">

@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
 
 use function Inpsyde\MultilingualPress\get_site_language;
@@ -97,11 +98,13 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 			return '';
 		}
 
-		return array_reduce( $site_ids, function ( $relationships, $site_id ) use ( $base_site_id ) {
+		$network_state = NetworkState::from_globals();
+
+		$relationships = array_reduce( $site_ids, function ( $relationships, $site_id ) use ( $base_site_id ) {
 
 			switch_to_blog( $site_id );
+
 			$site_name = get_bloginfo( 'name' );
-			restore_current_blog();
 
 			$related_site_ids = $this->site_relations->get_related_site_ids( (int) $site_id );
 
@@ -119,5 +122,9 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 					checked( in_array( $base_site_id, $related_site_ids, true ), true, false )
 				);
 		}, '' );
+
+		$network_state->restore();
+
+		return $relationships;
 	}
 }

@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\NavMenu;
 
+use Inpsyde\MultilingualPress\Common\NetworkState;
+
 /**
  * Deletes nav menu items.
  *
@@ -48,6 +50,8 @@ FROM {$this->db->blogs}
 WHERE blog_id != %d";
 		$query = $this->db->prepare( $query, $deleted_site_id );
 
+		$network_state = NetworkState::from_globals();
+
 		foreach ( $this->db->get_col( $query ) as $site_id ) {
 			switch_to_blog( $site_id );
 
@@ -65,9 +69,9 @@ WHERE pm.meta_key = %s
 					$deleted++;
 				}
 			}
-
-			restore_current_blog();
 		}
+
+		$network_state->restore();
 
 		return $deleted;
 	}

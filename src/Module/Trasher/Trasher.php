@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 
 /**
  * Post trasher.
@@ -75,16 +76,20 @@ class Trasher {
 
 		$trashed_posts = 0;
 
+		$network_state = NetworkState::from_globals();
+
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$trashed_posts ) {
 
 			switch_to_blog( $site_id );
+
 			$trashed = wp_trash_post( $post_id );
-			restore_current_blog();
 
 			if ( false !== $trashed && ! is_wp_error( $trashed ) ) {
 				$trashed_posts ++;
 			}
 		} );
+
+		$network_state->restore();
 
 		// Reset static flag.
 		self::$trashing_related_posts = false;
