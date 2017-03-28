@@ -165,7 +165,7 @@ class Updater {
 
 		$table = $this->languages_table->name();
 
-		$query = "SELECT ID FROM $table WHERE wp_locale = %s OR iso_639_1 = %s";
+		$query = "SELECT ID FROM {$table} WHERE wp_locale = %s OR iso_639_1 = %s";
 
 		array_walk( $languages, function ( array $language ) use ( $table, $query ) {
 
