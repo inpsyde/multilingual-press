@@ -31,15 +31,15 @@ interface Languages {
 	public function get_all_site_languages(): array;
 
 	/**
-	 * Returns all data of the language with the given HTTP code.
+	 * Returns language with the given HTTP code.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param string $http_code Language HTTP code.
 	 *
-	 * @return array Language data.
+	 * @return Language Language object.
 	 */
-	public function get_language_by_http_code( string $http_code ): array;
+	public function get_language_by_http_code( string $http_code ): Language;
 
 	/**
 	 * Returns all languages according to the given arguments.

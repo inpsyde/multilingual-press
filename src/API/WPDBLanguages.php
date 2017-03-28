@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\API;
 
 use Inpsyde\MultilingualPress\Common\Type\Language;
+use Inpsyde\MultilingualPress\Common\Type\NullLanguage;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
@@ -150,21 +151,24 @@ final class WPDBLanguages implements Languages {
 	}
 
 	/**
-	 * Returns all data of the language with the given HTTP code.
+	 * Returns language with the given HTTP code.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param string $http_code Language HTTP code.
 	 *
-	 * @return array Language data.
+	 * @return Language Language object.
 	 */
-	public function get_language_by_http_code( string $http_code ): array {
+	public function get_language_by_http_code( string $http_code ): Language {
 
 		$query = $this->db->prepare( "SELECT * FROM {$this->table} WHERE http_name = %s LIMIT 1", $http_code );
 
-		$results = $this->db->get_row( $query, ARRAY_A );
+		$language = $this->db->get_row( $query, ARRAY_A );
+		if ( ! $language || ! is_array( $language ) ) {
+			return new NullLanguage();
+		}
 
-		return is_array( $results ) ? $results : [];
+		return $this->type_factory->create_language( [ $language ] );
 	}
 
 	/**

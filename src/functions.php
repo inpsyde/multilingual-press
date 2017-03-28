@@ -8,6 +8,7 @@ use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\API\Translations;
 use Inpsyde\MultilingualPress\Common\Locations;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Common\Type\URL;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
@@ -381,13 +382,13 @@ function get_flag_url_for_site( $site_id = 0 ): URL {
 }
 
 /**
- * Returns all data of the language with the given HTTP code.
+ * Returns the language with the given HTTP code.
  *
  * @since 3.0.0
  *
  * @param string $http_code Language HTTP code.
  *
- * @return array Language data.
+ * @return Language Language object.
  */
 function get_language_by_http_code( $http_code ) {
 
