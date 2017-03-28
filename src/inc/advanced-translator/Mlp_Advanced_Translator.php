@@ -1,10 +1,10 @@
 <?php # -*- coding: utf-8 -*-
 
-use Inpsyde\MultilingualPress\Module\Module;
-use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
-use Inpsyde\MultilingualPress\Factory\NonceFactory;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Module\Module;
+use Inpsyde\MultilingualPress\Module\ModuleManager;
 
 use function Inpsyde\MultilingualPress\resolve;
 
@@ -66,7 +66,7 @@ class Mlp_Advanced_Translator {
 			$base_data['basic_data'],
 			$base_data['allowed_post_types'],
 			resolve( 'multilingualpress.site_relations', SiteRelations::class ),
-			resolve( 'multilingualpress.nonce_factory', NonceFactory::BASE )
+			resolve( 'multilingualpress.nonce_factory', Nonce::class )
 		);
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
