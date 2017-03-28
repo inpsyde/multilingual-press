@@ -46,7 +46,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Inpsyde\\MultilingualPress\\": "src/"
+      "Inpsyde\\MultilingualPress\\": "src"
     },
     "classmap": [
       "src/inc"
