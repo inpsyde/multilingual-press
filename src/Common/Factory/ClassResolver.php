@@ -43,9 +43,9 @@ class ClassResolver {
 
 		$this->base = $base;
 
-		$this->base_is_class = \class_exists( $base );
+		$this->base_is_class = class_exists( $base );
 
-		if ( ! $this->base_is_class && ! \interface_exists( $base ) ) {
+		if ( ! $this->base_is_class && ! interface_exists( $base ) ) {
 			throw new \InvalidArgumentException(
 				__CLASS__ . ' requires a valid fully qualified class or interface name as first argument.'
 			);
@@ -95,7 +95,7 @@ class ClassResolver {
 
 		if (
 			! ( $this->base_is_class && $class === $this->base )
-			&& ! \is_subclass_of( $class, $this->base, true )
+			&& ! is_subclass_of( $class, $this->base, true )
 		) {
 			throw new InvalidClass(
 				"The class '{$class}' is invalid with respect to the defined base '{$this->base}'."
