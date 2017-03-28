@@ -47,7 +47,7 @@ class ClassResolver {
 
 		if ( ! $this->base_is_class && ! interface_exists( $base ) ) {
 			throw new \InvalidArgumentException(
-				__CLASS__ . ' requires a valid fully qualified class or interface name as first argument.'
+				__METHOD__ . ' requires a valid fully qualified class or interface name as first argument.'
 			);
 		}
 
