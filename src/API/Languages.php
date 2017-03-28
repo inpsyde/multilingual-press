@@ -17,7 +17,7 @@ interface Languages {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return object[] The array with objects of all available languages.
+	 * @return Language[] The array with objects of all available languages.
 	 */
 	public function get_all_languages(): array;
 

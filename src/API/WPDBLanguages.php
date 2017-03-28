@@ -75,15 +75,18 @@ final class WPDBLanguages implements Languages {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return object[] The array with objects of all available languages.
+	 * @return Language[] The array with objects of all available languages.
 	 */
 	public function get_all_languages(): array {
 
 		$query = "SELECT * FROM {$this->table} ORDER BY priority DESC, english_name ASC";
 
-		$result = $this->db->get_results( $query );
+		$results = $this->db->get_results( $query, ARRAY_A );
+		if ( ! $results || ! is_array( $results ) ) {
+			return [];
+		}
 
-		return is_array( $result ) ? $result : [];
+		return array_map( [ $this, 'create_language_for_data' ], $results );
 	}
 
 	/**
