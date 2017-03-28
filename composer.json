@@ -45,14 +45,23 @@
     "phpunit/phpunit": "^6.0"
   },
   "autoload": {
+    "psr-4": {
+      "Inpsyde\\MultilingualPress\\": "src"
+    },
+    "classmap": [
+      "src/inc"
+    ],
     "files": [
-      "src/autoload.php"
+      "src/functions.php"
     ]
   },
   "autoload-dev": {
     "psr-4": {
       "Inpsyde\\MultilingualPress\\Tests\\Unit\\": "tests/php/unit"
     }
+  },
+  "config": {
+    "optimize-autoloader": true
   },
   "extra": {
     "branch-alias": {

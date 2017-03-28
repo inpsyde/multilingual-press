@@ -53,11 +53,11 @@ const ACTION_ACTIVATION = 'multilingualpress.activation';
  */
 const ACTION_ADD_SERVICE_PROVIDERS = 'multilingualpress.add_service_providers';
 
-if ( is_readable( __DIR__ . '/src/autoload.php' ) ) {
+if ( ! class_exists( MultilingualPress::class ) && is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
 	/**
 	 * MultilingualPress autoload file.
 	 */
-	require_once __DIR__ . '/src/autoload.php';
+	require_once __DIR__ . '/vendor/autoload.php';
 }
 
 /**
@@ -69,11 +69,6 @@ if ( is_readable( __DIR__ . '/src/autoload.php' ) ) {
  * @return bool Whether or not MultilingualPress was bootstrapped successfully.
  */
 function bootstrap(): bool {
-
-	/**
-	 * MultilingualPress functions.
-	 */
-	require_once __DIR__ . '/src/functions.php';
 
 	/** @var Container $container */
 	$container = resolve( null );
@@ -151,11 +146,6 @@ register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 
 // TODO: Eventually remove/refactor according to new architecture as soon as the old controller got replaced.
 add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
-
-	class_exists( 'Mlp_Load_Controller' ) or require __DIR__ . '/src/inc/autoload/Mlp_Load_Controller.php';
-	new \Mlp_Load_Controller(
-		resolve( 'multilingualpress.properties' )->plugin_dir_path() . '/src/inc'
-	);
 
 	// Advanced Translator
 	new \Mlp_Advanced_Translator();
