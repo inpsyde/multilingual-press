@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Common\Type;
  * @package Inpsyde\MultilingualPress\Common\Type
  * @since   3.0.0
  */
-interface Language {
+interface Language extends \ArrayAccess {
 
 	/**
 	 * Checks if the language is written right-to-left (RTL).

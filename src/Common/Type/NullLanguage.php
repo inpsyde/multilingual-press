@@ -13,6 +13,61 @@ namespace Inpsyde\MultilingualPress\Common\Type;
 final class NullLanguage implements Language {
 
 	/**
+	 * Checks if a value with the given name exists.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $name The name of a value.
+	 *
+	 * @return bool Whether or not a value with the given name exists.
+	 */
+	public function offsetExists( $name ) {
+
+		return false;
+	}
+
+	/**
+	 * Returns the value with the given name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $name The name of a value.
+	 *
+	 * @return mixed The value with the given name.
+	 */
+	public function offsetGet( $name ) {
+
+		return '';
+	}
+
+	/**
+	 * Stores the given value with the given name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $name  The name of a value.
+	 * @param mixed  $value The value.
+	 *
+	 * @return void
+	 */
+	public function offsetSet( $name, $value ) {
+
+	}
+
+	/**
+	 * Removes the value with the given name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $name The name of a value.
+	 *
+	 * @return void
+	 */
+	public function offsetUnset( $name ) {
+
+	}
+
+	/**
 	 * Checks if the language is written right-to-left (RTL).
 	 *
 	 * @since 3.0.0
