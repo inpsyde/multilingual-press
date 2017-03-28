@@ -104,4 +104,25 @@ final class NullLanguage implements Language {
 
 		return 0;
 	}
+
+	/**
+	 * Returns the language data in array form.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array Language data.
+	 */
+	public function to_array(): array {
+
+		return [
+			'custom_name'  => '',
+			'english_name' => '',
+			'http_name'    => '',
+			'is_rtl'       => false,
+			'native_name'  => '',
+			'priority'     => 10,
+			'text'         => '',
+			'wp_locale'    => '',
+		];
+	}
 }

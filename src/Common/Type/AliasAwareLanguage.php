@@ -201,6 +201,21 @@ final class AliasAwareLanguage implements Language {
 	}
 
 	/**
+	 * Returns the language data in array form.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array Language data.
+	 */
+	public function to_array(): array {
+
+		return array_merge( $this->names, [
+			'is_rtl'   => $this->is_rtl,
+			'priority' => $this->priority,
+		] );
+	}
+
+	/**
 	 * Returns the complete set of language names and codes for the given language data.
 	 *
 	 * @param array $data Language data.

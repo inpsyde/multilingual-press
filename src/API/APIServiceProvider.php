@@ -40,7 +40,8 @@ final class APIServiceProvider implements ServiceProvider {
 			return new WPDBLanguages(
 				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.languages_table'],
-				$container['multilingualpress.site_settings_repository']
+				$container['multilingualpress.site_settings_repository'],
+				$container['multilingualpress.type_factory']
 			);
 		} );
 

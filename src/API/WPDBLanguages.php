@@ -4,8 +4,10 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\API;
 
+use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
  * Languages API implementation using the WordPress database object.
@@ -36,6 +38,11 @@ final class WPDBLanguages implements Languages {
 	private $table;
 
 	/**
+	 * @var TypeFactory
+	 */
+	private $type_factory;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -43,14 +50,22 @@ final class WPDBLanguages implements Languages {
 	 * @param \wpdb                  $db                       WordPress database object.
 	 * @param Table                  $table                    Site relations table object.
 	 * @param SiteSettingsRepository $site_settings_repository Site settings repository object.
+	 * @param TypeFactory            $type_factory             Type factory object.
 	 */
-	public function __construct( \wpdb $db, Table $table, SiteSettingsRepository $site_settings_repository ) {
+	public function __construct(
+		\wpdb $db,
+		Table $table,
+		SiteSettingsRepository $site_settings_repository,
+		TypeFactory $type_factory
+	) {
 
 		$this->db = $db;
 
 		$this->table = $table->name();
 
 		$this->site_settings_repository = $site_settings_repository;
+
+		$this->type_factory = $type_factory;
 
 		$this->fields = $this->extract_field_specifications_from_table( $table );
 	}
@@ -156,7 +171,7 @@ final class WPDBLanguages implements Languages {
 	 *
 	 * @param array $args Arguments.
 	 *
-	 * @return object[] The array with objects of all languages according to the given arguments.
+	 * @return Language[] The array with objects of all languages according to the given arguments.
 	 */
 	public function get_languages( array $args = [] ): array {
 
@@ -187,9 +202,12 @@ final class WPDBLanguages implements Languages {
 
 		$query = "SELECT $fields FROM {$this->table} {$where} {$order_by} {$limit}";
 
-		$results = $this->db->get_results( $query );
+		$results = $this->db->get_results( $query, ARRAY_A );
+		if ( ! $results || ! is_array( $results ) ) {
+			return [];
+		}
 
-		return is_array( $results ) ? $results : [];
+		return array_map( [ $this, 'create_language_for_data' ], $results );
 	}
 
 	/**
@@ -216,6 +234,18 @@ final class WPDBLanguages implements Languages {
 		}
 
 		return $updated;
+	}
+
+	/**
+	 * Returns a new language object, instantiated with the given data.
+	 *
+	 * @param array $data Language data.
+	 *
+	 * @return Language Language object.
+	 */
+	private function create_language_for_data( array $data ) {
+
+		return $this->type_factory->create_language( [ $data ] );
 	}
 
 	/**

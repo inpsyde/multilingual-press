@@ -6,6 +6,7 @@ namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
+use Inpsyde\MultilingualPress\Common\Type\Language;
 
 /**
  * MultilingualPress "Language" site setting.
@@ -104,10 +105,10 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 			$options = array_reduce( $languages, function ( $options, $language ) use ( $current_site_language ) {
 
 				if (
-					! empty( $language->http_name )
-					&& ! ( empty( $language->english_name) && empty( $language->native_name ) )
+					! empty( $language['http_name'] )
+					&& ! ( empty( $language['english_name'] ) && empty( $language['native_name'] ) )
 				) {
-					$site_language = str_replace( '-', '_', $language->http_name );
+					$site_language = str_replace( '-', '_', $language['http_name'] );
 
 					$options .= sprintf(
 						'<option value="%2$s"%3$s>%1$s</option>',
@@ -127,15 +128,15 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	/**
 	 * Returns the name of the given language.
 	 *
-	 * @param object $language Language object.
+	 * @param Language $language Language object.
 	 *
 	 * @return string The name of the given language.
 	 */
-	private function get_language_name( $language ): string {
+	private function get_language_name( Language $language ): string {
 
 		return implode( '/', array_filter( array_unique( [
-			empty( $language->english_name ) ? '' : $language->english_name,
-			empty( $language->native_name ) ? '' : $language->native_name,
+			$language['english_name'] ?? '',
+			$language['native_name'] ?? '',
 		] ) ) );
 	}
 }

@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\API;
 
+use Inpsyde\MultilingualPress\Common\Type\Language;
+
 /**
  * Interface for all languages API implementations.
  *
@@ -46,7 +48,7 @@ interface Languages {
 	 *
 	 * @param array $args Arguments.
 	 *
-	 * @return object[] The array with objects of all languages according to the given arguments.
+	 * @return Language[] The array with objects of all languages according to the given arguments.
 	 */
 	public function get_languages( array $args = [] ): array;
 

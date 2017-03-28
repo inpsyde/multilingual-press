@@ -223,7 +223,7 @@ class SiteSettingsUpdater {
 			return;
 		}
 
-		$wplang = $language->wp_locale;
+		$wplang = $language['wp_locale'];
 
 		if ( in_array( $wplang, get_available_languages(), true ) ) {
 			update_blog_option( $site_id, 'WPLANG', $wplang );

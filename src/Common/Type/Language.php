@@ -38,4 +38,13 @@ interface Language extends \ArrayAccess {
 	 * @return int Language priority.
 	 */
 	public function priority(): int;
+
+	/**
+	 * Returns the language data in array form.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return array Language data.
+	 */
+	public function to_array(): array;
 }

@@ -113,8 +113,8 @@ class Mlp_Language_Updater {
 
 		$return = [];
 
-		foreach ( $before as $id => $data )
-			$return[ $id ] = (array) $data;
+		foreach ( $before as $id => $language )
+			$return[ $id ] = $language->to_array();
 
 		return $return;
 	}

@@ -1,6 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\API\Languages;
+use Inpsyde\MultilingualPress\Common\Type\Language;
 
 use function Inpsyde\MultilingualPress\attributes_array_to_string;
 
@@ -106,17 +107,17 @@ class Mlp_Admin_Table_View {
 
 	/**
 	 * @param $id
-	 * @param $row
+	 * @param Language $row
 	 * @return void
 	 */
-	private function print_row( $id, $row ) {
+	private function print_row( $id, Language $row ) {
 
 		?>
 		<tr<?php echo $this->get_alternating_class(); ?>>
 			<?php foreach ( $this->columns as $col => $data ) : ?>
 				<td>
 					<?php
-					$content = empty( $row->$col ) ? '' : $row->$col;
+					$content = $row[ $col ] ?? '';
 
 					$attrs = empty( $data['attributes'] ) ? [] : $data['attributes'];
 
