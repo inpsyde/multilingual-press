@@ -66,15 +66,21 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	 * @param array  $args        Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return void
+	 *
+	 * @throws \InvalidArgumentException if the given method name does not exist on a provider, or is not callable.
 	 */
 	public function apply_method( string $method_name, ...$args ) {
 
 		$this->storage->rewind();
 
 		while ( $this->storage->valid() ) {
-			/** @var callable $method */
 			$method = [ $this->storage->current(), $method_name ];
-			// TODO: Check if is_callable() first?
+			if ( ! is_callable( $method ) ) {
+				throw new \InvalidArgumentException(
+					"{$method_name}() does not exist on the current provider, or is not callable."
+				);
+			}
+
 			$method( ...$args );
 
 			$this->storage->next();
