@@ -21,9 +21,9 @@ use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
  *
  * @since 3.0.0
  *
- * @param string|null $name           Name of value to resolve in the container or null to get the whole container.
- * @param string[]    $expected_types Optional. One or more types (scalar type, or interface or class name) that the
- *                                    returned value has to satisfy.
+ * @param string|null $name              Name of value to resolve in the container or null to get the whole container.
+ * @param string[]    ...$expected_types Optional. One or more types (scalar type, or interface or class name) that the
+ *                                       returned value has to satisfy.
  *
  * @return mixed The value with the given name.
  *

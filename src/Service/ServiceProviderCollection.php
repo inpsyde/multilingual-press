@@ -38,7 +38,7 @@ interface ServiceProviderCollection extends \Countable {
 	 * @since 3.0.0
 	 *
 	 * @param string $method_name Name of the method to call on each provider.
-	 * @param array  $args        Variadic array of arguments that will be passed to provider method.
+	 * @param array  ...$args     Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return void
 	 */
@@ -50,7 +50,7 @@ interface ServiceProviderCollection extends \Countable {
 	 * @since 3.0.0
 	 *
 	 * @param callable $callback Callback to execute.
-	 * @param array    $args     Variadic array of arguments that will be passed to provider method.
+	 * @param array    ...$args  Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return void
 	 */
@@ -63,7 +63,7 @@ interface ServiceProviderCollection extends \Countable {
 	 * @since 3.0.0
 	 *
 	 * @param callable $callback Callback to execute.
-	 * @param array    $args     Variadic array of arguments that will be passed to provider method.
+	 * @param array    ...$args  Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return ServiceProviderCollection The filtered instance.
 	 */
@@ -76,7 +76,7 @@ interface ServiceProviderCollection extends \Countable {
 	 * @since 3.0.0
 	 *
 	 * @param callable $callback Callback to execute.
-	 * @param array    $args     Variadic array of arguments that will be passed to provider method.
+	 * @param array    ...$args  Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return ServiceProviderCollection The transformed instance.
 	 */
