@@ -60,6 +60,8 @@ final class AliasAwareLanguage implements Language {
 			'custom_name',
 			'english_name',
 			'http_name',
+			'iso_639_1',
+			'iso_639_2',
 			'is_rtl',
 			'native_name',
 			'priority',
@@ -225,11 +227,13 @@ final class AliasAwareLanguage implements Language {
 	private function get_names( array $data ): array {
 
 		$names = [
-			'english_name' => '',
-			'native_name'  => '',
 			'custom_name'  => $data['text'] ?? '',
-			'text'         => '',
+			'english_name' => '',
 			'http_name'    => '',
+			'iso_639_1'    => '',
+			'iso_639_2'    => '',
+			'native_name'  => '',
+			'text'         => '',
 			'wp_locale'    => '',
 		];
 

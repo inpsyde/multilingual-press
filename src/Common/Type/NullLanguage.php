@@ -119,6 +119,8 @@ final class NullLanguage implements Language {
 			'english_name' => '',
 			'http_name'    => '',
 			'is_rtl'       => false,
+			'iso_639_1'    => '',
+			'iso_639_2'    => '',
 			'native_name'  => '',
 			'priority'     => 10,
 			'text'         => '',
