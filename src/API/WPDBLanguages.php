@@ -111,7 +111,7 @@ final class WPDBLanguages implements Languages {
 			? "'" . implode( "','", array_map( 'esc_sql', $iso_codes ) ) . "'"
 			: '';
 
-		$query = "SELECT * FROM {$this->table} WHERE http_name IN ($names_string)";
+		$query = "SELECT * FROM {$this->table} WHERE http_name IN ({$names_string})";
 
 		if ( $iso_codes ) {
 			$query .= "\n\tOR iso_639_1 IN ($iso_codes_string)";
@@ -185,7 +185,7 @@ final class WPDBLanguages implements Languages {
 
 		$limit = $this->get_limit( $args );
 
-		$query = "SELECT $fields FROM {$this->table} $where $order_by $limit";
+		$query = "SELECT $fields FROM {$this->table} {$where} {$order_by} {$limit}";
 
 		$results = $this->db->get_results( $query );
 
@@ -323,7 +323,7 @@ final class WPDBLanguages implements Languages {
 						? 'ASC'
 						: 'DESC';
 
-					return "{$order_by['field']} $order";
+					return "{$order_by['field']} {$order}";
 				}, $order_by );
 
 				return 'ORDER BY ' . implode( ', ', $order_by );

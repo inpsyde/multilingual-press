@@ -156,7 +156,7 @@ ORDER BY site_id ASC";
 
 		$values = implode( ',', $values );
 
-		return (int) $this->db->query( "INSERT IGNORE INTO {$this->table} (site_1, site_2) VALUES $values" );
+		return (int) $this->db->query( "INSERT IGNORE INTO {$this->table} (site_1, site_2) VALUES {$values}" );
 	}
 
 	/**

@@ -495,7 +495,7 @@ WHERE s.ml_blogid = %d
 			$args[] = $type;
 		}
 
-		return (bool) $this->db->query( $this->db->prepare( "$query LIMIT 1", $args ) );
+		return (bool) $this->db->query( $this->db->prepare( "{$query} LIMIT 1", $args ) );
 	}
 
 	/**

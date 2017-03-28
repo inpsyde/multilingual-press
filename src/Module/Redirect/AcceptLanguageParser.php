@@ -58,13 +58,13 @@ final class AcceptLanguageParser implements AcceptHeaderParser {
 
 		$delimiter_found = false !== strpos( $header, $delimiter );
 		if ( $delimiter_found ) {
-			$header = str_replace( $delimiter, "\\$delimiter", $header );
+			$header = str_replace( $delimiter, "\\{$delimiter}", $header );
 		}
 
 		$header = preg_replace( '~\([^)]*\)~', '', $header );
 
 		if ( $delimiter_found ) {
-			$header = str_replace( "\\$delimiter", $delimiter, $header );
+			$header = str_replace( "\\{$delimiter}", $delimiter, $header );
 		}
 
 		return trim( $header );

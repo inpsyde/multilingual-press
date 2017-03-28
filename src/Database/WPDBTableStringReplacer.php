@@ -59,7 +59,7 @@ final class WPDBTableStringReplacer implements TableStringReplacer {
 
 		$this->db->query( 'SET autocommit = 0' );
 
-		$affected_rows = (int) $this->db->query( "UPDATE $table SET $replacements" );
+		$affected_rows = (int) $this->db->query( "UPDATE {$table} SET {$replacements}" );
 
 		$this->db->query( 'COMMIT' );
 

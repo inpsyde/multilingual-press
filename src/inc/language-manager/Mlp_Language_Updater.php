@@ -153,6 +153,6 @@ class Mlp_Language_Updater {
 		if ( 0 === $amount )
 			return remove_query_arg( 'msg', $url );
 
-		return add_query_arg( 'msg', "updated-$amount", $url );
+		return add_query_arg( 'msg', "updated-{$amount}", $url );
 	}
 }

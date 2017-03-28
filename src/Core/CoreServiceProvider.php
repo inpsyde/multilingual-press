@@ -254,23 +254,23 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			)
 			->add(
 				'css',
-				"$plugin_dir_path/assets/css",
-				"$plugin_dir_url/assets/css"
+				"{$plugin_dir_path}/assets/css",
+				"{$plugin_dir_url}/assets/css"
 			)
 			->add(
 				'js',
-				"$plugin_dir_path/assets/js",
-				"$plugin_dir_url/assets/js"
+				"{$plugin_dir_path}/assets/js",
+				"{$plugin_dir_url}/assets/js"
 			)
 			->add(
 				'images',
-				"$plugin_dir_path/assets/images",
-				"$plugin_dir_url/assets/images"
+				"{$plugin_dir_path}/assets/images",
+				"{$plugin_dir_url}/assets/images"
 			)
 			->add(
 				'flags',
-				"$plugin_dir_path/assets/images/flags",
-				"$plugin_dir_url/assets/images/flags"
+				"{$plugin_dir_path}/assets/images/flags",
+				"{$plugin_dir_url}/assets/images/flags"
 			);
 
 		load_plugin_textdomain( 'multilingual-press' );

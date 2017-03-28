@@ -99,7 +99,7 @@ final class ValidatingItemRepository implements ItemRepository {
 
 		$item->type_label = esc_html__( 'Language', 'multilingual-press' );
 
-		$item->classes[] = "blog-id-$site_id";
+		$item->classes[] = "blog-id-{$site_id}";
 		$item->classes[] = 'mlp-language-nav-item';
 
 		$home_url = get_home_url( $site_id, '/' );

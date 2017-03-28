@@ -72,17 +72,17 @@ class Mlp_Language_Formatter {
 		$size = $this->get_size( $name );
 
 		if ( 'checkbox' === $name )
-			return "<input type='checkbox' id='lang_$id' name='delete_languages[]' value='$id' />";
+			return "<input type='checkbox' id='lang_{$id}' name='delete_languages[]' value='{$id}' />";
 
 		$content = esc_attr( $this->get_content( $name ) );
 
 		if ( 'priority' === $name )
-			return "<input type='number' name='languages[$id][is_rtl]' value='$content' min=1 max=10 size=3 />";
+			return "<input type='number' name='languages[{$id}][is_rtl]' value='{$content}' min=1 max=10 size=3 />";
 
 		if ( 'is_rtl' === $name )
 			return $this->get_rtl_checkbox( $content, $id );
 
-		return "<input type='text' name='languages[$id]" . "[$name]" . "' value='" . $content . "' $size />";
+		return "<input type='text' name='languages[$id]" . "[{$name}]" . "' value='{$content}' {$size} />";
 	}
 
 	/**

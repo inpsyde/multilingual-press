@@ -41,17 +41,17 @@ final class WPDBTableReplacer implements TableReplacer {
 	 */
 	public function replace_table( string $destination, string $source ): bool {
 
-		$has_primary_key = (bool) $this->db->get_results( "SHOW KEYS FROM $destination WHERE Key_name = 'PRIMARY'" );
+		$has_primary_key = (bool) $this->db->get_results( "SHOW KEYS FROM {$destination} WHERE Key_name = 'PRIMARY'" );
 		if ( $has_primary_key ) {
-			$this->db->query( "ALTER TABLE $destination DISABLE KEYS" );
+			$this->db->query( "ALTER TABLE {$destination} DISABLE KEYS" );
 		}
 
-		$this->db->query( "TRUNCATE TABLE $destination" );
+		$this->db->query( "TRUNCATE TABLE {$destination}" );
 
-		$replaced_table = (bool) $this->db->query( "INSERT INTO $destination SELECT * FROM $source" );
+		$replaced_table = (bool) $this->db->query( "INSERT INTO {$destination} SELECT * FROM {$source}" );
 
 		if ( $has_primary_key ) {
-			$this->db->query( "ALTER TABLE $destination ENABLE KEYS" );
+			$this->db->query( "ALTER TABLE {$destination} ENABLE KEYS" );
 		}
 
 		return $replaced_table;

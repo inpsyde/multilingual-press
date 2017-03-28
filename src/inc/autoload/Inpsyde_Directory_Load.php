@@ -45,7 +45,7 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 		if ( ! isset ( $this->found[ $name ] ) )
 			return FALSE;
 
-		require $this->dir . "/$name.php";
+		require $this->dir . "/{$name}.php";
 
 		return TRUE;
 	}

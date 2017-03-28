@@ -67,11 +67,11 @@ final class SemanticVersionNumber implements VersionNumber {
 		$version = $numeric;
 
 		if ( $pre_release ) {
-			$version .= "-$pre_release";
+			$version .= "-{$pre_release}";
 		}
 
 		if ( $metadata ) {
-			$version .= "+$metadata";
+			$version .= "+{$metadata}";
 		}
 
 		return $version;

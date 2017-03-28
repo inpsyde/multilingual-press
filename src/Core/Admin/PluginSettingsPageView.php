@@ -82,7 +82,7 @@ final class PluginSettingsPageView implements SettingsPageView {
 						 *
 						 * @param bool $show_module Whether or not the module should be listed on the settings page.
 						 */
-						if ( apply_filters( "multilingualpress.show_module_$id", true ) ) {
+						if ( apply_filters( "multilingualpress.show_module_{$id}", true ) ) {
 							$this->render_module( $module );
 						}
 					}

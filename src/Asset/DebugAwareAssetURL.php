@@ -39,9 +39,9 @@ final class DebugAwareAssetURL implements AssetURL {
 
 		$file = $this->get_file( $file, $dir_path );
 
-		$file_path = "$dir_path/$file";
+		$file_path = "{$dir_path}/{$file}";
 		if ( is_readable( $file_path ) ) {
-			$this->url = rtrim( $dir_url, '/' ) . "/$file";
+			$this->url = rtrim( $dir_url, '/' ) . "/{$file}";
 
 			$this->version = filemtime( $file_path );
 		}

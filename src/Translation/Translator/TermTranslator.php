@@ -130,7 +130,7 @@ final class TermTranslator implements Translator {
 	 */
 	private function get_term_by_term_taxonomy_id( int $term_taxonomy_id ): array {
 
-		$cache_key = "term_with_ttid_$term_taxonomy_id";
+		$cache_key = "term_with_ttid_{$term_taxonomy_id}";
 
 		$term = wp_cache_get( $cache_key, 'mlp' );
 		if ( is_array( $term ) ) {

@@ -148,7 +148,7 @@ class Updater {
 
 		$table = $this->content_relations_table->name();
 
-		$this->db->query( "UPDATE $table set ml_type = 'post' WHERE ml_type NOT IN('post','term')" );
+		$this->db->query( "UPDATE {$table} set ml_type = 'post' WHERE ml_type NOT IN('post','term')" );
 	}
 
 	/**

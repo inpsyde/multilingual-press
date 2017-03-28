@@ -59,8 +59,8 @@ class Mlp_Load_Controller {
 			require __DIR__ . '/Inpsyde_Autoload_Rule_Interface.php';
 
 		foreach ( [ 'Directory_Load', 'Autoload' ] as $class ) {
-			if ( ! class_exists( "Inpsyde_$class" ) )
-				require __DIR__ . "/Inpsyde_$class.php";
+			if ( ! class_exists( "Inpsyde_{$class}" ) )
+				require __DIR__ . "/Inpsyde_{$class}.php";
 		}
 
 		$this->loader = new Inpsyde_Autoload;

@@ -369,7 +369,7 @@ function get_flag_url_for_site( $site_id = 0 ): URL {
 
 	$file_name = get_site_language( $site_id, true ) . '.gif';
 
-	if ( is_readable( $internal_locations->get( 'flags', Locations::TYPE_PATH ) . "/$file_name" ) ) {
+	if ( is_readable( $internal_locations->get( 'flags', Locations::TYPE_PATH ) . "/{$file_name}" ) ) {
 		return $type_factory->create_url( [
 			$internal_locations->get( 'flags', Locations::TYPE_URL ) . $file_name,
 		] );

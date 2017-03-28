@@ -77,7 +77,7 @@ final class WPDBTableInstaller implements TableInstaller {
 		 */
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		dbDelta( "CREATE TABLE $table_name ({$columns}{$keys}) $options" );
+		dbDelta( "CREATE TABLE {$table_name} ({$columns}{$keys}) {$options}" );
 
 		if ( ! $this->table_exists( $table_name ) ) {
 			return false;
@@ -143,7 +143,7 @@ final class WPDBTableInstaller implements TableInstaller {
 		$primary_key = $table->primary_key();
 		if ( $primary_key ) {
 			// Due to dbDelta: two spaces after PRIMARY KEY!
-			$keys .= ",\n\tPRIMARY KEY  ($primary_key)";
+			$keys .= ",\n\tPRIMARY KEY  ({$primary_key})";
 		}
 
 		$keys_sql = $table->keys_sql();
@@ -151,7 +151,7 @@ final class WPDBTableInstaller implements TableInstaller {
 			$keys .= ",\n\t$keys_sql";
 		}
 
-		return "$keys\n";
+		return "{$keys}\n";
 	}
 
 	/**
@@ -207,7 +207,7 @@ final class WPDBTableInstaller implements TableInstaller {
 		$table_name = $table->name();
 
 		// Bail if the table is not empty.
-		if ( $this->db->query( "SELECT 1 FROM $table_name LIMIT 1" ) ) {
+		if ( $this->db->query( "SELECT 1 FROM {$table_name} LIMIT 1" ) ) {
 			return;
 		}
 
@@ -221,6 +221,6 @@ final class WPDBTableInstaller implements TableInstaller {
 		$columns = array_diff( $columns, $table->columns_without_default_content() );
 		$columns = implode( ',', $columns );
 
-		$this->db->query( "INSERT INTO $table_name ($columns) VALUES $default_content" );
+		$this->db->query( "INSERT INTO {$table_name} ({$columns}) VALUES {$default_content}" );
 	}
 }

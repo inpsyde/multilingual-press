@@ -212,7 +212,7 @@ class Mlp_Translation_Metabox {
 		 ];
 
 		$view = new Mlp_Translation_Metabox_View( $this->nonce_factory->create( [
-			"save_translation_of_post_{$post->ID}_for_site_$blog_id"
+			"save_translation_of_post_{$post->ID}_for_site_{$blog_id}"
 		] ) );
 
 		add_meta_box(
@@ -237,7 +237,7 @@ class Mlp_Translation_Metabox {
 			$checkbox_callback = apply_filters( 'mlp_post_translator_activation_checkbox', $callback );
 
 			if ( $checkbox_callback ) {
-				add_action( "mlp_translation_meta_box_top_$blog_id", $checkbox_callback, 10, 3 );
+				add_action( "mlp_translation_meta_box_top_{$blog_id}", $checkbox_callback, 10, 3 );
 			}
 		}
 

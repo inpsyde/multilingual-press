@@ -132,7 +132,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			[ $this->view, 'render' ]
 		);
 
-		add_action( "load-$page_id", [ $this, 'enqueue_style' ] );
+		add_action( "load-{$page_id}", [ $this, 'enqueue_style' ] );
 	}
 
 	/**

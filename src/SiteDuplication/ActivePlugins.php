@@ -37,7 +37,7 @@ class ActivePlugins {
 			do_action( 'activate_plugin', $plugin, false );
 
 			/** This action is documented in wp-admin/includes/plugin.php. */
-			do_action( "activate_$plugin", false );
+			do_action( "activate_{$plugin}", false );
 
 			/** This action is documented in wp-admin/includes/plugin.php. */
 			do_action( 'activated_plugin', $plugin, false );

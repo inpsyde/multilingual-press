@@ -169,7 +169,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 			}
 
 			$nonce = $this->nonce_factory->create( [
-				"save_translation_of_post_{$post_id}_for_site_$remote_blog_id",
+				"save_translation_of_post_{$post_id}_for_site_{$remote_blog_id}",
 			] );
 
 			$request_validator = new Mlp_Save_Post_Request_Validator( $nonce );

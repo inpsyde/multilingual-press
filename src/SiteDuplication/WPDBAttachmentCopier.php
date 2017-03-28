@@ -178,9 +178,9 @@ final class WPDBAttachmentCopier implements AttachmentCopier {
 		array_walk( $paths, function ( $path ) use ( $source_dir, $destination_dir ) {
 
 			if (
-				file_exists( "$source_dir/$path" )
-				&& ! file_exists( "$destination_dir/$path" )
-				&& copy( "$source_dir/$path", "$destination_dir/$path" )
+				file_exists( "{$source_dir}/{$path}" )
+				&& ! file_exists( "{$destination_dir}/{$path}" )
+				&& copy( "{$source_dir}/{$path}", "{$destination_dir}/{$path}" )
 			) {
 				$this->copied_files = true;
 			}

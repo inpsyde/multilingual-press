@@ -40,15 +40,15 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 
 		foreach ( [ 'core', 'pro' ] as $main_dir ) {
 
-			if ( ! is_dir( "$this->dir/$main_dir" ) )
+			if ( ! is_dir( "{$this->dir}/{$main_dir}" ) )
 				continue;
 
 			foreach ( [ 'controllers', 'models', 'views' ] as $sub_dir ) {
 
-				if ( ! is_dir( "$this->dir/$main_dir/$sub_dir" ) )
+				if ( ! is_dir( "{$this->dir}/{$main_dir}/{$sub_dir}" ) )
 					continue;
 
-				$file = "$this->dir/$main_dir/$sub_dir/$name.php";
+				$file = "{$this->dir}/{$main_dir}/{$sub_dir}/{$name}.php";
 
 				if ( file_exists( $file ) ) {
 					include $file;
