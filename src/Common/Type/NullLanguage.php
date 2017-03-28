@@ -122,7 +122,7 @@ final class NullLanguage implements Language {
 			'iso_639_1'    => '',
 			'iso_639_2'    => '',
 			'native_name'  => '',
-			'priority'     => 10,
+			'priority'     => 1,
 			'text'         => '',
 			'wp_locale'    => '',
 		];
