@@ -17,15 +17,6 @@ interface PostRepository {
 	 *
 	 * @var string
 	 */
-	const DEPRECATED_META_KEY = 'post_is_translated';
-
-	/**
-	 * Meta key used to store the translation status.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string
-	 */
 	const META_KEY = '_post_is_translated';
 
 	/**

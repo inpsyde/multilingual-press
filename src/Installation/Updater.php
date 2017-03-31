@@ -19,11 +19,6 @@ use Inpsyde\MultilingualPress\Database\TableInstaller;
 class Updater {
 
 	/**
-	 * @var Table
-	 */
-	private $content_relations_table;
-
-	/**
 	 * @var \wpdb
 	 */
 	private $db;
@@ -34,24 +29,9 @@ class Updater {
 	private $languages_table;
 
 	/**
-	 * @var SiteRelations
-	 */
-	private $site_relations;
-
-	/**
-	 * @var Table
-	 */
-	private $site_relations_table;
-
-	/**
 	 * @var SiteSettingsRepository
 	 */
 	private $site_settings_repository;
-
-	/**
-	 * @var TableInstaller
-	 */
-	private $table_installer;
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -60,35 +40,15 @@ class Updater {
 	 *
 	 * @param \wpdb                  $db                       WordPress database object.
 	 * @param SiteSettingsRepository $site_settings_repository Site settings repository object.
-	 * @param TableInstaller         $table_installer          Table installer object.
-	 * @param Table                  $content_relations_table  Content relations table object.
 	 * @param Table                  $languages_table          Languages table object.
-	 * @param Table                  $site_relations_table     Site relations table object.
-	 * @param SiteRelations          $site_relations           Site relations API.
 	 */
-	public function __construct(
-		\wpdb $db,
-		SiteSettingsRepository $site_settings_repository,
-		TableInstaller $table_installer,
-		Table $content_relations_table,
-		Table $languages_table,
-		Table $site_relations_table,
-		SiteRelations $site_relations
-	) {
+	public function __construct( \wpdb $db, SiteSettingsRepository $site_settings_repository, Table $languages_table ) {
 
 		$this->db = $db;
 
 		$this->site_settings_repository = $site_settings_repository;
 
-		$this->table_installer = $table_installer;
-
-		$this->content_relations_table = $content_relations_table;
-
 		$this->languages_table = $languages_table;
-
-		$this->site_relations_table = $site_relations_table;
-
-		$this->site_relations = $site_relations;
 	}
 
 	/**
@@ -102,53 +62,11 @@ class Updater {
 	 */
 	public function update( VersionNumber $installed_version ) {
 
-		if ( VersionNumber::FALLBACK_VERSION === $installed_version ) {
+		if ( VersionNumber::FALLBACK_VERSION === (string) $installed_version ) {
 			// TODO: Move either to separate class or method on an existing class in the Language API namespace.
 			// TODO: Check if this is needed exactly like this (or similar and compatible) in the language manager.
 			$this->import_active_languages();
 		}
-
-		if ( version_compare( (string) $installed_version, '2.0.4', '<' ) ) {
-			$this->table_installer->install( $this->site_relations_table );
-
-			$this->import_site_relations();
-
-			if ( version_compare( (string) $installed_version, '2.3.2', '<' ) ) {
-				$this->update_type_column();
-			}
-		}
-
-		// Remove obsolete plugin data.
-		delete_option( 'inpsyde_companyname' );
-	}
-
-	/**
-	 * Moves site relations from deprecated site options to the new custom network table.
-	 *
-	 * @return void
-	 */
-	private function import_site_relations() {
-
-		foreach ( array_column( get_sites(), 'id' ) as $site_id ) {
-			$linked = get_blog_option( $site_id, 'inpsyde_multilingual_blog_relationship', [] );
-			if ( $linked ) {
-				$this->site_relations->insert_relations( (int) $site_id, $linked );
-			}
-
-			delete_blog_option( $site_id, 'inpsyde_multilingual_blog_relationship' );
-		}
-	}
-
-	/**
-	 * Updates invalid type field entries in the content relations table.
-	 *
-	 * @return void
-	 */
-	private function update_type_column() {
-
-		$table = $this->content_relations_table->name();
-
-		$this->db->query( "UPDATE {$table} set ml_type = 'post' WHERE ml_type NOT IN('post','term')" );
 	}
 
 	/**

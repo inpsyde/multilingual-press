@@ -80,11 +80,7 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 			return new Updater(
 				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.site_settings_repository'],
-				$container['multilingualpress.table_installer'],
-				$container['multilingualpress.content_relations_table'],
-				$container['multilingualpress.languages_table'],
-				$container['multilingualpress.site_relations_table'],
-				$container['multilingualpress.site_relations']
+				$container['multilingualpress.languages_table']
 			);
 		};
 	}

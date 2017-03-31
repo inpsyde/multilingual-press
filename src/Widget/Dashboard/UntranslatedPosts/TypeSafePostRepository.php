@@ -27,14 +27,8 @@ final class TypeSafePostRepository implements PostRepository {
 			// Post status 'any' automatically excludes both 'auto-draft' and 'trash'.
 			'post_status'      => 'any',
 			'meta_query'       => [
-				'relation' => 'OR',
 				[
 					'key'     => PostRepository::META_KEY,
-					'compare' => '!=',
-					'value'   => true,
-				],
-				[
-					'key'     => PostRepository::DEPRECATED_META_KEY,
 					'compare' => '!=',
 					'value'   => true,
 				],
@@ -55,17 +49,7 @@ final class TypeSafePostRepository implements PostRepository {
 
 		$post_id = $post_id ?: (int) get_the_ID();
 
-		if ( get_post_meta( $post_id, PostRepository::META_KEY, true ) ) {
-			return true;
-		}
-
-		if ( get_post_meta( $post_id, PostRepository::DEPRECATED_META_KEY, true ) ) {
-			$this->update_deprecated_post_meta( $post_id );
-
-			return true;
-		}
-
-		return false;
+		return (bool) get_post_meta( $post_id, PostRepository::META_KEY, true );
 	}
 
 	/**
@@ -81,19 +65,5 @@ final class TypeSafePostRepository implements PostRepository {
 	public function update_post( int $post_id, bool $value ): bool {
 
 		return (bool) update_post_meta( $post_id, PostRepository::META_KEY, (bool) $value );
-	}
-
-	/**
-	 * Updates the meta value for the given post (i.e., deletes the deprecated key and uses the correct one).
-	 *
-	 * @param int $post_id Post ID.
-	 *
-	 * @return void
-	 */
-	private function update_deprecated_post_meta( int $post_id ) {
-
-		if ( update_post_meta( $post_id, PostRepository::META_KEY, true ) ) {
-			delete_post_meta( $post_id, PostRepository::DEPRECATED_META_KEY );
-		}
 	}
 }
