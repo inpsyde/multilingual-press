@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Service;
 
+use Inpsyde\MultilingualPress\Service\Exception\FactoryNotFound;
 use Inpsyde\MultilingualPress\Service\Exception\InvalidValueWriteAccess;
 use Inpsyde\MultilingualPress\Service\Exception\LateAccessToNotSharedService;
 use Inpsyde\MultilingualPress\Service\Exception\ValueNotFound;
@@ -218,9 +219,9 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @return Container Container instance.
 	 *
+	 * @throws FactoryNotFound if there is no factory callback with the given name.
+	 * @throws InvalidValueWriteAccess if there already is a value with the given name.
 	 * @throws WriteAccessOnLockedContainer if the container is locked.
-	 * @throws ValueNotFound                if there is no value or factory callback with the given name.
-	 * @throws InvalidValueWriteAccess      if there already is a value with the given name.
 	 */
 	public function extend( string $name, callable $new_factory ): Container {
 
@@ -229,7 +230,7 @@ final class AddOnlyContainer implements Container {
 		}
 
 		if ( ! array_key_exists( $name, $this->factories ) ) {
-			throw ValueNotFound::for_name( $name, 'extend' );
+			throw FactoryNotFound::for_name( $name, 'extend' );
 		}
 
 		if ( array_key_exists( $name, $this->values ) ) {
