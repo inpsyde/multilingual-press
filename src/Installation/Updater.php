@@ -108,12 +108,12 @@ class Updater {
 			$this->import_active_languages();
 		}
 
-		if ( version_compare( $installed_version, '2.0.4', '<' ) ) {
+		if ( version_compare( (string) $installed_version, '2.0.4', '<' ) ) {
 			$this->table_installer->install( $this->site_relations_table );
 
 			$this->import_site_relations();
 
-			if ( version_compare( $installed_version, '2.3.2', '<' ) ) {
+			if ( version_compare( (string) $installed_version, '2.3.2', '<' ) ) {
 				$this->update_type_column();
 			}
 		}

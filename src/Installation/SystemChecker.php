@@ -218,7 +218,7 @@ class SystemChecker {
 	 */
 	public function check_version( VersionNumber $installed_version, VersionNumber $current_version ): int {
 
-		if ( version_compare( $installed_version, $current_version, '>=' ) ) {
+		if ( version_compare( (string) $installed_version, (string) $current_version, '>=' ) ) {
 			return static::VERSION_OK;
 		}
 
@@ -262,7 +262,7 @@ class SystemChecker {
 			static::MINIMUM_PHP_VERSION,
 		] );
 
-		if ( version_compare( $current_version, $required_version, '>=' ) ) {
+		if ( version_compare( (string) $current_version, (string) $required_version, '>=' ) ) {
 			return;
 		}
 
@@ -292,7 +292,7 @@ class SystemChecker {
 			static::MINIMUM_WORDPRESS_VERSION,
 		] );
 
-		if ( version_compare( $current_version, $required_version, '>=' ) ) {
+		if ( version_compare( (string) $current_version, (string) $required_version, '>=' ) ) {
 			return;
 		}
 
