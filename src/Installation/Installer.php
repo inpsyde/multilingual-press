@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace Inpsyde\MultilingualPress\Installation;
 
@@ -16,21 +16,6 @@ use Inpsyde\MultilingualPress\Database\TableInstaller;
 class Installer {
 
 	/**
-	 * @var Table
-	 */
-	private $content_relations_table;
-
-	/**
-	 * @var Table
-	 */
-	private $languages_table;
-
-	/**
-	 * @var Table
-	 */
-	private $site_relations_table;
-
-	/**
 	 * @var TableInstaller
 	 */
 	private $table_installer;
@@ -40,38 +25,26 @@ class Installer {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param TableInstaller $table_installer         Table installer object.
-	 * @param Table          $content_relations_table Content relations table object.
-	 * @param Table          $languages_table         Languages table object.
-	 * @param Table          $site_relations_table    Site relations table object.
+	 * @param TableInstaller $table_installer Table installer object.
 	 */
-	public function __construct(
-		TableInstaller $table_installer,
-		Table $content_relations_table,
-		Table $languages_table,
-		Table $site_relations_table
-	) {
+	public function __construct( TableInstaller $table_installer ) {
 
 		$this->table_installer = $table_installer;
-
-		$this->content_relations_table = $content_relations_table;
-
-		$this->languages_table = $languages_table;
-
-		$this->site_relations_table = $site_relations_table;
 	}
 
 	/**
-	 * Performs installation-specific tasks.
+	 * Installs the given tables.
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param Table[] ...$tables Table objects.
+	 *
 	 * @return void
 	 */
-	public function install() {
+	public function install_tables( Table ...$tables ) {
 
-		$this->table_installer->install( $this->content_relations_table );
-		$this->table_installer->install( $this->languages_table );
-		$this->table_installer->install( $this->site_relations_table );
+		foreach ( $tables as $table ) {
+			$this->table_installer->install( $table );
+		}
 	}
 }

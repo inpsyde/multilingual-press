@@ -39,10 +39,7 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 		$container['multilingualpress.installer'] = function ( Container $container ) {
 
 			return new Installer(
-				$container['multilingualpress.table_installer'],
-				$container['multilingualpress.content_relations_table'],
-				$container['multilingualpress.languages_table'],
-				$container['multilingualpress.site_relations_table']
+				$container['multilingualpress.table_installer']
 			);
 		};
 
@@ -109,7 +106,11 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 
 			switch ( $version_check ) {
 				case SystemChecker::NEEDS_INSTALLATION:
-					$container['multilingualpress.installer']->install();
+					$container['multilingualpress.installer']->install_tables(
+						$container['multilingualpress.content_relations_table'],
+						$container['multilingualpress.languages_table'],
+						$container['multilingualpress.site_relations_table']
+					);
 					break;
 
 				case SystemChecker::NEEDS_UPGRADE:
