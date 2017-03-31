@@ -52,7 +52,7 @@
       "src/inc"
     ],
     "files": [
-      "src/functions.php"
+      "inc/functions.php"
     ]
   },
   "autoload-dev": {
