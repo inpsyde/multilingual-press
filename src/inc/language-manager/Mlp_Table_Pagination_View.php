@@ -255,7 +255,7 @@ class Mlp_Table_Pagination_View {
 	private function get_item_count() {
 
 		$num = sprintf(
-			_n( '1 item', '%s items', (int) $this->total_items, 'multilingual-press' ),
+			_n( '1 item', '%s items', (int) $this->total_items, 'multilingualpress' ),
 			number_format_i18n( $this->total_items )
 		);
 

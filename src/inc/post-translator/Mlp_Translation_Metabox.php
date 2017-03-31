@@ -156,7 +156,7 @@ class Mlp_Translation_Metabox {
 			$template = esc_html_x(
 				'%1$s (%2$s)',
 				'No HTML; 1 = post status, 2 = publish time',
-				'multilingual-press'
+				'multilingualpress'
 			);
 
 			$post_time = get_post_time( get_option( 'date_format' ), false, $remote_post );
@@ -262,7 +262,7 @@ class Mlp_Translation_Metabox {
 	private function get_metabox_title( $blog_id, WP_Post $post, $language ) {
 
 		/* translators: 1: site name, 2: language */
-		$text = esc_html__( 'Translation for %1$s (%2$s)', 'multilingual-press' );
+		$text = esc_html__( 'Translation for %1$s (%2$s)', 'multilingualpress' );
 
 		$site_name = get_blog_option( $blog_id, 'blogname' );
 		$title     = sprintf( $text, $site_name, $language );

@@ -73,7 +73,7 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 				'text'           => __( 'Custom name', 'multilingualpress' ),
 				'english'        => __( 'English name', 'multilingualpress' ),
 				'http'           => __( 'Language code', 'multilingualpress' ),
-				'language_short' => __( 'Language code (short)', 'multilingual-press' ),
+				'language_short' => __( 'Language code (short)', 'multilingualpress' ),
 			];
 
 			$link_type = $instance['widget_link_type'] ?? '';
