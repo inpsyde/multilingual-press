@@ -15,6 +15,33 @@ use Inpsyde\MultilingualPress\Database\Table;
 final class SiteRelationsTable implements Table {
 
 	/**
+	 * Column name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const COLUMN_ID = 'ID';
+
+	/**
+	 * Column name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const COLUMN_SITE_1 = 'site_1';
+
+	/**
+	 * Column name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const COLUMN_SITE_2 = 'site_2';
+
+	/**
 	 * @var string
 	 */
 	private $prefix;
@@ -41,7 +68,7 @@ final class SiteRelationsTable implements Table {
 	public function columns_without_default_content(): array {
 
 		return [
-			'ID',
+			self::COLUMN_ID,
 		];
 	}
 
@@ -67,7 +94,11 @@ final class SiteRelationsTable implements Table {
 	public function keys_sql(): string {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
-		return "UNIQUE KEY site_combinations (site_1,site_2)";
+		return sprintf(
+			'UNIQUE KEY site_combinations (%1$s,%2$s)',
+			self::COLUMN_SITE_1,
+			self::COLUMN_SITE_2
+		);
 	}
 
 	/**
@@ -91,7 +122,7 @@ final class SiteRelationsTable implements Table {
 	 */
 	public function primary_key(): string {
 
-		return 'ID';
+		return self::COLUMN_ID;
 	}
 
 	/**
@@ -99,14 +130,14 @@ final class SiteRelationsTable implements Table {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string[] An array with fields as keys and the according SQL definitions as values.
+	 * @return string[] An array with column names as keys and the according SQL definitions as values.
 	 */
 	public function schema(): array {
 
 		return [
-			'ID'     => 'int unsigned NOT NULL AUTO_INCREMENT',
-			'site_1' => 'bigint(20) NOT NULL',
-			'site_2' => 'bigint(20) NOT NULL',
+			self::COLUMN_ID     => 'int unsigned NOT NULL AUTO_INCREMENT',
+			self::COLUMN_SITE_1 => 'bigint(20) NOT NULL',
+			self::COLUMN_SITE_2 => 'bigint(20) NOT NULL',
 		];
 	}
 }
