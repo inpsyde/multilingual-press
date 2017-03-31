@@ -136,8 +136,8 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	public function register_module( ModuleManager $module_manager ): bool {
 
 		return $module_manager->register_module( new Module( 'quicklinks', [
-			'description' => __( 'Show link to translations in post content.', 'multilingual-press' ),
-			'name'        => __( 'Quicklinks', 'multilingual-press' ),
+			'description' => __( 'Show link to translations in post content.', 'multilingualpress' ),
+			'name'        => __( 'Quicklinks', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
 	}

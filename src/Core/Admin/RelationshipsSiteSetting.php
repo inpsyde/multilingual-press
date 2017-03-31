@@ -63,7 +63,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 				'<p class="description">%s</p>',
 				esc_html__(
 					'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
-					'multilingual-press'
+					'multilingualpress'
 				)
 			);
 	}
@@ -79,7 +79,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
-			esc_html__( 'Relationships', 'multilingual-press' ),
+			esc_html__( 'Relationships', 'multilingualpress' ),
 			esc_attr( $this->id )
 		);
 	}
@@ -112,7 +112,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 					'<p><label for="%3$s"><input type="checkbox" name="%4$s[]" value="%2$d" id="%3$s"%5$s>%1$s</label></p>',
 					sprintf(
 						// translators: 1 = site name, 2 = site language
-						esc_html_x( '%1$s - %2$s', 'Site relationships', 'multilingual-press' ),
+						esc_html_x( '%1$s - %2$s', 'Site relationships', 'multilingualpress' ),
 						$site_name,
 						get_site_language( $site_id, false )
 					),

@@ -66,7 +66,7 @@ final class FlagImageURLSiteSetting implements SiteSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
-			esc_html__( 'Flag image URL', 'multilingual-press' ),
+			esc_html__( 'Flag image URL', 'multilingualpress' ),
 			esc_attr( $this->id )
 		);
 	}

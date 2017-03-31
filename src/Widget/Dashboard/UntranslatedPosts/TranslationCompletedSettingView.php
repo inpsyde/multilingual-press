@@ -77,7 +77,7 @@ class TranslationCompletedSettingView {
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( PostRepository::META_KEY ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>" <?php checked( $translated ); ?>>
-				<?php _e( 'Translation completed', 'multilingual-press' ); ?>
+				<?php _e( 'Translation completed', 'multilingualpress' ); ?>
 			</label>
 		</div>
 		<?php

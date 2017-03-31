@@ -35,6 +35,6 @@ final class LanguagesMetaBoxModel implements MetaBoxModel {
 	 */
 	public function title(): string {
 
-		return __( 'Languages', 'multilingual-press' );
+		return __( 'Languages', 'multilingualpress' );
 	}
 }

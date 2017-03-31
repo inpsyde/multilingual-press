@@ -63,12 +63,12 @@ final class SiteSettingsTabView implements SettingsPageView {
 
 		$site_id = (int) ( $_REQUEST['id'] ?? 0 );
 		if ( ! $site_id ) {
-			wp_die( __( 'Invalid site ID.', 'multilingual-press' ) );
+			wp_die( __( 'Invalid site ID.', 'multilingualpress' ) );
 		}
 
 		$site = get_site( $site_id );
 		if ( ! $site ) {
-			wp_die( __( 'The requested site does not exist.', 'multilingual-press' ) );
+			wp_die( __( 'The requested site does not exist.', 'multilingualpress' ) );
 		}
 		?>
 		<div class="wrap">
@@ -99,17 +99,17 @@ final class SiteSettingsTabView implements SettingsPageView {
 		$site_id = $site->id;
 
 		/* translators: %s: site name */
-		$title = sprintf( __( 'Edit Site: %s', 'multilingual-press' ), $site->blogname );
+		$title = sprintf( __( 'Edit Site: %s', 'multilingualpress' ), $site->blogname );
 		?>
 		<h1 id="edit-site"><?php echo esc_html( $title ); ?></h1>
 		<?php settings_errors(); ?>
 		<p class="edit-site-actions">
 			<a href="<?php echo esc_url( get_home_url( $site_id, '/' ) ); ?>">
-				<?php _e( 'Visit', 'multilingual-press' ); ?>
+				<?php _e( 'Visit', 'multilingualpress' ); ?>
 			</a>
 			|
 			<a href="<?php echo esc_url( get_admin_url( $site_id ) ); ?>">
-				<?php _e( 'Dashboard', 'multilingual-press' ); ?>
+				<?php _e( 'Dashboard', 'multilingualpress' ); ?>
 			</a>
 		</p>
 		<?php

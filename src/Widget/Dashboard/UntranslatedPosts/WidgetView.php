@@ -73,7 +73,7 @@ final class WidgetView implements View {
 							<strong>
 								<?php
 								/* translators: %s: site name */
-								$message = __( 'Pending Translations for %s', 'multilingual-press' );
+								$message = __( 'Pending Translations for %s', 'multilingualpress' );
 								printf( $message, get_bloginfo( 'name' ) );
 								?>
 							</strong>
@@ -82,7 +82,7 @@ final class WidgetView implements View {
 					<?php foreach ( array_column( $untranslated_posts, 'ID' ) as $post_id ) : ?>
 						<tr>
 							<td style="width: 20%;">
-								<?php edit_post_link( __( 'Translate', 'multilingual-press' ), '', '', $post_id ); ?>
+								<?php edit_post_link( __( 'Translate', 'multilingualpress' ), '', '', $post_id ); ?>
 							</td>
 							<td style="width: 55%;">
 								<?php echo esc_html( get_the_title( $post_id ) ); ?>
@@ -98,7 +98,7 @@ final class WidgetView implements View {
 			<?php if ( ! $have_untranslated_posts ) : ?>
 				<tr>
 					<td colspan="3">
-						<?php esc_html_e( 'No untranslated posts found.', 'multilingual-press' ); ?>
+						<?php esc_html_e( 'No untranslated posts found.', 'multilingualpress' ); ?>
 					</td>
 				</tr>
 			<?php endif; ?>

@@ -174,7 +174,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 						( new SitesListTableColumn(
 							'multilingualpress.redirect',
-							__( 'Redirect', 'multilingual-press' ),
+							__( 'Redirect', 'multilingualpress' ),
 							function ( $id, $site_id ) use ( $redirect_settings_repository ) {
 
 								return $redirect_settings_repository->get_site_setting( (int) $site_id )
@@ -209,8 +209,8 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	public function register_module( ModuleManager $module_manager ): bool {
 
 		return $module_manager->register_module( new Module( 'redirect', [
-			'description' => __( 'Redirect visitors according to browser language settings.', 'multilingual-press' ),
-			'name'        => __( 'Redirect', 'multilingual-press' ),
+			'description' => __( 'Redirect visitors according to browser language settings.', 'multilingualpress' ),
+			'name'        => __( 'Redirect', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
 	}

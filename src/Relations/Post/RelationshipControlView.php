@@ -71,11 +71,11 @@ class RelationshipControlView {
 		$action_container_id = "mlp-rc-action-container-{$remote_site_id}";
 
 		$actions = [
-			$this->default_action                      => __( 'Leave as is', 'multilingual-press' ),
-			RelationshipController::ACTION_CONNECT_NEW => __( 'Create new post', 'multilingual-press' ),
+			$this->default_action                      => __( 'Leave as is', 'multilingualpress' ),
+			RelationshipController::ACTION_CONNECT_NEW => __( 'Create new post', 'multilingualpress' ),
 		];
 		if ( $remote_post_id ) {
-			$actions[ RelationshipController::ACTION_DISCONNECT ] = __( 'Remove relationship', 'multilingual-press' );
+			$actions[ RelationshipController::ACTION_DISCONNECT ] = __( 'Remove relationship', 'multilingualpress' );
 		}
 
 		$action_search_id = "mlp-rc-action-{$remote_site_id}-search";
@@ -92,7 +92,7 @@ class RelationshipControlView {
 			<button type="button" name="mlp_rc_<?php echo esc_attr( $remote_site_id ); ?>"
 				class="button secondary mlp-rc-button mlp-click-toggler"
 				data-toggle-target="#<?php echo esc_attr( $action_container_id ); ?>">
-				<?php esc_html_e( 'Change Relationship', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Change Relationship', 'multilingualpress' ); ?>
 			</button>
 			<div id="<?php echo esc_attr( $action_container_id ); ?>" class='hidden'>
 				<div class="mlp-rc-settings">
@@ -107,13 +107,13 @@ class RelationshipControlView {
 									id="<?php echo esc_attr( $action_search_id ); ?>"
 									class="mlp-state-toggler"
 									data-toggle-target="#<?php echo esc_attr( $search_container_id ); ?>">
-								<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ) ?>
+								<?php esc_html_e( 'Select existing post &hellip;', 'multilingualpress' ) ?>
 							</label>
 						</p>
 					</div>
 					<div id="<?php echo esc_attr( $search_container_id ); ?>" class="mlp-rc-search-container">
 						<label for="<?php echo esc_attr( $search_input_id ); ?>">
-							<?php esc_html_e( 'Live search', 'multilingual-press' ); ?>
+							<?php esc_html_e( 'Live search', 'multilingualpress' ); ?>
 						</label>
 						<input type="search" id="<?php echo esc_attr( $search_input_id ); ?>" class="mlp-rc-search">
 						<ul id="mlp-rc-search-results-<?php echo esc_attr( $remote_site_id ); ?>"
@@ -124,10 +124,10 @@ class RelationshipControlView {
 				</div>
 				<p>
 					<button type="button" class="button button-primary mlp-save-relationship-button">
-						<?php esc_attr_e( 'Save and reload this page', 'multilingual-press' ); ?>
+						<?php esc_attr_e( 'Save and reload this page', 'multilingualpress' ); ?>
 					</button>
 					<span class="description">
-						<?php esc_html_e( 'Please save other changes first separately.', 'multilingual-press' ); ?>
+						<?php esc_html_e( 'Please save other changes first separately.', 'multilingualpress' ); ?>
 					</span>
 				</p>
 			</div>
@@ -152,10 +152,10 @@ class RelationshipControlView {
 			'actionConnectNew'      => RelationshipController::ACTION_CONNECT_NEW,
 			'actionDisconnect'      => RelationshipController::ACTION_DISCONNECT,
 			'l10n'                  => [
-				'noPostSelected'       => __( 'Please select a post.', 'multilingual-press' ),
+				'noPostSelected'       => __( 'Please select a post.', 'multilingualpress' ),
 				'unsavedRelationships' => __(
 					'You have unsaved changes in your post relationships. The changes you made will be lost if you navigate away from this page.',
-					'multilingual-press'
+					'multilingualpress'
 				),
 			],
 		] );

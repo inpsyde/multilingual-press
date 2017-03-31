@@ -151,9 +151,9 @@ class Mlp_Advanced_Translator {
 		return $module_manager->register_module( new Module( 'advanced_translator', [
 			'description' => __(
 				'Use the WYSIWYG editor to write all translations on one screen, including thumbnails and taxonomies.',
-				'multilingual-press'
+				'multilingualpress'
 			),
-			'name'        => __( 'Advanced Translator', 'multilingual-press' ),
+			'name'        => __( 'Advanced Translator', 'multilingualpress' ),
 			'active'      => true,
 		] ) );
 	}

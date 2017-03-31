@@ -111,9 +111,9 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 		return $module_manager->register_module( new Module( 'trasher', [
 			'description' => __(
 				'This module provides a new post meta and checkbox to trash the posts. If you enable the checkbox and move a post to the trash MultilingualPress also will trash the linked posts.',
-				'multilingual-press'
+				'multilingualpress'
 			),
-			'name'        => __( 'Trasher', 'multilingual-press' ),
+			'name'        => __( 'Trasher', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
 	}

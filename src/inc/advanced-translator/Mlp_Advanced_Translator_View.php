@@ -52,7 +52,7 @@ class Mlp_Advanced_Translator_View {
 		<div class="wp-media-buttons">
 			<button class="button mlp-copy-post-button" data-site-id="<?php echo esc_attr( $matches[1] ); ?>">
 				<span class="wp-media-buttons-icon"></span>
-				<?php esc_html_e( 'Copy source post', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Copy source post', 'multilingualpress' ); ?>
 			</button>
 		</div>
 		<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="" id="<?php echo esc_attr( $id ); ?>">
@@ -113,10 +113,10 @@ class Mlp_Advanced_Translator_View {
 		<div class="mlp-namediv">
 			<div>
 				<label for="<?php echo esc_attr( $id ); ?>">
-					<?php _e( 'Post Name:', 'multilingual-press' ) ?><br>
+					<?php _e( 'Post Name:', 'multilingualpress' ) ?><br>
 					<input type="text" name="<?php echo esc_attr( $name ); ?>"
 						value="<?php echo esc_attr( $value ); ?>"
-						placeholder="<?php echo esc_attr__( 'Enter name here', 'multilingual-press' ) ?>" size="30"
+						placeholder="<?php echo esc_attr__( 'Enter name here', 'multilingualpress' ) ?>" size="30"
 						class="mlp-name" id="<?php echo esc_attr( $id ); ?>">
 				</label>
 			</div>
@@ -144,9 +144,9 @@ class Mlp_Advanced_Translator_View {
 		?>
 		<div class="mlp-excerptdiv">
 			<div>
-				<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Post Excerpt:', 'multilingual-press' ) ?></label>
+				<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Post Excerpt:', 'multilingualpress' ) ?></label>
 				<textarea name="<?php echo esc_attr( $name ); ?>"
-					placeholder="<?php echo esc_attr__( 'Enter excerpt here', 'multilingual-press' ) ?>"
+					placeholder="<?php echo esc_attr__( 'Enter excerpt here', 'multilingualpress' ) ?>"
 					class="mlp-excerpt"
 					id="<?php echo esc_attr( $id ); ?>"><?php echo esc_textarea( $value ); ?></textarea>
 			</div>
@@ -200,9 +200,9 @@ class Mlp_Advanced_Translator_View {
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>">
-				<?php _e( 'Copy the featured image of the source post.', 'multilingual-press' ); ?>
+				<?php _e( 'Copy the featured image of the source post.', 'multilingualpress' ); ?>
 				<span class="description"><?php
-					_e( 'Overwrites an existing featured image in the target post.', 'multilingual-press' ); ?></span>
+					_e( 'Overwrites an existing featured image in the target post.', 'multilingualpress' ); ?></span>
 			</label>
 		</p>
 		<?php
@@ -230,7 +230,7 @@ class Mlp_Advanced_Translator_View {
 		<button type="button" name="toggle_<?php echo esc_attr( $remote_blog_id ); ?>"
 			data-toggle-target="#<?php echo esc_attr( $toggle_id ); ?>"
 			class="button secondary mlp-click-toggler">
-			<?php echo esc_html__( 'Change taxonomies', 'multilingual-press' ); ?>
+			<?php echo esc_html__( 'Change taxonomies', 'multilingualpress' ); ?>
 		</button>
 		<div class="hidden" id="<?php echo esc_attr( $toggle_id ); ?>">
 			<?php if ( ! empty( $taxonomies['inclusive'] ) ) : ?>
@@ -305,7 +305,7 @@ class Mlp_Advanced_Translator_View {
 	 */
 	private function get_placeholder_title( WP_Post $post ) {
 
-		$placeholder = __( 'Enter title here', 'multilingual-press' );
+		$placeholder = __( 'Enter title here', 'multilingualpress' );
 
 		/** This filter is documented in wp-admin/edit-form-advanced.php */
 		return apply_filters( 'enter_title_here', $placeholder, $post );
@@ -372,7 +372,7 @@ class Mlp_Advanced_Translator_View {
 		<div class="mlp-warning">
 			<p><?php _e(
 					'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
-					'multilingual-press'
+					'multilingualpress'
 				); ?></p>
 		</div>
 		<?php

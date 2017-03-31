@@ -27,7 +27,7 @@ if ( ! is_multisite() ) {
 	return;
 }
 
-$main_plugin_file = __DIR__ . '/multilingual-press.php';
+$main_plugin_file = __DIR__ . '/multilingualpress.php';
 
 if (
 	plugin_basename( $main_plugin_file ) !== WP_UNINSTALL_PLUGIN

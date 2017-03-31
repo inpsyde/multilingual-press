@@ -70,7 +70,7 @@ final class AlternativeLanguageTitleSiteSetting implements SiteSettingViewModel 
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
-			esc_html__( 'Alternative language title', 'multilingual-press' ),
+			esc_html__( 'Alternative language title', 'multilingualpress' ),
 			esc_attr( $this->id )
 		);
 	}

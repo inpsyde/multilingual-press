@@ -66,7 +66,7 @@ final class BasedOnSiteSetting implements SiteSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
-			esc_html__( 'Based on site', 'multilingual-press' ),
+			esc_html__( 'Based on site', 'multilingualpress' ),
 			esc_attr( $this->id )
 		);
 	}
@@ -78,7 +78,7 @@ final class BasedOnSiteSetting implements SiteSettingViewModel {
 	 */
 	private function get_options(): string {
 
-		$options = '<option value="0">' . esc_html__( 'Choose site', 'multilingual-press' ) . '</option>';
+		$options = '<option value="0">' . esc_html__( 'Choose site', 'multilingualpress' ) . '</option>';
 
 		$sites = (array) $this->get_all_sites();
 		if ( $sites ) {

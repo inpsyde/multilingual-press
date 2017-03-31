@@ -63,7 +63,7 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 
 		$language_names = get_available_language_names();
 		if ( ! $language_names ) {
-			esc_html_e( 'No items.', 'multilingual-press' );
+			esc_html_e( 'No items.', 'multilingualpress' );
 
 			return;
 		}
@@ -114,13 +114,13 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 		<p class="button-controls wp-clearfix">
 			<span class="list-controls">
 				<a href="<?php echo esc_url( $this->get_select_all_url() ); ?>" class="select-all aria-button-if-js">
-					<?php esc_html_e( 'Select All', 'multilingual-press' ); ?>
+					<?php esc_html_e( 'Select All', 'multilingualpress' ); ?>
 				</a>
 			</span>
 			<span class="add-to-menu">
 				<?php
 				submit_button(
-					__( 'Add to Menu', 'multilingual-press' ),
+					__( 'Add to Menu', 'multilingualpress' ),
 					'button-secondary submit-add-to-menu right',
 					'add-mlp-language-item',
 					false,

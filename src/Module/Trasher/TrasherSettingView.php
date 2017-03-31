@@ -61,7 +61,7 @@ class TrasherSettingView {
 				<input type="checkbox" name="<?php echo esc_attr( TrasherSettingRepository::META_KEY ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>"
 					<?php checked( $this->setting_repository->get_setting( (int) $post->ID ) ); ?>>
-				<?php _e( 'Send all the translations to trash when this post is trashed.', 'multilingual-press' ); ?>
+				<?php _e( 'Send all the translations to trash when this post is trashed.', 'multilingualpress' ); ?>
 			</label>
 		</div>
 		<?php

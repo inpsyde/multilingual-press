@@ -78,7 +78,7 @@ final class NewSiteSettings implements SiteSettingsSectionViewModel {
 
 		return sprintf(
 			'<h2>%s</h2>',
-			esc_html__( 'MultilingualPress', 'multilingual-press' )
+			esc_html__( 'MultilingualPress', 'multilingualpress' )
 		);
 	}
 }

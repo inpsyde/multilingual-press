@@ -104,8 +104,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return SettingsPage::with_parent(
 				SettingsPage::ADMIN_NETWORK,
 				SettingsPage::PARENT_NETWORK_SETTINGS,
-				__( 'MultilingualPress', 'multilingual-press' ),
-				__( 'MultilingualPress', 'multilingual-press' ),
+				__( 'MultilingualPress', 'multilingualpress' ),
+				__( 'MultilingualPress', 'multilingualpress' ),
 				'manage_network_options',
 				'multilingualpress',
 				$container['multilingualpress.plugin_settings_page_view']
@@ -188,7 +188,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new EditSiteTabData(
 				'multilingualpress',
-				__( 'MultilingualPress', 'multilingual-press' ),
+				__( 'MultilingualPress', 'multilingualpress' ),
 				'multilingualpress'
 			);
 		};
@@ -273,7 +273,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				"{$plugin_dir_url}/assets/images/flags"
 			);
 
-		load_plugin_textdomain( 'multilingual-press' );
+		load_plugin_textdomain( 'multilingualpress' );
 
 		$setting_page = $container['multilingualpress.plugin_settings_page'];
 
@@ -286,7 +286,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		( new ActionLink(
 			'settings',
-			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>'
+			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingualpress' ) . '</a>'
 		) )->register( 'network_admin_plugin_action_links_' . $properties->plugin_base_name() );
 
 		add_action( 'delete_blog', [ $container['multilingualpress.site_data_deletor'], 'delete_site_data' ] );
@@ -302,7 +302,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			if ( 'sites.php' === $pagenow ) {
 				( new SitesListTableColumn(
 					'multilingualpress.relationships',
-					__( 'Relationships', 'multilingual-press' ),
+					__( 'Relationships', 'multilingualpress' ),
 					function ( $id, $site_id ) {
 
 						switch_to_blog( $site_id );
@@ -315,19 +315,19 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 								'<div class="mlp-site-relations">%s</div>',
 								implode( '<br>', array_map( 'esc_html', $sites ) )
 							)
-							: __( 'none', 'multilingual-press' );
+							: __( 'none', 'multilingualpress' );
 					}
 				) )->register();
 
 				( new SitesListTableColumn(
 					'multilingualpress.site_language',
-					__( 'Site Language', 'multilingual-press' ),
+					__( 'Site Language', 'multilingualpress' ),
 					function ( $id, $site_id ) {
 
 						$language = get_site_language( $site_id );
 
 						return '' === $language
-							? __( 'none', 'multilingual-press' )
+							? __( 'none', 'multilingualpress' )
 							: sprintf(
 								'<div class="mlp-site-language">%s</div>',
 								esc_html( get_language_field_by_http_code(

@@ -86,7 +86,7 @@ class Quicklinks {
 
 		$this->asset_manager = $asset_manager;
 
-		$this->description = _x( 'Read in:', 'Quicklinks description', 'multilingual-press' );
+		$this->description = _x( 'Read in:', 'Quicklinks description', 'multilingualpress' );
 	}
 
 	/**
@@ -265,7 +265,7 @@ class Quicklinks {
 				</select>
 			</label>
 			<button type="submit">
-				<?php echo esc_html_x( 'Go', 'Quicklinks submit button', 'multilingual-press' ); ?>
+				<?php echo esc_html_x( 'Go', 'Quicklinks submit button', 'multilingualpress' ); ?>
 			</button>
 		</form>
 		<?php

@@ -75,7 +75,7 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 
 			return new Dashboard\DashboardWidget(
 				'multilingualpress-untranslated-posts-dashboard-widget',
-				__( 'Untranslated Posts', 'multilingual-press' ),
+				__( 'Untranslated Posts', 'multilingualpress' ),
 				$container['multilingualpress.untranslated_posts_dashboard_widget_view'],
 				$capability
 			);

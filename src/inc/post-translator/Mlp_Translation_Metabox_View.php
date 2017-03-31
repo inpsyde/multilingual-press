@@ -170,7 +170,7 @@ class Mlp_Translation_Metabox_View {
 		printf(
 			'<textarea class="large-text" cols="80" rows="%1$d" placeholder="%2$s" readonly>%3$s</textarea>',
 			esc_attr( $rows ),
-			esc_attr_x( 'No content yet.', 'placeholder for empty translation textarea', 'multilingual-press' ),
+			esc_attr_x( 'No content yet.', 'placeholder for empty translation textarea', 'multilingualpress' ),
 			esc_textarea( $remote_post->post_content )
 		);
 	}
@@ -194,7 +194,7 @@ class Mlp_Translation_Metabox_View {
 					id="translate_this_post_<?php echo esc_attr( $id ); ?>"
 					name="mlp_to_translate[]"
 					value="<?php echo esc_attr( $id ); ?>" />
-				<?php esc_html_e( 'Translate this post', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Translate this post', 'multilingualpress' ); ?>
 			</label>
 		</p>
 		<?php

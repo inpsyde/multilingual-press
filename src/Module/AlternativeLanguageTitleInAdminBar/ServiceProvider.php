@@ -88,9 +88,9 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 		return $module_manager->register_module( new Module( 'alternative_language_title', [
 			'description' => __(
 				'Show sites with their alternative language title in the admin bar.',
-				'multilingual-press'
+				'multilingualpress'
 			),
-			'name'        => __( 'Alternative Language Title', 'multilingual-press' ),
+			'name'        => __( 'Alternative Language Title', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
 	}

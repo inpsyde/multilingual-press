@@ -90,7 +90,7 @@ function add_settings_updated_message( $setting = 'mlp-setting', $code = 'mlp-se
 	$messages[ $code ] = [
 		'setting' => $setting,
 		'code'    => $code,
-		'message' => __( 'Settings saved.', 'multilingual-press' ),
+		'message' => __( 'Settings saved.', 'multilingualpress' ),
 		'type'    => 'updated',
 	];
 

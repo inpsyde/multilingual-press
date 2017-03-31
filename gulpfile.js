@@ -39,7 +39,7 @@ const config = {
 		dest: 'assets/js/'
 	},
 
-	slug: 'multilingual-press',
+	slug: 'multilingualpress',
 
 	src: 'src/',
 

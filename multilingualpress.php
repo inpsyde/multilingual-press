@@ -1,12 +1,12 @@
 <?php # -*- coding: utf-8 -*-
 /*
  * Plugin Name: MultilingualPress
- * Plugin URI:  https://wordpress.org/plugins/multilingual-press/
+ * Plugin URI:  https://wordpress.org/plugins/multilingualpress/
  * Description: The multisite-based free open source plugin for your multilingual WordPress websites.
  * Author:      Inpsyde GmbH
  * Author URI:  https://inpsyde.com
  * Version:     3.0.0-dev
- * Text Domain: multilingual-press
+ * Text Domain: multilingualpress
  * License:     MIT
  * Network:     true
  */

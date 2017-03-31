@@ -119,9 +119,9 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 		return $module_manager->register_module( new Module( 'custom_post_type_support', [
 			'description' => __(
 				'Enable translation of custom post types. Creates a second settings box below this. The post types must be activated for the whole network or on the main site.',
-				'multilingual-press'
+				'multilingualpress'
 			),
-			'name'        => __( 'Custom Post Type Support', 'multilingual-press' ),
+			'name'        => __( 'Custom Post Type Support', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
 	}

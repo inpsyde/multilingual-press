@@ -79,7 +79,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		) {
 
 		$this->wpdb            = $wpdb;
-		$this->page_title      = __( 'Language Manager', 'multilingual-press' );
+		$this->page_title      = __( 'Language Manager', 'multilingualpress' );
 		$this->pagination_data = new Mlp_Language_Manager_Pagination_Data( $database );
 		$this->setting         = new Mlp_Language_Manager_Options_Page_Data(
 			$this->page_title,
@@ -199,7 +199,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		?>
 		<p>
 			<a href="<?php echo esc_url( $url ); ?>" class="delete submitdelete" style="color:red">
-				<?php esc_html_e( 'Reset table to default values', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Reset table to default values', 'multilingualpress' ); ?>
 			</a>
 		</p>
 		<?php
@@ -260,7 +260,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 					'One language changed.',
 					'%s languages changed.',
 					$num,
-					'multilingual-press'
+					'multilingualpress'
 				),
 				$num_f
 			);
@@ -268,7 +268,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		if ( 'resettable' === $type ) {
 			$text = esc_html__(
 				'Table reset to default values.',
-				'multilingual-press'
+				'multilingualpress'
 			);
 		}
 
@@ -288,7 +288,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			<?php
 			esc_html_e(
 				'Languages are sorted descending by priority and ascending by their English name.',
-				'multilingual-press'
+				'multilingualpress'
 			);
 			?>
 		</p>
@@ -297,7 +297,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			<?php
 			esc_html_e(
 				'If you change the priority of a language to a higher value, it will show up on an earlier page.',
-				'multilingual-press'
+				'multilingualpress'
 			);
 			?>
 		</p>
@@ -365,42 +365,42 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	private function get_columns() {
 		return [
 			'native_name' => [
-				'header'     => __( 'Native name', 'multilingual-press' ),
+				'header'     => __( 'Native name', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 20 ],
 			],
 			'english_name' => [
-				'header'     => __( 'English name', 'multilingual-press' ),
+				'header'     => __( 'English name', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 20 ],
 			],
 			'is_rtl' => [
-				'header'     => __( 'RTL', 'multilingual-press' ),
+				'header'     => __( 'RTL', 'multilingualpress' ),
 				'type'       => 'input_checkbox',
 				'attributes' => [ 'size' => 20 ],
 			],
 			'http_name' => [
-				'header'     => __( 'HTTP', 'multilingual-press' ),
+				'header'     => __( 'HTTP', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 5 ],
 			],
 			'iso_639_1' => [
-				'header'     => __( 'ISO&#160;639-1', 'multilingual-press' ),
+				'header'     => __( 'ISO&#160;639-1', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 5 ],
 			],
 			'iso_639_2' => [
-				'header'     => __( 'ISO&#160;639-2', 'multilingual-press' ),
+				'header'     => __( 'ISO&#160;639-2', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 5 ],
 			],
 			'wp_locale' => [
-				'header'     => __( 'wp_locale', 'multilingual-press' ),
+				'header'     => __( 'wp_locale', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 5 ],
 			],
 			'priority' => [
-				'header'     => __( 'Priority', 'multilingual-press' ),
+				'header'     => __( 'Priority', 'multilingualpress' ),
 				'type'       => 'input_number',
 				'attributes' => [
 					'min'  => 1,

@@ -73,7 +73,7 @@ final class ValidatingItemRepository implements ItemRepository {
 			'menu-item-type'       => 'language',
 			'menu-item-object'     => 'custom',
 			'menu-item-url'        => get_home_url( $site_id, '/' ),
-			'menu_item-type-label' => esc_html__( 'Language', 'multilingual-press' ),
+			'menu_item-type-label' => esc_html__( 'Language', 'multilingualpress' ),
 		] ) );
 	}
 
@@ -97,7 +97,7 @@ final class ValidatingItemRepository implements ItemRepository {
 
 		$item->label = $item->title;
 
-		$item->type_label = esc_html__( 'Language', 'multilingual-press' );
+		$item->type_label = esc_html__( 'Language', 'multilingualpress' );
 
 		$item->classes[] = "blog-id-{$site_id}";
 		$item->classes[] = 'mlp-language-nav-item';

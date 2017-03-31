@@ -269,7 +269,7 @@ class SystemChecker {
 		/* translators: 1: required PHP version, 2: current PHP version */
 		$message = esc_html__(
 			'This plugin requires PHP version %1$s, your version %2$s is too old. Please upgrade.',
-			'multilingual-press'
+			'multilingualpress'
 		);
 
 		$this->errors[] = sprintf( $message, $required_version, $current_version );
@@ -299,7 +299,7 @@ class SystemChecker {
 		/* translators: 1: required WordPress version, 2: current WordPress version */
 		$message = esc_html__(
 			'This plugin requires WordPress version %1$s, your version %2$s is too old. Please upgrade.',
-			'multilingual-press'
+			'multilingualpress'
 		);
 
 		$this->errors[] = sprintf( $message, $required_version, $current_version );
@@ -319,7 +319,7 @@ class SystemChecker {
 		/* translators: %s: link to installation instructions */
 		$message = __(
 			'This plugin needs to run in a multisite. Please <a href="%s">convert this WordPress installation to multisite</a>.',
-			'multilingual-press'
+			'multilingualpress'
 		);
 
 		$this->errors[] = sprintf( $message, 'http://make.multilingualpress.org/2014/02/how-to-install-multi-site/' );
@@ -343,7 +343,7 @@ class SystemChecker {
 		/* translators: %s: link to network plugin screen */
 		$message = __(
 			'This plugin must be activated for the network. Please use the <a href="%s">network plugin administration</a>.',
-			'multilingual-press'
+			'multilingualpress'
 		);
 
 		$this->errors[] = sprintf( $message, esc_url( network_admin_url( 'plugins.php' ) ) );

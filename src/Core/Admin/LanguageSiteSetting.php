@@ -76,7 +76,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
-			esc_html__( 'Language', 'multilingual-press' ),
+			esc_html__( 'Language', 'multilingualpress' ),
 			esc_attr( $this->id )
 		);
 	}
@@ -90,7 +90,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	 */
 	private function get_options( int $site_id ): string {
 
-		$options = '<option value="-1">' . esc_html__( 'Choose language', 'multilingual-press' ) . '</option>';
+		$options = '<option value="-1">' . esc_html__( 'Choose language', 'multilingualpress' ) . '</option>';
 
 		$languages = $this->languages->get_languages( [
 			'fields' => [

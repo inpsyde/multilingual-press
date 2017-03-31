@@ -16,7 +16,7 @@ class Mlp_Translation_Metabox {
 	/**
 	 * @var string[]
 	 */
-	private $allowed_post_types = [ 
+	private $allowed_post_types = [
 		'post',
 		'page',
 	 ];
@@ -205,7 +205,7 @@ class Mlp_Translation_Metabox {
 
 		$title = $this->get_metabox_title( $blog_id, $remote_post, $lang );
 
-		$metabox_data = [ 
+		$metabox_data = [
 			'remote_blog_id' => $blog_id,
 			'remote_post'    => $remote_post,
 			'language'       => $lang,
@@ -289,7 +289,7 @@ class Mlp_Translation_Metabox {
 	 */
 	private function register_metabox_view_details( Mlp_Translation_Metabox_View $view, WP_Post $post, $blog_id ) {
 
-		$callbacks = [ 
+		$callbacks = [
 			'title'  => [ $view, 'show_title' ],
 			'editor' => [ $view, 'show_editor' ],
 		 ];
@@ -348,7 +348,7 @@ class Mlp_Translation_Metabox {
 		restore_current_blog();
 
 		if ( '' === $text ) {
-			$text = __( 'Switch to site', 'multilingual-press' );
+			$text = __( 'Switch to site', 'multilingualpress' );
 		}
 
 		return ' <small> - <a href="' . esc_url( $url ) . '">' . esc_html( $text ) . '</a></small>';
