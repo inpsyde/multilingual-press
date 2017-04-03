@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\Languages;
+use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 /**
  * Site settings updater.
@@ -211,10 +212,10 @@ class SiteSettingsUpdater {
 		}
 
 		$language = reset( $this->languages->get_languages( [
-			'fields'     => 'locale',
+			'fields'     => LanguagesTable::COLUMN_LOCALE,
 			'conditions' => [
 				[
-					'field' => 'http_code',
+					'field' => LanguagesTable::COLUMN_HTTP_CODE,
 					'value' => str_replace( '_', '-', $language ),
 				],
 			],
@@ -223,7 +224,7 @@ class SiteSettingsUpdater {
 			return;
 		}
 
-		$wplang = $language['locale'];
+		$wplang = $language[ LanguagesTable::COLUMN_LOCALE ];
 
 		if ( in_array( $wplang, get_available_languages(), true ) ) {
 			update_blog_option( $site_id, 'WPLANG', $wplang );
