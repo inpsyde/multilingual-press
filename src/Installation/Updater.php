@@ -4,11 +4,10 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Installation;
 
-use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
-use Inpsyde\MultilingualPress\Database\TableInstaller;
+use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 /**
  * Updates any installed plugin data to the current version.
@@ -83,7 +82,14 @@ class Updater {
 
 		$table = $this->languages_table->name();
 
-		$query = "SELECT ID FROM {$table} WHERE wp_locale = %s OR iso_639_1 = %s";
+		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
+		$query = sprintf(
+			'SELECT %2$s FROM %1$s WHERE %3$s = %%s OR %4$s = %%s',
+			$table,
+			LanguagesTable::COLUMN_ID,
+			LanguagesTable::COLUMN_LOCALE,
+			LanguagesTable::COLUMN_ISO_639_1_CODE
+		);
 
 		array_walk( $languages, function ( array $language ) use ( $table, $query ) {
 
@@ -92,8 +98,8 @@ class Updater {
 				if ( $language_id ) {
 					$this->db->update(
 						$table,
-						[ 'priority' => 10 ],
-						[ 'ID' => $language_id ]
+						[ LanguagesTable::COLUMN_PRIORITY => 10 ],
+						[ LanguagesTable::COLUMN_ID => $language_id ]
 					);
 
 					return;
@@ -102,14 +108,10 @@ class Updater {
 				$language['lang'] = '';
 			}
 
-			if ( ! isset( $language['text'] ) ) {
-				$language['text'] = '';
-			}
-
 			$this->db->insert( $table, [
-				'english_name' => '' === $language['text'] ? $language['lang'] : $language['text'],
-				'wp_locale'    => $language['lang'],
-				'http_name'    => str_replace( '_', '-', $language['lang'] ),
+				LanguagesTable::COLUMN_ENGLISH_NAME => (string) ( $language['text'] ?? $language['lang'] ),
+				LanguagesTable::COLUMN_LOCALE       => $language['lang'],
+				LanguagesTable::COLUMN_HTTP_CODE    => str_replace( '_', '-', $language['lang'] ),
 			] );
 		} );
 	}

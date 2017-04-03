@@ -178,7 +178,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 */
 	private function get_language_priority( Language $language, array $languages ): float {
 
-		$lang_http = strtolower( $language->name( 'http_name' ) );
+		$lang_http = strtolower( $language->name( 'http_code' ) );
 
 		if ( isset( $languages[ $lang_http ] ) ) {
 			return (float) $languages[ $lang_http ];

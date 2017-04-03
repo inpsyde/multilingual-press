@@ -211,10 +211,10 @@ class SiteSettingsUpdater {
 		}
 
 		$language = reset( $this->languages->get_languages( [
-			'fields'     => 'wp_locale',
+			'fields'     => 'locale',
 			'conditions' => [
 				[
-					'field' => 'http_name',
+					'field' => 'http_code',
 					'value' => str_replace( '_', '-', $language ),
 				],
 			],
@@ -223,7 +223,7 @@ class SiteSettingsUpdater {
 			return;
 		}
 
-		$wplang = $language['wp_locale'];
+		$wplang = $language['locale'];
 
 		if ( in_array( $wplang, get_available_languages(), true ) ) {
 			update_blog_option( $site_id, 'WPLANG', $wplang );

@@ -95,7 +95,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 		$languages = $this->languages->get_languages( [
 			'fields' => [
 				'english_name',
-				'http_name',
+				'http_code',
 				'native_name',
 			],
 		] );
@@ -105,10 +105,10 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 			$options = array_reduce( $languages, function ( $options, $language ) use ( $current_site_language ) {
 
 				if (
-					! empty( $language['http_name'] )
+					! empty( $language['http_code'] )
 					&& ! ( empty( $language['english_name'] ) && empty( $language['native_name'] ) )
 				) {
-					$site_language = str_replace( '-', '_', $language['http_name'] );
+					$site_language = str_replace( '-', '_', $language['http_code'] );
 
 					$options .= sprintf(
 						'<option value="%2$s"%3$s>%1$s</option>',

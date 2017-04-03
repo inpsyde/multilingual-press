@@ -32,14 +32,14 @@ final class LanguagesTable implements Table {
 	 */
 	const COLUMN_ENGLISH_NAME = 'english_name';
 
-	/**@todo Rename to "http".
+	/**
 	 * Column name.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @var string
 	 */
-	const COLUMN_HTTP_CODE = 'http_name';
+	const COLUMN_HTTP_CODE = 'http_code';
 
 	/**
 	 * Column name.
@@ -68,14 +68,14 @@ final class LanguagesTable implements Table {
 	 */
 	const COLUMN_ISO_639_2_CODE = 'iso_639_2';
 
-	/**@todo Rename to "locale".
+	/**
 	 * Column name.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @var string
 	 */
-	const COLUMN_LOCALE = 'wp_locale';
+	const COLUMN_LOCALE = 'locale';
 
 	/**
 	 * Column name.
@@ -1917,7 +1917,7 @@ final class LanguagesTable implements Table {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
 		return sprintf(
-			'KEY http_name (%1$s)',
+			'KEY http_code (%1$s)',
 			self::COLUMN_HTTP_CODE
 		);
 	}

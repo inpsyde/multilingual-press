@@ -364,49 +364,49 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	private function get_columns() {
 		return [
-			'native_name' => [
+			LanguagesTable::COLUMN_NATIVE_NAME    => [
 				'header'     => __( 'Native name', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 20 ],
 			],
-			'english_name' => [
+			LanguagesTable::COLUMN_ENGLISH_NAME   => [
 				'header'     => __( 'English name', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 20 ],
 			],
-			'is_rtl' => [
+			LanguagesTable::COLUMN_RTL            => [
 				'header'     => __( 'RTL', 'multilingualpress' ),
 				'type'       => 'input_checkbox',
 				'attributes' => [ 'size' => 20 ],
 			],
-			'http_name' => [
+			LanguagesTable::COLUMN_HTTP_CODE      => [
 				'header'     => __( 'HTTP', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 5 ],
 			],
-			'iso_639_1' => [
+			LanguagesTable::COLUMN_ISO_639_1_CODE => [
 				'header'     => __( 'ISO&#160;639-1', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 5 ],
 			],
-			'iso_639_2' => [
+			LanguagesTable::COLUMN_ISO_639_2_CODE => [
 				'header'     => __( 'ISO&#160;639-2', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 5 ],
 			],
-			'wp_locale' => [
-				'header'     => __( 'wp_locale', 'multilingualpress' ),
+			LanguagesTable::COLUMN_LOCALE         => [
+				'header'     => __( 'Locale', 'multilingualpress' ),
 				'type'       => 'input_text',
 				'attributes' => [ 'size' => 5 ],
 			],
-			'priority' => [
+			LanguagesTable::COLUMN_PRIORITY       => [
 				'header'     => __( 'Priority', 'multilingualpress' ),
 				'type'       => 'input_number',
 				'attributes' => [
 					'min'  => 1,
 					'max'  => 10,
 					'size' => 3,
-				 ],
+				],
 			],
 		];
 	}

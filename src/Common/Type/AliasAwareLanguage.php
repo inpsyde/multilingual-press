@@ -36,7 +36,9 @@ final class AliasAwareLanguage implements Language {
 	 */
 	public function __construct( array $data ) {
 
-		$this->is_rtl = ! empty( $data['is_rtl'] );
+		// TODO: Introduce method/trait for normalizing language data (i.e., handle both types of constants as keys).
+
+		$this->is_rtl = (bool) ( $data['is_rtl'] ?? false );
 
 		$this->names = $this->get_names( $data );
 
@@ -59,14 +61,14 @@ final class AliasAwareLanguage implements Language {
 		static $names = [
 			'custom_name',
 			'english_name',
-			'http_name',
+			'http_code',
 			'iso_639_1',
 			'iso_639_2',
 			'is_rtl',
+			'locale',
 			'native_name',
 			'priority',
 			'text',
-			'wp_locale',
 		];
 
 		return in_array( (string) $name, $names, true );
@@ -153,7 +155,7 @@ final class AliasAwareLanguage implements Language {
 	 * * language_long:  Alias for "http".
 	 * * language_short: First part of "http" (e.g., "de" for "de-DE").
 	 * * lang:           Alias for "language_short".
-	 * * wp_locale:      WordPress locale representing the language.
+	 * * locale:         WordPress locale representing the language.
 	 * * none:           No text output (e.g,. for displaying the flag icon only).
 	 *
 	 * @return string Language name (or code) according to the given argument.
@@ -169,11 +171,11 @@ final class AliasAwareLanguage implements Language {
 		}
 
 		if ( in_array( $output, [ 'language_short', 'lang' ], true ) ) {
-			return strtok( $this->names['http_name'], '-' );
+			return strtok( $this->names['http_code'], '-' );
 		}
 
 		if ( 'language_long' === $output ) {
-			return (string) $this->names['http_name'];
+			return (string) $this->names['http_code'];
 		}
 
 		if ( 'none' === $output ) {
@@ -229,7 +231,7 @@ final class AliasAwareLanguage implements Language {
 		$names = [
 			'custom_name'  => $data['text'] ?? '',
 			'english_name' => '',
-			'http_name'    => '',
+			'http_code'    => '',
 			'iso_639_1'    => '',
 			'iso_639_2'    => '',
 			'native_name'  => '',

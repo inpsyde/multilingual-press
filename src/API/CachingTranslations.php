@@ -195,11 +195,11 @@ final class CachingTranslations implements Translations {
 			$translation = array_merge( $default_translation, [ 'target_site_id' => $site_id ], $translation );
 
 			$language = $languages[ $site_id ];
-			if ( empty( $language['http_name'] ) ) {
-				$language['http_name'] = $language['lang'] ?? '';
+			if ( empty( $language['http_code'] ) ) {
+				$language['http_code'] = $language['lang'] ?? '';
 			}
 
-			$translation['icon_url'] = $language['http_name'] ? get_flag_url_for_site( $site_id ) : '';
+			$translation['icon_url'] = $language['http_code'] ? get_flag_url_for_site( $site_id ) : '';
 
 			$translations[ $site_id ] = $this->type_factory->create_translation( [
 				$translation,
