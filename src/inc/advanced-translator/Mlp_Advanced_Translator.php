@@ -2,7 +2,7 @@
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
-use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Factory\NonceFactory;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
@@ -66,7 +66,7 @@ class Mlp_Advanced_Translator {
 			$base_data['basic_data'],
 			$base_data['allowed_post_types'],
 			resolve( 'multilingualpress.site_relations', SiteRelations::class ),
-			resolve( 'multilingualpress.nonce_factory', Nonce::class )
+			resolve( 'multilingualpress.nonce_factory', NonceFactory::class )
 		);
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
