@@ -111,7 +111,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	public function save( $post_id, WP_Post $post ) {
 
-		if ( ! $this->is_valid_save_request( $post ) ) {
+		if ( ! $this->basic_data->is_valid_save_request( $post, $this->name_base ) ) {
 			return;
 		}
 
@@ -597,100 +597,6 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		}
 
 		return '';
-	}
-
-	/**
-	 * Check if the current request should be processed by save().
-	 *
-	 * @param WP_Post $post
-	 *
-	 * @return bool
-	 */
-	private function is_valid_save_request( WP_Post $post ) {
-
-		static $called = 0;
-
-		if ( ms_is_switched() ) {
-			return false;
-		}
-
-		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
-		$called++;
-
-		if ( empty( $this->post_request_data ) ) {
-			return false;
-		}
-
-		if ( empty( $this->post_request_data[ $this->name_base ] ) ) {
-			return false;
-		}
-
-		if ( ! is_array( $this->post_request_data[ $this->name_base ] ) ) {
-			return false;
-		}
-
-		if (
-			! empty( $this->post_request_data['original_post_status'] )
-			&& 'auto-draft' === $this->post_request_data['original_post_status']
-			&& 1 < $called
-		) {
-			return false;
-		}
-
-		// We only need this when the post is published or drafted.
-		if ( ! $this->is_connectable_status( $post ) ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Check post status.
-	 *
-	 * Includes special hacks for auto-drafts.
-	 *
-	 * @param  WP_Post $post
-	 *
-	 * @return bool
-	 */
-	private function is_connectable_status( WP_Post $post ) {
-
-		// TODO: Discuss post status "future"...
-		if ( in_array( $post->post_status, [ 'publish', 'draft', 'private', 'auto-draft' ], true ) ) {
-			return true;
-		}
-
-		return $this->is_auto_draft( $post, $this->post_request_data );
-	}
-
-	/**
-	 * Check for hidden auto-draft
-	 *
-	 * Auto-drafts are sent as revision with a status 'inherit'.
-	 * We have to inspect the $_POST [ $request ] to distinguish them from
-	 * real revisions and attachments (which have the same status)
-	 *
-	 * @param  WP_Post $post
-	 * @param  array   $request Usually (a copy of) $_POST
-	 *
-	 * @return bool
-	 */
-	private function is_auto_draft( WP_Post $post, array $request ) {
-
-		if ( 'inherit' !== $post->post_status ) {
-			return false;
-		}
-
-		if ( 'revision' !== $post->post_type ) {
-			return false;
-		}
-
-		if ( empty( $request['original_post_status'] ) ) {
-			return false;
-		}
-
-		return 'auto-draft' === $request['original_post_status'];
 	}
 
 	/**
