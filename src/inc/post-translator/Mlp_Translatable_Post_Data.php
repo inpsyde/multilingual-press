@@ -363,7 +363,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 
 		$post_id = $post->ID;
 
-		static $post_type = [];
+		static $post_type = array();
 		if ( isset( $post_type[ $post_id ] ) ) {
 			return $post_type[ $post_id ];
 		}
