@@ -101,4 +101,13 @@ interface Mlp_Translatable_Post_Data_Interface {
 	 */
 	public function set_save_context( array $save_context = [] );
 
+	/**
+	 * Check if the current request should be processed by save().
+	 *
+	 * @param WP_Post $post
+	 * @param string  $name_base
+	 *
+	 * @return bool
+	 */
+	public function is_valid_save_request( WP_Post $post, $name_base = '' );
 }
