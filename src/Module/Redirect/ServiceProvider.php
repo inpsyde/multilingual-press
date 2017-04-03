@@ -61,9 +61,13 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 		$container['multilingualpress.noredirect_storage'] = function () {
 
-			return is_user_logged_in() && wp_using_ext_object_cache()
-				? new NoredirectObjectCacheStorage()
-				: new NoredirectSessionStorage();
+			/*
+			 * @TODO for logged in user, when using external object cache, we used to return
+			 * `NoredirectObjectCacheStorage` here.
+			 * Think about adding cached storage again, when cache handling will be refactored.
+			 */
+
+			return new NoredirectSessionStorage();
 		};
 
 		$container['multilingualpress.redirect_request_validator'] = function ( Container $container ) {

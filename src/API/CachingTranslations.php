@@ -103,12 +103,10 @@ final class CachingTranslations implements Translations {
 
 		$args = $this->normalize_arguments( $args );
 
-		$key = md5( serialize( $args ) );
-
-		$translations = wp_cache_get( $key, 'mlp' );
-		if ( is_array( $translations ) ) {
-			return $translations;
-		}
+		/*
+		 * @TODO There was cache here, now removed. Think about adding it again.
+		 * Cache key was calculated with `$key = md5( serialize( $args ) );` and cache group was 'mlp'
+		 */
 
 		$translations = $this->build_translations( $args );
 
@@ -119,8 +117,6 @@ final class CachingTranslations implements Translations {
 		 * @param array         $args         Translation args.
 		 */
 		$translations = (array) apply_filters( 'mlp_translations', $translations, $args );
-
-		wp_cache_set( $key, $translations, 'mlp' );
 
 		return $translations;
 	}

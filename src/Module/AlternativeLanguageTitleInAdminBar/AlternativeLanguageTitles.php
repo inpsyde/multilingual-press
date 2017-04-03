@@ -15,16 +15,6 @@ use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 class AlternativeLanguageTitles {
 
 	/**
-	 * @var string
-	 */
-	private $cache_group = 'mlp';
-
-	/**
-	 * @var string
-	 */
-	private $cache_key = 'mlp_alternative_language_titles';
-
-	/**
 	 * @var SiteSettingsRepository
 	 */
 	private $site_settings_repository;
@@ -56,10 +46,14 @@ class AlternativeLanguageTitles {
 			$site_id = get_current_blog_id();
 		}
 
-		$titles = wp_cache_get( $this->cache_key, $this->cache_group );
-		if ( ! is_array( $titles ) ) {
-			$titles = [];
-		} elseif ( isset( $titles[ $site_id ] ) ) {
+		/*
+		 * @TODO There was cache here, now removed. Think about adding it again.
+		 * cache key was 'mlp_alternative_language_titles' and cache group 'mlp'.
+		 * Cache was updated with in a `update()` method, nw deleted, hooked into 'mlp_blogs_save_fields'.
+		 * Hook was added in AlternativeLanguageTitleInAdminBar\ServiceProvider::bootstrap()
+		 */
+
+		if ( isset( $titles[ $site_id ] ) ) {
 			return (string) $titles[ $site_id ];
 		}
 
@@ -70,35 +64,6 @@ class AlternativeLanguageTitles {
 
 		$titles[ $site_id ] = $title;
 
-		wp_cache_set( $this->cache_key, $titles, $this->cache_group );
-
 		return $title;
-	}
-
-	/**
-	 * Updates the cache entry for the alternative language title of the updated site.
-	 *
-	 * @since   3.0.0
-	 * @wp-hook mlp_blogs_save_fields
-	 *
-	 * @return bool Whether or not any alternative language titles were updated.
-	 */
-	public function update(): bool {
-
-		$site_id = (int) ( $_REQUEST['id'] ?? get_current_blog_id() );
-		if ( 1 > $site_id ) {
-			return false;
-		}
-
-		$titles = wp_cache_get( $this->cache_key, $this->cache_group );
-		if ( ! isset( $titles[ $site_id ] ) ) {
-			return false;
-		}
-
-		unset( $titles[ $site_id ] );
-
-		wp_cache_set( $this->cache_key, $titles, $this->cache_group );
-
-		return true;
 	}
 }

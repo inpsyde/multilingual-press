@@ -57,11 +57,6 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	 */
 	public function bootstrap( Container $container ) {
 
-		add_action(
-			'mlp_blogs_save_fields',
-			[ $container['multilingualpress.alternative_language_titles'], 'update' ]
-		);
-
 		$this->on_activation( function () use ( $container ) {
 
 			$customizer = $container['multilingualpress.alternative_language_title_customizer'];
