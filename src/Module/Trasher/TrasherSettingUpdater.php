@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\Http\Request;
 use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
@@ -20,6 +21,11 @@ class TrasherSettingUpdater {
 	 * @var ContentRelations
 	 */
 	private $content_relations;
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * @var Nonce
@@ -38,17 +44,21 @@ class TrasherSettingUpdater {
 	 *
 	 * @param TrasherSettingRepository $setting_repository Trasher setting repository object.
 	 * @param ContentRelations         $content_relations  Content relations API object.
+	 * @param Request                  $request            HTTP request abstraction
 	 * @param Nonce                    $nonce              Nonce object.
 	 */
 	public function __construct(
 		TrasherSettingRepository $setting_repository,
 		ContentRelations $content_relations,
+		Request $request,
 		Nonce $nonce
 	) {
 
 		$this->setting_repository = $setting_repository;
 
 		$this->content_relations = $content_relations;
+
+		$this->request = $request;
 
 		$this->nonce = $nonce;
 	}
@@ -74,9 +84,7 @@ class TrasherSettingUpdater {
 			return 0;
 		}
 
-		$value = array_key_exists( TrasherSettingRepository::META_KEY, $_POST )
-			? (bool) $_POST[ TrasherSettingRepository::META_KEY ]
-			: false;
+		$value = (bool) $this->request->body_value( TrasherSettingRepository::META_KEY, INPUT_POST );
 
 		$post_id = (int) $post_id;
 

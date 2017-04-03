@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
+use Inpsyde\MultilingualPress\Common\Http\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
@@ -54,11 +55,11 @@ class PostTypeSupportSettingsUpdater {
 	 * @since   3.0.0
 	 * @wp-hook multilingualpress.save_modules
 	 *
-	 * @param array $data Request data.
+	 * @param Request $request Request data.
 	 *
 	 * @return bool Whether or not the settings were updated successfully.
 	 */
-	public function update_settings( array $data ): bool {
+	public function update_settings( Request $request ): bool {
 
 		if ( ! $this->nonce->is_valid() ) {
 			return false;
@@ -66,13 +67,18 @@ class PostTypeSupportSettingsUpdater {
 
 		$custom_post_types = $this->repository->get_custom_post_types();
 
-		if ( ! $custom_post_types || empty( $data[ static::SETTINGS_NAME ] ) ) {
+		if ( ! $custom_post_types || $request->body_value( static::SETTINGS_NAME ) ) {
 			return $this->repository->unset_supported_post_types();
 		}
 
 		$custom_post_types = array_keys( $custom_post_types );
 
-		$settings = (array) $data[ static::SETTINGS_NAME ];
+		$settings = (array) $request->body_value(
+			static::SETTINGS_NAME,
+			INPUT_POST,
+			FILTER_DEFAULT,
+			FILTER_FORCE_ARRAY
+		);
 
 		$custom_post_types = array_combine( $custom_post_types, array_map( function ( $slug ) use ( $settings ) {
 

@@ -74,16 +74,13 @@ final class WPNonce implements Nonce {
 			$this->context = new OriginalRequestContext();
 		}
 
-		if ( ! isset( $this->context[ $this->action ] ) ) {
+		if ( empty( $this->context[ $this->action ] ) ) {
 			return false;
 		}
 
 		$nonce = $this->context[ $this->action ];
-		if ( ! is_string( $nonce ) ) {
-			return false;
-		}
 
-		return (bool) wp_verify_nonce( $nonce, $this->get_hash() );
+		return is_string( $nonce ) && wp_verify_nonce( $nonce, $this->get_hash() );
 	}
 
 	/**

@@ -1,14 +1,15 @@
 <?php # -*- coding: utf-8 -*-
 
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace Inpsyde\MultilingualPress\Common\Nonce;
 
+use Inpsyde\MultilingualPress\Common\Http\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueManipulationNotAllowed;
 use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueNotSet;
 
 /**
- * Nonce context implementation wrapping around GET and POST request data using filter_input().
+ * Nonce context implementation wrapping around GET and POST request data using filter_input_array().
  *
  * @package Inpsyde\MultilingualPress\Common\Nonce
  * @since   3.0.0
@@ -16,29 +17,18 @@ use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueNotSet;
 final class OriginalRequestContext implements Context {
 
 	/**
-	 * @var array
+	 * @var Request
 	 */
-	private $cache = [];
+	private $request;
 
 	/**
-	 * @var int[]
-	 */
-	private $types;
-
-	/**
-	 * Constructor. Sets up the properties.
+	 * OriginalRequestContext constructor.
 	 *
-	 * @since 3.0.0
+	 * @param Request|null $request
 	 */
-	public function __construct() {
+	public function __construct( Request $request = null ) {
 
-		if ( ! isset( $this->types ) ) {
-			$method = $_SERVER['REQUEST_METHOD'] ?? '';
-
-			$this->types = $method && 'POST' === strtoupper( $method )
-				? [ INPUT_GET, INPUT_POST ]
-				: [ INPUT_GET ];
-		}
+		$this->request = $request ?: new ServerRequest();
 	}
 
 	/**
@@ -52,20 +42,7 @@ final class OriginalRequestContext implements Context {
 	 */
 	public function offsetExists( $name ) {
 
-		if ( array_key_exists( $name, $this->cache ) ) {
-			return true;
-		}
-
-		foreach ( $this->types as $type ) {
-			$value = filter_input( $type, $name, FILTER_DEFAULT, [ 'default' => null ] );
-			if ( null !== $value ) {
-				$this->cache[ $name ] = $value;
-
-				return true;
-			}
-		}
-
-		return false;
+		return $this->request->body_value( $name ) !== null;
 	}
 
 	/**
@@ -82,7 +59,7 @@ final class OriginalRequestContext implements Context {
 	public function offsetGet( $name ) {
 
 		if ( $this->offsetExists( $name ) ) {
-			return $this->cache[ $name ];
+			return $this->request->body_value( $name );
 		}
 
 		throw ContextValueNotSet::for_name( $name, 'read' );

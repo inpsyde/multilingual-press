@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
@@ -78,7 +78,8 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 				$container['multilingualpress.table_replacer'],
 				$container['multilingualpress.active_plugins'],
 				$container['multilingualpress.content_relations'],
-				$container['multilingualpress.attachment_copier']
+				$container['multilingualpress.attachment_copier'],
+				$container['multilingualpress.request']
 			);
 		};
 	}

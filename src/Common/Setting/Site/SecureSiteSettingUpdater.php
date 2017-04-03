@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\Setting\Site;
 
+use Inpsyde\MultilingualPress\Common\Http\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
@@ -25,18 +26,26 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 	private $nonce;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $option Site option name.
-	 * @param Nonce  $nonce  Optional. Nonce object. Defaults to null.
+	 * @param string  $option  Site option name.
+	 * @param Request $request HTTP request abstraction
+	 * @param Nonce   $nonce   Optional. Nonce object. Defaults to null.
 	 */
-	public function __construct( string $option, Nonce $nonce = null ) {
+	public function __construct( string $option, Request $request, Nonce $nonce = null ) {
 
 		$this->option = $option;
 
 		$this->nonce = $nonce;
+
+		$this->request = $request;
 	}
 
 	/**
@@ -58,27 +67,10 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 			return false;
 		}
 
-		$value = $this->get_value();
+		$value = $this->request->body_value( $this->option );
 
 		return $value
 			? update_blog_option( $site_id, $this->option, $value )
 			: delete_blog_option( $site_id, $this->option );
-	}
-
-	/**
-	 * Returns the value included in the request.
-	 *
-	 * @return string The value included in the request.
-	 */
-	private function get_value(): string {
-
-		$value = is_string( $_GET[ $this->option ] ?? null ) ? $_GET[ $this->option ] : '';
-
-		$request_method = $_SERVER['REQUEST_METHOD'] ?? '';
-		if ( ! $request_method || 'POST' !== strtoupper( $request_method ) ) {
-			return $value;
-		}
-
-		return is_string( $_POST[ $this->option ] ?? null ) ? $_POST[ $this->option ] : '';
 	}
 }

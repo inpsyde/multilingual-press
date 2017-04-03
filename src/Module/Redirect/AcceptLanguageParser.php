@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
-use Inpsyde\MultilingualPress\Common\AcceptHeader\AcceptHeaderParser;
+use Inpsyde\MultilingualPress\Common\Http\HeaderParser;
 
 /**
  * Parser for Accept-Language headers, sorting by priority.
@@ -12,7 +12,7 @@ use Inpsyde\MultilingualPress\Common\AcceptHeader\AcceptHeaderParser;
  * @package Inpsyde\MultilingualPress\Module\Redirect
  * @since   3.0.0
  */
-final class AcceptLanguageParser implements AcceptHeaderParser {
+final class AcceptLanguageParser implements HeaderParser {
 
 	/**
 	 * Parses the given Accept header and returns the according data in array form.

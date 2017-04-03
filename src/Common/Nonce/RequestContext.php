@@ -26,7 +26,7 @@ final class RequestContext implements Context {
 
 		if ( ! isset( $this->context ) ) {
 			$this->context = new ArrayContext(
-				( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) )
+				( 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ?? '' ) )
 					? array_merge( $_GET, $_POST )
 					: $_GET
 			);

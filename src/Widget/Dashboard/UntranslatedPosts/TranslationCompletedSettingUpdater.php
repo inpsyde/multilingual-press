@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
+use Inpsyde\MultilingualPress\Common\Http\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
@@ -13,6 +14,11 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
  * @since   3.0.0
  */
 class TranslationCompletedSettingUpdater {
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * @var Nonce
@@ -30,11 +36,14 @@ class TranslationCompletedSettingUpdater {
 	 * @since 3.0.0
 	 *
 	 * @param PostRepository $post_repository Untranslated posts repository object.
+	 * @param Request        $request         HTTP request abstraction
 	 * @param Nonce          $nonce           Nonce object.
 	 */
-	public function __construct( PostRepository $post_repository, Nonce $nonce ) {
+	public function __construct( PostRepository $post_repository, Request $request, Nonce $nonce ) {
 
 		$this->post_repository = $post_repository;
+
+		$this->request = $request;
 
 		$this->nonce = $nonce;
 	}
@@ -60,7 +69,7 @@ class TranslationCompletedSettingUpdater {
 			return false;
 		}
 
-		$value = ! empty( $_POST[ PostRepository::META_KEY ] );
+		$value = (bool) $this->request->body_value( PostRepository::META_KEY, INPUT_POST, FILTER_VALIDATE_BOOLEAN );
 
 		return $this->post_repository->update_post( (int) $post_id, $value );
 	}

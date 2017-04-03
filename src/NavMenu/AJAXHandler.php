@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\NavMenu;
 
+use Inpsyde\MultilingualPress\Common\Http\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
@@ -34,18 +35,26 @@ class AJAXHandler {
 	private $repository;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param Nonce          $nonce      Nonce object.
 	 * @param ItemRepository $repository Item repository object.
+	 * @param Request        $request    HTTP request abstraction
 	 */
-	public function __construct( Nonce $nonce, ItemRepository $repository ) {
+	public function __construct( Nonce $nonce, ItemRepository $repository, Request $request ) {
 
 		$this->nonce = $nonce;
 
 		$this->repository = $repository;
+
+		$this->request = $request;
 	}
 
 	/**
@@ -62,7 +71,9 @@ class AJAXHandler {
 			wp_send_json_error();
 		}
 
-		$items = $this->repository->get_items_for_sites( array_map( 'intval', (array) $_GET['mlp_sites'] ) );
+		$sites = $this->request->body_value( 'mlp_sites', INPUT_GET, FILTER_SANITIZE_NUMBER_INT, FILTER_FORCE_ARRAY );
+
+		$items = $this->repository->get_items_for_sites( array_map( 'intval', (array) $sites ) );
 
 		/**
 		 * Contains the Walker_Nav_Menu_Edit class.
@@ -88,7 +99,7 @@ class AJAXHandler {
 		return (
 			current_user_can( 'edit_theme_options' )
 			&& $this->nonce->is_valid()
-			&& ! empty( $_GET['mlp_sites'] )
+			&& $this->request->body_value( 'mlp_sites', INPUT_GET, FILTER_SANITIZE_NUMBER_INT, FILTER_FORCE_ARRAY )
 		);
 	}
 }

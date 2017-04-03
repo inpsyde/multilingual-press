@@ -109,10 +109,11 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 					[ $container['multilingualpress.quicklinks_settings_updater'], 'update_settings' ]
 				);
 			} else {
-				if ( ! empty( $_POST[ Quicklinks::NAME ] ) && is_string( $_POST[ Quicklinks::NAME ] ) ) {
-					$container['multilingualpress.quicklinks_redirector']->maybe_redirect(
-						$_POST[ Quicklinks::NAME ]
-					);
+
+				$name = $container['multilingualpress.request']->body_value( Quicklinks::NAME, INPUT_POST );
+
+				if ( $name && is_string( $name ) ) {
+					$container['multilingualpress.quicklinks_redirector']->maybe_redirect( $name );
 				}
 
 				add_filter(

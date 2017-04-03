@@ -8,7 +8,7 @@ use Inpsyde\MultilingualPress\API\Translations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
-use Inpsyde\MultilingualPress\Common\Request;
+use Inpsyde\MultilingualPress\Common\WordPressRequest;
 
 /**
  * Quicklinks front-end view.
@@ -149,7 +149,7 @@ class Quicklinks {
 		if ( is_singular() ) {
 			return array_diff_key(
 				$this->translations->get_translations( [
-					'type' => Request::TYPE_SINGULAR,
+					'type' => WordPressRequest::TYPE_SINGULAR,
 				] ),
 				array_flip( (array) $skip )
 			);

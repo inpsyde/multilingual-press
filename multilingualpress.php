@@ -16,6 +16,7 @@ namespace Inpsyde\MultilingualPress;
 use Inpsyde\MultilingualPress\API\APIServiceProvider;
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Asset\AssetServiceProvider;
+use Inpsyde\MultilingualPress\Common\Nonce\ServerRequest;
 use Inpsyde\MultilingualPress\Core\CoreServiceProvider;
 use Inpsyde\MultilingualPress\Core\ImmutablePluginProperties;
 use Inpsyde\MultilingualPress\Database\DatabaseServiceProvider;
@@ -73,6 +74,7 @@ function bootstrap(): bool {
 	/** @var Container $container */
 	$container = resolve( null );
 	$container->share( 'multilingualpress.properties', new ImmutablePluginProperties( __FILE__ ) );
+	$container->share( 'multilingualpress.request', new ServerRequest() );
 
 	$providers = new DistinctServiceProviderCollection();
 	$providers
