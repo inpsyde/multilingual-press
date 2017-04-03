@@ -300,7 +300,7 @@ module.exports = function( grunt ) {
 		 */
 		shell: {
 			phpunit: {
-				command: 'phpunit'
+				command: '"vendor/bin/phpunit"'
 			},
 
 			// DO NOT run this directly. Run "$ grunt tape" instead.
