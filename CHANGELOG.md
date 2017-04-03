@@ -8,6 +8,13 @@
 - Language API: Use fallback names for languages, see
 [issue #224](https://github.com/inpsyde/multilingual-press/issues/224).
 
+## 2.5.4
+- Post Translator: Fix creation of duplicate draft translation posts, see
+[issue #253](https://github.com/inpsyde/MultilingualPress/issues/253).
+
+## 2.5.3
+- Helpers: Fix `Mlp_Helpers::get_language_flag()` (and thus `mlp_get_language_flag()`) throwing a warning for non-custom flag images.
+
 ## 2.5.2
 - Language Switcher: Fix widget not passing on the `strict` flag.
 
