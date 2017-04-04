@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\NavMenu;
 
-use Inpsyde\MultilingualPress\Common\Http\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use function Inpsyde\MultilingualPress\get_available_language_names;
 use function Inpsyde\MultilingualPress\site_exists;
 
@@ -46,7 +46,7 @@ final class ValidatingItemRepository implements ItemRepository {
 			return [];
 		}
 
-		$menu =  $this->request->body_value( 'menu', INPUT_GET, FILTER_SANITIZE_NUMBER_INT );
+		$menu = $this->request->body_value( 'menu', INPUT_GET, FILTER_SANITIZE_NUMBER_INT );
 
 		if ( $menu === null ) {
 			return [];

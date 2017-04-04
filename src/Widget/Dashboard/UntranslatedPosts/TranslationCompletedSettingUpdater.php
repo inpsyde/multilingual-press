@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
-use Inpsyde\MultilingualPress\Common\Http\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
@@ -61,7 +61,7 @@ class TranslationCompletedSettingUpdater {
 	 */
 	public function update_setting( $post_id, \WP_Post $post ) {
 
-		if ( ! $this->nonce->is_valid() )  {
+		if ( ! $this->nonce->is_valid() ) {
 			return false;
 		}
 

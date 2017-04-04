@@ -1,11 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
-declare( strict_types=1 );
+declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\Languages;
-use Inpsyde\MultilingualPress\Common\Http\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 /**

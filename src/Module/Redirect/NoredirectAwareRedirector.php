@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use function Inpsyde\MultilingualPress\call_exit;
-use Inpsyde\MultilingualPress\Common\Http\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 
 /**
  * Interface for all redirector implementations.

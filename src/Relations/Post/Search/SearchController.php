@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Relations\Post\Search;
 
-use Inpsyde\MultilingualPress\Common\Http\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
 
 /**
@@ -52,7 +52,7 @@ class SearchController {
 	 */
 	public function initialize( Request $request ) {
 
-		add_action( 'wp_ajax_' . static::ACTION, function () use( $request ) {
+		add_action( 'wp_ajax_' . static::ACTION, function () use ( $request ) {
 
 			$context = RelationshipContext::from_request( $request );
 

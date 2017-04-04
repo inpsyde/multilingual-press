@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
-use Inpsyde\MultilingualPress\Common\Http\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
@@ -76,7 +76,7 @@ class TrasherSettingUpdater {
 	 */
 	public function update_settings( $post_id, \WP_Post $post ): int {
 
-		if ( ! $this->nonce->is_valid() )  {
+		if ( ! $this->nonce->is_valid() ) {
 			return 0;
 		}
 

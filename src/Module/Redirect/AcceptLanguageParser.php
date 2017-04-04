@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
-use Inpsyde\MultilingualPress\Common\Http\HeaderParser;
+use Inpsyde\MultilingualPress\Common\HTTP\HeaderParser;
 
 /**
  * Parser for Accept-Language headers, sorting by priority.

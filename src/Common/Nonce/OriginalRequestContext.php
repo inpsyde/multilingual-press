@@ -1,10 +1,12 @@
 <?php # -*- coding: utf-8 -*-
 
-declare( strict_types=1 );
+declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\Nonce;
 
-use Inpsyde\MultilingualPress\Common\Http\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueManipulationNotAllowed;
 use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueNotSet;
 
@@ -24,11 +26,11 @@ final class OriginalRequestContext implements Context {
 	/**
 	 * OriginalRequestContext constructor.
 	 *
-	 * @param Request|null $request
+	 * @param ServerRequest|null $request
 	 */
-	public function __construct( Request $request = null ) {
+	public function __construct( ServerRequest $request = null ) {
 
-		$this->request = $request ?: new ServerRequest();
+		$this->request = $request ?: new PHPServerRequest();
 	}
 
 	/**

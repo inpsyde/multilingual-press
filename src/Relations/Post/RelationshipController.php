@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Relations\Post;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
-use Inpsyde\MultilingualPress\Common\Http\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 
 /**
  * Relationship controller.
