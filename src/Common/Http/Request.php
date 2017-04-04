@@ -34,12 +34,13 @@ interface Request {
 	/**
 	 * Returns a parsed header value.
 	 *
-	 * @param string       $name  Header name.
-	 * @param HeaderParser $parse Header parser to be used.
+	 * @param string            $name   Header name.
+	 * @param HeaderParser|null $parser Header parser to be used. Implementations can decide how to convert raw header
+	 *                                  string to array if not provided.
 	 *
 	 * @return array
 	 */
-	public function parsed_header( string $name, HeaderParser $parse ): array;
+	public function parsed_header( string $name, HeaderParser $parser = null ): array;
 
 	/**
 	 * Returns a server value.

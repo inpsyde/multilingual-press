@@ -26,6 +26,21 @@ final class PHPServerRequest implements ServerRequest {
 	private static $server = [];
 
 	/**
+	 * @var HeaderParser
+	 */
+	private $default_header_parser;
+
+	/**
+	 * Constructor. Sets properties.
+	 *
+	 * @param HeaderParser|null $default_header_parser
+	 */
+	public function __construct( HeaderParser $default_header_parser = null ) {
+
+		$this->default_header_parser = $default_header_parser;
+	}
+
+	/**
 	 * Return a value from request body, optionally filtered.
 	 *
 	 * @param string $name    Key to get value for.
@@ -68,16 +83,28 @@ final class PHPServerRequest implements ServerRequest {
 	/**
 	 * Returns a parsed header value.
 	 *
-	 * @param string       $name  Header name.
-	 * @param HeaderParser $parse Parser to use.
+	 * @param string       $name   Header name.
+	 * @param HeaderParser $parser Parser to use. If not provided, the default parser will be used. When neither default
+	 *                             parser was passed to constructor, `TrimmingHeaderParser` is instantiated, used and
+	 *                             stored as default parser for subsequent calls.
 	 *
 	 * @return array
 	 */
-	public function parsed_header( string $name, HeaderParser $parse ): array {
+	public function parsed_header( string $name, HeaderParser $parser = null ): array {
 
 		$this->ensure_headers();
 
-		return $parse->parse( $this->header( $name ) );
+		$header = $this->header( $name );
+
+		if ( $parser ) {
+			return $parser->parse( $header );
+		}
+
+		if ( ! $this->default_header_parser ) {
+			$this->default_header_parser = new TrimmingHeaderParser();
+		}
+
+		return $this->default_header_parser->parse( $header );
 	}
 
 	/**
