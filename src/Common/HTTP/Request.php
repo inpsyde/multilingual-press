@@ -41,13 +41,4 @@ interface Request {
 	 * @return array
 	 */
 	public function parsed_header( string $name, HeaderParser $parser = null ): array;
-
-	/**
-	 * Returns a server value.
-	 *
-	 * @param string $name
-	 *
-	 * @return string Server setting value, empty string if not set.
-	 */
-	public function server_value( string $name ): string;
 }
