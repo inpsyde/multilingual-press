@@ -5,7 +5,7 @@ namespace Inpsyde\MultilingualPress\Common\HTTP;
 /**
  * Interface for all header parser implementations.
  *
- * @package Inpsyde\MultilingualPress\Common\AcceptHeader
+ * @package Inpsyde\MultilingualPress\Common\HTTP
  * @since   3.0.0
  */
 interface HeaderParser {

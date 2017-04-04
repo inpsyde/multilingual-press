@@ -2,7 +2,7 @@
 
 namespace Inpsyde\MultilingualPress\Asset;
 
-use Inpsyde\MultilingualPress\Common\Type\URL;
+use Inpsyde\MultilingualPress\Common\HTTP\URL;
 
 /**
  * Interface for all asset URL data type implementations, providing a file version.
