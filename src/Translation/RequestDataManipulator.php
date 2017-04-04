@@ -35,7 +35,7 @@ interface RequestDataManipulator {
 	 *
 	 * @return int Number of cleared elements.
 	 */
-	public function clear_data(): int ;
+	public function clear_data(): int;
 
 	/**
 	 * Restores all data from the storage.
@@ -44,5 +44,5 @@ interface RequestDataManipulator {
 	 *
 	 * @return int Number of restored elements.
 	 */
-	public function restore_data(): int ;
+	public function restore_data(): int;
 }
