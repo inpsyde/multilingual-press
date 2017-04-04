@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Common\Http;
+namespace Inpsyde\MultilingualPress\Common\HTTP;
 
 /**
  * Interface for all header parser implementations.
@@ -11,13 +11,13 @@ namespace Inpsyde\MultilingualPress\Common\Http;
 interface HeaderParser {
 
 	/**
-	 * Parses the given Accept header and returns the according data in array form.
+	 * Parses the given header and returns the according data in array form.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $header Accept header string.
+	 * @param string $header Header string.
 	 *
-	 * @return array Parsed Accept header in array form.
+	 * @return array Parsed header in array form.
 	 */
 	public function parse( string $header ): array;
 }

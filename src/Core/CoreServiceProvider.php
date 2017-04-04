@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-declare( strict_types=1 );
+declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core;
 
@@ -9,8 +9,9 @@ use Inpsyde\MultilingualPress\Common\Admin\EditSiteTab;
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
-use Inpsyde\MultilingualPress\Common\ConditionalAwareWordPressRequest;
+use Inpsyde\MultilingualPress\Common\ConditionalAwareWordPressRequestContext;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingMultiView;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
 use Inpsyde\MultilingualPress\Core\Admin\AlternativeLanguageTitleSiteSetting;
@@ -51,6 +52,14 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 * @return void
 	 */
 	public function register( Container $container ) {
+
+		$container['multilingualpress.request'] = function ( Container $container ) {
+
+			$container->share( 'multilingualpress.request', function () {
+
+				return new PHPServerRequest();
+			} );
+		};
 
 		$container['multilingualpress.alternative_language_title_site_setting'] = function ( Container $container ) {
 
@@ -138,9 +147,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
-		$container->share( 'multilingualpress.wp_request', function () {
+		$container->share( 'multilingualpress.wordpress_request_context', function () {
 
-			return new ConditionalAwareWordPressRequest();
+			return new ConditionalAwareWordPressRequestContext();
 		} );
 
 		$container['multilingualpress.save_plugin_settings_nonce'] = function () {

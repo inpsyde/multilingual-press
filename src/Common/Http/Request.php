@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Common\Http;
+namespace Inpsyde\MultilingualPress\Common\HTTP;
 
 /**
  * Interface for all HTTP request abstraction implementations.
