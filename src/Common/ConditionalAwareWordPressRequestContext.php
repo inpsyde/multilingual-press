@@ -25,10 +25,9 @@ final class ConditionalAwareWordPressRequestContext implements WordPressRequestC
 	/**
 	 * Constructor. Sets up the properties.
 	 *
-	 * @since 3.0.0
-	 *
 	 * @see   ConditionalAwareWordPressRequestContext::is_singular()
 	 * @see   ConditionalAwareWordPressRequestContext::is_term_archive()
+	 * @since 3.0.0
 	 */
 	public function __construct() {
 
