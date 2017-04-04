@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.7
 Tested up to: 4.7
-Stable tag: 2.5.1
+Stable tag: 2.5.4
 
 The multisite-based free open source plugin for your multilingual WordPress websites.
 
@@ -113,6 +113,13 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.5.4 =
+- Post Translator: Fix creation of duplicate draft translation posts, see
+[issue #253](https://github.com/inpsyde/MultilingualPress/issues/253).
+
+= 2.5.3 =
+- Helpers: Fix `Mlp_Helpers::get_language_flag()` (and thus `mlp_get_language_flag()`) throwing a warning for non-custom flag images.
 
 = 2.5.2 =
 - Language Switcher: Fix widget not passing on the `strict` flag.

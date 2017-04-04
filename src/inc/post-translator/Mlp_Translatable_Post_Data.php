@@ -28,6 +28,11 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	private $link_table;
 
 	/**
+	 * @var string
+	 */
+	private $name_base = 'mlp_to_translate';
+
+	/**
 	 * @var NonceFactory
 	 */
 	private $nonce_factory;
@@ -109,23 +114,16 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 */
 	public function save( $post_id, WP_Post $post ) {
 
-		$post_type = $this->get_real_post_type( $post );
-		if ( ! in_array( $post_type, $this->allowed_post_types, true ) ) {
+		if ( ! $this->is_valid_save_request( $post ) ) {
 			return;
 		}
-
-		if ( empty( $this->post_request_data['mlp_to_translate'] ) ) {
-			return;
-		}
-
-		$to_translate = $this->post_request_data['mlp_to_translate'];
 
 		$post_id = $this->get_real_post_id( $post_id );
 
 		$this->save_context = [
 			'source_blog'    => get_current_blog_id(),
 			'source_post'    => $post,
-			'real_post_type' => $post_type,
+			'real_post_type' => $this->get_real_post_type( $post ),
 			'real_post_id'   => $post_id,
 		];
 
@@ -171,7 +169,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		$network_state = NetworkState::from_globals();
 
 		// Create a copy of the item for every related blog
-		foreach ( $to_translate as $blog_id ) {
+		foreach ( $this->post_request_data[ $this->name_base ] as $blog_id ) {
 			if ( $blog_id == get_current_blog_id() or ! site_exists( $blog_id ) ) {
 				continue;
 			}
@@ -375,24 +373,25 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 */
 	public function get_real_post_type( WP_Post $post ) {
 
-		if ( 'revision' !== $post->post_type ) {
-			return $post->post_type;
+		$post_id = $post->ID;
+
+		static $post_type = [];
+		if ( isset( $post_type[ $post_id ] ) ) {
+			return $post_type[ $post_id ];
 		}
 
-		if ( empty( $this->post_request_data['post_type'] ) ) {
-			return $post->post_type;
+		if (
+			'revision' === $post->post_type
+			&& ! empty( $this->post_request_data['post_type'] )
+			&& is_string( $this->post_request_data['post_type'] )
+			&& 'revision' !== $this->post_request_data['post_type']
+		) {
+			$post_type[ $post_id ] = $this->post_request_data['post_type'];
+		} else {
+			$post_type[ $post_id ] = $post->post_type;
 		}
 
-		if ( 'revision' === $this->post_request_data['post_type'] ) {
-			return $post->post_type;
-		}
-
-		if ( is_string( $this->post_request_data['post_type'] ) ) {
-			// auto-draft
-			return $this->post_request_data['post_type'];
-		}
-
-		return $post->post_type;
+		return $post_type[ $post_id ];
 	}
 
 	/**
@@ -450,5 +449,101 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	public function set_save_context( array $save_context = [] ) {
 
 		$this->save_context = $save_context;
+	}
+
+	/**
+	 * Check if the current request should be processed by save().
+	 *
+	 * @param WP_Post $post
+	 * @param string  $name_base
+	 *
+	 * @return bool
+	 */
+	public function is_valid_save_request( WP_Post $post, $name_base = '' ) {
+
+		$name_base = (string) ( $name_base ?: $this->name_base );
+
+		static $called = 0;
+
+		if ( ms_is_switched() ) {
+			return false;
+		}
+
+		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
+		$called ++;
+
+		if ( ! in_array( $this->get_real_post_type( $post ), $this->allowed_post_types, true ) ) {
+			return false;
+		}
+
+		if (
+			empty( $this->post_request_data[ $name_base ] )
+			|| ! is_array( $this->post_request_data[ $name_base ] )
+		) {
+			return false;
+		}
+
+		if (
+			! empty( $this->post_request_data['original_post_status'] )
+			&& 'auto-draft' === $this->post_request_data['original_post_status']
+			&& 1 < $called
+		) {
+			return false;
+		}
+
+		// We only need this when the post is published or drafted.
+		if ( ! $this->is_connectable_status( $post ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check post status.
+	 *
+	 * Includes special hacks for auto-drafts.
+	 *
+	 * @param  WP_Post $post
+	 *
+	 * @return bool
+	 */
+	private function is_connectable_status( WP_Post $post ) {
+
+		// TODO: Discuss post status "future"...
+		if ( in_array( $post->post_status, [ 'publish', 'draft', 'private', 'auto-draft' ], true ) ) {
+			return true;
+		}
+
+		return $this->is_auto_draft( $post, $this->post_request_data );
+	}
+
+	/**
+	 * Check for hidden auto-draft
+	 *
+	 * Auto-drafts are sent as revision with a status 'inherit'.
+	 * We have to inspect the $_POST [ $request ] to distinguish them from
+	 * real revisions and attachments (which have the same status)
+	 *
+	 * @param  WP_Post $post
+	 * @param  array   $request Usually (a copy of) $_POST
+	 *
+	 * @return bool
+	 */
+	private function is_auto_draft( WP_Post $post, array $request ) {
+
+		if ( 'inherit' !== $post->post_status ) {
+			return false;
+		}
+
+		if ( 'revision' !== $post->post_type ) {
+			return false;
+		}
+
+		if ( empty( $request['original_post_status'] ) ) {
+			return false;
+		}
+
+		return 'auto-draft' === $request['original_post_status'];
 	}
 }
