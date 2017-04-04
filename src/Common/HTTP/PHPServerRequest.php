@@ -26,6 +26,11 @@ final class PHPServerRequest implements ServerRequest {
 	private static $server = [];
 
 	/**
+	 * @var URL
+	 */
+	private static $url;
+
+	/**
 	 * @var HeaderParser
 	 */
 	private $default_header_parser;
@@ -38,6 +43,18 @@ final class PHPServerRequest implements ServerRequest {
 	public function __construct( HeaderParser $default_header_parser = null ) {
 
 		$this->default_header_parser = $default_header_parser;
+	}
+
+	/**
+	 * Returns the URL for current request.
+	 *
+	 * @return URL
+	 */
+	public function url(): URL {
+
+		$this->ensure_url();
+
+		return self::$url;
 	}
 
 	/**
@@ -124,7 +141,20 @@ final class PHPServerRequest implements ServerRequest {
 	}
 
 	/**
-	 * Ensure values from request are available in object property.
+	 * Ensure URL marshaled from request is available in class property.
+	 */
+	private function ensure_url() {
+
+		if ( ! self::$url instanceof URL ) {
+
+			$this->ensure_headers();
+
+			self::$url = new ServerURL( self::$server, $this->header( 'HOST' ) );
+		}
+	}
+
+	/**
+	 * Ensure values from request are available in class property.
 	 */
 	private function ensure_values() {
 
@@ -166,7 +196,7 @@ final class PHPServerRequest implements ServerRequest {
 	}
 
 	/**
-	 * Ensure headers from request are available in object property.
+	 * Ensure headers from request are available in class property.
 	 */
 	private function ensure_headers() {
 
@@ -202,7 +232,7 @@ final class PHPServerRequest implements ServerRequest {
 	}
 
 	/**
-	 * Ensure server values from request are available in object property.
+	 * Ensure server values from request are available in class property.
 	 */
 	private function ensure_server() {
 

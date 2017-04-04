@@ -5,10 +5,17 @@ namespace Inpsyde\MultilingualPress\Common\HTTP;
 /**
  * Interface for all HTTP request abstraction implementations.
  *
- * @package Inpsyde\MultilingualPress\Common\AcceptHeader
+ * @package Inpsyde\MultilingualPress\Common\HTTP
  * @since   3.0.0
  */
 interface Request {
+
+	/**
+	 * Returns the URL for current request.
+	 *
+	 * @return URL
+	 */
+	public function url(): URL;
 
 	/**
 	 * Return a value from request body, optionally filtered.
