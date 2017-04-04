@@ -32,7 +32,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.type_factory'                   => \Inpsyde\MultilingualPress\Factory\TypeFactory::class,
 		'multilingualpress.uninstaller'                    => \Inpsyde\MultilingualPress\Installation\Uninstaller::class,
 		'multilingualpress.untranslated_posts_repository'  => \Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostRepository::class,
-		'multilingualpress.wp_request'                     => \Inpsyde\MultilingualPress\Common\WordPressRequest::class,
+		'multilingualpress.wordpress_request_context'      => \Inpsyde\MultilingualPress\Common\WordPressRequestContext::class,
 		'multilingualpress.wpdb'                           => \wpdb::class,
 	] ) );
 
@@ -144,7 +144,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.untranslated_posts_dashboard_widget_view'          => \Inpsyde\MultilingualPress\Widget\Dashboard\View::class,
 		'multilingualpress.untranslated_posts_repository'                     => \Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostRepository::class,
 		'multilingualpress.updater'                                           => \Inpsyde\MultilingualPress\Installation\Updater::class,
-		'multilingualpress.wp_request'                                        => \Inpsyde\MultilingualPress\Common\WordPressRequest::class,
+		'multilingualpress.wordpress_request_context'                         => \Inpsyde\MultilingualPress\Common\WordPressRequestContext::class,
 		'multilingualpress.wpdb'                                              => \wpdb::class,
 	] ) );
 }

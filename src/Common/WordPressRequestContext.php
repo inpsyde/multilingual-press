@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Common;
  * @package Inpsyde\MultilingualPress\Common
  * @since   3.0.0
  */
-interface WordPressRequest {
+interface WordPressRequestContext {
 
 	/**
 	 * Request type.

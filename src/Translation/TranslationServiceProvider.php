@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation;
 
-use Inpsyde\MultilingualPress\Common\WordPressRequest;
+use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Translation\Translator\FrontPageTranslator;
@@ -89,27 +89,27 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$translations->register_translator(
 			$container['multilingualpress.front_page_translator'],
-			WordPressRequest::TYPE_FRONT_PAGE
+			WordPressRequestContext::TYPE_FRONT_PAGE
 		);
 
 		$translations->register_translator(
 			$container['multilingualpress.post_translator'],
-			WordPressRequest::TYPE_SINGULAR
+			WordPressRequestContext::TYPE_SINGULAR
 		);
 
 		$translations->register_translator(
 			$container['multilingualpress.post_type_translator'],
-			WordPressRequest::TYPE_POST_TYPE_ARCHIVE
+			WordPressRequestContext::TYPE_POST_TYPE_ARCHIVE
 		);
 
 		$translations->register_translator(
 			$container['multilingualpress.search_translator'],
-			WordPressRequest::TYPE_SEARCH
+			WordPressRequestContext::TYPE_SEARCH
 		);
 
 		$translations->register_translator(
 			$container['multilingualpress.term_translator'],
-			WordPressRequest::TYPE_TERM_ARCHIVE
+			WordPressRequestContext::TYPE_TERM_ARCHIVE
 		);
 
 		if ( $container['request']->server_value( 'REQUEST_METHOD' ) === 'POST' ) {

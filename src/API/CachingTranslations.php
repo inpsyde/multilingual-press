@@ -7,7 +7,7 @@ namespace Inpsyde\MultilingualPress\API;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Translation\Translator;
 use Inpsyde\MultilingualPress\Translation\Translator\NullTranslator;
-use Inpsyde\MultilingualPress\Common\WordPressRequest;
+use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 use function Inpsyde\MultilingualPress\get_flag_url_for_site;
@@ -36,7 +36,7 @@ final class CachingTranslations implements Translations {
 	private $null_translator;
 
 	/**
-	 * @var WordPressRequest
+	 * @var WordPressRequestContext
 	 */
 	private $request;
 
@@ -65,17 +65,17 @@ final class CachingTranslations implements Translations {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param SiteRelations    $site_relations    Site relations API object.
-	 * @param ContentRelations $content_relations Content relations API object.
-	 * @param Languages        $languages         Languages API object.
-	 * @param WordPressRequest $request           Request object.
-	 * @param TypeFactory      $type_factory      Type factory object.
+	 * @param SiteRelations           $site_relations    Site relations API object.
+	 * @param ContentRelations        $content_relations Content relations API object.
+	 * @param Languages               $languages         Languages API object.
+	 * @param WordPressRequestContext $request           Request object.
+	 * @param TypeFactory             $type_factory      Type factory object.
 	 */
 	public function __construct(
 		SiteRelations $site_relations,
 		ContentRelations $content_relations,
 		Languages $languages,
-		WordPressRequest $request,
+		WordPressRequestContext $request,
 		TypeFactory $type_factory
 	) {
 
@@ -176,7 +176,8 @@ final class CachingTranslations implements Translations {
 					continue;
 				}
 			} else {
-				if ( in_array( $type, [ WordPressRequest::TYPE_SINGULAR, WordPressRequest::TYPE_TERM_ARCHIVE ], true ) ) {
+				if ( in_array( $type,
+					[ WordPressRequestContext::TYPE_SINGULAR, WordPressRequestContext::TYPE_TERM_ARCHIVE ], true ) ) {
 					$content_id = (int) $content_relations[ $site_id ];
 
 					$translation = $this->get_translation_for_related_content( $site_id, $content_id, $args );
@@ -224,14 +225,14 @@ final class CachingTranslations implements Translations {
 		$translation = [];
 
 		switch ( $type ) {
-			case WordPressRequest::TYPE_SINGULAR:
+			case WordPressRequestContext::TYPE_SINGULAR:
 				$translation = $translator->get_translation( $site_id, [
 					'content_id' => $content_id,
 					'strict'     => (bool) $args['strict'],
 				] );
 				break;
 
-			case WordPressRequest::TYPE_TERM_ARCHIVE:
+			case WordPressRequestContext::TYPE_TERM_ARCHIVE:
 				$translation = $translator->get_translation( $site_id, [
 					'content_id' => $content_id,
 				] );
@@ -258,13 +259,13 @@ final class CachingTranslations implements Translations {
 		$translation = [];
 
 		switch ( $type ) {
-			case WordPressRequest::TYPE_POST_TYPE_ARCHIVE:
+			case WordPressRequestContext::TYPE_POST_TYPE_ARCHIVE:
 				$translation = $translator->get_translation( $site_id, [
 					'post_type' => (string) $args['post_type'],
 				] );
 				break;
 
-			case WordPressRequest::TYPE_SEARCH:
+			case WordPressRequestContext::TYPE_SEARCH:
 				$translation = $translator->get_translation( $site_id, [
 					'query' => (string) $args['search_term'],
 				] );
@@ -272,12 +273,12 @@ final class CachingTranslations implements Translations {
 		}
 
 		if (
-			WordPressRequest::TYPE_FRONT_PAGE === $type
+			WordPressRequestContext::TYPE_FRONT_PAGE === $type
 			|| ( empty( $translation['remote_url'] ) && ! $args['strict'] )
 		) {
 			$translation = array_merge(
 				$translation,
-				$this->translator( WordPressRequest::TYPE_FRONT_PAGE )->get_translation( $site_id )
+				$this->translator( WordPressRequestContext::TYPE_FRONT_PAGE )->get_translation( $site_id )
 			);
 		}
 

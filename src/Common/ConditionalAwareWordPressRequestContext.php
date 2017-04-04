@@ -10,7 +10,7 @@ namespace Inpsyde\MultilingualPress\Common;
  * @package Inpsyde\MultilingualPress\Common
  * @since   3.0.0
  */
-final class ConditionalAwareWordPressRequest implements WordPressRequest {
+final class ConditionalAwareWordPressRequestContext implements WordPressRequestContext {
 
 	/**
 	 * @var callable[]
@@ -27,18 +27,18 @@ final class ConditionalAwareWordPressRequest implements WordPressRequest {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @see ConditionalAwareWordPressRequest::is_singular()
-	 * @see ConditionalAwareWordPressRequest::is_term_archive()
+	 * @see   ConditionalAwareWordPressRequestContext::is_singular()
+	 * @see   ConditionalAwareWordPressRequestContext::is_term_archive()
 	 */
 	public function __construct() {
 
 		$this->callbacks = [
-			WordPressRequest::TYPE_ADMIN             => 'is_admin',
-			WordPressRequest::TYPE_FRONT_PAGE        => 'is_front_page',
-			WordPressRequest::TYPE_POST_TYPE_ARCHIVE => 'is_post_type_archive',
-			WordPressRequest::TYPE_SEARCH            => 'is_search',
-			WordPressRequest::TYPE_SINGULAR          => [ $this, 'is_singular' ],
-			WordPressRequest::TYPE_TERM_ARCHIVE      => [ $this, 'is_term_archive' ],
+			WordPressRequestContext::TYPE_ADMIN             => 'is_admin',
+			WordPressRequestContext::TYPE_FRONT_PAGE        => 'is_front_page',
+			WordPressRequestContext::TYPE_POST_TYPE_ARCHIVE => 'is_post_type_archive',
+			WordPressRequestContext::TYPE_SEARCH            => 'is_search',
+			WordPressRequestContext::TYPE_SINGULAR          => [ $this, 'is_singular' ],
+			WordPressRequestContext::TYPE_TERM_ARCHIVE      => [ $this, 'is_term_archive' ],
 		];
 	}
 
