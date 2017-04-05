@@ -1,5 +1,15 @@
 <?php # -*- coding: utf-8 -*-
 
+/**
+ * This file incorporates work from Zend Framework "zend-diactoros" released under New BSD License
+ * and covered by the following copyright and permission notices:
+ *
+ *      Copyright (c) Zend Technologies USA Inc. (http://www.zend.com)
+ *
+ * @see https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
+ * @see https://github.com/zendframework/zend-diactoros/blob/master/src/ServerRequestFactory.php
+ */
+
 declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\HTTP;
@@ -13,22 +23,27 @@ final class PHPServerRequest implements ServerRequest {
 	/**
 	 * @var array
 	 */
-	private static $values = [];
+	private static $values;
 
 	/**
 	 * @var array
 	 */
-	private static $headers = [];
+	private static $headers;
 
 	/**
 	 * @var array
 	 */
-	private static $server = [];
+	private static $server;
 
 	/**
 	 * @var URL
 	 */
 	private static $url;
+
+	/**
+	 * @var string
+	 */
+	private static $body;
 
 	/**
 	 * @var HeaderParser
@@ -55,6 +70,18 @@ final class PHPServerRequest implements ServerRequest {
 		$this->ensure_url();
 
 		return self::$url;
+	}
+
+	/**
+	 * Returns the body of the request as string.
+	 *
+	 * @return string
+	 */
+	public function body(): string {
+
+		$this->ensure_body();
+
+		return self::$body;
 	}
 
 	/**
@@ -141,58 +168,43 @@ final class PHPServerRequest implements ServerRequest {
 	}
 
 	/**
-	 * Ensure URL marshaled from request is available in class property.
+	 * Ensure request body is available in class property.
 	 */
-	private function ensure_url() {
+	private function ensure_body() {
 
-		if ( ! self::$url instanceof URL ) {
-
-			$this->ensure_headers();
-
-			self::$url = new ServerURL( self::$server, $this->header( 'HOST' ) );
+		if ( null === self::$body ) {
+			self::$body = stream_get_contents( fopen( 'php://input', 'r' ) );
 		}
 	}
 
 	/**
-	 * Ensure values from request are available in class property.
+	 * Ensure server values from request are available in class property.
 	 */
-	private function ensure_values() {
+	private function ensure_server() {
 
-		if ( null !== self::$values ) {
+		if ( null !== self::$server ) {
 			return;
 		}
 
-		$url_query_data = (array) filter_input_array( INPUT_GET, FILTER_DEFAULT, false );
+		self::$server = array_change_key_case( $_SERVER, CASE_UPPER );
 
-		self::$values[ INPUT_GET ] = $url_query_data;
-
-		$method = $_SERVER['REQUEST_METHOD'] ?? '';
-
-		// For POST requests merge URL query data with form data. This will also work with multipart forms.
-		if ( $method && strtoupper( $method ) === 'POST' ) {
-
-			self::$values[ INPUT_POST ] = (array) filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
-
-			self::$values[ INPUT_REQUEST ] = array_merge( self::$values[ INPUT_GET ], self::$values[ INPUT_POST ] );
-
+		if ( array_key_exists( 'HTTP_AUTHORIZATION', $_SERVER ) ) {
 			return;
 		}
 
-		$content_type = $_SERVER['CONTENT_TYPE'] ?? '';
-
-		// For GET requests or when content type is not URL-encoded, just return URL query data.
-		if ( $method === 'GET' || $content_type !== 'application/x-www-form-urlencoded' ) {
-			self::$values[ INPUT_REQUEST ] = $url_query_data;
-
+		// This seems to be the only way to get the Authorization header on Apache
+		$apache_request_headers = apache_request_headers();
+		if ( ! $apache_request_headers ) {
 			return;
 		}
 
-		// When not GET nor POST method is used, but content is URL-encoded, we can safely decode raw body stream.
-		@parse_str( stream_get_contents( fopen( 'php://input', 'r' ) ), $values );
+		$apache_request_headers = array_change_key_case( $apache_request_headers, CASE_LOWER );
 
-		self::$values[ INPUT_REQUEST ] = is_array( $values )
-			? array_merge( $url_query_data, $values )
-			: $url_query_data;
+		if ( array_key_exists( 'authorization', $apache_request_headers ) ) {
+			self::$server['HTTP_AUTHORIZATION'] = $apache_request_headers['authorization'];
+
+			return;
+		}
 	}
 
 	/**
@@ -232,32 +244,64 @@ final class PHPServerRequest implements ServerRequest {
 	}
 
 	/**
-	 * Ensure server values from request are available in class property.
+	 * Ensure values from request are available in class property.
 	 */
-	private function ensure_server() {
+	private function ensure_values() {
 
-		if ( null !== self::$server ) {
+		if ( null !== self::$values ) {
 			return;
 		}
 
-		self::$server = array_change_key_case( $_SERVER, CASE_UPPER );
+		$url_query_data = (array) filter_input_array( INPUT_GET, FILTER_DEFAULT, false );
 
-		if ( array_key_exists( 'HTTP_AUTHORIZATION', $_SERVER ) ) {
+		self::$values[ INPUT_GET ] = $url_query_data;
+
+		$method = strtoupper( $this->server_value( 'REQUEST_METHOD' ) );
+
+		// For GET requests URL query data represent all the request values.
+		if ( $method === 'GET' ) {
+			self::$values[ INPUT_REQUEST ] = $url_query_data;
+
 			return;
 		}
 
-		// This seems to be the only way to get the Authorization header on Apache
-		$apache_request_headers = apache_request_headers();
-		if ( ! $apache_request_headers ) {
+		// For POST requests values are represented by URL query data merged with any kind of form data.
+		if ( $method === 'POST' ) {
+
+			self::$values[ INPUT_POST ] = (array) filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
+
+			self::$values[ INPUT_REQUEST ] = array_merge( self::$values[ INPUT_GET ], self::$values[ INPUT_POST ] );
+
 			return;
 		}
 
-		$apache_request_headers = array_change_key_case( apache_request_headers(), CASE_LOWER );
+		$content_type = $this->server_value( 'CONTENT_TYPE' );
 
-		if ( array_key_exists( 'authorization', $apache_request_headers ) ) {
-			self::$server['HTTP_AUTHORIZATION'] = $apache_request_headers['authorization'];
+		// When content type is not URL-encoded, give up parsing body. Raw body can still be accessed and decoded.
+		if ( $content_type !== 'application/x-www-form-urlencoded' ) {
+			self::$values[ INPUT_REQUEST ] = $url_query_data;
 
 			return;
+		}
+
+		// When not GET nor POST method is used, but content is URL-encoded, we can safely decode raw body stream.
+		@parse_str( $this->body(), $values );
+
+		self::$values[ INPUT_REQUEST ] = is_array( $values )
+			? array_merge( $url_query_data, $values )
+			: $url_query_data;
+	}
+
+	/**
+	 * Ensure URL marshaled from request is available in class property.
+	 */
+	private function ensure_url() {
+
+		if ( ! self::$url instanceof URL ) {
+
+			$this->ensure_headers();
+
+			self::$url = new ServerURL( self::$server, $this->header( 'HOST' ) );
 		}
 	}
 }
