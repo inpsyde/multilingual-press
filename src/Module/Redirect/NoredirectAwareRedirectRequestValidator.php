@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\RequestValidator;
 
 use function Inpsyde\MultilingualPress\get_current_site_language;
@@ -37,7 +38,7 @@ final class NoredirectAwareRedirectRequestValidator implements RequestValidator 
 	private $settings_repository;
 
 	/**
-	 * @var Request
+	 * @var ServerRequest
 	 */
 	private $request;
 
@@ -48,12 +49,12 @@ final class NoredirectAwareRedirectRequestValidator implements RequestValidator 
 	 *
 	 * @param SettingsRepository $settings_repository Settings repository object.
 	 * @param NoredirectStorage  $noredirect_storage  Noredirect session storage object.
-	 * @param Request            $request             HTTP request abstraction
+	 * @param ServerRequest      $request             HTTP request abstraction
 	 */
 	public function __construct(
 		SettingsRepository $settings_repository,
 		NoredirectStorage $noredirect_storage,
-		Request $request
+		ServerRequest $request
 	) {
 
 		$this->settings_repository = $settings_repository;
