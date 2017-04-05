@@ -14,6 +14,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\HTTP;
 
+use Inpsyde\MultilingualPress\Common\Type\URL;
+
 /**
  * @package Inpsyde\MultilingualPress\Common\HTTP
  * @since   3.0.0

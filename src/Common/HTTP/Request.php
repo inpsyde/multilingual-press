@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Common\HTTP;
 
+use Inpsyde\MultilingualPress\Common\Type\URL;
+
 /**
  * Interface for all HTTP request abstraction implementations.
  *
