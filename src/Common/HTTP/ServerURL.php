@@ -14,6 +14,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\HTTP;
 
+use Inpsyde\MultilingualPress\Common\Type\URL;
+
 /**
  * URL implementation that is build starting from server data as array.
  *

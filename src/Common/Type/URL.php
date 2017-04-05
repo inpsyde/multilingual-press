@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Common\HTTP;
+namespace Inpsyde\MultilingualPress\Common\Type;
 
 /**
  * Interface for all URL data type implementations.

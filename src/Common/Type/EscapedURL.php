@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Common\HTTP;
+namespace Inpsyde\MultilingualPress\Common\Type;
 
 /**
  * Escaped URL data type.
  *
- * @package Inpsyde\MultilingualPress\Common\HTTP
+ * @package Inpsyde\MultilingualPress\Common\Type
  * @since   3.0.0
  */
 final class EscapedURL implements URL {
