@@ -18,6 +18,13 @@ interface Request {
 	public function url(): URL;
 
 	/**
+	 * Returns the body of the request as string.
+	 *
+	 * @return string
+	 */
+	public function body(): string;
+
+	/**
 	 * Return a value from request body, optionally filtered.
 	 *
 	 * @param string $name
