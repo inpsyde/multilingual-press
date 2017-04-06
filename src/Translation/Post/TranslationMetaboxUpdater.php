@@ -82,6 +82,9 @@ final class TranslationMetaboxUpdater implements PostMetaboxUpdater {
 	 * @return bool
 	 */
 	public function update( ServerRequest $request ): bool {
+
 		// TODO: Implement update() method.
+
+		return true;
 	}
 }

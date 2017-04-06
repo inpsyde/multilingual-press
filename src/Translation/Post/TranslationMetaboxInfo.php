@@ -91,7 +91,7 @@ final class TranslationMetaboxInfo implements PriorityAwareMetaboxInfo {
 		return sprintf(
 			' <small> - <a href="%s">%s</a></small>',
 			esc_url( get_edit_post_link( $post ) ),
-			esc_html(  $this->translated_status( $post ) )
+			esc_html( $this->translated_status( $post ) )
 		);
 	}
 

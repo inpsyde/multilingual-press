@@ -12,6 +12,20 @@ use Inpsyde\MultilingualPress\Translation\Metabox\MetaboxView;
  */
 final class TranslationMetaboxView implements PostMetaboxView {
 
+	const ACTION_RENDER_PREFIX = 'multilingualpress.translation_meta_box_';
+
+	const POSITION_TOP = 'top';
+
+	const POSITION_MAIN = 'main';
+
+	const POSITION_BOTTOM = 'bottom';
+
+	const POSITIONS = [
+		self::POSITION_TOP,
+		self::POSITION_MAIN,
+		self::POSITION_BOTTOM,
+	];
+
 	/**
 	 * @var array
 	 */
@@ -97,7 +111,7 @@ final class TranslationMetaboxView implements PostMetaboxView {
 			 * @param \WP_Post|null $remote_post    Remote post object.
 			 */
 			do_action(
-				'multilingualpress.translation_meta_box_top',
+				self::ACTION_RENDER_PREFIX . self::POSITION_TOP,
 				$this->post,
 				$this->site_id,
 				$this->language,
@@ -113,7 +127,7 @@ final class TranslationMetaboxView implements PostMetaboxView {
 			 * @param \WP_Post|null $remote_post    Remote post object.
 			 */
 			do_action(
-				'multilingualpress.translation_meta_box_main',
+				self::ACTION_RENDER_PREFIX . self::POSITION_MAIN,
 				$this->post,
 				$this->site_id,
 				$this->language,
@@ -129,7 +143,7 @@ final class TranslationMetaboxView implements PostMetaboxView {
 			 * @param \WP_Post|null $remote_post    Remote post object.
 			 */
 			do_action(
-				'multilingualpress.translation_meta_box_bottom',
+				self::ACTION_RENDER_PREFIX . self::POSITION_BOTTOM,
 				$this->post,
 				$this->site_id,
 				$this->language,
@@ -141,6 +155,37 @@ final class TranslationMetaboxView implements PostMetaboxView {
 		<?php
 
 		return ob_get_clean();
+
+	}
+
+	/**
+	 * @param string   $position
+	 * @param callable $callback
+	 * @param int      $priority
+	 */
+	public function inject_in_view( string $position, callable $callback, int $priority = 10 ) {
+
+		if ( ! in_array( $position, self::POSITIONS, true ) ) {
+			return;
+		}
+
+		add_action(
+			self::ACTION_RENDER_PREFIX . $position,
+			function ( ...$args ) use ( $callback ) {
+
+				ob_start();
+				$return = $callback( ...$args );
+				$echo   = ob_get_clean();
+
+				if ( trim( $echo ) ) {
+					echo $echo;
+				} elseif ( is_string( $return ) && $return ) {
+					echo $return;
+				}
+			},
+			$priority,
+			4
+		);
 
 	}
 }
