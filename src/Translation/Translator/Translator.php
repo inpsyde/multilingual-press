@@ -1,11 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Translation;
+namespace Inpsyde\MultilingualPress\Translation\Translator;
 
 /**
  * Interface for all translator implementations.
  *
- * @package Inpsyde\MultilingualPress\Translation
+ * @package Inpsyde\MultilingualPress\Translation\Translator
  * @since   3.0.0
  */
 interface Translator {

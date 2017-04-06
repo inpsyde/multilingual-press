@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Translator;
 
-use Inpsyde\MultilingualPress\Translation\Translator;
-
 /**
  * Null translator implementation.
  *

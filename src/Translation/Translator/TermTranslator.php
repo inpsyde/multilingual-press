@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Translator;
 
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
-use Inpsyde\MultilingualPress\Translation\Translator;
 
 /**
  * Translator implementation for terms.
