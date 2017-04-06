@@ -78,7 +78,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.post_permission_checker'                           => \Inpsyde\MultilingualPress\Translation\Post\PermissionChecker::class,
 		'multilingualpress.post_metabox_registrar'                            => \Inpsyde\MultilingualPress\Translation\Metabox\MetaboxRegistrar::class,
 		'multilingualpress.post_translation_ui_registry'                      => \Inpsyde\MultilingualPress\Translation\Post\TranslationUIRegistry::class,
-		'multilingualpress.post_request_data_manipulator'                     => \Inpsyde\MultilingualPress\Translation\Request\RequestDataManipulator::class,
+		'multilingualpress.post_request_data_manipulator'                     => \Inpsyde\MultilingualPress\Translation\RequestDataManipulator::class,
 		'multilingualpress.post_translator'                                   => \Inpsyde\MultilingualPress\Translation\Translator::class,
 		'multilingualpress.post_type_link_url_filter'                         => \Inpsyde\MultilingualPress\Common\Filter::class,
 		'multilingualpress.post_type_repository'                              => \Inpsyde\MultilingualPress\Module\CustomPostTypeSupport\PostTypeRepository::class,

@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Translation\Request;
+namespace Inpsyde\MultilingualPress\Translation;
 
 /**
  * Request data manipulator implementation for the full request data.
  *
- * @package Inpsyde\MultilingualPress\Translation\Request
+ * @package Inpsyde\MultilingualPress\Translation
  * @since   3.0.0
  */
 final class FullRequestDataManipulator implements RequestDataManipulator {

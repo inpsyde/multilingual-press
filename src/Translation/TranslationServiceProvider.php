@@ -64,7 +64,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$container['multilingualpress.post_request_data_manipulator'] = function () {
 
-			return new Request\FullRequestDataManipulator( Request\RequestDataManipulator::METHOD_POST );
+			return new FullRequestDataManipulator( RequestDataManipulator::METHOD_POST );
 		};
 
 		$container['multilingualpress.post_translator'] = function ( Container $container ) {
