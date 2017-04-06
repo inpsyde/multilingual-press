@@ -34,8 +34,8 @@ final class WPDBTableReplacer implements TableReplacer {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $destination  Name of the destination table.
-	 * @param string $source       Name of the source table.
+	 * @param string $destination Name of the destination table.
+	 * @param string $source      Name of the source table.
 	 *
 	 * @return bool Whether or not the table was replaced successfully.
 	 */

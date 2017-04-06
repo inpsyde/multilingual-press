@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Relations\Post\Search;
 
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
 
 /**
@@ -13,6 +14,21 @@ use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
  * @since   3.0.0
  */
 final class RequestAwareSearch implements Search {
+
+	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
+	 * Constructor. Sets properties.
+	 *
+	 * @param Request $request
+	 */
+	public function __construct( Request $request ) {
+
+		$this->request = $request;
+	}
 
 	/**
 	 * Returns the latest/best-matching posts with respect to the given context.
@@ -73,6 +89,6 @@ final class RequestAwareSearch implements Search {
 	 */
 	private function get_search_query(): string {
 
-		return (string) ( $_REQUEST[ Search::ARG_NAME ] ?? '' );
+		return (string) $this->request->body_value( Search::ARG_NAME );
 	}
 }

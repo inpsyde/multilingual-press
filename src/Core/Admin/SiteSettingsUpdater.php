@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\Languages;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 /**
@@ -44,18 +45,26 @@ class SiteSettingsUpdater {
 	private $repository;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param SiteSettingsRepository $repository Site settings repository object.
 	 * @param Languages              $languages  Languages API object.
+	 * @param Request                $request    HTTP request abstraction
 	 */
-	public function __construct( SiteSettingsRepository $repository, Languages $languages ) {
+	public function __construct( SiteSettingsRepository $repository, Languages $languages, Request $request ) {
 
 		$this->repository = $repository;
 
 		$this->languages = $languages;
+
+		$this->request = $request;
 	}
 
 	/**
@@ -126,15 +135,13 @@ class SiteSettingsUpdater {
 	 */
 	private function get_language(): string {
 
-		if (
-			empty( $_POST['blog'][ SiteSettingsRepository::NAME_LANGUAGE ] )
-			|| ! is_string( $_POST['blog'][ SiteSettingsRepository::NAME_LANGUAGE ] )
-			|| '-1' === $_POST['blog'][ SiteSettingsRepository::NAME_LANGUAGE ]
-		) {
-			return '';
-		}
+		$language = $this->request->body_value(
+			SiteSettingsRepository::NAME_LANGUAGE,
+			INPUT_POST,
+			FILTER_SANITIZE_STRING
+		);
 
-		return $_POST['blog'][ SiteSettingsRepository::NAME_LANGUAGE ];
+		return ( ! $language || ! is_string( $language ) || '-1' === $language ) ? '' : $language;
 	}
 
 	/**
@@ -146,9 +153,13 @@ class SiteSettingsUpdater {
 	 */
 	private function update_alternative_language_title( int $site_id ) {
 
-		$title = empty( $_POST[ SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE ] )
-			? ''
-			: (string) $_POST[ SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE ];
+		$alternative_language = $this->request->body_value(
+			SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE,
+			INPUT_POST,
+			FILTER_SANITIZE_STRING
+		);
+
+		$title = empty( $alternative_language ) ? '' : (string) $alternative_language;
 
 		$this->repository->set_alternative_language_title( $title, $site_id );
 	}
@@ -162,11 +173,13 @@ class SiteSettingsUpdater {
 	 */
 	private function update_flag_image_url( int $site_id ) {
 
-		$url = empty( $_POST[ SiteSettingsRepository::NAME_FLAG_IMAGE_URL ] )
-			? ''
-			: (string) $_POST[ SiteSettingsRepository::NAME_FLAG_IMAGE_URL ];
+		$flag_url = $this->request->body_value(
+			SiteSettingsRepository::NAME_FLAG_IMAGE_URL,
+			INPUT_POST,
+			FILTER_SANITIZE_URL
+		);
 
-		$this->repository->set_flag_image_url( $url, $site_id );
+		$this->repository->set_flag_image_url( $flag_url ?: '', $site_id );
 	}
 
 	/**
@@ -190,11 +203,14 @@ class SiteSettingsUpdater {
 	 */
 	private function update_relationships( int $site_id ) {
 
-		$relationships = empty( $_POST[ SiteSettingsRepository::NAME_RELATIONSHIPS ] )
-			? []
-			: array_map( 'intval', (array) $_POST[ SiteSettingsRepository::NAME_RELATIONSHIPS ] );
+		$relationships = $this->request->body_value(
+			SiteSettingsRepository::NAME_RELATIONSHIPS,
+			INPUT_POST,
+			FILTER_SANITIZE_NUMBER_INT,
+			FILTER_FORCE_ARRAY
+		);
 
-		$this->repository->set_relationships( $relationships, $site_id );
+		$this->repository->set_relationships( array_map( 'intval', (array) $relationships ), $site_id );
 	}
 
 	/**

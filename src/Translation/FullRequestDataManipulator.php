@@ -65,7 +65,7 @@ final class FullRequestDataManipulator implements RequestDataManipulator {
 	 *
 	 * @return int Number of restored elements.
 	 */
-	public function restore_data(): int  {
+	public function restore_data(): int {
 
 		if ( ! $this->storage ) {
 			return 0;

@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
@@ -54,22 +55,24 @@ class SettingsUpdater {
 	 * @since   3.0.0
 	 * @wp-hook multilingualpress.save_modules
 	 *
-	 * @param array $data Request data.
+	 * @param Request $request Request data.
 	 *
 	 * @return bool Whether or not the settings were updated successfully.
 	 */
-	public function update_settings( array $data ): bool {
+	public function update_settings( Request $request ): bool {
 
 		if ( ! $this->nonce->is_valid() ) {
 			return false;
 		}
 
-		if ( empty( $data[ static::SETTINGS_NAME ] ) ) {
+		$setting = $request->body_value( static::SETTINGS_NAME, INPUT_POST, FILTER_DEFAULT, FILTER_FORCE_ARRAY );
+
+		if ( empty( $setting ) ) {
 			return false;
 		}
 
-		if ( ! empty( $data[ static::SETTINGS_NAME ]['position'] ) ) {
-			return $this->repository->set_position( $data[ static::SETTINGS_NAME ]['position'] );
+		if ( ! empty( $setting['position'] ) ) {
+			return $this->repository->set_position( $setting['position'] );
 		}
 
 		return false;

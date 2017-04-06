@@ -9,8 +9,9 @@ use Inpsyde\MultilingualPress\Common\Admin\EditSiteTab;
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
-use Inpsyde\MultilingualPress\Common\ConditionalAwareRequest;
+use Inpsyde\MultilingualPress\Common\ConditionalAwareWordPressRequestContext;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingMultiView;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
 use Inpsyde\MultilingualPress\Core\Admin\AlternativeLanguageTitleSiteSetting;
@@ -51,6 +52,14 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 * @return void
 	 */
 	public function register( Container $container ) {
+
+		$container['multilingualpress.request'] = function ( Container $container ) {
+
+			$container->share( 'multilingualpress.request', function () {
+
+				return new PHPServerRequest();
+			} );
+		};
 
 		$container['multilingualpress.alternative_language_title_site_setting'] = function ( Container $container ) {
 
@@ -125,7 +134,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new PluginSettingsUpdater(
 				$container['multilingualpress.module_manager'],
 				$container['multilingualpress.save_plugin_settings_nonce'],
-				$container['multilingualpress.plugin_settings_page']
+				$container['multilingualpress.plugin_settings_page'],
+				$container['multilingualpress.request']
 			);
 		};
 
@@ -137,9 +147,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
-		$container->share( 'multilingualpress.request', function () {
+		$container->share( 'multilingualpress.wordpress_request_context', function () {
 
-			return new ConditionalAwareRequest();
+			return new ConditionalAwareWordPressRequestContext();
 		} );
 
 		$container['multilingualpress.save_plugin_settings_nonce'] = function () {
@@ -197,6 +207,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new SiteSettingsTabView(
 				$container['multilingualpress.site_settings_tab_data'],
 				new SiteSettingsSectionView( $container['multilingualpress.site_settings'] ),
+				$container['multilingualpress.request'],
 				$container['multilingualpress.save_site_settings_nonce']
 			);
 		};
@@ -205,6 +216,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new SiteSettingsUpdateRequestHandler(
 				$container['multilingualpress.site_settings_updater'],
+				$container['multilingualpress.request'],
 				$container['multilingualpress.save_site_settings_nonce']
 			);
 		};
@@ -213,7 +225,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new SiteSettingsUpdater(
 				$container['multilingualpress.site_settings_repository'],
-				$container['multilingualpress.languages']
+				$container['multilingualpress.languages'],
+				$container['multilingualpress.request']
 			);
 		};
 

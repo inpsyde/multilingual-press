@@ -65,7 +65,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_flag_image_url( int $site_id = 0 ): string {
 
-		$site_id =  $site_id ?: get_current_blog_id();
+		$site_id = $site_id ?: get_current_blog_id();
 
 		return (string) get_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, '' );
 	}
@@ -115,7 +115,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_site_language( int $site_id = 0 ): string {
 
-		$site_id =  $site_id ?: get_current_blog_id();
+		$site_id = $site_id ?: get_current_blog_id();
 
 		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 

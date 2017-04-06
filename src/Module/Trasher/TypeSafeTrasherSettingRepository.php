@@ -29,8 +29,8 @@ final class TypeSafeTrasherSettingRepository implements TrasherSettingRepository
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $post_id Post ID.
-	 * @param bool $value  Setting value to be set.
+	 * @param int  $post_id Post ID.
+	 * @param bool $value   Setting value to be set.
 	 *
 	 * @return bool Whether or not the trasher setting value was updated successfully.
 	 */

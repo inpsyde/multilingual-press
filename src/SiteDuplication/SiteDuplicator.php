@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Database\TableDuplicator;
 use Inpsyde\MultilingualPress\Database\TableList;
@@ -81,6 +82,11 @@ class SiteDuplicator {
 	private $table_replacer;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -92,6 +98,7 @@ class SiteDuplicator {
 	 * @param ActivePlugins    $active_plugins    Active plugin access object.
 	 * @param ContentRelations $content_relations Content relations APU object.
 	 * @param AttachmentCopier $attachment_copier Attachment copier object.
+	 * @param Request          $request           HTTP request abstraction
 	 */
 	public function __construct(
 		\wpdb $db,
@@ -100,7 +107,8 @@ class SiteDuplicator {
 		TableReplacer $table_replacer,
 		ActivePlugins $active_plugins,
 		ContentRelations $content_relations,
-		AttachmentCopier $attachment_copier
+		AttachmentCopier $attachment_copier,
+		Request $request
 	) {
 
 		$this->db = $db;
@@ -116,6 +124,8 @@ class SiteDuplicator {
 		$this->content_relations = $content_relations;
 
 		$this->attachment_copier = $attachment_copier;
+
+		$this->request = $request;
 	}
 
 	/**
@@ -129,16 +139,17 @@ class SiteDuplicator {
 	 */
 	public function duplicate_site( $new_site_id ): bool {
 
-		if (
-			empty( $_POST['blog'][ static::NAME_BASED_ON_SITE ] )
-			|| 1 > $_POST['blog'][ static::NAME_BASED_ON_SITE ]
-		) {
+		$source_site_id = (int) $this->request->body_value(
+			static::NAME_BASED_ON_SITE,
+			INPUT_POST,
+			FILTER_SANITIZE_NUMBER_INT
+		);
+
+		if ( 1 > $source_site_id ) {
 			return false;
 		}
 
 		$new_site_id = (int) $new_site_id;
-
-		$source_site_id = (int) $_POST['blog'][ static::NAME_BASED_ON_SITE ];
 
 		$network_state = NetworkState::from_globals();
 
@@ -163,13 +174,20 @@ class SiteDuplicator {
 
 		$this->set_admin_email( $admin_email );
 
-		update_option( 'blogname', stripslashes( $_POST['blog']['title'] ) );
+		$blog_data = (array) $this->request->body_value(
+			'blog',
+			INPUT_POST,
+			FILTER_DEFAULT,
+			FILTER_FORCE_ARRAY
+		);
+
+		update_option( 'blogname', stripslashes( $blog_data['title'] ) );
 
 		$this->rename_user_roles_option( $table_prefix );
 
 		// Set the search engine visibility.
-		if ( isset( $_POST['blog'][ static::NAME_SEARCH_ENGINE_VISIBILITY ] ) ) {
-			update_option( 'blog_public', (bool) $_POST['blog'][ static::NAME_SEARCH_ENGINE_VISIBILITY ] );
+		if ( array_key_exists( static::NAME_SEARCH_ENGINE_VISIBILITY, $blog_data ) ) {
+			update_option( 'blog_public', (bool) $blog_data[ static::NAME_SEARCH_ENGINE_VISIBILITY ] );
 		}
 
 		$this->handle_plugins();
@@ -314,7 +332,14 @@ class SiteDuplicator {
 	 */
 	private function handle_plugins() {
 
-		if ( isset( $_POST['blog'][ static::NAME_ACTIVATE_PLUGINS ] ) ) {
+		$blog_data = (array) $this->request->body_value(
+			'blog',
+			INPUT_POST,
+			FILTER_DEFAULT,
+			FILTER_FORCE_ARRAY
+		);
+
+		if ( array_key_exists( static::NAME_ACTIVATE_PLUGINS, $blog_data ) ) {
 			$this->active_plugins->activate();
 		} else {
 			$this->active_plugins->deactivate();

@@ -6,6 +6,7 @@ namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageView;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingView;
 
@@ -25,6 +26,11 @@ final class SiteSettingsTabView implements SettingsPageView {
 	private $data;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * @var Nonce
 	 */
 	private $nonce;
@@ -41,13 +47,16 @@ final class SiteSettingsTabView implements SettingsPageView {
 	 *
 	 * @param EditSiteTabData $data  Tab data object.
 	 * @param SiteSettingView $view  Site settings view object.
+	 * @param Request         $request
 	 * @param Nonce           $nonce Nonce object.
 	 */
-	public function __construct( EditSiteTabData $data, SiteSettingView $view, Nonce $nonce ) {
+	public function __construct( EditSiteTabData $data, SiteSettingView $view, Request $request, Nonce $nonce ) {
 
 		$this->data = $data;
 
 		$this->view = $view;
+
+		$this->request = $request;
 
 		$this->nonce = $nonce;
 	}
@@ -61,7 +70,7 @@ final class SiteSettingsTabView implements SettingsPageView {
 	 */
 	public function render() {
 
-		$site_id = (int) ( $_REQUEST['id'] ?? 0 );
+		$site_id = (int) $this->request->body_value( 'id', INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
 		if ( ! $site_id ) {
 			wp_die( __( 'Invalid site ID.', 'multilingualpress' ) );
 		}

@@ -34,9 +34,9 @@ class PluginDeactivator {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $plugin_base_name The base name of the plugin.
-	 * @param string $plugin_name      The name of the plugin.
-	 * @param string[] $errors         Optional. Error messages. Defaults to empty array.
+	 * @param string   $plugin_base_name The base name of the plugin.
+	 * @param string   $plugin_name      The name of the plugin.
+	 * @param string[] $errors           Optional. Error messages. Defaults to empty array.
 	 */
 	public function __construct( string $plugin_base_name, string $plugin_name, array $errors = [] ) {
 

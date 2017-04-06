@@ -5,7 +5,8 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\API\Translations;
-use Inpsyde\MultilingualPress\Common\AcceptHeader\AcceptHeaderParser;
+use Inpsyde\MultilingualPress\Common\HTTP\HeaderParser;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 
@@ -32,7 +33,12 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	private $language_only_priority_factor;
 
 	/**
-	 * @var AcceptHeaderParser
+	 * @var Request
+	 */
+	private $request;
+
+	/**
+	 * @var HeaderParser
 	 */
 	private $parser;
 
@@ -46,12 +52,15 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Translations       $translations Translations API object.
-	 * @param AcceptHeaderParser $parser       Accept-Language parser object.
+	 * @param Translations $translations Translations API object.
+	 * @param Request      $request      HTTP request abstraction
+	 * @param HeaderParser $parser       Accept-Language parser object.
 	 */
-	public function __construct( Translations $translations, AcceptHeaderParser $parser ) {
+	public function __construct( Translations $translations, Request $request, HeaderParser $parser ) {
 
 		$this->translations = $translations;
+
+		$this->request = $request;
 
 		$this->parser = $parser;
 
@@ -146,7 +155,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 */
 	private function get_user_languages(): array {
 
-		$fields = $this->parser->parse( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
+		$fields = $this->request->parsed_header( 'ACCEPT_LANGUAGE', $this->parser );
 		if ( ! $fields ) {
 			return [];
 		}

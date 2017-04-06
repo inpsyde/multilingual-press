@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Relations\Post;
 
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
+use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
+
 /**
  * Relationship context data object.
  *
@@ -130,11 +133,35 @@ class RelationshipContext {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param Request|null $request
+	 *
 	 * @return RelationshipContext Context object.
 	 */
-	public static function from_request(): RelationshipContext {
+	public static function from_request( Request $request = null ): RelationshipContext {
 
-		return new static( $_REQUEST );
+		if ( ! $request ) {
+			$request = new PHPServerRequest();
+		}
+
+		$getter = function ( $key ) use ( $request ) {
+
+			return (int) $request->body_value( $key, INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
+		};
+
+		$data = array_map(
+			$getter,
+			[
+				static::KEY_NEW_POST_ID,
+				static::KEY_REMOTE_POST_ID,
+				static::KEY_REMOTE_SITE_ID,
+				static::KEY_SOURCE_POST_ID,
+				static::KEY_SOURCE_SITE_ID,
+			]
+		);
+
+		$data[ static::KEY_NEW_POST_TITLE ] = (string) $request->body_value( static::KEY_NEW_POST_ID );
+
+		return new static( $data );
 	}
 
 	/**

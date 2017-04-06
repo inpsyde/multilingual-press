@@ -55,7 +55,7 @@ class Updater {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param VersionNumber  $installed_version       Installed MultilingualPress version.
+	 * @param VersionNumber $installed_version Installed MultilingualPress version.
 	 *
 	 * @return void
 	 */

@@ -55,6 +55,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			return new TrasherSettingUpdater(
 				$container['multilingualpress.trasher_setting_repository'],
 				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.request'],
 				$container['multilingualpress.trasher_setting_nonce']
 			);
 		};

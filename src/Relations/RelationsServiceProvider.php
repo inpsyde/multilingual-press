@@ -32,9 +32,9 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$container['multilingualpress.relationship_control_search'] = function () {
+		$container['multilingualpress.relationship_control_search'] = function ( Container $container ) {
 
-			return new RequestAwareSearch();
+			return new RequestAwareSearch( $container['multilingualpress.request'] );
 		};
 
 		$container['multilingualpress.relationship_control_search_controller'] = function ( Container $container ) {
@@ -62,7 +62,8 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.relationship_controller'] = function ( Container $container ) {
 
 			return new RelationshipController(
-				$container['multilingualpress.content_relations']
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.request']
 			);
 		};
 
@@ -100,10 +101,13 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 				3
 			);
 
-			if ( wp_doing_ajax() && ! empty( $_REQUEST['action'] ) ) {
-				switch ( $_REQUEST['action'] ) {
+			$request = $container['multilingualpress.request'];
+			$action  = $request->body_value( 'action' );
+
+			if ( $action && wp_doing_ajax() ) {
+				switch ( $action ) {
 					case SearchController::ACTION:
-						$container['multilingualpress.relationship_control_search_controller']->initialize();
+						$container['multilingualpress.relationship_control_search_controller']->initialize( $request );
 						break;
 
 					case RelationshipController::ACTION_CONNECT_EXISTING:

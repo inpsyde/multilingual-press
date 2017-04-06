@@ -18,7 +18,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.properties'                     => \Inpsyde\MultilingualPress\Common\PluginProperties::class,
 		'multilingualpress.quicklinks_settings_repository' => \Inpsyde\MultilingualPress\Module\Quicklinks\SettingsRepository::class,
 		'multilingualpress.redirect_settings_repository'   => \Inpsyde\MultilingualPress\Module\Redirect\SettingsRepository::class,
-		'multilingualpress.request'                        => \Inpsyde\MultilingualPress\Common\Request::class,
+		'multilingualpress.request'                        => \Inpsyde\MultilingualPress\Common\Http\Request::class,
 		'multilingualpress.site_relations'                 => \Inpsyde\MultilingualPress\API\SiteRelations::class,
 		'multilingualpress.site_relations_table'           => \Inpsyde\MultilingualPress\Database\Table::class,
 		'multilingualpress.site_settings_repository'       => \Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository::class,
@@ -32,11 +32,12 @@ namespace PHPSTORM_META {
 		'multilingualpress.type_factory'                   => \Inpsyde\MultilingualPress\Factory\TypeFactory::class,
 		'multilingualpress.uninstaller'                    => \Inpsyde\MultilingualPress\Installation\Uninstaller::class,
 		'multilingualpress.untranslated_posts_repository'  => \Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostRepository::class,
+		'multilingualpress.wordpress_request_context'      => \Inpsyde\MultilingualPress\Common\WordPressRequestContext::class,
 		'multilingualpress.wpdb'                           => \wpdb::class,
 	] ) );
 
 	override( new \Inpsyde\MultilingualPress\Service\Container, map( [
-		'multilingualpress.accept_language_parser'                            => \Inpsyde\MultilingualPress\Common\AcceptHeader\AcceptHeaderParser::class,
+		'multilingualpress.accept_language_parser'                            => \Inpsyde\MultilingualPress\Common\AcceptHeader\HeaderParser::class,
 		'multilingualpress.active_plugins'                                    => \Inpsyde\MultilingualPress\SiteDuplication\ActivePlugins::class,
 		'multilingualpress.add_languages_to_nav_menu_nonce'                   => \Inpsyde\MultilingualPress\Common\Nonce\Nonce::class,
 		'multilingualpress.alternative_language_title_site_setting'           => \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel::class,
@@ -102,7 +103,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.relationship_control_view'                         => \Inpsyde\MultilingualPress\Relations\Post\RelationshipControlView::class,
 		'multilingualpress.relationship_controller'                           => \Inpsyde\MultilingualPress\Relations\Post\RelationshipController::class,
 		'multilingualpress.relationships_site_setting'                        => \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel::class,
-		'multilingualpress.request'                                           => \Inpsyde\MultilingualPress\Common\Request::class,
+		'multilingualpress.request'                                           => \Inpsyde\MultilingualPress\Common\Http\Request::class,
 		'multilingualpress.save_plugin_settings_nonce'                        => \Inpsyde\MultilingualPress\Common\Nonce\Nonce::class,
 		'multilingualpress.save_redirect_site_setting_nonce'                  => \Inpsyde\MultilingualPress\Common\Nonce\Nonce::class,
 		'multilingualpress.save_redirect_user_setting_nonce'                  => \Inpsyde\MultilingualPress\Common\Nonce\Nonce::class,
@@ -143,6 +144,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.untranslated_posts_dashboard_widget_view'          => \Inpsyde\MultilingualPress\Widget\Dashboard\View::class,
 		'multilingualpress.untranslated_posts_repository'                     => \Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostRepository::class,
 		'multilingualpress.updater'                                           => \Inpsyde\MultilingualPress\Installation\Updater::class,
+		'multilingualpress.wordpress_request_context'                         => \Inpsyde\MultilingualPress\Common\WordPressRequestContext::class,
 		'multilingualpress.wpdb'                                              => \wpdb::class,
 	] ) );
 }
