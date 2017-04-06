@@ -8,12 +8,11 @@ namespace Inpsyde\MultilingualPress\Translation\Post;
  * @package Inpsyde\MultilingualPress\Translation\Metabox
  * @since   3.0.0
  */
-final class PostTranslationMetaboxUIRegistry {
+final class TranslationUIRegistry {
 
-	const DEFAULT_UI = [
-		PostTranslationMetaboxAdvancedUI::class,
-		PostTranslationMetaboxSimpleUI::class,
-	];
+	const FILTER_SELECT_UI = 'multilingualpress.select_translation_meta_box_ui';
+
+	const ACTION_UI_SELECTED = 'multilingualpress.translation_meta_box_ui';
 
 	/**
 	 * @var array
@@ -31,7 +30,7 @@ final class PostTranslationMetaboxUIRegistry {
 	private $selected_ui_id;
 
 	/**
-	 * @var PostTranslationMetaboxUI
+	 * @var TranslationMetaboxUI
 	 */
 	private $selected_ui;
 
@@ -46,47 +45,53 @@ final class PostTranslationMetaboxUIRegistry {
 	}
 
 	/**
-	 * Setup view and updater on proper hooks using the selected UI.
+	 * Setup view and updater on proper hook using the selected UI.
 	 */
 	public function setup() {
 
 		static $done;
-
 		if ( $done ) {
 			return;
 		}
 
 		$done = true;
 
-		$this->ensure_default();
+		add_action( PostMetaboxRegistrar::ACTION_ADD_BOXES, function () {
 
-		add_action( 'multilingualpress.add_translation_meta_boxes', function() {
 			$this->selected_ui()->setup_view();
 		} );
 
-		add_action( 'multilingualpress.save_translation_meta_boxes', function() {
+		add_action( PostMetaboxRegistrar::ACTION_SAVE_BOXES, function () {
+
 			$this->selected_ui()->setup_updater();
 		} );
 	}
 
 	/**
-	 * @param PostTranslationMetaboxUI $ui
+	 * @param TranslationMetaboxUI $ui
+	 *
+	 * @return TranslationUIRegistry
 	 */
-	public function register_ui( PostTranslationMetaboxUI $ui ) {
+	public function register_ui( TranslationMetaboxUI $ui ): TranslationUIRegistry {
 
 		$id = $ui->id();
+
+		if ( array_key_exists( $id, $this->ui ) ) {
+			throw new \InvalidArgumentException(
+				"It is not possible to use '{$id}' as post metabox UI identifier because it is already in use."
+			);
+		}
 
 		$this->ui[ $id ]     = $ui;
 		$this->titles[ $id ] = $ui->title();
 
+		return $this;
 	}
 
 	/**
 	 * @return string[]
 	 */
 	public function all_ui_titles(): array {
-
-		$this->ensure_default();
 
 		return $this->titles;
 	}
@@ -96,66 +101,52 @@ final class PostTranslationMetaboxUIRegistry {
 	 */
 	public function all_ui_ids(): array {
 
-		$this->ensure_default();
-
 		return array_keys( $this->ui );
 	}
 
 	/**
-	 * @return PostTranslationMetaboxUI[]
+	 * @return TranslationMetaboxUI[]
 	 */
 	public function all_ui(): array {
-
-		$this->ensure_default();
 
 		return $this->ui;
 	}
 
 	/**
-	 * In no ui are setup, add the defaults.
+	 * @return TranslationMetaboxUI
 	 */
-	private function ensure_default() {
-
-		if ( $this->ui ) {
-			return;
-		}
-
-		foreach ( self::DEFAULT_UI as $ui_class ) {
-			$this->register_ui( new $ui_class() );
-		}
-	}
-
-	/**
-	 * @return PostTranslationMetaboxUI
-	 */
-	private function selected_ui(): PostTranslationMetaboxUI {
+	private function selected_ui(): TranslationMetaboxUI {
 
 		if ( $this->selected_ui ) {
 			return $this->selected_ui;
 		}
 
-		$this->ensure_default();
-
 		$selected = $this->selected_ui_id && array_key_exists( $this->selected_ui_id, $this->ui )
 			? $this->ui[ $this->selected_ui_id ]
-			: $this->ui[ PostTranslationMetaboxSimpleUI::ID ];
+			: null;
+
+		if ( ! $selected ) {
+			$selected = array_key_exists( TranslationAdvancedUI::ID, $this->ui )
+				? $this->ui[ TranslationAdvancedUI::ID ]
+				: new TranslationAdvancedUI();
+		}
 
 		/**
 		 * Filters the post metabox UI to be used
 		 *
-		 * @param \WP_Post $ui          Currently Selected UI.
-		 * @param int      $ui_registry UI registry.
+		 * @param \WP_Post $ui Currently selected UI object.
+		 * @param array    $ui Array of available UI where keys are UI ids and values are UI titles
 		 */
-		$filtered = apply_filters( 'multilingualpress.select_translation_meta_box_ui', $selected, $this );
+		$filtered = apply_filters( self::FILTER_SELECT_UI, $selected, $this->titles );
 
-		$this->selected_ui = $filtered instanceof PostTranslationMetaboxUI ? $filtered : $selected;
+		$this->selected_ui = $filtered instanceof TranslationMetaboxUI ? $filtered : $selected;
 
 		/**
 		 * Runs after the translation UI has been selected.
 		 *
 		 * @param \WP_Post $post Post object.
 		 */
-		do_action( 'multilingualpress.translation_meta_box_ui', $this->selected_ui );
+		do_action( self::ACTION_UI_SELECTED, $this->selected_ui );
 
 		return $this->selected_ui;
 	}

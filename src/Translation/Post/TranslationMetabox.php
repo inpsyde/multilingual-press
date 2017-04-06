@@ -13,7 +13,11 @@ use Inpsyde\MultilingualPress\Translation\Metabox\SiteSpecificMetabox;
  * @package Inpsyde\MultilingualPress\Translation\Metabox
  * @since   3.0.0
  */
-final class PostTranslationMetabox implements SiteSpecificMetabox {
+final class TranslationMetabox implements SiteSpecificMetabox {
+
+	const ACTION_INIT_VIEW = 'multilingualpress.post_translation_view';
+
+	const ACTION_INIT_UPDATER = 'multilingualpress.post_translation_updater';
 
 	/**
 	 * @var \WP_Post
@@ -23,6 +27,7 @@ final class PostTranslationMetabox implements SiteSpecificMetabox {
 	 * @var int
 	 */
 	private $site_id;
+
 	/**
 	 * @var string
 	 */
@@ -65,7 +70,7 @@ final class PostTranslationMetabox implements SiteSpecificMetabox {
 	 */
 	public function info(): MetaboxInfo {
 
-		return new PostTranslationMetaboxInfo( $this->site_id, $this->language, $this->post_types, $this->post );
+		return new TranslationMetaboxInfo( $this->site_id, $this->language, $this->post_types, $this->post );
 
 	}
 
@@ -74,16 +79,16 @@ final class PostTranslationMetabox implements SiteSpecificMetabox {
 	 */
 	public function view(): MetaboxView {
 
-		$view = new PostTranslationMetaboxView( $this->site_id, $this->language, $this->post );
+		$view = new TranslationMetaboxView( $this->site_id, $this->language, $this->post );
 
 		/**
 		 * Runs just after PostTranslationMetaboxView is initialized.
 		 *
 		 * Useful to inject data via PostTranslationMetaboxView::with_data().
 		 *
-		 * @param PostTranslationMetaboxView $view View object.
+		 * @param TranslationMetaboxView $view View object.
 		 */
-		do_action( 'multilingualpress.post_translation_view', $view );
+		do_action( self::ACTION_INIT_VIEW, $view );
 
 		return $view;
 	}
@@ -93,16 +98,16 @@ final class PostTranslationMetabox implements SiteSpecificMetabox {
 	 */
 	public function updater(): MetaboxUpdater {
 
-		$updater = new PostTranslationMetaboxUpdater( $this->site_id, $this->language, $this->post );
+		$updater = new TranslationMetaboxUpdater( $this->site_id, $this->language, $this->post );
 
 		/**
 		 * Runs just after PostTranslationMetaboxUpdater is initialized.
 		 *
 		 * Useful to inject data via PostTranslationMetaboxUpdater::with_data().
 		 *
-		 * @param PostTranslationMetaboxUpdater $updater Updater object.
+		 * @param TranslationMetaboxUpdater $updater Updater object.
 		 */
-		do_action( 'multilingualpress.post_translation_updater', $updater );
+		do_action( self::ACTION_INIT_UPDATER, $updater );
 
 		return $updater;
 	}

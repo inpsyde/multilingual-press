@@ -12,9 +12,21 @@ use Inpsyde\MultilingualPress\Translation\Metabox\PriorityAwareMetaboxInfo;
  * @package Inpsyde\MultilingualPress\Translation\Metabox
  * @since   3.0.0
  */
-final class PostTranslationMetaboxInfo implements PriorityAwareMetaboxInfo {
+final class TranslationMetaboxInfo implements PriorityAwareMetaboxInfo {
 
 	use MetaboxInfoDecorator;
+
+	const ID_PREFIX = 'inpsyde_multilingual_';
+
+	/**
+	 * @var string
+	 */
+	private $context = 'advanced';
+
+	/**
+	 * @var string
+	 */
+	private $priority = 'default';
 
 	/**
 	 * Constructor.
@@ -27,11 +39,11 @@ final class PostTranslationMetaboxInfo implements PriorityAwareMetaboxInfo {
 	public function __construct( int $site_id, string $language, array $post_types, \WP_Post $post = null ) {
 
 		$info = new GenericMetaboxInfo(
-			"inpsyde_multilingual_{$site_id}",
+			self::ID_PREFIX . $site_id,
 			$this->metabox_title( $site_id, $language, $post ),
 			$post_types,
-			'advanced',
-			'default'
+			$this->context,
+			$this->priority
 		);
 
 		$this->decorate_metabox_info( $info );
@@ -76,10 +88,11 @@ final class PostTranslationMetaboxInfo implements PriorityAwareMetaboxInfo {
 	 */
 	private function edit_post_link( \WP_Post $post ) {
 
-		$url  = get_edit_post_link( $post );
-		$text = $this->translated_status( $post );
-
-		return ' <small> - <a href="' . esc_url( $url ) . '">' . esc_html( $text ) . '</a></small>';
+		return sprintf(
+			' <small> - <a href="%s">%s</a></small>',
+			esc_url( get_edit_post_link( $post ) ),
+			esc_html(  $this->translated_status( $post ) )
+		);
 	}
 
 	/**
@@ -98,11 +111,8 @@ final class PostTranslationMetaboxInfo implements PriorityAwareMetaboxInfo {
 		$translated_status = $existing_statuses[ $status ] ?? ucfirst( $status );
 
 		if ( in_array( $status, [ 'publish', 'private' ], true ) ) {
-			$template = esc_html_x(
-				'%1$s (%2$s)',
-				'No HTML; 1 = post status, 2 = publish time',
-				'multilingualpress'
-			);
+
+			$template = _x( '%1$s (%2$s)', '1 = post status, 2 = publish time', 'multilingualpress' );
 
 			$post_time = get_post_time( get_option( 'date_format' ), false, $post );
 

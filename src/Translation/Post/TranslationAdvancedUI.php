@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Translation\Post;
  * @package Inpsyde\MultilingualPress\Translation\Metabox
  * @since   3.0.0
  */
-final class PostTranslationMetaboxAdvancedUI implements PostTranslationMetaboxUI {
+final class TranslationAdvancedUI implements TranslationMetaboxUI {
 
 	const ID = 'mlp_advanced';
 
@@ -25,7 +25,7 @@ final class PostTranslationMetaboxAdvancedUI implements PostTranslationMetaboxUI
 	 */
 	public function title(): string {
 
-		return esc_html_x( 'Advanced', 'Post Metabox UI title', 'multilingualpress');
+		return esc_html_x( 'Advanced', 'Post Metabox UI title', 'multilingualpress' );
 	}
 
 	/**
@@ -33,29 +33,33 @@ final class PostTranslationMetaboxAdvancedUI implements PostTranslationMetaboxUI
 	 */
 	public function setup_view() {
 
-		add_action( 'multilingualpress.post_translation_view', function ( PostTranslationMetaboxView $view ) {
+		add_action( 'multilingualpress.post_translation_view', function ( TranslationMetaboxView $view ) {
 
 		} );
 
 		add_action(
 			'multilingualpress.translation_meta_box_top',
-			function( \WP_Post $post, int $remote_site_id, string $remote_language, \WP_Post $remote_post = null ) {
+			function ( \WP_Post $post, int $remote_site_id, string $remote_language, \WP_Post $remote_post = null ) {
 
-			}
+			},
+			10,
+			4
 		);
 
 		add_action(
 			'multilingualpress.translation_meta_box_main',
-			function( \WP_Post $post, int $remote_site_id, string $remote_language, \WP_Post $remote_post = null ) {
+			function ( \WP_Post $post, int $remote_site_id, string $remote_language, \WP_Post $remote_post = null ) {
 
 			}
 		);
 
 		add_action(
 			'multilingualpress.translation_meta_box_bottom',
-			function( \WP_Post $post, int $remote_site_id, string $remote_language, \WP_Post $remote_post = null ) {
+			function ( \WP_Post $post, int $remote_site_id, string $remote_language, \WP_Post $remote_post = null ) {
 
-			}
+			},
+			10,
+			4
 		);
 	}
 
@@ -64,7 +68,7 @@ final class PostTranslationMetaboxAdvancedUI implements PostTranslationMetaboxUI
 	 */
 	public function setup_updater() {
 
-		add_action( 'multilingualpress.post_translation_updater', function ( PostTranslationMetaboxUpdater $updater ) {
+		add_action( 'multilingualpress.post_translation_updater', function ( TranslationMetaboxUpdater $updater ) {
 
 		} );
 	}

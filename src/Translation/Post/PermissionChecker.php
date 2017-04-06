@@ -5,14 +5,13 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Post;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
-use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use function Inpsyde\MultilingualPress\site_exists;
 
 /**
  * @package Inpsyde\MultilingualPress\Translation\Metabox
  * @since   3.0.0
  */
-class PostTranslationGuard {
+class PermissionChecker {
 
 	/**
 	 * @var ContentRelations
@@ -39,7 +38,7 @@ class PostTranslationGuard {
 	 *
 	 * @return bool
 	 */
-	public function is_source_post_translatable( \WP_Post $post ): bool {
+	public function is_source_post_editable( \WP_Post $post ): bool {
 
 		$post_type = get_post_type_object( $post->post_type );
 
@@ -54,10 +53,10 @@ class PostTranslationGuard {
 	 *
 	 * @return bool
 	 */
-	public function is_remote_post_translatable( \WP_Post $source_post, int $remote_site_id = null ): bool {
+	public function is_remote_post_editable( \WP_Post $source_post, int $remote_site_id = null ): bool {
 
 		if ( null === $remote_site_id || $remote_site_id === (int) get_current_blog_id() ) {
-			return $this->is_source_post_translatable( $source_post );
+			return $this->is_source_post_editable( $source_post );
 		}
 
 		$post_type = get_post_type_object( $source_post->post_type );
@@ -71,7 +70,7 @@ class PostTranslationGuard {
 
 		$remote_post_id = $this->remote_post_id( $source_post, $remote_site_id );
 		if ( ! $remote_post_id ) {
-			return false;
+			return current_user_can_for_blog( $remote_site_id, $post_type->cap->edit_others_posts );
 		}
 
 		return current_user_can_for_blog( $remote_site_id, $post_type->cap->edit_post, $remote_post_id );

@@ -6,15 +6,14 @@ namespace Inpsyde\MultilingualPress\Translation\Post;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\API\SiteRelations;
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Translation\Metabox\SiteSpecificMetabox;
 
 /**
  * @package Inpsyde\MultilingualPress\Translation\Metabox
  * @since   3.0.0
  */
-class PostTranslationMetaboxFactory {
-
-	const BLOGS_OPTION_NAME = 'inpsyde_multilingual';
+class MetaboxFactory {
 
 	/**
 	 * @var SiteRelations
@@ -26,21 +25,34 @@ class PostTranslationMetaboxFactory {
 	 */
 	private $content_relations;
 
-	private $blogs;
+	/**
+	 * @var SiteSettingsRepository
+	 */
+	private $settings_repository;
+
+	/**
+	 * @var array
+	 */
+	private $settings;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param SiteRelations    $site_relations
-	 * @param ContentRelations $content_relations
+	 * @param SiteRelations          $site_relations
+	 * @param ContentRelations       $content_relations
+	 * @param SiteSettingsRepository $settings_repository
 	 */
-	public function __construct( SiteRelations $site_relations, ContentRelations $content_relations ) {
+	public function __construct(
+		SiteRelations $site_relations,
+		ContentRelations $content_relations,
+		SiteSettingsRepository $settings_repository
+	) {
 
 		$this->site_relations = $site_relations;
 
 		$this->content_relations = $content_relations;
 
-		$this->blogs = (array) get_site_option( self::BLOGS_OPTION_NAME, [] ) ?: [];
+		$this->settings_repository = $settings_repository;
 	}
 
 	/**
@@ -55,17 +67,15 @@ class PostTranslationMetaboxFactory {
 			return [];
 		}
 
-		$related_sites = $this->site_relations->get_related_site_ids( (int) get_current_blog_id(), false );
+		$current_site = (int) get_current_blog_id();
+
+		$related_sites = $this->site_relations->get_related_site_ids( $current_site, false );
 
 		if ( ! $related_sites ) {
 			return [];
 		}
 
-		$linked_posts = $this->content_relations->get_relations(
-			get_current_blog_id(),
-			$post->ID,
-			'post'
-		);
+		$linked_posts = $this->content_relations->get_relations( $current_site, $post->ID, 'post' );
 
 		return array_map( function ( $site_id ) use ( $linked_posts, $post_types ) {
 
@@ -83,9 +93,11 @@ class PostTranslationMetaboxFactory {
 	 */
 	private function create_site_box( int $site_id, array $linked_posts, array $post_types ): SiteSpecificMetabox {
 
-		$remote_post = empty( $linked_posts[ $site_id ] ) ? null : get_blog_post( $site_id, $linked_posts[ $site_id ] );
+		$remote_post = empty( $linked_posts[ $site_id ] )
+			? null
+			: get_blog_post( $site_id, $linked_posts[ $site_id ] );
 
-		return new PostTranslationMetabox(
+		return new TranslationMetabox(
 			$site_id,
 			$this->language_for_site( $site_id ),
 			$post_types,
@@ -113,22 +125,26 @@ class PostTranslationMetaboxFactory {
 	 */
 	public function language_for_site( $site_id ) {
 
-		$language = '(' . $site_id . ')';
+		/*
+		 * @TODO Here would be better to use specific setting repository methods, e.g. get_site_language().
+		 *      The issue is that in TypeSafeSiteSettingsRepository get_site_language() never
+		 *      returns and empty value, but fallbacks to default lang (en_US) which is a bit dangerous here.
+		 *      Consider to return an empty value from TypeSafeSiteSettingsRepository::get_site_language() so we
+		 *      can use a custom fallback instead of a possibly misleading default language.
+		 */
 
-		if ( empty( $this->blogs[ $site_id ] ) ) {
-			return $language;
+		if ( null === $this->settings ) {
+			$this->settings = $this->settings_repository->get_settings();
 		}
 
-		$data = $this->blogs[ $site_id ];
-
-		if ( ! empty( $data['text'] ) ) {
-			return $data['text'];
+		if ( ! empty( $settings[ $site_id ]['text'] ) ) {
+			return stripslashes( (string) $settings[ $site_id ]['text'] );
 		}
 
-		if ( ! empty( $data['lang'] ) ) {
-			return $data['lang'];
+		if ( ! empty( $settings[ $site_id ]['lang'] ) ) {
+			return stripslashes( (string) $settings[ $site_id ]['lang'] );
 		}
 
-		return $language;
+		return "({$site_id})";
 	}
 }

@@ -6,12 +6,13 @@ namespace Inpsyde\MultilingualPress\Translation\Post;
 
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Translation\Metabox\MetaboxUpdater;
+use Inpsyde\MultilingualPress\Translation\Metabox\PostMetaboxUpdater;
 
 /**
  * @package Inpsyde\MultilingualPress\Translation\Metabox
  * @since   3.0.0
  */
-final class PostTranslationMetaboxUpdater implements MetaboxUpdater {
+final class TranslationMetaboxUpdater implements PostMetaboxUpdater {
 
 	/**
 	 * @var array
@@ -30,6 +31,11 @@ final class PostTranslationMetaboxUpdater implements MetaboxUpdater {
 	/**
 	 * @var \WP_Post
 	 */
+	private $remote_post;
+
+	/**
+	 * @var \WP_Post
+	 */
 	private $post;
 
 	/**
@@ -37,13 +43,25 @@ final class PostTranslationMetaboxUpdater implements MetaboxUpdater {
 	 *
 	 * @param string   $language
 	 * @param int      $site_id
-	 * @param \WP_Post $post
+	 * @param \WP_Post $remote_post
 	 */
-	public function __construct( int $site_id, string $language, \WP_Post $post = null ) {
+	public function __construct( int $site_id, string $language, \WP_Post $remote_post = null ) {
 
-		$this->site_id = $site_id;
-		$this->language = $language;
+		$this->site_id     = $site_id;
+		$this->language    = $language;
+		$this->remote_post = $remote_post;
+	}
+
+	/**
+	 * @param \WP_Post $post
+	 *
+	 * @return PostMetaboxUpdater
+	 */
+	public function with_post( \WP_Post $post ): PostMetaboxUpdater {
+
 		$this->post = $post;
+
+		return $this;
 	}
 
 	/**
@@ -58,6 +76,11 @@ final class PostTranslationMetaboxUpdater implements MetaboxUpdater {
 		return $this;
 	}
 
+	/**
+	 * @param ServerRequest $request
+	 *
+	 * @return bool
+	 */
 	public function update( ServerRequest $request ): bool {
 		// TODO: Implement update() method.
 	}

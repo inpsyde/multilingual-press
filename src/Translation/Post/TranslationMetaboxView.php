@@ -10,7 +10,7 @@ use Inpsyde\MultilingualPress\Translation\Metabox\MetaboxView;
  * @package Inpsyde\MultilingualPress\Translation\Metabox
  * @since   3.0.0
  */
-final class PostTranslationMetaboxView implements MetaboxView {
+final class TranslationMetaboxView implements PostMetaboxView {
 
 	/**
 	 * @var array
@@ -28,6 +28,11 @@ final class PostTranslationMetaboxView implements MetaboxView {
 	/**
 	 * @var \WP_Post
 	 */
+	private $remote_post;
+
+	/**
+	 * @var \WP_Post
+	 */
 	private $post;
 
 	/**
@@ -35,13 +40,13 @@ final class PostTranslationMetaboxView implements MetaboxView {
 	 *
 	 * @param int      $site_id
 	 * @param string   $language
-	 * @param \WP_Post $post
+	 * @param \WP_Post $remote_post
 	 */
-	public function __construct( int $site_id, string $language, \WP_Post $post = null ) {
+	public function __construct( int $site_id, string $language, \WP_Post $remote_post = null ) {
 
-		$this->language = $language;
-		$this->site_id  = $site_id;
-		$this->post     = $post;
+		$this->language    = $language;
+		$this->site_id     = $site_id;
+		$this->remote_post = $remote_post;
 	}
 
 	/**
@@ -57,12 +62,23 @@ final class PostTranslationMetaboxView implements MetaboxView {
 	}
 
 	/**
+	 * @param \WP_Post $post
+	 *
+	 * @return PostMetaboxView
+	 */
+	public function with_post( \WP_Post $post ): PostMetaboxView {
+
+		$this->post = $post;
+
+		return $this;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function render(): string {
 
-		$post = $this->data['post'] ?? null;
-		if ( ! $post ) {
+		if ( ! $this->post ) {
 			return '';
 		}
 
@@ -82,10 +98,10 @@ final class PostTranslationMetaboxView implements MetaboxView {
 			 */
 			do_action(
 				'multilingualpress.translation_meta_box_top',
-				$post,
+				$this->post,
 				$this->site_id,
 				$this->language,
-				$this->post
+				$this->remote_post
 			);
 
 			/**
@@ -98,10 +114,10 @@ final class PostTranslationMetaboxView implements MetaboxView {
 			 */
 			do_action(
 				'multilingualpress.translation_meta_box_main',
-				$post,
+				$this->post,
 				$this->site_id,
 				$this->language,
-				$this->post
+				$this->remote_post
 			);
 
 			/**
@@ -114,10 +130,10 @@ final class PostTranslationMetaboxView implements MetaboxView {
 			 */
 			do_action(
 				'multilingualpress.translation_meta_box_bottom',
-				$post,
+				$this->post,
 				$this->site_id,
 				$this->language,
-				$this->post
+				$this->remote_post
 			);
 			?>
 		</div>

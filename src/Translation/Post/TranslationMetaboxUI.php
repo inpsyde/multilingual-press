@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Translation\Post;
  * @package Inpsyde\MultilingualPress\Translation\Metabox
  * @since   3.0.0
  */
-interface PostTranslationMetaboxUI {
+interface TranslationMetaboxUI {
 
 	/**
 	 * @return string
