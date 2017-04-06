@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
-use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\RequestValidator;
 
