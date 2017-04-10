@@ -6,14 +6,15 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Post;
 
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\AdvancedPostTranslator;
-use Inpsyde\MultilingualPress\Translation\TranslationUI;
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 
 /**
  * @package Inpsyde\MultilingualPress\Common\Admin\MetaBox
  * @since   3.0.0
  */
-final class TranslationUIRegistry {
+final class TranslationUIRegistry implements MetaBoxUIRegistry {
 
 	const FILTER_SELECT_UI = 'multilingualpress.select_translation_meta_box_ui';
 
@@ -24,10 +25,10 @@ final class TranslationUIRegistry {
 	 */
 	private $ui = [];
 
-	/**@todo Adapt to new name "name".
+	/**
 	 * @var array
 	 */
-	private $titles = [];
+	private $names = [];
 
 	/**
 	 * @var string
@@ -35,7 +36,7 @@ final class TranslationUIRegistry {
 	private $selected_ui_id;
 
 	/**
-	 * @var TranslationUI
+	 * @var MetaBoxUI
 	 */
 	private $selected_ui;
 
@@ -73,11 +74,11 @@ final class TranslationUIRegistry {
 	}
 
 	/**
-	 * @param TranslationUI $ui
+	 * @param MetaBoxUI $ui
 	 *
-	 * @return TranslationUIRegistry
+	 * @return MetaBoxUIRegistry
 	 */
-	public function register_ui( TranslationUI $ui ): TranslationUIRegistry {
+	public function register_ui( MetaBoxUI $ui ): MetaBoxUIRegistry {
 
 		$id = $ui->id();
 
@@ -89,7 +90,7 @@ final class TranslationUIRegistry {
 
 		$this->ui[ $id ] = $ui;
 
-		$this->titles[ $id ] = $ui->name();
+		$this->names[ $id ] = $ui->name();
 
 		return $this;
 	}
@@ -97,9 +98,9 @@ final class TranslationUIRegistry {
 	/**
 	 * @return string[]
 	 */
-	public function all_ui_titles(): array {
+	public function all_ui_names(): array {
 
-		return $this->titles;
+		return $this->names;
 	}
 
 	/**
@@ -111,7 +112,7 @@ final class TranslationUIRegistry {
 	}
 
 	/**
-	 * @return TranslationUI[]
+	 * @return MetaBoxUI[]
 	 */
 	public function all_ui(): array {
 
@@ -119,9 +120,9 @@ final class TranslationUIRegistry {
 	}
 
 	/**
-	 * @return TranslationUI
+	 * @return MetaBoxUI
 	 */
-	private function selected_ui(): TranslationUI {
+	private function selected_ui(): MetaBoxUI {
 
 		if ( $this->selected_ui ) {
 			return $this->selected_ui;
@@ -143,9 +144,9 @@ final class TranslationUIRegistry {
 		 * @param \WP_Post $ui Currently selected UI object.
 		 * @param array    $ui Array of available UI where keys are UI ids and values are UI titles
 		 */
-		$filtered = apply_filters( self::FILTER_SELECT_UI, $selected, $this->titles );
+		$filtered = apply_filters( self::FILTER_SELECT_UI, $selected, $this->names );
 
-		$this->selected_ui = $filtered instanceof TranslationUI ? $filtered : $selected;
+		$this->selected_ui = $filtered instanceof MetaBoxUI ? $filtered : $selected;
 
 		/**
 		 * Runs after the translation UI has been selected.

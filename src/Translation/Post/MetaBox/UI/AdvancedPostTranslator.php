@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI;
 
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxController;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxView;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetadataUpdater;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\ViewInjection;
-use Inpsyde\MultilingualPress\Translation\TranslationUI;
 
 /**
  * Advanced post translation user interface implementation.
@@ -16,7 +16,7 @@ use Inpsyde\MultilingualPress\Translation\TranslationUI;
  * @package Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI
  * @since   3.0.0
  */
-final class AdvancedPostTranslator implements TranslationUI {
+final class AdvancedPostTranslator implements MetaBoxUI {
 
 	use ViewInjection;
 

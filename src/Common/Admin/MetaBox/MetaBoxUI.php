@@ -2,15 +2,15 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Translation;
+namespace Inpsyde\MultilingualPress\Common\Admin\MetaBox;
 
 /**
- * Interface for all translation user interface implementations.
+ * Interface for all meta box UI implementations.
  *
- * @package Inpsyde\MultilingualPress\Translation
+ * @package Inpsyde\MultilingualPress\Common\Admin\MetaBox
  * @since   3.0.0
  */
-interface TranslationUI {
+interface MetaBoxUI {
 
 	/**
 	 * Returns the ID of the user interface.
@@ -47,4 +47,6 @@ interface TranslationUI {
 	 * @return void
 	 */
 	public function register_view();
+
+
 }
