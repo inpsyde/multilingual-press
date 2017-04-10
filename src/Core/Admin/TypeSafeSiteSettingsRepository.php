@@ -15,11 +15,6 @@ use Inpsyde\MultilingualPress\API\SiteRelations;
 final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 	/**
-	 * @var string
-	 */
-	private $default_site_language = 'en_US';
-
-	/**
 	 * @var SiteRelations
 	 */
 	private $site_relations;
@@ -123,11 +118,11 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 			return (string) $settings[ $site_id ]['lang'];
 		}
 
-		$site_language = (string) get_network_option( null, 'WPLANG', $this->default_site_language );
+		$site_language = (string) get_network_option( null, 'WPLANG', '' );
 
 		return in_array( $site_language, get_available_languages(), true )
 			? $site_language
-			: $this->default_site_language;
+			: '';
 	}
 
 	/**

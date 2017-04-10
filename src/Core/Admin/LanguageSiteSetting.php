@@ -100,7 +100,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 			],
 		] );
 		if ( $languages ) {
-			$current_site_language = $this->repository->get_site_language( $site_id );
+			$current_site_language = $this->repository->get_site_language( $site_id ) ?: 'en_US';
 
 			$options = array_reduce( $languages, function ( $options, $language ) use ( $current_site_language ) {
 
