@@ -93,7 +93,7 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 
 			return new Dashboard\UntranslatedPosts\TranslationCompletedSettingUpdater(
 				$container['multilingualpress.untranslated_posts_repository'],
-				$container['multilingualpress.request'],
+				$container['multilingualpress.server_request'],
 				$container['multilingualpress.translation_completed_setting_nonce']
 			);
 		};
