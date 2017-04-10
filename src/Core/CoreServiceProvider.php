@@ -53,14 +53,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$container['multilingualpress.request'] = function ( Container $container ) {
-
-			$container->share( 'multilingualpress.request', function () {
-
-				return new PHPServerRequest();
-			} );
-		};
-
 		$container['multilingualpress.alternative_language_title_site_setting'] = function ( Container $container ) {
 
 			return new AlternativeLanguageTitleSiteSetting(
@@ -135,7 +127,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.module_manager'],
 				$container['multilingualpress.save_plugin_settings_nonce'],
 				$container['multilingualpress.plugin_settings_page'],
-				$container['multilingualpress.request']
+				$container['multilingualpress.server_request']
 			);
 		};
 
@@ -147,11 +139,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
-		$container->share( 'multilingualpress.wordpress_request_context', function () {
-
-			return new ConditionalAwareWordPressRequestContext();
-		} );
-
 		$container['multilingualpress.save_plugin_settings_nonce'] = function () {
 
 			return new WPNonce( 'save_plugin_settings' );
@@ -161,6 +148,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new WPNonce( 'save_site_settings' );
 		};
+
+		$container->share( 'multilingualpress.server_request', function () {
+
+			return new PHPServerRequest();
+		} );
 
 		$container['multilingualpress.site_data_deletor'] = function ( Container $container ) {
 
@@ -207,7 +199,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new SiteSettingsTabView(
 				$container['multilingualpress.site_settings_tab_data'],
 				new SiteSettingsSectionView( $container['multilingualpress.site_settings'] ),
-				$container['multilingualpress.request'],
+				$container['multilingualpress.server_request'],
 				$container['multilingualpress.save_site_settings_nonce']
 			);
 		};
@@ -216,7 +208,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new SiteSettingsUpdateRequestHandler(
 				$container['multilingualpress.site_settings_updater'],
-				$container['multilingualpress.request'],
+				$container['multilingualpress.server_request'],
 				$container['multilingualpress.save_site_settings_nonce']
 			);
 		};
@@ -226,7 +218,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new SiteSettingsUpdater(
 				$container['multilingualpress.site_settings_repository'],
 				$container['multilingualpress.languages'],
-				$container['multilingualpress.request']
+				$container['multilingualpress.server_request']
 			);
 		};
 
@@ -239,6 +231,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.relationships_site_setting'],
 			] );
 		};
+
+		$container->share( 'multilingualpress.wordpress_request_context', function () {
+
+			return new ConditionalAwareWordPressRequestContext();
+		} );
 	}
 
 	/**

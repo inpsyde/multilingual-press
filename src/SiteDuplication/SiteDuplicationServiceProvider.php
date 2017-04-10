@@ -79,7 +79,7 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 				$container['multilingualpress.active_plugins'],
 				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.attachment_copier'],
-				$container['multilingualpress.request']
+				$container['multilingualpress.server_request']
 			);
 		};
 	}

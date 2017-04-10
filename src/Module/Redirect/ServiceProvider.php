@@ -50,7 +50,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 			return new PriorityAwareLanguageNegotiator(
 				$container['multilingualpress.translations'],
-				$container['multilingualpress.request'],
+				$container['multilingualpress.server_request'],
 				$container['multilingualpress.accept_language_parser']
 			);
 		};
@@ -76,7 +76,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			return new NoredirectAwareRedirectRequestValidator(
 				$container['multilingualpress.redirect_settings_repository'],
 				$container['multilingualpress.noredirect_storage'],
-				$container['multilingualpress.request']
+				$container['multilingualpress.server_request']
 			);
 		};
 
@@ -98,7 +98,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 			return new SecureSiteSettingUpdater(
 				SettingsRepository::OPTION_SITE,
-				$container['multilingualpress.request'],
+				$container['multilingualpress.server_request'],
 				$container['multilingualpress.save_redirect_site_setting_nonce']
 			);
 		};
@@ -116,7 +116,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 			return new SecureUserSettingUpdater(
 				SettingsRepository::META_KEY_USER,
-				$container['multilingualpress.request'],
+				$container['multilingualpress.server_request'],
 				$container['multilingualpress.save_redirect_user_setting_nonce']
 			);
 		};
@@ -126,7 +126,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			return new NoredirectAwareRedirector(
 				$container['multilingualpress.language_negotiator'],
 				$container['multilingualpress.noredirect_storage'],
-				$container['multilingualpress.request']
+				$container['multilingualpress.server_request']
 			);
 		};
 

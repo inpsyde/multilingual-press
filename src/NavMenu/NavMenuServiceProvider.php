@@ -38,7 +38,7 @@ final class NavMenuServiceProvider implements BootstrappableServiceProvider {
 			return new AJAXHandler(
 				$container['multilingualpress.add_languages_to_nav_menu_nonce'],
 				$container['multilingualpress.nav_menu_item_repository'],
-				$container['multilingualpress.request']
+				$container['multilingualpress.server_request']
 			);
 		};
 
@@ -58,7 +58,9 @@ final class NavMenuServiceProvider implements BootstrappableServiceProvider {
 
 		$container->share( 'multilingualpress.nav_menu_item_repository', function ( Container $container ) {
 
-			return new ValidatingItemRepository( $container['multilingualpress.request'] );
+			return new ValidatingItemRepository(
+				$container['multilingualpress.server_request']
+			);
 		} );
 
 		$container['multilingualpress.nav_menu_meta_box_model'] = function () {

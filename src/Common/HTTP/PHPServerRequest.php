@@ -166,7 +166,7 @@ final class PHPServerRequest implements ServerRequest {
 
 		$name = strtoupper( $name );
 
-		return array_key_exists( $name, self::$values ) ? (string) self::$values[ $name ] : '';
+		return array_key_exists( $name, self::$server ) ? (string) self::$server[ $name ] : '';
 	}
 
 	/**

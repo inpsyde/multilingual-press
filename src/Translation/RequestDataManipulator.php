@@ -1,11 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Translation\Request;
+namespace Inpsyde\MultilingualPress\Translation;
 
 /**
  * Interface for all request data manipulator implementations.
  *
- * @package Inpsyde\MultilingualPress\Translation\Request
+ * @package Inpsyde\MultilingualPress\Translation
  * @since   3.0.0
  */
 interface RequestDataManipulator {
