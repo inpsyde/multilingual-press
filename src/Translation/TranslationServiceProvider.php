@@ -10,7 +10,6 @@ use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\AdvancedPostTranslator;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\SimplePostTranslator;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBoxFactory;
-use Inpsyde\MultilingualPress\Translation\Post\PermissionChecker;
 use Inpsyde\MultilingualPress\Translation\Post\PostMetaBoxRegistrar;
 use Inpsyde\MultilingualPress\Translation\Post\TranslationUIRegistry;
 use Inpsyde\MultilingualPress\Translation\Translator\FrontPageTranslator;
@@ -85,18 +84,11 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			);
 		};
 
-		$container['multilingualpress.post_translation_permission_checker'] = function ( Container $container ) {
-
-			return new PermissionChecker(
-				$container['multilingualpress.content_relations']
-			);
-		};
-
 		$container['multilingualpress.post_translation_meta_box_registrar'] = function ( Container $container ) {
 
 			return new PostMetaBoxRegistrar(
 				$container['multilingualpress.post_translation_meta_box_factory'],
-				$container['multilingualpress.post_translation_permission_checker'],
+				$container['multilingualpress.relationship_permission'],
 				$container['multilingualpress.server_request'],
 				$container['multilingualpress.nonce_factory']
 			);

@@ -7,6 +7,7 @@ namespace Inpsyde\MultilingualPress\Relations;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipController;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipControlView;
+use Inpsyde\MultilingualPress\Relations\Post\RelationshipPermission;
 use Inpsyde\MultilingualPress\Relations\Post\Search\RequestAwareSearch;
 use Inpsyde\MultilingualPress\Relations\Post\Search\SearchController;
 use Inpsyde\MultilingualPress\Relations\Post\Search\StatusAwareSearchResultsView;
@@ -64,6 +65,13 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 			return new RelationshipController(
 				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.server_request']
+			);
+		};
+
+		$container['multilingualpress.relationship_permission'] = function ( Container $container ) {
+
+			return new RelationshipPermission(
+				$container['multilingualpress.content_relations']
 			);
 		};
 

@@ -16,6 +16,7 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Post\PostMetaBoxView;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Post\PostMetaUpdater;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\PriorityAwareMetaBox;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\SiteAwareMetaBoxController;
+use Inpsyde\MultilingualPress\Relations\Post\RelationshipPermission;
 
 use function Inpsyde\MultilingualPress\nonce_field;
 
@@ -49,7 +50,7 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	private $nonce_factory;
 
 	/**
-	 * @var PermissionChecker
+	 * @var RelationshipPermission
 	 */
 	private $permission_checker;
 
@@ -61,14 +62,14 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param MetaBoxFactory    $factory
-	 * @param PermissionChecker $permission_checker
-	 * @param ServerRequest     $request
-	 * @param NonceFactory      $nonce_factory
+	 * @param MetaBoxFactory         $factory
+	 * @param RelationshipPermission $permission_checker
+	 * @param ServerRequest          $request
+	 * @param NonceFactory           $nonce_factory
 	 */
 	public function __construct(
 		MetaBoxFactory $factory,
-		PermissionChecker $permission_checker,
+		RelationshipPermission $permission_checker,
 		ServerRequest $request,
 		NonceFactory $nonce_factory
 	) {
@@ -234,11 +235,26 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	 */
 	private function get_controllers( $post ): array {
 
-		if ( $post instanceof \WP_Post || ! $this->permission_checker->is_post_editable( $post ) ) {
+		if ( $post instanceof \WP_Post || ! $this->is_post_editable( $post ) ) {
 			return [];
 		}
 
 		return $this->factory->create_meta_boxes( $post );
+	}
+
+	/**
+	 * @param \WP_Post $post
+	 *
+	 * @return bool
+	 */
+	public function is_post_editable( \WP_Post $post ): bool {
+
+		$post_type = get_post_type_object( $post->post_type );
+		if ( ! $post_type instanceof \WP_Post_Type ) {
+			return false;
+		}
+
+		return current_user_can( $post_type->cap->edit_post, $post->ID );
 	}
 
 	/**
@@ -251,7 +267,7 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 
 		return
 			! $controller instanceof SiteAwareMetaBoxController
-			|| $this->permission_checker->is_translation_editable( $post, $controller->site_id() );
+			|| $this->permission_checker->is_related_post_editable( $post, $controller->site_id() );
 	}
 
 	/**
