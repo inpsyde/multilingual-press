@@ -5,10 +5,13 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Post;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+
 use function Inpsyde\MultilingualPress\site_exists;
 
 /**
- * @package Inpsyde\MultilingualPress\Translation\Metabox
+ * Permission checker to be used to either permit or prevent access to posts.
+ *
+ * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
  */
 class PermissionChecker {
@@ -19,14 +22,16 @@ class PermissionChecker {
 	private $content_relations;
 
 	/**
-	 * @var array
+	 * @var int[][]
 	 */
-	private $linked_posts = [];
+	private $related_posts = [];
 
 	/**
-	 * Constructor.
+	 * Constructor. Sets up the properties.
 	 *
-	 * @param ContentRelations $content_relations
+	 * @since 3.0.0
+	 *
+	 * @param ContentRelations $content_relations Content relations API object.
 	 */
 	public function __construct( ContentRelations $content_relations ) {
 
@@ -34,30 +39,35 @@ class PermissionChecker {
 	}
 
 	/**
-	 * @param \WP_Post $post
+	 * Checks if the current user can edit the given post.
 	 *
-	 * @return bool
+	 * @since 3.0.0
+	 *
+	 * @param \WP_Post $post Post object.
+	 *
+	 * @return bool Whether or not the given post is editable.
 	 */
-	public function is_source_post_editable( \WP_Post $post ): bool {
+	public function is_post_editable( \WP_Post $post ): bool {
 
 		$post_type = get_post_type_object( $post->post_type );
+		if ( ! $post_type instanceof \WP_Post_Type ) {
+			return false;
+		}
 
-		return
-			$post_type instanceof \WP_Post_Type
-			&& current_user_can( $post_type->cap->edit_post, $post->ID );
+		return current_user_can( $post_type->cap->edit_post, $post->ID );
 	}
 
 	/**
-	 * @param \WP_Post $source_post
-	 * @param int|null $remote_site_id
+	 * Checks if the current user can edit (or create) the translation of the given post in the site with the given ID.
 	 *
-	 * @return bool
+	 * @since 3.0.0
+	 *
+	 * @param \WP_Post $source_post    Source post object.
+	 * @param int      $remote_site_id Remote site ID.
+	 *
+	 * @return bool Whether or not the translation of the given post in the given site is editable.
 	 */
-	public function is_remote_post_editable( \WP_Post $source_post, int $remote_site_id = null ): bool {
-
-		if ( null === $remote_site_id || $remote_site_id === (int) get_current_blog_id() ) {
-			return $this->is_source_post_editable( $source_post );
-		}
+	public function is_translation_editable( \WP_Post $source_post, int $remote_site_id ): bool {
 
 		$post_type = get_post_type_object( $source_post->post_type );
 		if ( ! $post_type instanceof \WP_Post_Type ) {
@@ -68,7 +78,7 @@ class PermissionChecker {
 			return false;
 		}
 
-		$remote_post_id = $this->remote_post_id( $source_post, $remote_site_id );
+		$remote_post_id = $this->get_remote_post_id( $source_post, $remote_site_id );
 		if ( ! $remote_post_id ) {
 			return current_user_can_for_blog( $remote_site_id, $post_type->cap->edit_others_posts );
 		}
@@ -77,43 +87,41 @@ class PermissionChecker {
 	}
 
 	/**
-	 * @param  \WP_Post $source_post
-	 * @param  int      $site_id
+	 * Returns the post ID of the translation of the given post in the site with the given ID.
 	 *
-	 * @return int
+	 * @param \WP_Post $source_post Source post object.
+	 * @param int      $site_id     Site ID.
+	 *
+	 * @return int Post ID, or 0.
 	 */
-	private function remote_post_id( \WP_Post $source_post, int $site_id ): int {
+	private function get_remote_post_id( \WP_Post $source_post, int $site_id ): int {
 
-		$linked = $this->linked_to( $source_post );
-
-		if ( empty( $linked[ $site_id ] ) ) {
+		$related_posts = $this->get_related_posts( (int) $source_post->ID );
+		if ( empty( $related_posts[ $site_id ] ) ) {
 			return 0;
 		}
 
-		$post = get_blog_post( $site_id, $linked[ $site_id ] );
+		// This is just to be extra careful in case the post has been deleted via MySQL etc.
+		$post = get_blog_post( $site_id, $related_posts[ $site_id ] );
 
 		return $post ? (int) $post->ID : 0;
 	}
 
 	/**
-	 * @param \WP_Post $source_post
+	 * Returns an array with the IDs of all related posts for the post with the given ID.
 	 *
-	 * @return array
+	 * @param int $post_id Post ID.
+	 *
+	 * @return int[] The array with site IDs as keys and post IDs as values.
 	 */
-	private function linked_to( \WP_Post $source_post ): array {
+	private function get_related_posts( int $post_id ): array {
 
-		$post_id = (int) $source_post->ID;
-
-		if ( array_key_exists( $post_id, $this->linked_posts ) ) {
-			return $this->linked_posts[ $post_id ];
+		if ( array_key_exists( $post_id, $this->related_posts ) ) {
+			return $this->related_posts[ $post_id ];
 		}
 
-		$this->linked_posts[ $post_id ] = $this->content_relations->get_relations(
-			get_current_blog_id(),
-			$source_post->ID,
-			'post'
-		);
+		$this->related_posts[ $post_id ] = $this->content_relations->get_relations( get_current_blog_id(), $post_id );
 
-		return $this->linked_posts[ $post_id ];
+		return $this->related_posts[ $post_id ];
 	}
 }

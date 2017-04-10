@@ -1,11 +1,16 @@
 <?php # -*- coding: utf-8 -*-
 
+// TODO
+
 declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Post;
 
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\AdvancedPostTranslator;
+use Inpsyde\MultilingualPress\Translation\TranslationUI;
+
 /**
- * @package Inpsyde\MultilingualPress\Translation\Metabox
+ * @package Inpsyde\MultilingualPress\Common\Admin\MetaBox
  * @since   3.0.0
  */
 final class TranslationUIRegistry {
@@ -19,7 +24,7 @@ final class TranslationUIRegistry {
 	 */
 	private $ui = [];
 
-	/**
+	/**@todo Adapt to new name "name".
 	 * @var array
 	 */
 	private $titles = [];
@@ -30,7 +35,7 @@ final class TranslationUIRegistry {
 	private $selected_ui_id;
 
 	/**
-	 * @var TranslationMetaboxUI
+	 * @var TranslationUI
 	 */
 	private $selected_ui;
 
@@ -56,23 +61,23 @@ final class TranslationUIRegistry {
 
 		$done = true;
 
-		add_action( PostMetaboxRegistrar::ACTION_ADD_BOXES, function () {
+		add_action( PostMetaBoxRegistrar::ACTION_ADD_BOXES, function () {
 
-			$this->selected_ui()->setup_view();
+			$this->selected_ui()->register_view();
 		} );
 
-		add_action( PostMetaboxRegistrar::ACTION_SAVE_BOXES, function () {
+		add_action( PostMetaBoxRegistrar::ACTION_SAVE_BOXES, function () {
 
-			$this->selected_ui()->setup_updater();
+			$this->selected_ui()->register_updater();
 		} );
 	}
 
 	/**
-	 * @param TranslationMetaboxUI $ui
+	 * @param TranslationUI $ui
 	 *
 	 * @return TranslationUIRegistry
 	 */
-	public function register_ui( TranslationMetaboxUI $ui ): TranslationUIRegistry {
+	public function register_ui( TranslationUI $ui ): TranslationUIRegistry {
 
 		$id = $ui->id();
 
@@ -82,8 +87,9 @@ final class TranslationUIRegistry {
 			);
 		}
 
-		$this->ui[ $id ]     = $ui;
-		$this->titles[ $id ] = $ui->title();
+		$this->ui[ $id ] = $ui;
+
+		$this->titles[ $id ] = $ui->name();
 
 		return $this;
 	}
@@ -105,7 +111,7 @@ final class TranslationUIRegistry {
 	}
 
 	/**
-	 * @return TranslationMetaboxUI[]
+	 * @return TranslationUI[]
 	 */
 	public function all_ui(): array {
 
@@ -113,9 +119,9 @@ final class TranslationUIRegistry {
 	}
 
 	/**
-	 * @return TranslationMetaboxUI
+	 * @return TranslationUI
 	 */
-	private function selected_ui(): TranslationMetaboxUI {
+	private function selected_ui(): TranslationUI {
 
 		if ( $this->selected_ui ) {
 			return $this->selected_ui;
@@ -126,9 +132,9 @@ final class TranslationUIRegistry {
 			: null;
 
 		if ( ! $selected ) {
-			$selected = array_key_exists( TranslationAdvancedUI::ID, $this->ui )
-				? $this->ui[ TranslationAdvancedUI::ID ]
-				: new TranslationAdvancedUI();
+			$selected = array_key_exists( AdvancedPostTranslator::ID, $this->ui )
+				? $this->ui[ AdvancedPostTranslator::ID ]
+				: new AdvancedPostTranslator();
 		}
 
 		/**
@@ -139,7 +145,7 @@ final class TranslationUIRegistry {
 		 */
 		$filtered = apply_filters( self::FILTER_SELECT_UI, $selected, $this->titles );
 
-		$this->selected_ui = $filtered instanceof TranslationMetaboxUI ? $filtered : $selected;
+		$this->selected_ui = $filtered instanceof TranslationUI ? $filtered : $selected;
 
 		/**
 		 * Runs after the translation UI has been selected.
@@ -150,5 +156,4 @@ final class TranslationUIRegistry {
 
 		return $this->selected_ui;
 	}
-
 }
