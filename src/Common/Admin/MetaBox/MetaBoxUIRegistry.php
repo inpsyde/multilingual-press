@@ -171,7 +171,7 @@ class MetaBoxUIRegistry {
 		if ( $ui_selected ) {
 
 			/**
-			 * Fires right after the UI for the post translation meta box has been selected.
+			 * Fires right after the UI for the meta box has been selected.
 			 *
 			 * @since 3.0.0
 			 *
@@ -181,7 +181,7 @@ class MetaBoxUIRegistry {
 			do_action( self::ACTION_UI_SELECTED, $this->selected_ui[ $registrar_id ], $registrar );
 
 			/**
-			 * Fires right after the UI for the post translation meta box has been selected.
+			 * Fires right after the UI for the meta box has been selected.
 			 *
 			 * @since 3.0.0
 			 *
