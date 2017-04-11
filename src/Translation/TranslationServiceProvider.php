@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation;
 
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -11,7 +12,6 @@ use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\AdvancedPostTranslator
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\SimplePostTranslator;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBoxFactory;
 use Inpsyde\MultilingualPress\Translation\Post\PostMetaBoxRegistrar;
-use Inpsyde\MultilingualPress\Translation\Post\TranslationUIRegistry;
 use Inpsyde\MultilingualPress\Translation\Translator\FrontPageTranslator;
 use Inpsyde\MultilingualPress\Translation\Translator\PostTranslator;
 use Inpsyde\MultilingualPress\Translation\Translator\PostTypeTranslator;
@@ -76,7 +76,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function register_post_translation( Container $container ) {
 
-		$container['multilingualpress.post_translation_meta_box_factory'] = function ( Container $container ) {
+		$container['multilingualpress.post_meta_box_factory'] = function ( Container $container ) {
 
 			return new MetaBoxFactory(
 				$container['multilingualpress.site_relations'],
@@ -84,20 +84,15 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			);
 		};
 
-		$container['multilingualpress.post_translation_meta_box_registrar'] = function ( Container $container ) {
+		$container['multilingualpress.post_metabox_registrar'] = function ( Container $container ) {
 
 			return new PostMetaBoxRegistrar(
-				$container['multilingualpress.post_translation_meta_box_factory'],
+				$container['multilingualpress.post_meta_box_factory'],
 				$container['multilingualpress.relationship_permission'],
 				$container['multilingualpress.server_request'],
 				$container['multilingualpress.nonce_factory']
 			);
 		};
-
-		$container->share( 'multilingualpress.post_translation_ui_registry', function () {
-
-			return new TranslationUIRegistry();
-		} );
 	}
 
 	/**
@@ -167,19 +162,24 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function bootstrap_post_translation( Container $container ) {
 
-		$ui_registry = $container['multilingualpress.post_translation_ui_registry'];
+		$box_registrar = $container['multilingualpress.post_metabox_registrar'];
 
-		$ui_registry->register_ui( new AdvancedPostTranslator() );
+		$ui_registry = $container['multilingualpress.metabox_ui_registry'];
 
-		$ui_registry->register_ui( new SimplePostTranslator() );
+		$ui_registry->register_ui( new AdvancedPostTranslator(), $box_registrar );
 
-		$box_registrar = $container['multilingualpress.post_translation_meta_box_registrar'];
+		$ui_registry->register_ui( new SimplePostTranslator(), $box_registrar );
 
 		add_action( 'admin_init', function () use ( $ui_registry, $box_registrar ) {
-
-			$ui_registry->register();
-
 			$box_registrar->register_meta_boxes();
+		}, 0 );
+
+		add_action( PostMetaBoxRegistrar::ACTION_ADD_META_BOXES, function () use ( $ui_registry, $box_registrar ) {
+			$box_registrar->with_ui( $ui_registry->selected_ui( $box_registrar ) );
+		}, 0 );
+
+		add_action( PostMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function () use ( $ui_registry, $box_registrar ) {
+			$box_registrar->with_ui( $ui_registry->selected_ui( $box_registrar ) );
 		}, 0 );
 
 		if ( 'POST' === $container['multilingualpress.server_request']->server_value( 'REQUEST_METHOD' ) ) {

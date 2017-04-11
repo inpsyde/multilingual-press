@@ -7,6 +7,7 @@ namespace Inpsyde\MultilingualPress\Core;
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTab;
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
 use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
@@ -236,6 +237,12 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new ConditionalAwareWordPressRequestContext();
 		} );
+
+		$container->share( 'multilingualpress.metabox_ui_registry', function () {
+
+			return new MetaBoxUIRegistry();
+		} );
+
 	}
 
 	/**

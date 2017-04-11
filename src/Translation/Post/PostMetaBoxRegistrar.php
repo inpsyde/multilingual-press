@@ -4,12 +4,13 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Post;
 
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\UIAwareMetaBoxRegistrar;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxController;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBox;
-use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxRegistrar;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Post\PostMetaBoxView;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Post\PostMetaUpdater;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\PriorityAwareMetaBox;
@@ -24,7 +25,7 @@ use function Inpsyde\MultilingualPress\nonce_field;
  * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
  */
-final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
+final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 
 	/**
 	 * Action name.
@@ -60,7 +61,7 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	 *
 	 * @var string
 	 */
-	const ACTION_SAVED_META_BOX_DATA = 'multilingualpress.saved_post_meta_box_data';
+	const ACTION_SAVED_META_BOX_DATA = 'multilingualpress.saved_post_metabox_data';
 
 	/**
 	 * @var MetaBoxFactory
@@ -83,12 +84,17 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	private $request;
 
 	/**
+	 * @var MetaBoxUI
+	 */
+	private $ui;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param MetaBoxFactory         $factory            Meta box factory object.
-	 * @param RelationshipPermission $permission_checker Relatinship permission checker object.
+	 * @param RelationshipPermission $permission_checker Relationship permission checker object.
 	 * @param ServerRequest          $request            Request object.
 	 * @param NonceFactory           $nonce_factory      Nonce factory object.
 	 */
@@ -106,6 +112,34 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 		$this->request = $request;
 
 		$this->nonce_factory = $nonce_factory;
+	}
+
+	/**
+	 * Tell the registrar to use given UI.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param MetaBoxUI $ui
+	 *
+	 * @return UIAwareMetaBoxRegistrar
+	 */
+	public function with_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar {
+
+		$this->ui = $ui;
+
+		return $this;
+	}
+
+	/**
+	 * Return a string that uniquely identify the object for the UI.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string
+	 */
+	public function identify_for_ui(): string {
+
+		return __CLASS__;
 	}
 
 	/**
@@ -152,6 +186,10 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 		 * @param \WP_Post $post Post object.
 		 */
 		do_action( self::ACTION_ADD_META_BOXES, $post );
+
+		if ( $this->ui instanceof MetaBoxUI ) {
+			$this->ui->register_view();
+		}
 
 		array_walk( $controllers, function ( MetaBoxController $controller ) use ( $post_type, $post ) {
 
@@ -229,6 +267,10 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 		 * @param bool     $update Whether or not this is an update of the post.
 		 */
 		do_action( self::ACTION_SAVE_META_BOXES, $post, $update );
+
+		if ( $this->ui instanceof MetaBoxUI ) {
+			$this->ui->register_updater();
+		}
 
 		array_walk( $controllers, function ( MetaBoxController $controller ) use ( $post, $update ) {
 
