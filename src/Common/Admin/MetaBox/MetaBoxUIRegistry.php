@@ -164,7 +164,10 @@ class MetaBoxUIRegistry {
 		 */
 		$user_ui = apply_filters( self::FILTER_SELECT_UI, null, $ui_objects, $registrar );
 
-		$ui_selected = $user_ui instanceof MetaBoxUI;
+		// Let's check that selected UI is a valid MetaBoxUI object and that its id is one of the UIs for the registrar
+		$ui_selected =
+			$user_ui instanceof MetaBoxUI
+			&& array_key_exists( $user_ui->id(), $this->get_ids( $registrar) );
 
 		$this->selected_ui[ $registrar_id ] = $ui_selected ? $user_ui : new NullMetaBoxUI();
 
