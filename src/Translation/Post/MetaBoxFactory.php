@@ -1,7 +1,5 @@
 <?php # -*- coding: utf-8 -*-
 
-// TODO
-
 declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Post;
@@ -12,6 +10,8 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\SiteAwareMetaBoxController;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxController;
 
 /**
+ * Factory for post translation meta box controller objects.
+ *
  * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
  */
@@ -28,10 +28,12 @@ class MetaBoxFactory {
 	private $site_relations;
 
 	/**
-	 * Constructor.
+	 * Constructor. Sets up the properties.
 	 *
-	 * @param SiteRelations    $site_relations
-	 * @param ContentRelations $content_relations
+	 * @since 3.0.0
+	 *
+	 * @param SiteRelations    $site_relations    Site relations API object.
+	 * @param ContentRelations $content_relations Content relations API object.
 	 */
 	public function __construct( SiteRelations $site_relations, ContentRelations $content_relations ) {
 
@@ -41,9 +43,13 @@ class MetaBoxFactory {
 	}
 
 	/**
-	 * @param \WP_Post $post
+	 * Returns an array with all post translation meta box controllers for the given post.
 	 *
-	 * @return SiteAwareMetaBoxController[]
+	 * @since 3.0.0
+	 *
+	 * @param \WP_Post $post Post object.
+	 *
+	 * @return SiteAwareMetaBoxController[] Post translation meta box controllers.
 	 */
 	public function create_meta_boxes( \WP_Post $post ): array {
 
@@ -72,11 +78,13 @@ class MetaBoxFactory {
 	}
 
 	/**
-	 * @param int           $site_id
-	 * @param string[]      $post_types
-	 * @param \WP_Post|null $related_post
+	 * Returns a post translation meta box controller according to the given site and post data.
 	 *
-	 * @return SiteAwareMetaBoxController
+	 * @param int      $site_id      Site ID.
+	 * @param string[] $post_types   One or more post type slugs.
+	 * @param \WP_Post $related_post Optional. Related post object. Defaults to null.
+	 *
+	 * @return SiteAwareMetaBoxController Post translation meta box controller.
 	 */
 	private function create_meta_box_for_site(
 		int $site_id,
@@ -88,14 +96,20 @@ class MetaBoxFactory {
 	}
 
 	/**
-	 * @return string[]
+	 * Returns the allowed post type slugs.
+	 *
+	 * @todo Make this a method on a dedicated data object (maybe extending \ArrayObject)...
+	 *
+	 * @return string[] One or more post type slugs.
 	 */
 	private function allowed_post_types() {
 
 		/**
-		 * Filter the allowed post types.
+		 * Filters the allowed post types.
 		 *
-		 * @param string[] $allowed_post_types Allowed post type names.
+		 * @since 3.0.0
+		 *
+		 * @param string[] $allowed_post_types Allowed post type slugs.
 		 */
 		$allowed_post_types = (array) apply_filters( 'multilingualpress.allowed_post_types', [ 'post', 'page' ] );
 
