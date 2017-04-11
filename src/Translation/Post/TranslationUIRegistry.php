@@ -1,39 +1,49 @@
 <?php # -*- coding: utf-8 -*-
 
-// TODO
+/**
+ * TODO: Discuss whether or not to make this class not specific to posts.
+ *      Currently, it both references and contains post-specific hooks, it falls back to the advanced post translator
+ *      UI, and might also instantiate one.
+ */
 
 declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Post;
 
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\AdvancedPostTranslator;
-use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 
 /**
- * @package Inpsyde\MultilingualPress\Common\Admin\MetaBox
+ * Meta box UI registry implementation for post translation.
+ *
+ * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
  */
 final class TranslationUIRegistry implements MetaBoxUIRegistry {
 
-	const FILTER_SELECT_UI = 'multilingualpress.select_translation_meta_box_ui';
-
-	const ACTION_UI_SELECTED = 'multilingualpress.translation_meta_box_ui';
-
 	/**
-	 * @var array
-	 */
-	private $ui = [];
-
-	/**
-	 * @var array
-	 */
-	private $names = [];
-
-	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
 	 * @var string
 	 */
-	private $selected_ui_id;
+	const ACTION_UI_SELECTED = 'multilingualpress.post_translation_meta_box_ui';
+
+	/**
+	 * Filter name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_SELECT_UI = 'multilingualpress.select_post_translation_meta_box_ui';
+
+	/**
+	 * @var string[]
+	 */
+	private $names = [];
 
 	/**
 	 * @var MetaBoxUI
@@ -41,40 +51,98 @@ final class TranslationUIRegistry implements MetaBoxUIRegistry {
 	private $selected_ui;
 
 	/**
-	 * Constructor.
-	 *
-	 * @param string $selected_ui_id
+	 * @var string
 	 */
-	public function __construct( string $selected_ui_id = '' ) {
+	private $selected_ui_id;
+
+	/**
+	 * @var MetaBoxUI[]
+	 */
+	private $objects = [];
+
+	/**
+	 * Constructor. Sets up the properties.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $selected_ui_id Optional. ID of the selected UI, if exists. Defaults to advanced post translator.
+	 */
+	public function __construct( string $selected_ui_id = AdvancedPostTranslator::ID ) {
 
 		$this->selected_ui_id = $selected_ui_id;
 	}
 
 	/**
-	 * Setup view and updater on proper hook using the selected UI.
+	 * Returns an array with all meta box IDs.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string[] An array with all meta box IDs.
 	 */
-	public function setup() {
+	public function get_ids(): array {
+
+		return array_keys( $this->objects );
+	}
+
+	/**
+	 * Returns an array with all meta box names.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string[] An array with all meta box IDs as keys and the names as values.
+	 */
+	public function get_names(): array {
+
+		return $this->names;
+	}
+
+	/**
+	 * Returns an array with all meta box objects.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return MetaBoxUI[] An array with all meta box IDs as keys and the objects as values.
+	 */
+	public function get_objects(): array {
+
+		return $this->objects;
+	}
+
+	/**
+	 * Registers both the meta box view and the metadata updater of the selected UI for usage.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool Whether or not the registration was successful.
+	 */
+	public function register(): bool {
 
 		static $done;
 		if ( $done ) {
-			return;
+			return false;
 		}
 
 		$done = true;
 
-		add_action( PostMetaBoxRegistrar::ACTION_ADD_BOXES, function () {
+		add_action( PostMetaBoxRegistrar::ACTION_ADD_META_BOXES, function () {
 
 			$this->selected_ui()->register_view();
 		} );
 
-		add_action( PostMetaBoxRegistrar::ACTION_SAVE_BOXES, function () {
+		add_action( PostMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function () {
 
 			$this->selected_ui()->register_updater();
 		} );
+
+		return true;
 	}
 
 	/**
-	 * @param MetaBoxUI $ui
+	 * Registers the given meta box UI.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param MetaBoxUI $ui UI object.
 	 *
 	 * @return MetaBoxUIRegistry
 	 */
@@ -82,45 +150,23 @@ final class TranslationUIRegistry implements MetaBoxUIRegistry {
 
 		$id = $ui->id();
 
-		if ( array_key_exists( $id, $this->ui ) ) {
+		if ( array_key_exists( $id, $this->objects ) ) {
 			throw new \InvalidArgumentException(
-				"It is not possible to use '{$id}' as post metabox UI identifier because it is already in use."
+				"Unable to register meta box UI. A user interface with the '{$id}' already exists."
 			);
 		}
 
-		$this->ui[ $id ] = $ui;
-
 		$this->names[ $id ] = $ui->name();
+
+		$this->objects[ $id ] = $ui;
 
 		return $this;
 	}
 
 	/**
-	 * @return string[]
-	 */
-	public function all_ui_names(): array {
-
-		return $this->names;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	public function all_ui_ids(): array {
-
-		return array_keys( $this->ui );
-	}
-
-	/**
-	 * @return MetaBoxUI[]
-	 */
-	public function all_ui(): array {
-
-		return $this->ui;
-	}
-
-	/**
-	 * @return MetaBoxUI
+	 * Returns the selected UI as object.
+	 *
+	 * @return MetaBoxUI Selected UI object.
 	 */
 	private function selected_ui(): MetaBoxUI {
 
@@ -128,30 +174,28 @@ final class TranslationUIRegistry implements MetaBoxUIRegistry {
 			return $this->selected_ui;
 		}
 
-		$selected = $this->selected_ui_id && array_key_exists( $this->selected_ui_id, $this->ui )
-			? $this->ui[ $this->selected_ui_id ]
-			: null;
-
-		if ( ! $selected ) {
-			$selected = array_key_exists( AdvancedPostTranslator::ID, $this->ui )
-				? $this->ui[ AdvancedPostTranslator::ID ]
-				: new AdvancedPostTranslator();
-		}
+		$selected_ui = $this->selected_ui_id && array_key_exists( $this->selected_ui_id, $this->objects )
+			? $this->objects[ $this->selected_ui_id ]
+			: new AdvancedPostTranslator();
 
 		/**
-		 * Filters the post metabox UI to be used
+		 * Filters the UI to be used for the post translation meta box.
 		 *
-		 * @param \WP_Post $ui Currently selected UI object.
-		 * @param array    $ui Array of available UI where keys are UI ids and values are UI titles
+		 * @since 3.0.0
+		 *
+		 * @param MetaBoxUI   $selected_ui Currently selected UI object.
+		 * @param MetaBoxUI[] $objects     An array with all meta box IDs as keys and the objects as values.
 		 */
-		$filtered = apply_filters( self::FILTER_SELECT_UI, $selected, $this->names );
+		$user_ui = apply_filters( self::FILTER_SELECT_UI, $selected_ui, $this->objects );
 
-		$this->selected_ui = $filtered instanceof MetaBoxUI ? $filtered : $selected;
+		$this->selected_ui = $user_ui instanceof MetaBoxUI ? $user_ui : $selected_ui;
 
 		/**
-		 * Runs after the translation UI has been selected.
+		 * Fires right after the UI for the post translation meta box has been selected.
 		 *
-		 * @param \WP_Post $post Post object.
+		 * @since 3.0.0
+		 *
+		 * @param MetaBoxUI $selected_ui Selected UI object.
 		 */
 		do_action( self::ACTION_UI_SELECTED, $this->selected_ui );
 

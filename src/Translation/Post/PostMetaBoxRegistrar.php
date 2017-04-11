@@ -1,7 +1,5 @@
 <?php # -*- coding: utf-8 -*-
 
-// TODO
-
 declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Post;
@@ -21,23 +19,48 @@ use Inpsyde\MultilingualPress\Relations\Post\RelationshipPermission;
 use function Inpsyde\MultilingualPress\nonce_field;
 
 /**
- * Implementation of MetaBoxRegistrar for post metaboxes.
+ * Meta box registrar implementation for post metaboxes.
  *
- * Uses an injected factory to generate all the metabox objects that are added on "add_meta_boxes" and saved on
- * "save_post".
- *
- * @package Inpsyde\MultilingualPress\Common\Admin\MetaBox
+ * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
  */
 final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 
-	const ACTION_ADD_BOXES = 'multilingualpress.add_post_meta_boxes';
+	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_ADD_META_BOXES = 'multilingualpress.add_post_meta_boxes';
 
-	const ACTION_BOX_ADDED = 'multilingualpress.post_meta_box_added';
+	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_ADDED_META_BOX = 'multilingualpress.added_post_meta_box';
 
-	const ACTION_BOX_SAVED = 'multilingualpress.post_meta_box_saved';
+	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_SAVE_META_BOXES = 'multilingualpress.save_post_meta_boxes';
 
-	const ACTION_SAVE_BOXES = 'multilingualpress.save_post_meta_boxes';
+	/**
+	 * Action name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ACTION_SAVED_META_BOX_DATA = 'multilingualpress.saved_post_meta_box_data';
 
 	/**
 	 * @var MetaBoxFactory
@@ -60,12 +83,14 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	private $request;
 
 	/**
-	 * Constructor. Sets properties.
+	 * Constructor. Sets up the properties.
 	 *
-	 * @param MetaBoxFactory         $factory
-	 * @param RelationshipPermission $permission_checker
-	 * @param ServerRequest          $request
-	 * @param NonceFactory           $nonce_factory
+	 * @since 3.0.0
+	 *
+	 * @param MetaBoxFactory         $factory            Meta box factory object.
+	 * @param RelationshipPermission $permission_checker Relatinship permission checker object.
+	 * @param ServerRequest          $request            Request object.
+	 * @param NonceFactory           $nonce_factory      Nonce factory object.
 	 */
 	public function __construct(
 		MetaBoxFactory $factory,
@@ -78,12 +103,16 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 
 		$this->permission_checker = $permission_checker;
 
-		$this->nonce_factory = $nonce_factory;
-
 		$this->request = $request;
+
+		$this->nonce_factory = $nonce_factory;
 	}
 
 	/**
+	 * Registers meta boxes both for display and updating.
+	 *
+	 * @since 3.0.0
+	 *
 	 * @return void
 	 */
 	public function register_meta_boxes() {
@@ -93,6 +122,7 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 			$this->add_meta_boxes( $post, (string) $post_type );
 		}, 10, 2 );
 
+		/** @noinspection PhpUnusedParameterInspection */
 		add_action( 'save_post', function ( $post_id, \WP_Post $post, $update ) {
 
 			$this->save_metadata_for_post( $post, (bool) $update );
@@ -100,13 +130,12 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	}
 
 	/**
-	 * Add all metaboxes that are returned by the metabox factory, by calling in loop `add_metabox()` method that
-	 * proxies a call to WordPress `add_meta_box()` function.
+	 * Adds all meta boxes returned by the meta box factory.
 	 *
-	 * @param \WP_Post $post
-	 * @param string   $post_type
+	 * @param \WP_Post $post      Post object.
+	 * @param string   $post_type Post type slug.
 	 *
-	 * @see MetaBoxRegistrar::add_metabox()
+	 * @return void
 	 */
 	private function add_meta_boxes( $post, string $post_type ) {
 
@@ -116,11 +145,13 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 		}
 
 		/**
-		 * Runs before registration of the post meta boxes.
+		 * Fires right before the post meta boxes are added.
+		 *
+		 * @since 3.0.0
 		 *
 		 * @param \WP_Post $post Post object.
 		 */
-		do_action( self::ACTION_ADD_BOXES, $post );
+		do_action( self::ACTION_ADD_META_BOXES, $post );
 
 		array_walk( $controllers, function ( MetaBoxController $controller ) use ( $post_type, $post ) {
 
@@ -128,27 +159,30 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 				$this->add_meta_box( $controller, $post_type );
 
 				/**
-				 * Runs after registration of each post meta box
+				 * Fires right after a post meta box was added.
 				 *
-				 * @param \WP_Post $post    Post object.
-				 * @param MetaBoxController  $controller Meta box controller object.
+				 * @since 3.0.0
+				 *
+				 * @param \WP_Post          $post       Post object.
+				 * @param MetaBoxController $controller Meta box controller object.
 				 */
-				do_action( self::ACTION_BOX_ADDED, $post, $controller );
+				do_action( self::ACTION_ADDED_META_BOX, $post, $controller );
 			}
 		} );
 	}
 
 	/**
-	 * Adds a metabox via WordPress `add_meta_box()` function, taking arguments mostly from info object and using
-	 * view object for render callback.
+	 * Adds a meta box according to the data of the given controller.
 	 *
-	 * @param MetaBoxController $controller
-	 * @param string  $post_type
+	 * @param MetaBoxController $controller Meta box controller object.
+	 * @param string            $post_type  Post type slug.
+	 *
+	 * @return void
 	 */
 	private function add_meta_box( MetaBoxController $controller, string $post_type ) {
 
-		$info = $controller->meta_box();
-		if ( ! $info->is_allowed_for_screen( get_current_screen() ) ) {
+		$meta_box = $controller->meta_box();
+		if ( ! $meta_box->is_allowed_for_screen( get_current_screen() ) ) {
 			return;
 		}
 
@@ -157,23 +191,27 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 			return;
 		}
 
-		add_meta_box(
-			$info->id(),
-			esc_html( $info->title() ),
-			function ( \WP_Post $post ) use ( $info, $view ) {
+		$priority = $meta_box instanceof PriorityAwareMetaBox ? $meta_box->priority() : 'default';
 
-				echo nonce_field( $this->create_nonce_for_meta_box( $info ) );
+		add_meta_box(
+			$meta_box->id(),
+			esc_html( $meta_box->title() ),
+			function ( \WP_Post $post ) use ( $meta_box, $view ) {
+
+				echo nonce_field( $this->create_nonce_for_meta_box( $meta_box ) );
 				echo $view->with_post( $post )->render();
 			},
 			$post_type,
-			$info->context(),
-			$info instanceof PriorityAwareMetaBox ? $info->priority() : 'default'
+			$meta_box->context(),
+			$priority
 		);
 	}
 
 	/**
-	 * @param \WP_Post $post
-	 * @param bool     $update
+	 * Saves the metadata of all meta boxes for the given post.
+	 *
+	 * @param \WP_Post $post   Post object.
+	 * @param bool     $update Whether or not this is an update of the post.
 	 */
 	private function save_metadata_for_post( \WP_Post $post, bool $update ) {
 
@@ -183,12 +221,14 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 		}
 
 		/**
-		 * Runs before saving of the post meta boxes.
+		 * Fires right before the metadata of the meta boxes is saved.
+		 *
+		 * @since 3.0.0
 		 *
 		 * @param \WP_Post $post   Post object.
-		 * @param bool     $update True if it is a post update
+		 * @param bool     $update Whether or not this is an update of the post.
 		 */
-		do_action( self::ACTION_SAVE_BOXES, $post, $update );
+		do_action( self::ACTION_SAVE_META_BOXES, $post, $update );
 
 		array_walk( $controllers, function ( MetaBoxController $controller ) use ( $post, $update ) {
 
@@ -196,20 +236,24 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 				$this->save_meta_box_data_for_post( $controller, $post, $update );
 
 				/**
-				 * Runs after saving of each post meta box
+				 * Fires right after the metadata of a meta box was saved.
 				 *
-				 * @param \WP_Post $post    Post object.
-				 * @param MetaBoxController  $controller MetaBox object
+				 * @since 3.0.0
+				 *
+				 * @param \WP_Post          $post       Post object.
+				 * @param MetaBoxController $controller Meta box controller object.
 				 */
-				do_action( self::ACTION_BOX_SAVED, $post, $controller );
+				do_action( self::ACTION_SAVED_META_BOX_DATA, $post, $controller );
 			}
 		} );
 	}
 
 	/**
-	 * @param MetaBoxController  $controller
-	 * @param \WP_Post $post
-	 * @param bool     $update
+	 * Saves the metadata according to the given meta box controller for the given post.
+	 *
+	 * @param MetaBoxController $controller Meta box controller object.
+	 * @param \WP_Post          $post       Post object.
+	 * @param bool              $update     Whether or not this is an update of the post.
 	 */
 	private function save_meta_box_data_for_post( MetaBoxController $controller, \WP_Post $post, bool $update ) {
 
@@ -229,9 +273,23 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	}
 
 	/**
-	 * @param \WP_Post $post
+	 * Returns a nonce specific to the given meta box.
 	 *
-	 * @return SiteAwareMetaBoxController[]
+	 * @param MetaBox $meta_box Meta box object.
+	 *
+	 * @return Nonce Nonce object.
+	 */
+	private function create_nonce_for_meta_box( MetaBox $meta_box ) {
+
+		return $this->nonce_factory->create( [ 'meta_box_' . $meta_box->id() ] );
+	}
+
+	/**
+	 * Returns the controllers for all meta boxes for the given post.
+	 *
+	 * @param mixed $post Post object, maybe.
+	 *
+	 * @return SiteAwareMetaBoxController[] Meta box controllers.
 	 */
 	private function get_controllers( $post ): array {
 
@@ -243,25 +301,12 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	}
 
 	/**
-	 * @param \WP_Post $post
+	 * Checks if the meta box for the given controller is to be displayed for the given post.
 	 *
-	 * @return bool
-	 */
-	public function is_post_editable( \WP_Post $post ): bool {
-
-		$post_type = get_post_type_object( $post->post_type );
-		if ( ! $post_type instanceof \WP_Post_Type ) {
-			return false;
-		}
-
-		return current_user_can( $post_type->cap->edit_post, $post->ID );
-	}
-
-	/**
-	 * @param MetaBoxController  $controller
-	 * @param \WP_Post $post
+	 * @param MetaBoxController $controller Meta box controller object.
+	 * @param \WP_Post          $post       Post object.
 	 *
-	 * @return bool
+	 * @return bool Whether or not the meta box for the given controller is to be displayed for the given post.
 	 */
 	private function is_meta_box_allowed_for_post( MetaBoxController $controller, \WP_Post $post ): bool {
 
@@ -271,12 +316,21 @@ final class PostMetaBoxRegistrar implements MetaBoxRegistrar {
 	}
 
 	/**
-	 * @param MetaBox $info
+	 * Checks if the current user can edit the given post in the current site.
 	 *
-	 * @return Nonce
+	 * @since 3.0.0
+	 *
+	 * @param \WP_Post $post Post object.
+	 *
+	 * @return bool Whether or not the current user can edit the given post in the current site.
 	 */
-	private function create_nonce_for_meta_box( MetaBox $info ) {
+	private function is_post_editable( \WP_Post $post ): bool {
 
-		return $this->nonce_factory->create( [ 'meta_box_' . $info->id() ] );
+		$post_type = get_post_type_object( $post->post_type );
+		if ( ! $post_type instanceof \WP_Post_Type ) {
+			return false;
+		}
+
+		return current_user_can( $post_type->cap->edit_post, $post->ID );
 	}
 }
