@@ -74,7 +74,6 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.content_relations']
 			);
 		};
-
 	}
 
 	/**
