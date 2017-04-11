@@ -125,7 +125,15 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	 */
 	public function with_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar {
 
-		$this->ui = $ui;
+		// Don't allow overwrite
+		if ( null !== $this->ui ) {
+			throw new \BadMethodCallException( sprintf( 'It is not possible to override UI for %s.', __CLASS__ ) );
+		}
+
+		// Don't do anything if called too early
+		if ( did_action( self::ACTION_ADD_META_BOXES ) || did_action( self::ACTION_SAVE_META_BOXES ) ) {
+			$this->ui = $ui;
+		}
 
 		return $this;
 	}

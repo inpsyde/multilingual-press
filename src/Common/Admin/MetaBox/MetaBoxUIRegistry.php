@@ -154,7 +154,7 @@ class MetaBoxUIRegistry {
 		$ui_objects = $this->get_objects( $registrar );
 
 		/**
-		 * Filters the UI to be used for the post translation meta box.
+		 * Filters the UI to be used for the post meta box.
 		 *
 		 * @since 3.0.0
 		 *
@@ -164,10 +164,15 @@ class MetaBoxUIRegistry {
 		 */
 		$user_ui = apply_filters( self::FILTER_SELECT_UI, null, $ui_objects, $registrar );
 
-		// Let's check that selected UI is a valid MetaBoxUI object and that its id is one of the UIs for the registrar
-		$ui_selected =
-			$user_ui instanceof MetaBoxUI
-			&& array_key_exists( $user_ui->id(), $this->get_ids( $registrar) );
+		// If the filter does not return valid MetaBoxUI we default to null object and return.
+		if ( ! $user_ui instanceof MetaBoxUI ) {
+			$this->selected_ui[ $registrar_id ] = new NullMetaBoxUI();
+
+			return $this->selected_ui[ $registrar_id ];
+		}
+
+		// Let's ensure that the selected UI is one of the available UI objects: filter can only pick one, not override
+		$ui_selected = ( $ui_objects[ $user_ui->id() ] ?? null ) === $user_ui;
 
 		$this->selected_ui[ $registrar_id ] = $ui_selected ? $user_ui : new NullMetaBoxUI();
 
