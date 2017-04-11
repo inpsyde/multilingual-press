@@ -39,45 +39,46 @@ class RelationshipPermission {
 	}
 
 	/**
-	 * Checks if the current user can edit (or create) a post in site with the given ID that is related to given post.
+	 * Checks if the current user can edit (or create) a post in the site with the given ID that is related to given
+	 * post in the current site.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param \WP_Post $current_site_post Post object in the current site.
-	 * @param int      $related_site_id   Related site ID.
+	 * @param \WP_Post $post            Post object in the current site.
+	 * @param int      $related_site_id Related site ID.
 	 *
-	 * @return bool Whether or not the translation of the given post in the given site is editable.
+	 * @return bool Whether or not the related post of the given post in the given site is editable.
 	 */
-	public function is_related_post_editable( \WP_Post $current_site_post, int $related_site_id ): bool {
-
-		$post_type = get_post_type_object( $current_site_post->post_type );
-		if ( ! $post_type instanceof \WP_Post_Type ) {
-			return false;
-		}
+	public function is_related_post_editable( \WP_Post $post, int $related_site_id ): bool {
 
 		if ( ! site_exists( $related_site_id ) ) {
 			return false;
 		}
 
-		$related_post_id = $this->get_related_post_id( $current_site_post, $related_site_id );
-		if ( ! $related_post_id ) {
-			return current_user_can_for_blog( $related_site_id, $post_type->cap->edit_others_posts );
+		$post_type = get_post_type_object( $post->post_type );
+		if ( ! $post_type instanceof \WP_Post_Type ) {
+			return false;
 		}
 
-		return current_user_can_for_blog( $related_site_id, $post_type->cap->edit_post, $related_post_id );
+		$related_post_id = $this->get_related_post_id( $post, $related_site_id );
+		if ( $related_post_id ) {
+			return current_user_can_for_blog( $related_site_id, $post_type->cap->edit_post, $related_post_id );
+		}
+
+		return current_user_can_for_blog( $related_site_id, $post_type->cap->edit_others_posts );
 	}
 
 	/**
-	 * Given a post in current site returns the post related to it in the given site.
+	 * Returns the ID of the post in the site with the given ID that is related to given post in the current site.
 	 *
-	 * @param \WP_Post $current_site_post Post object in the current site.
-	 * @param int      $related_site_id   Related site ID.
+	 * @param \WP_Post $post            Post object in the current site.
+	 * @param int      $related_site_id Related site ID.
 	 *
 	 * @return int Post ID, or 0.
 	 */
-	private function get_related_post_id( \WP_Post $current_site_post, int $related_site_id ): int {
+	private function get_related_post_id( \WP_Post $post, int $related_site_id ): int {
 
-		$related_posts = $this->get_related_posts( (int) $current_site_post->ID );
+		$related_posts = $this->get_related_posts( (int) $post->ID );
 		if ( empty( $related_posts[ $related_site_id ] ) ) {
 			return 0;
 		}
