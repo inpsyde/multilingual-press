@@ -177,7 +177,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		add_action( 'admin_init', function () use ( $ui_registry, $box_registrar ) {
 
-			$ui_registry->setup();
+			$ui_registry->register();
 
 			$box_registrar->register_meta_boxes();
 		}, 0 );

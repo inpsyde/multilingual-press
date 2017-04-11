@@ -13,31 +13,49 @@ namespace Inpsyde\MultilingualPress\Common\Admin\MetaBox;
 interface MetaBoxUIRegistry {
 
 	/**
-	 * Setup the registry so that meta boxes will be able to use registered UIs.
+	 * Returns an array with all meta box IDs.
 	 *
-	 * @return void
+	 * @since 3.0.0
+	 *
+	 * @return string[] An array with all meta box IDs.
 	 */
-	public function setup();
+	public function get_ids(): array;
 
 	/**
-	 * @param MetaBoxUI $ui
+	 * Returns an array with all meta box names.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string[] An array with all meta box IDs as keys and the names as values.
+	 */
+	public function get_names(): array;
+
+	/**
+	 * Returns an array with all meta box objects.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return MetaBoxUI[] An array with all meta box IDs as keys and the objects as values.
+	 */
+	public function get_objects(): array;
+
+	/**
+	 * Registers both the meta box view and the metadata updater of the selected UI for usage.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool Whether or not the registration was successful.
+	 */
+	public function register(): bool;
+
+	/**
+	 * Registers the given meta box UI.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param MetaBoxUI $ui UI object.
 	 *
 	 * @return MetaBoxUIRegistry
 	 */
 	public function register_ui( MetaBoxUI $ui ): MetaBoxUIRegistry;
-
-	/**
-	 * @return string[]
-	 */
-	public function all_ui_names(): array;
-
-	/**
-	 * @return string[]
-	 */
-	public function all_ui_ids(): array;
-
-	/**
-	 * @return MetaBoxUI[]
-	 */
-	public function all_ui(): array;
 }
