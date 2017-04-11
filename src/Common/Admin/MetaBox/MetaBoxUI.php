@@ -47,6 +47,4 @@ interface MetaBoxUI {
 	 * @return void
 	 */
 	public function register_view();
-
-
 }
