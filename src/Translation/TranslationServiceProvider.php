@@ -4,7 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation;
 
-use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
+use Inpsyde\MultilingualPress\Common\HTTP\FullRequestGlobalsManipulator;
+use Inpsyde\MultilingualPress\Common\HTTP\RequestGlobalsManipulator;
 use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -37,9 +38,9 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	public function register( Container $container ) {
 
-		$container['multilingualpress.post_request_data_manipulator'] = function () {
+		$container['multilingualpress.request_globals_manipulator'] = function () {
 
-			return new FullRequestDataManipulator( RequestDataManipulator::METHOD_POST );
+			return new FullRequestGlobalsManipulator( RequestGlobalsManipulator::METHOD_POST );
 		};
 
 		$this->register_post_translation( $container );
@@ -183,10 +184,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 		}, 0 );
 
 		if ( 'POST' === $container['multilingualpress.server_request']->server_value( 'REQUEST_METHOD' ) ) {
-			$post_request_data_manipulator = $container['multilingualpress.post_request_data_manipulator'];
+			$request_globals_manipulator = $container['multilingualpress.request_globals_manipulator'];
 
-			add_action( 'mlp_before_post_synchronization', [ $post_request_data_manipulator, 'clear_data' ] );
-			add_action( 'mlp_after_post_synchronization', [ $post_request_data_manipulator, 'restore_data' ] );
+			add_action( 'mlp_before_post_synchronization', [ $request_globals_manipulator, 'clear_data' ] );
+			add_action( 'mlp_after_post_synchronization', [ $request_globals_manipulator, 'restore_data' ] );
 		}
 	}
 
@@ -200,10 +201,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	private function bootstrap_term_translation( Container $container ) {
 
 		if ( 'POST' === $container['multilingualpress.server_request']->server_value( 'REQUEST_METHOD' ) ) {
-			$post_request_data_manipulator = $container['multilingualpress.post_request_data_manipulator'];
+			$request_globals_manipulator = $container['multilingualpress.request_globals_manipulator'];
 
-			add_action( 'mlp_before_term_synchronization', [ $post_request_data_manipulator, 'clear_data' ] );
-			add_action( 'mlp_after_term_synchronization', [ $post_request_data_manipulator, 'restore_data' ] );
+			add_action( 'mlp_before_term_synchronization', [ $request_globals_manipulator, 'clear_data' ] );
+			add_action( 'mlp_after_term_synchronization', [ $request_globals_manipulator, 'restore_data' ] );
 		}
 	}
 

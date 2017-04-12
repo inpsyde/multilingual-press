@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Translation;
+namespace Inpsyde\MultilingualPress\Common\HTTP;
 
 /**
  * Request data manipulator implementation for the full request data.
@@ -10,7 +10,7 @@ namespace Inpsyde\MultilingualPress\Translation;
  * @package Inpsyde\MultilingualPress\Translation
  * @since   3.0.0
  */
-final class FullRequestDataManipulator implements RequestDataManipulator {
+final class FullRequestGlobalsManipulator implements RequestGlobalsManipulator {
 
 	/**
 	 * @var string
@@ -29,11 +29,11 @@ final class FullRequestDataManipulator implements RequestDataManipulator {
 	 *
 	 * @param string $request_method Optional. Request method. Defaults to RequestDataManipulator::METHOD_POST.
 	 */
-	public function __construct( string $request_method = RequestDataManipulator::METHOD_POST ) {
+	public function __construct( string $request_method = RequestGlobalsManipulator::METHOD_POST ) {
 
-		$this->request_method = RequestDataManipulator::METHOD_POST === strtoupper( $request_method )
-			? RequestDataManipulator::METHOD_POST
-			: RequestDataManipulator::METHOD_GET;
+		$this->request_method = RequestGlobalsManipulator::METHOD_POST === strtoupper( $request_method )
+			? RequestGlobalsManipulator::METHOD_POST
+			: RequestGlobalsManipulator::METHOD_GET;
 	}
 
 	/**
