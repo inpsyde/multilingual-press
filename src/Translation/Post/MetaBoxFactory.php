@@ -28,18 +28,30 @@ class MetaBoxFactory {
 	private $site_relations;
 
 	/**
+	 * @var AllowedPostTypes
+	 */
+	private $allowed_post_types;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param SiteRelations    $site_relations    Site relations API object.
-	 * @param ContentRelations $content_relations Content relations API object.
+	 * @param SiteRelations    $site_relations     Site relations API object.
+	 * @param ContentRelations $content_relations  Content relations API object.
+	 * @param AllowedPostTypes $allowed_post_types Allowed post type object.
 	 */
-	public function __construct( SiteRelations $site_relations, ContentRelations $content_relations ) {
+	public function __construct(
+		SiteRelations $site_relations,
+		ContentRelations $content_relations,
+		AllowedPostTypes $allowed_post_types
+	) {
 
 		$this->site_relations = $site_relations;
 
 		$this->content_relations = $content_relations;
+
+		$this->allowed_post_types = $allowed_post_types;
 	}
 
 	/**
@@ -53,8 +65,7 @@ class MetaBoxFactory {
 	 */
 	public function create_meta_boxes( \WP_Post $post ): array {
 
-		$allowed_post_types = $this->allowed_post_types();
-		if ( ! $allowed_post_types || ! in_array( $post->post_type, $allowed_post_types, true ) ) {
+		if ( ! empty( $this->allowed_post_types[$post->post_type]) ) {
 			return [];
 		}
 
@@ -67,13 +78,13 @@ class MetaBoxFactory {
 
 		$related_post_ids = $this->content_relations->get_relations( $current_site_id, $post->ID, 'post' );
 
-		return array_map( function ( int $site_id ) use ( $related_post_ids, $allowed_post_types ) {
+		return array_map( function ( int $site_id ) use ( $related_post_ids ) {
 
 			$related_post = empty( $related_post_ids[ $site_id ] )
 				? null
 				: get_blog_post( $site_id, $related_post_ids[ $site_id ] );
 
-			return $this->create_meta_box_for_site( $site_id, $allowed_post_types, $related_post );
+			return $this->create_meta_box_for_site( $site_id, $related_post );
 		}, $related_site_ids );
 	}
 
@@ -81,38 +92,12 @@ class MetaBoxFactory {
 	 * Returns a post translation meta box controller according to the given site and post data.
 	 *
 	 * @param int      $site_id      Site ID.
-	 * @param string[] $post_types   One or more post type slugs.
 	 * @param \WP_Post $related_post Optional. Related post object. Defaults to null.
 	 *
 	 * @return SiteAwareMetaBoxController Post translation meta box controller.
 	 */
-	private function create_meta_box_for_site(
-		int $site_id,
-		array $post_types,
-		\WP_Post $related_post = null
-	): SiteAwareMetaBoxController {
+	private function create_meta_box_for_site( int $site_id, \WP_Post $related_post = null ): SiteAwareMetaBoxController {
 
-		return new TranslationMetaBoxController( $site_id, $post_types, $related_post );
-	}
-
-	/**
-	 * Returns the allowed post type slugs.
-	 *
-	 * @todo Make this a method on a dedicated data object (maybe extending \ArrayObject)...
-	 *
-	 * @return string[] One or more post type slugs.
-	 */
-	private function allowed_post_types() {
-
-		/**
-		 * Filters the allowed post types.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param string[] $allowed_post_types Allowed post type slugs.
-		 */
-		$allowed_post_types = (array) apply_filters( 'multilingualpress.allowed_post_types', [ 'post', 'page' ] );
-
-		return array_filter( $allowed_post_types, 'is_string' );
+		return new TranslationMetaBoxController( $site_id, $this->allowed_post_types, $related_post );
 	}
 }

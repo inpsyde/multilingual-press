@@ -9,6 +9,7 @@ use Inpsyde\MultilingualPress\Common\HTTP\RequestGlobalsManipulator;
 use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Translation\Post\AllowedPostTypes;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\AdvancedPostTranslator;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\SimplePostTranslator;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBoxFactory;
@@ -77,11 +78,17 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function register_post_translation( Container $container ) {
 
+		$container['multilingualpress.allowed_post_types'] = function () {
+
+			return new AllowedPostTypes();
+		};
+
 		$container['multilingualpress.post_meta_box_factory'] = function ( Container $container ) {
 
 			return new MetaBoxFactory(
 				$container['multilingualpress.site_relations'],
-				$container['multilingualpress.content_relations']
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.allowed_post_types']
 			);
 		};
 
