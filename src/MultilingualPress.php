@@ -170,7 +170,9 @@ final class MultilingualPress {
 
 		$activation = function ( ModuleServiceProvider $module, ModuleManager $module_manager, Container $container ) {
 
-			$module->register_module( $module_manager ) && $module->activate( $container );
+			if ( $module->register_module( $module_manager ) ) {
+				$module->activate_module( $container );
+			}
 		};
 
 		$this->service_providers->filter( function ( ServiceProvider $provider ) {

@@ -25,7 +25,7 @@ interface ModuleServiceProvider extends ServiceProvider {
 	public function register_module( ModuleManager $module_manager ): bool;
 
 	/**
-	 * Executes the callback to be used in case this service provider's module is active.
+	 * Performs various tasks on module activation.
 	 *
 	 * @since 3.0.0
 	 *
@@ -33,5 +33,5 @@ interface ModuleServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function activate( Container $container );
+	public function activate_module( Container $container );
 }

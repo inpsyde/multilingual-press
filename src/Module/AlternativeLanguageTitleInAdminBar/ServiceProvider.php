@@ -65,15 +65,15 @@ final class ServiceProvider implements ModuleServiceProvider {
 	}
 
 	/**
-	 * Executes the callback to be used in case this service provider's module is active.
+	 * Performs various tasks on module activation.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Container $container Container object
+	 * @param Container $container Container object.
 	 *
 	 * @return void
 	 */
-	public function activate( Container $container ) {
+	public function activate_module( Container $container ) {
 
 		$customizer = $container['multilingualpress.alternative_language_title_customizer'];
 

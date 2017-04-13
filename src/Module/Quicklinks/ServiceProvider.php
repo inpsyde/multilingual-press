@@ -99,31 +99,55 @@ final class ServiceProvider implements ModuleServiceProvider {
 	}
 
 	/**
-	 * Executes the callback to be used in case this service provider's module is active.
+	 * Performs various tasks on module activation.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Container $container Container object
+	 * @param Container $container Container object.
 	 *
 	 * @return void
 	 */
-	public function activate( Container $container ) {
+	public function activate_module( Container $container ) {
 
 		if ( is_admin() ) {
-			$settings_box = $container['multilingualpress.quicklinks_settings_box'];
-
-			add_action( 'multilingualpress.after_module_list', function () use ( $settings_box ) {
-
-				( new SettingsBoxView( $settings_box ) )->render();
-			} );
-
-			add_action(
-				'multilingualpress.save_modules',
-				[ $container['multilingualpress.quicklinks_settings_updater'], 'update_settings' ]
-			);
+			$this->activate_module_for_admin( $container );
 
 			return;
 		}
+
+		$this->activate_module_for_front_end( $container );
+	}
+
+	/**
+	 * Performs various admin-specific tasks on module activation.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function activate_module_for_admin( Container $container ) {
+
+		$settings_box = $container['multilingualpress.quicklinks_settings_box'];
+
+		add_action( 'multilingualpress.after_module_list', function () use ( $settings_box ) {
+
+			( new SettingsBoxView( $settings_box ) )->render();
+		} );
+
+		add_action(
+			'multilingualpress.save_modules',
+			[ $container['multilingualpress.quicklinks_settings_updater'], 'update_settings' ]
+		);
+	}
+
+	/**
+	 * Performs various admin-specific tasks on module activation.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function activate_module_for_front_end( Container $container ) {
 
 		$name = $container['multilingualpress.server_request']->body_value( Quicklinks::NAME, INPUT_POST );
 

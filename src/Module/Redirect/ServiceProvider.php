@@ -157,15 +157,15 @@ final class ServiceProvider implements ModuleServiceProvider {
 	}
 
 	/**
-	 * Executes the callback to be used in case this service provider's module is active.
+	 * Performs various tasks on module activation.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Container $container Container object
+	 * @param Container $container Container object.
 	 *
 	 * @return void
 	 */
-	public function activate( Container $container ) {
+	public function activate_module( Container $container ) {
 
 		( new UserSetting(
 			$container['multilingualpress.redirect_user_setting'],
@@ -173,57 +173,57 @@ final class ServiceProvider implements ModuleServiceProvider {
 		) )->register();
 
 		if ( is_admin() ) {
-			$this->activate_network_admin( $this->activate_admin( $container ), $container );
+			$this->activate_module_for_admin( $container );
 
 			return;
 		}
 
-		$container['multilingualpress.noredirect_permalink_filter']->enable();
-
-		if ( $container['multilingualpress.redirect_request_validator']->is_valid() ) {
-			add_action( 'template_redirect', [ $container['multilingualpress.redirector'], 'redirect' ], 1 );
-		}
+		$this->activate_module_for_front_end( $container );
 	}
 
 	/**
-	 * @param Container $container
+	 * Performs various admin-specific tasks on module activation.
 	 *
-	 * @return SiteSetting
+	 * @param Container $container Container object.
+	 *
+	 * @return void
 	 */
-	private function activate_admin( Container $container ): SiteSetting {
+	private function activate_module_for_admin( Container $container ) {
 
-		$redirect_site_setting = new SiteSetting(
+		if ( is_network_admin() ) {
+			$this->activate_module_for_network_admin( $container );
+
+			return;
+		}
+
+		( new SiteSetting(
 			$container['multilingualpress.redirect_site_setting'],
 			$container['multilingualpress.redirect_site_setting_updater']
-		);
-
-		$redirect_site_setting->register(
+		) )->register(
 			SiteSettingsSectionView::ACTION_AFTER . '_' . SiteSettings::ID,
 			SiteSettingsUpdater::ACTION_UPDATE_SETTINGS
 		);
-
-		return $redirect_site_setting;
 	}
 
 	/**
-	 * @param SiteSetting $redirect_site_setting
-	 * @param Container   $container
+	 * Performs various admin-specific tasks on module activation.
 	 *
-	 * @return bool
+	 * @param Container $container Container object.
+	 *
+	 * @return void
 	 */
-	private function activate_network_admin( SiteSetting $redirect_site_setting, Container $container ): bool {
+	private function activate_module_for_network_admin( Container $container ) {
 
-		if ( ! is_network_admin() ) {
-			return true;
-		}
-
-		$redirect_site_setting->register(
+		( new SiteSetting(
+			$container['multilingualpress.redirect_site_setting'],
+			$container['multilingualpress.redirect_site_setting_updater']
+		) )->register(
 			SiteSettingsSectionView::ACTION_AFTER . '_' . NewSiteSettings::ID,
 			SiteSettingsUpdater::ACTION_DEFINE_INITIAL_SETTINGS
 		);
 
 		if ( 'sites.php' !== ( $GLOBALS['pagenow'] ?? '' ) ) {
-			return true;
+			return;
 		}
 
 		$redirect_settings_repository = $container['multilingualpress.redirect_settings_repository'];
@@ -242,7 +242,21 @@ final class ServiceProvider implements ModuleServiceProvider {
 		);
 
 		$site_list_column->register();
+	}
 
-		return true;
+	/**
+	 * Performs various admin-specific tasks on module activation.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function activate_module_for_front_end( Container $container ) {
+
+		$container['multilingualpress.noredirect_permalink_filter']->enable();
+
+		if ( $container['multilingualpress.redirect_request_validator']->is_valid() ) {
+			add_action( 'template_redirect', [ $container['multilingualpress.redirector'], 'redirect' ], 1 );
+		}
 	}
 }
