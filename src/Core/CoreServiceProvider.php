@@ -10,7 +10,7 @@ use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
-use Inpsyde\MultilingualPress\Common\HTTP\FullRequestGlobalsManipulator;
+use Inpsyde\MultilingualPress\Common\HTTP\FullRequestGlobalManipulator;
 use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
 use Inpsyde\MultilingualPress\Common\HTTP\RequestGlobalsManipulator;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
@@ -157,9 +157,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new PHPServerRequest();
 		} );
 
-		$container->share('multilingualpress.request_globals_manipulator', function () {
+		$container->share('multilingualpress.request_http_post_manipulator', function () {
 
-			return new FullRequestGlobalsManipulator( RequestGlobalsManipulator::METHOD_POST );
+			return new FullRequestGlobalManipulator( RequestGlobalsManipulator::METHOD_POST );
 		} );
 
 		$container['multilingualpress.site_data_deletor'] = function ( Container $container ) {

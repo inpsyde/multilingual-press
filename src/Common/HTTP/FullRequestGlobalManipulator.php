@@ -10,7 +10,7 @@ namespace Inpsyde\MultilingualPress\Common\HTTP;
  * @package Inpsyde\MultilingualPress\Translation
  * @since   3.0.0
  */
-final class FullRequestGlobalsManipulator implements RequestGlobalsManipulator {
+final class FullRequestGlobalManipulator implements RequestGlobalsManipulator {
 
 	/**
 	 * @var string
