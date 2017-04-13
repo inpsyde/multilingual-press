@@ -14,7 +14,6 @@ use Inpsyde\MultilingualPress\Common\ConditionalAwareRequest;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingMultiView;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
 use Inpsyde\MultilingualPress\Core\Admin\AlternativeLanguageTitleSiteSetting;
-use Inpsyde\MultilingualPress\Core\Admin\FlagImageURLSiteSetting;
 use Inpsyde\MultilingualPress\Core\Admin\LanguageSiteSetting;
 use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
@@ -62,13 +61,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.base_path_adapter'] = function () {
 
 			return new CachingBasePathAdapter();
-		};
-
-		$container['multilingualpress.flag_image_url_site_setting'] = function ( Container $container ) {
-
-			return new FlagImageURLSiteSetting(
-				$container['multilingualpress.site_settings_repository']
-			);
 		};
 
 		$container->share( 'multilingualpress.internal_locations', function () {
@@ -222,7 +214,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return SiteSettingMultiView::from_view_models( [
 				$container['multilingualpress.language_site_setting'],
 				$container['multilingualpress.alternative_language_title_site_setting'],
-				$container['multilingualpress.flag_image_url_site_setting'],
 				$container['multilingualpress.relationships_site_setting'],
 			] );
 		};
@@ -265,11 +256,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				'images',
 				"{$plugin_dir_path}/assets/images",
 				"{$plugin_dir_url}/assets/images"
-			)
-			->add(
-				'flags',
-				"{$plugin_dir_path}/assets/images/flags",
-				"{$plugin_dir_url}/assets/images/flags"
 			);
 
 		load_plugin_textdomain( 'multilingualpress' );

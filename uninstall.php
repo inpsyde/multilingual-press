@@ -76,7 +76,6 @@ $uninstaller->delete_site_options( [
 	'inpsyde_license_status_MultilingualPress Pro',
 	'inpsyde_multilingual_blog_relationship',
 	'inpsyde_multilingual_default_actions',
-	'inpsyde_multilingual_flag_url',
 	'inpsyde_multilingual_redirect',
 ] );
 

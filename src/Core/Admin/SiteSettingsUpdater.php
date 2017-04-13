@@ -76,8 +76,6 @@ class SiteSettingsUpdater {
 
 		$this->update_alternative_language_title( $site_id );
 
-		$this->update_flag_image_url( $site_id );
-
 		$this->update_relationships( $site_id );
 
 		/**
@@ -104,8 +102,6 @@ class SiteSettingsUpdater {
 		$this->update_language( $site_id );
 
 		$this->update_alternative_language_title( $site_id );
-
-		$this->update_flag_image_url( $site_id );
 
 		$this->update_relationships( $site_id );
 
@@ -151,22 +147,6 @@ class SiteSettingsUpdater {
 			: (string) $_POST[ SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE ];
 
 		$this->repository->set_alternative_language_title( $title, $site_id );
-	}
-
-	/**
-	 * Updates the flag image URL for the site with the given ID according to the data in the request.
-	 *
-	 * @param int $site_id Site ID.
-	 *
-	 * @return void
-	 */
-	private function update_flag_image_url( int $site_id ) {
-
-		$url = empty( $_POST[ SiteSettingsRepository::NAME_FLAG_IMAGE_URL ] )
-			? ''
-			: (string) $_POST[ SiteSettingsRepository::NAME_FLAG_IMAGE_URL ];
-
-		$this->repository->set_flag_image_url( $url, $site_id );
 	}
 
 	/**

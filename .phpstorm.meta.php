@@ -47,7 +47,6 @@ namespace PHPSTORM_META {
 		'multilingualpress.content_relations'                                 => \Inpsyde\MultilingualPress\API\ContentRelations::class,
 		'multilingualpress.content_relations_table'                           => \Inpsyde\MultilingualPress\Database\Table::class,
 		'multilingualpress.error_factory'                                     => \Inpsyde\MultilingualPress\Factory\ErrorFactory::class,
-		'multilingualpress.flag_image_url_site_setting'                       => \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel::class,
 		'multilingualpress.front_page_translator'                             => \Inpsyde\MultilingualPress\Translation\Translator::class,
 		'multilingualpress.installation_checker'                              => \Inpsyde\MultilingualPress\Installation\InstallationChecker::class,
 		'multilingualpress.installer'                                         => \Inpsyde\MultilingualPress\Installation\Installer::class,

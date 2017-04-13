@@ -55,22 +55,6 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	}
 
 	/**
-	 * Returns the flag image URL of the site with the given ID, or the current site.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param int $site_id Optional. Site ID. Defaults to 0.
-	 *
-	 * @return string The flag image URL of the site with the given ID, or the current site.
-	 */
-	public function get_flag_image_url( int $site_id = 0 ): string {
-
-		$site_id =  $site_id ?: get_current_blog_id();
-
-		return (string) get_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, '' );
-	}
-
-	/**
 	 * Returns the complete settings data.
 	 *
 	 * @since 3.0.0
@@ -143,23 +127,6 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	public function set_alternative_language_title( string $title, int $site_id = 0 ): bool {
 
 		return $this->update_setting( SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE, $title, $site_id );
-	}
-
-	/**
-	 * Sets the flag image URL for the site with the given ID, or the current site.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param string $url     Flag image URL.
-	 * @param int    $site_id Optional. Site ID. Defaults to 0.
-	 *
-	 * @return bool Whether or not the flag image URL was set successfully.
-	 */
-	public function set_flag_image_url( string $url, int $site_id = 0 ): bool {
-
-		$site_id = $site_id ?: get_current_blog_id();
-
-		return (bool) update_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, esc_url( $url ) );
 	}
 
 	/**

@@ -156,7 +156,7 @@ final class AliasAwareLanguage implements Language {
 	 * * language_short: First part of "http" (e.g., "de" for "de-DE").
 	 * * lang:           Alias for "language_short".
 	 * * locale:         WordPress locale representing the language.
-	 * * none:           No text output (e.g,. for displaying the flag icon only).
+	 * * none:           No text output.
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
