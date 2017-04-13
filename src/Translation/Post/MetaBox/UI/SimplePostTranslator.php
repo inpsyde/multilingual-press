@@ -28,6 +28,15 @@ final class SimplePostTranslator implements MetaBoxUI {
 	const ID = 'multilingualpress.simple_post_translator';
 
 	/**
+	 * Initialize the UI. This will be called early to allow setup of early hooks like 'wp_ajax_*'.
+	 *
+	 * @return void
+	 */
+	public function initialize() {
+		// TODO: Implement initialize() method.
+	}
+
+	/**
 	 * Returns the ID of the user interface.
 	 *
 	 * @since 3.0.0

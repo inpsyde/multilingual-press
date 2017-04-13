@@ -31,6 +31,13 @@ interface MetaBoxUI {
 	public function name(): string;
 
 	/**
+	 * Initialize the UI. This will be called early to allow setup of early hooks like 'wp_ajax_*'.
+	 *
+	 * @return void
+	 */
+	public function initialize();
+
+	/**
 	 * Registers the updater of the user interface.
 	 *
 	 * @since 3.0.0

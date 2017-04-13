@@ -131,6 +131,8 @@ class MetaBoxUIRegistry {
 
 		$this->names[ $registrar_id ][ $id ] = $ui->name();
 
+		$ui->initialize();
+
 		return $this;
 	}
 

@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation;
 
-use Inpsyde\MultilingualPress\Common\HTTP\FullRequestGlobalsManipulator;
-use Inpsyde\MultilingualPress\Common\HTTP\RequestGlobalsManipulator;
 use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -38,11 +36,6 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 * @return void
 	 */
 	public function register( Container $container ) {
-
-		$container['multilingualpress.request_globals_manipulator'] = function () {
-
-			return new FullRequestGlobalsManipulator( RequestGlobalsManipulator::METHOD_POST );
-		};
 
 		$this->register_post_translation( $container );
 
@@ -174,19 +167,24 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$ui_registry = $container['multilingualpress.metabox_ui_registry'];
 
-		$ui_registry->register_ui( new AdvancedPostTranslator(), $box_registrar );
+		$ui_registry->register_ui(
+			new AdvancedPostTranslator(
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.asset_manager'],
+				$container['multilingualpress.server_request']
+			),
+			$box_registrar
+		);
 
 		$ui_registry->register_ui( new SimplePostTranslator(), $box_registrar );
 
 		add_action( 'admin_init', function () use ( $ui_registry, $box_registrar ) {
+
 			$box_registrar->register_meta_boxes();
 		}, 0 );
 
-		add_action( PostMetaBoxRegistrar::ACTION_ADD_META_BOXES, function () use ( $ui_registry, $box_registrar ) {
-			$box_registrar->with_ui( $ui_registry->selected_ui( $box_registrar ) );
-		}, 0 );
+		add_action( PostMetaBoxRegistrar::ACTION_INIT_META_BOXES, function () use ( $ui_registry, $box_registrar ) {
 
-		add_action( PostMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function () use ( $ui_registry, $box_registrar ) {
 			$box_registrar->with_ui( $ui_registry->selected_ui( $box_registrar ) );
 		}, 0 );
 

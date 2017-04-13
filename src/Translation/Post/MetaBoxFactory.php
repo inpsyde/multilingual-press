@@ -7,7 +7,9 @@ namespace Inpsyde\MultilingualPress\Translation\Post;
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\SiteAwareMetaBoxController;
+use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxController;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 
 /**
  * Factory for post translation meta box controller objects.
@@ -89,6 +91,17 @@ class MetaBoxFactory {
 	}
 
 	/**
+	 * @param \WP_Post      $post
+	 * @param ServerRequest $request
+	 *
+	 * @return SourcePostSaveContext
+	 */
+	public function create_post_request_context( \WP_Post $post, ServerRequest $request ): SourcePostSaveContext {
+
+		return new SourcePostSaveContext( $post, $this->allowed_post_types, $this->site_relations, $request );
+	}
+
+	/**
 	 * Returns a post translation meta box controller according to the given site and post data.
 	 *
 	 * @param int      $site_id      Site ID.
@@ -98,6 +111,11 @@ class MetaBoxFactory {
 	 */
 	private function create_meta_box_for_site( int $site_id, \WP_Post $related_post = null ): SiteAwareMetaBoxController {
 
-		return new TranslationMetaBoxController( $site_id, $this->allowed_post_types, $related_post );
+		return new TranslationMetaBoxController(
+			$site_id,
+			$this->site_relations,
+			$this->allowed_post_types,
+			$related_post
+		);
 	}
 }
