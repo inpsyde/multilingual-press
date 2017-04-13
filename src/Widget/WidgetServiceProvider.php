@@ -27,19 +27,35 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$container['multilingualpress.language_switcher_widget'] = function ( Container $container ) {
+		$this->register_dashboard_widgets( $container );
 
-			return new Sidebar\LanguageSwitcher\Widget(
-				$container['multilingualpress.language_switcher_widget_view']
-			);
-		};
+		$this->register_sidebar_widgets( $container );
+	}
 
-		$container['multilingualpress.language_switcher_widget_view'] = function ( Container $container ) {
+	/**
+	 * Bootstraps the registered services.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	public function bootstrap( Container $container ) {
 
-			return new Sidebar\LanguageSwitcher\WidgetView(
-				$container['multilingualpress.asset_manager']
-			);
-		};
+		$this->bootstrap_dashboard_widgets( $container );
+
+		$this->bootstrap_sidebar_widgets( $container );
+	}
+
+	/**
+	 * Registers the dashboard widget services.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function register_dashboard_widgets( Container $container ) {
 
 		$container['multilingualpress.translation_completed_setting_nonce'] = function () {
 
@@ -100,19 +116,39 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 	}
 
 	/**
-	 * Bootstraps the registered services.
-	 *
-	 * @since 3.0.0
+	 * Registers the sidebar widget services.
 	 *
 	 * @param Container $container Container object.
 	 *
 	 * @return void
 	 */
-	public function bootstrap( Container $container ) {
+	private function register_sidebar_widgets( Container $container ) {
+
+		$container['multilingualpress.language_switcher_widget'] = function ( Container $container ) {
+
+			return new Sidebar\LanguageSwitcher\Widget(
+				$container['multilingualpress.language_switcher_widget_view']
+			);
+		};
+
+		$container['multilingualpress.language_switcher_widget_view'] = function ( Container $container ) {
+
+			return new Sidebar\LanguageSwitcher\WidgetView(
+				$container['multilingualpress.asset_manager']
+			);
+		};
+	}
+
+	/**
+	 * Bootstraps the dashboard widget services.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_dashboard_widgets( Container $container ) {
 
 		$container['multilingualpress.untranslated_posts_dashboard_widget']->register();
-
-		$container['multilingualpress.language_switcher_widget']->register();
 
 		add_action(
 			'post_submitbox_misc_actions',
@@ -125,5 +161,17 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 			10,
 			2
 		);
+	}
+
+	/**
+	 * Bootstraps the sidebar widget services.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_sidebar_widgets( Container $container ) {
+
+		$container['multilingualpress.language_switcher_widget']->register();
 	}
 }

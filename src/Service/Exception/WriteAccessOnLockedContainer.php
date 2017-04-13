@@ -22,7 +22,7 @@ class WriteAccessOnLockedContainer extends InvalidValueWriteAccess {
 	 *
 	 * @return WriteAccessOnLockedContainer Exception object.
 	 */
-	public static function for_name( string $name, string $action = 'set' ): WriteAccessOnLockedContainer {
+	public static function for_value( string $name, string $action = 'set' ): WriteAccessOnLockedContainer {
 
 		return new static( sprintf(
 			'Cannot %2$s "%1$s". Manipulating a locked container is not allowed.',

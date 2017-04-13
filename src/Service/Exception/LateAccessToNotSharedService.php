@@ -22,7 +22,7 @@ class LateAccessToNotSharedService extends InvalidValueReadAccess {
 	 *
 	 * @return LateAccessToNotSharedService Exception object.
 	 */
-	public static function for_name( string $name, string $action = 'read' ): LateAccessToNotSharedService {
+	public static function for_value( string $name, string $action = 'read' ): LateAccessToNotSharedService {
 
 		return new static( sprintf(
 			'Cannot %2$s not shared "%1$s". The container has already been bootstrapped.',

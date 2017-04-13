@@ -14,8 +14,7 @@ use Inpsyde\MultilingualPress\Common\Setting\User\UserSetting;
 use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater;
-use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
-use Inpsyde\MultilingualPress\Module\ActivationAwareness;
+use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -26,9 +25,7 @@ use Inpsyde\MultilingualPress\Service\Container;
  * @package Inpsyde\MultilingualPress\Module\Redirect
  * @since   3.0.0
  */
-final class ServiceProvider implements ActivationAwareModuleServiceProvider {
-
-	use ActivationAwareness;
+final class ServiceProvider implements ModuleServiceProvider {
 
 	/**
 	 * Registers the provided services on the given container.
@@ -142,71 +139,6 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	}
 
 	/**
-	 * Bootstraps the registered services.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param Container $container Container object.
-	 *
-	 * @return void
-	 */
-	public function bootstrap( Container $container ) {
-
-		$this->on_activation( function () use ( $container ) {
-
-			( new UserSetting(
-				$container['multilingualpress.redirect_user_setting'],
-				$container['multilingualpress.redirect_user_setting_updater']
-			) )->register();
-
-			if ( is_admin() ) {
-				global $pagenow;
-
-				$redirect_site_setting = new SiteSetting(
-					$container['multilingualpress.redirect_site_setting'],
-					$container['multilingualpress.redirect_site_setting_updater']
-				);
-
-				$redirect_site_setting->register(
-					SiteSettingsSectionView::ACTION_AFTER . '_' . SiteSettings::ID,
-					SiteSettingsUpdater::ACTION_UPDATE_SETTINGS
-				);
-
-				if ( is_network_admin() ) {
-					$redirect_site_setting->register(
-						SiteSettingsSectionView::ACTION_AFTER . '_' . NewSiteSettings::ID,
-						SiteSettingsUpdater::ACTION_DEFINE_INITIAL_SETTINGS
-					);
-
-					if ( 'sites.php' === $pagenow ) {
-						$redirect_settings_repository = $container['multilingualpress.redirect_settings_repository'];
-
-						( new SitesListTableColumn(
-							'multilingualpress.redirect',
-							__( 'Redirect', 'multilingualpress' ),
-							function ( $id, $site_id ) use ( $redirect_settings_repository ) {
-
-								return $redirect_settings_repository->get_site_setting( (int) $site_id )
-									? '<span class="dashicons dashicons-yes"></span>'
-									: '';
-							}
-						) )->register();
-					}
-				}
-			} else {
-				$container['multilingualpress.noredirect_permalink_filter']->enable();
-
-				if (
-					! wp_doing_ajax()
-					&& $container['multilingualpress.redirect_request_validator']->is_valid()
-				) {
-					add_action( 'template_redirect', [ $container['multilingualpress.redirector'], 'redirect' ], 1 );
-				}
-			}
-		} );
-	}
-
-	/**
 	 * Registers the module at the module manager.
 	 *
 	 * @since 3.0.0
@@ -222,5 +154,109 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			'name'        => __( 'Redirect', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
+	}
+
+	/**
+	 * Performs various tasks on module activation.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	public function activate_module( Container $container ) {
+
+		( new UserSetting(
+			$container['multilingualpress.redirect_user_setting'],
+			$container['multilingualpress.redirect_user_setting_updater']
+		) )->register();
+
+		if ( is_admin() ) {
+			$this->activate_module_for_admin( $container );
+
+			return;
+		}
+
+		$this->activate_module_for_front_end( $container );
+	}
+
+	/**
+	 * Performs various admin-specific tasks on module activation.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function activate_module_for_admin( Container $container ) {
+
+		if ( is_network_admin() ) {
+			$this->activate_module_for_network_admin( $container );
+
+			return;
+		}
+
+		( new SiteSetting(
+			$container['multilingualpress.redirect_site_setting'],
+			$container['multilingualpress.redirect_site_setting_updater']
+		) )->register(
+			SiteSettingsSectionView::ACTION_AFTER . '_' . SiteSettings::ID,
+			SiteSettingsUpdater::ACTION_UPDATE_SETTINGS
+		);
+	}
+
+	/**
+	 * Performs various admin-specific tasks on module activation.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function activate_module_for_network_admin( Container $container ) {
+
+		( new SiteSetting(
+			$container['multilingualpress.redirect_site_setting'],
+			$container['multilingualpress.redirect_site_setting_updater']
+		) )->register(
+			SiteSettingsSectionView::ACTION_AFTER . '_' . NewSiteSettings::ID,
+			SiteSettingsUpdater::ACTION_DEFINE_INITIAL_SETTINGS
+		);
+
+		if ( 'sites.php' !== ( $GLOBALS['pagenow'] ?? '' ) ) {
+			return;
+		}
+
+		$redirect_settings_repository = $container['multilingualpress.redirect_settings_repository'];
+
+		$render_callback = function ( $id, $site_id ) use ( $redirect_settings_repository ) {
+
+			return $redirect_settings_repository->get_site_setting( (int) $site_id )
+				? '<span class="dashicons dashicons-yes"></span>'
+				: '';
+		};
+
+		$site_list_column = new SitesListTableColumn(
+			'multilingualpress.redirect',
+			__( 'Redirect', 'multilingualpress' ),
+			$render_callback
+		);
+
+		$site_list_column->register();
+	}
+
+	/**
+	 * Performs various admin-specific tasks on module activation.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function activate_module_for_front_end( Container $container ) {
+
+		$container['multilingualpress.noredirect_permalink_filter']->enable();
+
+		if ( $container['multilingualpress.redirect_request_validator']->is_valid() ) {
+			add_action( 'template_redirect', [ $container['multilingualpress.redirector'], 'redirect' ], 1 );
+		}
 	}
 }

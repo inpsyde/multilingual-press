@@ -26,20 +26,7 @@ final class DatabaseServiceProvider implements ServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$container->share( 'multilingualpress.content_relations_table', function ( Container $container ) {
-
-			return new Table\ContentRelationsTable( $container['multilingualpress.wpdb']->base_prefix );
-		} );
-
-		$container->share( 'multilingualpress.languages_table', function ( Container $container ) {
-
-			return new Table\LanguagesTable( $container['multilingualpress.wpdb']->base_prefix );
-		} );
-
-		$container->share( 'multilingualpress.site_relations_table', function ( Container $container ) {
-
-			return new Table\SiteRelationsTable( $container['multilingualpress.wpdb']->base_prefix );
-		} );
+		$this->register_tables( $container );
 
 		$container->share( 'multilingualpress.table_duplicator', function ( Container $container ) {
 
@@ -79,6 +66,31 @@ final class DatabaseServiceProvider implements ServiceProvider {
 		$container->share( 'multilingualpress.wpdb', function () {
 
 			return $GLOBALS['wpdb'];
+		} );
+	}
+
+	/**
+	 * Registers the tables.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function register_tables( Container $container ) {
+
+		$container->share( 'multilingualpress.content_relations_table', function ( Container $container ) {
+
+			return new Table\ContentRelationsTable( $container['multilingualpress.wpdb']->base_prefix );
+		} );
+
+		$container->share( 'multilingualpress.languages_table', function ( Container $container ) {
+
+			return new Table\LanguagesTable( $container['multilingualpress.wpdb']->base_prefix );
+		} );
+
+		$container->share( 'multilingualpress.site_relations_table', function ( Container $container ) {
+
+			return new Table\SiteRelationsTable( $container['multilingualpress.wpdb']->base_prefix );
 		} );
 	}
 }

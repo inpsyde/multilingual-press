@@ -177,7 +177,7 @@ class AddOnlyContainerTest extends TestCase {
 
 		$container = new AddOnlyContainer( [ 'foo' => 'bar' ] );
 
-		$this->expectException( Exception\FactoryNotFound::class );
+		$this->expectException( Exception\ValueNotFound::class );
 
 		$container->extend( 'foo', function () {
 
