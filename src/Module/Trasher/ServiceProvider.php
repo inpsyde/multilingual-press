@@ -5,8 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
-use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
-use Inpsyde\MultilingualPress\Module\ActivationAwareness;
+use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -17,9 +16,7 @@ use Inpsyde\MultilingualPress\Service\Container;
  * @package Inpsyde\MultilingualPress\Module\Trasher
  * @since   3.0.0
  */
-final class ServiceProvider implements ActivationAwareModuleServiceProvider {
-
-	use ActivationAwareness;
+final class ServiceProvider implements ModuleServiceProvider {
 
 	/**
 	 * Registers the provided services on the given container.
@@ -55,6 +52,7 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			return new TrasherSettingUpdater(
 				$container['multilingualpress.trasher_setting_repository'],
 				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.server_request'],
 				$container['multilingualpress.trasher_setting_nonce']
 			);
 		};
@@ -66,35 +64,6 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 				$container['multilingualpress.trasher_setting_nonce']
 			);
 		};
-	}
-
-	/**
-	 * Bootstraps the registered services.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param Container $container Container object.
-	 *
-	 * @return void
-	 */
-	public function bootstrap( Container $container ) {
-
-		$this->on_activation( function () use ( $container ) {
-
-			add_action(
-				'post_submitbox_misc_actions',
-				[ $container['multilingualpress.trasher_setting_view'], 'render' ]
-			);
-
-			add_action(
-				'save_post',
-				[ $container['multilingualpress.trasher_setting_updater'], 'update_settings' ],
-				10,
-				2
-			);
-
-			add_action( 'wp_trash_post', [ $container['multilingualpress.trasher'], 'trash_related_posts' ] );
-		} );
 	}
 
 	/**
@@ -116,5 +85,31 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			'name'        => __( 'Trasher', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
+	}
+
+	/**
+	 * Executes the callback to be used in case this service provider's module is active.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Container $container Container object
+	 *
+	 * @return void
+	 */
+	public function activate( Container $container ) {
+
+		add_action(
+			'post_submitbox_misc_actions',
+			[ $container['multilingualpress.trasher_setting_view'], 'render' ]
+		);
+
+		add_action(
+			'save_post',
+			[ $container['multilingualpress.trasher_setting_updater'], 'update_settings' ],
+			10,
+			2
+		);
+
+		add_action( 'wp_trash_post', [ $container['multilingualpress.trasher'], 'trash_related_posts' ] );
 	}
 }

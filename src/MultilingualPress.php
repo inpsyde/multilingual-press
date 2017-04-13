@@ -4,7 +4,6 @@ namespace Inpsyde\MultilingualPress;
 
 use Inpsyde\MultilingualPress\Core\Exception\InstanceAlreadyBootstrapped;
 use Inpsyde\MultilingualPress\Installation\SystemChecker;
-use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -162,16 +161,6 @@ final class MultilingualPress {
 			return;
 		}
 
-		$activation = function ( ModuleServiceProvider $module, ModuleManager $module_manager ) {
-
-			if (
-				$module->register_module( $module_manager )
-				&& $module instanceof ActivationAwareModuleServiceProvider
-			) {
-				$module->activate();
-			}
-		};
-
 		/**
 		 * Fires right before MultilingualPress registers any modules.
 		 *
@@ -179,9 +168,14 @@ final class MultilingualPress {
 		 */
 		do_action( static::ACTION_REGISTER_MODULES );
 
+		$activation = function ( ModuleServiceProvider $module, ModuleManager $module_manager, Container $container ) {
+
+			$module->register_module( $module_manager ) && $module->activate( $container );
+		};
+
 		$this->service_providers->filter( function ( ServiceProvider $provider ) {
 
 			return $provider instanceof ModuleServiceProvider;
-		} )->apply_callback( $activation, $this->container['multilingualpress.module_manager'] );
+		} )->apply_callback( $activation, $this->container['multilingualpress.module_manager'], $this->container );
 	}
 }

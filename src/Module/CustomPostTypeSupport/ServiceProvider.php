@@ -6,8 +6,7 @@ namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxView;
-use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
-use Inpsyde\MultilingualPress\Module\ActivationAwareness;
+use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -18,9 +17,7 @@ use Inpsyde\MultilingualPress\Service\Container;
  * @package Inpsyde\MultilingualPress\Module\CustomPostTypeSupport
  * @since   3.0.0
  */
-final class ServiceProvider implements ActivationAwareModuleServiceProvider {
-
-	use ActivationAwareness;
+final class ServiceProvider implements ModuleServiceProvider {
 
 	/**
 	 * Registers the provided services on the given container.
@@ -68,44 +65,6 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	}
 
 	/**
-	 * Bootstraps the registered services.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param Container $container Container object.
-	 *
-	 * @return void
-	 */
-	public function bootstrap( Container $container ) {
-
-		$this->on_activation( function () use ( $container ) {
-
-			$repository = $container['multilingualpress.post_type_repository'];
-
-			$settings_box = $container['multilingualpress.post_type_support_settings_box'];
-
-			add_action( 'multilingualpress.after_module_list', function () use ( $settings_box, $repository ) {
-
-				if ( $repository->get_custom_post_types() ) {
-					( new SettingsBoxView( $settings_box ) )->render();
-				}
-			} );
-
-			$updater = $container['multilingualpress.post_type_support_settings_updater'];
-			add_action( 'multilingualpress.save_modules', [ $updater, 'update_settings' ] );
-
-			add_filter( 'mlp_allowed_post_types', function ( array $post_types ) use ( $repository ) {
-
-				return array_merge( $post_types, $repository->get_supported_post_types() );
-			} );
-
-			$url_filter = $container['multilingualpress.post_type_link_url_filter'];
-			add_action( 'multilingualpress.generate_permalink', [ $url_filter, 'enable' ] );
-			add_action( 'multilingualpress.generated_permalink', [ $url_filter, 'disable' ] );
-		} );
-	}
-
-	/**
 	 * Registers the module at the module manager.
 	 *
 	 * @since 3.0.0
@@ -124,5 +83,40 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 			'name'        => __( 'Custom Post Type Support', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
+	}
+
+	/**
+	 * Executes the callback to be used in case this service provider's module is active.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Container $container Container object
+	 *
+	 * @return void
+	 */
+	public function activate( Container $container ) {
+
+		$repository = $container['multilingualpress.post_type_repository'];
+
+		$settings_box = $container['multilingualpress.post_type_support_settings_box'];
+
+		add_action( 'multilingualpress.after_module_list', function () use ( $settings_box, $repository ) {
+
+			if ( $repository->get_custom_post_types() ) {
+				( new SettingsBoxView( $settings_box ) )->render();
+			}
+		} );
+
+		$updater = $container['multilingualpress.post_type_support_settings_updater'];
+		add_action( 'multilingualpress.save_modules', [ $updater, 'update_settings' ] );
+
+		add_filter( 'mlp_allowed_post_types', function ( array $post_types ) use ( $repository ) {
+
+			return array_merge( $post_types, $repository->get_supported_post_types() );
+		} );
+
+		$url_filter = $container['multilingualpress.post_type_link_url_filter'];
+		add_action( 'multilingualpress.generate_permalink', [ $url_filter, 'enable' ] );
+		add_action( 'multilingualpress.generated_permalink', [ $url_filter, 'disable' ] );
 	}
 }
