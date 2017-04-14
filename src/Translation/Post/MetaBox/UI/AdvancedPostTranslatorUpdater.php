@@ -18,11 +18,6 @@ use function Inpsyde\MultilingualPress\site_exists;
 class AdvancedPostTranslatorUpdater {
 
 	/**
-	 * @var \WP_Post
-	 */
-	private $source_post;
-
-	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -40,19 +35,15 @@ class AdvancedPostTranslatorUpdater {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param \WP_Post               $source_post
-	 * @param ContentRelations       $content_relations
-	 * @param ServerRequest          $server_request
-	 * @param SourcePostSaveContext  $save_context
+	 * @param ContentRelations      $content_relations
+	 * @param ServerRequest         $server_request
+	 * @param SourcePostSaveContext $save_context
 	 */
 	public function __construct(
-		\WP_Post $source_post,
 		ContentRelations $content_relations,
 		ServerRequest $server_request,
 		SourcePostSaveContext $save_context
 	) {
-
-		$this->source_post = $source_post;
 
 		$this->content_relations = $content_relations;
 
@@ -62,55 +53,63 @@ class AdvancedPostTranslatorUpdater {
 	}
 
 	/**
-	 * Save the remote post. This run in remote post site context.
+	 * Save the remote post. Runs in site context or remote post.
 	 *
 	 * @param \WP_Post $remote_post
 	 * @param int      $remote_site_id
 	 *
-	 * @return bool
+	 * @return \WP_Post
 	 */
-	public function update( \WP_Post $remote_post, int $remote_site_id ): bool {
+	public function update( \WP_Post $remote_post, int $remote_site_id ): \WP_Post {
 
 		if (
 			! in_array( $remote_site_id, $this->save_context[ SourcePostSaveContext::RELATED_BLOGS ] )
 			|| ! site_exists( $remote_site_id )
 		) {
-			return false;
+			return new \WP_Post( new \stdClass() );
 		}
 
-		$request_data = (array) $this->server_request->body_value( PostTranslatorInputHelper::NAME_BASE ) ?: [];
-		if ( ! $request_data ) {
-			return false;
+		$sites_request_data = (array) $this->server_request->body_value( PostTranslatorInputHelper::NAME_BASE ) ?: [];
+		if ( ! $sites_request_data || ! is_array( $sites_request_data ) ) {
+			return new \WP_Post( new \stdClass() );
+		}
+
+		$request_data = $sites_request_data[ $remote_site_id ] ?? null;
+		if ( ! $request_data || ! is_array( $request_data ) ) {
+			return new \WP_Post( new \stdClass() );
 		}
 
 		$relation_helper = new PostRelationSaveHelper( $this->content_relations, $this->save_context );
 
-		$post_array = $this->build_remote_post_array( $remote_post, $request_data, $relation_helper );
+		$post_array = $this->build_remote_post_array( $remote_post, $remote_site_id, $request_data, $relation_helper );
 
-		$new_id = $post_array ? (int) wp_insert_post( $post_array, false ) : 0;
+		$new_remote_post_id = $post_array ? (int) wp_insert_post( $post_array, false ) : 0;
 
-		if ( 0 >= $new_id ) {
-			return false;
+		if ( 0 >= $new_remote_post_id ) {
+			return new \WP_Post( new \stdClass() );
 		}
 
-		if ( ! $relation_helper->update_linked_element( $remote_site_id, $new_id ) ) {
-			return false;
+		if ( ! $relation_helper->sync_linked_element( $remote_site_id, $new_remote_post_id ) ) {
+			return new \WP_Post( new \stdClass() );
 		}
 
-		$remote_post = get_post( $new_id );
-		if ( ! $remote_post ) {
-			return false;
+		$remote_post = get_post( $new_remote_post_id );
+		if ( ! $remote_post instanceof \WP_Post ) {
+			return new \WP_Post( new \stdClass() );
 		}
 
-		$this->copy_thumb( $remote_post, $request_data );
+		if ( ! empty( $request_data[ AdvancedPostTranslatorFields::SYNC_THUMBNAIL ] ) ) {
+			$relation_helper->sync_thumb( $remote_post, $remote_site_id );
+		}
 
-		$this->set_remote_tax_terms( $remote_post, $request_data );
+		$this->sync_remote_terms( $remote_post, $request_data );
 
-		return true;
+		return $remote_post;
 	}
 
 	/**
 	 * @param \WP_Post               $remote_post
+	 * @param int                    $remote_site_id
 	 * @param array                  $request_data
 	 * @param PostRelationSaveHelper $relation_helper
 	 *
@@ -118,6 +117,7 @@ class AdvancedPostTranslatorUpdater {
 	 */
 	private function build_remote_post_array(
 		\WP_Post $remote_post,
+		int $remote_site_id,
 		array $request_data,
 		PostRelationSaveHelper $relation_helper
 	): array {
@@ -164,7 +164,7 @@ class AdvancedPostTranslatorUpdater {
 			$remote_post->post_author = $author;
 		}
 
-		$remote_post->post_parent = $relation_helper->get_related_post_parent();
+		$remote_post->post_parent = $relation_helper->get_related_post_parent( $remote_site_id );
 
 		return $remote_post->to_array();
 	}
@@ -210,65 +210,6 @@ class AdvancedPostTranslatorUpdater {
 	}
 
 	/**
-	 * @param \WP_Post $remote_post
-	 * @param array    $request_data
-	 *
-	 * @return bool
-	 */
-	private function copy_thumb( \WP_Post $remote_post, array $request_data ): bool {
-
-		// We should not save the thumbnail
-		if ( empty( $request_data[ AdvancedPostTranslatorFields::SYNC_THUMBNAIL ] ) ) {
-			return true;
-		}
-
-		$source_thumb_path = $this->save_context[ SourcePostSaveContext::FEATURED_IMG_PATH ];
-
-		// There's no thumbnail on source post
-		if ( empty( $source_thumb_path ) ) {
-			return true;
-		}
-
-		$upload_dir = wp_upload_dir();
-
-		if ( ! wp_mkdir_p( $upload_dir['path'] ) ) {
-			// Failed create dir
-			return false;
-		}
-
-		$filename = wp_unique_filename( $upload_dir['path'], basename( $source_thumb_path ) );
-
-		if ( ! copy( $source_thumb_path, $upload_dir['path'] . '/' . $filename ) ) {
-			return false;
-		}
-
-		$wp_filetype = wp_check_filetype( $upload_dir['url'] . '/' . $filename );
-		$attachment  = [
-			'post_mime_type' => $wp_filetype['type'],
-			'guid'           => $upload_dir['url'] . '/' . $filename,
-			'post_parent'    => $remote_post->ID,
-			'post_title'     => '',
-			'post_excerpt'   => '',
-			'post_author'    => get_current_user_id(),
-			'post_content'   => '',
-		];
-
-		$full_path = $upload_dir['path'] . '/' . $filename;
-		$attach_id = wp_insert_attachment( $attachment, $full_path );
-
-		if ( is_wp_error( $attach_id ) ) {
-			return false;
-		}
-
-		wp_update_attachment_metadata(
-			$attach_id,
-			wp_generate_attachment_metadata( $attach_id, $full_path )
-		);
-
-		return (bool) update_post_meta( $remote_post->ID, '_thumbnail_id', $attach_id );
-	}
-
-	/**
 	 * Update terms for each taxonomy.
 	 *
 	 * @param  \WP_Post $remote_post
@@ -276,42 +217,54 @@ class AdvancedPostTranslatorUpdater {
 	 *
 	 * @return bool True on complete success, false when there were errors.
 	 */
-	private function set_remote_tax_terms( \WP_Post $remote_post, array $request_data ): bool {
+	private function sync_remote_terms( \WP_Post $remote_post, array $request_data ): bool {
 
 		$tax_data = array_key_exists( AdvancedPostTranslatorFields::TAXONOMY, $request_data )
 			? (array) $request_data[ AdvancedPostTranslatorFields::TAXONOMY ]
 			: [];
 
-		if ( ! $tax_data ) {
-			return true;
-		}
-
 		$errors = 0;
 
 		$taxonomies = get_object_taxonomies( $remote_post, 'objects' );
 
-		foreach ( $taxonomies as $taxonomy => $properties ) {
-
-			if ( ! current_user_can( $properties->cap->assign_terms, $taxonomy ) ) {
-				continue;
-			}
-
-			$terms = [];
-
-			$term_ids = empty( $tax_data[ $taxonomy ] ) ? [] : (array) $tax_data[ $taxonomy ];
-
-			foreach ( $term_ids as $term_id ) {
-				$terms[ $term_id ] = get_term_by( 'id', (int) $term_id, $taxonomy );
-			}
-
-			$to_save = array_keys( array_filter( $terms ) );
-
-			if ( is_wp_error( wp_set_object_terms( $remote_post->ID, $to_save, $taxonomy ) ) ) {
-				$errors ++;
+		foreach ( $taxonomies as $slug => $taxonomy_object ) {
+			if ( current_user_can( $taxonomy_object->cap->assign_terms, $slug ) ) {
+				$this->sync_remote_taxonomy_terms( $remote_post, $slug, $tax_data ) or $errors ++;
 			}
 		}
 
 		return $errors === 0;
+	}
+
+	/**
+	 * @param \WP_Post $remote_post
+	 * @param string   $taxonomy
+	 * @param array    $request_data
+	 *
+	 * @return bool
+	 */
+	private function sync_remote_taxonomy_terms( \WP_Post $remote_post, string $taxonomy, array $request_data ): bool {
+
+		$term_ids = empty( $request_data[ $taxonomy ] )
+			? []
+			: array_filter( array_map( 'intval', array_filter( (array) $request_data[ $taxonomy ], 'is_numeric' ) ) );
+
+		if ( $term_ids ) {
+			return ! is_wp_error( wp_set_object_terms( $remote_post->ID, $term_ids, $taxonomy ) );
+		}
+
+		// When user unchecked all terms from UI but post has already some terms, let's remove them.
+
+		$post_terms = get_the_terms( $remote_post, $taxonomy );
+
+		$post_term_ids = is_array( $post_terms ) && $post_terms
+			? array_column( $post_terms, 'term_id' )
+			: [];
+
+		return
+			! $post_term_ids
+			|| ! is_wp_error( wp_remove_object_terms( $remote_post->ID, $post_term_ids, $taxonomy ) );
+
 	}
 
 }

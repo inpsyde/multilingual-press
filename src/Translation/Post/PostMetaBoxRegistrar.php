@@ -101,7 +101,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	/**
 	 * @var ServerRequest
 	 */
-	private $request;
+	private $server_request;
 
 	/**
 	 * @var MetaBoxUI
@@ -129,7 +129,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 
 		$this->permission_checker = $permission_checker;
 
-		$this->request = $request;
+		$this->server_request = $request;
 
 		$this->nonce_factory = $nonce_factory;
 	}
@@ -285,17 +285,17 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	/**
 	 * Saves the metadata of all meta boxes for the given post.
 	 *
-	 * @param \WP_Post $post   Post object.
-	 * @param bool     $update Whether or not this is an update of the post.
+	 * @param \WP_Post $source_post Post object.
+	 * @param bool     $update      Whether or not this is an update of the post.
 	 */
-	private function save_metadata_for_post( \WP_Post $post, bool $update ) {
+	private function save_metadata_for_post( \WP_Post $source_post, bool $update ) {
 
-		$controllers = $this->get_controllers( $post );
+		$controllers = $this->get_controllers( $source_post );
 		if ( ! $controllers ) {
 			return;
 		}
 
-		$save_context = $this->factory->create_post_request_context( $post, $this->request );
+		$save_context = $this->factory->create_post_request_context( $source_post, $this->server_request );
 
 		if ( ! $save_context[ SourcePostSaveContext::POST_ID ] ) {
 			return;
@@ -306,20 +306,20 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param \WP_Post $post Post object.
+		 * @param \WP_Post $source_post Post object.
 		 */
-		do_action( self::ACTION_INIT_META_BOXES, $post );
+		do_action( self::ACTION_INIT_META_BOXES, $source_post );
 
 		/**
 		 * Fires right before the metadata of the meta boxes is saved.
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param \WP_Post              $post         Post object.
+		 * @param \WP_Post              $source_post  Source post object.
 		 * @param SourcePostSaveContext $save_context Source post save context object.
 		 * @param bool                  $update       Whether or not this is an update of the post.
 		 */
-		do_action( self::ACTION_SAVE_META_BOXES, $post, $save_context, $update );
+		do_action( self::ACTION_SAVE_META_BOXES, $source_post, $save_context, $update );
 
 		if ( $this->ui instanceof MetaBoxUI ) {
 			$this->ui->register_updater();
@@ -327,57 +327,53 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 
 		$network_state = NetworkState::from_globals();
 
-		array_walk( $controllers, function ( MetaBoxController $controller ) use ( $post, $save_context, $update ) {
+		array_walk( $controllers,
+			function ( MetaBoxController $controller ) use ( $source_post, $save_context, $update ) {
 
-			if ( $this->is_meta_box_allowed_for_post( $controller, $post ) ) {
+				if ( $this->is_meta_box_allowed_for_post( $controller, $source_post ) ) {
 
-				/** @var SiteAwareMetaBoxController $controller */
-				switch_to_blog( $controller->site_id() );
+					/** @var SiteAwareMetaBoxController $controller */
+					switch_to_blog( $controller->site_id() );
 
-				$this->save_meta_box_data_for_post( $controller, $post, $save_context, $update );
+					$this->save_meta_box_data_for_post( $controller, $save_context, $update );
 
-				/**
-				 * Fires right after the metadata of a meta box was saved.
-				 *
-				 * Important: it runs in the site context of the remote post.
-				 *
-				 * @since 3.0.0
-				 *
-				 * @param \WP_Post              $post         Post object.
-				 * @param SourcePostSaveContext $save_context Source post save context object.
-				 * @param MetaBoxController     $controller   Meta box controller object.
-				 */
-				do_action( self::ACTION_SAVED_META_BOX_DATA, $post, $save_context, $controller );
-			}
-		} );
+					/**
+					 * Fires right after the metadata of a meta box was saved.
+					 *
+					 * Important: it runs in the site context of the remote post.
+					 *
+					 * @since 3.0.0
+					 *
+					 * @param \WP_Post              $source_post  Source post object.
+					 * @param SourcePostSaveContext $save_context Source post save context object.
+					 * @param MetaBoxController     $controller   Meta box controller object.
+					 */
+					do_action( self::ACTION_SAVED_META_BOX_DATA, $source_post, $save_context, $controller );
+				}
+			} );
+
+		$network_state->restore();
 
 		/**
 		 * Fires right after the metadata of the meta boxes is saved.
 		 *
-		 * This hook should be used to save custom metadata on remote posts.
-		 * Important: it runs in the site context of the remote post.
-		 *
 		 * @since 3.0.0
 		 *
-		 * @param \WP_Post              $post         Post object.
+		 * @param \WP_Post              $source_post  Post object.
 		 * @param SourcePostSaveContext $save_context Source post save context object.
 		 */
-		do_action( self::ACTION_SAVED_META_BOXES, $post, $save_context );
-
-		$network_state->restore();
+		do_action( self::ACTION_SAVED_META_BOXES, $source_post, $save_context );
 	}
 
 	/**
 	 * Saves the metadata according to the given meta box controller for the given post.
 	 *
-	 * @param MetaBoxController     $controller           Meta box controller object.
-	 * @param \WP_Post              $post                 Post object.
-	 * @param SourcePostSaveContext $save_context         Save context object.
-	 * @param bool                  $update               Whether or not this is an update of the post.
+	 * @param MetaBoxController     $controller   Meta box controller object.
+	 * @param SourcePostSaveContext $save_context Save context object.
+	 * @param bool                  $update       Whether or not this is an update of the post.
 	 */
 	private function save_meta_box_data_for_post(
 		MetaBoxController $controller,
-		\WP_Post $post,
 		SourcePostSaveContext $save_context,
 		bool $update
 	) {
@@ -392,10 +388,9 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		}
 
 		$updater
-			->with_post( $post )
-			->with_save_context( $save_context )
+			->with_post_save_context( $save_context )
 			->with_data( compact( 'update' ) )
-			->update( $this->request );
+			->update( $this->server_request );
 	}
 
 	/**

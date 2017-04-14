@@ -12,6 +12,10 @@ use function Inpsyde\MultilingualPress\get_post_taxonomies_with_terms;
  */
 class AdvancedPostTranslatorFields {
 
+	const INPUT_NAME_BASE = 'mlp_translation_data';
+
+	const INPUT_ID_BASE = 'mlp-translation-data';
+
 	const SOURCE_POST_ID = 'source_post_id';
 
 	const REMOTE_POST_ID = 'remote_post_id';
@@ -26,48 +30,38 @@ class AdvancedPostTranslatorFields {
 
 	const COPIED_POST = 'copied_post';
 
-	const SYNC_THUMBNAIL = 'sync_thumb';
+	const SYNC_THUMBNAIL = 'thumbnail';
 
 	const TAXONOMY = 'tax';
 
 	/**
-	 * Constructor. Sets properties.
-	 */
-	public function __construct() {
-
-		$this->input_helper = new PostTranslatorInputHelper();
-
-		$this->current_site_id = (int) get_current_blog_id();
-	}
-
-	/**
-	 * @param int           $remote_site_id
 	 * @param \WP_Post      $source_post
-	 * @param \WP_Post|null $post
+	 * @param int           $remote_site_id
+	 * @param \WP_Post|null $remote_post
 	 *
 	 * @return string
 	 */
-	public function top_fields( int $remote_site_id, \WP_Post $source_post, \WP_Post $post = null ): string {
+	public function top_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		$output = $this->posts_id_input( $remote_site_id, $source_post, $post );
-		$output .= $this->title_input( $remote_site_id, $source_post, $post );
+		$output = $this->posts_id_input( $source_post, $remote_site_id, $remote_post );
+		$output .= $this->title_input( $source_post, $remote_site_id, $remote_post );
 		$output .= $this->name_input( $remote_site_id, $source_post );
-		$output .= $this->editor( $remote_site_id, $source_post, $post );
+		$output .= $this->editor( $source_post, $remote_site_id, $remote_post );
 
 		return $output;
 	}
 
 	/**
-	 * @param int           $remote_site_id
 	 * @param \WP_Post      $source_post
-	 * @param \WP_Post|null $post
+	 * @param int           $remote_site_id
+	 * @param \WP_Post|null $remote_post
 	 *
 	 * @return string
 	 */
-	public function main_fields( int $remote_site_id, \WP_Post $source_post, \WP_Post $post = null ): string {
+	public function main_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		$output = $this->editor( $remote_site_id, $source_post, $post );
-		$output .= $this->excerpt_input( $remote_site_id, $source_post, $post );
+		$output = $this->editor( $source_post, $remote_site_id, $remote_post );
+		$output .= $this->excerpt_input( $source_post, $remote_site_id, $remote_post );
 		$output .= $this->sync_thumbnail_input( $remote_site_id );
 
 		return $output;
@@ -75,30 +69,30 @@ class AdvancedPostTranslatorFields {
 	}
 
 	/**
-	 * @param int           $remote_site_id
 	 * @param \WP_Post      $source_post
-	 * @param \WP_Post|null $post
+	 * @param int           $remote_site_id
+	 * @param \WP_Post|null $remote_post
 	 *
 	 * @return string
 	 */
-	public function bottom_fields( int $remote_site_id, \WP_Post $source_post, \WP_Post $post = null ): string {
+	public function bottom_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		return $this->taxonomies_input( $remote_site_id, $source_post, $post );
+		return $this->taxonomies_input( $source_post, $remote_site_id, $remote_post );
 	}
 
 	/**
-	 * @param int           $remote_site_id
 	 * @param \WP_Post      $source_post
-	 * @param \WP_Post|null $post
+	 * @param int           $remote_site_id
+	 * @param \WP_Post|null $remote_post
 	 *
 	 * @return string
 	 */
-	private function posts_id_input( int $remote_site_id, \WP_Post $source_post, \WP_Post $post = null ): string {
+	private function posts_id_input( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		$source_name = $this->input_helper->field_name( $remote_site_id, self::SOURCE_POST_ID );
-		$remote_name = $this->input_helper->field_name( $remote_site_id, self::REMOTE_POST_ID );
+		$source_name = $this->field_name( $remote_site_id, self::SOURCE_POST_ID );
+		$remote_name = $this->field_name( $remote_site_id, self::REMOTE_POST_ID );
 
-		$remote_pid = $post ? (int) $post->ID : 0;
+		$remote_pid = $remote_post ? (int) $remote_post->ID : 0;
 
 		$output = sprintf( '<input type="hidden" name="%s" value="%d">', $source_name, (int) $source_post->ID );
 		$output .= sprintf( '<input type="hidden" name="%s" value="%d">', $remote_name, $remote_pid );
@@ -107,13 +101,13 @@ class AdvancedPostTranslatorFields {
 	}
 
 	/**
-	 * @param int           $remote_site_id
 	 * @param \WP_Post      $source_post
-	 * @param \WP_Post|null $post
+	 * @param int           $remote_site_id
+	 * @param \WP_Post|null $remote_post
 	 *
 	 * @return string
 	 */
-	private function title_input( int $remote_site_id, \WP_Post $source_post, \WP_Post $post = null ): string {
+	private function title_input( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
 		if ( ! post_type_supports( $source_post->post_type, 'title' ) ) {
 			return '';
@@ -130,12 +124,12 @@ class AdvancedPostTranslatorFields {
 			<div>
 				<input
 					type="text"
-					name="<?php echo $this->input_helper->field_name( $remote_site_id, self::POST_TITLE ); ?>"
-					value="<?php echo $post ? esc_attr( $post->post_title ) : ''; ?>"
+					name="<?php echo $this->field_name( $remote_site_id, self::POST_TITLE ); ?>"
+					value="<?php echo $remote_post ? esc_attr( $remote_post->post_title ) : ''; ?>"
 					placeholder="<?php echo esc_attr( $placeholder ); ?>"
 					size="30"
 					class="mlp-title"
-					id="<?php echo $this->input_helper->field_id( $remote_site_id, 'title' ); ?>">
+					id="<?php echo $this->field_id( $remote_site_id, 'title' ); ?>">
 			</div>
 		</div>
 		<?php
@@ -144,18 +138,18 @@ class AdvancedPostTranslatorFields {
 	}
 
 	/**
-	 * @param int      $remote_site_id
-	 * @param \WP_Post $post Remote post
+	 * @param int      $remote_site_id Remote site id.
+	 * @param \WP_Post $remote_post    Remote post.
 	 *
 	 * @return string
 	 */
-	private function name_input( int $remote_site_id, \WP_Post $post = null ): string {
+	private function name_input( int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		$id = $this->input_helper->field_id( $remote_site_id, 'name' );
+		$id = $this->field_id( $remote_site_id, 'name' );
 
-		$value = $post ? $post->post_name : '';
-		if ( ! $value && $post && $post->post_title ) {
-			$value = sanitize_title( $post->post_title );
+		$value = $remote_post ? $remote_post->post_name : '';
+		if ( ! $value && $remote_post && $remote_post->post_title ) {
+			$value = sanitize_title( $remote_post->post_title );
 		}
 
 		ob_start();
@@ -166,7 +160,7 @@ class AdvancedPostTranslatorFields {
 					<?php _e( 'Post Name:', 'multilingualpress' ) ?><br>
 					<input
 						type="text"
-						name="<?php echo $this->input_helper->field_name( $remote_site_id, self::POST_NAME ); ?>"
+						name="<?php echo $this->field_name( $remote_site_id, self::POST_NAME ); ?>"
 						value="<?php echo esc_attr( urldecode( $value ) ); ?>"
 						placeholder="<?php echo esc_attr__( 'Enter name here', 'multilingualpress' ) ?>"
 						size="30"
@@ -181,21 +175,21 @@ class AdvancedPostTranslatorFields {
 	}
 
 	/**
-	 * @param int      $remote_site_id
 	 * @param \WP_Post $source_post
-	 * @param \WP_Post $post
+	 * @param int      $remote_site_id
+	 * @param \WP_Post $remote_post
 	 *
 	 * @return string
 	 */
-	private function editor( int $remote_site_id, \WP_Post $source_post, \WP_Post $post = null ): string {
+	private function editor( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
 		if ( ! post_type_supports( $source_post->post_type, 'editor' ) ) {
 			return '';
 		}
 
-		$editor_id = $this->input_helper->field_id( $remote_site_id, 'content' );
+		$editor_id = $this->field_id( $remote_site_id, 'content' );
 
-		$content = $post ? $post->post_content : '';
+		$content = $remote_post ? $remote_post->post_content : '';
 
 		$copy_button = $this->copy_button( $editor_id, $remote_site_id );
 
@@ -204,7 +198,7 @@ class AdvancedPostTranslatorFields {
 			'tabindex'      => false,
 			'editor_height' => 150,
 			'resize'        => true,
-			'textarea_name' => $this->input_helper->field_name( $remote_site_id, self::POST_CONTENT ),
+			'textarea_name' => $this->field_name( $remote_site_id, self::POST_CONTENT ),
 			'media_buttons' => false,
 			'tinymce'       => [ 'resize' => true, ],
 		] );
@@ -213,21 +207,21 @@ class AdvancedPostTranslatorFields {
 	}
 
 	/**
-	 * @param int      $remote_site_id
 	 * @param \WP_Post $source_post
-	 * @param \WP_Post $post
+	 * @param int      $remote_site_id
+	 * @param \WP_Post $remote_post
 	 *
 	 * @return string
 	 */
-	private function excerpt_input( int $remote_site_id, \WP_Post $source_post, \WP_Post $post = null ): string {
+	private function excerpt_input( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
 		if ( ! post_type_supports( $source_post->post_type, 'excerpt' ) ) {
 			return '';
 		}
 
-		$id = $this->input_helper->field_id( $remote_site_id, 'excerpt' );
+		$id = $this->field_id( $remote_site_id, 'excerpt' );
 
-		$value = $post ? esc_textarea( $post->post_excerpt ) : '';
+		$value = $remote_post ? esc_textarea( $remote_post->post_excerpt ) : '';
 
 		ob_start();
 		?>
@@ -235,7 +229,7 @@ class AdvancedPostTranslatorFields {
 			<div>
 				<label for="<?php echo $id; ?>"><?php _e( 'Post Excerpt:', 'multilingualpress' ) ?></label>
 				<textarea
-					name="<?php echo $this->input_helper->field_name( $remote_site_id, self::POST_EXCERPT ); ?>"
+					name="<?php echo $this->field_name( $remote_site_id, self::POST_EXCERPT ); ?>"
 					placeholder="<?php echo esc_attr__( 'Enter excerpt here', 'multilingualpress' ) ?>"
 					class="mlp-excerpt"
 					id="<?php echo $id; ?>"><?php echo $value; ?></textarea>
@@ -253,7 +247,7 @@ class AdvancedPostTranslatorFields {
 	 */
 	private function sync_thumbnail_input( int $remote_site_id ): string {
 
-		$id = $this->input_helper->field_id( $remote_site_id, 'thumbnail' );
+		$id = $this->field_id( $remote_site_id, 'thumbnail' );
 
 		ob_start();
 		?>
@@ -261,7 +255,7 @@ class AdvancedPostTranslatorFields {
 			<label for="<?php echo $id; ?>_id">
 				<input
 					type="checkbox"
-					name="<?php echo $this->input_helper->field_name( $remote_site_id, self::SYNC_THUMBNAIL ); ?>"
+					name="<?php echo $this->field_name( $remote_site_id, self::SYNC_THUMBNAIL ); ?>"
 					value="1"
 					id="<?php echo $id; ?>_id">
 				<?php _e( 'Copy the featured image of the source post.', 'multilingualpress' ); ?>
@@ -276,16 +270,18 @@ class AdvancedPostTranslatorFields {
 	}
 
 	/**
-	 * @param int      $remote_site_id
 	 * @param \WP_Post $source_post
-	 * @param \WP_Post $post
+	 * @param int      $remote_site_id
+	 * @param \WP_Post $remote_post
 	 *
 	 * @return string
 	 */
-	private function taxonomies_input( int $remote_site_id, \WP_Post $source_post, \WP_Post $post = null ): string {
+	private function taxonomies_input( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
+
+		$terms_post = $remote_post ?: new \WP_Post( (object) [ 'post_type' => $source_post->post_type, 'ID' => 0 ] );
 
 		switch_to_blog( $remote_site_id );
-		$taxonomies = $post ? get_post_taxonomies_with_terms( $post ) : get_post_taxonomies_with_terms( $source_post );
+		$taxonomies = get_post_taxonomies_with_terms( $terms_post );
 		restore_current_blog();
 
 		if ( ! $taxonomies ) {
@@ -319,7 +315,7 @@ class AdvancedPostTranslatorFields {
 						$input_type = in_array( $taxonomy, $exclusive_tax, true ) ? 'radio' : 'checkbox';
 
 						if ( $taxonomy_data->terms ) {
-							$this->show_terms_input( $taxonomy_data, $remote_site_id, $input_type, $post );
+							$this->show_terms_input( $taxonomy_data, $remote_site_id, $input_type, $remote_post );
 						}
 					}
 					?>
@@ -337,7 +333,7 @@ class AdvancedPostTranslatorFields {
 	 *
 	 * @return string
 	 */
-	private function copy_button( $editor_id, int $remote_site_id ): string {
+	private function copy_button( string $editor_id, int $remote_site_id ): string {
 
 		$matches = [];
 
@@ -346,9 +342,9 @@ class AdvancedPostTranslatorFields {
 			return '';
 		}
 
-		$name = $this->input_helper->field_name( $remote_site_id, self::COPIED_POST );
+		$name = $this->field_name( $remote_site_id, self::COPIED_POST );
 
-		$id = $this->input_helper->field_id( $remote_site_id, 'copied-post' );
+		$id = $this->field_id( $remote_site_id, 'copied-post' );
 
 		ob_start();
 		?>
@@ -369,7 +365,7 @@ class AdvancedPostTranslatorFields {
 	 * @param int           $remote_site_id
 	 * @param string        $input_type Either 'checkbox' (e.g., for categories) or 'radio' (e.g., for post formats).
 	 *
-	 * @param \WP_Post|null $post
+	 * @param \WP_Post|null $remote_post
 	 *
 	 * @return string
 	 */
@@ -377,10 +373,10 @@ class AdvancedPostTranslatorFields {
 		\stdClass $taxonomy_data,
 		int $remote_site_id,
 		string $input_type,
-		\WP_Post $post = null
+		\WP_Post $remote_post = null
 	): string {
 
-		$name = $this->input_helper->field_name( $remote_site_id, self::TAXONOMY ) . "[{$taxonomy_data->object->name}]";
+		$name = $this->field_name( $remote_site_id, self::TAXONOMY ) . "[{$taxonomy_data->object->name}]";
 
 		$inputs_markup = '';
 		$inputs_format = '<label for="%2$s">';
@@ -393,8 +389,7 @@ class AdvancedPostTranslatorFields {
 			/** @var \WP_Term $term */
 			$term = $term_data->term;
 
-			// If post is null, $term_data->assigned refers to source post, so never consider it assigned on remote.
-			$assigned = $post ? checked( $term_data->assigned, true, false ) : '';
+			$assigned = $remote_post ? checked( $term_data->assigned, true, false ) : '';
 
 			$inputs_markup .= sprintf(
 				$inputs_format,
@@ -410,6 +405,28 @@ class AdvancedPostTranslatorFields {
 		$fieldset_format = '<fieldset class="mlp-taxonomy-box"><legend>%s</legend>%s</fieldset>';
 
 		return sprintf( $fieldset_format, $taxonomy_data->object->labels->name, $inputs_markup );
+	}
+
+	/**
+	 * @param int    $site_id
+	 * @param string $name
+	 *
+	 * @return string
+	 */
+	public function field_name( int $site_id, string $name ): string {
+
+		return self::INPUT_NAME_BASE . "[{$site_id}][" . esc_attr( $name ) . ']';
+	}
+
+	/**
+	 * @param int    $site_id
+	 * @param string $name
+	 *
+	 * @return string
+	 */
+	public function field_id( int $site_id, string $name ): string {
+
+		return self::INPUT_ID_BASE . "-{$site_id}-" . esc_attr( $name );
 	}
 
 }

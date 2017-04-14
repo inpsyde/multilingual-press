@@ -19,9 +19,9 @@ interface PostMetaBoxView extends MetaBoxView {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param \WP_Post $post Post object to set.
+	 * @param \WP_Post $source_post Post object to set.
 	 *
 	 * @return PostMetaBoxView
 	 */
-	public function with_post( \WP_Post $post ): PostMetaBoxView;
+	public function with_post( \WP_Post $source_post ): PostMetaBoxView;
 }

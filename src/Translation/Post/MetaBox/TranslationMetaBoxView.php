@@ -74,7 +74,7 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 	/**
 	 * @var \WP_Post
 	 */
-	private $post;
+	private $source_post;
 
 	/**
 	 * @var \WP_Post
@@ -84,19 +84,19 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 	/**
 	 * @var int
 	 */
-	private $site_id;
+	private $remote_site_id;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int      $site_id     Site ID.
-	 * @param \WP_Post $remote_post Optional. Remote post object. Defaults to null.
+	 * @param int      $remote_site_id Site ID.
+	 * @param \WP_Post $remote_post    Optional. Remote post object. Defaults to null.
 	 */
-	public function __construct( int $site_id, \WP_Post $remote_post = null ) {
+	public function __construct( int $remote_site_id, \WP_Post $remote_post = null ) {
 
-		$this->site_id = $site_id;
+		$this->remote_site_id = $remote_site_id;
 
 		$this->remote_post = $remote_post;
 	}
@@ -124,15 +124,15 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param \WP_Post $post Post object to set.
+	 * @param \WP_Post $source_post Post object to set.
 	 *
 	 * @return PostMetaBoxView
 	 */
-	public function with_post( \WP_Post $post ): PostMetaBoxView {
+	public function with_post( \WP_Post $source_post ): PostMetaBoxView {
 
 		$clone = clone $this;
 
-		$clone->post = $post;
+		$clone->source_post = $source_post;
 
 		return $clone;
 	}
@@ -146,14 +146,14 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 	 */
 	public function render(): string {
 
-		if ( ! $this->post ) {
+		if ( ! $this->source_post ) {
 			return '';
 		}
 
 		$args = [
-			$this->post,
-			$this->site_id,
-			get_site_language( $this->site_id ),
+			$this->source_post,
+			$this->remote_site_id,
+			get_site_language( $this->remote_site_id ),
 			$this->remote_post,
 		];
 

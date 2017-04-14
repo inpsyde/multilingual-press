@@ -7,9 +7,9 @@ namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\GenericMetaBox;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxDecorator;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\PriorityAwareMetaBox;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 use function Inpsyde\MultilingualPress\get_site_language;
-use Inpsyde\MultilingualPress\Translation\Post\AllowedPostTypes;
 
 /**
  * Meta box implementation for post translation.
@@ -35,11 +35,11 @@ final class TranslationMetaBox implements PriorityAwareMetaBox {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int              $site_id    Site ID.
-	 * @param AllowedPostTypes $post_types Allowed post type object.
-	 * @param \WP_Post         $post       Optional. Post object. Defaults to null.
+	 * @param int             $site_id    Site ID.
+	 * @param ActivePostTypes $post_types Active post types object.
+	 * @param \WP_Post        $post       Optional. Post object. Defaults to null.
 	 */
-	public function __construct( int $site_id, AllowedPostTypes $post_types, \WP_Post $post = null ) {
+	public function __construct( int $site_id, ActivePostTypes $post_types, \WP_Post $post = null ) {
 
 		$this->decorate_meta_box( new GenericMetaBox(
 			self::ID_PREFIX . $site_id,

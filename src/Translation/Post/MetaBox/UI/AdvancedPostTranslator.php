@@ -118,22 +118,20 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	 */
 	public function register_updater() {
 
-		add_action( TranslationMetadataUpdater::ACTION_SAVE_POST, function (
+		add_filter( TranslationMetadataUpdater::FILTER_SAVE_POST, function (
 			\WP_Post $remote_post,
 			int $remote_site_id,
-			\WP_Post $source_post,
 			ServerRequest $server_request,
 			SourcePostSaveContext $save_context
 		) {
 
 			$updater = new AdvancedPostTranslatorUpdater(
-				$source_post,
 				$this->content_relations,
 				$server_request,
 				$save_context
 			);
 
-			$updater->update( $remote_post, $remote_site_id );
+			return $updater->update( $remote_post, $remote_site_id );
 
 		}, 30, 5 );
 	}
@@ -169,7 +167,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 				'siteID' => get_current_blog_id(),
 			] );
 
-			echo $fields->top_fields( $remote_site_id, $post, $remote_post );
+			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
 
 		}, TranslationMetaBoxView::POSITION_TOP );
 
@@ -182,7 +180,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 		) use ( $fields ) {
 
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
-				echo $fields->main_fields( $remote_site_id, $post, $remote_post );
+				echo $fields->main_fields( $post, $remote_site_id, $remote_post );
 			}
 
 		}, TranslationMetaBoxView::POSITION_MAIN );
@@ -196,7 +194,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 		) use ( $fields ) {
 
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
-				echo $fields->bottom_fields( $remote_site_id, $post, $remote_post );
+				echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
 			}
 
 		}, TranslationMetaBoxView::POSITION_BOTTOM );

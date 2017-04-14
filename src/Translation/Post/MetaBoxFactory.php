@@ -30,30 +30,30 @@ class MetaBoxFactory {
 	private $site_relations;
 
 	/**
-	 * @var AllowedPostTypes
+	 * @var ActivePostTypes
 	 */
-	private $allowed_post_types;
+	private $active_post_types;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param SiteRelations    $site_relations     Site relations API object.
-	 * @param ContentRelations $content_relations  Content relations API object.
-	 * @param AllowedPostTypes $allowed_post_types Allowed post type object.
+	 * @param SiteRelations    $site_relations    Site relations API object.
+	 * @param ContentRelations $content_relations Content relations API object.
+	 * @param ActivePostTypes  $active_post_types Allowed post type object.
 	 */
 	public function __construct(
 		SiteRelations $site_relations,
 		ContentRelations $content_relations,
-		AllowedPostTypes $allowed_post_types
+		ActivePostTypes $active_post_types
 	) {
 
 		$this->site_relations = $site_relations;
 
 		$this->content_relations = $content_relations;
 
-		$this->allowed_post_types = $allowed_post_types;
+		$this->active_post_types = $active_post_types;
 	}
 
 	/**
@@ -67,7 +67,7 @@ class MetaBoxFactory {
 	 */
 	public function create_meta_boxes( \WP_Post $post ): array {
 
-		if ( ! empty( $this->allowed_post_types[$post->post_type]) ) {
+		if ( ! $this->active_post_types->includes( $post->post_type ) ) {
 			return [];
 		}
 
@@ -98,7 +98,7 @@ class MetaBoxFactory {
 	 */
 	public function create_post_request_context( \WP_Post $post, ServerRequest $request ): SourcePostSaveContext {
 
-		return new SourcePostSaveContext( $post, $this->allowed_post_types, $this->site_relations, $request );
+		return new SourcePostSaveContext( $post, $this->active_post_types, $this->site_relations, $request );
 	}
 
 	/**
@@ -114,7 +114,7 @@ class MetaBoxFactory {
 		return new TranslationMetaBoxController(
 			$site_id,
 			$this->site_relations,
-			$this->allowed_post_types,
+			$this->active_post_types,
 			$related_post
 		);
 	}

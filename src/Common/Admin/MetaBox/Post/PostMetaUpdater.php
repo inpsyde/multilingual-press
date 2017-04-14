@@ -20,20 +20,9 @@ interface PostMetaUpdater extends MetadataUpdater {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param \WP_Post $post Post object to set.
-	 *
-	 * @return PostMetaUpdater
-	 */
-	public function with_post( \WP_Post $post ): PostMetaUpdater;
-
-	/**
-	 * Returns an instance with the given post.
-	 *
-	 * @since 3.0.0
-	 *
 	 * @param SourcePostSaveContext $save_context Save context object to set.
 	 *
 	 * @return PostMetaUpdater
 	 */
-	public function with_save_context( SourcePostSaveContext $save_context ): PostMetaUpdater;
+	public function with_post_save_context( SourcePostSaveContext $save_context ): PostMetaUpdater;
 }

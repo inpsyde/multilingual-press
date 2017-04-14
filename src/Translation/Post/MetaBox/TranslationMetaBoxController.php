@@ -9,7 +9,7 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBox;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxView;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetadataUpdater;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\SiteAwareMetaBoxController;
-use Inpsyde\MultilingualPress\Translation\Post\AllowedPostTypes;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Meta box controller implementation for post translation.
@@ -55,23 +55,23 @@ final class TranslationMetaBoxController implements SiteAwareMetaBoxController {
 	/**
 	 * @var \WP_Post
 	 */
-	private $post;
+	private $remote_post;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int              $site_id    Site ID.
-	 * @param SiteRelations    $site_relations
-	 * @param AllowedPostTypes $post_types Allowed post type object.
-	 * @param \WP_Post         $post       Optional. Post object. Defaults to null.
+	 * @param int             $site_id        Site ID.
+	 * @param SiteRelations   $site_relations Site relations object.
+	 * @param ActivePostTypes $post_types     Active post types object.
+	 * @param \WP_Post        $remote_post    Optional. Post object. Defaults to null.
 	 */
 	public function __construct(
 		int $site_id,
 		SiteRelations $site_relations,
-		AllowedPostTypes $post_types,
-		\WP_Post $post = null
+		ActivePostTypes $post_types,
+		\WP_Post $remote_post = null
 	) {
 
 		$this->site_id = $site_id;
@@ -80,7 +80,7 @@ final class TranslationMetaBoxController implements SiteAwareMetaBoxController {
 
 		$this->post_types = $post_types;
 
-		$this->post = $post;
+		$this->remote_post = $remote_post;
 	}
 
 	/**
@@ -104,7 +104,7 @@ final class TranslationMetaBoxController implements SiteAwareMetaBoxController {
 	 */
 	public function meta_box(): MetaBox {
 
-		return new TranslationMetaBox( $this->site_id, $this->post_types, $this->post );
+		return new TranslationMetaBox( $this->site_id, $this->post_types, $this->remote_post );
 	}
 
 	/**
@@ -120,7 +120,7 @@ final class TranslationMetaBoxController implements SiteAwareMetaBoxController {
 			$this->site_id,
 			$this->site_relations,
 			$this->post_types,
-			$this->post
+			$this->remote_post
 		);
 
 		/**
@@ -134,7 +134,7 @@ final class TranslationMetaBoxController implements SiteAwareMetaBoxController {
 		 * @param int                        $site_id Remote site id.
 		 * @param \WP_Post|null              $post    Remote post object, if any, null otherwise.
 		 */
-		do_action( self::ACTION_INITIALIZED_UPDATER, $updater, $this->site_id, $this->post );
+		do_action( self::ACTION_INITIALIZED_UPDATER, $updater, $this->site_id, $this->remote_post );
 
 		return $updater;
 	}
@@ -148,7 +148,7 @@ final class TranslationMetaBoxController implements SiteAwareMetaBoxController {
 	 */
 	public function view(): MetaBoxView {
 
-		$view = new TranslationMetaBoxView( $this->site_id, $this->post );
+		$view = new TranslationMetaBoxView( $this->site_id, $this->remote_post );
 
 		/**
 		 * Fires right after the post translation view was initialized.
@@ -161,7 +161,7 @@ final class TranslationMetaBoxController implements SiteAwareMetaBoxController {
 		 * @param int                    $site_id Remote site id.
 		 * @param \WP_Post|null          $post    Remote post object, if any, null otherwise.
 		 */
-		do_action( self::ACTION_INITIALIZED_VIEW, $view, $this->site_id, $this->post );
+		do_action( self::ACTION_INITIALIZED_VIEW, $view, $this->site_id, $this->remote_post );
 
 		return $view;
 	}

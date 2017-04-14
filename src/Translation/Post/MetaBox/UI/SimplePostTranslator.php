@@ -4,8 +4,10 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI;
 
+use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
-use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxController;
+use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxView;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetadataUpdater;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\ViewInjection;
@@ -16,8 +18,6 @@ use Inpsyde\MultilingualPress\Translation\Post\MetaBox\ViewInjection;
  */
 final class SimplePostTranslator implements MetaBoxUI {
 
-	use ViewInjection;
-
 	/**
 	 * User interface ID.
 	 *
@@ -27,13 +27,38 @@ final class SimplePostTranslator implements MetaBoxUI {
 	 */
 	const ID = 'multilingualpress.simple_post_translator';
 
+	use ViewInjection;
+
+	/**
+	 * @var ContentRelations
+	 */
+	private $content_relations;
+
+	/**
+	 * @var ServerRequest
+	 */
+	private $server_request;
+
+	/**
+	 * Constructor. Sets properties.
+	 *
+	 * @param ContentRelations $content_relations
+	 * @param ServerRequest    $server_request
+	 */
+	public function __construct( ContentRelations $content_relations, ServerRequest $server_request ) {
+
+		$this->content_relations = $content_relations;
+
+		$this->server_request = $server_request;
+	}
+
 	/**
 	 * Initialize the UI. This will be called early to allow setup of early hooks like 'wp_ajax_*'.
 	 *
 	 * @return void
 	 */
 	public function initialize() {
-		// TODO: Implement initialize() method.
+
 	}
 
 	/**
@@ -69,12 +94,22 @@ final class SimplePostTranslator implements MetaBoxUI {
 	 */
 	public function register_updater() {
 
-		add_action( TranslationMetaBoxController::ACTION_INITIALIZED_UPDATER, function (
-			TranslationMetadataUpdater $updater
+		add_filter( TranslationMetadataUpdater::FILTER_SAVE_POST, function (
+			\WP_Post $remote_post,
+			int $remote_site_id,
+			ServerRequest $server_request,
+			SourcePostSaveContext $save_context
 		) {
 
-			// TODO: Make use of $updater->with_data() here?
-		} );
+			$updater = new SimplePostTranslatorUpdater(
+				$this->content_relations,
+				$server_request,
+				$save_context
+			);
+
+			return $updater->update( $remote_post, $remote_site_id );
+
+		}, 30, 5 );
 	}
 
 	/**
@@ -86,39 +121,42 @@ final class SimplePostTranslator implements MetaBoxUI {
 	 */
 	public function register_view() {
 
-		add_action( TranslationMetaBoxController::ACTION_INITIALIZED_VIEW, function ( TranslationMetaBoxView $view ) {
+		$fields = new SimplePostTranslatorFields();
 
-			// TODO: Make use of $view->with_data() here?
-		} );
-
+		// Add inputs to the top of metabox
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
 			\WP_Post $remote_post = null
-		) {
+		) use ( $fields ) {
 
-			// TODO: Render fields?
+			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
+
 		}, TranslationMetaBoxView::POSITION_TOP );
 
+		// Add inputs to the center of metabox
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
 			\WP_Post $remote_post = null
-		) {
+		) use ( $fields ) {
 
-			// TODO: Render fields?
+			echo $fields->main_fields( $post, $remote_site_id, $remote_post );
+
 		}, TranslationMetaBoxView::POSITION_MAIN );
 
+		// Add inputs to the bottom of metabox
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
 			\WP_Post $remote_post = null
-		) {
+		) use ( $fields ) {
 
-			// TODO: Render fields?
-		} );
+			echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
+
+		}, TranslationMetaBoxView::POSITION_BOTTOM );
 	}
 }

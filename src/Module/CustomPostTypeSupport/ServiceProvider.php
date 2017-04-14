@@ -10,6 +10,7 @@ use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Module service provider.
@@ -110,7 +111,7 @@ final class ServiceProvider implements ModuleServiceProvider {
 		$updater = $container['multilingualpress.post_type_support_settings_updater'];
 		add_action( 'multilingualpress.save_modules', [ $updater, 'update_settings' ] );
 
-		add_filter( 'mlp_allowed_post_types', function ( array $post_types ) use ( $repository ) {
+		add_filter( ActivePostTypes::FILTER_ACTIVE_POST_TYPES, function ( array $post_types ) use ( $repository ) {
 
 			return array_merge( $post_types, $repository->get_supported_post_types() );
 		} );

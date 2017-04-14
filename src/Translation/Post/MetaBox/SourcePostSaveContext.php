@@ -6,7 +6,7 @@ namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox;
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
-use Inpsyde\MultilingualPress\Translation\Post\AllowedPostTypes;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * @package Inpsyde\MultilingualPress\Translation\Post\MetaBox
@@ -37,7 +37,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	private $post;
 
 	/**
-	 * @var AllowedPostTypes
+	 * @var ActivePostTypes
 	 */
 	private $post_types;
 
@@ -54,14 +54,14 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param \WP_Post         $post
-	 * @param AllowedPostTypes $post_types
-	 * @param SiteRelations    $site_relations
-	 * @param ServerRequest    $request
+	 * @param \WP_Post        $post           Post object.
+	 * @param ActivePostTypes $post_types     Active post types object.
+	 * @param SiteRelations   $site_relations Site relations object.
+	 * @param ServerRequest   $request        Server request object.
 	 */
 	public function __construct(
 		\WP_Post $post,
-		AllowedPostTypes $post_types,
+		ActivePostTypes $post_types,
 		SiteRelations $site_relations,
 		ServerRequest $request
 	) {
@@ -98,16 +98,14 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			/** @var array $context */
 			$context = self::$contexts->offsetGet( $this->post );
 
-			$context = $this->is_valid_save_request( $context ) ? $context : $empty_context;
-
-			return $context;
+			return $this->is_valid_save_request( $context ) ? $context : $empty_context;
 		}
 
 		$original_post_status = (string) $this->request->body_value( 'original_post_status', INPUT_POST );
 
-		$context = compact( 'original_post_status' );
+		$context = array_merge( $empty_context, [ self::POST_STATUS => $original_post_status ] );
 
-		if ( ! $this->is_valid_save_request( $context ) ) {
+		if ( ! $this->is_valid_save_request( [ self::POST_STATUS => $original_post_status ] ) ) {
 			self::$contexts->attach( $this->post, $context );
 
 			return $empty_context;
@@ -125,7 +123,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		// Get type of post in case of revision
 		$real_post_type = $this->real_post_type( $this->post );
 
-		if ( empty( $this->post_types[ $real_post_type ] ) ) {
+		if ( ! $this->post_types->includes( $real_post_type ) ) {
 			self::$contexts->attach( $this->post, $context );
 
 			return $empty_context;
@@ -165,20 +163,20 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
 		$called ++;
 
-		$original_post_status = $context[ self::POST_STATUS] ?? '';
+		$original_post_status = $context[ self::POST_STATUS ] ?? '';
 
 		if ( 'auto-draft' === $original_post_status && 1 < $called ) {
 			return false;
 		}
 
 		// If context is filled, we only want to check that is not called twice for auto-draft
-		if ( array_key_exists( self::SITE_ID, $context) ) {
+		if ( array_key_exists( self::SITE_ID, $context ) ) {
 			return true;
 		}
 
 		$post_type = $this->real_post_type( $this->post );
 
-		if ( empty( $this->post_types[ $post_type ] ) ) {
+		if ( ! $this->post_types->includes( $post_type ) ) {
 			return false;
 		}
 
@@ -267,15 +265,36 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 */
 	private function featured_image_path( \WP_Post $post ) {
 
-		if ( ! has_post_thumbnail( $post ) ) {
+		$thumb_id = get_post_thumbnail_id( $post );
+
+		if ( ! $thumb_id ) {
 			return '';
 		}
 
-		$meta = wp_get_attachment_metadata( get_post_thumbnail_id( $post ) );
+		$thumb_post = get_post( $thumb_id );
 
-		$upload_dir = wp_upload_dir();
+		if ( ! $thumb_post || $thumb_post->post_type !== 'attachment' ) {
+			return '';
+		}
 
-		return rtrim( $upload_dir['basedir'] ?? '' . '/' . $meta['file'] ?? '', '/' );
+		$upload_dir = wp_upload_dir()['basedir'] ?? '';
+
+		if ( ! $upload_dir ) {
+			return '';
+		}
+
+		$thumb_rel_path = get_post_meta( $thumb_post->ID, '_wp_attached_file', true );
+
+		if ( ! $thumb_rel_path ) {
+
+			$meta = (array) ( wp_get_attachment_metadata( $thumb_id ) ?: [] );
+
+			$thumb_rel_path = $meta['file'] ?? '';
+		}
+
+		$thumb_abs_path = $thumb_rel_path ? "{$upload_dir}/{$thumb_rel_path}" : '';
+
+		return $thumb_abs_path && is_readable( $thumb_abs_path ) ? $thumb_abs_path : '';
 	}
 
 	/**

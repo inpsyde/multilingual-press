@@ -7,7 +7,7 @@ namespace Inpsyde\MultilingualPress\Translation;
 use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
-use Inpsyde\MultilingualPress\Translation\Post\AllowedPostTypes;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\AdvancedPostTranslator;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\SimplePostTranslator;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBoxFactory;
@@ -73,7 +73,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$container['multilingualpress.allowed_post_types'] = function () {
 
-			return new AllowedPostTypes();
+			return new ActivePostTypes();
 		};
 
 		$container['multilingualpress.post_meta_box_factory'] = function ( Container $container ) {
@@ -176,7 +176,13 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$box_registrar
 		);
 
-		$ui_registry->register_ui( new SimplePostTranslator(), $box_registrar );
+		$ui_registry->register_ui(
+			new SimplePostTranslator(
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.server_request']
+			),
+			$box_registrar
+		);
 
 		add_action( 'admin_init', function () use ( $ui_registry, $box_registrar ) {
 
@@ -188,12 +194,17 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$box_registrar->with_ui( $ui_registry->selected_ui( $box_registrar ) );
 		}, 0 );
 
-		if ( 'POST' === $container['multilingualpress.server_request']->server_value( 'REQUEST_METHOD' ) ) {
-			$request_globals_manipulator = $container['multilingualpress.request_globals_manipulator'];
+		add_action( PostMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function() use( $container ) {
 
-			add_action( 'mlp_before_post_synchronization', [ $request_globals_manipulator, 'clear_data' ] );
-			add_action( 'mlp_after_post_synchronization', [ $request_globals_manipulator, 'restore_data' ] );
-		}
+			$request_manipulator = $container['multilingualpress.request_globals_manipulator'];
+			$request_manipulator->clear_data();
+		});
+
+		add_action( PostMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function() use( $container ) {
+
+			$request_manipulator = $container['multilingualpress.request_globals_manipulator'];
+			$request_manipulator->restore_data();
+		});
 	}
 
 	/**

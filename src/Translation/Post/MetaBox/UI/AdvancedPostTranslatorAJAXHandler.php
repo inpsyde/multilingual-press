@@ -24,7 +24,7 @@ class AdvancedPostTranslatorAJAXHandler {
 	/**
 	 * @var ServerRequest
 	 */
-	private $request;
+	private $server_request;
 
 	/**
 	 * Constructor. Sets properties.
@@ -33,7 +33,7 @@ class AdvancedPostTranslatorAJAXHandler {
 	 */
 	public function __construct( ServerRequest $request ) {
 
-		$this->request = $request;
+		$this->server_request = $request;
 	}
 
 	/**
@@ -43,13 +43,13 @@ class AdvancedPostTranslatorAJAXHandler {
 
 		$current_site_id = get_current_blog_id();
 
-		$current_post_id = (int) $this->request->body_value(
+		$current_post_id = (int) $this->server_request->body_value(
 			'current_post_id',
 			INPUT_POST,
 			FILTER_SANITIZE_NUMBER_INT
 		);
 
-		$remote_site_id = (int) $this->request->body_value(
+		$remote_site_id = (int) $this->server_request->body_value(
 			'remote_site_id',
 			INPUT_POST,
 			FILTER_SANITIZE_NUMBER_INT
@@ -69,7 +69,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$title = apply_filters(
 			'mlp_process_post_title_for_remote_site',
-			$this->request->body_value( 'title', INPUT_POST ),
+			$this->server_request->body_value( 'title', INPUT_POST ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id
@@ -85,7 +85,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$slug = apply_filters(
 			'mlp_process_post_slug_for_remote_site',
-			$this->request->body_value( 'slug', INPUT_POST ),
+			$this->server_request->body_value( 'slug', INPUT_POST ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id
@@ -101,7 +101,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$tmce_content = (string) apply_filters(
 			'mlp_process_post_tmce_content_for_remote_site',
-			$this->request->body_value( 'tinyMceContent', INPUT_POST ),
+			$this->server_request->body_value( 'tinyMceContent', INPUT_POST ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id
@@ -117,7 +117,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$content = (string) apply_filters(
 			'mlp_process_post_content_for_remote_site',
-			$this->request->body_value( 'content', INPUT_POST ),
+			$this->server_request->body_value( 'content', INPUT_POST ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id
@@ -133,7 +133,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$excerpt = apply_filters(
 			'mlp_process_post_excerpt_for_remote_site',
-			$this->request->body_value( 'excerpt', INPUT_POST ),
+			$this->server_request->body_value( 'excerpt', INPUT_POST ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id
