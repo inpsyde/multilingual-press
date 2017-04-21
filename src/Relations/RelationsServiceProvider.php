@@ -4,13 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Relations;
 
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipController;
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipControlView;
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipPermission;
-use Inpsyde\MultilingualPress\Relations\Post\Search\RequestAwareSearch;
-use Inpsyde\MultilingualPress\Relations\Post\Search\SearchController;
-use Inpsyde\MultilingualPress\Relations\Post\Search\StatusAwareSearchResultsView;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 
@@ -35,42 +28,49 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.relationship_control_search'] = function ( Container $container ) {
 
-			return new RequestAwareSearch( $container['multilingualpress.server_request'] );
+			return new Post\Search\RequestAwareSearch( $container['multilingualpress.server_request'] );
 		};
 
 		$container['multilingualpress.relationship_control_search_controller'] = function ( Container $container ) {
 
-			return new SearchController(
-				$container['multilingualpress.relationship_control_search_results_view']
+			return new Post\Search\SearchController(
+				$container['multilingualpress.post_relationship_control_search_results_view']
 			);
 		};
 
-		$container['multilingualpress.relationship_control_search_results_view'] = function ( Container $container ) {
+		$container['multilingualpress.post_relationship_control_search_results_view'] = function ( Container $container ) {
 
-			return new StatusAwareSearchResultsView(
+			return new Post\Search\StatusAwareSearchResultsView(
 				$container['multilingualpress.relationship_control_search']
 			);
 		};
 
-		$container['multilingualpress.relationship_control_view'] = function ( Container $container ) {
+		$container['multilingualpress.post_relationship_control_view'] = function ( Container $container ) {
 
-			return new RelationshipControlView(
-				$container['multilingualpress.relationship_control_search_results_view'],
+			return new Post\RelationshipControlView(
+				$container['multilingualpress.post_relationship_control_search_results_view'],
 				$container['multilingualpress.asset_manager']
 			);
 		};
 
-		$container['multilingualpress.relationship_controller'] = function ( Container $container ) {
+		$container['multilingualpress.post_relationship_controller'] = function ( Container $container ) {
 
-			return new RelationshipController(
+			return new Post\RelationshipController(
 				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.server_request']
 			);
 		};
 
-		$container['multilingualpress.relationship_permission'] = function ( Container $container ) {
+		$container['multilingualpress.post_relationship_permission'] = function ( Container $container ) {
 
-			return new RelationshipPermission(
+			return new Post\RelationshipPermission(
+				$container['multilingualpress.content_relations']
+			);
+		};
+
+		$container['multilingualpress.term_relationship_permission'] = function ( Container $container ) {
+
+			return new Term\RelationshipPermission(
 				$container['multilingualpress.content_relations']
 			);
 		};
@@ -88,15 +88,15 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 	public function bootstrap( Container $container ) {
 
 		if ( is_admin() ) {
-			$relationship_control_view = $container['multilingualpress.relationship_control_view'];
+			$post_relationship_control_view = $container['multilingualpress.post_relationship_control_view'];
 
 			add_action(
 				'mlp_translation_meta_box_bottom',
-				function ( \WP_Post $post, $remote_site_id, \WP_Post $remote_post ) use ( $relationship_control_view ) {
+				function ( \WP_Post $post, $remote_site_id, \WP_Post $remote_post ) use ( $post_relationship_control_view ) {
 
 					global $pagenow;
 					if ( 'post.php' === $pagenow ) {
-						$relationship_control_view->render( new RelationshipContext( [
+						$post_relationship_control_view->render( new RelationshipContext( [
 							RelationshipContext::KEY_REMOTE_POST_ID => $remote_post->ID,
 							RelationshipContext::KEY_REMOTE_SITE_ID => $remote_site_id,
 							RelationshipContext::KEY_SOURCE_POST_ID => $post->ID,
@@ -122,7 +122,7 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 					case RelationshipController::ACTION_CONNECT_EXISTING:
 					case RelationshipController::ACTION_CONNECT_NEW:
 					case RelationshipController::ACTION_DISCONNECT:
-						$container['multilingualpress.relationship_controller']->initialize();
+						$container['multilingualpress.post_relationship_controller']->initialize();
 						break;
 				}
 			}
