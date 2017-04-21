@@ -215,6 +215,10 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 */
 		do_action( self::ACTION_INIT_META_BOXES, $post );
 
+		if ( $this->ui instanceof MetaBoxUI ) {
+			$this->ui->register_view();
+		}
+
 		/**
 		 * Fires right before the post meta boxes are added.
 		 *
@@ -223,10 +227,6 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 * @param \WP_Post $post Post object.
 		 */
 		do_action( self::ACTION_ADD_META_BOXES, $post );
-
-		if ( $this->ui instanceof MetaBoxUI ) {
-			$this->ui->register_view();
-		}
 
 		array_walk( $controllers, function ( MetaBoxController $controller ) use ( $post_type, $post ) {
 
@@ -310,6 +310,10 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 */
 		do_action( self::ACTION_INIT_META_BOXES, $source_post );
 
+		if ( $this->ui instanceof MetaBoxUI ) {
+			$this->ui->register_updater();
+		}
+
 		/**
 		 * Fires right before the metadata of the meta boxes is saved.
 		 *
@@ -320,10 +324,6 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 * @param bool                  $update       Whether or not this is an update of the post.
 		 */
 		do_action( self::ACTION_SAVE_META_BOXES, $source_post, $save_context, $update );
-
-		if ( $this->ui instanceof MetaBoxUI ) {
-			$this->ui->register_updater();
-		}
 
 		$network_state = NetworkState::from_globals();
 
@@ -344,11 +344,10 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 					 *
 					 * @since 3.0.0
 					 *
-					 * @param \WP_Post              $source_post  Source post object.
 					 * @param SourcePostSaveContext $save_context Source post save context object.
 					 * @param MetaBoxController     $controller   Meta box controller object.
 					 */
-					do_action( self::ACTION_SAVED_META_BOX_DATA, $source_post, $save_context, $controller );
+					do_action( self::ACTION_SAVED_META_BOX_DATA, $save_context, $controller );
 				}
 			} );
 
