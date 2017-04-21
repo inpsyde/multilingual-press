@@ -161,10 +161,10 @@ class MetaBoxUIRegistry {
 		 * @since 3.0.0
 		 *
 		 * @param MetaBoxUI|null          $selected_ui Currently selected UI object.
-		 * @param MetaBoxUI[]             $ui_objects  An array with all meta box IDs as keys and the objects as values.
 		 * @param UIAwareMetaBoxRegistrar $registrar   Target meta box registrar object
+		 * @param MetaBoxUI[]             $ui_objects  An array with all meta box IDs as keys and the objects as values.
 		 */
-		$user_ui = apply_filters( self::FILTER_SELECT_UI, null, $ui_objects, $registrar );
+		$user_ui = apply_filters( self::FILTER_SELECT_UI, null, $registrar, $ui_objects );
 
 		// If the filter does not return valid MetaBoxUI we default to null object and return.
 		if ( ! $user_ui instanceof MetaBoxUI ) {

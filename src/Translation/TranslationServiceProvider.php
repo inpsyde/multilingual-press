@@ -252,14 +252,15 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$box_registrar->register_meta_boxes();
 		}, 0 );
 
-		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $ui_objects, $registrar ) use ( $container ) {
+		// For the moment, let's set select here the only available UI for terms
+		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use ( $container ) {
 
 			if ( $registrar === $container['multilingualpress.term_metabox_registrar'] ) {
 				$ui = $container['multilingualpress.term_translation_simple_ui'];
 			}
 
 			return $ui;
-		}, 10, 3 );
+		}, 10, 2 );
 
 		add_action( Term\TermMetaBoxRegistrar::ACTION_INIT_META_BOXES,
 			function () use ( $ui_registry, $box_registrar ) {
