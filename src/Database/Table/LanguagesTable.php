@@ -577,8 +577,8 @@ final class LanguagesTable implements Table {
 				self::COLUMN_PRIORITY       => 1,
 			],
 			'en'    => [
-				self::COLUMN_ENGLISH_NAME   => 'English',
-				self::COLUMN_NATIVE_NAME    => 'English',
+				self::COLUMN_ENGLISH_NAME   => 'English (US)',
+				self::COLUMN_NATIVE_NAME    => 'English (US)',
 				self::COLUMN_RTL            => 0,
 				self::COLUMN_ISO_639_1_CODE => 'en',
 				self::COLUMN_ISO_639_2_CODE => 'eng',
