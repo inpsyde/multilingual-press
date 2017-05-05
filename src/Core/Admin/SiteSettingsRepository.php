@@ -44,15 +44,6 @@ interface SiteSettingsRepository {
 	 *
 	 * @var string
 	 */
-	const NAME_FLAG_IMAGE_URL = 'mlp_flag_image_url';
-
-	/**
-	 * Input name.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string
-	 */
 	const NAME_LANGUAGE = 'mlp_site_language';
 
 	/**
@@ -63,15 +54,6 @@ interface SiteSettingsRepository {
 	 * @var string
 	 */
 	const NAME_RELATIONSHIPS = 'mlp_site_relations';
-
-	/**
-	 * Option name.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string
-	 */
-	const OPTION_FLAG_IMAGE_URL = 'inpsyde_multilingual_flag_url';
 
 	/**
 	 * Option name.
@@ -92,17 +74,6 @@ interface SiteSettingsRepository {
 	 * @return string The alternative language title of the site with the given ID, or the current site.
 	 */
 	public function get_alternative_language_title( int $site_id = 0 ): string;
-
-	/**
-	 * Returns the flag image URL of the site with the given ID, or the current site.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param int $site_id Optional Site ID. Defaults to 0.
-	 *
-	 * @return string The flag image URL of the site with the given ID, or the current site.
-	 */
-	public function get_flag_image_url( int $site_id = 0 ): string;
 
 	/**
 	 * Returns the complete settings data.
@@ -146,18 +117,6 @@ interface SiteSettingsRepository {
 	 * @return bool Whether or not the alternative language title was set successfully.
 	 */
 	public function set_alternative_language_title( string $title, int $site_id = 0 ): bool;
-
-	/**
-	 * Sets the flag image URL for the site with the given ID, or the current site.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param string $url     Flag image URL.
-	 * @param int    $site_id Optional. Site ID. Defaults to 0.
-	 *
-	 * @return bool Whether or not the flag image URL was set successfully.
-	 */
-	public function set_flag_image_url( string $url, int $site_id = 0 ): bool;
 
 	/**
 	 * Sets the language for the site with the given ID, or the current site.

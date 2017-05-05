@@ -81,7 +81,6 @@ final class ServiceProvider implements ModuleServiceProvider {
 	}
 
 	/**
-
 	 * Registers the module at the module manager.
 	 *
 	 * @since 3.0.0

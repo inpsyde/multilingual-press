@@ -10,8 +10,6 @@ use Inpsyde\MultilingualPress\Translation\Translator\NullTranslator;
 use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
-use function Inpsyde\MultilingualPress\get_flag_url_for_site;
-
 /**
  * Caching translations API implementation.
  *
@@ -195,8 +193,6 @@ final class CachingTranslations implements Translations {
 			if ( empty( $language['http_code'] ) ) {
 				$language['http_code'] = $language['lang'] ?? '';
 			}
-
-			$translation['icon_url'] = $language['http_code'] ? get_flag_url_for_site( $site_id ) : '';
 
 			$translations[ $site_id ] = $this->type_factory->create_translation( [
 				$translation,

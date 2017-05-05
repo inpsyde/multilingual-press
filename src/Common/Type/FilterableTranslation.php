@@ -13,11 +13,6 @@ namespace Inpsyde\MultilingualPress\Common\Type;
 final class FilterableTranslation implements Translation {
 
 	/**
-	 * @var string
-	 */
-	private $icon_url;
-
-	/**
 	 * @var Language
 	 */
 	private $language;
@@ -69,8 +64,6 @@ final class FilterableTranslation implements Translation {
 
 		// TODO: Passing all the (different) stuff via an array really should be improved! Use fluent setters instead?!
 
-		$this->icon_url = (string) ( $args['icon_url'] ?? '' );
-
 		$this->remote_title = (string) ( $args['remote_title'] ?? '' );
 
 		$this->remote_url = (string) ( $args['remote_url'] ?? '' );
@@ -86,18 +79,6 @@ final class FilterableTranslation implements Translation {
 		$this->type = (string) ( $args['type'] ?? '' );
 
 		$this->language = $language;
-	}
-
-	/**
-	 * Returns the icon URL.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return string Icon URL.
-	 */
-	public function icon_url(): string {
-
-		return $this->icon_url;
 	}
 
 	/**

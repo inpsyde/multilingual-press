@@ -90,18 +90,6 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 		</p>
 		<p>
 			<?php
-			$id = $this->get_field_id( 'mlp_widget_display_flag' );
-			?>
-			<label for="<?php echo esc_attr( $id ); ?>">
-				<input type="checkbox"
-					name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_display_flag' ) ); ?>" value="1"
-					id="<?php echo esc_attr( $id ); ?>"
-					<?php checked( ! empty( $instance['widget_display_flag'] ) ); ?>>
-				<?php _e( 'Show flag', 'multilingualpress' ); ?>
-			</label>
-		</p>
-		<p>
-			<?php
 			$id = $this->get_field_id( 'mlp_widget_show_current_blog' );
 			?>
 			<label for="<?php echo esc_attr( $id ); ?>">
@@ -160,11 +148,6 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 		$instance['widget_title'] = esc_html( $new_instance['mlp_widget_title'] ?? '' );
 
 		$instance['widget_link_type'] = esc_attr( $new_instance['mlp_widget_link_type'] ?? '' );
-
-		$instance['widget_display_flag'] = (int) (
-			isset( $new_instance['mlp_widget_display_flag'] )
-			&& 1 === (int) $new_instance['mlp_widget_display_flag']
-		);
 
 		$instance['widget_show_current_blog'] = (int) (
 			isset( $new_instance['mlp_widget_show_current_blog'] )

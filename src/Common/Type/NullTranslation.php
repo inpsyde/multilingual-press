@@ -13,18 +13,6 @@ namespace Inpsyde\MultilingualPress\Common\Type;
 final class NullTranslation implements Translation {
 
 	/**
-	 * Returns the icon URL.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return string Icon URL.
-	 */
-	public function icon_url(): string {
-
-		return '';
-	}
-
-	/**
 	 * Returns the language object.
 	 *
 	 * @since 3.0.0

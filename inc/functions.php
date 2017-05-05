@@ -6,14 +6,10 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\API\Translations;
-use Inpsyde\MultilingualPress\Common\Locations;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
-use Inpsyde\MultilingualPress\Common\Type\URL;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
-use Inpsyde\MultilingualPress\Core\InternalLocations;
-use Inpsyde\MultilingualPress\Factory\TypeFactory;
 use Inpsyde\MultilingualPress\Module\Redirect\SettingsRepository as RedirectSettingsRepository;
 use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
 
@@ -344,44 +340,6 @@ function get_default_content_id( $content_id ): int {
 }
 
 /**
- * Returns the URL of the flag image for the given (or current) site ID.
- *
- * @since 3.0.0
- *
- * @param int $site_id Optional. Site ID. Defaults to 0.
- *
- * @return URL Flag URL object.
- */
-function get_flag_url_for_site( $site_id = 0 ): URL {
-
-	$site_id = (int) ( $site_id ?: get_current_blog_id() );
-
-	$type_factory = resolve( 'multilingualpress.type_factory', TypeFactory::class );
-
-	$url = resolve( 'multilingualpress.site_settings_repository', SiteSettingsRepository::class )
-		->get_flag_image_url( $site_id );
-	if ( $url ) {
-		return $type_factory->create_url( [
-			$url,
-		] );
-	}
-
-	$internal_locations = resolve( 'multilingualpress.internal_locations', InternalLocations::class );
-
-	$file_name = get_site_language( $site_id, true ) . '.gif';
-
-	if ( is_readable( $internal_locations->get( 'flags', Locations::TYPE_PATH ) . "/{$file_name}" ) ) {
-		return $type_factory->create_url( [
-			$internal_locations->get( 'flags', Locations::TYPE_URL ) . $file_name,
-		] );
-	}
-
-	return $type_factory->create_url( [
-		'',
-	] );
-}
-
-/**
  * Returns the language with the given HTTP code.
  *
  * @since 3.0.0
@@ -441,7 +399,6 @@ function get_linked_elements( array $args = [] ): string {
 
 	$args = array_merge( [
 		'link_text'         => 'native',
-		'display_flag'      => false,
 		'sort'              => 'priority',
 		'show_current_blog' => false,
 		'strict'            => false,
@@ -470,7 +427,6 @@ function get_linked_elements( array $args = [] ): string {
 				'http'     => $language->name( 'http' ),
 				'name'     => $language->name( $link_text ),
 				'priority' => $language->priority(),
-				'icon'     => $translation->icon_url(),
 			];
 		}, $translations );
 
@@ -501,18 +457,13 @@ function get_linked_elements( array $args = [] ): string {
 		foreach ( $translations as $site_id => $translation ) {
 			$name = $translation['name'];
 
-			$img = ( ! empty( $translation['icon'] ) && $args['display_flag'] )
-				? '<img src="' . esc_url( $translation['icon'] ) . '" alt="' . esc_attr( $name ) . '"> '
-				: '';
-
 			if ( $current_site_id === $site_id ) {
-				$output .= '<li><a class="mlp-current-language-item" href="">' . $img . esc_html( $name ) . '</a></li>';
+				$output .= '<li><a class="mlp-current-language-item" href="">' . esc_html( $name ) . '</a></li>';
 			} else {
 				$output .= sprintf(
-					'<li><a rel="alternate" hreflang="%1$s" href="%2$s">%3$s%4$s</a></li>',
+					'<li><a rel="alternate" hreflang="%1$s" href="%2$s">%3$s</a></li>',
 					esc_attr( $translation['http'] ),
 					esc_url( $translation['url'] ),
-					$img,
 					esc_html( $name )
 				);
 			}
@@ -634,7 +585,6 @@ function get_translations( $content_id = 0 ): array {
 			'post_id'        => $translation->target_content_id(),
 			'post_title'     => $translation->remote_title(),
 			'permalink'      => $translation->remote_url(),
-			'flag'           => $translation->icon_url(),
 			'lang'           => $language->name( 'lang' ),
 			'language_short' => $language->name( 'lang' ),
 			'language_long'  => $language->name( 'language_long' ),
