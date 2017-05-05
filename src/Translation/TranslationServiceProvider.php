@@ -242,8 +242,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$ui_registry = $container['multilingualpress.metabox_ui_registry'];
 
+		$simple_ui = $container['multilingualpress.term_translation_simple_ui'];
+
 		$ui_registry->register_ui(
-			$container['multilingualpress.term_translation_simple_ui'],
+			$simple_ui,
 			$box_registrar
 		);
 
@@ -253,13 +255,12 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 		}, 0 );
 
 		// For the moment, let's set select here the only available UI for terms
-		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use ( $container ) {
+		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use (
+			$box_registrar,
+			$simple_ui
+		) {
 
-			if ( $registrar === $container['multilingualpress.term_metabox_registrar'] ) {
-				$ui = $container['multilingualpress.term_translation_simple_ui'];
-			}
-
-			return $ui;
+			return $registrar === $box_registrar ? $simple_ui : $ui;
 		}, 10, 2 );
 
 		add_action( Term\TermMetaBoxRegistrar::ACTION_INIT_META_BOXES,
