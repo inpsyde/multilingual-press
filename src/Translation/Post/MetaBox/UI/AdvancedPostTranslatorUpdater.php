@@ -69,7 +69,7 @@ class AdvancedPostTranslatorUpdater {
 			return new \WP_Post( new \stdClass() );
 		}
 
-		$sites_request_data = (array) $this->server_request->body_value( PostTranslatorInputHelper::NAME_BASE ) ?: [];
+		$sites_request_data = $this->server_request->body_value( AdvancedPostTranslatorFields::INPUT_NAME_BASE ) ?: [];
 		if ( ! $sites_request_data || ! is_array( $sites_request_data ) ) {
 			return new \WP_Post( new \stdClass() );
 		}

@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Relations;
 
+use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
+use Inpsyde\MultilingualPress\Relations\Post\RelationshipController;
+use Inpsyde\MultilingualPress\Relations\Post\Search\SearchController;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 
