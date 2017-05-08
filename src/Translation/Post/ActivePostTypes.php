@@ -5,49 +5,72 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Post;
 
 /**
+ * Simple read-only storage for post types activ for MultilingualPress.
+ *
  * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
  */
 class ActivePostTypes {
 
+	/**
+	 * Post type slugs active by default.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[]
+	 */
+	const DEFAULT_ACTIVE_POST_TYPES = [
+		'page',
+		'post',
+	];
+
+	/**
+	 * Filter hook.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
 	const FILTER_ACTIVE_POST_TYPES = 'multilingualpress.active_post_types';
 
-	const DEFAULT_ACTIVE_POST_TYPES = [ 'post', 'page' ];
-
 	/**
-	 * @var array
+	 * @var string[]
 	 */
-	private $allowed_post_types_slugs;
+	private $active_post_types_slugs;
 
 	/**
-	 * Returns the allowed post type slugs.
+	 * Returns the active post type slugs.
 	 *
-	 * @return string[] Allowed post type slugs.
+	 * @since 3.0.0
+	 *
+	 * @return string[] Active post type slugs.
 	 */
 	public function names(): array {
 
-		if ( null !== $this->allowed_post_types_slugs ) {
-			return $this->allowed_post_types_slugs;
+		if ( null !== $this->active_post_types_slugs ) {
+			return $this->active_post_types_slugs;
 		}
 
 		/**
-		 * Filters the allowed post types.
+		 * Filters the active post type slugs.
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param string[] $post_types Allowed post type slugs.
+		 * @param string[] $active_post_types Active post type slugs.
 		 */
-		$post_types = (array) apply_filters( self::FILTER_ACTIVE_POST_TYPES, self::DEFAULT_ACTIVE_POST_TYPES );
+		$active_post_types = (array) apply_filters( self::FILTER_ACTIVE_POST_TYPES, self::DEFAULT_ACTIVE_POST_TYPES );
 
-		$this->allowed_post_types_slugs = array_filter( $post_types, 'post_type_exists' );
+		$this->active_post_types_slugs = array_filter( array_unique( $active_post_types ), 'post_type_exists' );
 
-		return $this->allowed_post_types_slugs;
+		return $this->active_post_types_slugs;
 	}
 
 	/**
-	 * Returns the allowed post type object.
+	 * Returns the active post type objects.
 	 *
-	 * @return \WP_Post_Type[] Allowed post type objects.
+	 * @since 3.0.0
+	 *
+	 * @return \WP_Post_Type[] Active post type objects.
 	 */
 	public function objects(): array {
 
@@ -55,14 +78,16 @@ class ActivePostTypes {
 	}
 
 	/**
-	 * Returns the allowed post type object.
+	 * Checks if all given post type slugs are active.
 	 *
-	 * @param \string[] $post_type
+	 * @since 3.0.0
 	 *
-	 * @return bool
+	 * @param \string[] $post_types Post type slugs to check.
+	 *
+	 * @return bool Whether or not all given post type slugs are active.
 	 */
-	public function includes( string ...$post_type ): bool {
+	public function includes( string ...$post_types ): bool {
 
-		return (bool) array_intersect( $post_type, $this->names() );
+		return ! array_diff( array_unique( $post_types ), $this->names() );
 	}
 }
