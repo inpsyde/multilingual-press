@@ -47,7 +47,7 @@ class ActiveTaxonomies {
 
 		$all_taxonomies = [];
 		foreach ( $this->active_post_types->names() as $post_type ) {
-			$post_type_taxonomies = get_object_taxonomies( (object) [ 'post_type' => $post_type ] );
+			$post_type_taxonomies = get_object_taxonomies( (object) compact( 'post_type' ) );
 			$all_taxonomies       = array_merge( $all_taxonomies, $post_type_taxonomies );
 		}
 
@@ -86,6 +86,6 @@ class ActiveTaxonomies {
 	 */
 	public function includes( string ...$taxonomies ): bool {
 
-		return (bool) array_intersect( $taxonomies, $this->names() );
+		return ! array_diff( array_unique( $taxonomies ), $this->names() );
 	}
 }

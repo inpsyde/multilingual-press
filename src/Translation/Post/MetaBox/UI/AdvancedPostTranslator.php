@@ -33,14 +33,14 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	const ID = 'multilingualpress.advanced_post_translator';
 
 	/**
-	 * @var ContentRelations
-	 */
-	private $content_relations;
-
-	/**
 	 * @var AssetManager
 	 */
 	private $asset_manager;
+
+	/**
+	 * @var ContentRelations
+	 */
+	private $content_relations;
 
 	/**
 	 * @var ServerRequest
@@ -136,7 +136,6 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 			);
 
 			return $updater->update( $remote_post, $remote_site_id );
-
 		}, 30, 5 );
 	}
 
@@ -151,7 +150,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 
 		$fields = new AdvancedPostTranslatorFields();
 
-		// Add inputs to the top of meta box
+		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
@@ -172,10 +171,9 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 			] );
 
 			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
-
 		}, TranslationMetaBoxView::POSITION_TOP );
 
-		// Add inputs to the center of meta box
+		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
@@ -186,10 +184,9 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
 				echo $fields->main_fields( $post, $remote_site_id, $remote_post );
 			}
-
 		}, TranslationMetaBoxView::POSITION_MAIN );
 
-		// Add inputs to the bottom of meta box
+		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
@@ -200,8 +197,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
 				echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
 			}
-
-		}, TranslationMetaBoxView::POSITION_BOTTOM );
+		} );
 	}
 
 	/**

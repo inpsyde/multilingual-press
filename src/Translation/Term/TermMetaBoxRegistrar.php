@@ -157,7 +157,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	public function set_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar {
 
 		// Don't allow overwrite
-		if ( null !== $this->ui ) {
+		if ( $this->ui ) {
 			throw new \BadMethodCallException( sprintf( 'It is not possible to override UI for %s.', __CLASS__ ) );
 		}
 
@@ -197,6 +197,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 
 		// There are 2 different actions for saving terms
 
+		/** @noinspection PhpUnusedParameterInspection */
 		add_action( 'edit_term', function ( $term_id, $tt_id, $taxonomy ) {
 
 			$term = get_term_by( 'term_taxonomy_id', $tt_id );
@@ -205,6 +206,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			}
 		}, 10, 3 );
 
+		/** @noinspection PhpUnusedParameterInspection */
 		add_action( 'created_term', function ( $term_id, $tt_id, $taxonomy ) {
 
 			$term = get_term_by( 'term_taxonomy_id', $tt_id );
@@ -239,7 +241,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 */
 		do_action( self::ACTION_INIT_META_BOXES, $term, $update );
 
-		if ( $this->ui instanceof MetaBoxUI ) {
+		if ( $this->ui ) {
 			$this->ui->register_view();
 		}
 
@@ -302,18 +304,17 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	/**
 	 * Saves the metadata of all meta boxes for the given term.
 	 *
-	 * @param \WP_Term $source_term Term object.
-	 * @param bool     $update      Whether or not this is an update of the term.
+	 * @param \WP_Term $term   Term object.
+	 * @param bool     $update Whether or not this is an update of the term.
 	 */
-	private function save_metadata_for_term( \WP_Term $source_term, bool $update ) {
+	private function save_metadata_for_term( \WP_Term $term, bool $update ) {
 
-		$controllers = $this->get_controllers( $source_term );
+		$controllers = $this->get_controllers( $term );
 		if ( ! $controllers ) {
 			return;
 		}
 
-		$save_context = $this->factory->create_term_request_context( $source_term, $this->server_request );
-
+		$save_context = $this->factory->create_term_request_context( $term, $this->server_request );
 		if ( ! $save_context[ SourceTermSaveContext::TERM_ID ] ) {
 			return;
 		}
@@ -323,11 +324,11 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param \WP_Term $source_term Term object.
+		 * @param \WP_Term $term Term object.
 		 */
-		do_action( self::ACTION_INIT_META_BOXES, $source_term );
+		do_action( self::ACTION_INIT_META_BOXES, $term );
 
-		if ( $this->ui instanceof MetaBoxUI ) {
+		if ( $this->ui ) {
 			$this->ui->register_updater();
 		}
 
@@ -336,37 +337,35 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param \WP_Term              $source_term  Source term object.
+		 * @param \WP_Term              $term         Source term object.
 		 * @param SourceTermSaveContext $save_context Source term save context object.
 		 * @param bool                  $update       Whether or not this is an update of the term.
 		 */
-		do_action( self::ACTION_SAVE_META_BOXES, $source_term, $save_context, $update );
+		do_action( self::ACTION_SAVE_META_BOXES, $term, $save_context, $update );
 
 		$network_state = NetworkState::from_globals();
 
-		array_walk( $controllers,
-			function ( MetaBoxController $controller ) use ( $source_term, $save_context, $update ) {
+		array_walk( $controllers, function ( MetaBoxController $controller ) use ( $term, $save_context, $update ) {
 
-				if ( $this->is_meta_box_allowed_for_term( $controller, $source_term ) ) {
+			if ( $this->is_meta_box_allowed_for_term( $controller, $term ) ) {
+				/** @var SiteAwareMetaBoxController $controller */
+				switch_to_blog( $controller->site_id() );
 
-					/** @var SiteAwareMetaBoxController $controller */
-					switch_to_blog( $controller->site_id() );
+				$this->save_meta_box_data_for_term( $controller, $save_context, $update );
 
-					$this->save_meta_box_data_for_term( $controller, $save_context, $update );
-
-					/**
-					 * Fires right after the metadata of a meta box was saved.
-					 *
-					 * Important: it runs in the site context of the remote term.
-					 *
-					 * @since 3.0.0
-					 *
-					 * @param SourceTermSaveContext $save_context Source term save context object.
-					 * @param MetaBoxController     $controller   Meta box controller object.
-					 */
-					do_action( self::ACTION_SAVED_META_BOX_DATA, $save_context, $controller );
-				}
-			} );
+				/**
+				 * Fires right after the metadata of a meta box was saved.
+				 *
+				 * Important: it runs in the site context of the remote term.
+				 *
+				 * @since 3.0.0
+				 *
+				 * @param SourceTermSaveContext $save_context Source term save context object.
+				 * @param MetaBoxController     $controller   Meta box controller object.
+				 */
+				do_action( self::ACTION_SAVED_META_BOX_DATA, $save_context, $controller );
+			}
+		} );
 
 		$network_state->restore();
 
@@ -375,10 +374,10 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param \WP_Term              $source_term  Term object.
+		 * @param \WP_Term              $term         Term object.
 		 * @param SourceTermSaveContext $save_context Source term save context object.
 		 */
-		do_action( self::ACTION_SAVED_META_BOXES, $source_term, $save_context );
+		do_action( self::ACTION_SAVED_META_BOXES, $term, $save_context );
 	}
 
 	/**

@@ -158,7 +158,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	public function set_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar {
 
 		// Don't allow overwrite
-		if ( null !== $this->ui ) {
+		if ( $this->ui ) {
 			throw new \BadMethodCallException( sprintf( 'It is not possible to override UI for %s.', __CLASS__ ) );
 		}
 
@@ -215,7 +215,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 */
 		do_action( self::ACTION_INIT_META_BOXES, $post );
 
-		if ( $this->ui instanceof MetaBoxUI ) {
+		if ( $this->ui ) {
 			$this->ui->register_view();
 		}
 
@@ -285,18 +285,17 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	/**
 	 * Saves the metadata of all meta boxes for the given post.
 	 *
-	 * @param \WP_Post $source_post Post object.
-	 * @param bool     $update      Whether or not this is an update of the post.
+	 * @param \WP_Post $post   Post object.
+	 * @param bool     $update Whether or not this is an update of the post.
 	 */
-	private function save_metadata_for_post( \WP_Post $source_post, bool $update ) {
+	private function save_metadata_for_post( \WP_Post $post, bool $update ) {
 
-		$controllers = $this->get_controllers( $source_post );
+		$controllers = $this->get_controllers( $post );
 		if ( ! $controllers ) {
 			return;
 		}
 
-		$save_context = $this->factory->create_post_request_context( $source_post, $this->server_request );
-
+		$save_context = $this->factory->create_post_request_context( $post, $this->server_request );
 		if ( ! $save_context[ SourcePostSaveContext::POST_ID ] ) {
 			return;
 		}
@@ -306,11 +305,11 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param \WP_Post $source_post Post object.
+		 * @param \WP_Post $post Post object.
 		 */
-		do_action( self::ACTION_INIT_META_BOXES, $source_post );
+		do_action( self::ACTION_INIT_META_BOXES, $post );
 
-		if ( $this->ui instanceof MetaBoxUI ) {
+		if ( $this->ui ) {
 			$this->ui->register_updater();
 		}
 
@@ -319,37 +318,35 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param \WP_Post              $source_post  Source post object.
+		 * @param \WP_Post              $post         Source post object.
 		 * @param SourcePostSaveContext $save_context Source post save context object.
 		 * @param bool                  $update       Whether or not this is an update of the post.
 		 */
-		do_action( self::ACTION_SAVE_META_BOXES, $source_post, $save_context, $update );
+		do_action( self::ACTION_SAVE_META_BOXES, $post, $save_context, $update );
 
 		$network_state = NetworkState::from_globals();
 
-		array_walk( $controllers,
-			function ( MetaBoxController $controller ) use ( $source_post, $save_context, $update ) {
+		array_walk( $controllers, function ( MetaBoxController $controller ) use ( $post, $save_context, $update ) {
 
-				if ( $this->is_meta_box_allowed_for_post( $controller, $source_post ) ) {
+			if ( $this->is_meta_box_allowed_for_post( $controller, $post ) ) {
+				/** @var SiteAwareMetaBoxController $controller */
+				switch_to_blog( $controller->site_id() );
 
-					/** @var SiteAwareMetaBoxController $controller */
-					switch_to_blog( $controller->site_id() );
+				$this->save_meta_box_data_for_post( $controller, $save_context, $update );
 
-					$this->save_meta_box_data_for_post( $controller, $save_context, $update );
-
-					/**
-					 * Fires right after the metadata of a meta box was saved.
-					 *
-					 * Important: it runs in the site context of the remote post.
-					 *
-					 * @since 3.0.0
-					 *
-					 * @param SourcePostSaveContext $save_context Source post save context object.
-					 * @param MetaBoxController     $controller   Meta box controller object.
-					 */
-					do_action( self::ACTION_SAVED_META_BOX_DATA, $save_context, $controller );
-				}
-			} );
+				/**
+				 * Fires right after the metadata of a meta box was saved.
+				 *
+				 * Important: it runs in the site context of the remote post.
+				 *
+				 * @since 3.0.0
+				 *
+				 * @param SourcePostSaveContext $save_context Source post save context object.
+				 * @param MetaBoxController     $controller   Meta box controller object.
+				 */
+				do_action( self::ACTION_SAVED_META_BOX_DATA, $save_context, $controller );
+			}
+		} );
 
 		$network_state->restore();
 
@@ -358,10 +355,10 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param \WP_Post              $source_post  Post object.
+		 * @param \WP_Post              $post         Post object.
 		 * @param SourcePostSaveContext $save_context Source post save context object.
 		 */
-		do_action( self::ACTION_SAVED_META_BOXES, $source_post, $save_context );
+		do_action( self::ACTION_SAVED_META_BOXES, $post, $save_context );
 	}
 
 	/**

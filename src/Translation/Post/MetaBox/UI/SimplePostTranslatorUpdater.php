@@ -23,14 +23,14 @@ class SimplePostTranslatorUpdater {
 	private $content_relations;
 
 	/**
-	 * @var ServerRequest
-	 */
-	private $server_request;
-
-	/**
 	 * @var SourcePostSaveContext
 	 */
 	private $save_context;
+
+	/**
+	 * @var ServerRequest
+	 */
+	private $server_request;
 
 	/**
 	 * Constructor. Sets properties.
@@ -44,6 +44,10 @@ class SimplePostTranslatorUpdater {
 		ServerRequest $server_request,
 		SourcePostSaveContext $save_context
 	) {
+
+		$this->content_relations = $content_relations;
+
+		$this->server_request = $server_request;
 
 		$this->save_context = $save_context;
 	}
@@ -101,5 +105,4 @@ class SimplePostTranslatorUpdater {
 
 		return $remote_post;
 	}
-
 }

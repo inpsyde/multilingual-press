@@ -43,7 +43,8 @@ class AdvancedPostTranslatorFields {
 	 */
 	public function top_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		$output = $this->posts_id_input( $source_post, $remote_site_id, $remote_post );
+		$output = '';
+		$output .= $this->posts_id_input( $source_post, $remote_site_id, $remote_post );
 		$output .= $this->title_input( $source_post, $remote_site_id, $remote_post );
 		$output .= $this->name_input( $remote_site_id, $source_post );
 		$output .= $this->editor( $source_post, $remote_site_id, $remote_post );
@@ -60,7 +61,8 @@ class AdvancedPostTranslatorFields {
 	 */
 	public function main_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		$output = $this->editor( $source_post, $remote_site_id, $remote_post );
+		$output = '';
+		$output .= $this->editor( $source_post, $remote_site_id, $remote_post );
 		$output .= $this->excerpt_input( $source_post, $remote_site_id, $remote_post );
 		$output .= $this->sync_thumbnail_input( $remote_site_id );
 
@@ -428,5 +430,4 @@ class AdvancedPostTranslatorFields {
 
 		return self::INPUT_ID_BASE . "-{$site_id}-" . esc_attr( $name );
 	}
-
 }

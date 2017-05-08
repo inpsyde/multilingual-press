@@ -264,7 +264,5 @@ class AdvancedPostTranslatorUpdater {
 		return
 			! $post_term_ids
 			|| ! is_wp_error( wp_remove_object_terms( $remote_post->ID, $post_term_ids, $taxonomy ) );
-
 	}
-
 }

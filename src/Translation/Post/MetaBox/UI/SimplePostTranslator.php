@@ -18,6 +18,8 @@ use Inpsyde\MultilingualPress\Translation\Post\MetaBox\ViewInjection;
  */
 final class SimplePostTranslator implements MetaBoxUI {
 
+	use ViewInjection;
+
 	/**
 	 * User interface ID.
 	 *
@@ -26,8 +28,6 @@ final class SimplePostTranslator implements MetaBoxUI {
 	 * @var string
 	 */
 	const ID = 'multilingualpress.simple_post_translator';
-
-	use ViewInjection;
 
 	/**
 	 * @var ContentRelations
@@ -127,7 +127,7 @@ final class SimplePostTranslator implements MetaBoxUI {
 
 		$fields = new SimplePostTranslatorFields();
 
-		// Add inputs to the top of meta box
+		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
@@ -136,10 +136,9 @@ final class SimplePostTranslator implements MetaBoxUI {
 		) use ( $fields ) {
 
 			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
-
 		}, TranslationMetaBoxView::POSITION_TOP );
 
-		// Add inputs to the center of meta box
+		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
@@ -148,10 +147,9 @@ final class SimplePostTranslator implements MetaBoxUI {
 		) use ( $fields ) {
 
 			echo $fields->main_fields( $post, $remote_site_id, $remote_post );
-
 		}, TranslationMetaBoxView::POSITION_MAIN );
 
-		// Add inputs to the bottom of meta box
+		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
@@ -160,7 +158,6 @@ final class SimplePostTranslator implements MetaBoxUI {
 		) use ( $fields ) {
 
 			echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
-
-		}, TranslationMetaBoxView::POSITION_BOTTOM );
+		} );
 	}
 }

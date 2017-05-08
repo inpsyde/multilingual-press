@@ -22,8 +22,8 @@ class SimplePostTranslatorFields {
 	public function top_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
 		$output = $remote_post
-			? $this->title_input( $remote_post  )
-			: $this->translatable_input( $remote_site_id  );
+			? $this->title_input( $remote_post )
+			: $this->translatable_input( $remote_site_id );
 
 		return $output;
 	}
@@ -37,11 +37,9 @@ class SimplePostTranslatorFields {
 	 */
 	public function main_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		$output = '';
-
-		if ( $remote_post ) {
-			$output .= $this->editor_input( $remote_post );
-		}
+		$output =  $remote_post
+			? $this->editor_input( $remote_post )
+			: '';
 
 		return $output;
 	}
@@ -64,6 +62,7 @@ class SimplePostTranslatorFields {
 	 * @return string
 	 */
 	private function title_input( \WP_Post $remote_post ): string {
+
 		return '<h2 class="headline" style="margin: 0;">' . esc_attr( $remote_post->post_title ) . '</h2>';
 	}
 
@@ -77,12 +76,12 @@ class SimplePostTranslatorFields {
 		ob_start();
 		?>
 		<p>
-			<label for="translate_this_post_<?php echo "{$remote_site_id}"; ?>">
+			<label for="translate_this_post_<?php echo $remote_site_id; ?>">
 				<input
 					type="checkbox"
-					id="<?= self::TRANSLATABLE_FIELD ?>-<?php echo "{$remote_site_id}"; ?>"
+					id="<?= self::TRANSLATABLE_FIELD ?>-<?php echo $remote_site_id; ?>"
 					name="<?= self::TRANSLATABLE_FIELD ?>[]"
-					value="<?php echo "{$remote_site_id}"; ?>" />
+					value="<?php echo $remote_site_id; ?>" />
 				<?php esc_html_e( 'Translate this post', 'multilingualpress' ); ?>
 			</label>
 		</p>

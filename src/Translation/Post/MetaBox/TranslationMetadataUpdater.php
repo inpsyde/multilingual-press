@@ -137,7 +137,7 @@ final class TranslationMetadataUpdater implements PostMetaUpdater {
 	 */
 	public function update( ServerRequest $server_request ): bool {
 
-		if ( ! $this->save_context instanceof SourcePostSaveContext ) {
+		if ( ! $this->save_context ) {
 			return false;
 		}
 

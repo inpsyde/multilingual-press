@@ -20,6 +20,11 @@ use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 class MetaBoxFactory {
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -30,18 +35,13 @@ class MetaBoxFactory {
 	private $site_relations;
 
 	/**
-	 * @var ActivePostTypes
-	 */
-	private $active_post_types;
-
-	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param SiteRelations    $site_relations    Site relations API object.
 	 * @param ContentRelations $content_relations Content relations API object.
-	 * @param ActivePostTypes  $active_post_types Allowed post type object.
+	 * @param ActivePostTypes  $active_post_types Active post types object.
 	 */
 	public function __construct(
 		SiteRelations $site_relations,
@@ -91,8 +91,8 @@ class MetaBoxFactory {
 	}
 
 	/**
-	 * @param \WP_Post      $post
-	 * @param ServerRequest $request
+	 * @param \WP_Post      $post    Post object.
+	 * @param ServerRequest $request HTTP server request object.
 	 *
 	 * @return SourcePostSaveContext
 	 */
@@ -109,7 +109,10 @@ class MetaBoxFactory {
 	 *
 	 * @return SiteAwareMetaBoxController Post translation meta box controller.
 	 */
-	private function create_meta_box_for_site( int $site_id, \WP_Post $related_post = null ): SiteAwareMetaBoxController {
+	private function create_meta_box_for_site(
+		int $site_id,
+		\WP_Post $related_post = null
+	): SiteAwareMetaBoxController {
 
 		return new TranslationMetaBoxController(
 			$site_id,
