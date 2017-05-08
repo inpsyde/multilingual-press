@@ -13,15 +13,6 @@ namespace Inpsyde\MultilingualPress\Common\Admin\MetaBox;
 final class NullMetaBoxUI implements MetaBoxUI {
 
 	/**
-	 * Initialize the UI. This will be called early to allow setup of early hooks like 'wp_ajax_*'.
-	 *
-	 * @return void
-	 */
-	public function initialize() {
-
-	}
-
-	/**
 	 * Returns the ID of the user interface.
 	 *
 	 * @since 3.0.0
@@ -29,7 +20,21 @@ final class NullMetaBoxUI implements MetaBoxUI {
 	 * @return string ID of the user interface.
 	 */
 	public function id(): string {
+
 		return '';
+	}
+
+	/**
+	 * Initializes the user interface.
+	 *
+	 * This will be called early to allow wiring up of early-running hooks, for example, 'wp_ajax_{$action}'.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return void
+	 */
+	public function initialize() {
+
 	}
 
 	/**
@@ -40,6 +45,7 @@ final class NullMetaBoxUI implements MetaBoxUI {
 	 * @return string Name of the user interface.
 	 */
 	public function name(): string {
+
 		return '';
 	}
 

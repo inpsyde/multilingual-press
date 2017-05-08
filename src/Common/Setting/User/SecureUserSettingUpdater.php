@@ -21,14 +21,14 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 	private $meta_key;
 
 	/**
-	 * @var Request
-	 */
-	private $request;
-
-	/**
 	 * @var Nonce
 	 */
 	private $nonce;
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -36,16 +36,16 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 	 * @since 3.0.0
 	 *
 	 * @param string  $meta_key User meta key.
-	 * @param Request $request  HTTP request abstraction
+	 * @param Request $request  HTTP request object.
 	 * @param Nonce   $nonce    Optional. Nonce object. Defaults to null.
 	 */
 	public function __construct( string $meta_key, Request $request, Nonce $nonce = null ) {
 
 		$this->meta_key = (string) $meta_key;
 
-		$this->request = $request;
-
 		$this->nonce = $nonce;
+
+		$this->request = $request;
 	}
 
 	/**

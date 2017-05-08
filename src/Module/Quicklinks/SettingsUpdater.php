@@ -55,7 +55,7 @@ class SettingsUpdater {
 	 * @since   3.0.0
 	 * @wp-hook multilingualpress.save_modules
 	 *
-	 * @param Request $request Request data.
+	 * @param Request $request HTTP request object.
 	 *
 	 * @return bool Whether or not the settings were updated successfully.
 	 */
@@ -66,7 +66,6 @@ class SettingsUpdater {
 		}
 
 		$setting = $request->body_value( static::SETTINGS_NAME, INPUT_POST, FILTER_DEFAULT, FILTER_FORCE_ARRAY );
-
 		if ( empty( $setting ) ) {
 			return false;
 		}

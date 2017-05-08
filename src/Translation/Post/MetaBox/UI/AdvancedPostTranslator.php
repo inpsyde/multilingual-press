@@ -68,24 +68,6 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	}
 
 	/**
-	 * Initialize the UI. This will be called early to allow setup of early hooks like 'wp_ajax_*'.
-	 *
-	 * @return void
-	 */
-	public function initialize() {
-
-		static $done;
-
-		if ( ! $done && wp_doing_ajax() ) {
-
-			$handler = new AdvancedPostTranslatorAJAXHandler( $this->server_request );
-			add_action( 'wp_ajax_' . AdvancedPostTranslatorAJAXHandler::AJAX_ACTION, $handler );
-
-			$done = true;
-		}
-	}
-
-	/**
 	 * Returns the ID of the user interface.
 	 *
 	 * @since 3.0.0
@@ -95,6 +77,28 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	public function id(): string {
 
 		return self::ID;
+	}
+
+	/**
+	 * Initializes the user interface.
+	 *
+	 * This will be called early to allow wiring up of early-running hooks, for example, 'wp_ajax_{$action}'.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return void
+	 */
+	public function initialize() {
+
+		static $done;
+		if ( ! $done && wp_doing_ajax() ) {
+			add_action( 'wp_ajax_' . AdvancedPostTranslatorAJAXHandler::AJAX_ACTION, function () {
+
+				( new AdvancedPostTranslatorAJAXHandler( $this->server_request ) )();
+			} );
+
+			$done = true;
+		}
 	}
 
 	/**

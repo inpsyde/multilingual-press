@@ -5,7 +5,7 @@ namespace Inpsyde\MultilingualPress\Common\Type;
 /**
  * Interface for all URL data type implementations.
  *
- * @package Inpsyde\MultilingualPress\Common\HTTP
+ * @package Inpsyde\MultilingualPress\Common\Type
  * @since   3.0.0
  */
 interface URL {

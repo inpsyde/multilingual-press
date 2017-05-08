@@ -46,7 +46,7 @@ class AJAXHandler {
 	 *
 	 * @param Nonce          $nonce      Nonce object.
 	 * @param ItemRepository $repository Item repository object.
-	 * @param Request        $request    HTTP request abstraction
+	 * @param Request        $request    HTTP request object.
 	 */
 	public function __construct( Nonce $nonce, ItemRepository $repository, Request $request ) {
 

@@ -16,11 +16,6 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 class TranslationCompletedSettingUpdater {
 
 	/**
-	 * @var Request
-	 */
-	private $request;
-
-	/**
 	 * @var Nonce
 	 */
 	private $nonce;
@@ -31,12 +26,17 @@ class TranslationCompletedSettingUpdater {
 	private $post_repository;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param PostRepository $post_repository Untranslated posts repository object.
-	 * @param Request        $request         HTTP request abstraction
+	 * @param Request        $request         HTTP request object.
 	 * @param Nonce          $nonce           Nonce object.
 	 */
 	public function __construct( PostRepository $post_repository, Request $request, Nonce $nonce ) {

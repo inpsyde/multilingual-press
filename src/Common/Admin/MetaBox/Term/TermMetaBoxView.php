@@ -15,7 +15,7 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxView;
 interface TermMetaBoxView extends MetaBoxView {
 
 	/**
-	 * Returns an instance with the given post.
+	 * Returns an instance with the given term.
 	 *
 	 * @since 3.0.0
 	 *

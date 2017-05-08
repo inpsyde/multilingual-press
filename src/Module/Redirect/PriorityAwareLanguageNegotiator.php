@@ -33,14 +33,14 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	private $language_only_priority_factor;
 
 	/**
-	 * @var Request
-	 */
-	private $request;
-
-	/**
 	 * @var HeaderParser
 	 */
 	private $parser;
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * @var Translations
@@ -53,7 +53,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 * @since 3.0.0
 	 *
 	 * @param Translations $translations Translations API object.
-	 * @param Request      $request      HTTP request abstraction
+	 * @param Request      $request      HTTP request object.
 	 * @param HeaderParser $parser       Accept-Language parser object.
 	 */
 	public function __construct( Translations $translations, Request $request, HeaderParser $parser ) {

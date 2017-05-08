@@ -56,7 +56,7 @@ class SiteSettingsUpdater {
 	 *
 	 * @param SiteSettingsRepository $repository Site settings repository object.
 	 * @param Languages              $languages  Languages API object.
-	 * @param Request                $request    HTTP request abstraction
+	 * @param Request                $request    HTTP request object.
 	 */
 	public function __construct( SiteSettingsRepository $repository, Languages $languages, Request $request ) {
 

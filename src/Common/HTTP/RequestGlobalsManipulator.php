@@ -29,7 +29,7 @@ interface RequestGlobalsManipulator {
 	const METHOD_POST = 'POST';
 
 	/**
-	 * Removes all data from the request global.
+	 * Removes all data from the request globals.
 	 *
 	 * @since 3.0.0
 	 *

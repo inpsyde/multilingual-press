@@ -37,7 +37,7 @@ final class FullRequestGlobalManipulator implements RequestGlobalsManipulator {
 	}
 
 	/**
-	 * Removes all data from the request global.
+	 * Removes all data from the request globals.
 	 *
 	 * @since 3.0.0
 	 *

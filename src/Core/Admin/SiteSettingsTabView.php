@@ -26,14 +26,14 @@ final class SiteSettingsTabView implements SettingsPageView {
 	private $data;
 
 	/**
-	 * @var Request
-	 */
-	private $request;
-
-	/**
 	 * @var Nonce
 	 */
 	private $nonce;
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * @var SiteSettingView
@@ -45,12 +45,17 @@ final class SiteSettingsTabView implements SettingsPageView {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param EditSiteTabData $data  Tab data object.
-	 * @param SiteSettingView $view  Site settings view object.
-	 * @param Request         $request
-	 * @param Nonce           $nonce Nonce object.
+	 * @param EditSiteTabData $data    Tab data object.
+	 * @param SiteSettingView $view    Site settings view object.
+	 * @param Request         $request HTTP request object.
+	 * @param Nonce           $nonce   Nonce object.
 	 */
-	public function __construct( EditSiteTabData $data, SiteSettingView $view, Request $request, Nonce $nonce ) {
+	public function __construct(
+		EditSiteTabData $data,
+		SiteSettingView $view,
+		Request $request,
+		Nonce $nonce
+	) {
 
 		$this->data = $data;
 

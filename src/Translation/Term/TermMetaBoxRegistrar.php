@@ -134,15 +134,27 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	}
 
 	/**
-	 * Tell the registrar to use given UI.
+	 * Returns the ID of the user interface.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param MetaBoxUI $ui
+	 * @return string ID.
+	 */
+	public function id(): string {
+
+		return __CLASS__;
+	}
+
+	/**
+	 * Sets the given user interface.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param MetaBoxUI $ui Meta box UI object.
 	 *
 	 * @return UIAwareMetaBoxRegistrar
 	 */
-	public function with_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar {
+	public function set_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar {
 
 		// Don't allow overwrite
 		if ( null !== $this->ui ) {
@@ -155,18 +167,6 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Return a string that uniquely identify the object for the UI.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return string
-	 */
-	public function identify_for_ui(): string {
-
-		return __CLASS__;
 	}
 
 	/**

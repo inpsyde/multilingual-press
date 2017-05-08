@@ -21,9 +21,11 @@ final class RequestAwareSearch implements Search {
 	private $request;
 
 	/**
-	 * Constructor. Sets properties.
+	 * Constructor. Sets up the properties.
 	 *
-	 * @param Request $request
+	 * @since 3.0.0
+	 *
+	 * @param Request $request HTTP request object.
 	 */
 	public function __construct( Request $request ) {
 

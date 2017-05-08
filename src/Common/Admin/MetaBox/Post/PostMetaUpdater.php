@@ -16,7 +16,7 @@ use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 interface PostMetaUpdater extends MetadataUpdater {
 
 	/**
-	 * Returns an instance with the given post.
+	 * Returns an instance with the given post save context.
 	 *
 	 * @since 3.0.0
 	 *

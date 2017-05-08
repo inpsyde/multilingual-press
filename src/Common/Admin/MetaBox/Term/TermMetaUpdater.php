@@ -16,7 +16,7 @@ use Inpsyde\MultilingualPress\Translation\Term\MetaBox\SourceTermSaveContext;
 interface TermMetaUpdater extends MetadataUpdater {
 
 	/**
-	 * Returns an instance with the given post.
+	 * Returns an instance with the given term save context.
 	 *
 	 * @since 3.0.0
 	 *

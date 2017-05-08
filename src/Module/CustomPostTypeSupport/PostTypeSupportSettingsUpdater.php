@@ -55,7 +55,7 @@ class PostTypeSupportSettingsUpdater {
 	 * @since   3.0.0
 	 * @wp-hook multilingualpress.save_modules
 	 *
-	 * @param Request $request Request data.
+	 * @param Request $request HTTP request object.
 	 *
 	 * @return bool Whether or not the settings were updated successfully.
 	 */

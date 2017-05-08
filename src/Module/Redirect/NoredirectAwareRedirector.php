@@ -4,8 +4,9 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
-use function Inpsyde\MultilingualPress\call_exit;
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
+
+use function Inpsyde\MultilingualPress\call_exit;
 
 /**
  * Interface for all redirector implementations.
@@ -21,14 +22,14 @@ final class NoredirectAwareRedirector implements Redirector {
 	private $negotiator;
 
 	/**
-	 * @var NoredirectStorage
-	 */
-	private $storage;
-
-	/**
 	 * @var Request
 	 */
 	private $request;
+
+	/**
+	 * @var NoredirectStorage
+	 */
+	private $storage;
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -37,7 +38,7 @@ final class NoredirectAwareRedirector implements Redirector {
 	 *
 	 * @param LanguageNegotiator $negotiator Language negotiator object.
 	 * @param NoredirectStorage  $storage    Noredirect storage object.
-	 * @param Request            $request    HTTP request abstraction.
+	 * @param Request            $request    HTTP request object.
 	 */
 	public function __construct(
 		LanguageNegotiator $negotiator,

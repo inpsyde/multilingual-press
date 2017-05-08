@@ -5,32 +5,33 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Common\Nonce;
 
 use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
-use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueManipulationNotAllowed;
 use Inpsyde\MultilingualPress\Common\Nonce\Exception\ContextValueNotSet;
 
 /**
- * Nonce context implementation wrapping around GET and POST request data using filter_input_array().
+ * Nonce context implementation wrapping around the server request.
  *
  * @package Inpsyde\MultilingualPress\Common\Nonce
  * @since   3.0.0
  */
-final class OriginalRequestContext implements Context {
+final class ServerRequestContext implements Context {
 
 	/**
-	 * @var Request
+	 * @var ServerRequest
 	 */
 	private $request;
 
 	/**
-	 * OriginalRequestContext constructor.
+	 * Constructor. Sets up the properties.
 	 *
-	 * @param ServerRequest|null $request
+	 * @since 3.0.0
+	 *
+	 * @param ServerRequest $request Optional. Server request object. Defaults to null.
 	 */
 	public function __construct( ServerRequest $request = null ) {
 
-		$this->request = $request ?: new PHPServerRequest();
+		$this->request = $request ?? new PHPServerRequest();
 	}
 
 	/**

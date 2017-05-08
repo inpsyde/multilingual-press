@@ -253,9 +253,9 @@ final class GenericMetaBox implements PriorityAwareMetaBox {
 	}
 
 	/**
-	 * Allows the meta box for given screen, based on all available properties such as ID, base and parent base.
+	 * Allows the meta box for the given screen, based on all available properties, such as ID, base and parent base.
 	 *
-	 * @param mixed $screen Screen object, array, ID, base or parent base.
+	 * @param \WP_Screen|array|string $screen Screen object, array, ID, base or parent base.
 	 *
 	 * @return void
 	 */
@@ -302,7 +302,7 @@ final class GenericMetaBox implements PriorityAwareMetaBox {
 	/**
 	 * Normalizes the given screen object, array, ID, base or parent base.
 	 *
-	 * @param \WP_Screen|string|array $screen  Screen object, array, ID, base or parent base.
+	 * @param \WP_Screen|array|string $screen  Screen object, array, ID, base or parent base.
 	 * @param bool                    $id_only Optional. Return the screen ID only? Defaults to false.
 	 * @param string                  $key     Optional. Screen property key. Defaults to ID.
 	 *

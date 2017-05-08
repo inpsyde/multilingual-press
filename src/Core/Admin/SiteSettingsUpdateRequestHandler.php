@@ -28,14 +28,14 @@ class SiteSettingsUpdateRequestHandler {
 	const ACTION = 'update_multilingualpress_site_settings';
 
 	/**
-	 * @var Request
-	 */
-	private $request;
-
-	/**
 	 * @var Nonce
 	 */
 	private $nonce;
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * @var SiteSettingsUpdater
@@ -48,7 +48,7 @@ class SiteSettingsUpdateRequestHandler {
 	 * @since 3.0.0
 	 *
 	 * @param SiteSettingsUpdater $updater Updater object.
-	 * @param Request             $request HTTP request abstraction
+	 * @param Request             $request HTTP request object.
 	 * @param Nonce               $nonce   Nonce object.
 	 */
 	public function __construct( SiteSettingsUpdater $updater, Request $request, Nonce $nonce ) {
@@ -75,7 +75,6 @@ class SiteSettingsUpdateRequestHandler {
 		}
 
 		$site_id = (int) $this->request->body_value( 'id', INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
-
 		if ( ! $site_id ) {
 			wp_die( 'Invalid site', 'Invalid site', 403 );
 		}

@@ -68,7 +68,7 @@ class RelationshipController {
 	 * @since 3.0.0
 	 *
 	 * @param ContentRelations $content_relations Content relations API object.
-	 * @param Request          $request           HTTP request abstraction
+	 * @param Request          $request           HTTP request object.
 	 */
 	public function __construct( ContentRelations $content_relations, Request $request ) {
 

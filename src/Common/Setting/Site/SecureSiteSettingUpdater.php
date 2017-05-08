@@ -16,14 +16,14 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 
 	/**
-	 * @var string
-	 */
-	private $option;
-
-	/**
 	 * @var Nonce
 	 */
 	private $nonce;
+
+	/**
+	 * @var string
+	 */
+	private $option;
 
 	/**
 	 * @var Request
@@ -36,16 +36,16 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 	 * @since 3.0.0
 	 *
 	 * @param string  $option  Site option name.
-	 * @param Request $request HTTP request abstraction
+	 * @param Request $request HTTP request object.
 	 * @param Nonce   $nonce   Optional. Nonce object. Defaults to null.
 	 */
 	public function __construct( string $option, Request $request, Nonce $nonce = null ) {
 
 		$this->option = $option;
 
-		$this->nonce = $nonce;
-
 		$this->request = $request;
+
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -68,6 +68,9 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 		}
 
 		$value = $this->request->body_value( $this->option );
+		if ( ! is_string( $value ) ) {
+			$value = '';
+		}
 
 		return $value
 			? update_blog_option( $site_id, $this->option, $value )

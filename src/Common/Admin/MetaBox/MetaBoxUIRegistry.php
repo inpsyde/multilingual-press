@@ -50,13 +50,13 @@ class MetaBoxUIRegistry {
 	 *
 	 * @since    3.0.0
 	 *
-	 * @param UIAwareMetaBoxRegistrar $registrar
+	 * @param UIAwareMetaBoxRegistrar $registrar Meta box registrar object.
 	 *
 	 * @return string[] An array with all meta box IDs.
 	 */
 	public function get_ids( UIAwareMetaBoxRegistrar $registrar ): array {
 
-		$registrar_id = $registrar->identify_for_ui();
+		$registrar_id = $registrar->id();
 
 		return array_key_exists( $registrar_id, $this->names ) ? array_keys( $this->names[ $registrar_id ] ) : [];
 	}
@@ -66,13 +66,13 @@ class MetaBoxUIRegistry {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param UIAwareMetaBoxRegistrar $registrar
+	 * @param UIAwareMetaBoxRegistrar $registrar Meta box registrar object.
 	 *
 	 * @return string[] An array with all meta box IDs as keys and the names as values.
 	 */
 	public function get_names( UIAwareMetaBoxRegistrar $registrar ): array {
 
-		$registrar_id = $registrar->identify_for_ui();
+		$registrar_id = $registrar->id();
 
 		return array_key_exists( $registrar_id, $this->names ) ? $this->names[ $registrar_id ] : [];
 	}
@@ -82,13 +82,13 @@ class MetaBoxUIRegistry {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param UIAwareMetaBoxRegistrar $registrar
+	 * @param UIAwareMetaBoxRegistrar $registrar Meta box registrar object.
 	 *
 	 * @return MetaBoxUI[] An array with all meta box IDs as keys and the objects as values.
 	 */
 	public function get_objects( UIAwareMetaBoxRegistrar $registrar ): array {
 
-		$registrar_id = $registrar->identify_for_ui();
+		$registrar_id = $registrar->id();
 
 		return array_key_exists( $registrar_id, $this->objects ) ? $this->objects[ $registrar_id ] : [];
 	}
@@ -98,14 +98,14 @@ class MetaBoxUIRegistry {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param MetaBoxUI               $ui UI object.
-	 * @param UIAwareMetaBoxRegistrar $registrar
+	 * @param MetaBoxUI               $ui        UI object.
+	 * @param UIAwareMetaBoxRegistrar $registrar Meta box registrar object.
 	 *
 	 * @return MetaBoxUIRegistry
 	 */
 	public function register_ui( MetaBoxUI $ui, UIAwareMetaBoxRegistrar $registrar ): MetaBoxUIRegistry {
 
-		$registrar_id = $registrar->identify_for_ui();
+		$registrar_id = $registrar->id();
 
 		$registrar_ui_ids = array_key_exists( $registrar_id, $this->objects ) ? $this->objects[ $registrar_id ] : [];
 
@@ -141,13 +141,13 @@ class MetaBoxUIRegistry {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param UIAwareMetaBoxRegistrar $registrar
+	 * @param UIAwareMetaBoxRegistrar $registrar Meta box registrar object.
 	 *
 	 * @return MetaBoxUI Selected UI object.
 	 */
 	public function selected_ui( UIAwareMetaBoxRegistrar $registrar ): MetaBoxUI {
 
-		$registrar_id = $registrar->identify_for_ui();
+		$registrar_id = $registrar->id();
 
 		if ( array_key_exists( $registrar_id, $this->selected_ui ) ) {
 			return $this->selected_ui[ $registrar_id ];
@@ -161,7 +161,7 @@ class MetaBoxUIRegistry {
 		 * @since 3.0.0
 		 *
 		 * @param MetaBoxUI|null          $selected_ui Currently selected UI object.
-		 * @param UIAwareMetaBoxRegistrar $registrar   Target meta box registrar object
+		 * @param UIAwareMetaBoxRegistrar $registrar   Meta box registrar object.
 		 * @param MetaBoxUI[]             $ui_objects  An array with all meta box IDs as keys and the objects as values.
 		 */
 		$user_ui = apply_filters( self::FILTER_SELECT_UI, null, $registrar, $ui_objects );
@@ -186,7 +186,7 @@ class MetaBoxUIRegistry {
 			 * @since 3.0.0
 			 *
 			 * @param MetaBoxUI               $selected_ui Selected UI object.
-			 * @param UIAwareMetaBoxRegistrar $registrar   Target registrar object.
+			 * @param UIAwareMetaBoxRegistrar $registrar   Meta box registrar object.
 			 */
 			do_action( self::ACTION_UI_SELECTED, $this->selected_ui[ $registrar_id ], $registrar );
 

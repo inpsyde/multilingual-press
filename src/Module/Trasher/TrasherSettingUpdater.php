@@ -23,14 +23,14 @@ class TrasherSettingUpdater {
 	private $content_relations;
 
 	/**
-	 * @var Request
-	 */
-	private $request;
-
-	/**
 	 * @var Nonce
 	 */
 	private $nonce;
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * @var TrasherSettingRepository
@@ -44,7 +44,7 @@ class TrasherSettingUpdater {
 	 *
 	 * @param TrasherSettingRepository $setting_repository Trasher setting repository object.
 	 * @param ContentRelations         $content_relations  Content relations API object.
-	 * @param Request                  $request            HTTP request abstraction
+	 * @param Request                  $request            HTTP request object.
 	 * @param Nonce                    $nonce              Nonce object.
 	 */
 	public function __construct(

@@ -71,7 +71,7 @@ final class WPNonce implements Nonce {
 	public function is_valid(): bool {
 
 		if ( ! $this->context ) {
-			$this->context = new OriginalRequestContext();
+			$this->context = new ServerRequestContext();
 		}
 
 		if ( empty( $this->context[ $this->action ] ) ) {

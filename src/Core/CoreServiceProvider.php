@@ -67,6 +67,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new CachingBasePathAdapter();
 		};
 
+		$container->share( 'multilingualpress.http_post_request_globals_manipulator', function () {
+
+			return new FullRequestGlobalManipulator( RequestGlobalsManipulator::METHOD_POST );
+		} );
+
 		$container->share( 'multilingualpress.internal_locations', function () {
 
 			return new InternalLocations();
@@ -79,6 +84,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.languages']
 			);
 		};
+
+		$container->share( 'multilingualpress.meta_box_ui_registry', function () {
+
+			return new MetaBoxUIRegistry();
+		} );
 
 		// TODO: Make a regular not shared service as soon as everything else has been adapted.
 		$container->share( 'multilingualpress.module_manager', function () {
@@ -147,11 +157,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		$container->share( 'multilingualpress.server_request', function () {
 
 			return new PHPServerRequest();
-		} );
-
-		$container->share('multilingualpress.request_http_post_manipulator', function () {
-
-			return new FullRequestGlobalManipulator( RequestGlobalsManipulator::METHOD_POST );
 		} );
 
 		$container['multilingualpress.site_data_deletor'] = function ( Container $container ) {
@@ -235,12 +240,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new ConditionalAwareWordPressRequestContext();
 		} );
-
-		$container->share( 'multilingualpress.meta_box_ui_registry', function () {
-
-			return new MetaBoxUIRegistry();
-		} );
-
 	}
 
 	/**

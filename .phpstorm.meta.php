@@ -100,7 +100,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.redirector'                                        => \Inpsyde\MultilingualPress\Module\Redirect\Redirector::class,
 		'multilingualpress.relationship_control_search'                       => \Inpsyde\MultilingualPress\Relations\Post\Search\Search::class,
 		'multilingualpress.relationship_control_search_controller'            => \Inpsyde\MultilingualPress\Relations\Post\Search\SearchController::class,
-		'multilingualpress.relationship_control_search_results_view'          => \Inpsyde\MultilingualPress\Relations\Post\Search\SearchResultsView::class,
+		'multilingualpress.relationship_control_search_results'               => \Inpsyde\MultilingualPress\Relations\Post\Search\SearchResultsView::class,
 		'multilingualpress.relationship_control_view'                         => \Inpsyde\MultilingualPress\Relations\Post\RelationshipControlView::class,
 		'multilingualpress.relationship_controller'                           => \Inpsyde\MultilingualPress\Relations\Post\RelationshipController::class,
 		'multilingualpress.relationship_permission'                           => \Inpsyde\MultilingualPress\Relations\Post\RelationshipPermission::class,

@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Common\Admin\MetaBox;
 
 /**
- * Interface for UI aware meta box registrar implementations.
+ * Interface for UI-aware meta box registrar implementations.
  *
  * @package Inpsyde\MultilingualPress\Common\Admin\MetaBox
  * @since   3.0.0
@@ -13,18 +13,22 @@ namespace Inpsyde\MultilingualPress\Common\Admin\MetaBox;
 interface UIAwareMetaBoxRegistrar extends MetaBoxRegistrar {
 
 	/**
-	 * @return string
-	 */
-	public function identify_for_ui(): string;
-
-	/**
-	 * Tell the registrar to use given UI.
+	 * Returns the ID of the user interface.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param MetaBoxUI $ui
+	 * @return string ID.
+	 */
+	public function id(): string;
+
+	/**
+	 * Sets the given user interface.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param MetaBoxUI $ui Meta box UI object.
 	 *
 	 * @return UIAwareMetaBoxRegistrar
 	 */
-	public function with_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar;
+	public function set_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar;
 }

@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\NavMenu;
 
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
+
 use function Inpsyde\MultilingualPress\get_available_language_names;
 use function Inpsyde\MultilingualPress\site_exists;
 
@@ -22,9 +23,11 @@ final class ValidatingItemRepository implements ItemRepository {
 	private $request;
 
 	/**
-	 * Constructor. Sets properties.
+	 * Constructor. Sets up the properties.
 	 *
-	 * @param Request $request
+	 * @since 3.0.0
+	 *
+	 * @param Request $request HTTP request object.
 	 */
 	public function __construct( Request $request ) {
 
@@ -46,15 +49,12 @@ final class ValidatingItemRepository implements ItemRepository {
 			return [];
 		}
 
-		$menu = $this->request->body_value( 'menu', INPUT_GET, FILTER_SANITIZE_NUMBER_INT );
-
-		if ( $menu === null ) {
+		$menu_id = (int) $this->request->body_value( 'menu', INPUT_GET, FILTER_SANITIZE_NUMBER_INT );
+		if ( ! $menu_id ) {
 			return [];
 		}
 
 		$language_names = get_available_language_names();
-
-		$menu_id = (int) $menu;
 
 		$items = [];
 

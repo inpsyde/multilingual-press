@@ -67,6 +67,11 @@ class SiteDuplicator {
 	private $db;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * @var TableDuplicator
 	 */
 	private $table_duplicator;
@@ -82,11 +87,6 @@ class SiteDuplicator {
 	private $table_replacer;
 
 	/**
-	 * @var Request
-	 */
-	private $request;
-
-	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -98,7 +98,7 @@ class SiteDuplicator {
 	 * @param ActivePlugins    $active_plugins    Active plugin access object.
 	 * @param ContentRelations $content_relations Content relations APU object.
 	 * @param AttachmentCopier $attachment_copier Attachment copier object.
-	 * @param Request          $request           HTTP request abstraction
+	 * @param Request          $request           HTTP request object.
 	 */
 	public function __construct(
 		\wpdb $db,

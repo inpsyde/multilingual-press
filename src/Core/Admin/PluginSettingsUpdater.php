@@ -40,14 +40,14 @@ class PluginSettingsUpdater {
 	private $nonce;
 
 	/**
-	 * @var SettingsPage
-	 */
-	private $settings_page;
-
-	/**
 	 * @var Request
 	 */
 	private $request;
+
+	/**
+	 * @var SettingsPage
+	 */
+	private $settings_page;
 
 	/**
 	 * Constructor. Sets up the properties.
@@ -57,7 +57,7 @@ class PluginSettingsUpdater {
 	 * @param ModuleManager $module_manager Module manager object.
 	 * @param Nonce         $nonce          Nonce object.
 	 * @param SettingsPage  $settings_page  Settings page object.
-	 * @param Request       $request        HTTP request abstraction
+	 * @param Request       $request        HTTP request object.
 	 */
 	public function __construct(
 		ModuleManager $module_manager,
@@ -95,7 +95,7 @@ class PluginSettingsUpdater {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param Request Request abstraction.
+		 * @param Request $request HTTP request object.
 		 */
 		do_action( 'multilingualpress.save_modules', $this->request );
 
