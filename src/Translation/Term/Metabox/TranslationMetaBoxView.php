@@ -151,7 +151,7 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 			return '';
 		}
 
-		$title = ( $this->data['metabox'] ?? null ) instanceof MetaBox ? $this->data['metabox']->title() : '';
+		$title = ( $this->data['meta_box'] ?? null ) instanceof MetaBox ? $this->data['meta_box']->title() : '';
 
 		list( $open, $close ) = $this->wrap_markup( ! empty( $this->data ), $title );
 

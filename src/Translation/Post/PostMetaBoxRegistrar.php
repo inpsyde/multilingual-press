@@ -22,7 +22,7 @@ use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 use function Inpsyde\MultilingualPress\nonce_field;
 
 /**
- * Meta box registrar implementation for post metaboxes.
+ * Meta box registrar implementation for post meta boxes.
  *
  * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
@@ -81,7 +81,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	 *
 	 * @var string
 	 */
-	const ACTION_SAVED_META_BOX_DATA = 'multilingualpress.saved_post_metabox_data';
+	const ACTION_SAVED_META_BOX_DATA = 'multilingualpress.saved_post_meta_box_data';
 
 	/**
 	 * @var MetaBoxFactory

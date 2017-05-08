@@ -76,7 +76,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			);
 		};
 
-		$container['multilingualpress.post_metabox_registrar'] = function ( Container $container ) {
+		$container['multilingualpress.post_meta_box_registrar'] = function ( Container $container ) {
 
 			return new Post\PostMetaBoxRegistrar(
 				$container['multilingualpress.post_meta_box_factory'],
@@ -110,7 +110,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			);
 		};
 
-		$container['multilingualpress.term_metabox_registrar'] = function ( Container $container ) {
+		$container['multilingualpress.term_meta_box_registrar'] = function ( Container $container ) {
 
 			return new Term\TermMetaBoxRegistrar(
 				$container['multilingualpress.term_meta_box_factory'],
@@ -184,9 +184,9 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function bootstrap_post_translation( Container $container ) {
 
-		$box_registrar = $container['multilingualpress.post_metabox_registrar'];
+		$box_registrar = $container['multilingualpress.post_meta_box_registrar'];
 
-		$ui_registry = $container['multilingualpress.metabox_ui_registry'];
+		$ui_registry = $container['multilingualpress.meta_box_ui_registry'];
 
 		$ui_registry->register_ui(
 			new Post\MetaBox\UI\AdvancedPostTranslator(
@@ -238,9 +238,9 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function bootstrap_term_translation( Container $container ) {
 
-		$box_registrar = $container['multilingualpress.term_metabox_registrar'];
+		$box_registrar = $container['multilingualpress.term_meta_box_registrar'];
 
-		$ui_registry = $container['multilingualpress.metabox_ui_registry'];
+		$ui_registry = $container['multilingualpress.meta_box_ui_registry'];
 
 		$simple_ui = $container['multilingualpress.term_translation_simple_ui'];
 

@@ -236,7 +236,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new ConditionalAwareWordPressRequestContext();
 		} );
 
-		$container->share( 'multilingualpress.metabox_ui_registry', function () {
+		$container->share( 'multilingualpress.meta_box_ui_registry', function () {
 
 			return new MetaBoxUIRegistry();
 		} );

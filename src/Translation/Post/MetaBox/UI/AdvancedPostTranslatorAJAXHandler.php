@@ -13,7 +13,7 @@ use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 class AdvancedPostTranslatorAJAXHandler {
 
 	/**
-	 * Ajax action used to update the metabox.
+	 * Ajax action used to update the meta box.
 	 *
 	 * @since 3.0.0
 	 *

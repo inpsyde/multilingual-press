@@ -39,7 +39,7 @@ final class LanguagesMetaBoxView implements MetaBoxView {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param mixed $object Metabox subject object.
+	 * @param mixed $object Meta box subject object.
 	 * @param array $args   Arguments.
 	 *
 	 * @return void

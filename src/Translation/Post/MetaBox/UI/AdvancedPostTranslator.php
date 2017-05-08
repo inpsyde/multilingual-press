@@ -147,7 +147,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 
 		$fields = new AdvancedPostTranslatorFields();
 
-		// Add inputs to the top of metabox
+		// Add inputs to the top of meta box
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
@@ -171,7 +171,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 
 		}, TranslationMetaBoxView::POSITION_TOP );
 
-		// Add inputs to the center of metabox
+		// Add inputs to the center of meta box
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
@@ -185,7 +185,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 
 		}, TranslationMetaBoxView::POSITION_MAIN );
 
-		// Add inputs to the bottom of metabox
+		// Add inputs to the bottom of meta box
 		$this->inject_into_view( function (
 			\WP_Post $post,
 			int $remote_site_id,
@@ -211,7 +211,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	}
 
 	/**
-	 * Shows a warning message in the metabox that the remote post is trashed.
+	 * Shows a warning message in the meta box that the remote post is trashed.
 	 *
 	 * @return void
 	 */

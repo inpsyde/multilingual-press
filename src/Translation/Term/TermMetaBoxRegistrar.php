@@ -21,7 +21,7 @@ use Inpsyde\MultilingualPress\Translation\Term\MetaBox\SourceTermSaveContext;
 use function Inpsyde\MultilingualPress\nonce_field;
 
 /**
- * Meta box registrar implementation for term metaboxes.
+ * Meta box registrar implementation for term meta boxes.
  *
  * @package Inpsyde\MultilingualPress\Translation\Term
  * @since   3.0.0
@@ -80,7 +80,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	 *
 	 * @var string
 	 */
-	const ACTION_SAVED_META_BOX_DATA = 'multilingualpress.saved_term_metabox_data';
+	const ACTION_SAVED_META_BOX_DATA = 'multilingualpress.saved_term_meta_box_data';
 
 	/**
 	 * @var MetaBoxFactory
@@ -294,9 +294,9 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 
 		echo nonce_field( $this->create_nonce_for_meta_box( $meta_box ) );
 
-		$metabox = $controller->meta_box();
+		$meta_box = $controller->meta_box();
 
-		echo $view->with_term( $term )->with_data( compact( 'metabox', 'update' ) )->render();
+		echo $view->with_term( $term )->with_data( compact( 'meta_box', 'update' ) )->render();
 	}
 
 	/**
