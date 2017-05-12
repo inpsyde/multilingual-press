@@ -380,7 +380,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		}
 
 		// new post
-		$new_post_data['post_status'] = 'draft';
+		$new_post_data['post_status'] = apply_filters('mlp_save_translation_status','draft');
 
 		// add post_author if override is available
 		if ( isset( $this->post_request_data['post_author_override'] ) ) {
