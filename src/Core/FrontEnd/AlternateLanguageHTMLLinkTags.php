@@ -41,6 +41,7 @@ class AlternateLanguageHTMLLinkTags {
 	 */
 	public function render(): bool {
 
+		// TODO: Adapt to 2.5.5 behavior (use filters, remove noredirect argument). Also, translations are objects!?!
 		$translations = $this->translations->get_unfiltered_translations();
 		if ( ! $translations ) {
 			return false;
