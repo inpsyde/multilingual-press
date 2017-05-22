@@ -163,6 +163,10 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
 		$called ++;
 
+		if ( '' !== (string) $this->request->body_value( 'wp-preview', INPUT_POST, FILTER_SANITIZE_STRING ) ) {
+			return false;
+		}
+
 		$original_post_status = $context[ self::POST_STATUS ] ?? '';
 
 		if ( 'auto-draft' === $original_post_status && 1 < $called ) {
