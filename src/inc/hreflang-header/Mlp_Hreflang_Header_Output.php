@@ -117,8 +117,7 @@ class Mlp_Hreflang_Header_Output {
 
 		/** @var Mlp_Translation_Interface[] $translations */
 		$translations = $this->language_api->get_translations( array(
-			'include_base'     => true,
-			'suppress_filters' => true,
+			'include_base' => true,
 		) );
 		if ( ! $translations ) {
 			return $this->translations;
@@ -128,6 +127,10 @@ class Mlp_Hreflang_Header_Output {
 			$url = $translation->get_remote_url();
 			if ( $url ) {
 				$language = $translation->get_language();
+
+				if ( preg_match( '/(\?|&)noredirect=/', $url ) ) {
+					$url = remove_query_arg( 'noredirect', $url );
+				}
 
 				$this->translations[ $language->get_name( 'http' ) ] = $url;
 			}
