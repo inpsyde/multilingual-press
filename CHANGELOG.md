@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.5.5
+- Translations: Fix issue with unfilterable URLs in the `hreflang` HTTP header and HTML element output.
+
 ## 2.5.4
 - Post Translator: Fix creation of duplicate draft translation posts, see
 [issue #253](https://github.com/inpsyde/MultilingualPress/issues/253).
