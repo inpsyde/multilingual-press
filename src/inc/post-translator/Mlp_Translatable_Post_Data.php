@@ -460,6 +460,10 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
 		$called ++;
 
+		if ( ! empty( $this->post_request_data['wp-preview'] ) ) {
+			return false;
+		}
+
 		if ( ! in_array( $this->get_real_post_type( $post ), $this->allowed_post_types, true ) ) {
 			return false;
 		}
