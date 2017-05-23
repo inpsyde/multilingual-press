@@ -22,21 +22,21 @@ class TranslationCompletedSettingView {
 	private $nonce;
 
 	/**
-	 * @var PostRepository
+	 * @var PostsRepository
 	 */
-	private $post_repository;
+	private $posts_repository;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param PostRepository $post_repository Untranslated posts repository object.
-	 * @param Nonce          $nonce           Nonce object.
+	 * @param PostsRepository $posts_repository Untranslated posts repository object.
+	 * @param Nonce           $nonce            Nonce object.
 	 */
-	public function __construct( PostRepository $post_repository, Nonce $nonce ) {
+	public function __construct( PostsRepository $posts_repository, Nonce $nonce ) {
 
-		$this->post_repository = $post_repository;
+		$this->posts_repository = $posts_repository;
 
 		$this->nonce = $nonce;
 	}
@@ -55,7 +55,7 @@ class TranslationCompletedSettingView {
 
 		$post_id = (int) $post->ID;
 
-		$translated = $this->post_repository->is_post_translated( $post_id );
+		$translated = $this->posts_repository->is_post_translated( $post_id );
 
 		/**
 		 * Filters whether or not the checkbox for the current post should be rendered.
@@ -75,7 +75,7 @@ class TranslationCompletedSettingView {
 		<div class="misc-pub-section misc-pub-mlp-translation-completed">
 			<?php echo nonce_field( $this->nonce ); ?>
 			<label for="<?php echo esc_attr( $id ); ?>">
-				<input type="checkbox" name="<?php echo esc_attr( PostRepository::META_KEY ); ?>"
+				<input type="checkbox" name="<?php echo esc_attr( PostsRepository::META_KEY ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>" <?php checked( $translated ); ?>>
 				<?php _e( 'Translation completed', 'multilingualpress' ); ?>
 			</label>

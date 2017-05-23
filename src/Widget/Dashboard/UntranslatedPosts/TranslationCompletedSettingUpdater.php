@@ -21,9 +21,9 @@ class TranslationCompletedSettingUpdater {
 	private $nonce;
 
 	/**
-	 * @var PostRepository
+	 * @var PostsRepository
 	 */
-	private $post_repository;
+	private $posts_repository;
 
 	/**
 	 * @var Request
@@ -35,13 +35,13 @@ class TranslationCompletedSettingUpdater {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param PostRepository $post_repository Untranslated posts repository object.
-	 * @param Request        $request         HTTP request object.
-	 * @param Nonce          $nonce           Nonce object.
+	 * @param PostsRepository $posts_repository Untranslated posts repository object.
+	 * @param Request         $request          HTTP request object.
+	 * @param Nonce           $nonce            Nonce object.
 	 */
-	public function __construct( PostRepository $post_repository, Request $request, Nonce $nonce ) {
+	public function __construct( PostsRepository $posts_repository, Request $request, Nonce $nonce ) {
 
-		$this->post_repository = $post_repository;
+		$this->posts_repository = $posts_repository;
 
 		$this->request = $request;
 
@@ -69,8 +69,8 @@ class TranslationCompletedSettingUpdater {
 			return false;
 		}
 
-		$value = (bool) $this->request->body_value( PostRepository::META_KEY, INPUT_POST, FILTER_VALIDATE_BOOLEAN );
+		$value = (bool) $this->request->body_value( PostsRepository::META_KEY, INPUT_POST, FILTER_VALIDATE_BOOLEAN );
 
-		return $this->post_repository->update_post( (int) $post_id, $value );
+		return $this->posts_repository->update_post( (int) $post_id, $value );
 	}
 }

@@ -10,7 +10,7 @@ namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
  * @package Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts
  * @since   3.0.0
  */
-final class TypeSafePostRepository implements PostRepository {
+final class TypeSafePostsRepository implements PostsRepository {
 
 	/**
 	 * Returns all untranslated posts for the current site.
@@ -28,7 +28,7 @@ final class TypeSafePostRepository implements PostRepository {
 			'post_status'      => 'any',
 			'meta_query'       => [
 				[
-					'key'     => PostRepository::META_KEY,
+					'key'     => PostsRepository::META_KEY,
 					'compare' => '!=',
 					'value'   => true,
 				],
@@ -49,7 +49,7 @@ final class TypeSafePostRepository implements PostRepository {
 
 		$post_id = $post_id ?: (int) get_the_ID();
 
-		return (bool) get_post_meta( $post_id, PostRepository::META_KEY, true );
+		return (bool) get_post_meta( $post_id, PostsRepository::META_KEY, true );
 	}
 
 	/**
@@ -64,6 +64,6 @@ final class TypeSafePostRepository implements PostRepository {
 	 */
 	public function update_post( int $post_id, bool $value ): bool {
 
-		return (bool) update_post_meta( $post_id, PostRepository::META_KEY, (bool) $value );
+		return (bool) update_post_meta( $post_id, PostsRepository::META_KEY, (bool) $value );
 	}
 }

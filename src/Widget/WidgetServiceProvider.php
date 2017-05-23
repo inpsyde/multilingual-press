@@ -62,6 +62,15 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 			return new WPNonce( 'save_translation_completed_setting' );
 		};
 
+		$container['multilingualpress.translation_completed_setting_updater'] = function ( Container $container ) {
+
+			return new Dashboard\UntranslatedPosts\TranslationCompletedSettingUpdater(
+				$container['multilingualpress.untranslated_posts_repository'],
+				$container['multilingualpress.server_request'],
+				$container['multilingualpress.translation_completed_setting_nonce']
+			);
+		};
+
 		$container['multilingualpress.translation_completed_setting_view'] = function ( Container $container ) {
 
 			return new Dashboard\UntranslatedPosts\TranslationCompletedSettingView(
@@ -72,7 +81,7 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 
 		$container->share( 'multilingualpress.untranslated_posts_repository', function () {
 
-			return new Dashboard\UntranslatedPosts\TypeSafePostRepository();
+			return new Dashboard\UntranslatedPosts\TypeSafePostsRepository();
 		} );
 
 		$container['multilingualpress.untranslated_posts_dashboard_widget'] = function ( Container $container ) {
@@ -102,15 +111,6 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 			return new Dashboard\UntranslatedPosts\WidgetView(
 				$container['multilingualpress.site_relations'],
 				$container['multilingualpress.untranslated_posts_repository']
-			);
-		};
-
-		$container['multilingualpress.translation_completed_setting_updater'] = function ( Container $container ) {
-
-			return new Dashboard\UntranslatedPosts\TranslationCompletedSettingUpdater(
-				$container['multilingualpress.untranslated_posts_repository'],
-				$container['multilingualpress.server_request'],
-				$container['multilingualpress.translation_completed_setting_nonce']
 			);
 		};
 	}

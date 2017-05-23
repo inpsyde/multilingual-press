@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
  * @package Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts
  * @since   3.0.0
  */
-interface PostRepository {
+interface PostsRepository {
 
 	/**
 	 * Meta key used to store the translation status.

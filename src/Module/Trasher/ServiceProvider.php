@@ -29,17 +29,17 @@ final class ServiceProvider implements ModuleServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.save_trasher_setting_nonce'] = function () {
+
+			return new WPNonce( 'save_trasher_setting' );
+		};
+
 		$container['multilingualpress.trasher'] = function ( Container $container ) {
 
 			return new Trasher(
 				$container['multilingualpress.trasher_setting_repository'],
 				$container['multilingualpress.content_relations']
 			);
-		};
-
-		$container['multilingualpress.trasher_setting_nonce'] = function () {
-
-			return new WPNonce( 'save_trasher_setting' );
 		};
 
 		$container->share( 'multilingualpress.trasher_setting_repository', function () {
@@ -53,7 +53,7 @@ final class ServiceProvider implements ModuleServiceProvider {
 				$container['multilingualpress.trasher_setting_repository'],
 				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.server_request'],
-				$container['multilingualpress.trasher_setting_nonce']
+				$container['multilingualpress.save_trasher_setting_nonce']
 			);
 		};
 
@@ -61,7 +61,7 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 			return new TrasherSettingView(
 				$container['multilingualpress.trasher_setting_repository'],
-				$container['multilingualpress.trasher_setting_nonce']
+				$container['multilingualpress.save_trasher_setting_nonce']
 			);
 		};
 	}

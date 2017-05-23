@@ -57,13 +57,8 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 			return new QuicklinksSettingsBox(
 				$container['multilingualpress.quicklinks_settings_repository'],
-				$container['multilingualpress.quicklinks_settings_nonce']
+				$container['multilingualpress.update_quicklinks_settings_nonce']
 			);
-		};
-
-		$container['multilingualpress.quicklinks_settings_nonce'] = function () {
-
-			return new WPNonce( 'update_quicklinks_settings' );
 		};
 
 		$container->share( 'multilingualpress.quicklinks_settings_repository', function () {
@@ -75,8 +70,13 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 			return new SettingsUpdater(
 				$container['multilingualpress.quicklinks_settings_repository'],
-				$container['multilingualpress.quicklinks_settings_nonce']
+				$container['multilingualpress.update_quicklinks_settings_nonce']
 			);
+		};
+
+		$container['multilingualpress.update_quicklinks_settings_nonce'] = function () {
+
+			return new WPNonce( 'update_quicklinks_settings' );
 		};
 	}
 

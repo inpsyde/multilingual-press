@@ -47,21 +47,21 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 			return new CustomPostTypeSupportSettingsBox(
 				$container['multilingualpress.post_type_repository'],
-				$container['multilingualpress.post_type_support_settings_nonce']
+				$container['multilingualpress.update_post_type_support_settings_nonce']
 			);
-		};
-
-		$container['multilingualpress.post_type_support_settings_nonce'] = function () {
-
-			return new WPNonce( 'update_custom_post_type_support_settings' );
 		};
 
 		$container['multilingualpress.post_type_support_settings_updater'] = function ( Container $container ) {
 
 			return new PostTypeSupportSettingsUpdater(
 				$container['multilingualpress.post_type_repository'],
-				$container['multilingualpress.post_type_support_settings_nonce']
+				$container['multilingualpress.update_post_type_support_settings_nonce']
 			);
+		};
+
+		$container['multilingualpress.update_post_type_support_settings_nonce'] = function () {
+
+			return new WPNonce( 'update_post_type_support_settings' );
 		};
 	}
 

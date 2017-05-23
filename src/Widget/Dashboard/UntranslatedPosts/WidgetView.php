@@ -17,9 +17,9 @@ use Inpsyde\MultilingualPress\Widget\Dashboard\View;
 final class WidgetView implements View {
 
 	/**
-	 * @var PostRepository
+	 * @var PostsRepository
 	 */
-	private $post_repository;
+	private $posts_repository;
 
 	/**
 	 * @var SiteRelations
@@ -31,14 +31,14 @@ final class WidgetView implements View {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param SiteRelations  $site_relations  Site relations API object.
-	 * @param PostRepository $post_repository Untranslated posts repository object.
+	 * @param SiteRelations   $site_relations   Site relations API object.
+	 * @param PostsRepository $posts_repository Untranslated posts repository object.
 	 */
-	public function __construct( SiteRelations $site_relations, PostRepository $post_repository ) {
+	public function __construct( SiteRelations $site_relations, PostsRepository $posts_repository ) {
 
 		$this->site_relations = $site_relations;
 
-		$this->post_repository = $post_repository;
+		$this->posts_repository = $posts_repository;
 	}
 
 	/**
@@ -65,7 +65,7 @@ final class WidgetView implements View {
 		<table class="widefat">
 			<?php foreach ( $related_site_ids as $related_site_id ) : ?>
 				<?php switch_to_blog( $related_site_id ); ?>
-				<?php $untranslated_posts = $this->post_repository->get_untranslated_posts(); ?>
+				<?php $untranslated_posts = $this->posts_repository->get_untranslated_posts(); ?>
 				<?php if ( $untranslated_posts ) : ?>
 					<?php $have_untranslated_posts = true; ?>
 					<tr>
