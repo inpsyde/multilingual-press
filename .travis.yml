@@ -1,7 +1,10 @@
 language: php
 
+sudo: false
+
 cache:
   directories:
+    - $HOME/.composer/cache/files
     - node_modules
 
 php:
@@ -10,22 +13,23 @@ php:
   - 5.5
   - 5.6
   - 7.0
-  - hhvm
+  - 7.1
   - nightly
 
-sudo: false
+env:
+  - TRAVIS_NODE_VERSION=5
 
 matrix:
   fast_finish: true
   allow_failures:
-    - php: hhvm
     - php: nightly
 
 install:
   - composer install --no-interaction
-  - gem install sass
+  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - npm i -g npm
   - npm i -g grunt-cli
+  - npm rebuild node-sass
   - npm i
 
 script:
