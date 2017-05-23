@@ -27,6 +27,7 @@ class Mlp_Become_Inpsyder_Admin_Notice {
 	 * @var string[]
 	 */
 	private $screen_ids = array(
+		'settings_page_language-manager-network',
 		'settings_page_mlp-network',
 	);
 
