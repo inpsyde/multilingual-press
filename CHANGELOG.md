@@ -8,6 +8,11 @@
 - Language API: Use fallback names for languages, see
 [issue #224](https://github.com/inpsyde/multilingual-press/issues/224).
 
+## 2.5.5
+- Translations: Fix issue with unfilterable URLs in the `hreflang` HTTP header and HTML element output.
+- Post Translator: Fix creation of (duplicate) draft translation posts on post preview, see
+[issue #260](https://github.com/inpsyde/MultilingualPress/issues/260).
+
 ## 2.5.4
 - Post Translator: Fix creation of duplicate draft translation posts, see
 [issue #253](https://github.com/inpsyde/MultilingualPress/issues/253).
