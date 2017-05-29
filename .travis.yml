@@ -3,10 +3,11 @@ language: php
 sudo: false
 
 cache:
+  apt: true
   yarn: true
   directories:
     - $HOME/.composer/cache/files
-    - node_modules
+    - $HOME/.npm
 
 php:
   - 7.0
@@ -21,12 +22,15 @@ matrix:
   allow_failures:
     - php: nightly
 
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+
 install:
   - composer install --no-interaction
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - npm i -g yarn
   - yarn add gulp-cli --dev
-  - npm rebuild node-sass
   - yarn
 
 script:
