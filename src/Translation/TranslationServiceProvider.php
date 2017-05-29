@@ -62,10 +62,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function register_post_translation( Container $container ) {
 
-		$container['multilingualpress.active_post_types'] = function () {
+		$container->share( 'multilingualpress.active_post_types', function () {
 
 			return new Post\ActivePostTypes();
-		};
+		} );
 
 		$container['multilingualpress.post_meta_box_factory'] = function ( Container $container ) {
 
@@ -96,10 +96,12 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function register_term_translation( Container $container ) {
 
-		$container['multilingualpress.active_taxonomies'] = function ( Container $container ) {
+		$container->share( 'multilingualpress.active_taxonomies', function ( Container $container ) {
 
-			return new Term\ActiveTaxonomies( $container['multilingualpress.active_post_types'] );
-		};
+			return new Term\ActiveTaxonomies(
+				$container['multilingualpress.active_post_types']
+			);
+		} );
 
 		$container['multilingualpress.term_meta_box_factory'] = function ( Container $container ) {
 
