@@ -170,7 +170,7 @@ final class CachingTranslations implements Translations {
 
 			if ( empty( $content_relations[ $site_id ] ) ) {
 				$translation = $this->get_translation_for_no_related_content( $site_id, $args );
-				if ( ! $translation['remote_url'] ) {
+				if ( empty( $translation['remote_url'] ) ) {
 					continue;
 				}
 			} else {
