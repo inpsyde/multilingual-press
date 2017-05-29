@@ -3,6 +3,9 @@
 namespace PHPSTORM_META {
 
 	override( \Inpsyde\MultilingualPress\resolve( 0 ), map( [
+		'multilingualpress.active_post_types'                     => \Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes::class,
+		'multilingualpress.active_taxonomies'                     => \Inpsyde\MultilingualPress\Translation\Term\ActiveTaxonomies::class,
+		'multilingualpress.alternate_languages'                   => \Inpsyde\MultilingualPress\Common\AlternateLanguages::class,
 		'multilingualpress.asset_factory'                         => \Inpsyde\MultilingualPress\Asset\AssetFactory::class,
 		'multilingualpress.asset_manager'                         => \Inpsyde\MultilingualPress\Asset\AssetManager::class,
 		'multilingualpress.content_relations'                     => \Inpsyde\MultilingualPress\API\ContentRelations::class,
@@ -44,6 +47,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.active_post_types'                                 => \Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes::class,
 		'multilingualpress.active_taxonomies'                                 => \Inpsyde\MultilingualPress\Translation\Term\ActiveTaxonomies::class,
 		'multilingualpress.add_languages_to_nav_menu_nonce'                   => \Inpsyde\MultilingualPress\Common\Nonce\Nonce::class,
+		'multilingualpress.alternate_languages'                               => \Inpsyde\MultilingualPress\Common\AlternateLanguages::class,
 		'multilingualpress.alternative_language_title_customizer'             => \Inpsyde\MultilingualPress\Module\AlternativeLanguageTitleInAdminBar\AdminBarCustomizer::class,
 		'multilingualpress.alternative_language_title_site_setting'           => \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel::class,
 		'multilingualpress.alternative_language_titles'                       => \Inpsyde\MultilingualPress\Module\AlternativeLanguageTitleInAdminBar\AlternativeLanguageTitles::class,

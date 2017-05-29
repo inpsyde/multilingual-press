@@ -4,7 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\FrontEnd;
 
-use Inpsyde\MultilingualPress\API\Translations;
+use Inpsyde\MultilingualPress\Common\AlternateLanguages;
+use Inpsyde\MultilingualPress\Module\Redirect\NoredirectStorage;
 
 /**
  * Alternate language HTML link tags.
@@ -15,20 +16,20 @@ use Inpsyde\MultilingualPress\API\Translations;
 class AlternateLanguageHTMLLinkTags {
 
 	/**
-	 * @var Translations
+	 * @var AlternateLanguages
 	 */
-	private $translations;
+	private $alternate_languages;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Translations $translations Translations API object.
+	 * @param AlternateLanguages $alternate_languages Alternate languages data object.
 	 */
-	public function __construct( Translations $translations ) {
+	public function __construct( AlternateLanguages $alternate_languages ) {
 
-		$this->translations = $translations;
+		$this->alternate_languages = $alternate_languages;
 	}
 
 	/**
@@ -37,17 +38,16 @@ class AlternateLanguageHTMLLinkTags {
 	 * @since   3.0.0
 	 * @wp-hook wp_head
 	 *
-	 * @return bool Whether or not link tags have been rendered.
+	 * @return void
 	 */
-	public function render(): bool {
+	public function render() {
 
-		// TODO: Adapt to 2.5.5 behavior (use filters, remove noredirect argument). Also, translations are objects!?!
-		$translations = $this->translations->get_unfiltered_translations();
-		if ( ! $translations ) {
-			return false;
-		}
+		$regexp = '/(\?|&)' . NoredirectStorage::KEY . '=/';
 
-		array_walk( $translations, function ( $url, $language ) {
+		foreach ( $this->alternate_languages->getIterator() as $language => $url ) {
+			if ( preg_match( $regexp, $url ) ) {
+				$url = remove_query_arg( NoredirectStorage::KEY, $url );
+			}
 
 			$html_link_tag = sprintf(
 				'<link rel="alternate" hreflang="%1$s" href="%2$s">',
@@ -65,8 +65,6 @@ class AlternateLanguageHTMLLinkTags {
 			 * @param string $url           Target URL.
 			 */
 			echo apply_filters( 'multilingualpress.hreflang_html_link_tag', $html_link_tag, $language, $url );
-		} );
-
-		return true;
+		}
 	}
 }

@@ -10,6 +10,7 @@ use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+use Inpsyde\MultilingualPress\Common\AlternateLanguages;
 use Inpsyde\MultilingualPress\Common\HTTP\FullRequestGlobalManipulator;
 use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
 use Inpsyde\MultilingualPress\Common\HTTP\RequestGlobalsManipulator;
@@ -54,6 +55,13 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 * @return void
 	 */
 	public function register( Container $container ) {
+
+		$container->share( 'multilingualpress.alternate_languages', function ( Container $container ) {
+
+			return new AlternateLanguages(
+				$container['multilingualpress.translations']
+			);
+		} );
 
 		$container['multilingualpress.alternative_language_title_site_setting'] = function ( Container $container ) {
 
@@ -362,18 +370,18 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				);
 			}
 		} else {
-			$translations = $container['multilingualpress.translations'];
+			$alternate_languages = $container['multilingualpress.alternate_languages'];
 
-			add_action( 'template_redirect', function () use ( $translations ) {
+			add_action( 'template_redirect', function () use ( $alternate_languages ) {
 
 				if ( ! is_paged() ) {
-					( new FrontEnd\AlternateLanguageHTTPHeaders( $translations ) )->send();
+					( new FrontEnd\AlternateLanguageHTTPHeaders( $alternate_languages ) )->send();
 				}
 			} );
-			add_action( 'wp_head', function () use ( $translations ) {
+			add_action( 'wp_head', function () use ( $alternate_languages ) {
 
 				if ( ! is_paged() ) {
-					( new FrontEnd\AlternateLanguageHTMLLinkTags( $translations ) )->render();
+					( new FrontEnd\AlternateLanguageHTMLLinkTags( $alternate_languages ) )->render();
 				}
 			} );
 

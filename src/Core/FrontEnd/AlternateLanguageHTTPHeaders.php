@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\FrontEnd;
 
-use Inpsyde\MultilingualPress\API\Translations;
+use Inpsyde\MultilingualPress\Common\AlternateLanguages;
 
 /**
  * Alternate language HTTP headers.
@@ -15,20 +15,20 @@ use Inpsyde\MultilingualPress\API\Translations;
 class AlternateLanguageHTTPHeaders {
 
 	/**
-	 * @var Translations
+	 * @var AlternateLanguages
 	 */
-	private $translations;
+	private $alternate_languages;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Translations $translations Translations API object.
+	 * @param AlternateLanguages $alternate_languages Alternate languages data object.
 	 */
-	public function __construct( Translations $translations ) {
+	public function __construct( AlternateLanguages $alternate_languages ) {
 
-		$this->translations = $translations;
+		$this->alternate_languages = $alternate_languages;
 	}
 
 	/**
@@ -37,18 +37,11 @@ class AlternateLanguageHTTPHeaders {
 	 * @since   3.0.0
 	 * @wp-hook template_redirect
 	 *
-	 * @return bool Whether or not headers have been sent.
+	 * @return void
 	 */
-	public function send(): bool {
+	public function send() {
 
-		// TODO: Adapt to 2.5.5 behavior (use filters, remove noredirect argument). Also, translations are objects!?!
-		$translations = $this->translations->get_unfiltered_translations();
-		if ( ! $translations ) {
-			return false;
-		}
-
-		array_walk( $translations, function ( $url, $language ) {
-
+		foreach ( $this->alternate_languages->getIterator() as $language => $url ) {
 			$header = sprintf(
 				'Link: <%1$s>; rel="alternate"; hreflang="%2$s"',
 				esc_url( $url ),
@@ -68,8 +61,6 @@ class AlternateLanguageHTTPHeaders {
 			if ( $header ) {
 				header( $header, false );
 			}
-		} );
-
-		return true;
+		}
 	}
 }
