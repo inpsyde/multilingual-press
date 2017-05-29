@@ -3,14 +3,13 @@ language: php
 sudo: false
 
 cache:
+  apt: true
   directories:
     - $HOME/.composer/cache/files
-    - node_modules
+    - $HOME/.npm
 
 php:
   - 5.3
-  - 5.4
-  - 5.5
   - 5.6
   - 7.0
   - 7.1
@@ -24,12 +23,15 @@ matrix:
   allow_failures:
     - php: nightly
 
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+
 install:
   - composer install --no-interaction
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - npm i -g npm
   - npm i -g grunt-cli
-  - npm rebuild node-sass
   - npm i
 
 script:

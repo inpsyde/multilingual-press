@@ -89,9 +89,9 @@ module.exports = function( grunt ) {
 				task: 'imagemin:images'
 			},
 
-			'sass-convert': {
+			'sass': {
 				src: [ '<%= config.styles.src %>**/*.scss' ],
-				task: 'sass:convert'
+				task: 'sass'
 			}
 		},
 
@@ -274,15 +274,7 @@ module.exports = function( grunt ) {
 				unixNewlines: true,
 				noCache: true
 			},
-
-			check: {
-				options: {
-					check: true
-				},
-				src: '<%= config.styles.src %>*.scss'
-			},
-
-			convert: {
+			styles: {
 				options: {
 					sourcemap: 'none',
 					style: 'expanded'
@@ -391,7 +383,7 @@ module.exports = function( grunt ) {
 			styles: {
 				files: [ '<%= config.styles.src %>**/*.scss' ],
 				tasks: [
-					'newer:delegate:sass-convert',
+					'newer:delegate:sass',
 					'changed:postcss',
 					'changed:cssmin'
 				]
@@ -434,7 +426,7 @@ module.exports = function( grunt ) {
 	] );
 
 	grunt.registerTask( 'styles', [
-		'newer:delegate:sass-convert',
+		'newer:delegate:sass',
 		'newer:postcss',
 		'newer:lineending:styles',
 		'changed:cssmin'
@@ -450,8 +442,7 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'ci', [
 		'common',
-		'jsvalidate',
-		'sass:check'
+		'jsvalidate'
 	] );
 
 	grunt.registerTask( 'develop', [
