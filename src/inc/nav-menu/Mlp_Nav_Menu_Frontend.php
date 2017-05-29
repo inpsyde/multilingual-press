@@ -133,7 +133,7 @@ class Mlp_Nav_Menu_Frontend {
 		$home_url = get_home_url( $site_id, '/' );
 
 		if ( empty( $translations[ $site_id ] ) ) {
-			return array( $home_url, null );
+			return array( $home_url, new Mlp_Null_Translation() );
 		}
 
 		$translation = $translations[ $site_id ];
