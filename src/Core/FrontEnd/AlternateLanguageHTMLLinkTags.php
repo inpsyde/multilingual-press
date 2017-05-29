@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Core\FrontEnd;
 
 use Inpsyde\MultilingualPress\Common\AlternateLanguages;
-use Inpsyde\MultilingualPress\Module\Redirect\NoredirectStorage;
 
 /**
  * Alternate language HTML link tags.
@@ -42,13 +41,7 @@ class AlternateLanguageHTMLLinkTags {
 	 */
 	public function render() {
 
-		$regexp = '/(\?|&)' . NoredirectStorage::KEY . '=/';
-
 		foreach ( $this->alternate_languages->getIterator() as $language => $url ) {
-			if ( preg_match( $regexp, $url ) ) {
-				$url = remove_query_arg( NoredirectStorage::KEY, $url );
-			}
-
 			$html_link_tag = sprintf(
 				'<link rel="alternate" hreflang="%1$s" href="%2$s">',
 				esc_attr( $language ),

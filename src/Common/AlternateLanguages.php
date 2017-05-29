@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Common;
 
 use Inpsyde\MultilingualPress\API\Translations;
+use Inpsyde\MultilingualPress\Module\Redirect\NoredirectStorage;
 
 /**
  * Alternate languages data object.
@@ -65,12 +66,18 @@ class AlternateLanguages implements \IteratorAggregate {
 			'include_base' => true,
 		] );
 
+		$regexp = '/(\?|&)' . NoredirectStorage::KEY . '=/';
+
 		$data = [];
 
 		foreach ( $translations as $translation ) {
 			$url = $translation->remote_url();
 			if ( $url ) {
 				$language = $translation->language();
+
+				if ( preg_match( $regexp, $url ) ) {
+					$url = remove_query_arg( NoredirectStorage::KEY, $url );
+				}
 
 				$data[ $language->name( 'http_code' ) ] = $url;
 			}
