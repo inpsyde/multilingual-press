@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.0-dev
+- Types: Introduce null implementations for language and translation interfaces, `Mlp_Null_Language` and `Mlp_Null_Translation`.
+- Nav Menu: Use `Mlp_Null_Translation` in favor of `null`.
+
 ## 2.5.5
 - Translations: Fix issue with unfilterable URLs in the `hreflang` HTTP header and HTML element output.
 - Post Translator: Fix creation of (duplicate) draft translation posts on post preview, see
