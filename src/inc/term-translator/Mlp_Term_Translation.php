@@ -41,19 +41,11 @@ class Mlp_Term_Translation {
 	 */
 	public function get_translation( $term_taxonomy_id, $target_site_id ) {
 
-		$cache = (array) wp_cache_get( 'mlp_term_translations', 'mlp' );
-		if ( isset ( $cache[ $target_site_id ][ $term_taxonomy_id ] ) ) {
-			return $cache[ $target_site_id ][ $term_taxonomy_id ];
-		}
-
 		switch_to_blog( $target_site_id );
 
 		$result = $this->get_translation_in_target_site( $term_taxonomy_id );
 
 		restore_current_blog();
-
-		$cache[ $target_site_id ][ $term_taxonomy_id ] = $result;
-		wp_cache_set( 'mlp_term_translations', $cache, 'mlp' );
 
 		return $result;
 	}
@@ -207,13 +199,6 @@ class Mlp_Term_Translation {
 	 */
 	private function get_term_by_term_taxonomy_id( $term_taxonomy_id ) {
 
-		$cache_key = $this->get_term_by_term_taxonomy_id_cache_key( $term_taxonomy_id );
-
-		$term = wp_cache_get( $cache_key, 'mlp' );
-		if ( is_array( $term ) ) {
-			return $term;
-		}
-
 		$query = "
 SELECT t.term_id, t.name, tt.taxonomy
 FROM {$this->wpdb->terms} t, {$this->wpdb->term_taxonomy} tt
@@ -226,20 +211,6 @@ LIMIT 1";
 			$term = array();
 		}
 
-		wp_cache_set( $cache_key, $term, 'mlp' );
-
 		return $term;
-	}
-
-	/**
-	 * Returns the get_term_by_term_taxonomy_id cache key for the given term taxonomy ID.
-	 *
-	 * @param int $term_taxonomy_id Term taxonomy ID.
-	 *
-	 * @return string
-	 */
-	private function get_term_by_term_taxonomy_id_cache_key( $term_taxonomy_id ) {
-
-		return "term_with_ttid_$term_taxonomy_id";
 	}
 }
