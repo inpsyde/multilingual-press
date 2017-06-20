@@ -22,11 +22,6 @@ class Mlp_Db_Table_List implements Mlp_Db_Table_List_Interface {
 	private $no_tables_found = 'no_tables_found';
 
 	/**
-	 * @type string
-	 */
-	private $cache_group = 'mlp';
-
-	/**
 	 * Constructor.
 	 *
 	 * @param wpdb $wpdb
@@ -47,14 +42,7 @@ class Mlp_Db_Table_List implements Mlp_Db_Table_List_Interface {
 	 */
 	public function get_all_table_names() {
 
-		$cached = wp_cache_get( 'table_names', $this->cache_group );
-
-		if ( ! empty ( $cached ) && is_array( $cached ) )
-			return $cached;
-
 		$names = $this->get_names_from_db();
-
-		wp_cache_set( 'table_names', $names, $this->cache_group );
 
 		if ( array ( $this->no_tables_found ) === $names )
 			return array();
