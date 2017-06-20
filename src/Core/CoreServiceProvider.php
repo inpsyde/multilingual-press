@@ -361,7 +361,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 				add_action( 'network_site_new_form', function ( $site_id ) use ( $new_site_settings ) {
 
-					( new SiteSettingsSectionView( $new_site_settings ) )->render( $site_id );
+					( new SiteSettingsSectionView( $new_site_settings ) )->render( (int) $site_id );
 				} );
 
 				add_action(
