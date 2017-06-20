@@ -202,13 +202,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		/** @type WP_Rewrite $wp_rewrite */
 		global $wp_rewrite;
 
-		$arguments         = $this->prepare_translation_arguments( $args );
-		$key               = md5( serialize( $arguments ) );
-		$content_relations = array();
-		$cached            = wp_cache_get( $key, 'mlp' );
-
-		if ( is_array( $cached ) )
-			return $cached;
+		$arguments = $this->prepare_translation_arguments( $args );
 
 		$sites = $this->get_related_sites(
 			$arguments[ 'site_id' ],
@@ -217,6 +211,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		if ( empty ( $sites ) )
 			return array ();
+
+		$content_relations = array();
 
 		if ( ! empty ( $arguments[ 'content_id' ] ) ) {
 
@@ -353,7 +349,6 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		 * @param array $arguments    Translation arguments.
 		 */
 		$translations = apply_filters( 'mlp_translations', $translations, $arguments );
-		wp_cache_set( $key, $translations, 'mlp' );
 
 		return $translations;
 	}
