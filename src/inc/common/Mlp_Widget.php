@@ -105,12 +105,12 @@ class Mlp_Widget extends WP_Widget {
 			$name = $this->get_field_name( 'mlp_widget_link_type' );
 
 			$options = array(
-				'none'           => __( 'None', 'multilingual-press' ),
 				'native'         => __( 'Native name', 'multilingual-press' ),
 				'text'           => __( 'Custom name', 'multilingual-press' ),
 				'english'        => __( 'English name', 'multilingual-press' ),
 				'http'           => __( 'Language code', 'multilingual-press' ),
 				'language_short' => __( 'Language code (short)', 'multilingual-press' ),
+				'none'           => __( 'None (use with Show flag checked)', 'multilingual-press' ),
 			);
 			?>
 			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Link text', 'multilingual-press' ); ?></label>
@@ -284,6 +284,12 @@ class Mlp_Widget extends WP_Widget {
 			case 'flag':
 				$instance['widget_link_type']    = 'none';
 				$instance['widget_display_flag'] = true;
+				break;
+
+			case 'none':
+				if ( $instance['widget_display_flag'] != true ) {
+					$instance['widget_link_type'] = 'native';
+				}
 				break;
 
 			default:
