@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2.6.0-dev
+- Language Switcher: Make _Native name_ the default _Link text_ option value, see [issue #262](https://github.com/inpsyde/MultilingualPress/issues/262).
 - Types: Introduce null implementations for language and translation interfaces, `Mlp_Null_Language` and `Mlp_Null_Translation`.
 - Nav Menu: Use `Mlp_Null_Translation` in favor of `null`.
 
@@ -70,7 +71,7 @@
 - JavaScript: Fix array check.
 
 ## 2.4.3
-- Fix missing flag for the current site in the Language Switcher widget due to a regression introduced in 
+- Fix missing flag for the current site in the Language Switcher widget due to a regression introduced in
 MultilingualPress 2.4.0, see [issue #212](https://github.com/inpsyde/multilingual-press/issues/212).
 - Fix stylesheet not being enqueued when using the Language Switcher widget only (i.e., no Quicklinks) due to a
 regression introduced in MultilingualPress 2.4.0, see
