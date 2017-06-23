@@ -1,9 +1,12 @@
 # Changelog
 
 ## 2.6.0-dev
-- Language Switcher: Make _Native name_ the default _Link text_ option value, see [issue #262](https://github.com/inpsyde/MultilingualPress/issues/262).
 - Types: Introduce null implementations for language and translation interfaces, `Mlp_Null_Language` and `Mlp_Null_Translation`.
 - Nav Menu: Use `Mlp_Null_Translation` in favor of `null`.
+- Language API: Don't cache translations anymore, see [issue #261](https://github.com/inpsyde/MultilingualPress/issues/261).
+- Term Translator: Don't cache translations anymore.
+- Table List: Don't cache table names anymore.
+- Language Switcher: Make _Native name_ the default _Link text_ option value, see [issue #262](https://github.com/inpsyde/MultilingualPress/issues/262).
 
 ## 2.5.5
 - Translations: Fix issue with unfilterable URLs in the `hreflang` HTTP header and HTML element output.
