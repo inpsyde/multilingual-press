@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.2
 Tested up to: 4.8
-Stable tag: 2.5.5
+Stable tag: 2.6.0
 
 Create a fast translation network on WordPress multisite.
 
@@ -113,6 +113,14 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.6.0 =
+- Types: Introduce null implementations for language and translation interfaces, `Mlp_Null_Language` and `Mlp_Null_Translation`.
+- Nav Menu: Use `Mlp_Null_Translation` in favor of `null`.
+- Language API: Don't cache translations anymore, see [issue #261](https://github.com/inpsyde/MultilingualPress/issues/261).
+- Term Translator: Don't cache translations anymore.
+- Table List: Don't cache table names anymore.
+- Language Switcher: Make _Native name_ the default _Link text_ option value, see [issue #262](https://github.com/inpsyde/MultilingualPress/issues/262).
 
 = 2.5.5 =
 - Translations: Fix issue with unfilterable URLs in the `hreflang` HTTP header and HTML element output.
