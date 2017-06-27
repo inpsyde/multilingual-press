@@ -51,20 +51,20 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	 * Constructor. Sets properties.
 	 *
 	 * @param ContentRelations $content_relations
-	 * @param AssetManager     $asset_manager
 	 * @param ServerRequest    $server_request
+	 * @param AssetManager     $asset_manager
 	 */
 	public function __construct(
 		ContentRelations $content_relations,
-		AssetManager $asset_manager,
-		ServerRequest $server_request
+		ServerRequest $server_request,
+		AssetManager $asset_manager
 	) {
 
 		$this->content_relations = $content_relations;
 
-		$this->asset_manager = $asset_manager;
-
 		$this->server_request = $server_request;
+
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
