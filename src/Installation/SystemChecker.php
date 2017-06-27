@@ -222,7 +222,7 @@ class SystemChecker {
 			return static::VERSION_OK;
 		}
 
-		if ( ! $this->site_settings_repository->get_settings() ) {
+		if ( $this->site_settings_repository->get_settings() ) {
 			return static::NEEDS_UPGRADE;
 		}
 
