@@ -410,7 +410,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	 */
 	private function get_controllers( $post ): array {
 
-		if ( $post instanceof \WP_Post || ! $this->is_post_editable( $post ) ) {
+		if ( ! $post instanceof \WP_Post || ! $this->is_post_editable( $post ) ) {
 			return [];
 		}
 
