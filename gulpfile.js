@@ -207,7 +207,9 @@ gulp.task( 'styles', () => {
 			extname: '.min.css'
 		} ) )
 		.pipe( postcss( [
-			cssnano(),
+			cssnano( {
+				zindex: false
+			}),
 		] ) )
 		.pipe( gulp.dest( dest ) );
 } );
