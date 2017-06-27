@@ -94,6 +94,8 @@ namespace PHPSTORM_META {
 		'multilingualpress.post_relationship_control_view'                    => \Inpsyde\MultilingualPress\Relations\Post\RelationshipControlView::class,
 		'multilingualpress.post_relationship_controller'                      => \Inpsyde\MultilingualPress\Relations\Post\RelationshipController::class,
 		'multilingualpress.post_relationship_permission'                      => \Inpsyde\MultilingualPress\Relations\Post\RelationshipPermission::class,
+		'multilingualpress.post_translation_advanced_ui'                      => \Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI::class,
+		'multilingualpress.post_translation_simple_ui'                        => \Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI::class,
 		'multilingualpress.post_translator'                                   => \Inpsyde\MultilingualPress\Translation\Translator::class,
 		'multilingualpress.post_type_link_url_filter'                         => \Inpsyde\MultilingualPress\Common\Filter::class,
 		'multilingualpress.post_type_translator'                              => \Inpsyde\MultilingualPress\Translation\Translator::class,

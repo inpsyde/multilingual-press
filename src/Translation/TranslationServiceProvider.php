@@ -85,6 +85,23 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 				$container['multilingualpress.nonce_factory']
 			);
 		};
+
+		$container['multilingualpress.post_translation_advanced_ui'] = function ( Container $container ) {
+
+			return new Post\MetaBox\UI\AdvancedPostTranslator(
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.server_request'],
+				$container['multilingualpress.asset_manager']
+			);
+		};
+
+		$container['multilingualpress.post_translation_simple_ui'] = function ( Container $container ) {
+
+			return new Post\MetaBox\UI\SimplePostTranslator(
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.server_request']
+			);
+		};
 	}
 
 	/**
@@ -186,48 +203,41 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function bootstrap_post_translation( Container $container ) {
 
-		$box_registrar = $container['multilingualpress.post_meta_box_registrar'];
+		$meta_box_registrar = $container['multilingualpress.post_meta_box_registrar'];
 
 		$ui_registry = $container['multilingualpress.meta_box_ui_registry'];
 
 		$ui_registry->register_ui(
-			new Post\MetaBox\UI\AdvancedPostTranslator(
-				$container['multilingualpress.content_relations'],
-				$container['multilingualpress.asset_manager'],
-				$container['multilingualpress.server_request']
-			),
-			$box_registrar
+			$container['multilingualpress.post_translation_advanced_ui'],
+			$meta_box_registrar
 		);
 
 		$ui_registry->register_ui(
-			new Post\MetaBox\UI\SimplePostTranslator(
-				$container['multilingualpress.content_relations'],
-				$container['multilingualpress.server_request']
-			),
-			$box_registrar
+			$container['multilingualpress.post_translation_simple_ui'],
+			$meta_box_registrar
 		);
 
-		add_action( 'admin_init', function () use ( $ui_registry, $box_registrar ) {
+		add_action( 'admin_init', function () use ( $meta_box_registrar ) {
 
-			$box_registrar->register_meta_boxes();
+			$meta_box_registrar->register_meta_boxes();
 		}, 0 );
 
-		add_action( Post\PostMetaBoxRegistrar::ACTION_INIT_META_BOXES,
-			function () use ( $ui_registry, $box_registrar ) {
+		add_action( Post\PostMetaBoxRegistrar::ACTION_INIT_META_BOXES, function () use (
+			$meta_box_registrar,
+			$ui_registry
+		) {
 
-				$box_registrar->set_ui( $ui_registry->selected_ui( $box_registrar ) );
-			}, 0 );
+			$meta_box_registrar->set_ui( $ui_registry->selected_ui( $meta_box_registrar ) );
+		}, 0 );
 
 		add_action( Post\PostMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function () use ( $container ) {
 
-			$request_manipulator = $container['multilingualpress.http_post_request_globals_manipulator'];
-			$request_manipulator->clear_data();
+			$container['multilingualpress.http_post_request_globals_manipulator']->clear_data();
 		} );
 
 		add_action( Post\PostMetaBoxRegistrar::ACTION_SAVED_META_BOXES, function () use ( $container ) {
 
-			$request_manipulator = $container['multilingualpress.http_post_request_globals_manipulator'];
-			$request_manipulator->restore_data();
+			$container['multilingualpress.http_post_request_globals_manipulator']->restore_data();
 		} );
 	}
 
@@ -240,7 +250,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function bootstrap_term_translation( Container $container ) {
 
-		$box_registrar = $container['multilingualpress.term_meta_box_registrar'];
+		$meta_box_registrar = $container['multilingualpress.term_meta_box_registrar'];
 
 		$ui_registry = $container['multilingualpress.meta_box_ui_registry'];
 
@@ -248,39 +258,39 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$ui_registry->register_ui(
 			$simple_ui,
-			$box_registrar
+			$meta_box_registrar
 		);
 
-		add_action( 'admin_init', function () use ( $ui_registry, $box_registrar ) {
+		add_action( 'admin_init', function () use ( $ui_registry, $meta_box_registrar ) {
 
-			$box_registrar->register_meta_boxes();
+			$meta_box_registrar->register_meta_boxes();
 		}, 0 );
 
 		// For the moment, let's set select here the only available UI for terms
 		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use (
-			$box_registrar,
+			$meta_box_registrar,
 			$simple_ui
 		) {
 
-			return $registrar === $box_registrar ? $simple_ui : $ui;
+			return $registrar === $meta_box_registrar ? $simple_ui : $ui;
 		}, 10, 2 );
 
-		add_action( Term\TermMetaBoxRegistrar::ACTION_INIT_META_BOXES,
-			function () use ( $ui_registry, $box_registrar ) {
+		add_action( Term\TermMetaBoxRegistrar::ACTION_INIT_META_BOXES, function () use (
+			$ui_registry,
+			$meta_box_registrar
+		) {
 
-				$box_registrar->with_ui( $ui_registry->selected_ui( $box_registrar ) );
-			}, 0 );
+			$meta_box_registrar->with_ui( $ui_registry->selected_ui( $meta_box_registrar ) );
+		}, 0 );
 
 		add_action( Term\TermMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function () use ( $container ) {
 
-			$request_manipulator = $container['multilingualpress.http_post_request_globals_manipulator'];
-			$request_manipulator->clear_data();
+			$container['multilingualpress.http_post_request_globals_manipulator']->clear_data();
 		} );
 
 		add_action( Term\TermMetaBoxRegistrar::ACTION_SAVED_META_BOXES, function () use ( $container ) {
 
-			$request_manipulator = $container['multilingualpress.http_post_request_globals_manipulator'];
-			$request_manipulator->restore_data();
+			$container['multilingualpress.http_post_request_globals_manipulator']->restore_data();
 		} );
 	}
 
