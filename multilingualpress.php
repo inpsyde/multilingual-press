@@ -148,10 +148,10 @@ register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
 
 	// Advanced Translator
-	new \Mlp_Advanced_Translator();
+	//new \Mlp_Advanced_Translator();
 
 	// Translation Meta Box
-	new \Mlp_Translation_Metabox();
+	//new \Mlp_Translation_Metabox();
 
 	if ( is_admin() ) {
 		// Term Translator
