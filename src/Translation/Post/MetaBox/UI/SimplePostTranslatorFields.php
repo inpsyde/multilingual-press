@@ -63,7 +63,7 @@ class SimplePostTranslatorFields {
 	 */
 	private function title_input( \WP_Post $remote_post ): string {
 
-		return '<h2 class="headline" style="margin: 0;">' . esc_attr( $remote_post->post_title ) . '</h2>';
+		return '<h2 class="headline" style="margin: 0;">' . esc_html( $remote_post->post_title ) . '</h2>';
 	}
 
 	/**
@@ -73,15 +73,17 @@ class SimplePostTranslatorFields {
 	 */
 	private function translatable_input( int $remote_site_id ): string {
 
+		$id = self::TRANSLATABLE_FIELD . "-{$remote_site_id}";
+
 		ob_start();
 		?>
 		<p>
-			<label for="translate_this_post_<?php echo $remote_site_id; ?>">
+			<label for="<?php echo esc_attr( $id ); ?>">
 				<input
 					type="checkbox"
-					id="<?= self::TRANSLATABLE_FIELD ?>-<?php echo $remote_site_id; ?>"
-					name="<?= self::TRANSLATABLE_FIELD ?>[]"
-					value="<?php echo $remote_site_id; ?>" />
+					id="<?php echo esc_attr( $id ); ?>"
+					name="<?php echo esc_attr( self::TRANSLATABLE_FIELD ); ?>[]"
+					value="<?php echo esc_attr( $remote_site_id ); ?>" />
 				<?php esc_html_e( 'Translate this post', 'multilingualpress' ); ?>
 			</label>
 		</p>
@@ -97,13 +99,13 @@ class SimplePostTranslatorFields {
 	 */
 	private function editor_input( $remote_post ): string {
 
-		$lines = substr_count( $remote_post->post_content, "\n" ) + 1;
+		$post_content = $remote_post->post_content;
 
 		return sprintf(
 			'<textarea class="large-text" cols="80" rows="%1$d" placeholder="%2$s" readonly>%3$s</textarea>',
-			min( $lines, 10 ),
+			min( substr_count( $post_content, "\n" ) + 1, 10 ),
 			esc_attr_x( 'No content yet.', 'placeholder for empty translation textarea', 'multilingualpress' ),
-			esc_textarea( $remote_post->post_content )
+			esc_textarea( $post_content )
 		);
 	}
 }
