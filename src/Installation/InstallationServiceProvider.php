@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Installation;
 
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
-use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Service\IntegrationServiceProvider;
 
 /**
  * Service provider for all Installation objects.
@@ -14,7 +14,7 @@ use Inpsyde\MultilingualPress\Service\Container;
  * @package Inpsyde\MultilingualPress\Installation
  * @since   3.0.0
  */
-final class InstallationServiceProvider implements BootstrappableServiceProvider {
+final class InstallationServiceProvider implements IntegrationServiceProvider {
 
 	/**
 	 * Registers the provided services on the given container.
@@ -83,7 +83,7 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 	}
 
 	/**
-	 * Bootstraps the registered services.
+	 * Integrates the registered services with MultilingualPress.
 	 *
 	 * @since 3.0.0
 	 *
@@ -91,7 +91,7 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 	 *
 	 * @return void
 	 */
-	public function bootstrap( Container $container ) {
+	public function integrate( Container $container ) {
 
 		add_action( SystemChecker::ACTION_CHECKED_VERSION, function (
 			int $version_check,
