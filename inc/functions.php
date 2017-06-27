@@ -187,30 +187,6 @@ function check_ajax_referer( Nonce $nonce, $terminate = true ): bool {
 }
 
 /**
- * Writes debug data to the error log.
- *
- * To enable this function, add the following line to your wp-config.php file:
- *
- *     define( 'MULTILINGUALPRESS_DEBUG', true );
- *
- * @since 3.0.0
- *
- * @param string $message The message to be logged.
- *
- * @return void
- */
-function debug( $message ) {
-
-	if ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG ) {
-		error_log( sprintf(
-			'MultilingualPress: %s %s',
-			date( 'H:m:s' ),
-			$message
-		) );
-	}
-}
-
-/**
  * Returns the names of all available languages according to the given arguments.
  *
  * @since 3.0.0

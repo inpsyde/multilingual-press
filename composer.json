@@ -53,7 +53,8 @@
       "src/inc"
     ],
     "files": [
-      "inc/functions.php"
+      "inc/functions.php",
+      "inc/pluggable.php"
     ]
   },
   "autoload-dev": {
