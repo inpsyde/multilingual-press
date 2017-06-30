@@ -222,7 +222,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$meta_box_registrar->register_meta_boxes();
 		}, 0 );
 
-		$post_translation_ui = $container['multilingualpress.post_translation_simple_ui'];
+		$post_translation_ui = $container['multilingualpress.post_translation_advanced_ui'];
 
 		// For the moment, let's set select here the UI for posts
 		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use (
