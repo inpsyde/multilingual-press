@@ -163,7 +163,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		}
 
 		// Don't do anything if called too early
-		if ( did_action( self::ACTION_ADD_META_BOXES ) || did_action( self::ACTION_SAVE_META_BOXES ) ) {
+		if ( did_action( self::ACTION_INIT_META_BOXES ) ) {
 			$this->ui = $ui;
 		}
 
@@ -206,14 +206,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			return;
 		}
 
-		/**
-		 * Fires right before the post meta boxes are added or saved.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param \WP_Post $post Post object.
-		 */
-		do_action( self::ACTION_INIT_META_BOXES, $post );
+		$this->initialize_meta_boxes( $post );
 
 		if ( $this->ui ) {
 			$this->ui->register_view();
@@ -300,14 +293,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			return;
 		}
 
-		/**
-		 * Fires right before the post meta boxes are added or saved.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param \WP_Post $post Post object.
-		 */
-		do_action( self::ACTION_INIT_META_BOXES, $post );
+		$this->initialize_meta_boxes( $post );
 
 		if ( $this->ui ) {
 			$this->ui->register_updater();
@@ -387,6 +373,32 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			->with_post_save_context( $save_context )
 			->with_data( compact( 'update' ) )
 			->update( $this->server_request );
+	}
+
+	/**
+	 * Triggers the initialization of the meta boxes for the given post.
+	 *
+	 * @param \WP_Post $post Post object.
+	 *
+	 * @return void
+	 */
+	private function initialize_meta_boxes( \WP_Post $post ) {
+
+		static $initialized;
+		if ( $initialized ) {
+			return;
+		}
+
+		/**
+		 * Fires when the meta boxes are about to be initialized for either display or data processing.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param \WP_Post $post Post object.
+		 */
+		do_action( self::ACTION_INIT_META_BOXES, $post );
+
+		$initialized = true;
 	}
 
 	/**
