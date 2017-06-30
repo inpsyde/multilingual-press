@@ -39,7 +39,7 @@ class AdvancedPostTranslatorAJAXHandler {
 	/**
 	 * Handle data processing via AJAX
 	 */
-	public function __invoke() {
+	public function handle_request() {
 
 		$current_site_id = get_current_blog_id();
 
