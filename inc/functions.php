@@ -778,13 +778,13 @@ function get_post_taxonomies_with_terms( \WP_Post $post ) {
 	foreach ( $all_terms as $term ) {
 
 		if ( ! array_key_exists( $term->taxonomy, $output ) ) {
-			$output[ $term->taxonomy ] = (object)[
+			$output[ $term->taxonomy ] = (object) [
 				'object' => $taxonomies[ $term->taxonomy ],
 				'terms'  => [],
 			];
 		}
 
-		$output[ $term->taxonomy ]['terms'][] = (object)[
+		$output[ $term->taxonomy ]->terms[] = (object) [
 			'assigned' => has_term( $term->term_id, $term->taxonomy, $post ),
 			'object'   => $term,
 		];
