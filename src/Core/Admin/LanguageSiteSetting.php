@@ -58,7 +58,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	public function markup( int $site_id ): string {
 
 		return sprintf(
-			'<select id="%2$s" name="blog[%3$s]" autocomplete="off">%1$s</select>',
+			'<select id="%2$s" name="%3$s" autocomplete="off">%1$s</select>',
 			$this->get_options( $site_id ),
 			esc_attr( $this->id ),
 			esc_attr( SiteSettingsRepository::NAME_LANGUAGE )
