@@ -107,7 +107,7 @@ class RelationshipControlView {
 									id="<?php echo esc_attr( $action_search_id ); ?>"
 									class="mlp-state-toggler"
 									data-toggle-target="#<?php echo esc_attr( $search_container_id ); ?>">
-								<?php esc_html_e( 'Select existing post &hellip;', 'multilingualpress' ) ?>
+								<?php esc_html_e( 'Select existing post &hellip;', 'multilingualpress' ); ?>
 							</label>
 						</p>
 					</div>
