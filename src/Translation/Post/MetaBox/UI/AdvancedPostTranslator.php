@@ -94,7 +94,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 		if ( ! $done && wp_doing_ajax() ) {
 			add_action( 'wp_ajax_' . AdvancedPostTranslatorAJAXHandler::AJAX_ACTION, function () {
 
-				( new AdvancedPostTranslatorAJAXHandler( $this->server_request ) )();
+				( new AdvancedPostTranslatorAJAXHandler( $this->server_request ) )->handle_request();
 			} );
 
 			$done = true;
@@ -148,7 +148,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	 */
 	public function register_view() {
 
-		$fields = new AdvancedPostTranslatorFields();
+		$fields = new AdvancedPostTranslatorFields( $this->asset_manager );
 
 		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
@@ -164,11 +164,6 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 
 				return;
 			}
-
-			$this->asset_manager->add_script_data( 'multilingualpress-admin', 'mlpCopyPostSettings', [
-				'action' => AdvancedPostTranslatorAJAXHandler::AJAX_ACTION,
-				'siteID' => get_current_blog_id(),
-			] );
 
 			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
 		}, TranslationMetaBoxView::POSITION_TOP );

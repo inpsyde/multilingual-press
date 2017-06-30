@@ -229,7 +229,9 @@ class AdvancedPostTranslatorUpdater {
 
 		foreach ( $taxonomies as $slug => $taxonomy_object ) {
 			if ( current_user_can( $taxonomy_object->cap->assign_terms, $slug ) ) {
-				$this->sync_remote_taxonomy_terms( $remote_post, $slug, $tax_data ) or $errors ++;
+				if ( ! $this->sync_remote_taxonomy_terms( $remote_post, $slug, $tax_data ) ) {
+					$errors ++;
+				}
 			}
 		}
 
