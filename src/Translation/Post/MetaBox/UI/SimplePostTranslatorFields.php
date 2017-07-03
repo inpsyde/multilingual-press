@@ -21,9 +21,8 @@ class SimplePostTranslatorFields {
 	 */
 	public function top_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		$output = $remote_post
-			? $this->title_input( $remote_post )
-			: $this->translatable_input( $remote_site_id );
+		$output = '';
+		$output .= $remote_post ? $this->title_input( $remote_post ) : $this->translatable_input( $remote_site_id );
 
 		return $output;
 	}
@@ -37,9 +36,10 @@ class SimplePostTranslatorFields {
 	 */
 	public function main_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		$output =  $remote_post
-			? $this->editor_input( $remote_post )
-			: '';
+		$output = '';
+		if ( $remote_post ) {
+			$output .= $this->editor_input( $remote_post );
+		}
 
 		return $output;
 	}
@@ -97,7 +97,7 @@ class SimplePostTranslatorFields {
 	 *
 	 * @return string
 	 */
-	private function editor_input( $remote_post ): string {
+	private function editor_input( \WP_Post $remote_post ): string {
 
 		$post_content = $remote_post->post_content;
 
