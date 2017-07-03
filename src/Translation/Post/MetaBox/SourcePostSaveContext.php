@@ -94,22 +94,16 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		];
 
 		if ( self::$contexts->contains( $this->post ) ) {
-
-			/** @var array $context */
-			$context = self::$contexts->offsetGet( $this->post );
-
-			// TODO: This is where the world ends...
-			return $this->is_valid_save_request( $context ) ? $context : $empty_context;
+			return self::$contexts->offsetGet( $this->post );
 		}
 
 		$original_post_status = (string) $this->request->body_value( 'original_post_status', INPUT_POST );
 
 		$context = array_merge( $empty_context, [ self::POST_STATUS => $original_post_status ] );
 
-		if ( ! $this->is_valid_save_request( [ self::POST_STATUS => $original_post_status ] ) ) {
+		if ( ms_is_switched() && ! $this->is_valid_save_request( [ self::POST_STATUS => $original_post_status ] ) ) {
 			self::$contexts->attach( $this->post, $context );
 
-			// TODO: Really return the EMPTY context, and not the ATTACHED $context (that is based on the empty one)?!?
 			return $empty_context;
 		}
 
@@ -119,7 +113,6 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		if ( empty( $related_blogs ) ) {
 			self::$contexts->attach( $this->post, $context );
 
-			// TODO: Really return the EMPTY context, and not the ATTACHED $context (that is based on the empty one)?!?
 			return $empty_context;
 		}
 
@@ -129,7 +122,6 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		if ( ! $this->post_types->includes( $real_post_type ) ) {
 			self::$contexts->attach( $this->post, $context );
 
-			// TODO: Really return the EMPTY context, and not the ATTACHED $context (that is based on the empty one)?!?
 			return $empty_context;
 		}
 
@@ -144,7 +136,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			self::RELATED_BLOGS     => $related_blogs,
 		];
 
-		self::$contexts->attach( self::$contexts, $context );
+		self::$contexts->attach( $this->post, $context );
 
 		return $context;
 	}
