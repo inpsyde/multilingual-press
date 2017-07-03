@@ -98,6 +98,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			/** @var array $context */
 			$context = self::$contexts->offsetGet( $this->post );
 
+			// TODO: This is where the world ends...
 			return $this->is_valid_save_request( $context ) ? $context : $empty_context;
 		}
 
@@ -273,35 +274,33 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	private function featured_image_path( \WP_Post $post ) {
 
 		$thumb_id = get_post_thumbnail_id( $post );
-
 		if ( ! $thumb_id ) {
 			return '';
 		}
 
 		$thumb_post = get_post( $thumb_id );
-
 		if ( ! $thumb_post || $thumb_post->post_type !== 'attachment' ) {
 			return '';
 		}
 
 		$upload_dir = wp_upload_dir()['basedir'] ?? '';
-
 		if ( ! $upload_dir ) {
 			return '';
 		}
 
-		$thumb_rel_path = get_post_meta( $thumb_post->ID, '_wp_attached_file', true );
-
+		$thumb_rel_path = get_post_meta( $thumb_id, '_wp_attached_file', true );
 		if ( ! $thumb_rel_path ) {
-
 			$meta = (array) ( wp_get_attachment_metadata( $thumb_id ) ?: [] );
 
 			$thumb_rel_path = $meta['file'] ?? '';
 		}
+		if ( ! $thumb_rel_path ) {
+			return '';
+		}
 
-		$thumb_abs_path = $thumb_rel_path ? "{$upload_dir}/{$thumb_rel_path}" : '';
+		$thumb_abs_path = "{$upload_dir}/{$thumb_rel_path}";
 
-		return $thumb_abs_path && is_readable( $thumb_abs_path ) ? $thumb_abs_path : '';
+		return is_readable( $thumb_abs_path ) ? $thumb_abs_path : '';
 	}
 
 	/**
@@ -321,9 +320,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 */
 	public function offsetGet( $offset ) {
 
-		$array = $this->to_array();
-
-		return $array[ $offset ] ?? null;
+		return $this->to_array()[ $offset ] ?? null;
 	}
 
 	/**

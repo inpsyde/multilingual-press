@@ -112,7 +112,6 @@ final class SimplePostTranslator implements MetaBoxUI {
 			);
 
 			return $updater->update( $remote_post, $remote_site_id );
-
 		}, 30, 5 );
 	}
 
