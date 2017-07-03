@@ -108,6 +108,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		if ( ! $this->is_valid_save_request( [ self::POST_STATUS => $original_post_status ] ) ) {
 			self::$contexts->attach( $this->post, $context );
 
+			// TODO: Really return the EMPTY context, and not the ATTACHED $context (that is based on the empty one)?!?
 			return $empty_context;
 		}
 
@@ -117,6 +118,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		if ( empty( $related_blogs ) ) {
 			self::$contexts->attach( $this->post, $context );
 
+			// TODO: Really return the EMPTY context, and not the ATTACHED $context (that is based on the empty one)?!?
 			return $empty_context;
 		}
 
@@ -126,6 +128,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		if ( ! $this->post_types->includes( $real_post_type ) ) {
 			self::$contexts->attach( $this->post, $context );
 
+			// TODO: Really return the EMPTY context, and not the ATTACHED $context (that is based on the empty one)?!?
 			return $empty_context;
 		}
 
