@@ -63,7 +63,7 @@ class AdvancedPostTranslatorFields {
 		$output = '';
 		$output .= $this->posts_id_input( $source_post, $remote_site_id, $remote_post );
 		$output .= $this->title_input( $source_post, $remote_site_id, $remote_post );
-		$output .= $this->name_input( $remote_site_id, $source_post );
+		$output .= $this->name_input( $remote_site_id, $remote_post );
 
 		return $output;
 	}
