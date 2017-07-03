@@ -66,17 +66,17 @@ class AdvancedPostTranslatorUpdater {
 			! in_array( $remote_site_id, $this->save_context[ SourcePostSaveContext::RELATED_BLOGS ] )
 			|| ! site_exists( $remote_site_id )
 		) {
-			return new \WP_Post( new \stdClass() );
+			return $this->create_empty_post();
 		}
 
 		$sites_request_data = $this->server_request->body_value( AdvancedPostTranslatorFields::INPUT_NAME_BASE ) ?: [];
 		if ( ! $sites_request_data || ! is_array( $sites_request_data ) ) {
-			return new \WP_Post( new \stdClass() );
+			return $this->create_empty_post();
 		}
 
 		$request_data = $sites_request_data[ $remote_site_id ] ?? null;
 		if ( ! $request_data || ! is_array( $request_data ) ) {
-			return new \WP_Post( new \stdClass() );
+			return $this->create_empty_post();
 		}
 
 		$relation_helper = new PostRelationSaveHelper( $this->content_relations, $this->save_context );
@@ -86,16 +86,16 @@ class AdvancedPostTranslatorUpdater {
 		$new_remote_post_id = $post_array ? (int) wp_insert_post( $post_array, false ) : 0;
 
 		if ( 0 >= $new_remote_post_id ) {
-			return new \WP_Post( new \stdClass() );
+			return $this->create_empty_post();
 		}
 
 		if ( ! $relation_helper->sync_linked_element( $remote_site_id, $new_remote_post_id ) ) {
-			return new \WP_Post( new \stdClass() );
+			return $this->create_empty_post();
 		}
 
 		$remote_post = get_post( $new_remote_post_id );
 		if ( ! $remote_post instanceof \WP_Post ) {
-			return new \WP_Post( new \stdClass() );
+			return $this->create_empty_post();
 		}
 
 		if ( ! empty( $request_data[ AdvancedPostTranslatorFields::SYNC_THUMBNAIL ] ) ) {
@@ -105,6 +105,16 @@ class AdvancedPostTranslatorUpdater {
 		$this->sync_remote_terms( $remote_post, $request_data );
 
 		return $remote_post;
+	}
+
+	/**
+	 * Returns a new empty post.
+	 *
+	 * @return \WP_Post
+	 */
+	private function create_empty_post() {
+
+		return new \WP_Post( new \stdClass() );
 	}
 
 	/**
