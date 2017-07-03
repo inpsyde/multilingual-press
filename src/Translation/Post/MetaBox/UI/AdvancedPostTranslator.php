@@ -148,6 +148,8 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	 */
 	public function register_view() {
 
+		$this->asset_manager->enqueue_style( 'multilingualpress-admin' );
+
 		$fields = new AdvancedPostTranslatorFields( $this->asset_manager );
 
 		/** @noinspection PhpUnusedParameterInspection */

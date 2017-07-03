@@ -218,7 +218,7 @@ class AdvancedPostTranslatorFields {
 
 		$copy_button = $this->copy_button( $editor_id, $remote_site_id );
 
-		$this->asset_manager->add_script_data( 'multilingualpress-admin', 'mlpCopyPostSettings', [
+		$this->asset_manager->enqueue_script_with_data( 'multilingualpress-admin', 'mlpCopyPostSettings', [
 			'action' => AdvancedPostTranslatorAJAXHandler::AJAX_ACTION,
 			'siteID' => get_current_blog_id(),
 		] );
