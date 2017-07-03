@@ -109,6 +109,10 @@ final class PHPServerRequest implements ServerRequest {
 			return null;
 		}
 
+		if ( is_array( self::$values[ $method ][ $name ] ) ) {
+			$options |= FILTER_REQUIRE_ARRAY;
+		}
+
 		return filter_var( self::$values[ $method ][ $name ], $filter, $options );
 	}
 
