@@ -84,6 +84,11 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	const ACTION_SAVED_META_BOX_DATA = 'multilingualpress.saved_post_meta_box_data';
 
 	/**
+	 * @var int
+	 */
+	private $current_site_id;
+
+	/**
 	 * @var MetaBoxFactory
 	 */
 	private $factory;
@@ -132,6 +137,8 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		$this->server_request = $request;
 
 		$this->nonce_factory = $nonce_factory;
+
+		$this->current_site_id = get_current_blog_id();
 	}
 
 	/**
@@ -365,7 +372,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			return;
 		}
 
-		if ( ! $this->create_nonce_for_meta_box( $controller->meta_box() )->is_valid() ) {
+		if ( ! $this->validate_nonce_for_meta_box( $controller->meta_box() ) ) {
 			return;
 		}
 
@@ -461,5 +468,21 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		}
 
 		return current_user_can( $post_type->cap->edit_post, $post->ID );
+	}
+
+	/**
+	 * Validates the nonce for the given meta box.
+	 *
+	 * @param MetaBox $meta_box Meta box object.
+	 *
+	 * @return bool Whether or not the nonce for the given meta box is valid.
+	 */
+	private function validate_nonce_for_meta_box( MetaBox $meta_box ): bool {
+
+		switch_to_blog( $this->current_site_id );
+		$is_valid = $this->create_nonce_for_meta_box( $meta_box )->is_valid();
+		restore_current_blog();
+
+		return $is_valid;
 	}
 }
