@@ -9,6 +9,7 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\UIAwareMetaBoxRegistrar;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxController;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBox;
@@ -372,7 +373,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			return;
 		}
 
-		if ( ! $this->validate_nonce_for_meta_box( $controller->meta_box() ) ) {
+		if ( ! $this->create_nonce_for_meta_box( $controller->meta_box() )->is_valid() ) {
 			return;
 		}
 
@@ -417,7 +418,10 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	 */
 	private function create_nonce_for_meta_box( MetaBox $meta_box ) {
 
-		return $this->nonce_factory->create( [ 'meta_box_' . $meta_box->id() ] );
+		/** @var WPNonce $nonce */
+		$nonce = $this->nonce_factory->create( [ 'meta_box_' . $meta_box->id() ], WPNonce::class );
+
+		return $nonce->with_site( $this->current_site_id );
 	}
 
 	/**
@@ -468,21 +472,5 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		}
 
 		return current_user_can( $post_type->cap->edit_post, $post->ID );
-	}
-
-	/**
-	 * Validates the nonce for the given meta box.
-	 *
-	 * @param MetaBox $meta_box Meta box object.
-	 *
-	 * @return bool Whether or not the nonce for the given meta box is valid.
-	 */
-	private function validate_nonce_for_meta_box( MetaBox $meta_box ): bool {
-
-		switch_to_blog( $this->current_site_id );
-		$is_valid = $this->create_nonce_for_meta_box( $meta_box )->is_valid();
-		restore_current_blog();
-
-		return $is_valid;
 	}
 }
