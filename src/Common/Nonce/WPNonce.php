@@ -23,6 +23,11 @@ final class WPNonce implements Nonce {
 	private $context;
 
 	/**
+	 * @var int
+	 */
+	private $site_id;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -35,6 +40,24 @@ final class WPNonce implements Nonce {
 		$this->action = $action;
 
 		$this->context = $context;
+	}
+
+	/**
+	 * Creates a new nonce instance for the site with the given ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $site_id Site ID.
+	 *
+	 * @return WPNonce
+	 */
+	public function with_site( int $site_id ) {
+
+		$clone = clone $this;
+
+		$clone->site_id = $site_id;
+
+		return $clone;
 	}
 
 	/**
@@ -90,6 +113,8 @@ final class WPNonce implements Nonce {
 	 */
 	private function get_hash() {
 
-		return (string) wp_hash( $this->action . get_current_blog_id(), 'nonce' );
+		$site_id = $this->site_id ?? get_current_blog_id();
+
+		return (string) wp_hash( $this->action . $site_id, 'nonce' );
 	}
 }
