@@ -86,6 +86,8 @@ class SimplePostTranslatorUpdater {
 
 		$remote_post->post_parent = $relation_helper->get_related_post_parent( $remote_site_id );
 
+		// TODO: Here is lots of stuff missing that was in the post translator before, see https://github.com/inpsyde/MultilingualPress/blob/60b1b30f6ba910d04f6f6cbc8a1a9717c02529f3/src/inc/post-translator/Mlp_Translatable_Post_Data.php#L102-L227.
+
 		if ( $to_translate || $remote_post_parent !== $remote_post->post_parent ) {
 			$remote_post_id = (int) wp_insert_post( $remote_post->to_array(), false );
 			$remote_post = $remote_post_id ? get_post( $remote_post_id ) : $this->create_empty_post();
