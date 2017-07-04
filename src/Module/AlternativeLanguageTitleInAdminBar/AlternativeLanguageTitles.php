@@ -42,9 +42,7 @@ class AlternativeLanguageTitles {
 	 */
 	public function get( int $site_id = 0 ): string {
 
-		if ( ! $site_id ) {
-			$site_id = get_current_blog_id();
-		}
+		$site_id = $site_id ?: get_current_blog_id();
 
 		/*
 		 * @TODO There was cache here, now removed. Think about adding it again.
@@ -53,17 +51,6 @@ class AlternativeLanguageTitles {
 		 * Hook was added in AlternativeLanguageTitleInAdminBar\ServiceProvider::bootstrap()
 		 */
 
-		if ( isset( $titles[ $site_id ] ) ) {
-			return (string) $titles[ $site_id ];
-		}
-
-		$title = $this->site_settings_repository->get_alternative_language_title();
-		if ( ! $title ) {
-			return '';
-		}
-
-		$titles[ $site_id ] = $title;
-
-		return $title;
+		return $this->site_settings_repository->get_alternative_language_title( $site_id );
 	}
 }
