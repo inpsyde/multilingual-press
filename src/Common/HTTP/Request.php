@@ -32,11 +32,16 @@ interface Request {
 	 * @param string $name
 	 * @param int    $method
 	 * @param int    $filter
-	 * @param null   $options
+	 * @param mixed  $options
 	 *
 	 * @return mixed
 	 */
-	public function body_value( string $name, int $method = INPUT_REQUEST, int $filter = FILTER_UNSAFE_RAW, $options = null );
+	public function body_value(
+		string $name,
+		int $method = INPUT_REQUEST,
+		int $filter = FILTER_UNSAFE_RAW,
+		$options = FILTER_FLAG_NONE
+	);
 
 	/**
 	 * Returns header value as set in the request.

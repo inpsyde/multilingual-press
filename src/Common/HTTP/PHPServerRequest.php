@@ -92,7 +92,7 @@ final class PHPServerRequest implements ServerRequest {
 	 * @param string $name    Key to get value for.
 	 * @param int    $method  HTTP method constants, can be one of INPUT_REQUEST, INPUT_GET or INPUT_POST
 	 * @param int    $filter  Optional. One of the FILTER_* constants. Defaults to FILTER_UNSAFE_RAW (value unchanged).
-	 * @param null   $options Optional. Options for filter. Defaults to null.
+	 * @param mixed  $options Optional. Options for filter. Defaults to FILTER_FLAG_NONE.
 	 *
 	 * @return mixed
 	 */
@@ -100,7 +100,7 @@ final class PHPServerRequest implements ServerRequest {
 		string $name,
 		int $method = INPUT_REQUEST,
 		int $filter = FILTER_UNSAFE_RAW,
-		$options = null
+		$options = FILTER_FLAG_NONE
 	) {
 
 		$this->ensure_values();
@@ -109,11 +109,9 @@ final class PHPServerRequest implements ServerRequest {
 			return null;
 		}
 
-		if ( is_array( self::$values[ $method ][ $name ] ) ) {
-			$options |= FILTER_REQUIRE_ARRAY;
-		}
+		$value = self::$values[ $method ][ $name ];
 
-		return filter_var( self::$values[ $method ][ $name ], $filter, $options );
+		return filter_var( $value, $filter, $this->adapt_filter_options( $value, $options ) );
 	}
 
 	/**
@@ -309,5 +307,28 @@ final class PHPServerRequest implements ServerRequest {
 
 			self::$url = new ServerURL( self::$server, $this->header( 'HOST' ) );
 		}
+	}
+
+	/**
+	 * Returns the given filter options, potentially adapted to work with array data.
+	 *
+	 * @param mixed $value   Request value.
+	 * @param mixed $options Filter options.
+	 *
+	 * @return array|int|mixed Filter options, potentially adapted to work with array data.
+	 */
+	private function adapt_filter_options( $value, $options ) {
+
+		if ( ! is_array( $value ) ) {
+			return $options;
+		}
+
+		if ( ! is_array( $options ) ) {
+			return $options | FILTER_REQUIRE_ARRAY;
+		}
+
+		return array_merge( $options, [
+			'flag' => (int) ( $options['flag'] ?? 0 ) | FILTER_REQUIRE_ARRAY,
+		] );
 	}
 }
