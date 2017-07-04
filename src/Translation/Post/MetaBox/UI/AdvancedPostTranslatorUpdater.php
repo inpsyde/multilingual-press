@@ -71,6 +71,7 @@ class AdvancedPostTranslatorUpdater {
 
 		$sites_request_data = (array) $this->server_request->body_value(
 			AdvancedPostTranslatorFields::INPUT_NAME_BASE,
+			INPUT_REQUEST,
 			FILTER_DEFAULT,
 			FILTER_REQUIRE_ARRAY
 		);
