@@ -67,7 +67,7 @@ final class SecureSiteSettingUpdater implements SiteSettingUpdater {
 			return false;
 		}
 
-		$value = $this->request->body_value( $this->option );
+		$value = $this->request->body_value( $this->option, INPUT_REQUEST, FILTER_SANITIZE_STRING );
 		if ( ! is_string( $value ) ) {
 			$value = '';
 		}

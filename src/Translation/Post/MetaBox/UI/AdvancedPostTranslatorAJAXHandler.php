@@ -69,7 +69,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$title = apply_filters(
 			'mlp_process_post_title_for_remote_site',
-			$this->server_request->body_value( 'title', INPUT_POST ),
+			(string) $this->server_request->body_value( 'title', INPUT_POST, FILTER_SANITIZE_STRING ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id
@@ -85,7 +85,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$slug = apply_filters(
 			'mlp_process_post_slug_for_remote_site',
-			$this->server_request->body_value( 'slug', INPUT_POST ),
+			(string) $this->server_request->body_value( 'slug', INPUT_POST, FILTER_SANITIZE_STRING ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id
@@ -101,7 +101,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$tmce_content = (string) apply_filters(
 			'mlp_process_post_tmce_content_for_remote_site',
-			$this->server_request->body_value( 'tinyMceContent', INPUT_POST ),
+			(string) $this->server_request->body_value( 'tinyMceContent', INPUT_POST, FILTER_SANITIZE_STRING ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id
@@ -117,7 +117,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$content = (string) apply_filters(
 			'mlp_process_post_content_for_remote_site',
-			$this->server_request->body_value( 'content', INPUT_POST ),
+			(string) $this->server_request->body_value( 'content', INPUT_POST, FILTER_SANITIZE_STRING ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id
@@ -133,7 +133,7 @@ class AdvancedPostTranslatorAJAXHandler {
 		 */
 		$excerpt = apply_filters(
 			'mlp_process_post_excerpt_for_remote_site',
-			$this->server_request->body_value( 'excerpt', INPUT_POST ),
+			(string) $this->server_request->body_value( 'excerpt', INPUT_POST, FILTER_SANITIZE_STRING ),
 			$current_site_id,
 			$current_post_id,
 			$remote_site_id

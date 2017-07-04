@@ -90,7 +90,8 @@ class RelationshipController {
 
 		$callback = $this->get_callback();
 		if ( $callback ) {
-			add_action( 'wp_ajax_' . $this->request->body_value( 'action' ), $callback );
+			$action = $this->request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
+			add_action( "wp_ajax_{$action}", $callback );
 		}
 	}
 
@@ -259,15 +260,18 @@ class RelationshipController {
 	 */
 	private function get_callback() {
 
-		switch ( $this->request->body_value( 'action' ) ) {
-			case static::ACTION_CONNECT_EXISTING:
-				return [ $this, 'handle_connect_existing_post' ];
+		$action = $this->request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
+		if ( is_string( $action ) ) {
+			switch ( $action ) {
+				case static::ACTION_CONNECT_EXISTING:
+					return [ $this, 'handle_connect_existing_post' ];
 
-			case static::ACTION_CONNECT_NEW:
-				return [ $this, 'handle_connect_new_post' ];
+				case static::ACTION_CONNECT_NEW:
+					return [ $this, 'handle_connect_new_post' ];
 
-			case static::ACTION_DISCONNECT:
-				return [ $this, 'handle_disconnect_post' ];
+				case static::ACTION_DISCONNECT:
+					return [ $this, 'handle_disconnect_post' ];
+			}
 		}
 
 		return null;
@@ -288,12 +292,11 @@ class RelationshipController {
 			return $post->post_type;
 		}
 
-		$post_type = $this->request->body_value( 'post_type', INPUT_POST );
-
-		if ( ! $post_type || 'revision' === $post_type ) {
-			return $post->post_type;
+		$post_type = $this->request->body_value( 'post_type', INPUT_POST, FILTER_SANITIZE_STRING );
+		if ( is_string( $post_type ) && '' !== $post_type && 'revision' !== $post_type ) {
+			return $post_type;
 		}
 
-		return is_string( $post_type ) ? $post_type : $post->post_type;
+		return $post->post_type;
 	}
 }

@@ -111,7 +111,7 @@ class PluginSettingsUpdater {
 	 */
 	private function update_module( string $id ) {
 
-		$modules = $this->request->body_value( 'multilingualpress_modules' ) ?: [];
+		$modules = $this->request->body_value( 'multilingualpress_modules' );
 
 		if ( empty( $modules[ $id ] ) ) {
 			$this->module_manager->deactivate_module( $id );

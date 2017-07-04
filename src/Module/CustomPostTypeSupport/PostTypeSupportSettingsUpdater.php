@@ -67,12 +67,6 @@ class PostTypeSupportSettingsUpdater {
 
 		$custom_post_types = $this->repository->get_custom_post_types();
 
-		if ( ! $custom_post_types || $request->body_value( static::SETTINGS_NAME ) ) {
-			return $this->repository->unset_supported_post_types();
-		}
-
-		$custom_post_types = array_keys( $custom_post_types );
-
 		$settings = (array) $request->body_value(
 			static::SETTINGS_NAME,
 			INPUT_POST,
@@ -80,6 +74,11 @@ class PostTypeSupportSettingsUpdater {
 			FILTER_FORCE_ARRAY
 		);
 
+		if ( ! $custom_post_types || ! $settings ) {
+			return $this->repository->unset_supported_post_types();
+		}
+
+		$custom_post_types = array_keys( $custom_post_types );
 		$custom_post_types = array_combine( $custom_post_types, array_map( function ( $slug ) use ( $settings ) {
 
 			if ( empty( $settings[ $slug ] ) ) {

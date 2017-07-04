@@ -68,7 +68,7 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 			return false;
 		}
 
-		$value = $this->request->body_value( $this->meta_key );
+		$value = $this->request->body_value( $this->meta_key, INPUT_REQUEST, FILTER_SANITIZE_STRING );
 		if ( ! is_string( $value ) ) {
 			$value = '';
 		}

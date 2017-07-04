@@ -71,9 +71,14 @@ class AJAXHandler {
 			wp_send_json_error();
 		}
 
-		$sites = $this->request->body_value( 'mlp_sites', INPUT_GET, FILTER_SANITIZE_NUMBER_INT, FILTER_FORCE_ARRAY );
+		$sites = (array) $this->request->body_value(
+			'mlp_sites',
+			INPUT_GET,
+			FILTER_SANITIZE_NUMBER_INT,
+			FILTER_FORCE_ARRAY
+		);
 
-		$items = $this->repository->get_items_for_sites( array_map( 'intval', (array) $sites ) );
+		$items = $this->repository->get_items_for_sites( array_map( 'intval', $sites ) );
 
 		/**
 		 * Contains the Walker_Nav_Menu_Edit class.

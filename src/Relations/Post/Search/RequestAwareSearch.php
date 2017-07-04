@@ -91,6 +91,6 @@ final class RequestAwareSearch implements Search {
 	 */
 	private function get_search_query(): string {
 
-		return (string) $this->request->body_value( Search::ARG_NAME );
+		return (string) $this->request->body_value( Search::ARG_NAME, INPUT_REQUEST, FILTER_SANITIZE_STRING );
 	}
 }

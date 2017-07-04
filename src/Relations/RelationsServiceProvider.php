@@ -157,8 +157,8 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 
 		$server_request = $container['multilingualpress.server_request'];
 
-		$action = $server_request->body_value( 'action' );
-		if ( $action && wp_doing_ajax() ) {
+		$action = $server_request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
+		if ( is_string( $action ) && '' !== $action && wp_doing_ajax() ) {
 			switch ( $action ) {
 				case SearchController::ACTION:
 					$container['multilingualpress.post_relationship_control_search_controller']->initialize(

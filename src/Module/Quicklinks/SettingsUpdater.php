@@ -65,8 +65,13 @@ class SettingsUpdater {
 			return false;
 		}
 
-		$setting = $request->body_value( static::SETTINGS_NAME, INPUT_POST, FILTER_DEFAULT, FILTER_FORCE_ARRAY );
-		if ( empty( $setting ) ) {
+		$setting = (array) $request->body_value(
+			static::SETTINGS_NAME,
+			INPUT_POST,
+			FILTER_DEFAULT,
+			FILTER_FORCE_ARRAY
+		);
+		if ( ! $setting ) {
 			return false;
 		}
 

@@ -62,9 +62,8 @@ final class NoredirectAwareRedirector implements Redirector {
 	 */
 	public function redirect(): bool {
 
-		$value = $this->request->body_value( NoredirectStorage::KEY, INPUT_GET );
-
-		if ( null !== $value ) {
+		$value = (string) $this->request->body_value( NoredirectStorage::KEY, INPUT_GET, FILTER_SANITIZE_STRING );
+		if ( '' !== $value ) {
 			$this->storage->add_language( $value );
 
 			return false;

@@ -136,8 +136,11 @@ class SiteSettingsUpdater {
 			INPUT_POST,
 			FILTER_SANITIZE_STRING
 		);
+		if ( ! is_string( $language ) || '-1' === $language ) {
+			$language = '';
+		}
 
-		return ( ! $language || ! is_string( $language ) || '-1' === $language ) ? '' : $language;
+		return $language;
 	}
 
 	/**
@@ -149,15 +152,16 @@ class SiteSettingsUpdater {
 	 */
 	private function update_alternative_language_title( int $site_id ) {
 
-		$alternative_language = $this->request->body_value(
+		$alternative_language_title = $this->request->body_value(
 			SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE,
 			INPUT_POST,
 			FILTER_SANITIZE_STRING
 		);
+		if ( ! is_string( $alternative_language_title ) ) {
+			$alternative_language_title = '';
+		}
 
-		$title = empty( $alternative_language ) ? '' : (string) $alternative_language;
-
-		$this->repository->set_alternative_language_title( $title, $site_id );
+		$this->repository->set_alternative_language_title( $alternative_language_title, $site_id );
 	}
 
 	/**
@@ -181,14 +185,14 @@ class SiteSettingsUpdater {
 	 */
 	private function update_relationships( int $site_id ) {
 
-		$relationships = $this->request->body_value(
+		$relationships = (array) $this->request->body_value(
 			SiteSettingsRepository::NAME_RELATIONSHIPS,
 			INPUT_POST,
 			FILTER_SANITIZE_NUMBER_INT,
 			FILTER_FORCE_ARRAY
 		);
 
-		$this->repository->set_relationships( array_map( 'intval', (array) $relationships ), $site_id );
+		$this->repository->set_relationships( array_map( 'intval', $relationships ), $site_id );
 	}
 
 	/**

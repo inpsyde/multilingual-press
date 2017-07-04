@@ -112,7 +112,7 @@ class SimpleTermTranslatorUpdater {
 	private function term_to_relate( int $remote_site_id, string $taxonomy, TermRelationSaveHelper $relations ): int {
 
 		// Let's see if for this remote site, we should create a new ter, relate an existing one or do nothing
-		$operation_for_sites = $this->server_request->body_value(
+		$operation_for_sites = (array) $this->server_request->body_value(
 			SimpleTermTranslatorFields::RELATED_TERM_OPERATION,
 			INPUT_POST,
 			FILTER_SANITIZE_STRING,

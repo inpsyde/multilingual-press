@@ -97,7 +97,11 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			return self::$contexts->offsetGet( $this->post );
 		}
 
-		$original_post_status = (string) $this->request->body_value( 'original_post_status', INPUT_POST );
+		$original_post_status = (string) $this->request->body_value(
+			'original_post_status',
+			INPUT_POST,
+			FILTER_SANITIZE_STRING
+		);
 
 		$context = array_merge( $empty_context, [ self::POST_STATUS => $original_post_status ] );
 

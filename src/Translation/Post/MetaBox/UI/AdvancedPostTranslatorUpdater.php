@@ -69,8 +69,12 @@ class AdvancedPostTranslatorUpdater {
 			return $this->create_empty_post();
 		}
 
-		$sites_request_data = $this->server_request->body_value( AdvancedPostTranslatorFields::INPUT_NAME_BASE ) ?: [];
-		if ( ! $sites_request_data || ! is_array( $sites_request_data ) ) {
+		$sites_request_data = (array) $this->server_request->body_value(
+			AdvancedPostTranslatorFields::INPUT_NAME_BASE,
+			FILTER_DEFAULT,
+			FILTER_REQUIRE_ARRAY
+		);
+		if ( ! $sites_request_data ) {
 			return $this->create_empty_post();
 		}
 
@@ -164,13 +168,12 @@ class AdvancedPostTranslatorUpdater {
 			return [];
 		}
 
-		$author = $this->server_request->body_value(
+		$author = (int) $this->server_request->body_value(
 			'post_author_override',
 			INPUT_REQUEST,
 			FILTER_SANITIZE_NUMBER_INT
 		);
-
-		if ( is_numeric( $author ) && $author ) {
+		if ( $author ) {
 			$remote_post->post_author = $author;
 		}
 

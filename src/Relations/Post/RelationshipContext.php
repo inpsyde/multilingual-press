@@ -156,7 +156,7 @@ class RelationshipContext {
 			return (int) $request->body_value( $key, INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
 		}, $keys );
 
-		$data[ static::KEY_NEW_POST_TITLE ] = (string) $request->body_value( static::KEY_NEW_POST_ID );
+		$data[ static::KEY_NEW_POST_TITLE ] = (string) $request->body_value( static::KEY_NEW_POST_TITLE );
 
 		return new static( $data );
 	}

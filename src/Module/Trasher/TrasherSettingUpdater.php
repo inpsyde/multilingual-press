@@ -84,7 +84,11 @@ class TrasherSettingUpdater {
 			return 0;
 		}
 
-		$value = (bool) $this->request->body_value( TrasherSettingRepository::META_KEY, INPUT_POST );
+		$value = (bool) $this->request->body_value(
+			TrasherSettingRepository::META_KEY,
+			INPUT_POST,
+			FILTER_VALIDATE_BOOLEAN
+		);
 
 		$post_id = (int) $post_id;
 
