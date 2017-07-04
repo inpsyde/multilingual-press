@@ -4,7 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Relations;
 
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipController;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipControlView;
 use Inpsyde\MultilingualPress\Relations\Post\RelationshipPermission as PostRelationshipPermission;
@@ -14,6 +15,7 @@ use Inpsyde\MultilingualPress\Relations\Post\Search\StatusAwareSearchResultsView
 use Inpsyde\MultilingualPress\Relations\Term\RelationshipPermission as TermRelationshipPermission;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\AdvancedPostTranslator;
 
 /**
  * Service provider for all relations objects.
@@ -135,25 +137,16 @@ final class RelationsServiceProvider implements BootstrappableServiceProvider {
 	 */
 	private function bootstrap_post_translation( Container $container ) {
 
-		$post_relationship_control_view = $container['multilingualpress.post_relationship_control_view'];
+		$relationship_control_view = $container['multilingualpress.post_relationship_control_view'];
 
-		add_action(
-			'mlp_translation_meta_box_bottom',
-			function ( \WP_Post $post, $remote_site_id, \WP_Post $remote_post ) use ( $post_relationship_control_view ) {
+		add_action( MetaBoxUIRegistry::ACTION_UI_SELECTED, function ( MetaBoxUI $selected_ui ) use (
+			$relationship_control_view
+		) {
 
-				global $pagenow;
-				if ( 'post.php' === $pagenow ) {
-					$post_relationship_control_view->render( new RelationshipContext( [
-						RelationshipContext::KEY_REMOTE_POST_ID => $remote_post->ID,
-						RelationshipContext::KEY_REMOTE_SITE_ID => $remote_site_id,
-						RelationshipContext::KEY_SOURCE_POST_ID => $post->ID,
-						RelationshipContext::KEY_SOURCE_SITE_ID => get_current_blog_id(),
-					] ) );
-				}
-			},
-			200,
-			3
-		);
+			if ( $selected_ui instanceof AdvancedPostTranslator ) {
+				$relationship_control_view->register();
+			}
+		} );
 
 		$server_request = $container['multilingualpress.server_request'];
 

@@ -8,6 +8,8 @@ use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Relations\Post\Search\Search;
 use Inpsyde\MultilingualPress\Relations\Post\Search\SearchController;
 use Inpsyde\MultilingualPress\Relations\Post\Search\SearchResultsView;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxView;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\ViewInjection;
 
 /**
  * Relationship control view to be used within the Translation meta box.
@@ -17,10 +19,7 @@ use Inpsyde\MultilingualPress\Relations\Post\Search\SearchResultsView;
  */
 class RelationshipControlView {
 
-	/**
-	 * @var bool
-	 */
-	private static $is_script_localized = false;
+	use ViewInjection;
 
 	/**
 	 * @var AssetManager
@@ -53,16 +52,40 @@ class RelationshipControlView {
 	}
 
 	/**
+	 * @since 3.0.0
+	 */
+	public function register() {
+
+		/** @noinspection PhpUnusedParameterInspection */
+		$this->inject_into_view( function (
+			\WP_Post $post,
+			int $remote_site_id,
+			string $remote_language,
+			\WP_Post $remote_post = null
+		) {
+
+			global $pagenow;
+			if ( 'post.php' !== $pagenow ) {
+				return;
+			}
+
+			$this->render( new RelationshipContext( [
+				RelationshipContext::KEY_REMOTE_POST_ID => $remote_post->ID ?? 0,
+				RelationshipContext::KEY_REMOTE_SITE_ID => $remote_site_id,
+				RelationshipContext::KEY_SOURCE_POST_ID => $post->ID,
+				RelationshipContext::KEY_SOURCE_SITE_ID => get_current_blog_id(),
+			] ) );
+		}, TranslationMetaBoxView::POSITION_BOTTOM, 0 );
+	}
+
+	/**
 	 * Renders the markup.
-	 *
-	 * @since   3.0.0
-	 * @wp-hook TODO: Reference (to-be-defined) class constant of Translation meta box.
 	 *
 	 * @param RelationshipContext $context Relationship context data object.
 	 *
 	 * @return void
 	 */
-	public function render( RelationshipContext $context ) {
+	private function render( RelationshipContext $context ) {
 
 		$remote_post_id = $context->remote_post_id();
 
@@ -143,7 +166,8 @@ class RelationshipControlView {
 	 */
 	private function localize_script() {
 
-		if ( static::$is_script_localized ) {
+		static $done;
+		if ( $done ) {
 			return;
 		}
 
@@ -173,7 +197,7 @@ class RelationshipControlView {
 			'threshold' => max( 1, $threshold ),
 		] );
 
-		static::$is_script_localized = true;
+		$done = true;
 	}
 
 	/**
