@@ -188,7 +188,7 @@ class MetaBoxUIRegistry {
 			 * @param MetaBoxUI               $selected_ui Selected UI object.
 			 * @param UIAwareMetaBoxRegistrar $registrar   Meta box registrar object.
 			 */
-			do_action( self::ACTION_UI_SELECTED, $this->selected_ui[ $registrar_id ], $registrar );
+			do_action( self::ACTION_UI_SELECTED, $user_ui, $registrar );
 
 			/**
 			 * Fires right after the UI for the meta box has been selected.
@@ -197,7 +197,7 @@ class MetaBoxUIRegistry {
 			 *
 			 * @param MetaBoxUI $selected_ui Selected UI object.
 			 */
-			do_action( self::ACTION_UI_SELECTED . "_{$registrar_id}", $this->selected_ui[ $registrar_id ] );
+			do_action( self::ACTION_UI_SELECTED . "_{$registrar_id}", $user_ui );
 		}
 
 		return $this->selected_ui[ $registrar_id ];
