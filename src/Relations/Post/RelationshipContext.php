@@ -151,10 +151,10 @@ class RelationshipContext {
 			static::KEY_SOURCE_SITE_ID,
 		];
 
-		$data = array_map( function ( $key ) use ( $request ) {
+		$data = array_combine( $keys, array_map( function ( $key ) use ( $request ) {
 
 			return (int) $request->body_value( $key, INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
-		}, $keys );
+		}, $keys ) );
 
 		$data[ static::KEY_NEW_POST_TITLE ] = (string) $request->body_value( static::KEY_NEW_POST_TITLE );
 
