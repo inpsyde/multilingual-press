@@ -338,7 +338,7 @@ class AdvancedPostTranslatorFields {
 		 *
 		 * @param string[] $taxonomies Mutually exclusive taxonomy names.
 		 */
-		$exclusive_tax = apply_filters( 'mlp_mutually_exclusive_taxonomies', [ 'post_format' ] );
+		$exclusive_tax = (array) apply_filters( 'mlp_mutually_exclusive_taxonomies', [ 'post_format' ] );
 
 		$toggle_id = "tax_toggle_{$remote_site_id}";
 
@@ -352,22 +352,18 @@ class AdvancedPostTranslatorFields {
 			<?php esc_html_e( 'Change taxonomies', 'multilingualpress' ); ?>
 		</button>
 		<div class="hidden" id="<?php echo esc_attr( $toggle_id ); ?>">
-			<?php if ( ! empty( $taxonomies['inclusive'] ) ) : ?>
-				<div class="mlp-taxonomy-fieldset-container">
-					<?php
-					foreach ( $taxonomies as $taxonomy => $taxonomy_data ) {
-						if ( $taxonomy_data->terms ) {
-							$this->show_terms_input(
-								$taxonomy_data,
-								$remote_site_id,
-								in_array( $taxonomy, $exclusive_tax, true ) ? 'radio' : 'checkbox',
-								$remote_post
-							);
-						}
-					}
-					?>
-				</div>
-			<?php endif; ?>
+			<div class="mlp-taxonomy-fieldset-container">
+				<?php
+				foreach ( $taxonomies as $taxonomy => $taxonomy_data ) {
+					$this->show_terms_input(
+						$taxonomy_data,
+						$remote_site_id,
+						in_array( $taxonomy, $exclusive_tax, true ) ? 'radio' : 'checkbox',
+						$remote_post
+					);
+				}
+				?>
+			</div>
 		</div>
 		<?php
 
@@ -414,18 +410,23 @@ class AdvancedPostTranslatorFields {
 	 *
 	 * @param \WP_Post|null $remote_post
 	 *
-	 * @return string
+	 * @return void
 	 */
 	private function show_terms_input(
 		\stdClass $taxonomy_data,
 		int $remote_site_id,
 		string $input_type,
 		\WP_Post $remote_post = null
-	): string {
+	) {
+
+		if ( empty( $taxonomy_data->terms ) ) {
+			return;
+		}
 
 		$name = $this->field_name( $remote_site_id, self::TAXONOMY ) . "[{$taxonomy_data->object->name}]";
 
 		$inputs_markup = '';
+
 		$inputs_format = '<label for="%2$s">';
 		$inputs_format .= '<input type="%3$s" name="%4$s[]" id="%2$s" value="%5$s"%6$s> %1$s';
 		$inputs_format .= '</label><br>';
@@ -434,7 +435,7 @@ class AdvancedPostTranslatorFields {
 		foreach ( $taxonomy_data->terms as $term_data ) {
 
 			/** @var \WP_Term $term */
-			$term = $term_data->term;
+			$term = $term_data->object;
 
 			$assigned = $remote_post ? checked( $term_data->assigned, true, false ) : '';
 
@@ -449,7 +450,7 @@ class AdvancedPostTranslatorFields {
 			);
 		}
 
-		return sprintf(
+		printf(
 			'<fieldset class="mlp-taxonomy-box"><legend>%s</legend>%s</fieldset>',
 			esc_html( $taxonomy_data->object->labels->name ),
 			$inputs_markup
