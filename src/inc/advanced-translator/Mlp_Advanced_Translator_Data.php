@@ -9,7 +9,7 @@ use function Inpsyde\MultilingualPress\site_exists;
 /**
  * Data model for advanced post translation. Handles inserts and updates.
  */
-class Mlp_Advanced_Translator_Data implements Mlp_Save_Post_Interface {
+class Mlp_Advanced_Translator_Data {
 
 	/**
 	 * @var array
@@ -17,7 +17,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Save_Post_Interface {
 	private $allowed_post_types;
 
 	/**
-	 * @var Mlp_Translatable_Post_Data_Interface
+	 * @var Mlp_Translatable_Post_Data
 	 */
 	private $basic_data;
 
@@ -49,15 +49,15 @@ class Mlp_Advanced_Translator_Data implements Mlp_Save_Post_Interface {
 	private $save_context = [];
 
 	/**
-	 * @param                                      $deprecated
-	 * @param Mlp_Translatable_Post_Data_Interface $basic_data
-	 * @param array                                $allowed_post_types
-	 * @param SiteRelations                        $relations
-	 * @param NonceFactory                         $nonce_factory Nonce factory object.
+	 * @param                            $deprecated
+	 * @param Mlp_Translatable_Post_Data $basic_data
+	 * @param array                      $allowed_post_types
+	 * @param SiteRelations              $relations
+	 * @param NonceFactory               $nonce_factory Nonce factory object.
 	 */
 	public function __construct(
 		$deprecated,
-		Mlp_Translatable_Post_Data_Interface $basic_data,
+		Mlp_Translatable_Post_Data $basic_data,
 		array $allowed_post_types,
 		SiteRelations $relations,
 		NonceFactory $nonce_factory

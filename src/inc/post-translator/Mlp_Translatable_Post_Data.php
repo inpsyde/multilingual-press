@@ -10,7 +10,7 @@ use function Inpsyde\MultilingualPress\site_exists;
 /**
  * Data model for post translation. Handles inserts of new posts only.
  */
-class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface, Mlp_Save_Post_Interface {
+class Mlp_Translatable_Post_Data {
 
 	/**
 	 * @var array
