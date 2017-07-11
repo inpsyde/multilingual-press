@@ -105,6 +105,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 
 		$context = array_merge( $empty_context, [ self::POST_STATUS => $original_post_status ] );
 
+		// TODO: Make sure this is right! Think about remote posts being updated just now by MLP. Attach empty context?!
 		if ( ms_is_switched() && ! $this->is_valid_save_request( [ self::POST_STATUS => $original_post_status ] ) ) {
 			self::$contexts->attach( $this->post, $context );
 
