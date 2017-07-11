@@ -147,12 +147,6 @@ register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 // TODO: Eventually remove/refactor according to new architecture as soon as the old controller got replaced.
 add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
 
-	// Advanced Translator
-	//new \Mlp_Advanced_Translator();
-
-	// Translation Meta Box
-	//new \Mlp_Translation_Metabox();
-
 	if ( is_admin() ) {
 		// Term Translator
 		add_action( 'wp_loaded', function () {

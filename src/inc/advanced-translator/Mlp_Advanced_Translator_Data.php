@@ -9,7 +9,7 @@ use function Inpsyde\MultilingualPress\site_exists;
 /**
  * Data model for advanced post translation. Handles inserts and updates.
  */
-class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Interface, Mlp_Save_Post_Interface {
+class Mlp_Advanced_Translator_Data implements Mlp_Save_Post_Interface {
 
 	/**
 	 * @var array
@@ -20,11 +20,6 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 * @var Mlp_Translatable_Post_Data_Interface
 	 */
 	private $basic_data;
-
-	/**
-	 * @var string
-	 */
-	private $id_base = 'mlp-translation-data';
 
 	/**
 	 * @var string
@@ -82,26 +77,6 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	}
 
 	/**
-	 * Base string for name attribute in translation view.
-	 *
-	 * @return string
-	 */
-	public function get_name_base() {
-
-		return $this->name_base;
-	}
-
-	/**
-	 * Base string for ID attribute in translation view.
-	 *
-	 * @return string
-	 */
-	public function get_id_base() {
-
-		return $this->id_base;
-	}
-
-	/**
 	 * Save the post to the blogs
 	 *
 	 * @param int     $post_id
@@ -110,6 +85,8 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 * @return void
 	 */
 	public function save( $post_id, WP_Post $post ) {
+
+		// TODO: Compare what's happening "here" with what's happening in the new structures (meta boxes, UI, ...).
 
 		if ( ! $this->basic_data->is_valid_save_request( $post, $this->name_base ) ) {
 			return;
@@ -212,25 +189,6 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		 * @param array $save_context
 		 */
 		do_action( 'mlp_after_post_synchronization', $this->save_context );
-	}
-
-	/**
-	 * Wrapper for get_taxonomies_with_terms( $post ).
-	 *
-	 * Wraps the call into a blog switch.
-	 *
-	 * @param WP_Post $post
-	 * @param int     $blog_id
-	 *
-	 * @return array
-	 */
-	public function get_taxonomies( WP_Post $post, $blog_id ) {
-
-		switch_to_blog( $blog_id );
-		$out = $this->get_taxonomies_with_terms( $post );
-		restore_current_blog();
-
-		return $out;
 	}
 
 	/**
@@ -434,51 +392,6 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	}
 
 	/**
-	 * Get all existing taxonomies for the given post, including existing terms.
-	 *
-	 * @param WP_Post $post
-	 *
-	 * @return array
-	 */
-	private function get_taxonomies_with_terms( WP_Post $post ) {
-
-		$out = [];
-
-		$taxonomies = get_object_taxonomies( $post, 'objects' );
-
-		foreach ( $taxonomies as $taxonomy => $properties ) {
-
-			// Don't show what the user cannot change.
-			if ( ! current_user_can( $properties->cap->assign_terms, $taxonomy ) ) {
-				continue;
-			}
-
-			$terms = get_terms( $taxonomy, [ 'hide_empty' => false ] );
-
-			// we do not allow creating new terms
-			if ( empty( $terms ) ) {
-				continue;
-			}
-
-			$terms = $this->set_active_terms( $terms, $taxonomy, $post );
-
-			if ( $this->taxonomy_is_mutually_exclusive( $taxonomy ) ) {
-				$out['exclusive'][ $taxonomy ] = [
-					'properties' => $properties,
-					'terms'      => $terms,
-				 ];
-			} else {
-				$out['inclusive'][ $taxonomy ] = [
-					'properties' => $properties,
-					'terms'      => $terms,
-				 ];
-			}
-		}
-
-		return $out;
-	}
-
-	/**
 	 * Update terms for each taxonomy.
 	 *
 	 * This operates in the context of the target blog, after switch_to_blog().
@@ -597,45 +510,5 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		}
 
 		return '';
-	}
-
-	/**
-	 * Checks if more than one term can be assigned to a taxonomy.
-	 *
-	 * @param string $taxonomy Taxonomy name.
-	 *
-	 * @return bool
-	 */
-	private function taxonomy_is_mutually_exclusive( $taxonomy ) {
-
-		/**
-		 * Filter mutually exclusive taxonomies.
-		 *
-		 * @param string[] $taxonomies Mutually exclusive taxonomy names.
-		 */
-		$exclusive = apply_filters( 'mlp_mutually_exclusive_taxonomies', [ 'post_format' ] );
-
-		return in_array( $taxonomy, $exclusive, true );
-	}
-
-	/**
-	 * Mark active terms for the post.
-	 *
-	 * @param array   $terms
-	 * @param string  $taxonomy
-	 * @param WP_Post $post
-	 *
-	 * @return array
-	 */
-	private function set_active_terms( array $terms, $taxonomy, WP_Post $post ) {
-
-		$out = [];
-
-		foreach ( $terms as $term ) {
-			$term->active = has_term( $term->term_id, $taxonomy, $post );
-			$out[]        = $term;
-		}
-
-		return $out;
 	}
 }
