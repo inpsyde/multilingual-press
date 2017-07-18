@@ -91,7 +91,15 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		foreach ( $translations as $site_id => $translation )
 			$this->collect_matches( $possible, $site_id, $translation, $user );
 
-		return $possible;
+        /**
+         * Filters the collected redirect matches.
+         *
+         * @since 2.6.1
+         *
+         * @param Array $possible The found matches for the redirect.
+         * @param Array $translations The available translations for the current page.
+         */
+		return apply_filters( 'mlp_possible_redirect_matches', $possible, $translations);
 	}
 
 	/**
