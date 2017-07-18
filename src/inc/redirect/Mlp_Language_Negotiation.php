@@ -80,26 +80,27 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	private function get_possible_matches( Array $translations ) {
 
-		$possible = array ();
-
 		$user = $this->parse_accept_header( $_SERVER[ 'HTTP_ACCEPT_LANGUAGE' ] );
+		if ( empty( $user ) ) {
+			return array();
+		}
 
-		if ( empty ( $user ) )
-			return $possible;
+		$matches = array();
 
-		/** @type Mlp_Translation $translation */
-		foreach ( $translations as $site_id => $translation )
-			$this->collect_matches( $possible, $site_id, $translation, $user );
+		/** @var Mlp_Translation $translation */
+		foreach ( $translations as $site_id => $translation ) {
+			$this->collect_matches( $matches, $site_id, $translation, $user );
+		}
 
-        /**
-         * Filters the collected redirect matches.
-         *
-         * @since 2.6.1
-         *
-         * @param Array $possible The found matches for the redirect.
-         * @param Array $translations The available translations for the current page.
-         */
-		return apply_filters( 'mlp_possible_redirect_matches', $possible, $translations);
+		/**
+		 * Filters the redirect matches.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param array[]           $matches      The found matches for the redirect.
+		 * @param Mlp_Translation[] $translations The available translations for the current page.
+		 */
+		return (array) apply_filters( 'mlp_redirect_matches', $matches, $translations );
 	}
 
 	/**
