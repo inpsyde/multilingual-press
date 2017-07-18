@@ -100,7 +100,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		 * @param array[]           $matches      The found matches for the redirect.
 		 * @param Mlp_Translation[] $translations The available translations for the current page.
 		 */
-		return (array) apply_filters( 'mlp_redirect_matches', $matches, $translations );
+		return (array) apply_filters( 'multilingualpress.redirect_matches', $matches, $translations );
 	}
 
 	/**
