@@ -93,14 +93,14 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		}
 
 		/**
-		 * Filters the redirect matches.
+		 * Filters the possible redirect target objects.
 		 *
 		 * @since 2.7.0
 		 *
-		 * @param array[]           $matches      The found matches for the redirect.
-		 * @param Mlp_Translation[] $translations The available translations for the current page.
+		 * @param array[]           $matches      Possible redirect targets.
+		 * @param Mlp_Translation[] $translations Translation objects.
 		 */
-		return (array) apply_filters( 'multilingualpress.redirect_matches', $matches, $translations );
+		return (array) apply_filters( 'multilingualpress.redirect_targets', $matches, $translations );
 	}
 
 	/**
