@@ -27,6 +27,15 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	const FILTER_PRIORITY_FACTOR = 'multilingualpress.language_only_priority_factor';
 
 	/**
+	 * Filter hook.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_REDIRECT_TARGETS = 'multilingualpress.redirect_targets';
+
+	/**
 	 * @var float
 	 */
 	private $language_only_priority_factor;
@@ -136,7 +145,20 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 			}
 		}, $user_languages );
 
-		return $targets;
+		/**
+		 * Filters the possible redirect target objects.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param RedirectTarget[] $targets      Possible redirect target objects.
+		 * @param Translation[]    $translations Translation objects.
+		 */
+		$targets = (array) apply_filters( self::FILTER_REDIRECT_TARGETS, $targets, $translations );
+
+		return array_filter( $targets, function ( $target ) {
+
+			return $target instanceof RedirectTarget;
+		} );
 	}
 
 	/**
