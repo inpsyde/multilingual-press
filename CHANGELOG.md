@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.7.0
+- Redirect: Introduce a new filter, `multilingualpress.redirect_matches`, to manipulate the found redirect matches, see [pull request #265](https://github.com/inpsyde/MultilingualPress/pull/265), props @diedexx.
+
 ## 2.6.0
 - Types: Introduce null implementations for language and translation interfaces, `Mlp_Null_Language` and `Mlp_Null_Translation`.
 - Nav Menu: Use `Mlp_Null_Translation` in favor of `null`.
