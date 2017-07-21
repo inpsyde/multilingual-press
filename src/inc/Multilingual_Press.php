@@ -414,7 +414,7 @@ class Multilingual_Press {
 		 *
 		 * @param String[] The used output methods.
 		 */
-		$output_methods = apply_filters( 'multilingualpress.hreflang_output_method', [ 'header', 'html' ] );
+		$output_methods = apply_filters( 'multilingualpress.hreflang_output_method', array( 'header', 'html' ) );
 		
 		if ( in_array( 'header', $output_methods ) ) {
 			add_action(
