@@ -41,6 +41,16 @@ class Mlp_Hreflang_Header_Output {
 		}
 
 		$translations = $this->get_translations();
+
+		/**
+		 * Filters the available translations before outputting their hreflang links.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param Mlp_Translation[] $translations The available translations for the current page.
+		 */
+		$translations = apply_filters( 'multilingualpress.hreflang_translations', $translations );
+
 		if ( ! $translations ) {
 			return;
 		}
@@ -77,6 +87,16 @@ class Mlp_Hreflang_Header_Output {
 		}
 
 		$translations = $this->get_translations();
+
+		/**
+		 * Filters the available translations before outputting their hreflang links.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param Mlp_Translation[] $translations The available translations for the current page.
+		 */
+		$translations = apply_filters( 'multilingualpress.hreflang_translations', $translations );
+
 		if ( ! $translations ) {
 			return;
 		}
