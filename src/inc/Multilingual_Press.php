@@ -405,20 +405,35 @@ class Multilingual_Press {
 
 		// frontend-hooks
 		$hreflang = new Mlp_Hreflang_Header_Output( $this->plugin_data->get( 'language_api' ) );
-		add_action(
-			'template_redirect',
-			array (
-				$hreflang,
-				'http_header'
-			)
-		);
-		add_action(
-			'wp_head',
-			array (
-				$hreflang,
-				'wp_head'
-			)
-		);
+
+		/**
+		 * Filters the used output methods for the hreflang links.
+		 * Possible values are 'header' and 'html'.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param String[] The used output methods.
+		 */
+		$output_methods = apply_filters( 'multilingualpress.hreflang_output_method', [ 'header', 'html' ] );
+		
+		if ( in_array( 'header', $output_methods ) ) {
+			add_action(
+				'template_redirect',
+				array(
+					$hreflang,
+					'http_header'
+				)
+			);
+		}
+		if ( in_array( 'html', $output_methods ) ) {
+			add_action(
+				'wp_head',
+				array(
+					$hreflang,
+					'wp_head'
+				)
+			);
+		}
 	}
 
 	/**
