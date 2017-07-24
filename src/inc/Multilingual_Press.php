@@ -419,7 +419,7 @@ class Multilingual_Press {
 			Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTTP_HEADER | Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTML_HEAD
 		);
 
-		if ( $output_methods & self::HREFLANG_TYPE_HTTP_HEADER ) {
+		if ( $output_methods & Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTTP_HEADER ) {
 			add_action(
 				'template_redirect',
 				array(
@@ -428,7 +428,7 @@ class Multilingual_Press {
 				)
 			);
 		}
-		if ( $output_methods & self::HREFLANG_TYPE_HTML_HEAD ) {
+		if ( $output_methods & Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTML_HEAD ) {
 			add_action(
 				'wp_head',
 				array(
