@@ -7,6 +7,9 @@
  */
 class Mlp_Hreflang_Header_Output {
 
+	const HREFLANG_TYPE_HTTP_HEADER = 1;
+	const HREFLANG_TYPE_HTML_HEAD = 2;
+
 	/**
 	 * @var Mlp_Language_Api_Interface
 	 */

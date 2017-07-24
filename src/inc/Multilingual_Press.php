@@ -10,9 +10,6 @@
  */
 class Multilingual_Press {
 
-    const HREFLANG_TYPE_HTTP_HEADER = 1;
-    const HREFLANG_TYPE_HTML_HEAD = 2;
-
 	/**
 	 * The linked elements table
 	 *
@@ -411,13 +408,16 @@ class Multilingual_Press {
 
 		/**
 		 * Filters the used output methods for the hreflang links.
-		 * Possible values are Multilingual_Press::HREFLANG_TYPE_HTTP_HEADER and Multilingual_Press::HREFLANG_TYPE_HTML_HEAD.
+		 * Possible values are Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTTP_HEADER and Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTML_HEAD.
 		 *
 		 * @since 2.7.0
 		 *
 		 * @param int The used output methods.
 		 */
-		$output_methods = apply_filters( 'multilingualpress.hreflang_type', self::HREFLANG_TYPE_HTTP_HEADER | self::HREFLANG_TYPE_HTML_HEAD );
+		$output_methods = apply_filters(
+			'multilingualpress.hreflang_type',
+			Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTTP_HEADER | Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTML_HEAD
+		);
 
 		if ( $output_methods & self::HREFLANG_TYPE_HTTP_HEADER ) {
 			add_action(
