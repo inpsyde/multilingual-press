@@ -10,6 +10,9 @@
  */
 class Multilingual_Press {
 
+    const HREFLANG_TYPE_HTTP_HEADER = 1;
+    const HREFLANG_TYPE_HTML_HEAD = 2;
+
 	/**
 	 * The linked elements table
 	 *
@@ -408,15 +411,15 @@ class Multilingual_Press {
 
 		/**
 		 * Filters the used output methods for the hreflang links.
-		 * Possible values are 'header' and 'html'.
+		 * Possible values are Multilingual_Press::HREFLANG_TYPE_HTTP_HEADER and Multilingual_Press::HREFLANG_TYPE_HTML_HEAD.
 		 *
 		 * @since 2.7.0
 		 *
-		 * @param String[] The used output methods.
+		 * @param int The used output methods.
 		 */
-		$output_methods = apply_filters( 'multilingualpress.hreflang_output_method', array( 'header', 'html' ) );
-		
-		if ( in_array( 'header', $output_methods ) ) {
+		$output_methods = apply_filters( 'multilingualpress.hreflang_type', self::HREFLANG_TYPE_HTTP_HEADER | self::HREFLANG_TYPE_HTML_HEAD );
+
+		if ( $output_methods & self::HREFLANG_TYPE_HTTP_HEADER ) {
 			add_action(
 				'template_redirect',
 				array(
@@ -425,7 +428,7 @@ class Multilingual_Press {
 				)
 			);
 		}
-		if ( in_array( 'html', $output_methods ) ) {
+		if ( $output_methods & self::HREFLANG_TYPE_HTML_HEAD ) {
 			add_action(
 				'wp_head',
 				array(
