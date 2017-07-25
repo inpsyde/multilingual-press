@@ -374,7 +374,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		} else {
 			$alternate_languages = $container['multilingualpress.alternate_languages'];
 
-			$hreflang_type = AlternateLanguageHTTPHeaders::TYPE;
 			/**
 			 * Filters the output type for the hreflang links.
 			 *
@@ -385,9 +384,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			 *
 			 * @param int $hreflang_type The output type for the hreflang links.
 			 */
-			$hreflang_type = absint( apply_filters( 'multilingualpress.hreflang_type', $hreflang_type ) );
+			$type = absint( apply_filters( 'multilingualpress.hreflang_type', AlternateLanguageHTTPHeaders::TYPE ) );
 
-			if ( $hreflang_type & AlternateLanguageHTTPHeaders::TYPE ) {
+			if ( $type & AlternateLanguageHTTPHeaders::TYPE ) {
 				add_action( 'template_redirect', function () use ( $alternate_languages ) {
 
 					if ( ! is_paged() ) {
@@ -396,7 +395,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				}, 11 );
 			}
 
-			if ( $hreflang_type & AlternateLanguageHTMLLinkTags::TYPE ) {
+			if ( $type & AlternateLanguageHTMLLinkTags::TYPE ) {
 				add_action( 'wp_head', function () use ( $alternate_languages ) {
 
 					if ( ! is_paged() ) {
