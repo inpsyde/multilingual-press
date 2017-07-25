@@ -406,36 +406,24 @@ class Multilingual_Press {
 		// frontend-hooks
 		$hreflang = new Mlp_Hreflang_Header_Output( $this->plugin_data->get( 'language_api' ) );
 
+		$hreflang_type = Mlp_Hreflang_Header_Output::TYPE_HTTP_HEADER | Mlp_Hreflang_Header_Output::TYPE_HTML_LINK_TAG;
 		/**
-		 * Filters the used output methods for the hreflang links.
-		 * Possible values are Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTTP_HEADER and Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTML_HEAD.
+		 * Filters the output type for the hreflang links.
+		 *
+		 * The type is a bitmask with possible (partial) values Mlp_Hreflang_Header_Output::TYPE_HTTP_HEADER and Mlp_Hreflang_Header_Output::TYPE_HTML_LINK_TAG.
 		 *
 		 * @since 2.7.0
 		 *
-		 * @param int The used output methods.
+		 * @param int $hreflang_type The output type for the hreflang links.
 		 */
-		$output_methods = apply_filters(
-			'multilingualpress.hreflang_type',
-			Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTTP_HEADER | Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTML_HEAD
-		);
+		$hreflang_type = absint( apply_filters( 'multilingualpress.hreflang_type', $hreflang_type ) );
 
-		if ( $output_methods & Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTTP_HEADER ) {
-			add_action(
-				'template_redirect',
-				array(
-					$hreflang,
-					'http_header'
-				)
-			);
+		if ( $hreflang_type & Mlp_Hreflang_Header_Output::TYPE_HTTP_HEADER ) {
+			add_action( 'template_redirect', array( $hreflang, 'http_header' ), 11 );
 		}
-		if ( $output_methods & Mlp_Hreflang_Header_Output::HREFLANG_TYPE_HTML_HEAD ) {
-			add_action(
-				'wp_head',
-				array(
-					$hreflang,
-					'wp_head'
-				)
-			);
+
+		if ( $hreflang_type & Mlp_Hreflang_Header_Output::TYPE_HTML_LINK_TAG ) {
+			add_action( 'wp_head', array( $hreflang, 'wp_head' ) );
 		}
 	}
 
