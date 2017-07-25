@@ -45,7 +45,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		 *
 		 * @param float $factor The factor used to compute the priority of language-only matches.
 		 */
-		$factor = (float) apply_filters( 'multilingualpress.language_only_priority_factor', .7 );
+		$factor = (float) apply_filters( 'multilingualpress.language_only_priority_factor', .8 );
 		$factor = min( 1, $factor );
 		$factor = max( 0, $factor );
 
