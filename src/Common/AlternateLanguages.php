@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Common;
 
 use Inpsyde\MultilingualPress\API\Translations;
-use Inpsyde\MultilingualPress\Module\Redirect\NoredirectPermalinkFilter;
+use Inpsyde\MultilingualPress\Common\Type\Translation;
 
 /**
  * Alternate languages data object.
@@ -14,6 +14,24 @@ use Inpsyde\MultilingualPress\Module\Redirect\NoredirectPermalinkFilter;
  * @since   3.0.0
  */
 class AlternateLanguages implements \IteratorAggregate {
+
+	/**
+	 * Filter name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_TRANSLATIONS = 'multilingualpress.hreflang_translations';
+
+	/**
+	 * Filter name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_URL = 'multilingualpress.hreflang_url';
 
 	/**
 	 * @var Translations
@@ -67,18 +85,20 @@ class AlternateLanguages implements \IteratorAggregate {
 		$translations = $this->api->get_translations( [
 			'include_base' => true,
 		] );
-		if ( $translations ) {
-			$regexp = '/(\?|&)' . NoredirectPermalinkFilter::QUERY_ARGUMENT . '=/';
+		foreach ( $translations as $translation ) {
+			$url = $translation->remote_url();
+			if ( $url ) {
+				/**
+				 * Filters the URL to be used for hreflang links.
+				 *
+				 * @since 3.0.0
+				 *
+				 * @param string      $url         The URL to be used for hreflang links.
+				 * @param Translation $translation Translation object.
+				 */
+				$url = (string) apply_filters( self::FILTER_URL, $url, $translation );
 
-			foreach ( $translations as $translation ) {
-				$url = $translation->remote_url();
-				if ( $url ) {
-					if ( preg_match( $regexp, $url ) ) {
-						$url = remove_query_arg( NoredirectPermalinkFilter::QUERY_ARGUMENT, $url );
-					}
-
-					$urls[ $translation->language()->name( 'http_code' ) ] = $url;
-				}
+				$urls[ $translation->language()->name( 'http_code' ) ] = $url;
 			}
 		}
 
@@ -89,6 +109,6 @@ class AlternateLanguages implements \IteratorAggregate {
 		 *
 		 * @param string[] $translations The available translations to be used for hreflang links.
 		 */
-		$this->urls = (array) apply_filters( 'multilingualpress.hreflang_translations', $urls );
+		$this->urls = (array) apply_filters( self::FILTER_TRANSLATIONS, $urls );
 	}
 }

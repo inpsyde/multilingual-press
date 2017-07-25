@@ -77,6 +77,25 @@ final class NoredirectPermalinkFilter implements Filter {
 	}
 
 	/**
+	 * Removes the noredirect query argument from the given URL, if present.
+	 *
+	 * @since   3.0.0
+	 * @wp-hook AlternateLanguages::FILTER_URL
+	 *
+	 * @param string $url URL.
+	 *
+	 * @return string The (filtered) URL.
+	 */
+	public function remove_noredirect_query_argument( string $url ): string {
+
+		if ( $url && preg_match( '/(\?|&)' . self::QUERY_ARGUMENT . '=/', $url ) ) {
+			$url = remove_query_arg( self::QUERY_ARGUMENT, $url );
+		}
+
+		return $url;
+	}
+
+	/**
 	 * Returns the individual MultilingualPress language code of all (related) sites.
 	 *
 	 * @return string[] An array with site IDs as keys and the individual MultilingualPress language code as values.

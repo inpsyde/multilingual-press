@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+use Inpsyde\MultilingualPress\Common\AlternateLanguages;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SecureSiteSettingUpdater;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSetting;
@@ -253,7 +254,9 @@ final class ServiceProvider implements ModuleServiceProvider {
 	 */
 	private function activate_module_for_front_end( Container $container ) {
 
-		$container['multilingualpress.noredirect_permalink_filter']->enable();
+		$filter = $container['multilingualpress.noredirect_permalink_filter'];
+		$filter->enable();
+		add_action( AlternateLanguages::FILTER_URL, [ $filter, 'remove_noredirect_query_argument' ] );
 
 		if ( $container['multilingualpress.redirect_request_validator']->is_valid() ) {
 			add_action( 'template_redirect', [ $container['multilingualpress.redirector'], 'redirect' ], 1 );
