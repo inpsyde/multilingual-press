@@ -8,6 +8,24 @@
 class Mlp_Hreflang_Header_Output {
 
 	/**
+	 * Output type.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @var int
+	 */
+	const TYPE_HTTP_HEADER = 1;
+
+	/**
+	 * Output type.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @var int
+	 */
+	const TYPE_HTML_LINK_TAG = 2;
+
+	/**
 	 * @var Mlp_Language_Api_Interface
 	 */
 	private $language_api;
@@ -135,6 +153,15 @@ class Mlp_Hreflang_Header_Output {
 				$this->translations[ $language->get_name( 'http' ) ] = $url;
 			}
 		}
+
+		/**
+		 * Filters the available translations to be used for hreflang links.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param string[] $translations The available translations to be used for hreflang links.
+		 */
+		$this->translations = apply_filters( 'multilingualpress.hreflang_translations', $this->translations );
 
 		return $this->translations;
 	}
