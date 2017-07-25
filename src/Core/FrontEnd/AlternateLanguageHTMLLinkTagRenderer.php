@@ -7,21 +7,21 @@ namespace Inpsyde\MultilingualPress\Core\FrontEnd;
 use Inpsyde\MultilingualPress\Common\AlternateLanguages;
 
 /**
- * Alternate language HTML link tags.
+ * Alternate language HTML link tag renderer implementation.
  *
  * @package Inpsyde\MultilingualPress\Core\FrontEnd
  * @since   3.0.0
  */
-class AlternateLanguageHTMLLinkTags {
+final class AlternateLanguageHTMLLinkTagRenderer implements AlternateLanguageRenderer {
 
 	/**
-	 * Output type.
+	 * Filter name.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var int
+	 * @var string
 	 */
-	const TYPE = 2;
+	const FILTER = 'multilingualpress.hreflang_html_link_tag';
 
 	/**
 	 * @var AlternateLanguages
@@ -41,14 +41,16 @@ class AlternateLanguageHTMLLinkTags {
 	}
 
 	/**
-	 * Renders an alternate language HTML link tag for each available translation into the HTML head.
+	 * Renders all alternate languages as HTML link tags into the HTML head.
 	 *
 	 * @since   3.0.0
 	 * @wp-hook wp_head
 	 *
-	 * @return void
+	 * @param array ...$args Optional arguments.
+	 *
+	 * @return void|mixed
 	 */
-	public function render() {
+	public function render( ...$args ) {
 
 		foreach ( $this->alternate_languages->getIterator() as $language => $url ) {
 			$html_link_tag = sprintf(
@@ -66,7 +68,19 @@ class AlternateLanguageHTMLLinkTags {
 			 * @param string $language      HTTP language code (e.g., "en-US").
 			 * @param string $url           Target URL.
 			 */
-			echo apply_filters( 'multilingualpress.hreflang_html_link_tag', $html_link_tag, $language, $url );
+			echo apply_filters( self::FILTER, $html_link_tag, $language, $url );
 		}
+	}
+
+	/**
+	 * Returns the output type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return int The output type.
+	 */
+	public function type(): int {
+
+		return self::TYPE_HTML_LINK_TAG;
 	}
 }

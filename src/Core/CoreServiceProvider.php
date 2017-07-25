@@ -29,8 +29,9 @@ use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsTabView;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdateRequestHandler;
 use Inpsyde\MultilingualPress\Core\Admin\TypeSafeSiteSettingsRepository;
-use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTMLLinkTags;
-use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTTPHeaders;
+use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageController;
+use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTMLLinkTagRenderer;
+use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTTPHeaderRenderer;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -57,6 +58,25 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 * @return void
 	 */
 	public function register( Container $container ) {
+
+		$container['multilingualpress.alternate_language_controller'] = function () {
+
+			return new AlternateLanguageController();
+		};
+
+		$container['multilingualpress.alternate_language_html_link_tag_renderer'] = function ( Container $container ) {
+
+			return new AlternateLanguageHTMLLinkTagRenderer(
+				$container['multilingualpress.alternate_languages']
+			);
+		};
+
+		$container['multilingualpress.alternate_language_http_header_renderer'] = function ( Container $container ) {
+
+			return new AlternateLanguageHTTPHeaderRenderer(
+				$container['multilingualpress.alternate_languages']
+			);
+		};
 
 		$container->share( 'multilingualpress.alternate_languages', function ( Container $container ) {
 
@@ -372,37 +392,16 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				);
 			}
 		} else {
-			$alternate_languages = $container['multilingualpress.alternate_languages'];
-
-			/**
-			 * Filters the output type for the hreflang links.
-			 *
-			 * The type is a bitmask with possible (partial) values AlternateLanguageHTTPHeaders::TYPE and
-			 * AlternateLanguageHTMLLinkTags::TYPE.
-			 *
-			 * @since 2.7.0
-			 *
-			 * @param int $hreflang_type The output type for the hreflang links.
-			 */
-			$type = absint( apply_filters( 'multilingualpress.hreflang_type', AlternateLanguageHTTPHeaders::TYPE ) );
-
-			if ( $type & AlternateLanguageHTTPHeaders::TYPE ) {
-				add_action( 'template_redirect', function () use ( $alternate_languages ) {
-
-					if ( ! is_paged() ) {
-						( new FrontEnd\AlternateLanguageHTTPHeaders( $alternate_languages ) )->send();
-					}
-				}, 11 );
-			}
-
-			if ( $type & AlternateLanguageHTMLLinkTags::TYPE ) {
-				add_action( 'wp_head', function () use ( $alternate_languages ) {
-
-					if ( ! is_paged() ) {
-						( new FrontEnd\AlternateLanguageHTMLLinkTags( $alternate_languages ) )->render();
-					}
-				} );
-			}
+			$alternate_language_controller = $container['multilingualpress.alternate_language_controller'];
+			$alternate_language_controller->register_renderer(
+				$container['multilingualpress.alternate_language_html_link_tag_renderer'],
+				'wp_head'
+			);
+			$alternate_language_controller->register_renderer(
+				$container['multilingualpress.alternate_language_http_header_renderer'],
+				'template_redirect',
+				11
+			);
 
 			add_filter( 'language_attributes', 'Inpsyde\\MultilingualPress\\replace_language_in_language_attributes' );
 		}

@@ -7,21 +7,21 @@ namespace Inpsyde\MultilingualPress\Core\FrontEnd;
 use Inpsyde\MultilingualPress\Common\AlternateLanguages;
 
 /**
- * Alternate language HTTP headers.
+ * Alternate language HTTP header renderer implementation.
  *
  * @package Inpsyde\MultilingualPress\Core\FrontEnd
  * @since   3.0.0
  */
-class AlternateLanguageHTTPHeaders {
+final class AlternateLanguageHTTPHeaderRenderer implements AlternateLanguageRenderer {
 
 	/**
-	 * Output type.
+	 * Filter name.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var int
+	 * @var string
 	 */
-	const TYPE = 1;
+	const FILTER = 'multilingualpress.hreflang_http_header';
 
 	/**
 	 * @var AlternateLanguages
@@ -41,14 +41,16 @@ class AlternateLanguageHTTPHeaders {
 	}
 
 	/**
-	 * Sends an alternate language HTTP header for each available translation.
+	 * Renders all available alternate languages as Link HTTP headers.
 	 *
 	 * @since   3.0.0
 	 * @wp-hook template_redirect
 	 *
-	 * @return void
+	 * @param array ...$args Optional arguments.
+	 *
+	 * @return void|mixed
 	 */
-	public function send() {
+	public function render( ...$args ) {
 
 		foreach ( $this->alternate_languages->getIterator() as $language => $url ) {
 			$header = sprintf(
@@ -66,10 +68,22 @@ class AlternateLanguageHTTPHeaders {
 			 * @param string $language HTTP language code (e.g., "en-US").
 			 * @param string $url      Target URL.
 			 */
-			$header = (string) apply_filters( 'multilingualpress.hreflang_http_header', $header, $language, $url );
+			$header = (string) apply_filters( self::FILTER, $header, $language, $url );
 			if ( $header ) {
 				header( $header, false );
 			}
 		}
+	}
+
+	/**
+	 * Returns the output type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return int The output type.
+	 */
+	public function type(): int {
+
+		return self::TYPE_HTTP_HEADER;
 	}
 }
