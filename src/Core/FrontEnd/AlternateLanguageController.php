@@ -13,6 +13,15 @@ namespace Inpsyde\MultilingualPress\Core\FrontEnd;
 class AlternateLanguageController {
 
 	/**
+	 * Filter name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_TYPE = 'multilingualpress.hreflang_type';
+
+	/**
 	 * @var int
 	 */
 	private $type;
@@ -33,10 +42,7 @@ class AlternateLanguageController {
 		 *
 		 * @param int $hreflang_type The output type for the hreflang links.
 		 */
-		$this->type = absint( apply_filters(
-			'multilingualpress.hreflang_type',
-			AlternateLanguageRenderer::TYPE_HTTP_HEADER
-		) );
+		$this->type = absint( apply_filters( self::FILTER_TYPE, AlternateLanguageRenderer::TYPE_HTTP_HEADER ) );
 	}
 
 	/**
