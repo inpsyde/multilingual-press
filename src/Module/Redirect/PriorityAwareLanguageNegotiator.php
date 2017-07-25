@@ -72,7 +72,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 		 *
 		 * @param float $factor The factor used to compute the priority of language-only matches.
 		 */
-		$factor = (float) apply_filters( static::FILTER_PRIORITY_FACTOR, .7 );
+		$factor = (float) apply_filters( static::FILTER_PRIORITY_FACTOR, .8 );
 
 		$this->language_only_priority_factor = (float) max( 0, min( 1, $factor ) );
 	}
