@@ -29,6 +29,8 @@ use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsTabView;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdateRequestHandler;
 use Inpsyde\MultilingualPress\Core\Admin\TypeSafeSiteSettingsRepository;
+use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTMLLinkTags;
+use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTTPHeaders;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -372,18 +374,36 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		} else {
 			$alternate_languages = $container['multilingualpress.alternate_languages'];
 
-			add_action( 'template_redirect', function () use ( $alternate_languages ) {
+			$hreflang_type = AlternateLanguageHTTPHeaders::TYPE;
+			/**
+			 * Filters the output type for the hreflang links.
+			 *
+			 * The type is a bitmask with possible (partial) values AlternateLanguageHTTPHeaders::TYPE and
+			 * AlternateLanguageHTMLLinkTags::TYPE.
+			 *
+			 * @since 2.7.0
+			 *
+			 * @param int $hreflang_type The output type for the hreflang links.
+			 */
+			$hreflang_type = absint( apply_filters( 'multilingualpress.hreflang_type', $hreflang_type ) );
 
-				if ( ! is_paged() ) {
-					( new FrontEnd\AlternateLanguageHTTPHeaders( $alternate_languages ) )->send();
-				}
-			} );
-			add_action( 'wp_head', function () use ( $alternate_languages ) {
+			if ( $hreflang_type & AlternateLanguageHTTPHeaders::TYPE ) {
+				add_action( 'template_redirect', function () use ( $alternate_languages ) {
 
-				if ( ! is_paged() ) {
-					( new FrontEnd\AlternateLanguageHTMLLinkTags( $alternate_languages ) )->render();
-				}
-			} );
+					if ( ! is_paged() ) {
+						( new FrontEnd\AlternateLanguageHTTPHeaders( $alternate_languages ) )->send();
+					}
+				}, 11 );
+			}
+
+			if ( $hreflang_type & AlternateLanguageHTMLLinkTags::TYPE ) {
+				add_action( 'wp_head', function () use ( $alternate_languages ) {
+
+					if ( ! is_paged() ) {
+						( new FrontEnd\AlternateLanguageHTMLLinkTags( $alternate_languages ) )->render();
+					}
+				} );
+			}
 
 			add_filter( 'language_attributes', 'Inpsyde\\MultilingualPress\\replace_language_in_language_attributes' );
 		}

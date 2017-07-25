@@ -15,6 +15,15 @@ use Inpsyde\MultilingualPress\Common\AlternateLanguages;
 class AlternateLanguageHTMLLinkTags {
 
 	/**
+	 * Output type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var int
+	 */
+	const TYPE = 2;
+
+	/**
 	 * @var AlternateLanguages
 	 */
 	private $alternate_languages;

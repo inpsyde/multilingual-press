@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Common;
 
 use Inpsyde\MultilingualPress\API\Translations;
-use Inpsyde\MultilingualPress\Module\Redirect\NoredirectStorage;
+use Inpsyde\MultilingualPress\Module\Redirect\NoredirectPermalinkFilter;
 
 /**
  * Alternate languages data object.
@@ -16,25 +16,25 @@ use Inpsyde\MultilingualPress\Module\Redirect\NoredirectStorage;
 class AlternateLanguages implements \IteratorAggregate {
 
 	/**
-	 * @var string[]
-	 */
-	private $data;
-
-	/**
 	 * @var Translations
 	 */
-	private $translations;
+	private $api;
+
+	/**
+	 * @var string[]
+	 */
+	private $urls;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Translations $translations Translations API object.
+	 * @param Translations $api Translations API object.
 	 */
-	public function __construct( Translations $translations ) {
+	public function __construct( Translations $api ) {
 
-		$this->translations = $translations;
+		$this->api = $api;
 	}
 
 	/**
@@ -46,43 +46,49 @@ class AlternateLanguages implements \IteratorAggregate {
 	 */
 	public function getIterator() {
 
-		$this->ensure_data();
+		$this->ensure_urls();
 
-		return new \ArrayIterator( $this->data );
+		return new \ArrayIterator( $this->urls );
 	}
 
 	/**
-	 * Takes care that the alternate languages data is available for use.
+	 * Takes care that the alternate language URLs are available for use.
 	 *
 	 * @return void
 	 */
-	private function ensure_data() {
+	private function ensure_urls() {
 
-		if ( isset( $this->data ) ) {
+		if ( isset( $this->urls ) ) {
 			return;
 		}
 
-		$translations = $this->translations->get_translations( [
+		$urls = [];
+
+		$translations = $this->api->get_translations( [
 			'include_base' => true,
 		] );
+		if ( $translations ) {
+			$regexp = '/(\?|&)' . NoredirectPermalinkFilter::QUERY_ARGUMENT . '=/';
 
-		$regexp = '/(\?|&)' . NoredirectStorage::KEY . '=/';
+			foreach ( $translations as $translation ) {
+				$url = $translation->remote_url();
+				if ( $url ) {
+					if ( preg_match( $regexp, $url ) ) {
+						$url = remove_query_arg( NoredirectPermalinkFilter::QUERY_ARGUMENT, $url );
+					}
 
-		$data = [];
-
-		foreach ( $translations as $translation ) {
-			$url = $translation->remote_url();
-			if ( $url ) {
-				$language = $translation->language();
-
-				if ( preg_match( $regexp, $url ) ) {
-					$url = remove_query_arg( NoredirectStorage::KEY, $url );
+					$urls[ $translation->language()->name( 'http_code' ) ] = $url;
 				}
-
-				$data[ $language->name( 'http_code' ) ] = $url;
 			}
 		}
 
-		$this->data = $data;
+		/**
+		 * Filters the available translations to be used for hreflang links.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param string[] $translations The available translations to be used for hreflang links.
+		 */
+		$this->urls = (array) apply_filters( 'multilingualpress.hreflang_translations', $urls );
 	}
 }
