@@ -37,9 +37,9 @@ class TrasherSettingView {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param TrasherSettingRepository  $setting_repository Trasher setting repository object.
-	 * @param Nonce                     $nonce              Nonce object.
-     * @param ActivePostTypes           $active_post_types  Active post types storage object.
+	 * @param TrasherSettingRepository $setting_repository Trasher setting repository object.
+	 * @param Nonce                    $nonce              Nonce object.
+	 * @param ActivePostTypes          $active_post_types  Active post types storage object.
 	 */
 	public function __construct(
         TrasherSettingRepository $setting_repository,
