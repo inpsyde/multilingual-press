@@ -17,6 +17,11 @@ use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 class Trasher {
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -32,18 +37,13 @@ class Trasher {
 	private static $trashing_related_posts = false;
 
 	/**
-	 * @var ActivePostTypes
-	 */
-	private $active_post_types;
-
-	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param TrasherSettingRepository $setting_repository Trasher setting repository object.
 	 * @param ContentRelations         $content_relations  Content relations API object.
-	 * @param ActivePostTypes          $active_post_types  ActivePostTypes object.
+	 * @param ActivePostTypes          $active_post_types  Active post types storage object.
 	 */
 	public function __construct(
 		TrasherSettingRepository $setting_repository,
@@ -70,7 +70,7 @@ class Trasher {
 	 */
 	public function trash_related_posts( $post_id ): int {
 
-		if ( ! $this->active_post_types->includes( get_post_type( (int) $post_id ) ) ) {
+		if ( ! $this->active_post_types->includes( (string) get_post_type( $post_id ) ) ) {
 			return 0;
 		}
 

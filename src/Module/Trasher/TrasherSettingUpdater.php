@@ -19,6 +19,11 @@ use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 class TrasherSettingUpdater {
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -39,11 +44,6 @@ class TrasherSettingUpdater {
 	private $setting_repository;
 
 	/**
-	 * @var ActivePostTypes
-	 */
-	private $active_post_types;
-
-	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -52,7 +52,7 @@ class TrasherSettingUpdater {
 	 * @param ContentRelations         $content_relations  Content relations API object.
 	 * @param Request                  $request            HTTP request object.
 	 * @param Nonce                    $nonce              Nonce object.
-	 * @param ActivePostTypes          $active_post_types  ActivePostTypes object.
+	 * @param ActivePostTypes          $active_post_types  Active post types storage object.
 	 */
 	public function __construct(
 		TrasherSettingRepository $setting_repository,
@@ -86,11 +86,11 @@ class TrasherSettingUpdater {
 	 */
 	public function update_settings( $post_id, \WP_Post $post ): int {
 
-		if ( ! $this->nonce->is_valid() ) {
+		if ( ! $this->active_post_types->includes( (string) $post->post_type ) ) {
 			return 0;
 		}
 
-		if ( ! $this->active_post_types->includes( $post->post_type ) ) {
+		if ( ! $this->nonce->is_valid() ) {
 			return 0;
 		}
 

@@ -18,6 +18,11 @@ use function Inpsyde\MultilingualPress\nonce_field;
 class TrasherSettingView {
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * @var Nonce
 	 */
 	private $nonce;
@@ -28,18 +33,13 @@ class TrasherSettingView {
 	private $setting_repository;
 
 	/**
-	 * @var ActivePostTypes
-	 */
-	private $active_post_types;
-
-	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param TrasherSettingRepository  $setting_repository Trasher setting repository object.
 	 * @param Nonce                     $nonce              Nonce object.
-     * @param ActivePostTypes           $active_post_types  ActivePostTypes object.
+     * @param ActivePostTypes           $active_post_types  Active post types storage object.
 	 */
 	public function __construct(
         TrasherSettingRepository $setting_repository,
@@ -66,7 +66,7 @@ class TrasherSettingView {
 	 */
 	public function render( \WP_Post $post ) {
 
-		if ( ! $this->active_post_types->includes( $post->post_type ) ) {
+		if ( ! $this->active_post_types->includes( (string) $post->post_type ) ) {
 			return;
 		}
 

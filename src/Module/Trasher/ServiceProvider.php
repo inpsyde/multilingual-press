@@ -9,7 +9,6 @@ use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
-use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Module service provider.
@@ -33,11 +32,6 @@ final class ServiceProvider implements ModuleServiceProvider {
 		$container['multilingualpress.save_trasher_setting_nonce'] = function () {
 
 			return new WPNonce( 'save_trasher_setting' );
-		};
-
-		$container['multilingualpress.active_post_types'] = function () {
-
-			return new ActivePostTypes();
 		};
 
 		$container['multilingualpress.trasher'] = function ( Container $container ) {
