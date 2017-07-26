@@ -7,6 +7,8 @@
 [issue #223](https://github.com/inpsyde/multilingual-press/issues/223).
 - Language API: Use fallback names for languages, see
 [issue #224](https://github.com/inpsyde/multilingual-press/issues/224).
+- Trasher Module: Make the whole module act on activated post types only, see
+[issue #215](https://github.com/inpsyde/MultilingualPress/issues/215).
 
 ## 2.5.5
 - Translations: Fix issue with unfilterable URLs in the `hreflang` HTTP header and HTML element output.
