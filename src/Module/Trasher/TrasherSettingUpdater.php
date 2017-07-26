@@ -8,6 +8,7 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Trasher setting updater.
@@ -38,6 +39,11 @@ class TrasherSettingUpdater {
 	private $setting_repository;
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -46,12 +52,14 @@ class TrasherSettingUpdater {
 	 * @param ContentRelations         $content_relations  Content relations API object.
 	 * @param Request                  $request            HTTP request object.
 	 * @param Nonce                    $nonce              Nonce object.
+	 * @param ActivePostTypes          $active_post_types  ActivePostTypes object.
 	 */
 	public function __construct(
 		TrasherSettingRepository $setting_repository,
 		ContentRelations $content_relations,
 		Request $request,
-		Nonce $nonce
+		Nonce $nonce,
+		ActivePostTypes $active_post_types
 	) {
 
 		$this->setting_repository = $setting_repository;
@@ -61,6 +69,8 @@ class TrasherSettingUpdater {
 		$this->request = $request;
 
 		$this->nonce = $nonce;
+
+		$this->active_post_types = $active_post_types;
 	}
 
 	/**
@@ -77,6 +87,10 @@ class TrasherSettingUpdater {
 	public function update_settings( $post_id, \WP_Post $post ): int {
 
 		if ( ! $this->nonce->is_valid() ) {
+			return 0;
+		}
+
+		if ( ! $this->active_post_types->includes( $post->post_type ) ) {
 			return 0;
 		}
 

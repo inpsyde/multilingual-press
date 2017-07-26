@@ -9,6 +9,7 @@ use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Module service provider.
@@ -34,11 +35,17 @@ final class ServiceProvider implements ModuleServiceProvider {
 			return new WPNonce( 'save_trasher_setting' );
 		};
 
+		$container['multilingualpress.active_post_types'] = function () {
+
+			return new ActivePostTypes();
+		};
+
 		$container['multilingualpress.trasher'] = function ( Container $container ) {
 
 			return new Trasher(
 				$container['multilingualpress.trasher_setting_repository'],
-				$container['multilingualpress.content_relations']
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.active_post_types']
 			);
 		};
 
@@ -53,7 +60,8 @@ final class ServiceProvider implements ModuleServiceProvider {
 				$container['multilingualpress.trasher_setting_repository'],
 				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.server_request'],
-				$container['multilingualpress.save_trasher_setting_nonce']
+				$container['multilingualpress.save_trasher_setting_nonce'],
+				$container['multilingualpress.active_post_types']
 			);
 		};
 
@@ -61,7 +69,8 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 			return new TrasherSettingView(
 				$container['multilingualpress.trasher_setting_repository'],
-				$container['multilingualpress.save_trasher_setting_nonce']
+				$container['multilingualpress.save_trasher_setting_nonce'],
+				$container['multilingualpress.active_post_types']
 			);
 		};
 	}

@@ -6,6 +6,7 @@ namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\NetworkState;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Post trasher.
@@ -31,18 +32,30 @@ class Trasher {
 	private static $trashing_related_posts = false;
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param TrasherSettingRepository $setting_repository Trasher setting repository object.
 	 * @param ContentRelations         $content_relations  Content relations API object.
+	 * @param ActivePostTypes          $active_post_types  ActivePostTypes object.
 	 */
-	public function __construct( TrasherSettingRepository $setting_repository, ContentRelations $content_relations ) {
+	public function __construct(
+		TrasherSettingRepository $setting_repository,
+		ContentRelations $content_relations,
+		ActivePostTypes $active_post_types
+	) {
 
 		$this->setting_repository = $setting_repository;
 
 		$this->content_relations = $content_relations;
+
+		$this->active_post_types = $active_post_types;
 	}
 
 	/**
@@ -56,6 +69,10 @@ class Trasher {
 	 * @return int The number of related posts trashed.
 	 */
 	public function trash_related_posts( $post_id ): int {
+
+		if ( ! $this->active_post_types->includes( get_post_type( (int) $post_id ) ) ) {
+			return 0;
+		}
 
 		if ( self::$trashing_related_posts || ! $this->setting_repository->get_setting( (int) $post_id ) ) {
 			return 0;
