@@ -59,7 +59,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	public function get_redirect_match( $args = array() ) {
 		$translations = $this->language_api->get_translations(
-			wp_parse_args($args, array ( 'include_base' => TRUE ))
+			wp_parse_args( $args, array( 'include_base' => true ) )
 		);
 
 		if ( empty ( $translations ) )
