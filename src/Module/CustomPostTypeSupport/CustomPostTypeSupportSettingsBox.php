@@ -141,7 +141,9 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 
 		$id = "mlp-cpt-{$slug}";
 
-		$post_type_setting = empty( $supported_post_types[ $slug ] ) ? 0 : (int) $supported_post_types[ $slug ];
+		$post_type_setting = empty( $supported_post_types[ $slug ] )
+			? PostTypeRepository::CPT_INACTIVE
+			: (int) $supported_post_types[ $slug ];
 		?>
 		<tr>
 			<td>
