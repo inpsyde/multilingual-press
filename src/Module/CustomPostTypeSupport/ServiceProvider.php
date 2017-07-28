@@ -113,7 +113,7 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 		add_filter( ActivePostTypes::FILTER_ACTIVE_POST_TYPES, function ( array $post_types ) use ( $repository ) {
 
-			return array_merge( $post_types, $repository->get_supported_post_types() );
+			return array_merge( $post_types, array_keys( $repository->get_supported_post_types() ) );
 		} );
 
 		$url_filter = $container['multilingualpress.post_type_link_url_filter'];
