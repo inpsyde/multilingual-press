@@ -59,7 +59,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	public function get_redirect_match( $args = array() ) {
 		$translations = $this->language_api->get_translations(
-			wp_parse_args( $args, array( 'include_base' => true ) )
+			array_merge( array( 'include_base' => TRUE ), $args )
 		);
 
 		if ( empty ( $translations ) )
@@ -114,7 +114,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 			'url'               => '',
 			'language'          => '',
 			'site_id'           => 0,
-			'target_content_id' => 0,
+			'content_id' => 0,
 		);
 	}
 
@@ -149,7 +149,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 			'url'               => $url,
 			'language'          => $language->get_name( 'http' ),
 			'site_id'           => $site_id,
-			'target_content_id' => $translation->get_target_content_id(),
+			'content_id' => $translation->get_target_content_id(),
 		);
 	}
 
