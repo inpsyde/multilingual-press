@@ -55,9 +55,8 @@ final class WidgetView implements View {
 
 		$related_site_ids = $this->site_relations->get_related_site_ids();
 		if ( ! $related_site_ids ) {
+			echo '<p>' . esc_html__( 'There are no sites related to this one.', 'multilingualpress' ) . '</p>';
 
-			esc_html_e( 'There are no sites related to this one.', 'multilingualpress' );
-			
 			return;
 		}
 
