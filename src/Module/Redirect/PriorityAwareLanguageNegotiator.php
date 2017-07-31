@@ -82,13 +82,15 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param array $args Optional. Arguments required to determine the redirect targets. Defaults to empty array.
+	 *
 	 * @return RedirectTarget Redirect target object.
 	 */
-	public function get_redirect_target(): RedirectTarget {
+	public function get_redirect_target( array $args = [] ): RedirectTarget {
 
-		$translations = $this->translations->get_translations( [
-			'include_base' => true,
-		] );
+		$translations = $this->translations->get_translations(
+			array_merge( [ 'include_base' => true, ], $args )
+		);
 		if ( ! $translations ) {
 			return new RedirectTarget();
 		}
@@ -141,6 +143,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 					RedirectTarget::KEY_URL      => $translation->remote_url(),
 					RedirectTarget::KEY_LANGUAGE => $language->name( 'http' ),
 					RedirectTarget::KEY_SITE_ID  => $site_id,
+					RedirectTarget::KEY_CONTENT_ID => $translation->target_content_id(),
 				] );
 			}
 		}, $user_languages );
