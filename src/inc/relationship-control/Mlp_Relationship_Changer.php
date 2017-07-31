@@ -207,7 +207,15 @@ class Mlp_Relationship_Changer {
 			'post'
 		);
 
-		$relations = $this->content_relations->get_relations( $this->source_site_id, $this->source_post_id, 'post' );
+		$remote_site_id = 0;
+
+		$remote_post_id = 0;
+
+		$relations = $this->content_relations->get_relations(
+			$translation_ids['ml_source_blogid'],
+			$translation_ids['ml_source_elementid'],
+			'post'
+		);
 		if ( 2 < count( $relations ) ) {
 			$remote_site_id = $this->remote_site_id;
 
@@ -219,10 +227,6 @@ class Mlp_Relationship_Changer {
 					$remote_post_id = $this->source_post_id;
 				}
 			}
-		} else {
-			$remote_site_id = 0;
-
-			$remote_post_id = 0;
 		}
 
 		return $this->content_relations->delete_relation(
