@@ -41,11 +41,7 @@ class TranslationCompletedSettingView {
 	 * @param Nonce           $nonce             Nonce object.
 	 * @param ActivePostTypes $active_post_types Active post types storage object.
 	 */
-	public function __construct(
-		PostsRepository $posts_repository,
-		Nonce $nonce,
-		ActivePostTypes $active_post_types
-	) {
+	public function __construct( PostsRepository $posts_repository, Nonce $nonce, ActivePostTypes $active_post_types ) {
 
 		$this->posts_repository = $posts_repository;
 
