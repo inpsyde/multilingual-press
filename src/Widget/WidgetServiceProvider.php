@@ -7,7 +7,6 @@ namespace Inpsyde\MultilingualPress\Widget;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
-use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Widget service provider.
@@ -61,11 +60,6 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.translation_completed_setting_nonce'] = function () {
 
 			return new WPNonce( 'save_translation_completed_setting' );
-		};
-
-		$container['multilingualpress.active_post_types'] = function () {
-
-			return new ActivePostTypes();
 		};
 
 		$container['multilingualpress.translation_completed_setting_updater'] = function ( Container $container ) {
