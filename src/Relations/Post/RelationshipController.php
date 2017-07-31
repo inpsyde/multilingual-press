@@ -223,25 +223,39 @@ class RelationshipController {
 	 */
 	private function disconnect_post() {
 
+		$source_site_id = $this->context->source_site_id();
+
 		$remote_site_id = $this->context->remote_site_id();
+
+		$source_post_id = $this->context->source_post_id();
 
 		$remote_post_id = $this->context->remote_post_id();
 
-		$source_site_id = $this->context->source_site_id();
-
 		$translation_ids = $this->content_relations->get_translation_ids(
-			$this->context->source_site_id(),
+			$source_site_id,
 			$remote_site_id,
-			$this->context->source_post_id(),
+			$source_post_id,
 			$remote_post_id,
 			'post'
 		);
 
-		if ( $translation_ids['ml_source_blogid'] !== $source_site_id ) {
-			$remote_site_id = $source_site_id;
-			if ( 0 !== $remote_post_id ) {
-				$remote_post_id = $this->context->source_post_id();
+		$relations = $this->content_relations->get_relations(
+			$translation_ids['ml_source_blogid'],
+			$translation_ids['ml_source_elementid'],
+			'post'
+		);
+		if ( 2 < count( $relations ) ) {
+			if ( $translation_ids['ml_source_blogid'] !== $source_site_id ) {
+				$remote_site_id = $source_site_id;
+
+				if ( 0 !== $remote_post_id ) {
+					$remote_post_id = $source_post_id;
+				}
 			}
+		} else {
+			$remote_site_id = 0;
+
+			$remote_post_id = 0;
 		}
 
 		$this->content_relations->delete_relation(
