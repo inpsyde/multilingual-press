@@ -3,6 +3,7 @@
 ## Unreleased
 - Redirect: Add optional `$args` argument to `Mlp_Language_Negotiation::get_redirect_matches()` and pass it on to `Mlp_Language_Api::get_translations()`, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
 - Redirect: Add `content_id` to redirect matches, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
+- Relations: Delete all relationship data with the last relationship, see [issue #273](https://github.com/inpsyde/MultilingualPress/issues/273).
 
 ## 2.7.0
 - Redirect: Introduce a new filter, `multilingualpress.redirect_targets`, to manipulate the found redirect targets, see [pull request #265](https://github.com/inpsyde/MultilingualPress/pull/265), props @diedexx.
