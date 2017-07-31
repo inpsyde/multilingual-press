@@ -88,25 +88,6 @@ class Mlp_Translatable_Post_Data {
 	}
 
 	/**
-	 * @param  WP_Post $source_post
-	 * @param  int     $blog_id
-	 *
-	 * @return WP_Post
-	 */
-	public function get_remote_post( WP_Post $source_post, $blog_id ) {
-
-		$linked = get_translation_ids( $source_post->ID );
-		if ( ! empty( $linked[ $blog_id ] ) && site_exists( $blog_id ) ) {
-			$post = get_blog_post( $blog_id, $linked[ $blog_id ] );
-			if ( $post ) {
-				return $post;
-			}
-		}
-
-		return $this->get_dummy_post( $source_post->post_type );
-	}
-
-	/**
 	 * @param int     $post_id
 	 * @param WP_Post $post
 	 *
@@ -114,9 +95,7 @@ class Mlp_Translatable_Post_Data {
 	 */
 	public function save( $post_id, WP_Post $post ) {
 
-		if ( ! $this->is_valid_save_request( $post ) ) {
-			return;
-		}
+		// Bail if not is valid save request!
 
 		$post_id = $this->get_real_post_id( $post_id );
 
@@ -395,51 +374,6 @@ class Mlp_Translatable_Post_Data {
 	}
 
 	/**
-	 * @param  string $post_type
-	 *
-	 * @return WP_Post
-	 */
-	public function get_dummy_post( $post_type ) {
-
-		return new WP_Post( (object) [
-			'post_type' => $post_type,
-			'dummy'     => true,
-		 ] );
-	}
-
-	/**
-	 * @param  int $blog_id
-	 *
-	 * @return string
-	 */
-	public function get_remote_language( $blog_id ) {
-
-		static $blogs = false;
-
-		if ( ! $blogs ) {
-			$blogs = get_site_option( 'inpsyde_multilingual' );
-		}
-
-		$language = '(' . $blog_id . ')';
-
-		if ( empty( $blogs[ $blog_id ] ) ) {
-			return $language;
-		}
-
-		$data = $blogs[ $blog_id ];
-
-		if ( ! empty( $data['text'] ) ) {
-			return $data['text'];
-		}
-
-		if ( ! empty( $data['lang'] ) ) {
-			return $data['lang'];
-		}
-
-		return $language;
-	}
-
-	/**
 	 * Set the context of the to-be-saved post.
 	 *
 	 * @param array $save_context Save context.
@@ -449,101 +383,5 @@ class Mlp_Translatable_Post_Data {
 	public function set_save_context( array $save_context = [] ) {
 
 		$this->save_context = $save_context;
-	}
-
-	/**
-	 * Check if the current request should be processed by save().
-	 *
-	 * @param WP_Post $post
-	 * @param string  $name_base
-	 *
-	 * @return bool
-	 */
-	public function is_valid_save_request( WP_Post $post, $name_base = '' ) {
-
-		$name_base = (string) ( $name_base ?: $this->name_base );
-
-		static $called = 0;
-
-		if ( ms_is_switched() ) {
-			return false;
-		}
-
-		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
-		$called ++;
-
-		if ( ! in_array( $this->get_real_post_type( $post ), $this->allowed_post_types, true ) ) {
-			return false;
-		}
-
-		if (
-			empty( $this->post_request_data[ $name_base ] )
-			|| ! is_array( $this->post_request_data[ $name_base ] )
-		) {
-			return false;
-		}
-
-		if (
-			! empty( $this->post_request_data['original_post_status'] )
-			&& 'auto-draft' === $this->post_request_data['original_post_status']
-			&& 1 < $called
-		) {
-			return false;
-		}
-
-		// We only need this when the post is published or drafted.
-		if ( ! $this->is_connectable_status( $post ) ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Check post status.
-	 *
-	 * Includes special hacks for auto-drafts.
-	 *
-	 * @param  WP_Post $post
-	 *
-	 * @return bool
-	 */
-	private function is_connectable_status( WP_Post $post ) {
-
-		// TODO: Discuss post status "future"...
-		if ( in_array( $post->post_status, [ 'publish', 'draft', 'private', 'auto-draft' ], true ) ) {
-			return true;
-		}
-
-		return $this->is_auto_draft( $post, $this->post_request_data );
-	}
-
-	/**
-	 * Check for hidden auto-draft
-	 *
-	 * Auto-drafts are sent as revision with a status 'inherit'.
-	 * We have to inspect the $_POST [ $request ] to distinguish them from
-	 * real revisions and attachments (which have the same status)
-	 *
-	 * @param  WP_Post $post
-	 * @param  array   $request Usually (a copy of) $_POST
-	 *
-	 * @return bool
-	 */
-	private function is_auto_draft( WP_Post $post, array $request ) {
-
-		if ( 'inherit' !== $post->post_status ) {
-			return false;
-		}
-
-		if ( 'revision' !== $post->post_type ) {
-			return false;
-		}
-
-		if ( empty( $request['original_post_status'] ) ) {
-			return false;
-		}
-
-		return 'auto-draft' === $request['original_post_status'];
 	}
 }

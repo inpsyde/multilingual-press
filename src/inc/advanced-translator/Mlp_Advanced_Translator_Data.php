@@ -86,11 +86,9 @@ class Mlp_Advanced_Translator_Data {
 	 */
 	public function save( $post_id, WP_Post $post ) {
 
-		// TODO: Compare what's happening "here" with what's happening in the new structures (meta boxes, UI, ...).
+		// Bail if not is valid save request!
 
-		if ( ! $this->basic_data->is_valid_save_request( $post, $this->name_base ) ) {
-			return;
-		}
+		// TODO: Compare what's happening "here" with what's happening in the new structures (meta boxes, UI, ...).
 
 		// TODO: Check if this is what we want to do here (use site relations vs. sites with a language set)...
 		$available_blogs = get_site_option( 'inpsyde_multilingual' );
