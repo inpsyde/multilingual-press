@@ -194,9 +194,17 @@ class Mlp_Term_Connector {
 			'term'
 		);
 
+		$relations = $this->content_relations->get_relations(
+			$translation_ids['ml_source_blogid'],
+			$translation_ids['ml_source_elementid'],
+			'term'
+		);
+
+		$target_site_id = 2 < count( $relations ) ? $this->current_site_id : 0;
+
 		return $this->content_relations->delete_relation(
 			$translation_ids[ 'ml_source_blogid' ],
-			$this->current_site_id,
+			$target_site_id,
 			$translation_ids[ 'ml_source_elementid' ],
 			0,
 			'term'
