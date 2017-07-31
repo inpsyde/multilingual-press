@@ -162,6 +162,8 @@ class PostRelationSaveHelper {
 		$thumbnail_id = wp_insert_attachment( $attachment, $full_path );
 
 		if ( is_wp_error( $thumbnail_id ) ) {
+			$this->maybe_restore_site( $original_site );
+
 			return false;
 		}
 
