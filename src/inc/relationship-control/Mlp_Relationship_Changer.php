@@ -207,15 +207,22 @@ class Mlp_Relationship_Changer {
 			'post'
 		);
 
-		$remote_site_id = $this->remote_site_id;
+		$relations = $this->content_relations->get_relations( $this->source_site_id, $this->source_post_id, 'post' );
+		if ( 2 < count( $relations ) ) {
+			$remote_site_id = $this->remote_site_id;
 
-		$remote_post_id = $this->remote_post_id;
+			$remote_post_id = $this->remote_post_id;
 
-		if ( $translation_ids[ 'ml_source_blogid' ] !== $this->source_site_id ) {
-			$remote_site_id = $this->source_site_id;
-			if ( 0 !== $this->remote_post_id ) {
-				$remote_post_id = $this->source_post_id;
+			if ( $translation_ids['ml_source_blogid'] !== $this->source_site_id ) {
+				$remote_site_id = $this->source_site_id;
+				if ( 0 !== $this->remote_post_id ) {
+					$remote_post_id = $this->source_post_id;
+				}
 			}
+		} else {
+			$remote_site_id = 0;
+
+			$remote_post_id = 0;
 		}
 
 		return $this->content_relations->delete_relation(
