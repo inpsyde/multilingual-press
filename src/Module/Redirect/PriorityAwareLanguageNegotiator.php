@@ -139,11 +139,11 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 
 			if ( 0 < $user_priority ) {
 				$targets[] = new RedirectTarget( [
-					RedirectTarget::KEY_CONTENT_ID  => $translation->target_content_id(),
-					RedirectTarget::KEY_LANGUAGE    => $language->name( 'http' ),
-					RedirectTarget::KEY_PRIORITY    => $language->priority() * $user_priority,
-					RedirectTarget::KEY_SITE_ID     => $site_id,
-					RedirectTarget::KEY_URL         => $translation->remote_url(),
+					RedirectTarget::KEY_CONTENT_ID => $translation->target_content_id(),
+					RedirectTarget::KEY_LANGUAGE   => $language->name( 'http' ),
+					RedirectTarget::KEY_PRIORITY   => $language->priority() * $user_priority,
+					RedirectTarget::KEY_SITE_ID    => $site_id,
+					RedirectTarget::KEY_URL        => $translation->remote_url(),
 				] );
 			}
 		}, $user_languages );

@@ -92,11 +92,11 @@ class RedirectTarget {
 	public function __construct( array $data = [] ) {
 
 		$data = array_merge( [
-			static::KEY_CONTENT_ID  => 0,
-			static::KEY_LANGUAGE    => '',
-			static::KEY_PRIORITY    => 0,
-			static::KEY_SITE_ID     => 0,
-			static::KEY_URL         => '',
+			static::KEY_CONTENT_ID => 0,
+			static::KEY_LANGUAGE   => '',
+			static::KEY_PRIORITY   => 0,
+			static::KEY_SITE_ID    => 0,
+			static::KEY_URL        => '',
 		], $data );
 
 		$this->content_id = (int) $data[ static::KEY_CONTENT_ID ];
