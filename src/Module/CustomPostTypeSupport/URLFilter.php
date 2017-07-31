@@ -18,6 +18,21 @@ final class URLFilter implements Filter {
 	use ContextAwareFilter;
 
 	/**
+	 * @var int
+	 */
+	private $accepted_args;
+
+	/**
+	 * @var callable
+	 */
+	private $callback;
+
+	/**
+	 * @var string
+	 */
+	private $hook;
+
+	/**
 	 * @var PostTypeRepository
 	 */
 	private $post_type_repository;

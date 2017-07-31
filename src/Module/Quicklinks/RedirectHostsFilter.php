@@ -18,9 +18,24 @@ final class RedirectHostsFilter implements Filter {
 	use ContextAwareFilter;
 
 	/**
+	 * @var int
+	 */
+	private $accepted_args;
+
+	/**
+	 * @var callable
+	 */
+	private $callback;
+
+	/**
 	 * @var \wpdb
 	 */
 	private $db;
+
+	/**
+	 * @var string
+	 */
+	private $hook;
 
 	/**
 	 * Constructor. Sets up the properties.

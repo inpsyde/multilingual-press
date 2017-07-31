@@ -30,6 +30,21 @@ final class NoredirectPermalinkFilter implements Filter {
 	const QUERY_ARGUMENT = 'noredirect';
 
 	/**
+	 * @var int
+	 */
+	private $accepted_args;
+
+	/**
+	 * @var callable
+	 */
+	private $callback;
+
+	/**
+	 * @var string
+	 */
+	private $hook;
+
+	/**
 	 * @var string[]
 	 */
 	private $languages;
