@@ -58,9 +58,9 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 * @return array
 	 */
 	public function get_redirect_match( $args = array() ) {
-		$translations = $this->language_api->get_translations(
-			array_merge( array( 'include_base' => TRUE ), $args )
-		);
+		$translations = $this->language_api->get_translations( array_merge( array(
+			'include_base' => TRUE,
+		), $args ) );
 
 		if ( empty ( $translations ) )
 			return $this->get_fallback_match();
