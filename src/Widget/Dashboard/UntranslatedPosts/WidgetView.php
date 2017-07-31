@@ -54,8 +54,13 @@ final class WidgetView implements View {
 	public function render( $object, array $instance ) {
 
 		$related_site_ids = $this->site_relations->get_related_site_ids();
-		if ( ! $related_site_ids ) {
-			return;
+		if ( ! $related_site_ids ) { ?>
+			<tr>
+				<td colspan="3">
+					<?php esc_html_e( 'There are no sites related to this one.', 'multilingualpress' ); ?>
+				</td>
+			</tr>
+			<?php return;
 		}
 
 		$have_untranslated_posts = false;
