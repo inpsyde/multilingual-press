@@ -199,17 +199,21 @@ class Mlp_Relationship_Changer {
 	 */
 	public function disconnect() {
 
+		$source_site_id = $this->source_site_id;
+
+		$remote_site_id = $this->remote_site_id;
+
+		$source_post_id = $this->source_post_id;
+
+		$remote_post_id = $this->remote_post_id;
+
 		$translation_ids = $this->content_relations->get_translation_ids(
-			$this->source_site_id,
-			$this->remote_site_id,
-			$this->source_post_id,
-			$this->remote_post_id,
+			$source_site_id,
+			$remote_site_id,
+			$source_post_id,
+			$remote_post_id,
 			'post'
 		);
-
-		$remote_site_id = 0;
-
-		$remote_post_id = 0;
 
 		$relations = $this->content_relations->get_relations(
 			$translation_ids['ml_source_blogid'],
@@ -217,22 +221,23 @@ class Mlp_Relationship_Changer {
 			'post'
 		);
 		if ( 2 < count( $relations ) ) {
-			$remote_site_id = $this->remote_site_id;
+			if ( $translation_ids['ml_source_blogid'] !== $source_site_id ) {
+				$remote_site_id = $source_site_id;
 
-			$remote_post_id = $this->remote_post_id;
-
-			if ( $translation_ids['ml_source_blogid'] !== $this->source_site_id ) {
-				$remote_site_id = $this->source_site_id;
-				if ( 0 !== $this->remote_post_id ) {
-					$remote_post_id = $this->source_post_id;
+				if ( 0 !== $remote_post_id ) {
+					$remote_post_id = $source_post_id;
 				}
 			}
+		} else {
+			$remote_site_id = 0;
+
+			$remote_post_id = 0;
 		}
 
 		return $this->content_relations->delete_relation(
-			$translation_ids[ 'ml_source_blogid' ],
+			$translation_ids['ml_source_blogid'],
 			$remote_site_id,
-			$translation_ids[ 'ml_source_elementid' ],
+			$translation_ids['ml_source_elementid'],
 			$remote_post_id,
 			'post'
 		);

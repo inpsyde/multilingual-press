@@ -200,12 +200,12 @@ class Mlp_Term_Connector {
 			'term'
 		);
 
-		$target_site_id = 2 < count( $relations ) ? $this->current_site_id : 0;
+		$target_site_id = ( 2 < count( $relations ) ) ? $this->current_site_id : 0;
 
 		return $this->content_relations->delete_relation(
-			$translation_ids[ 'ml_source_blogid' ],
+			$translation_ids['ml_source_blogid'],
 			$target_site_id,
-			$translation_ids[ 'ml_source_elementid' ],
+			$translation_ids['ml_source_elementid'],
 			0,
 			'term'
 		);
