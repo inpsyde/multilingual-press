@@ -15,5 +15,5 @@ interface Mlp_Language_Negotiation_Interface {
 	 *
 	 * @return string
 	 */
-	public function get_redirect_match( $args = array() );
+	public function get_redirect_match( array $args = array() );
 }
