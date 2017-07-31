@@ -55,11 +55,13 @@ final class WidgetView implements View {
 
 		$related_site_ids = $this->site_relations->get_related_site_ids();
 		if ( ! $related_site_ids ) { ?>
-			<tr>
-				<td colspan="3">
-					<?php esc_html_e( 'There are no sites related to this one.', 'multilingualpress' ); ?>
-				</td>
-			</tr>
+			<table class="widefat">
+				<tr>
+					<td colspan="3">
+						<?php esc_html_e( 'There are no sites related to this one.', 'multilingualpress' ); ?>
+					</td>
+				</tr>
+			</table>
 			<?php return;
 		}
 
