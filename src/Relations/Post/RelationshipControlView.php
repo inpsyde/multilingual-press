@@ -115,7 +115,7 @@ class RelationshipControlView {
 			<button type="button" name="mlp_rc_<?php echo esc_attr( $remote_site_id ); ?>"
 				class="button secondary mlp-rc-button mlp-click-toggler"
 				data-toggle-target="#<?php echo esc_attr( $action_container_id ); ?>">
-				<?php esc_html_e( 'Change Relationship', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Change relationship', 'multilingualpress' ); ?>
 			</button>
 			<div id="<?php echo esc_attr( $action_container_id ); ?>" class='hidden'>
 				<div class="mlp-rc-settings">

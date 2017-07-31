@@ -5,10 +5,8 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
-use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBox;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
-use Inpsyde\MultilingualPress\Translation\Post\MetaBox\UI\SimplePostTranslatorFields;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\SourceTermSaveContext;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\TranslationMetaBoxView;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\TranslationMetadataUpdater;

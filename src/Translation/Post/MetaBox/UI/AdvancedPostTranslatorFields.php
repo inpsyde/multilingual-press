@@ -80,10 +80,9 @@ class AdvancedPostTranslatorFields {
 		$output = '';
 		$output .= $this->editor( $source_post, $remote_site_id, $remote_post );
 		$output .= $this->excerpt_input( $source_post, $remote_site_id, $remote_post );
-		$output .= $this->sync_thumbnail_input( $remote_site_id );
+		$output .= $this->sync_thumbnail_input( $source_post, $remote_site_id );
 
 		return $output;
-
 	}
 
 	/**
@@ -95,7 +94,10 @@ class AdvancedPostTranslatorFields {
 	 */
 	public function bottom_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
-		return $this->taxonomies_input( $source_post, $remote_site_id, $remote_post );
+		$output = '';
+		$output .= $this->taxonomies_input( $source_post, $remote_site_id, $remote_post );
+
+		return $output;
 	}
 
 	/**
@@ -276,11 +278,16 @@ class AdvancedPostTranslatorFields {
 	}
 
 	/**
-	 * @param int $remote_site_id
+	 * @param \WP_Post $source_post
+	 * @param int      $remote_site_id
 	 *
 	 * @return string
 	 */
-	private function sync_thumbnail_input( int $remote_site_id ): string {
+	private function sync_thumbnail_input( \WP_Post $source_post, int $remote_site_id ): string {
+
+		if ( ! post_type_supports( $source_post->post_type, 'thumbnail' ) ) {
+			return '';
+		}
 
 		$id = $this->field_id( $remote_site_id, self::SYNC_THUMBNAIL );
 
@@ -463,7 +470,7 @@ class AdvancedPostTranslatorFields {
 	 *
 	 * @return string
 	 */
-	public function field_name( int $site_id, string $name ): string {
+	private function field_name( int $site_id, string $name ): string {
 
 		return self::INPUT_NAME_BASE . "[{$site_id}][{$name}]";
 	}
@@ -474,7 +481,7 @@ class AdvancedPostTranslatorFields {
 	 *
 	 * @return string
 	 */
-	public function field_id( int $site_id, string $name ): string {
+	private function field_id( int $site_id, string $name ): string {
 
 		return self::INPUT_ID_BASE . "-{$site_id}-{$name}";
 	}
