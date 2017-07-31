@@ -49,6 +49,11 @@ final class TranslationMetaBox implements MetaBox {
 		) );
 	}
 
+	/**
+	 * @param ActiveTaxonomies $active_taxonomies
+	 *
+	 * @return string[]
+	 */
 	private function allowed_screens( ActiveTaxonomies $active_taxonomies ) {
 
 		return array_map( function ( string $taxonomy ) {
