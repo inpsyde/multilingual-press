@@ -88,9 +88,9 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 */
 	public function get_redirect_target( array $args = [] ): RedirectTarget {
 
-		$translations = $this->translations->get_translations(
-			array_merge( [ 'include_base' => true, ], $args )
-		);
+		$translations = $this->translations->get_translations( array_merge( [
+			'include_base' => true,
+		], $args ) );
 		if ( ! $translations ) {
 			return new RedirectTarget();
 		}
@@ -139,11 +139,11 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 
 			if ( 0 < $user_priority ) {
 				$targets[] = new RedirectTarget( [
-					RedirectTarget::KEY_PRIORITY => $language->priority() * $user_priority,
-					RedirectTarget::KEY_URL      => $translation->remote_url(),
-					RedirectTarget::KEY_LANGUAGE => $language->name( 'http' ),
-					RedirectTarget::KEY_SITE_ID  => $site_id,
-					RedirectTarget::KEY_CONTENT_ID => $translation->target_content_id(),
+					RedirectTarget::KEY_CONTENT_ID  => $translation->target_content_id(),
+					RedirectTarget::KEY_LANGUAGE    => $language->name( 'http' ),
+					RedirectTarget::KEY_PRIORITY    => $language->priority() * $user_priority,
+					RedirectTarget::KEY_SITE_ID     => $site_id,
+					RedirectTarget::KEY_URL         => $translation->remote_url(),
 				] );
 			}
 		}, $user_languages );

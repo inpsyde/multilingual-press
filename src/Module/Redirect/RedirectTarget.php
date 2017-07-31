@@ -92,12 +92,14 @@ class RedirectTarget {
 	public function __construct( array $data = [] ) {
 
 		$data = array_merge( [
-			static::KEY_LANGUAGE => '',
-			static::KEY_PRIORITY => 0,
-			static::KEY_SITE_ID  => 0,
-			static::KEY_URL      => '',
 			static::KEY_CONTENT_ID  => 0,
+			static::KEY_LANGUAGE    => '',
+			static::KEY_PRIORITY    => 0,
+			static::KEY_SITE_ID     => 0,
+			static::KEY_URL         => '',
 		], $data );
+
+		$this->content_id = (int) $data[ static::KEY_CONTENT_ID ];
 
 		$this->language = (string) $data[ static::KEY_LANGUAGE ];
 
@@ -106,8 +108,18 @@ class RedirectTarget {
 		$this->site_id = (int) $data[ static::KEY_SITE_ID ];
 
 		$this->url = (string) $data[ static::KEY_URL ];
+	}
 
-		$this->content_id = (int) $data[ static::KEY_CONTENT_ID ];
+	/**
+	 * Returns the target content ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return int The target content ID.
+	 */
+	public function content_id(): int {
+
+		return $this->content_id;
 	}
 
 	/**
@@ -156,17 +168,5 @@ class RedirectTarget {
 	public function url(): string {
 
 		return $this->url;
-	}
-
-	/**
-	 * Returns the target content ID.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return int The target content ID.
-	 */
-	public function content_id(): int {
-
-		return $this->content_id;
 	}
 }
