@@ -22,7 +22,11 @@ class SimplePostTranslatorFields {
 	public function top_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
 
 		$output = '';
-		$output .= $remote_post ? $this->title_input( $remote_post ) : $this->translatable_input( $remote_site_id );
+		if ( $remote_post ) {
+			$output .= $this->title_input( $source_post, $remote_post );
+		} else {
+			$output .= $this->translatable_input( $remote_site_id );
+		}
 
 		return $output;
 	}
@@ -38,7 +42,7 @@ class SimplePostTranslatorFields {
 
 		$output = '';
 		if ( $remote_post ) {
-			$output .= $this->editor_input( $remote_post );
+			$output .= $this->editor_input( $source_post, $remote_post );
 		}
 
 		return $output;
@@ -57,13 +61,23 @@ class SimplePostTranslatorFields {
 	}
 
 	/**
+	 * @param \WP_Post $source_post
 	 * @param \WP_Post $remote_post
 	 *
 	 * @return string
 	 */
-	private function title_input( \WP_Post $remote_post ): string {
+	private function title_input( \WP_Post $source_post, \WP_Post $remote_post ): string {
 
-		return '<h2 class="headline" style="margin: 0;">' . esc_html( $remote_post->post_title ) . '</h2>';
+		if ( ! post_type_supports( $source_post->post_type, 'title' ) ) {
+			return '';
+		}
+
+		$title = trim( $remote_post->post_title );
+		if ( ! $title ) {
+			return '';
+		}
+
+		return '<p><strong>' . esc_html( $title ) . '</strong></p>';
 	}
 
 	/**
@@ -93,11 +107,16 @@ class SimplePostTranslatorFields {
 	}
 
 	/**
-	 * @param $remote_post
+	 * @param \WP_Post $source_post
+	 * @param \WP_Post $remote_post
 	 *
 	 * @return string
 	 */
-	private function editor_input( \WP_Post $remote_post ): string {
+	private function editor_input( \WP_Post $source_post, \WP_Post $remote_post ): string {
+
+		if ( ! post_type_supports( $source_post->post_type, 'editor' ) ) {
+			return '';
+		}
 
 		$post_content = $remote_post->post_content;
 
