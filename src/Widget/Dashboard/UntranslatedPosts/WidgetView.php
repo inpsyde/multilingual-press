@@ -60,51 +60,63 @@ final class WidgetView implements View {
 			return;
 		}
 
-		$have_untranslated_posts = false;
-
 		$network_state = NetworkState::from_globals();
+
+		ob_start();
+
+		foreach ( $related_site_ids as $related_site_id ) {
+			switch_to_blog( $related_site_id );
+			$this->render_posts( $this->posts_repository->get_untranslated_posts() );
+		}
+
+		$network_state->restore();
+
+		$rows = ob_get_clean();
+		if ( ! $rows ) {
+			echo '<p>' . esc_html__( 'No untranslated posts found.', 'multilingualpress' ) . '</p>';
+
+			return;
+		}
+
+		echo '<table class="widefat">' . $rows . '</table>';
+	}
+
+	/**
+	 * Renders the markup for the give posts.
+	 *
+	 * @param array $posts An array with untranslated posts.
+	 *
+	 * @return void
+	 */
+	private function render_posts( array $posts ) {
+
+		if ( ! $posts ) {
+			return;
+		}
 		?>
-		<table class="widefat">
-			<?php foreach ( $related_site_ids as $related_site_id ) : ?>
-				<?php switch_to_blog( $related_site_id ); ?>
-				<?php $untranslated_posts = $this->posts_repository->get_untranslated_posts(); ?>
-				<?php if ( $untranslated_posts ) : ?>
-					<?php $have_untranslated_posts = true; ?>
-					<tr>
-						<th colspan="3">
-							<strong>
-								<?php
-								/* translators: %s: site name */
-								$message = __( 'Pending Translations for %s', 'multilingualpress' );
-								printf( $message, get_bloginfo( 'name' ) );
-								?>
-							</strong>
-						</th>
-					</tr>
-					<?php foreach ( array_column( $untranslated_posts, 'ID' ) as $post_id ) : ?>
-						<tr>
-							<td style="width: 20%;">
-								<?php edit_post_link( __( 'Translate', 'multilingualpress' ), '', '', $post_id ); ?>
-							</td>
-							<td style="width: 55%;">
-								<?php echo esc_html( get_the_title( $post_id ) ); ?>
-							</td>
-							<td style="width: 25%;">
-								<?php echo esc_html( get_the_time( get_option( 'date_format' ), $post_id ) ); ?>
-							</td>
-						</tr>
-					<?php endforeach; ?>
-				<?php endif; ?>
-			<?php endforeach; ?>
-			<?php $network_state->restore(); ?>
-			<?php if ( ! $have_untranslated_posts ) : ?>
-				<tr>
-					<td colspan="3">
-						<?php esc_html_e( 'No untranslated posts found.', 'multilingualpress' ); ?>
-					</td>
-				</tr>
-			<?php endif; ?>
-		</table>
-		<?php
+		<tr>
+			<th colspan="3">
+				<strong>
+					<?php
+					/* translators: %s: site name */
+					$message = __( 'Pending Translations for %s', 'multilingualpress' );
+					printf( $message, get_bloginfo( 'name' ) );
+					?>
+				</strong>
+			</th>
+		</tr>
+		<?php foreach ( array_column( $posts, 'ID' ) as $post_id ) : ?>
+			<tr>
+				<td style="width: 20%;">
+					<?php edit_post_link( __( 'Translate', 'multilingualpress' ), '', '', $post_id ); ?>
+				</td>
+				<td style="width: 55%;">
+					<?php echo esc_html( get_the_title( $post_id ) ); ?>
+				</td>
+				<td style="width: 25%;">
+					<?php echo esc_html( get_the_time( get_option( 'date_format' ), $post_id ) ); ?>
+				</td>
+			</tr>
+		<?php endforeach;
 	}
 }
