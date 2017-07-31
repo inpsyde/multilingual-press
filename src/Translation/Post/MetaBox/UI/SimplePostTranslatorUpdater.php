@@ -101,9 +101,7 @@ class SimplePostTranslatorUpdater {
 			return $this->create_empty_post();
 		}
 
-		if ( current_theme_supports( 'post-thumbnails' ) ) {
-			$relation_helper->sync_thumb( $remote_post, $remote_site_id );
-		}
+		$relation_helper->sync_thumb( $remote_post, $remote_site_id );
 
 		return $remote_post;
 	}
