@@ -110,10 +110,10 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	private function get_fallback_match() {
 
 		return array (
-			'priority'          => 0,
-			'url'               => '',
-			'language'          => '',
-			'site_id'           => 0,
+			'priority'   => 0,
+			'url'        => '',
+			'language'   => '',
+			'site_id'    => 0,
 			'content_id' => 0,
 		);
 	}
@@ -145,10 +145,10 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 		$combined_value   = $language->get_priority() * $user_priority;
 		$possible[]       = array (
-			'priority'          => $combined_value,
-			'url'               => $url,
-			'language'          => $language->get_name( 'http' ),
-			'site_id'           => $site_id,
+			'priority'   => $combined_value,
+			'url'        => $url,
+			'language'   => $language->get_name( 'http' ),
+			'site_id'    => $site_id,
 			'content_id' => $translation->get_target_content_id(),
 		);
 	}
