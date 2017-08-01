@@ -66,7 +66,13 @@ final class WidgetView implements View {
 
 		foreach ( $related_site_ids as $related_site_id ) {
 			switch_to_blog( $related_site_id );
-			$this->render_posts( $this->posts_repository->get_untranslated_posts() );
+
+			$untranslated_posts = $this->posts_repository->get_untranslated_posts();
+			$untranslated_posts = array_filter( $untranslated_posts, function ( \WP_Post $post ) {
+
+				return current_user_can( 'edit_post', $post );
+			} );
+			$this->render_posts( $untranslated_posts );
 		}
 
 		$network_state->restore();
@@ -90,14 +96,6 @@ final class WidgetView implements View {
 	 */
 	private function render_posts( array $posts ) {
 
-		if ( ! $posts ) {
-			return;
-		}
-
-		$posts = array_filter( $posts, function ( \WP_Post $post ) {
-
-			return current_user_can( 'edit_post', $post );
-		} );
 		if ( ! $posts ) {
 			return;
 		}
