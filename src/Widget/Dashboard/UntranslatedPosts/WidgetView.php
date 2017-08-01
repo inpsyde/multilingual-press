@@ -93,6 +93,14 @@ final class WidgetView implements View {
 		if ( ! $posts ) {
 			return;
 		}
+
+		$posts = array_filter( $posts, function ( \WP_Post $post ) {
+
+			return current_user_can( 'edit_post', $post );
+		} );
+		if ( ! $posts ) {
+			return;
+		}
 		?>
 		<tr>
 			<th colspan="3">
