@@ -101,7 +101,7 @@ final class WidgetView implements View {
 		}
 		?>
 		<tr>
-			<th colspan="3">
+			<th colspan="2">
 				<strong>
 					<?php
 					/* translators: %s: site name */
@@ -113,16 +113,36 @@ final class WidgetView implements View {
 		</tr>
 		<?php foreach ( array_column( $posts, 'ID' ) as $post_id ) : ?>
 			<tr>
-				<td style="width: 20%;">
-					<?php edit_post_link( __( 'Translate', 'multilingualpress' ), '', '', $post_id ); ?>
+				<td style="width: 66%;">
+					<?php $this->edit_post_link( (int) $post_id ); ?>
 				</td>
-				<td style="width: 55%;">
-					<?php echo esc_html( get_the_title( $post_id ) ); ?>
-				</td>
-				<td style="width: 25%;">
+				<td>
 					<?php echo esc_html( get_the_time( get_option( 'date_format' ), $post_id ) ); ?>
 				</td>
 			</tr>
 		<?php endforeach;
+	}
+
+	/**
+	 * Renders the edit link for the post with the given ID.
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return void
+	 */
+	private function edit_post_link( int $post_id ) {
+
+		$text = get_the_title( $post_id ) ?: __( 'Translate', 'multilingualpress' );
+		edit_post_link( esc_html( $text ), '', '', $post_id );
+
+		$post_type = get_post_type( $post_id );
+		if ( ! $post_type || 'post' === $post_type ) {
+			return;
+		}
+
+		$post_type = get_post_type_object( $post_type );
+		if ( $post_type ) {
+			echo " &mdash; {$post_type->labels->singular_name}";
+		}
 	}
 }
