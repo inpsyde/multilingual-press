@@ -81,9 +81,11 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
-		$container->share( 'multilingualpress.untranslated_posts_repository', function () {
+		$container->share( 'multilingualpress.untranslated_posts_repository', function ( Container $container ) {
 
-			return new Dashboard\UntranslatedPosts\TypeSafePostsRepository();
+			return new Dashboard\UntranslatedPosts\TypeSafePostsRepository(
+				$container['multilingualpress.active_post_types']
+			);
 		} );
 
 		$container['multilingualpress.untranslated_posts_dashboard_widget'] = function ( Container $container ) {
