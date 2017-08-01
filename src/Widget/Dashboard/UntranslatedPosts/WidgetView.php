@@ -17,6 +17,11 @@ use Inpsyde\MultilingualPress\Widget\Dashboard\View;
 final class WidgetView implements View {
 
 	/**
+	 * @var WidgetConfigurator
+	 */
+	private $configurator;
+
+	/**
 	 * @var PostsRepository
 	 */
 	private $posts_repository;
@@ -31,14 +36,21 @@ final class WidgetView implements View {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param SiteRelations   $site_relations   Site relations API object.
-	 * @param PostsRepository $posts_repository Untranslated posts repository object.
+	 * @param SiteRelations      $site_relations   Site relations API object.
+	 * @param PostsRepository    $posts_repository Untranslated posts repository object.
+	 * @param WidgetConfigurator $configurator     Widget configurator object.
 	 */
-	public function __construct( SiteRelations $site_relations, PostsRepository $posts_repository ) {
+	public function __construct(
+		SiteRelations $site_relations,
+		PostsRepository $posts_repository,
+		WidgetConfigurator $configurator
+	) {
 
 		$this->site_relations = $site_relations;
 
 		$this->posts_repository = $posts_repository;
+
+		$this->configurator = $configurator;
 	}
 
 	/**
@@ -53,26 +65,23 @@ final class WidgetView implements View {
 	 */
 	public function render( $object, array $instance ) {
 
-		$related_site_ids = $this->site_relations->get_related_site_ids();
-		if ( ! $related_site_ids ) {
-			echo '<p>' . esc_html__( 'There are no sites related to this one.', 'multilingualpress' ) . '</p>';
-
-			return;
-		}
+		$this->configurator = $this->configurator->with_widget_id( (string) $instance['id'] );
 
 		$network_state = NetworkState::from_globals();
 
 		ob_start();
 
-		foreach ( $related_site_ids as $related_site_id ) {
-			switch_to_blog( $related_site_id );
+		foreach ( $this->get_site_ids() as $site_id ) {
+			switch_to_blog( $site_id );
 
 			$untranslated_posts = $this->posts_repository->get_untranslated_posts();
 			$untranslated_posts = array_filter( $untranslated_posts, function ( \WP_Post $post ) {
 
 				return current_user_can( 'edit_post', $post );
 			} );
-			$this->render_posts( $untranslated_posts );
+			if ( $untranslated_posts ) {
+				$this->render_posts( $untranslated_posts );
+			}
 		}
 
 		$network_state->restore();
@@ -88,6 +97,24 @@ final class WidgetView implements View {
 	}
 
 	/**
+	 * Returns the site IDs for the widget to display posts from.
+	 *
+	 * @return int[] Site IDs.
+	 */
+	private function get_site_ids(): array {
+
+		$site_ids = [
+			(int) get_current_blog_id(),
+		];
+
+		if ( $this->configurator->is_displaying_remote_sites() ) {
+			$site_ids = array_merge( $site_ids, $this->site_relations->get_related_site_ids() );
+		}
+
+		return $site_ids;
+	}
+
+	/**
 	 * Renders the markup for the give posts.
 	 *
 	 * @param array $posts An array with untranslated posts.
@@ -96,9 +123,6 @@ final class WidgetView implements View {
 	 */
 	private function render_posts( array $posts ) {
 
-		if ( ! $posts ) {
-			return;
-		}
 		?>
 		<tr>
 			<th colspan="2">

@@ -81,13 +81,6 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
-		$container->share( 'multilingualpress.untranslated_posts_repository', function ( Container $container ) {
-
-			return new Dashboard\UntranslatedPosts\TypeSafePostsRepository(
-				$container['multilingualpress.active_post_types']
-			);
-		} );
-
 		$container['multilingualpress.untranslated_posts_dashboard_widget'] = function ( Container $container ) {
 
 			/**
@@ -106,7 +99,23 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 				'multilingualpress-untranslated-posts-dashboard-widget',
 				__( 'Untranslated Posts', 'multilingualpress' ),
 				$container['multilingualpress.untranslated_posts_dashboard_widget_view'],
-				$capability
+				$capability,
+				[],
+				[ $container['multilingualpress.untranslated_posts_dashboard_widget_configuration_view'], 'render' ]
+			);
+		};
+
+		$container['multilingualpress.untranslated_posts_dashboard_widget_configuration_view'] = function ( Container $container ) {
+
+			return new Dashboard\UntranslatedPosts\WidgetConfigurationView(
+				$container['multilingualpress.untranslated_posts_dashboard_widget_configurator']
+			);
+		};
+
+		$container['multilingualpress.untranslated_posts_dashboard_widget_configurator'] = function ( Container $container ) {
+
+			return new Dashboard\UntranslatedPosts\WidgetConfigurator(
+				$container['multilingualpress.server_request']
 			);
 		};
 
@@ -114,9 +123,17 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 
 			return new Dashboard\UntranslatedPosts\WidgetView(
 				$container['multilingualpress.site_relations'],
-				$container['multilingualpress.untranslated_posts_repository']
+				$container['multilingualpress.untranslated_posts_repository'],
+				$container['multilingualpress.untranslated_posts_dashboard_widget_configurator']
 			);
 		};
+
+		$container->share( 'multilingualpress.untranslated_posts_repository', function ( Container $container ) {
+
+			return new Dashboard\UntranslatedPosts\TypeSafePostsRepository(
+				$container['multilingualpress.active_post_types']
+			);
+		} );
 	}
 
 	/**

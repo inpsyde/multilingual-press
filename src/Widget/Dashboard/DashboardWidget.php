@@ -89,7 +89,7 @@ class DashboardWidget {
 			return false;
 		}
 
-		add_action( 'wp_dashboard_setup', function () {
+		return add_action( 'wp_dashboard_setup', function () {
 
 			wp_add_dashboard_widget(
 				$this->id,
@@ -99,7 +99,5 @@ class DashboardWidget {
 				$this->callback_args
 			);
 		} );
-
-		return true;
 	}
 }
