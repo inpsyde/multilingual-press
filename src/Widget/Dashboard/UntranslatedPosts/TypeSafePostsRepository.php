@@ -54,7 +54,6 @@ final class TypeSafePostsRepository implements PostsRepository {
 			'post_status'      => get_post_stati( [
 				'exclude_from_search' => false,
 			] ),
-			'posts_per_page'   => 20,
 			'meta_query'       => [
 				[
 					'key'     => PostsRepository::META_KEY,
