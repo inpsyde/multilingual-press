@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 use function Inpsyde\MultilingualPress\nonce_field;
 
@@ -15,6 +16,11 @@ use function Inpsyde\MultilingualPress\nonce_field;
  * @since   3.0.0
  */
 class TranslationCompletedSettingView {
+
+	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
 
 	/**
 	 * @var Nonce
@@ -31,14 +37,17 @@ class TranslationCompletedSettingView {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param PostsRepository $posts_repository Untranslated posts repository object.
-	 * @param Nonce           $nonce            Nonce object.
+	 * @param PostsRepository $posts_repository  Untranslated posts repository object.
+	 * @param Nonce           $nonce             Nonce object.
+	 * @param ActivePostTypes $active_post_types Active post types storage object.
 	 */
-	public function __construct( PostsRepository $posts_repository, Nonce $nonce ) {
+	public function __construct( PostsRepository $posts_repository, Nonce $nonce, ActivePostTypes $active_post_types ) {
 
 		$this->posts_repository = $posts_repository;
 
 		$this->nonce = $nonce;
+
+		$this->active_post_types = $active_post_types;
 	}
 
 	/**
@@ -52,6 +61,10 @@ class TranslationCompletedSettingView {
 	 * @return void
 	 */
 	public function render( \WP_Post $post ) {
+
+		if ( ! $this->active_post_types->includes( (string) $post->post_type ) ) {
+			return;
+		}
 
 		$post_id = (int) $post->ID;
 

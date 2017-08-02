@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
+
 /**
  * Type-safe untranslated posts repository implementation.
  *
@@ -11,6 +13,23 @@ namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
  * @since   3.0.0
  */
 final class TypeSafePostsRepository implements PostsRepository {
+
+	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
+	 * Constructor. Sets up the properties.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param ActivePostTypes $active_post_types Active post types storage object.
+	 */
+	public function __construct( ActivePostTypes $active_post_types ) {
+
+		$this->active_post_types = $active_post_types;
+	}
 
 	/**
 	 * Returns all untranslated posts for the current site.
@@ -21,11 +40,20 @@ final class TypeSafePostsRepository implements PostsRepository {
 	 */
 	public function get_untranslated_posts(): array {
 
-		return (array) get_posts( [
+		/**
+		 * Filters the untranslated posts query args.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param array $args Query args.
+		 */
+		$args = (array) apply_filters( PostsRepository::FILTER_QUERY_ARGS, [
 			// Not suppressing filters (which is done by default when using get_posts()) makes caching possible.
 			'suppress_filters' => false,
-			// Post status 'any' automatically excludes both 'auto-draft' and 'trash'.
-			'post_status'      => 'any',
+			'post_type'        => $this->active_post_types->names(),
+			'post_status'      => get_post_stati( [
+				'exclude_from_search' => false,
+			] ),
 			'meta_query'       => [
 				[
 					'key'     => PostsRepository::META_KEY,
@@ -34,6 +62,8 @@ final class TypeSafePostsRepository implements PostsRepository {
 				],
 			],
 		] );
+
+		return (array) get_posts( $args );
 	}
 
 	/**

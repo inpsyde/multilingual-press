@@ -11,6 +11,15 @@ namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 interface PostsRepository {
 
 	/**
+	 * Filter name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_QUERY_ARGS = 'multilingualpress.untranslated_posts_query_args';
+
+	/**
 	 * Meta key used to store the translation status.
 	 *
 	 * @since 3.0.0
