@@ -7,7 +7,7 @@ namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 use Inpsyde\MultilingualPress\Widget\Dashboard\View;
 
 /**
- * Untranslated posts widget configurator.
+ * Untranslated posts widget configuration view.
  *
  * @package Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts
  * @since   3.0.0
