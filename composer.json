@@ -43,9 +43,7 @@
     "brain/monkey": "^1.4",
     "mockery/mockery": "~0.9",
     "phpunit/phpunit": "^6.0",
-    "gmazzap/andrew": "2.1.*",
-
-    "doctrine/instantiator": "1.0.5"
+    "gmazzap/andrew": "2.1.*"
   },
   "autoload": {
     "psr-4": {
