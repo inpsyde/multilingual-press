@@ -174,8 +174,12 @@ final class CachingTranslations implements Translations {
 					continue;
 				}
 			} else {
-				if ( in_array( $type,
-					[ WordPressRequestContext::TYPE_SINGULAR, WordPressRequestContext::TYPE_TERM_ARCHIVE ], true ) ) {
+				$content_types = [
+					WordPressRequestContext::TYPE_SINGULAR,
+					WordPressRequestContext::TYPE_TERM_ARCHIVE,
+				];
+
+				if ( in_array( $type, $content_types, true ) ) {
 					$content_id = (int) $content_relations[ $site_id ];
 
 					$translation = $this->get_translation_for_related_content( $site_id, $content_id, $args );
@@ -223,8 +227,9 @@ final class CachingTranslations implements Translations {
 		switch ( $type ) {
 			case WordPressRequestContext::TYPE_SINGULAR:
 				$translation = $translator->get_translation( $site_id, [
-					'content_id' => $content_id,
-					'strict'     => (bool) $args['strict'],
+					'content_id'  => $content_id,
+					'post_status' => (array) $args['post_status'],
+					'strict'      => (bool) $args['strict'],
 				] );
 				break;
 
@@ -348,6 +353,7 @@ final class CachingTranslations implements Translations {
 		$args = array_merge( [
 			'content_id'       => $this->request->queried_object_id(),
 			'include_base'     => false,
+			'post_status'      => [],
 			'post_type'        => $this->request->post_type(),
 			'search_term'      => get_search_query(),
 			'site_id'          => get_current_blog_id(),
