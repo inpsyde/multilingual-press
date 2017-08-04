@@ -8,6 +8,17 @@
 - Language API: Use fallback names for languages, see
 [issue #224](https://github.com/inpsyde/multilingual-press/issues/224).
 
+## 2.7.1
+- Redirect: Add optional `$args` argument to `Mlp_Language_Negotiation::get_redirect_matches()` and pass it on to `Mlp_Language_Api::get_translations()`, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
+- Redirect: Add `content_id` to redirect matches, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
+- Relations: Delete all relationship data with the last relationship, see [issue #273](https://github.com/inpsyde/MultilingualPress/issues/273).
+
+## 2.7.0
+- Redirect: Introduce a new filter, `multilingualpress.redirect_targets`, to manipulate the found redirect targets, see [pull request #265](https://github.com/inpsyde/MultilingualPress/pull/265), props @diedexx.
+- hreflang: Introduce new filters `multilingualpress.hreflang_type` and `multilingualpress.hreflang_translations`, see [pull request #267](https://github.com/inpsyde/MultilingualPress/pull/267), props @diedexx.
+- hreflang: Bump priority for `hreflang` HTTP headers to `11`.
+- Redirect: Bump default value for language-only priority factor.
+
 ## 2.6.0
 - Types: Introduce null implementations for language and translation interfaces, `Mlp_Null_Language` and `Mlp_Null_Translation`.
 - Nav Menu: Use `Mlp_Null_Translation` in favor of `null`.
