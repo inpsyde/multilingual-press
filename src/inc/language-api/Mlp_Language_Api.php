@@ -275,8 +275,6 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 						$arguments['strict']
 					);
 
-					var_dump($translation);
-
 					if ( ! $translation )
 						$valid = FALSE;
 					else
