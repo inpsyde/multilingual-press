@@ -2,7 +2,7 @@
 Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont, ChriCo, dnaber-de, paddelboot
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.7
-Tested up to: 4.7
+Tested up to: 4.8
 Stable tag: 3.0.0
 
 The multisite-based free open source plugin for your multilingual WordPress websites.
@@ -113,6 +113,25 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.7.1 =
+- Redirect: Add optional `$args` argument to `Mlp_Language_Negotiation::get_redirect_matches()` and pass it on to `Mlp_Language_Api::get_translations()`, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
+- Redirect: Add `content_id` to redirect matches, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
+- Relations: Delete all relationship data with the last relationship, see [issue #273](https://github.com/inpsyde/MultilingualPress/issues/273).
+
+= 2.7.0 =
+- Redirect: Introduce a new filter, `multilingualpress.redirect_targets`, to manipulate the found redirect targets, see [pull request #265](https://github.com/inpsyde/MultilingualPress/pull/265), props @diedexx.
+- hreflang: Introduce new filters `multilingualpress.hreflang_type` and `multilingualpress.hreflang_translations`, see [pull request #267](https://github.com/inpsyde/MultilingualPress/pull/267), props @diedexx.
+- hreflang: Bump priority for `hreflang` HTTP headers to `11`.
+- Redirect: Bump default value for language-only priority factor.
+
+= 2.6.0 =
+- Types: Introduce null implementations for language and translation interfaces, `Mlp_Null_Language` and `Mlp_Null_Translation`.
+- Nav Menu: Use `Mlp_Null_Translation` in favor of `null`.
+- Language API: Don't cache translations anymore, see [issue #261](https://github.com/inpsyde/MultilingualPress/issues/261).
+- Term Translator: Don't cache translations anymore.
+- Table List: Don't cache table names anymore.
+- Language Switcher: Make _Native name_ the default _Link text_ option value, see [issue #262](https://github.com/inpsyde/MultilingualPress/issues/262).
 
 = 2.5.5 =
 - Translations: Fix issue with unfilterable URLs in the `hreflang` HTTP header and HTML element output.

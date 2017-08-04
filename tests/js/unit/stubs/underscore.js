@@ -7,7 +7,7 @@ _.template = sinon.stub().returns( F.returnArg );
 
 _._restore = () => {
 	_.template.reset();
-	_.reset().resetBehavior();
+	_.reset();
 };
 
 export default _;

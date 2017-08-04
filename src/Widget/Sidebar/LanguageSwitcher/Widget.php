@@ -68,12 +68,12 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 			$id = $this->get_field_id( 'mlp_widget_link_type' );
 
 			$options = [
-				'none'           => __( 'None', 'multilingualpress' ),
 				'native'         => __( 'Native name', 'multilingualpress' ),
 				'text'           => __( 'Custom name', 'multilingualpress' ),
 				'english'        => __( 'English name', 'multilingualpress' ),
 				'http'           => __( 'Language code', 'multilingualpress' ),
 				'language_short' => __( 'Language code (short)', 'multilingualpress' ),
+				'none'           => __( 'None', 'multilingualpress' ),
 			];
 
 			$link_type = $instance['widget_link_type'] ?? '';

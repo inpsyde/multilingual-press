@@ -25,7 +25,7 @@ jQuery.each = ( o, c ) => {
 jQuery.trim = ( a ) => a;
 
 jQuery._restore = () => {
-	jQuery.reset().resetBehavior();
+	jQuery.reset();
 
 	// TODO: On each call, return a fresh JqueryObject. Depends on something like sinon.stub().returnsCallbackResult().
 	jQuery.returns( new JqueryObject() );
