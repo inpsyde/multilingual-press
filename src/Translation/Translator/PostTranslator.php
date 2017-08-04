@@ -52,7 +52,7 @@ final class PostTranslator implements Translator {
 
 		$data = $this->get_translation_data(
 			(int) $args['content_id'],
-			(array) $args['post_status'],
+			(array) ( $args['post_status'] ?? [] ),
 			! empty( $args['strict'] )
 		);
 
