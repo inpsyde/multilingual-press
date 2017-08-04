@@ -133,9 +133,21 @@ class Mlp_Hreflang_Header_Output {
 
 		$this->translations = array();
 
+		/**
+		 * Filters the allowed status for posts to be included in hreflang links.
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param string[] $post_status Allowed post status.
+		 */
+		$post_status = (array) apply_filters( 'multilingualpress.hreflang_post_status', array(
+			'publish',
+		) );
+
 		/** @var Mlp_Translation_Interface[] $translations */
 		$translations = $this->language_api->get_translations( array(
 			'include_base' => true,
+			'post_status'  => $post_status,
 		) );
 		if ( ! $translations ) {
 			return $this->translations;
