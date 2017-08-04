@@ -133,9 +133,14 @@ class Mlp_Hreflang_Header_Output {
 
 		$this->translations = array();
 
+		$post_status = (array) apply_filters( 'mlp_hreflang_post_status', [
+			'publish',
+		] );
+
 		/** @var Mlp_Translation_Interface[] $translations */
 		$translations = $this->language_api->get_translations( array(
 			'include_base' => true,
+			'post_status'  => $post_status,
 		) );
 		if ( ! $translations ) {
 			return $this->translations;

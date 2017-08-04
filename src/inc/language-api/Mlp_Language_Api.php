@@ -271,6 +271,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 					$translation = $this->get_post_translation(
 						$content_relations[ $site_id ],
+						isset( $arguments['post_status'] ) ? $arguments['post_status'] : [],
 						$arguments[ 'strict' ]
 					);
 
@@ -376,16 +377,21 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	/**
 	 * Get translation for posts of any post type.
 	 *
-	 * @param  int  $content_id
-	 * @param  bool $strict
+	 * @param  int          $content_id
+	 * @param  string[]     $post_status Allowed post status.
+	 * @param  bool         $strict
 	 * @return array|bool
 	 */
-	private function get_post_translation( $content_id, $strict ) {
+	private function get_post_translation( $content_id,  $post_status, $strict ) {
 
 		$post  = get_post( $content_id );
 
 		if ( ! $post )
 			return FALSE;
+
+		if ( $post_status && ! in_array( $post->post_status, $post_status, true ) ) {
+			return [];
+		}
 
 		$title    = get_the_title( $content_id );
 		$editable = current_user_can( 'edit_post', $content_id );
