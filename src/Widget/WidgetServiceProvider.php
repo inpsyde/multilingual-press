@@ -171,17 +171,21 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.untranslated_posts_dashboard_widget']->register();
 
-		add_action(
-			'post_submitbox_misc_actions',
-			[ $container['multilingualpress.translation_completed_setting_view'], 'render' ]
-		);
+		global $pagenow;
 
-		add_action(
-			'save_post',
-			[ $container['multilingualpress.translation_completed_setting_updater'], 'update_setting' ],
-			10,
-			2
-		);
+		if ( 'post-new.php' !== $pagenow ) {
+			add_action(
+				'post_submitbox_misc_actions',
+				[ $container['multilingualpress.translation_completed_setting_view'], 'render' ]
+			);
+
+			add_action(
+				'save_post',
+				[ $container['multilingualpress.translation_completed_setting_updater'], 'update_setting' ],
+				10,
+				2
+			);
+		}
 	}
 
 	/**
