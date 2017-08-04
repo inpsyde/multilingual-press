@@ -22,6 +22,15 @@ class AlternateLanguages implements \IteratorAggregate {
 	 *
 	 * @var string
 	 */
+	const FILTER_POST_STATUS = 'multilingualpress.hreflang_post_status';
+
+	/**
+	 * Filter name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
 	const FILTER_TRANSLATIONS = 'multilingualpress.hreflang_translations';
 
 	/**
@@ -82,8 +91,20 @@ class AlternateLanguages implements \IteratorAggregate {
 
 		$urls = [];
 
+		/**
+		 * Filters the allowed status for posts to be included in hreflang links.
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param string[] $post_status Allowed post status.
+		 */
+		$post_status = (array) apply_filters( self::FILTER_POST_STATUS, [
+			'publish',
+		] );
+
 		$translations = $this->api->get_translations( [
 			'include_base' => true,
+			'post_status'  => $post_status,
 		] );
 		foreach ( $translations as $translation ) {
 			$url = $translation->remote_url();
