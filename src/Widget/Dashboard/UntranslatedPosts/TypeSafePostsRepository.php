@@ -79,7 +79,9 @@ final class TypeSafePostsRepository implements PostsRepository {
 
 		$post_id = $post_id ?: (int) get_the_ID();
 
-		return (bool) get_post_meta( $post_id, PostsRepository::META_KEY, true );
+		$value = get_post_meta( $post_id, PostsRepository::META_KEY, true );
+
+		return false === $value || $value;
 	}
 
 	/**

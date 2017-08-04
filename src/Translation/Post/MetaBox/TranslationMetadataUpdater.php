@@ -9,6 +9,7 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetadataUpdater;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Post\PostMetaUpdater;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
+use Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts\PostsRepository;
 
 /**
  * Metadata updater implementation for post translation.
@@ -145,6 +146,9 @@ final class TranslationMetadataUpdater implements PostMetaUpdater {
 			$this->remote_post = new \WP_Post( (object) [
 				'post_type'   => $this->save_context[ SourcePostSaveContext::POST_TYPE ],
 				'post_status' => 'draft',
+				'meta_input'  => [
+					PostsRepository::META_KEY => false,
+				],
 			] );
 		}
 
