@@ -23,7 +23,7 @@ matrix:
     - php: nightly
 
 before_install:
-  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini || echo "Skipping."
   - composer self-update
 
 install:
