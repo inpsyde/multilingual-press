@@ -147,7 +147,7 @@ final class TranslationMetadataUpdater implements PostMetaUpdater {
 				'post_type'   => $this->save_context[ SourcePostSaveContext::POST_TYPE ],
 				'post_status' => 'draft',
 				'meta_input'  => [
-					PostsRepository::META_KEY => false,
+					PostsRepository::META_KEY => PostsRepository::META_VALUE_UNTRANSLATED,
 				],
 			] );
 		}

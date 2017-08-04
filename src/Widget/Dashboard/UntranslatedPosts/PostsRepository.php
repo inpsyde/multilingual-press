@@ -29,6 +29,15 @@ interface PostsRepository {
 	const META_KEY = '_post_is_translated';
 
 	/**
+	 * Meta value used for the "untranslated" translation status.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const META_VALUE_UNTRANSLATED = 'untranslated';
+
+	/**
 	 * Returns all untranslated posts for the current site.
 	 *
 	 * @since 3.0.0

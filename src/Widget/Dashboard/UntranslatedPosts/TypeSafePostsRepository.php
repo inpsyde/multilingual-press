@@ -79,9 +79,7 @@ final class TypeSafePostsRepository implements PostsRepository {
 
 		$post_id = $post_id ?: (int) get_the_ID();
 
-		$value = get_post_meta( $post_id, PostsRepository::META_KEY, true );
-
-		return false === $value || $value;
+		return PostsRepository::META_VALUE_UNTRANSLATED !== get_post_meta( $post_id, PostsRepository::META_KEY, true );
 	}
 
 	/**
@@ -96,6 +94,10 @@ final class TypeSafePostsRepository implements PostsRepository {
 	 */
 	public function update_post( int $post_id, bool $value ): bool {
 
-		return (bool) update_post_meta( $post_id, PostsRepository::META_KEY, (bool) $value );
+		return (bool) update_post_meta(
+			$post_id,
+			PostsRepository::META_KEY,
+			$value ?: PostsRepository::META_VALUE_UNTRANSLATED
+		);
 	}
 }
