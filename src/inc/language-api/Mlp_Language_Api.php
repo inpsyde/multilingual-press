@@ -275,6 +275,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 						$arguments['strict']
 					);
 
+					var_dump($translation);
+
 					if ( ! $translation )
 						$valid = FALSE;
 					else
@@ -377,9 +379,9 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	/**
 	 * Get translation for posts of any post type.
 	 *
-	 * @param  int      $content_id
-	 * @param  string[] $post_status Allowed post status.
-	 * @param  bool     $strict
+	 * @param int      $content_id
+	 * @param string[] $post_status Allowed post status.
+	 * @param bool     $strict
 	 *
 	 * @return array|bool
 	 */
@@ -391,7 +393,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			return FALSE;
 
 		if ( $post_status && ! in_array( $post->post_status, $post_status, true ) ) {
-			return array();
+			return FALSE;
 		}
 
 		$title    = get_the_title( $content_id );
@@ -675,6 +677,7 @@ WHERE `http_name` IN( $values )";
 			'post_type'        => $this->get_request_post_type(),
 			'include_base'     => false,
 			'suppress_filters' => false,
+			'post_status' => array(),
 		);
 
 		$arguments = wp_parse_args( $args, $defaults );
