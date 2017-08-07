@@ -416,8 +416,10 @@ final class WPDBLanguages implements Languages {
 
 		$conditions = array_map( function ( array $condition ) {
 
+			$compare = $condition['compare'] ?? '=';
+
 			return $this->db->prepare(
-				"{$condition['field']} {$condition['compare']} {$this->fields[ $condition['field'] ]}",
+				"{$condition['field']} {$compare} {$this->fields[ $condition['field'] ]}",
 				$condition['value']
 			);
 		}, $conditions );
