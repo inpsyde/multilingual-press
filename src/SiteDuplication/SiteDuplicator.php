@@ -181,14 +181,11 @@ class SiteDuplicator {
 			FILTER_FORCE_ARRAY
 		);
 
-		update_option( 'blogname', stripslashes( $blog_data['title'] ) );
+		update_option( 'blogname', stripslashes( $blog_data['title'] ?? '' ) );
 
 		$this->rename_user_roles_option( $table_prefix );
 
-		// Set the search engine visibility.
-		if ( array_key_exists( static::NAME_SEARCH_ENGINE_VISIBILITY, $blog_data ) ) {
-			update_option( 'blog_public', (bool) $blog_data[ static::NAME_SEARCH_ENGINE_VISIBILITY ] );
-		}
+		$this->handle_search_engine_visibility();
 
 		$this->handle_plugins();
 
@@ -326,20 +323,33 @@ class SiteDuplicator {
 	}
 
 	/**
+	 * Adapts the search engine visibility according to the setting included in the request.
+	 *
+	 * @return void
+	 */
+	private function handle_search_engine_visibility() {
+
+		$is_site_visible = (bool) $this->request->body_value(
+			static::NAME_SEARCH_ENGINE_VISIBILITY,
+			INPUT_POST,
+			FILTER_SANITIZE_NUMBER_INT
+		);
+		update_option( 'blog_public', $is_site_visible );
+	}
+
+	/**
 	 * Adapts all active plugins according to the setting included in the request.
 	 *
 	 * @return void
 	 */
 	private function handle_plugins() {
 
-		$blog_data = (array) $this->request->body_value(
-			'blog',
+		$activate_plugins = (bool) $this->request->body_value(
+			static::NAME_ACTIVATE_PLUGINS,
 			INPUT_POST,
-			FILTER_DEFAULT,
-			FILTER_FORCE_ARRAY
+			FILTER_SANITIZE_NUMBER_INT
 		);
-
-		if ( array_key_exists( static::NAME_ACTIVATE_PLUGINS, $blog_data ) ) {
+		if ( $activate_plugins ) {
 			$this->active_plugins->activate();
 		} else {
 			$this->active_plugins->deactivate();
