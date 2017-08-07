@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
+use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionViewModel;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingView;
 
@@ -25,6 +26,11 @@ final class NewSiteSettings implements SiteSettingsSectionViewModel {
 	const ID = 'mlp-new-site-settings';
 
 	/**
+	 * @var AssetManager
+	 */
+	private $asset_manager;
+
+	/**
 	 * @var SiteSettingView
 	 */
 	private $view;
@@ -34,11 +40,14 @@ final class NewSiteSettings implements SiteSettingsSectionViewModel {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param SiteSettingView $view Setting view object.
+	 * @param SiteSettingView $view          Setting view object.
+	 * @param AssetManager    $asset_manager Asset manager object.
 	 */
-	public function __construct( SiteSettingView $view ) {
+	public function __construct( SiteSettingView $view, AssetManager $asset_manager ) {
 
 		$this->view = $view;
+
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
@@ -63,6 +72,8 @@ final class NewSiteSettings implements SiteSettingsSectionViewModel {
 	 * @return bool Whether or not the site setting markup was rendered successfully.
 	 */
 	public function render_view( int $site_id ): bool {
+
+		$this->asset_manager->enqueue_script( 'multilingualpress-admin' );
 
 		return $this->view->render( $site_id );
 	}

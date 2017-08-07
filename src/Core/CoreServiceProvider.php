@@ -130,7 +130,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.new_site_settings'] = function ( Container $container ) {
 
 			return new NewSiteSettings(
-				$container['multilingualpress.site_settings_view']
+				$container['multilingualpress.site_settings_view'],
+				$container['multilingualpress.asset_manager']
 			);
 		};
 
