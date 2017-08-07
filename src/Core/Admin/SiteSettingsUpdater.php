@@ -209,7 +209,7 @@ class SiteSettingsUpdater {
 			return;
 		}
 
-		$language = reset( $this->languages->get_languages( [
+		$languages = $this->languages->get_languages( [
 			'fields'     => LanguagesTable::COLUMN_LOCALE,
 			'conditions' => [
 				[
@@ -217,7 +217,9 @@ class SiteSettingsUpdater {
 					'value' => str_replace( '_', '-', $language ),
 				],
 			],
-		] ) );
+		] );
+
+		$language = reset( $languages );
 		if ( ! $language ) {
 			return;
 		}
