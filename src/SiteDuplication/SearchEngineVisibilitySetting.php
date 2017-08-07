@@ -40,7 +40,7 @@ final class SearchEngineVisibilitySetting implements SiteSettingViewModel {
 		$visible = (bool) apply_filters( 'multilingualpress.new_site_search_engine_visibility', false );
 
 		return sprintf(
-			'<label for="%2$s"><input type="checkbox" value="0" id="%2$s" name="blog[%3$s]"%4$s>%1$s</label><p class="description">%5$s</p>',
+			'<label for="%2$s"><input type="checkbox" value="0" id="%2$s" name="%3$s"%4$s>%1$s</label><p class="description">%5$s</p>',
 			esc_html__( 'Discourage search engines from indexing this site', 'multilingualpress' ),
 			esc_attr( $this->id ),
 			esc_attr( SiteDuplicator::NAME_SEARCH_ENGINE_VISIBILITY ),

@@ -31,7 +31,7 @@ final class ActivatePluginsSetting implements SiteSettingViewModel {
 	public function markup( int $site_id ): string {
 
 		return sprintf(
-			'<label for="%2$s"><input type="checkbox" value="1" id="%2$s" name="blog[%3$s]" checked="checked">%1$s</label>',
+			'<label for="%2$s"><input type="checkbox" value="1" id="%2$s" name="%3$s" checked="checked">%1$s</label>',
 			esc_html__( 'Activate all plugins that are active on the source site', 'multilingualpress' ),
 			esc_attr( $this->id ),
 			esc_attr( SiteDuplicator::NAME_ACTIVATE_PLUGINS )

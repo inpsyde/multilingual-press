@@ -26,7 +26,7 @@ class SiteDuplicator {
 	 *
 	 * @var string
 	 */
-	const NAME_ACTIVATE_PLUGINS = 'activate_plugins';
+	const NAME_ACTIVATE_PLUGINS = 'mlp_activate_plugins';
 
 	/**
 	 * Input name.
@@ -35,7 +35,7 @@ class SiteDuplicator {
 	 *
 	 * @var string
 	 */
-	const NAME_BASED_ON_SITE = 'basedon';
+	const NAME_BASED_ON_SITE = 'mlp_based_on_site';
 
 	/**
 	 * Input name.
@@ -44,7 +44,7 @@ class SiteDuplicator {
 	 *
 	 * @var string
 	 */
-	const NAME_SEARCH_ENGINE_VISIBILITY = 'visibility';
+	const NAME_SEARCH_ENGINE_VISIBILITY = 'mlp_search_engine_visibility';
 
 	/**
 	 * @var ActivePlugins
