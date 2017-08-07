@@ -50,7 +50,7 @@ FROM {$this->db->blogs}
 WHERE blog_id != %d";
 		$query = $this->db->prepare( $query, $deleted_site_id );
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		foreach ( $this->db->get_col( $query ) as $site_id ) {
 			switch_to_blog( $site_id );

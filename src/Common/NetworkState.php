@@ -23,42 +23,21 @@ class NetworkState {
 	private $stack;
 
 	/**
-	 * @var bool
-	 */
-	private $is_globals = false;
-
-	/**
-	 * Constructor. Sets up the properties.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param int   $site_id Site ID.
-	 * @param array $stack   Optional. Site ID stack. Defaults to empty array.
-	 */
-	public function __construct( int $site_id, array $stack = [] ) {
-
-		$this->site_id = $site_id;
-
-		$this->stack = $stack;
-	}
-
-	/**
 	 * Returns a new instance for the global site ID and switched stack.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return NetworkState
+	 * @return static
 	 */
-	public static function from_globals(): NetworkState {
+	public static function create() {
 
-		$instance = new static(
-			get_current_blog_id(),
-			(array) ( $GLOBALS['_wp_switched_stack'] ?? [] )
-		);
+		$state = new static();
 
-		$instance->is_globals = true;
+		$state->site_id = get_current_blog_id();
 
-		return $instance;
+		$state->stack = (array) ( $GLOBALS['_wp_switched_stack'] ?? [] );
+
+		return $state;
 	}
 
 	/**
@@ -68,28 +47,14 @@ class NetworkState {
 	 *
 	 * @return int The current site ID.
 	 */
-	public function restore(): int {
+	public function restore() {
 
-		// If class status is not initialized from globals, we don't affect globals on restore.
-		if ( ! $this->is_globals ) {
-			return $this->site_id;
-		}
+		switch_to_blog( $this->site_id );
 
-		$current = get_current_blog_id();
+		$GLOBALS['_wp_switched_stack'] = $this->stack;
 
-		// If current site is the same of initial site and the stack is identical, there's nothing we have to do.
-		if ( $current !== $this->site_id || ( $GLOBALS['_wp_switched_stack'] ?? null ) !== $this->stack ) {
+		$GLOBALS['switched'] = ! empty( $this->stack );
 
-			switch_to_blog( $this->site_id );
-
-			$GLOBALS['_wp_switched_stack'] = $this->stack;
-
-			$GLOBALS['switched'] = ! empty( $this->stack );
-
-			$current = $this->site_id;
-
-		}
-
-		return $current;
+		return get_current_blog_id();
 	}
 }

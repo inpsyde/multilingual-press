@@ -145,7 +145,7 @@ class Mlp_Translatable_Post_Data {
 		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_before_post_synchronization', $this->save_context );
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		// Create a copy of the item for every related blog
 		foreach ( $this->post_request_data[ $this->name_base ] as $blog_id ) {

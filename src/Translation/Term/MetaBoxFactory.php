@@ -79,7 +79,7 @@ class MetaBoxFactory {
 
 		$controllers = [];
 
-		$state = NetworkState::from_globals();
+		$state = NetworkState::create();
 
 		foreach ( $related_post_ids as $site_id ) {
 

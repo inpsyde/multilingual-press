@@ -98,7 +98,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 			return '';
 		}
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		$relationships = array_reduce( $site_ids, function ( $relationships, $site_id ) use ( $base_site_id ) {
 

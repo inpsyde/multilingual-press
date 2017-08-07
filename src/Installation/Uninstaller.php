@@ -107,7 +107,7 @@ class Uninstaller {
 
 		$site_ids = $site_ids ?: $this->site_ids();
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		$deleted = array_reduce( $site_ids, function ( int $deleted, int $site_id ) use ( $options ) {
 

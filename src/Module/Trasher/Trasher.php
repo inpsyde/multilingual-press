@@ -93,7 +93,7 @@ class Trasher {
 
 		$trashed_posts = 0;
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$trashed_posts ) {
 

@@ -122,7 +122,7 @@ class TrasherSettingUpdater {
 
 		$updated_posts = 1;
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$updated_posts, $value ) {
 

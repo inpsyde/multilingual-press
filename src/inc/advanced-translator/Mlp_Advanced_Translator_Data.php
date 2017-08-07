@@ -136,7 +136,7 @@ class Mlp_Advanced_Translator_Data {
 
 		// TODO: Fire also a typeless action that has the type (i.e., post) as second argument.
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		foreach ( $this->post_request_data[ $this->name_base ] as $remote_blog_id => $post_data ) {
 			if (

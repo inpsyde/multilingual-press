@@ -151,7 +151,7 @@ class SiteDuplicator {
 
 		$new_site_id = (int) $new_site_id;
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		// Switch to the source site.
 		switch_to_blog( $source_site_id );

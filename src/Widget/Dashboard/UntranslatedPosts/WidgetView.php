@@ -67,7 +67,7 @@ final class WidgetView implements View {
 
 		$this->configurator = $this->configurator->with_widget_id( (string) $instance['id'] );
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		ob_start();
 

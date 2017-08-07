@@ -318,7 +318,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		 */
 		do_action( self::ACTION_SAVE_META_BOXES, $post, $save_context, $update );
 
-		$network_state = NetworkState::from_globals();
+		$network_state = NetworkState::create();
 
 		array_walk( $controllers, function ( MetaBoxController $controller ) use ( $post, $save_context, $update ) {
 
