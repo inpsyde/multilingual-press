@@ -208,13 +208,13 @@ final class TranslationMetadataUpdater implements PostMetaUpdater {
 
 		$source_post = get_post( $this->save_context[ SourcePostSaveContext::POST_ID ], ARRAY_A );
 		if ( $source_post ) {
-			$remote_post = array_merge( $remote_post, array_intersect_key( $source_post, [
+			$remote_post = array_merge( $remote_post, array_intersect_key( $source_post, array_flip( [
 				'post_author',
 				'post_content',
 				'post_date',
 				'post_excerpt',
 				'post_title',
-			] ) );
+			] ) ) );
 		}
 
 		return new \WP_Post( (object) $remote_post );
