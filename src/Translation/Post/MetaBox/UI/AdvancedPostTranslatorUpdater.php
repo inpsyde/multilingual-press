@@ -103,6 +103,8 @@ class AdvancedPostTranslatorUpdater {
 			return $this->create_empty_post();
 		}
 
+		$relation_helper->sync_metadata( $new_remote_post_id );
+
 		if ( ! empty( $request_data[ AdvancedPostTranslatorFields::SYNC_THUMBNAIL ] ) ) {
 			$relation_helper->sync_thumb( $remote_post, $remote_site_id );
 		}
