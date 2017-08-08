@@ -63,6 +63,10 @@ class Mlp_Hreflang_Header_Output {
 			return;
 		}
 
+		if ( ! apply_filters( 'multilingualpress.render_hreflang', count( $translations ) > 1, $translations ) ) {
+			return;
+		}
+
 		foreach ( $translations as $lang => $url ) {
 			$html = sprintf(
 				'<link rel="alternate" hreflang="%1$s" href="%2$s">',
@@ -96,6 +100,10 @@ class Mlp_Hreflang_Header_Output {
 
 		$translations = $this->get_translations();
 		if ( ! $translations ) {
+			return;
+		}
+
+		if ( ! apply_filters( 'multilingualpress.render_hreflang', count( $translations ) > 1, $translations ) ) {
 			return;
 		}
 
