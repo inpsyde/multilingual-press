@@ -206,9 +206,10 @@ final class TranslationMetadataUpdater implements PostMetaUpdater {
 			],
 		];
 
-		$source_post = get_post( $this->save_context[ SourcePostSaveContext::POST_ID ], ARRAY_A );
+		/** @var \WP_Post $source_post */
+		$source_post = $this->save_context[ SourcePostSaveContext::POST ];
 		if ( $source_post ) {
-			$remote_post = array_merge( $remote_post, array_intersect_key( $source_post, array_flip( [
+			$remote_post = array_merge( $remote_post, array_intersect_key( $source_post->to_array(), array_flip( [
 				'post_author',
 				'post_content',
 				'post_date',

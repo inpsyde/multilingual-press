@@ -20,6 +20,8 @@ final class SourcePostSaveContext implements \ArrayAccess {
 
 	const POST_ID = 'real_post_id';
 
+	const POST = 'post';
+
 	const POST_STATUS = 'original_post_status';
 
 	const FEATURED_IMG_PATH = 'featured_image_path';
@@ -137,6 +139,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			self::POST_TYPE         => $real_post_type,
 			self::POST_ID           => $request_post_id ?: (int) $this->post->ID,
 			self::POST_STATUS       => $original_post_status,
+			self::POST              => $this->post,
 			self::FEATURED_IMG_PATH => $this->featured_image_path( $this->post ),
 			self::RELATED_BLOGS     => $related_blogs,
 		];
