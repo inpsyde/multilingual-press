@@ -142,16 +142,6 @@ final class TranslationMetadataUpdater implements PostMetaUpdater {
 			return false;
 		}
 
-		if ( ! $this->remote_post ) {
-			$this->remote_post = new \WP_Post( (object) [
-				'post_type'   => $this->save_context[ SourcePostSaveContext::POST_TYPE ],
-				'post_status' => 'draft',
-				'meta_input'  => [
-					PostsRepository::META_KEY => PostsRepository::META_VALUE_UNTRANSLATED,
-				],
-			] );
-		}
-
 		/**
 		 * Filter remote post instance.
 		 *
@@ -168,7 +158,7 @@ final class TranslationMetadataUpdater implements PostMetaUpdater {
 		 */
 		$remote_post = apply_filters(
 			self::FILTER_SAVE_POST,
-			$this->remote_post,
+			$this->remote_post ?? $this->create_draft_post(),
 			$this->remote_site_id,
 			$server_request,
 			$this->save_context
@@ -194,12 +184,39 @@ final class TranslationMetadataUpdater implements PostMetaUpdater {
 		 */
 		do_action(
 			self::ACTION_SAVED_POST,
-			$this->remote_post,
+			$remote_post,
 			$this->remote_site_id,
 			$this->save_context,
 			$server_request
 		);
 
 		return true;
+	}
+
+	/**
+	 * @return \WP_Post
+	 */
+	private function create_draft_post() {
+
+		$remote_post = [
+			'post_status' => 'draft',
+			'post_type'   => $this->save_context[ SourcePostSaveContext::POST_TYPE ],
+			'meta_input'  => [
+				PostsRepository::META_KEY => PostsRepository::META_VALUE_UNTRANSLATED,
+			],
+		];
+
+		$source_post = get_post( $this->save_context[ SourcePostSaveContext::POST_ID ], ARRAY_A );
+		if ( $source_post ) {
+			$remote_post = array_merge( $remote_post, array_intersect_key( $source_post, [
+				'post_author',
+				'post_content',
+				'post_date',
+				'post_excerpt',
+				'post_title',
+			] ) );
+		}
+
+		return new \WP_Post( (object) $remote_post );
 	}
 }
