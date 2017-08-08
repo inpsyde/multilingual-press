@@ -12,12 +12,38 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
  */
 class PostRelationSaveHelper {
 
+	/**
+	 * Filter name.
+	 *
+	 * @sice 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_METADATA = 'multilingualpress.post_metadata';
+
+	/**
+	 * Filter name.
+	 *
+	 * @sice 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_SYNC_METADATA = 'multilingualpress.sync_post_metadata';
+
+	/**
+	 * @var array
+	 */
 	private static $parent_ids = [];
 
 	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
+
+	/**
+	 * @var array
+	 */
+	private $metadata;
 
 	/**
 	 * @var SourcePostSaveContext
@@ -97,6 +123,27 @@ class PostRelationSaveHelper {
 			$remote_post_id,
 			'post'
 		);
+	}
+
+	/**
+	 * @param int $remote_post_id
+	 *
+	 * @return void
+	 */
+	public function sync_metadata( int $remote_post_id ) {
+
+		/**
+		 * Filters the post metadata before synchronization.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param array                 $metadata     Post metadata.
+		 * @param SourcePostSaveContext $save_context Save context object.
+		 */
+		$metadata = (array) apply_filters( static::FILTER_SYNC_METADATA, $this->get_metadata(), $this->save_context );
+		foreach ( $metadata as $key => $value ) {
+			update_post_meta( $remote_post_id, $key, $value );
+		}
 	}
 
 	/**
@@ -220,4 +267,23 @@ class PostRelationSaveHelper {
 		return true;
 	}
 
+	/**
+	 * @return array
+	 */
+	private function get_metadata(): array {
+
+		if ( ! isset( $this->metadata ) ) {
+			/**
+			 * Filters the original post metadata to be synchronized.
+			 *
+			 * @since 3.0.0
+			 *
+			 * @param array                 $metadata     Post metadata.
+			 * @param SourcePostSaveContext $save_context Save context object.
+			 */
+			$this->metadata = (array) apply_filters( static::FILTER_METADATA, [], $this->save_context );
+		}
+
+		return $this->metadata;
+	}
 }
