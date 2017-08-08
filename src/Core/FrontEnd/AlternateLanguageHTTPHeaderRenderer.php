@@ -61,7 +61,7 @@ final class AlternateLanguageHTTPHeaderRenderer implements AlternateLanguageRend
 	 */
 	public function render( ...$args ) {
 
-		$translations = $this->alternate_languages->getIterator();
+		$translations = iterator_to_array( $this->alternate_languages );
 
 		/** This filter is documented in src/Core/FrontEnd/AlternateLanguageHTMLLinkTagRenderer.php */
 		if ( ! apply_filters(

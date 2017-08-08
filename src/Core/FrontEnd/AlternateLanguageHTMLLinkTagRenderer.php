@@ -61,7 +61,7 @@ final class AlternateLanguageHTMLLinkTagRenderer implements AlternateLanguageRen
 	 */
 	public function render( ...$args ) {
 
-		$translations = $this->alternate_languages->getIterator();
+		$translations = iterator_to_array( $this->alternate_languages );
 
 		/**
 		 * Filters if the hreflang links should be rendered.
