@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.0
+- Language API: Introduce a new argument, `post_status`, to restrict post translations.
+- hreflang: Introduce a new filter, `multilingualpress.render_hreflang`, to force or prevent rendering.
+- hreflang: Introduce a new filter, `multilingualpress.post_status`, to restrict post translations, see [issue #276](https://github.com/inpsyde/MultilingualPress/issues/276) and [issue #277](https://github.com/inpsyde/MultilingualPress/issues/277).
+- hreflang: By default, only query published posts, see [issue #276](https://github.com/inpsyde/MultilingualPress/issues/276) and [issue #277](https://github.com/inpsyde/MultilingualPress/issues/277).
+
 ## 2.7.1
 - Redirect: Add optional `$args` argument to `Mlp_Language_Negotiation::get_redirect_matches()` and pass it on to `Mlp_Language_Api::get_translations()`, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
 - Redirect: Add `content_id` to redirect matches, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
