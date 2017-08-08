@@ -85,9 +85,7 @@ class PostRelationSaveHelper {
 	 */
 	public function sync_linked_element( int $remote_site_id, int $remote_post_id ): bool {
 
-		$source_post_id = $this->save_context[ SourcePostSaveContext::POST_ID ];
 		$source_site_id = $this->save_context[ SourcePostSaveContext::SITE_ID ];
-
 		if ( $source_site_id === $remote_site_id ) {
 			return true;
 		}
@@ -95,7 +93,7 @@ class PostRelationSaveHelper {
 		return $this->content_relations->set_relation(
 			$source_site_id,
 			$remote_site_id,
-			$source_post_id,
+			$this->save_context[ SourcePostSaveContext::POST_ID ],
 			$remote_post_id,
 			'post'
 		);
@@ -156,7 +154,10 @@ class PostRelationSaveHelper {
 			'post_content'   => '',
 		];
 
-		include_once( ABSPATH . 'wp-admin/includes/image.php' ); //including the attachment function
+		/**
+		 * Make attachment functions available.
+		 */
+		require_once ABSPATH . 'wp-admin/includes/image.php';
 
 		$full_path    = $upload_dir['path'] . '/' . $filename;
 		$thumbnail_id = wp_insert_attachment( $attachment, $full_path );

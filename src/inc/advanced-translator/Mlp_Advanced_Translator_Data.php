@@ -1,10 +1,7 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
-use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
-
-use function Inpsyde\MultilingualPress\site_exists;
 
 /**
  * Data model for advanced post translation. Handles inserts and updates.
@@ -24,6 +21,11 @@ class Mlp_Advanced_Translator_Data {
 	/**
 	 * @var string
 	 */
+	private $featured_image_path = '';
+
+	/**
+	 * @var string
+	 */
 	private $name_base = 'mlp_translation_data';
 
 	/**
@@ -35,6 +37,11 @@ class Mlp_Advanced_Translator_Data {
 	 * @var array
 	 */
 	private $post_request_data = [];
+
+	/**
+	 * @var string
+	 */
+	private $post_type;
 
 	/**
 	 * @var SiteRelations
@@ -80,113 +87,52 @@ class Mlp_Advanced_Translator_Data {
 	 * Save the post to the blogs
 	 *
 	 * @param int     $post_id
-	 * @param WP_Post $post
 	 *
 	 * @return void
 	 */
-	public function save( $post_id, WP_Post $post ) {
+	public function save( $post_id ) {
 
-		// Bail if not is valid save request!
+		// BAIL if not is valid save request!
 
-		// TODO: Compare what's happening "here" with what's happening in the new structures (meta boxes, UI, ...).
+		// Set both post ID and post type to the real ones.
 
-		// TODO: Check if this is what we want to do here (use site relations vs. sites with a language set)...
-		$available_blogs = get_site_option( 'inpsyde_multilingual' );
-		if ( empty( $available_blogs ) ) {
-			return;
-		}
+		// Set up featured image path.
 
-		// auto-drafts
-		$post_id   = $this->basic_data->get_real_post_id( $post_id );
-		$post_type = $this->basic_data->get_real_post_type( $post );
+		// BAIL if post type is not allowed!
 
-		$source_blog_id = (int) get_current_blog_id();
+		// Set up save context array.
 
-		$featured_image_path = $this->get_featured_image_path( $post_id );
+		// Set up post meta array.
 
-		$related_blogs = $this->relations->get_related_site_ids( $source_blog_id );
-		if ( empty( $related_blogs ) ) {
-			return;
-		}
+		// Set up remote post parents.
 
-		// Check Post Type
-		if ( ! in_array( $post_type, $this->allowed_post_types, true ) ) {
-			return;
-		}
-
-		$this->save_context = [
-			'source_blog'    => get_current_blog_id(),
-			'source_post'    => $post,
-			'real_post_type' => $post_type,
-			'real_post_id'   => $post_id,
-		];
-
-		$this->basic_data->set_save_context( $this->save_context );
-
-		$post_meta = $this->basic_data->get_post_meta_to_transfer();
-
-		$this->basic_data->find_post_parents( $post_type, $post->post_parent );
-
-		/**
-		 * Runs before the first save_post action is called for the remote blogs.
-		 *
-		 * @param array $save_context Context of the to-be-saved post.
-		 */
-		do_action( 'mlp_before_post_synchronization', $this->save_context );
-
-		// TODO: Fire also a typeless action that has the type (i.e., post) as second argument.
-
-		$network_state = NetworkState::create();
+		// Fire mlp_before_post_synchronization action.
 
 		foreach ( $this->post_request_data[ $this->name_base ] as $remote_blog_id => $post_data ) {
-			if (
-				! in_array( $remote_blog_id, $related_blogs )
-				|| ! site_exists( $remote_blog_id )
-			) {
-				continue;
-			}
 
-			$nonce = $this->nonce_factory->create( [
-				"save_translation_of_post_{$post_id}_for_site_{$remote_blog_id}",
-			] );
+			// Update target site ID in save context array.
 
-			$request_validator = new Mlp_Save_Post_Request_Validator( $nonce );
-			if ( ! $request_validator->is_valid( $post ) ) {
-				continue;
-			}
-
-			switch_to_blog( $remote_blog_id );
-
-			$this->save_context['target_blog_id'] = $remote_blog_id;
-
-			$new_post = $this->create_post_to_send( $post_data, $post_type, $remote_blog_id );
-
+			$new_post = $this->create_post_to_send( $post_data, $this->post_type, $remote_blog_id );
 			if ( [] !== $new_post ) {
-				$sync_thumb = ! empty( $post_data['thumbnail'] );
-				$update     = ! empty( $post_data['remote_post_id'] ) && 0 < $post_data['remote_post_id'];
-				$new_id     = $this->sync_post( $new_post, $post_id, $remote_blog_id, $update );
+				$new_id = $this->sync_post(
+					$new_post,
+					$post_id,
+					$remote_blog_id,
+					! empty( $post_data['remote_post_id'] ) && 0 < $post_data['remote_post_id']
+				);
 
-				$this->basic_data->set_save_context( $this->save_context );
+				// Set post meta.
 
-				$this->basic_data->update_remote_post_meta( $new_id, $post_meta );
-
-				if ( $sync_thumb && $featured_image_path ) {
-					$this->copy_thumb( $new_id, $featured_image_path );
+				if ( ! empty( $post_data['thumbnail'] ) ) {
+					$this->copy_thumb( $new_id, $this->featured_image_path );
 				}
 
-				$tax_data = empty( $post_data['tax'] ) ? [] : (array) $post_data['tax'];
-				$this->set_remote_tax_terms( $new_id, $tax_data );
+				$this->set_remote_tax_terms( $new_id, empty( $post_data['tax'] ) ? [] : (array) $post_data['tax'] );
 			}
+
 		}
 
-		$network_state->restore();
-
-		/**
-		 * Runs after all save_post actions have been called for the remote blogs.
-		 *
-		 * @param array $save_context
-		 */
-		do_action( 'mlp_after_post_synchronization', $this->save_context );
+		// Fire mlp_after_post_synchronization action.
 	}
 
 	/**
@@ -223,16 +169,20 @@ class Mlp_Advanced_Translator_Data {
 	 * @param int    $new_id
 	 * @param string $featured_image_path
 	 *
-	 * @return bool     TRUE on success, FALSE when the image could not be copied.
+	 * @return void
 	 */
 	private function copy_thumb( $new_id, $featured_image_path ) {
+
+		if ( ! $featured_image_path ) {
+			return;
+		}
 
 		// Prepare and Copy the image
 		$filedir = wp_upload_dir();
 
 		if ( ! is_dir( $filedir['path'] ) and ! wp_mkdir_p( $filedir['path'] ) ) {
 			// failed to make the directory
-			return false;
+			return;
 		}
 
 		$filename = wp_unique_filename( $filedir['path'], basename( $featured_image_path ) );
@@ -241,7 +191,7 @@ class Mlp_Advanced_Translator_Data {
 		// Now insert it into the posts
 		if ( ! $copy ) {
 			// failed to write the file
-			return false;
+			return;
 		}
 
 		$wp_filetype = wp_check_filetype( $filedir['url'] . '/' . $filename );
@@ -261,7 +211,7 @@ class Mlp_Advanced_Translator_Data {
 		// Everything went well?
 		if ( is_wp_error( $attach_id ) ) {
 			// failed to insert the image
-			return false;
+			return;
 		}
 
 		wp_update_attachment_metadata(
@@ -269,27 +219,7 @@ class Mlp_Advanced_Translator_Data {
 			wp_generate_attachment_metadata( $attach_id, $full_path )
 		);
 
-		return update_post_meta( $new_id, '_thumbnail_id', $attach_id );
-	}
-
-	/**
-	 * Fetch data of original featured image.
-	 *
-	 * @param  int $post_id
-	 *
-	 * @return string
-	 */
-	private function get_featured_image_path( $post_id ) {
-
-		if ( ! has_post_thumbnail( $post_id ) ) {
-			return '';
-		}
-
-		$meta = wp_get_attachment_metadata( get_post_thumbnail_id( $post_id ) );
-
-		$filedir = wp_upload_dir();
-
-		return $filedir['basedir'] . '/' . $meta['file'];
+		update_post_meta( $new_id, '_thumbnail_id', $attach_id );
 	}
 
 	/**
@@ -303,10 +233,9 @@ class Mlp_Advanced_Translator_Data {
 	 */
 	private function create_post_to_send( array $post_data, $post_type, $blog_id ) {
 
-		$title   = $this->get_remote_post_title( $post_data );
-		$name    = $this->get_remote_post_name( $post_data );
+		$title = $this->get_remote_post_title( $post_data );
+
 		$content = $this->get_remote_post_content( $post_data );
-		$excerpt = $this->get_remote_post_excerpt( $post_data );
 
 		if ( $this->is_empty_remote_post( $title, $content, $post_type ) ) {
 			return [];
@@ -315,9 +244,9 @@ class Mlp_Advanced_Translator_Data {
 		$new_post_data = [
 			'post_type'    => $post_type,
 			'post_title'   => $title,
-			'post_name'    => $name,
+			'post_name'    => $this->get_remote_post_name( $post_data ),
 			'post_content' => $content,
-			'post_excerpt' => $excerpt,
+			'post_excerpt' => $this->get_remote_post_excerpt( $post_data ),
 			'post_parent'  => $this->basic_data->get_post_parent( $blog_id ),
 		];
 

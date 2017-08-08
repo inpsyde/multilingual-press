@@ -1,21 +1,14 @@
 <?php # -*- coding: utf-8 -*-
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
-use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
 
 use function Inpsyde\MultilingualPress\get_translation_ids;
-use function Inpsyde\MultilingualPress\site_exists;
 
 /**
  * Data model for post translation. Handles inserts of new posts only.
  */
 class Mlp_Translatable_Post_Data {
-
-	/**
-	 * @var array
-	 */
-	private $allowed_post_types;
 
 	/**
 	 * @var ContentRelations
@@ -25,17 +18,7 @@ class Mlp_Translatable_Post_Data {
 	/**
 	 * @var string
 	 */
-	private $link_table;
-
-	/**
-	 * @var string
-	 */
 	private $name_base = 'mlp_to_translate';
-
-	/**
-	 * @var NonceFactory
-	 */
-	private $nonce_factory;
 
 	/**
 	 * @var array
@@ -72,13 +55,7 @@ class Mlp_Translatable_Post_Data {
 		NonceFactory $nonce_factory
 	) {
 
-		$this->allowed_post_types = $allowed_post_types;
-
-		$this->link_table = $link_table;
-
 		$this->content_relations = $content_relations;
-
-		$this->nonce_factory = $nonce_factory;
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			$this->post_request_data = $_POST;
@@ -87,134 +64,41 @@ class Mlp_Translatable_Post_Data {
 		$this->source_site_id = get_current_blog_id();
 	}
 
-	/**
-	 * @param int     $post_id
-	 * @param WP_Post $post
-	 *
-	 * @return void
-	 */
-	public function save( $post_id, WP_Post $post ) {
+	public function save() {
 
-		// Bail if not is valid save request!
+		// BAIL if not is valid save request!
 
-		$post_id = $this->get_real_post_id( $post_id );
+		// Set post ID to the real one.
 
-		$this->save_context = [
-			'source_blog'    => get_current_blog_id(),
-			'source_post'    => $post,
-			'real_post_type' => $this->get_real_post_type( $post ),
-			'real_post_id'   => $post_id,
-		];
+		// Set up save context array.
 
-		// Get the post
-		$post_data = get_post( $post_id, ARRAY_A );
-		$post_meta = $this->get_post_meta_to_transfer();
+		// Set up and filter post data array, and BAIL if invalid!
 
-		/** This filter is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
-		$post_data = apply_filters( 'mlp_pre_save_post', $post_data, $this->save_context );
-		if ( ! $post_data || ! is_array( $post_data ) ) {
-			return;
+		// Set up post meta array.
+
+		// Set up post thumbnail data.
+
+		// Set up new post array (with draft status and the rest according to the original post.
+
+		// Set up remote post parents.
+
+		// Fire mlp_before_post_synchronization action.
+
+		foreach ( $this->post_request_data[ $this->name_base ] as $site_id ) {
+
+			// Update target site ID in save context array.
+
+			// Save remote post.
+
+			// Set post meta.
+
+			// Set post thumbnail.
+
+			// Set up post relatinoship.
+
 		}
 
-		$file     = $path = '';
-		$fileinfo = [];
-
-		// Check for thumbnail
-		if ( current_theme_supports( 'post-thumbnails' ) ) {
-			$thumb_id = get_post_thumbnail_id( $post_id );
-			if ( 0 < $thumb_id ) {
-				$path     = wp_upload_dir();
-				$file     = get_post_meta( $thumb_id, '_wp_attached_file', true );
-				$fileinfo = pathinfo( $file );
-				include_once( ABSPATH . 'wp-admin/includes/image.php' ); //including the attachment function
-			}
-		}
-		// Create the post array
-		$new_post = [
-			'post_title'   => $post_data['post_title'],
-			'post_content' => $post_data['post_content'],
-			'post_status'  => 'draft',
-			'post_author'  => $post_data['post_author'],
-			'post_excerpt' => $post_data['post_excerpt'],
-			'post_date'    => $post_data['post_date'],
-			'post_type'    => $post_data['post_type'],
-		 ];
-
-		$this->find_post_parents( $post_data['post_type'], $post->post_parent );
-
-		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
-		do_action( 'mlp_before_post_synchronization', $this->save_context );
-
-		$network_state = NetworkState::create();
-
-		// Create a copy of the item for every related blog
-		foreach ( $this->post_request_data[ $this->name_base ] as $blog_id ) {
-			if ( $blog_id == get_current_blog_id() or ! site_exists( $blog_id ) ) {
-				continue;
-			}
-
-			$request_validator = new Mlp_Save_Post_Request_Validator( $this->nonce_factory->create( [
-				"save_translation_of_post_{$post_id}_for_site_{$blog_id}",
-			] ) );
-			if ( ! $request_validator->is_valid( $post ) ) {
-				continue;
-			}
-
-			switch_to_blog( $blog_id );
-
-			// Set the linked parent post
-			$new_post['post_parent'] = $this->get_post_parent( $blog_id );
-
-			$this->save_context['target_blog_id'] = $blog_id;
-
-			/** This filter is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
-			$new_post = apply_filters( 'mlp_pre_insert_post', $new_post, $this->save_context );
-
-			// Insert remote blog post
-			$remote_post_id = wp_insert_post( $new_post );
-
-			if ( ! empty( $post_meta ) ) {
-				$this->update_remote_post_meta( $remote_post_id, $post_meta );
-			}
-
-			if ( '' != $file ) { // thumbfile exists
-				if ( 0 < count( $fileinfo ) ) {
-					$filedir  = wp_upload_dir();
-					$filename = wp_unique_filename( $filedir['path'], $fileinfo['basename'] );
-					$copy     = copy( $path['basedir'] . '/' . $file, $filedir['path'] . '/' . $filename );
-
-					if ( $copy ) {
-						$wp_filetype = wp_check_filetype( $filedir['url'] . '/' . $filename ); //get the file type
-						$attachment  = [
-							'post_mime_type' => $wp_filetype['type'],
-							'guid'           => $filedir['url'] . '/' . $filename,
-							'post_parent'    => $remote_post_id,
-							'post_title'     => '',
-							'post_excerpt'   => '',
-							'post_author'    => $post_data['post_author'],
-							'post_content'   => '',
-						 ];
-
-						//insert the image
-						$attach_id = wp_insert_attachment( $attachment, $filedir['path'] . '/' . $filename );
-						if ( ! is_wp_error( $attach_id ) ) {
-							wp_update_attachment_metadata(
-								$attach_id,
-								wp_generate_attachment_metadata( $attach_id, $filedir['path'] . '/' . $filename )
-							);
-							// update the image data
-							set_post_thumbnail( $remote_post_id, $attach_id );
-						}
-					}
-				}
-			}
-			$this->set_linked_element( $post_id, $blog_id, $remote_post_id );
-		}
-
-		$network_state->restore();
-
-		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
-		do_action( 'mlp_after_post_synchronization', $this->save_context );
+		// Fire mlp_after_post_synchronization action.
 	}
 
 	/**
@@ -300,6 +184,10 @@ class Mlp_Translatable_Post_Data {
 	 */
 	public function update_remote_post_meta( $remote_post_id, $post_meta = [] ) {
 
+		if ( empty( $post_meta ) ) {
+			return;
+		}
+
 		/**
 		 * Filter post meta data before saving.
 		 *
@@ -307,7 +195,6 @@ class Mlp_Translatable_Post_Data {
 		 * @param array $save_context Context of the to-be-saved post.
 		 */
 		$new_post_meta = apply_filters( 'mlp_pre_insert_post_meta', $post_meta, $this->save_context );
-
 		if ( empty( $new_post_meta ) ) {
 			return;
 		}
@@ -336,9 +223,7 @@ class Mlp_Translatable_Post_Data {
 		 * @param array $post_meta    Post meta fields.
 		 * @param array $save_context Context of the to-be-saved post.
 		 */
-		$post_meta = apply_filters( 'mlp_pre_save_post_meta', [], $this->save_context );
-
-		return $post_meta;
+		return apply_filters( 'mlp_pre_save_post_meta', [], $this->save_context );
 	}
 
 	/**
@@ -371,17 +256,5 @@ class Mlp_Translatable_Post_Data {
 		}
 
 		return $post_type[ $post_id ];
-	}
-
-	/**
-	 * Set the context of the to-be-saved post.
-	 *
-	 * @param array $save_context Save context.
-	 *
-	 * @return void
-	 */
-	public function set_save_context( array $save_context = [] ) {
-
-		$this->save_context = $save_context;
 	}
 }

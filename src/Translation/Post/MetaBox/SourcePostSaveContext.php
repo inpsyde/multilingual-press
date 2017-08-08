@@ -84,6 +84,10 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 */
 	public function to_array(): array {
 
+		if ( self::$contexts->contains( $this->post ) ) {
+			return self::$contexts->offsetGet( $this->post );
+		}
+
 		$empty_context = [
 			self::SITE_ID           => 0,
 			self::POST_TYPE         => '',
@@ -92,10 +96,6 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			self::FEATURED_IMG_PATH => '',
 			self::RELATED_BLOGS     => [],
 		];
-
-		if ( self::$contexts->contains( $this->post ) ) {
-			return self::$contexts->offsetGet( $this->post );
-		}
 
 		$original_post_status = (string) $this->request->body_value(
 			'original_post_status',
