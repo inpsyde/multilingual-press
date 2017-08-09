@@ -58,8 +58,21 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 * @return array
 	 */
 	public function get_redirect_match( array $args = array() ) {
+
+		/**
+		 * Filters the allowed status for posts to be included as possible redirect targets.
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param string[] $post_status Allowed post status.
+		 */
+		$post_status = (array) apply_filters( 'multilingualpress.redirect_post_status', array(
+			'publish',
+		) );
+
 		$translations = $this->language_api->get_translations( array_merge( array(
 			'include_base' => TRUE,
+			'post_status'  => $post_status,
 		), $args ) );
 
 		if ( empty ( $translations ) )
