@@ -33,12 +33,14 @@ class Mlp_Table_Duplicator implements Mlp_Table_Duplicator_Interface {
 	 *
 	 * @param  string $new_table
 	 * @param  string $old_table
-	 * @param  bool   $create Create the new table if it doesn't exists
+	 * @param  bool   $create Create the new table based on the old one.
 	 * @return int Number of inserted rows
 	 */
 	public function replace_content( $new_table, $old_table, $create = FALSE ) {
 
-		$this->maybe_create_table( $new_table, $old_table, $create );
+		if ( $create ) {
+			$this->create_table( $new_table, $old_table );
+		}
 
 		$has_primary_keys = $this->has_primary_key( $new_table );
 
@@ -76,16 +78,11 @@ class Mlp_Table_Duplicator implements Mlp_Table_Duplicator_Interface {
 	/**
 	 * @param  string $new_table
 	 * @param  string $old_table
-	 * @param  bool   $create Create the new table if it doesn't exists
-	 * @return bool           Whether a new table was created or not
+	 * @return void
 	 */
-	private function maybe_create_table( $new_table, $old_table, $create ) {
+	private function create_table( $new_table, $old_table ) {
 
-		if ( ! $create )
-			return FALSE;
-
-		$query = "CREATE TABLE IF NOT EXISTS $new_table LIKE $old_table";
-
-		return (bool) $this->wpdb->query( $query );
+		$this->wpdb->query( "DROP TABLE IF EXISTS $new_table" );
+		$this->wpdb->query( "CREATE TABLE $new_table LIKE $old_table" );
 	}
 }
