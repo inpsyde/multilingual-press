@@ -59,13 +59,13 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	public function get_redirect_match( array $args = array() ) {
 		/**
-		 * Filters the allowed status for posts to be included in hreflang links.
+		 * Filters the allowed status for posts to be included in redirect matches.
 		 *
 		 * @since 2.8.0
 		 *
 		 * @param string[] $post_status Allowed post status.
 		 */
-		$post_status = (array) apply_filters( 'multilingualpress.hreflang_post_status', array(
+		$post_status = (array) apply_filters( 'multilingualpress.redirect_post_status', array(
 			'publish',
 		) );
 
