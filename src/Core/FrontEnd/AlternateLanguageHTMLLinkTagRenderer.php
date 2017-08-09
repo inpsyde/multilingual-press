@@ -21,7 +21,16 @@ final class AlternateLanguageHTMLLinkTagRenderer implements AlternateLanguageRen
 	 *
 	 * @var string
 	 */
-	const FILTER = 'multilingualpress.hreflang_html_link_tag';
+	const FILTER_HREFLANG = 'multilingualpress.hreflang_html_link_tag';
+
+	/**
+	 * Filter name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_RENDER = 'multilingualpress.render_hreflang';
 
 	/**
 	 * @var AlternateLanguages
@@ -52,7 +61,28 @@ final class AlternateLanguageHTMLLinkTagRenderer implements AlternateLanguageRen
 	 */
 	public function render( ...$args ) {
 
-		foreach ( $this->alternate_languages->getIterator() as $language => $url ) {
+		$translations = iterator_to_array( $this->alternate_languages );
+
+		/**
+		 * Filters if the hreflang links should be rendered.
+		 *
+		 * @since 2.8.0
+		 * @since 3.0.0 Add $type argument.
+		 *
+		 * @param bool     $render       Whether or not hreflang links should be rendered.
+		 * @param string[] $translations The available translations to be used for hreflang links.
+		 * @param int      $type         The output type.
+		 */
+		if ( ! apply_filters(
+			self::FILTER_RENDER,
+			count( $translations ) > 1,
+			$translations,
+			$this->type()
+		) ) {
+			return;
+		}
+
+		foreach ( $translations as $language => $url ) {
 			$html_link_tag = sprintf(
 				'<link rel="alternate" hreflang="%1$s" href="%2$s">',
 				esc_attr( $language ),
@@ -68,7 +98,7 @@ final class AlternateLanguageHTMLLinkTagRenderer implements AlternateLanguageRen
 			 * @param string $language      HTTP language code (e.g., "en-US").
 			 * @param string $url           Target URL.
 			 */
-			echo apply_filters( self::FILTER, $html_link_tag, $language, $url );
+			echo apply_filters( self::FILTER_HREFLANG, $html_link_tag, $language, $url );
 		}
 	}
 
