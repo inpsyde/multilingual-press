@@ -58,8 +58,9 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 * @return array
 	 */
 	public function get_redirect_match( array $args = array() ) {
+
 		/**
-		 * Filters the allowed status for posts to be included in redirect matches.
+		 * Filters the allowed status for posts to be included as possible redirect targets.
 		 *
 		 * @since 2.8.0
 		 *
