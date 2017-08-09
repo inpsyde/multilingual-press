@@ -557,11 +557,8 @@ WHERE `http_name` IN( $values )";
 
 		$checks = array (
 			'admin'             => 'is_admin',
-			'post'              => array ( $this, 'is_singular' ),
-			'term'              => array (
-				$this,
-				'is_term_archive_request'
-			),
+			'post'              => array( $this, 'is_singular' ),
+			'term'              => array( $this, 'is_term_archive_request' ),
 			'post_type_archive' => 'is_post_type_archive',
 			'search'            => 'is_search',
 			'front_page'        => 'is_front_page',
@@ -675,7 +672,7 @@ WHERE `http_name` IN( $values )";
 			'post_type'        => $this->get_request_post_type(),
 			'include_base'     => false,
 			'suppress_filters' => false,
-			'post_status' => array(),
+			'post_status'      => array(),
 		);
 
 		$arguments = wp_parse_args( $args, $defaults );
