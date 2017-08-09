@@ -25,6 +25,15 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 *
 	 * @var string
 	 */
+	const FILTER_POST_STATUS = 'multilingualpress.redirect_post_status';
+
+	/**
+	 * Filter hook.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
 	const FILTER_PRIORITY_FACTOR = 'multilingualpress.language_only_priority_factor';
 
 	/**
@@ -97,8 +106,20 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 */
 	public function get_redirect_target( array $args = [] ): RedirectTarget {
 
+		/**
+		 * Filters the allowed status for posts to be included as possible redirect targets.
+		 *
+		 * @since 2.8.0
+		 *
+		 * @param string[] $post_status Allowed post status.
+		 */
+		$post_status = (array) apply_filters( self::FILTER_POST_STATUS, [
+			'publish',
+		] );
+
 		$translations = $this->translations->get_translations( array_merge( [
 			'include_base' => true,
+			'post_status'  => $post_status,
 		], $args ) );
 		if ( ! $translations ) {
 			return new RedirectTarget();
