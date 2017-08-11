@@ -159,8 +159,8 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 			$this->source_term,
 			$this->remote_site_id,
 			get_site_language( $this->remote_site_id ),
-			$this->data,
 			$this->remote_term,
+			$this->data,
 		];
 
 		ob_start();
@@ -173,8 +173,8 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 		 * @param \WP_Term      $term                 Source term object.
 		 * @param int           $remote_site_id       Remote site ID.
 		 * @param string        $remote_site_language Remote site language.
-		 * @param array         $data                 View data.
 		 * @param \WP_Term|null $remote_term          Remote term object.
+		 * @param array         $data                 Data to be used by the view.
 		 */
 		do_action( self::ACTION_RENDER_PREFIX . self::POSITION_TOP, ...$args );
 
@@ -186,8 +186,8 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 		 * @param \WP_Term      $term                 Source term object.
 		 * @param int           $remote_site_id       Remote site ID.
 		 * @param string        $remote_site_language Remote site language.
-		 * @param array         $data                 View data.
 		 * @param \WP_Term|null $remote_term          Remote term object.
+		 * @param array         $data                 Data to be used by the view.
 		 */
 		do_action( self::ACTION_RENDER_PREFIX . self::POSITION_MAIN, ...$args );
 
@@ -199,8 +199,8 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 		 * @param \WP_Term      $term                 Source term object.
 		 * @param int           $remote_site_id       Remote site ID.
 		 * @param string        $remote_site_language Remote site language.
-		 * @param array         $data                 View data.
 		 * @param \WP_Term|null $remote_term          Remote term object.
+		 * @param array         $data                 Data to be used by the view.
 		 */
 		do_action( self::ACTION_RENDER_PREFIX . self::POSITION_BOTTOM, ...$args );
 
@@ -217,11 +217,17 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 	 */
 	private function wrap_markup( bool $update, string $title ): array {
 
-		$format = $update
-			? '<tr class="form-field"><th scope="row">%s</th><td>'
-			: '<div class="form-field" style="padding: 2em 0;"><strong>%s</strong>';
+		if ( $update ) {
+			$opening = '<tr class="form-field"><th scope="row">%s</th><td>';
+			$closing = '</td></tr>';
+		} else {
+			$opening = '<div class="form-field" style="padding: 2em 0;"><strong>%s</strong>';
+			$closing = '</div>';
+		}
 
-		return [ sprintf( $format, $title ), $update ? '</td></tr>' : '</div>' ];
-
+		return [
+			sprintf( $opening, $title ),
+			$closing,
+		];
 	}
 }

@@ -48,31 +48,29 @@ class SimpleTermTranslatorFields {
 	/**
 	 * @var bool
 	 */
-	private $update;
+	private $update = false;
 
 	/**
-	 * Constructor. Sets properties.
-	 *
 	 * @param bool $update
 	 */
-	public function __construct( bool $update = false ) {
+	public function set_update( bool $update ) {
 
 		$this->update = $update;
 	}
 
 	/**
-	 * @param int           $remote_site_id
 	 * @param \WP_Term      $source_term
+	 * @param int           $remote_site_id
 	 * @param \WP_Term|null $remote_term
 	 *
 	 * @return string
 	 */
-	public function main_fields( int $remote_site_id, \WP_Term $source_term, \WP_Term $remote_term = null ): string {
+	public function main_fields( \WP_Term $source_term, int $remote_site_id, \WP_Term $remote_term = null ): string {
 
 		ob_start();
 		?>
 		<p><?php $this->select_term_inputs( $remote_site_id, $source_term, $remote_term ) ?></p>
-		<p><?php $this->create_term_inputs( $remote_site_id, $source_term, $remote_term ) ?></p>
+		<p><?php $this->create_term_inputs( $remote_site_id, $remote_term ) ?></p>
 		<?php
 
 		return ob_get_clean();
@@ -126,14 +124,12 @@ class SimpleTermTranslatorFields {
 
 	/**
 	 * @param int           $remote_site_id
-	 * @param \WP_Term      $source_term
 	 * @param \WP_Term|null $remote_term
 	 *
 	 * @return string
 	 */
 	private function create_term_inputs(
 		int $remote_site_id,
-		\WP_Term $source_term,
 		\WP_Term $remote_term = null
 	): string {
 
@@ -194,5 +190,4 @@ class SimpleTermTranslatorFields {
 
 		return $input_markup;
 	}
-
 }

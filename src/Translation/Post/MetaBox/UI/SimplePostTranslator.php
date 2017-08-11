@@ -131,7 +131,8 @@ final class SimplePostTranslator implements MetaBoxUI {
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
 			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
@@ -142,7 +143,8 @@ final class SimplePostTranslator implements MetaBoxUI {
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
 			echo $fields->main_fields( $post, $remote_site_id, $remote_post );
@@ -153,7 +155,8 @@ final class SimplePostTranslator implements MetaBoxUI {
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
 			echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );

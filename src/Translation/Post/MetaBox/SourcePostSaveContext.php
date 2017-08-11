@@ -22,6 +22,8 @@ final class SourcePostSaveContext implements \ArrayAccess {
 
 	const POST = 'post';
 
+	const POST_PARENT = 'post_parent';
+
 	const POST_STATUS = 'original_post_status';
 
 	const FEATURED_IMG_PATH = 'featured_image_path';
@@ -95,6 +97,8 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			self::POST_TYPE         => '',
 			self::POST_ID           => 0,
 			self::POST_STATUS       => '',
+			self::POST              => new \WP_Post( new \stdClass() ),
+			self::POST_PARENT       => 0,
 			self::FEATURED_IMG_PATH => '',
 			self::RELATED_BLOGS     => [],
 		];
@@ -140,6 +144,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			self::POST_ID           => $request_post_id ?: (int) $this->post->ID,
 			self::POST_STATUS       => $original_post_status,
 			self::POST              => $this->post,
+			self::POST_PARENT       => (int) $this->post->post_parent,
 			self::FEATURED_IMG_PATH => $this->featured_image_path( $this->post ),
 			self::RELATED_BLOGS     => $related_blogs,
 		];

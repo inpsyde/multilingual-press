@@ -31,11 +31,6 @@ class PostRelationSaveHelper {
 	const FILTER_SYNC_METADATA = 'multilingualpress.sync_post_metadata';
 
 	/**
-	 * @var array
-	 */
-	private static $parent_ids = [];
-
-	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -44,6 +39,11 @@ class PostRelationSaveHelper {
 	 * @var array
 	 */
 	private $metadata;
+
+	/**
+	 * @var array
+	 */
+	private $parent_ids;
 
 	/**
 	 * @var SourcePostSaveContext
@@ -69,36 +69,31 @@ class PostRelationSaveHelper {
 	 */
 	public function get_related_post_parent( int $remote_site_id ): int {
 
-		if ( is_array( self::$parent_ids ) ) {
-			return (int) ( self::$parent_ids[ $remote_site_id ] ?? 0 );
+		if ( is_array( $this->parent_ids ) ) {
+			return (int) ( $this->parent_ids[ $remote_site_id ] ?? 0 );
 		}
 
-		$source_post_id = $this->save_context[ SourcePostSaveContext::POST_ID ];
-		$source_site_id = $this->save_context[ SourcePostSaveContext::SITE_ID ];
-
-		$source_post = $source_site_id === (int) get_current_blog_id()
-			? get_post( $source_post_id )
-			: get_blog_post( $source_site_id, $source_post_id );
-
-		$source_parent = $source_post ? (int) $source_post->post_parent : 0;
-
-		if ( ! $source_parent ) {
-			self::$parent_ids = [];
+		if ( ! is_post_type_hierarchical( SourcePostSaveContext::POST_TYPE ) ) {
+			$this->parent_ids = [];
 
 			return 0;
 		}
 
-		if ( $source_site_id === $remote_site_id ) {
-			return $source_parent;
+		$parent = $this->save_context[ SourcePostSaveContext::POST_PARENT ];
+		if ( ! $parent ) {
+			$this->parent_ids = [];
+
+			return 0;
 		}
 
-		self::$parent_ids = $this->content_relations->get_relations(
-			$this->save_context[ SourcePostSaveContext::SITE_ID ],
-			$source_parent,
-			'post'
-		);
+		$source_site_id = $this->save_context[ SourcePostSaveContext::SITE_ID ];
+		if ( $source_site_id === $remote_site_id ) {
+			return (int) $parent;
+		}
 
-		return (int) self::$parent_ids[ $remote_site_id ] ?? 0;
+		$this->parent_ids = $this->content_relations->get_relations( $source_site_id, $parent, 'post' );
+
+		return (int) $this->parent_ids[ $remote_site_id ] ?? 0;
 	}
 
 	/**

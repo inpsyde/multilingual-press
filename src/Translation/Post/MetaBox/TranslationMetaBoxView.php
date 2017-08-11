@@ -155,6 +155,7 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 			$this->remote_site_id,
 			get_site_language( $this->remote_site_id ),
 			$this->remote_post,
+			$this->data,
 		];
 
 		ob_start();
@@ -170,6 +171,7 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 			 * @param int           $remote_site_id       Remote site ID.
 			 * @param string        $remote_site_language Remote site language.
 			 * @param \WP_Post|null $remote_post          Remote post object.
+			 * @param array         $data                 Data to be used by the view.
 			 */
 			do_action( self::ACTION_RENDER_PREFIX . self::POSITION_TOP, ...$args );
 
@@ -182,6 +184,7 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 			 * @param int           $remote_site_id       Remote site ID.
 			 * @param string        $remote_site_language Remote site language.
 			 * @param \WP_Post|null $remote_post          Remote post object.
+			 * @param array         $data                 Data to be used by the view.
 			 */
 			do_action( self::ACTION_RENDER_PREFIX . self::POSITION_MAIN, ...$args );
 
@@ -194,6 +197,7 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 			 * @param int           $remote_site_id       Remote site ID.
 			 * @param string        $remote_site_language Remote site language.
 			 * @param \WP_Post|null $remote_post          Remote post object.
+			 * @param array         $data                 Data to be used by the view.
 			 */
 			do_action( self::ACTION_RENDER_PREFIX . self::POSITION_BOTTOM, ...$args );
 			?>

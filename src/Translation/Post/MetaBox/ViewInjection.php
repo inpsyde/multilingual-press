@@ -47,6 +47,6 @@ trait ViewInjection {
 			if ( is_string( $return ) ) {
 				echo $return;
 			}
-		}, $priority, 4 );
+		}, $priority, 5 );
 	}
 }

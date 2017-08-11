@@ -7,9 +7,11 @@ namespace Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI;
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\SourceTermSaveContext;
+use Inpsyde\MultilingualPress\Translation\Term\MetaBox\TermRelationSaveHelper;
 
 use function Inpsyde\MultilingualPress\site_exists;
-use Inpsyde\MultilingualPress\Translation\Term\MetaBox\TermRelationSaveHelper;
+
+// TODO: Review!
 
 /**
  * @package Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI
@@ -23,14 +25,14 @@ class SimpleTermTranslatorUpdater {
 	private $content_relations;
 
 	/**
-	 * @var ServerRequest
-	 */
-	private $server_request;
-
-	/**
 	 * @var SourceTermSaveContext
 	 */
 	private $save_context;
+
+	/**
+	 * @var ServerRequest
+	 */
+	private $server_request;
 
 	/**
 	 * Constructor. Sets properties.
@@ -67,36 +69,32 @@ class SimpleTermTranslatorUpdater {
 			|| ! site_exists( $remote_site_id )
 			|| ! taxonomy_exists( $remote_term->taxonomy )
 		) {
-			return new \WP_Term( new \stdClass() );
+			return $this->create_empty_term();
 		}
 
 		$relation_helper = new TermRelationSaveHelper( $this->content_relations, $this->save_context );
 
 		$term_id_to_relate = $this->term_to_relate( $remote_site_id, $remote_term->taxonomy, $relation_helper );
-
 		if ( $term_id_to_relate === - 1 ) {
-
 			$relation_helper->unlink_element( $remote_site_id );
 
-			return new \WP_Term( new \stdClass() );
+			return $this->create_empty_term();
 		}
-
 		if ( ! $term_id_to_relate ) {
-			return new \WP_Term( new \stdClass() );
+			return $this->create_empty_term();
 		}
 
 		$new_remote_term = get_term( $term_id_to_relate, $remote_term->taxonomy );
-
 		if ( ! $new_remote_term instanceof \WP_Term ) {
-			return new \WP_Term( new \stdClass() );
+			return $this->create_empty_term();
 		}
-
 		if ( (int) $new_remote_term->term_id === (int) $remote_term->term_id ) {
 			return $remote_term;
 		}
 
+		// TODO: Shouldn't this be negated?
 		if ( $relation_helper->link_element( $remote_site_id, (int) $new_remote_term->term_id ) ) {
-			return new \WP_Term( new \stdClass() );
+			return $this->create_empty_term();
 		}
 
 		return $new_remote_term;
@@ -204,4 +202,11 @@ class SimpleTermTranslatorUpdater {
 		return $to_relate_id;
 	}
 
+	/**
+	 * @return \WP_Term
+	 */
+	private function create_empty_term(): \WP_Term {
+
+		return new \WP_Term( new \stdClass() );
+	}
 }

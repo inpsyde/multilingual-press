@@ -157,7 +157,8 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
 			// If remote post is trashed show a notice and do nothing.
@@ -175,7 +176,8 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
@@ -188,7 +190,8 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {

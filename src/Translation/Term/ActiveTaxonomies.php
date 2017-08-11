@@ -45,12 +45,13 @@ class ActiveTaxonomies {
 			return $this->active_taxonomy_names;
 		}
 
-		$all_taxonomies = [];
-		foreach ( $this->active_post_types->names() as $post_type ) {
-			$post_type_taxonomies = get_object_taxonomies( (object) compact( 'post_type' ) );
-			$all_taxonomies       = array_merge( $all_taxonomies, $post_type_taxonomies );
-		}
+		$active_taxonomies = array_unique( array_reduce( $this->active_post_types->names(), function (
+			array $active_taxonomies,
+			$post_type
+		) {
 
+			return array_merge( $active_taxonomies, get_object_taxonomies( compact( 'post_type' ) ) );
+		}, [] ) );
 		/**
 		 * Filters the allowed taxonomies.
 		 *
@@ -58,9 +59,10 @@ class ActiveTaxonomies {
 		 *
 		 * @param string[] $active_taxonomies Allowed taxonomy names.
 		 */
-		$active_taxonomies = (array) apply_filters( self::FILTER_ACTIVE_TAXONOMIES, array_unique( $all_taxonomies ) );
+		$active_taxonomies = (array) apply_filters( self::FILTER_ACTIVE_TAXONOMIES, $active_taxonomies );
 
 		$this->active_taxonomy_names = array_filter( $active_taxonomies, function( $taxonomy ) {
+
 			return is_string( $taxonomy ) && taxonomy_exists( $taxonomy );
 		} );
 

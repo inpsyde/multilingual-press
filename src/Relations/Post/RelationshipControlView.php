@@ -61,7 +61,8 @@ class RelationshipControlView {
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) {
 
 			global $pagenow;

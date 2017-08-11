@@ -112,7 +112,6 @@ final class SimpleTermTranslator implements MetaBoxUI {
 			);
 
 			return $updater->update( $remote_term, $remote_site_id );
-
 		}, 30, 5 );
 	}
 
@@ -125,17 +124,20 @@ final class SimpleTermTranslator implements MetaBoxUI {
 	 */
 	public function register_view() {
 
+		$fields = new SimpleTermTranslatorFields();
+
+		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
 			\WP_Term $term,
 			int $remote_site_id,
 			string $remote_language,
-			array $data,
-			\WP_Term $remote_term = null
-		) {
+			\WP_Term $remote_term = null,
+			array $data = []
+		) use ( $fields ) {
 
-			$fields = new SimpleTermTranslatorFields( ! empty( $data['update'] ) );
+			$fields->set_update( ! empty( $data['update'] ) );
 
-			echo $fields->main_fields( $remote_site_id, $term, $remote_term );
+			echo $fields->main_fields( $term, $remote_site_id, $remote_term );
 
 		}, TranslationMetaBoxView::POSITION_MAIN );
 	}

@@ -275,7 +275,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$meta_box_registrar
 		);
 
-		add_action( 'admin_init', function () use ( $ui_registry, $meta_box_registrar ) {
+		add_action( 'admin_init', function () use ( $meta_box_registrar ) {
 
 			$meta_box_registrar->register_meta_boxes();
 		}, 0 );
@@ -292,11 +292,11 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 		}, 10, 2 );
 
 		add_action( Term\TermMetaBoxRegistrar::ACTION_INIT_META_BOXES, function () use (
-			$ui_registry,
-			$meta_box_registrar
+			$meta_box_registrar,
+			$ui_registry
 		) {
 
-			$meta_box_registrar->with_ui( $ui_registry->selected_ui( $meta_box_registrar ) );
+			$meta_box_registrar->set_ui( $ui_registry->selected_ui( $meta_box_registrar ) );
 		}, 0 );
 
 		add_action( Term\TermMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function () use ( $container ) {

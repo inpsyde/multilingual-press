@@ -61,21 +61,19 @@ class TermRelationSaveHelper {
 			return 0;
 		}
 
-		if ( ! $this->save_context[ SourceTermSaveContext::TERM_PARENT ] ) {
+		$parent = $this->save_context[ SourceTermSaveContext::TERM_PARENT ];
+		if ( ! $parent ) {
 			$this->parent_ids = [];
 
 			return 0;
 		}
 
-		if ( $this->save_context[ SourceTermSaveContext::SITE_ID ] === $remote_site_id ) {
-			return $this->save_context[ SourceTermSaveContext::TERM_PARENT ];
+		$source_site_id = $this->save_context[ SourceTermSaveContext::SITE_ID ];
+		if ( $source_site_id === $remote_site_id ) {
+			return (int) $parent;
 		}
 
-		$this->parent_ids = $this->content_relations->get_relations(
-			$this->save_context[ SourceTermSaveContext::SITE_ID ],
-			$this->save_context[ SourceTermSaveContext::TERM_PARENT ],
-			'term'
-		);
+		$this->parent_ids = $this->content_relations->get_relations( $source_site_id, $parent, 'term' );
 
 		return (int) $this->parent_ids[ $remote_site_id ] ?? 0;
 	}
@@ -90,9 +88,7 @@ class TermRelationSaveHelper {
 	 */
 	public function link_element( int $remote_site_id, int $remote_term_id ): bool {
 
-		$source_term_id = $this->save_context[ SourceTermSaveContext::TERM_ID ];
 		$source_site_id = $this->save_context[ SourceTermSaveContext::SITE_ID ];
-
 		if ( $source_site_id === $remote_site_id ) {
 			return true;
 		}
@@ -100,7 +96,7 @@ class TermRelationSaveHelper {
 		return $this->content_relations->set_relation(
 			$source_site_id,
 			$remote_site_id,
-			$source_term_id,
+			$this->save_context[ SourceTermSaveContext::TERM_ID ],
 			$remote_term_id,
 			'term'
 		);
@@ -135,5 +131,4 @@ class TermRelationSaveHelper {
 			'term'
 		);
 	}
-
 }
