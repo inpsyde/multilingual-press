@@ -204,28 +204,11 @@ class SiteSettingsUpdater {
 	 */
 	private function update_wplang( int $site_id ) {
 
-		$language = $this->get_language();
-		if ( ! $language ) {
-			return;
-		}
-
-		$languages = $this->languages->get_languages( [
-			'fields'     => LanguagesTable::COLUMN_LOCALE,
-			'conditions' => [
-				[
-					'field' => LanguagesTable::COLUMN_HTTP_CODE,
-					'value' => str_replace( '_', '-', $language ),
-				],
-			],
-		] );
-
-		$language = reset( $languages );
-		if ( ! $language ) {
-			return;
-		}
-
-		$wplang = $language[ LanguagesTable::COLUMN_LOCALE ];
-
+		$wplang = (string) $this->request->body_value(
+			'WPLANG',
+			INPUT_POST,
+			FILTER_SANITIZE_STRING
+		);
 		if ( in_array( $wplang, get_available_languages(), true ) ) {
 			update_blog_option( $site_id, 'WPLANG', $wplang );
 		}
