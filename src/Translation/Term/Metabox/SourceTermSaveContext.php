@@ -126,7 +126,7 @@ final class SourceTermSaveContext implements \ArrayAccess {
 			self::RELATED_BLOGS => $related_blogs,
 		];
 
-		self::$contexts->attach( self::$contexts, $context );
+		self::$contexts->attach( $this->term, $context );
 
 		return $context;
 	}

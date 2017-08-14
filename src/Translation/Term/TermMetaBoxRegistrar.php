@@ -9,6 +9,7 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\UIAwareMetaBoxRegistrar;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Factory\NonceFactory;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxController;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBox;
@@ -85,6 +86,11 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	const ACTION_SAVED_META_BOX_DATA = 'multilingualpress.saved_term_meta_box_data';
 
 	/**
+	 * @var int
+	 */
+	private $current_site_id;
+
+	/**
 	 * @var MetaBoxFactory
 	 */
 	private $factory;
@@ -133,6 +139,8 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		$this->server_request = $request;
 
 		$this->nonce_factory = $nonce_factory;
+
+		$this->current_site_id = get_current_blog_id();
 	}
 
 	/**
@@ -233,15 +241,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			return;
 		}
 
-		/**
-		 * Fires right before the term meta boxes are added or saved.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param \WP_Term $term Term object.
-		 * @param bool     $update
-		 */
-		do_action( self::ACTION_INIT_META_BOXES, $term, $update );
+		$this->initialize_meta_boxes( $term, $update );
 
 		if ( $this->ui ) {
 			$this->ui->register_view();
@@ -298,8 +298,6 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 
 		echo nonce_field( $this->create_nonce_for_meta_box( $meta_box ) );
 
-		$meta_box = $controller->meta_box();
-
 		echo $view->with_term( $term )->with_data( compact( 'meta_box', 'update' ) )->render();
 	}
 
@@ -321,14 +319,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			return;
 		}
 
-		/**
-		 * Fires right before the term meta boxes are added or saved.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param \WP_Term $term Term object.
-		 */
-		do_action( self::ACTION_INIT_META_BOXES, $term );
+		$this->initialize_meta_boxes( $term, $update );
 
 		if ( $this->ui ) {
 			$this->ui->register_updater();
@@ -419,7 +410,10 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	 */
 	private function create_nonce_for_meta_box( MetaBox $meta_box ) {
 
-		return $this->nonce_factory->create( [ 'meta_box_' . $meta_box->id() ] );
+		/** @var WPNonce $nonce */
+		$nonce = $this->nonce_factory->create( [ 'meta_box_' . $meta_box->id() ], WPNonce::class );
+
+		return $nonce->with_site( $this->current_site_id );
 	}
 
 	/**
@@ -431,19 +425,39 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	 */
 	private function get_controllers( $term ): array {
 
-		if ( ! $term instanceof \WP_Term ) {
+		if ( ! $term instanceof \WP_Term || ! $this->is_term_editable( $term ) ) {
 			return [];
 		}
 
-		$allowed = false;
+		return $this->factory->create_meta_boxes( $term );
+	}
 
-		if ( $term->term_id ) {
-			$allowed = current_user_can( 'edit_term', $term->term_id );
-		} elseif ( $term->taxonomy && ( $taxonomy_object = get_taxonomy( $term->taxonomy ) ) ) {
-			$allowed = current_user_can( $taxonomy_object->cap->edit_terms );
+	/**
+	 * Triggers the initialization of the meta boxes for the given term.
+	 *
+	 * @param \WP_Term $term Term object.
+	 * @param bool     $update
+	 *
+	 * @return void
+	 */
+	private function initialize_meta_boxes( \WP_Term $term, bool $update ) {
+
+		static $initialized;
+		if ( $initialized ) {
+			return;
 		}
 
-		return $allowed ? $this->factory->create_meta_boxes( $term ) : [];
+		/**
+		 * Fires right before the term meta boxes are added or saved.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param \WP_Term $term Term object.
+		 * @param bool     $update
+		 */
+		do_action( self::ACTION_INIT_META_BOXES, $term, $update );
+
+		$initialized = true;
 	}
 
 	/**
@@ -459,5 +473,31 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		return
 			! $controller instanceof SiteAwareMetaBoxController
 			|| $this->permission_checker->is_related_term_editable( $term, $controller->site_id() );
+	}
+
+
+	/**
+	 * Checks if the current user can edit the given term in the current site.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param \WP_Term $term Term object.
+	 *
+	 * @return bool Whether or not the current user can edit the given term in the current site.
+	 */
+	private function is_term_editable( \WP_Term $term ): bool {
+
+		if ( $term->term_id ) {
+			return current_user_can( 'edit_term', $term->term_id );
+		}
+
+		if ( $term->taxonomy ) {
+			$taxonomy_object = get_taxonomy( $term->taxonomy );
+			if ( $taxonomy_object ) {
+				return current_user_can( $taxonomy_object->cap->edit_terms );
+			}
+		}
+
+		return false;
 	}
 }
