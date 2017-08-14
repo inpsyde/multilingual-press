@@ -32,17 +32,15 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	}
 
 	/**
-	 * Returns the alternative language title of the site with the given ID, or the current site.
+	 * Returns the alternative language title of the site with the given ID.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $site_id Optional. Site ID. Defaults to 0.
+	 * @param int $site_id Site ID.
 	 *
-	 * @return string The alternative language title of the site with the given ID, or the current site.
+	 * @return string The alternative language title of the site with the given ID.
 	 */
-	public function get_alternative_language_title( int $site_id = 0 ): string {
-
-		$site_id = $site_id ?: get_current_blog_id();
+	public function get_alternative_language_title( int $site_id ): string {
 
 		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 
