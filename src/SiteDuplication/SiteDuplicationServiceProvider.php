@@ -95,7 +95,7 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 	 */
 	public function bootstrap( Container $container ) {
 
-		add_action( 'wpmu_new_blog', [ $container['multilingualpress.site_duplicator'], 'duplicate_site' ] );
+		add_action( 'wpmu_new_blog', [ $container['multilingualpress.site_duplicator'], 'duplicate_site' ], 0 );
 
 		add_action(
 			SiteSettingsSectionView::ACTION_AFTER . '_' . NewSiteSettings::ID,
