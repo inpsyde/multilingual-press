@@ -125,6 +125,7 @@ class SimpleTermTranslatorFields {
 		<?php
 		switch_to_blog( $remote_site_id );
 
+		// TODO: The data entry with the relationship ID is missing - which means the JavaScript doesn't work anymore.
 		$output .= wp_dropdown_categories( [
 			'show_option_none'  => $option_none_label,
 			'option_none_value' => $option_none_value,
@@ -132,7 +133,7 @@ class SimpleTermTranslatorFields {
 			'order'             => 'ASC',
 			'hide_empty'        => false,
 			'echo'              => false,
-			'selected'          => $remote_term ? $remote_term->term_taxonomy_id : '',
+			'selected'          => $remote_term->term_taxonomy_id ?? '',
 			'name'              => self::RELATED_TERM_SELECT . "[{$remote_site_id}]",
 			'id'                => $select_id,
 			'class'             => 'regular-text',
