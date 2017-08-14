@@ -14,7 +14,6 @@
 namespace Inpsyde\MultilingualPress;
 
 use Inpsyde\MultilingualPress\API\APIServiceProvider;
-use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Asset\AssetServiceProvider;
 use Inpsyde\MultilingualPress\Core\CoreServiceProvider;
 use Inpsyde\MultilingualPress\Core\ImmutablePluginProperties;
@@ -146,21 +145,6 @@ register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 
 // TODO: Eventually remove/refactor according to new architecture as soon as the old controller got replaced.
 add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
-
-	// Term Translator
-	//if ( is_admin() ) {
-	//	add_action( 'wp_loaded', function () {
-	//
-	//		$taxonomy = empty( $_REQUEST['taxonomy'] ) ? '' : (string) $_REQUEST['taxonomy'];
-	//
-	//		$term_taxonomy_id = empty( $_REQUEST['tag_ID'] ) ? 0 : (int) $_REQUEST['tag_ID'];
-	//
-	//		( new \Mlp_Term_Translation_Controller(
-	//			resolve( 'multilingualpress.content_relations', ContentRelations::class ),
-	//			new Common\Nonce\WPNonce( "save_{$taxonomy}_translations_$term_taxonomy_id" )
-	//		) )->setup();
-	//	}, 0 );
-	//}
 
 	add_action( 'wp_loaded', function () {
 
