@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
-use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 /**
  * Site settings updater.
