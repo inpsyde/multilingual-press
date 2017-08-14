@@ -11,8 +11,6 @@ use Inpsyde\MultilingualPress\Translation\Term\MetaBox\TermRelationSaveHelper;
 
 use function Inpsyde\MultilingualPress\site_exists;
 
-// TODO: Review!
-
 /**
  * @package Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI
  * @since   3.0.0
