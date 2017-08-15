@@ -86,64 +86,11 @@ class SimpleTermTranslatorFields {
 
 		ob_start();
 		?>
-		<p><?php echo $this->select_term_inputs( $remote_site_id, $source_term, $remote_term ) ?></p>
 		<p><?php echo $this->create_term_inputs( $remote_site_id, $remote_term ) ?></p>
+		<p><?php echo $this->select_term_inputs( $remote_site_id, $source_term, $remote_term ) ?></p>
 		<?php
 
 		return ob_get_clean();
-	}
-
-	/**
-	 * @param int           $remote_site_id
-	 * @param \WP_Term      $source_term
-	 * @param \WP_Term|null $remote_term
-	 *
-	 * @return string
-	 */
-	private function select_term_inputs(
-		int $remote_site_id,
-		\WP_Term $source_term,
-		\WP_Term $remote_term = null
-	): string {
-
-		$output = $this->operation_select_input( self::RELATED_TERM_DO_SELECT, $remote_site_id, $remote_term );
-
-		$select_id = self::RELATED_TERM_SELECT . "-{$remote_site_id}";
-
-		if ( $remote_term ) {
-			$option_none_value = '-1';
-			$option_none_label = '<strong>' . esc_html__( 'Remove connected term', 'multilingualpress' ) . '</strong>';
-		} else {
-			$option_none_value = '';
-			$option_none_label = '---';
-		}
-		?>
-		<label for="<?php echo esc_attr( $select_id ); ?>"
-			class="screen-reader-text">
-			<?php esc_html_e( 'Use the dropdown to select a term for translation', 'multilingualpress' ); ?>
-		</label>
-		<?php
-		switch_to_blog( $remote_site_id );
-
-		// TODO: The data entry with the relationship ID is missing - which means the JavaScript doesn't work anymore.
-		$output .= wp_dropdown_categories( [
-			'show_option_none'  => $option_none_label,
-			'option_none_value' => $option_none_value,
-			'orderby'           => 'name',
-			'order'             => 'ASC',
-			'hide_empty'        => false,
-			'echo'              => false,
-			'selected'          => $remote_term->term_taxonomy_id ?? '',
-			'name'              => self::RELATED_TERM_SELECT . "[{$remote_site_id}]",
-			'id'                => $select_id,
-			'class'             => 'regular-text',
-			'taxonomy'          => $source_term->taxonomy,
-			'value_field'       => 'term_taxonomy_id',
-		] );
-
-		restore_current_blog();
-
-		return $output;
 	}
 
 	/**
@@ -173,6 +120,59 @@ class SimpleTermTranslatorFields {
 			class="regular-text">
 		<?php
 		$output .= ob_get_clean();
+
+		return $output;
+	}
+
+	/**
+	 * @param int           $remote_site_id
+	 * @param \WP_Term      $source_term
+	 * @param \WP_Term|null $remote_term
+	 *
+	 * @return string
+	 */
+	private function select_term_inputs(
+		int $remote_site_id,
+		\WP_Term $source_term,
+		\WP_Term $remote_term = null
+	): string {
+
+		$output = $this->operation_select_input( self::RELATED_TERM_DO_SELECT, $remote_site_id, $remote_term );
+
+		$select_id = self::RELATED_TERM_SELECT . "-{$remote_site_id}";
+
+		if ( $remote_term ) {
+			$option_none_value = '-1';
+			$option_none_label = '<strong>' . esc_html__( 'Remove relationship', 'multilingualpress' ) . '</strong>';
+		} else {
+			$option_none_value = '';
+			$option_none_label = '---';
+		}
+		?>
+		<label for="<?php echo esc_attr( $select_id ); ?>"
+			class="screen-reader-text">
+			<?php esc_html_e( 'Use the dropdown to select a term for translation', 'multilingualpress' ); ?>
+		</label>
+		<?php
+		switch_to_blog( $remote_site_id );
+
+		// TODO: The data entry with the relationship ID is missing - which means the JavaScript doesn't work anymore.
+		$output .= wp_dropdown_categories( [
+			'show_option_none'  => $option_none_label,
+			'option_none_value' => $option_none_value,
+			'orderby'           => 'name',
+			'order'             => 'ASC',
+			'hide_empty'        => false,
+			'echo'              => false,
+			'selected'          => $remote_term->term_taxonomy_id ?? '',
+			'name'              => self::RELATED_TERM_SELECT . "[{$remote_site_id}]",
+			'id'                => $select_id,
+			'class'             => 'regular-text',
+			'taxonomy'          => $source_term->taxonomy,
+			'value_field'       => 'term_taxonomy_id',
+		] );
+
+		restore_current_blog();
 
 		return $output;
 	}
