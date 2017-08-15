@@ -74,7 +74,7 @@ controller.registerModule( 'nav-menus.php', NavMenus, {
 
 // Register the AddNewSite module for the Add New Site network admin page.
 controller.registerModule( 'network/site-new.php', AddNewSite, {
-	el: '#wpbody-content form',
+	el: '#wpbody-content',
 	events: {
 		'change #site-language': 'adaptLanguage',
 		'change #mlp-base-site-id': 'togglePluginsRow'
@@ -118,9 +118,10 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, 
 
 // Register the TermTranslator module for the Tags and Edit Tag admin page.
 controller.registerModule( [ 'edit-tags.php', 'term.php' ], TermTranslator, {
-	el: '#mlp-term-translations',
+	el: '#wpbody-content',
 	events: {
-		'change select': 'propagateSelectedTerm'
+		'change .mlp-term-select': 'propagateSelectedTerm',
+		'input .mlp-term-input': 'selectCreateTermOperation'
 	}
 } );
 

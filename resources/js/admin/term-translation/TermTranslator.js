@@ -25,7 +25,7 @@ class TermTranslator extends Backbone.View {
 		 * The jQuery object representing the MultilingualPress term selects.
 		 * @type {jQuery}
 		 */
-		_this.$selects = this.$el.find( 'select' );
+		_this.$selects = this.$el.find( 'select.mlp-term-select' );
 	}
 
 	/**
@@ -49,9 +49,16 @@ class TermTranslator extends Backbone.View {
 
 		const $select = $( event.target );
 
+		this.setTermOperation( Number( $select.data( 'site' ) ), 'select' );
+
 		const relation = this.getSelectedRelation( $select );
 		if ( '' !== relation ) {
-			this.$selects.not( $select ).each( ( index, element ) => this.selectTerm( $( element ), relation ) );
+			this.$selects.not( $select ).each( ( index, element ) => {
+				const $select = $( element );
+				if ( this.selectTerm( $select, relation ) ) {
+					this.setTermOperation( Number( $select.data( 'site' ) ), 'select' );
+				}
+			} );
 		}
 
 		_this.isPropagating = false;
@@ -85,6 +92,23 @@ class TermTranslator extends Backbone.View {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Sets the term operation for the site with the given ID to the given value.
+	 * @param {Number} siteId - The site ID.
+	 * @param {String} operation - The term operation.
+	 */
+	setTermOperation( siteId, operation ) {
+		$( `#mlp_related_term_op-${siteId}-${operation}` ).prop( 'checked', true );
+	}
+
+	/**
+	 * Selects the create term operation for the according site.
+	 * @param {Event} event - The input event of a create term input element.
+	 */
+	selectCreateTermOperation( event ) {
+		this.setTermOperation( Number( $( event.target ).data( 'site' ) ), 'create' );
 	}
 }
 
