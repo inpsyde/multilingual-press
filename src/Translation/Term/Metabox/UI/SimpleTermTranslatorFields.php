@@ -4,7 +4,9 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI;
 
+use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
+use Inpsyde\MultilingualPress\Translation\Term\TermOptionsRepository;
 
 /**
  * @package Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI
@@ -48,6 +50,16 @@ class SimpleTermTranslatorFields {
 	const RELATED_TERM_CREATE = 'mlp_related_term_create';
 
 	/**
+	 * @var ContentRelations
+	 */
+	private $content_relations;
+
+	/**
+	 * @var TermOptionsRepository
+	 */
+	private $repository;
+
+	/**
 	 * @var ServerRequest
 	 */
 	private $server_request;
@@ -60,11 +72,21 @@ class SimpleTermTranslatorFields {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param ServerRequest $server_request
+	 * @param ServerRequest         $server_request
+	 * @param TermOptionsRepository $repository
+	 * @param ContentRelations      $content_relations
 	 */
-	public function __construct( ServerRequest $server_request ) {
+	public function __construct(
+		ServerRequest $server_request,
+		TermOptionsRepository $repository,
+		ContentRelations $content_relations
+	) {
 
 		$this->server_request = $server_request;
+
+		$this->repository = $repository;
+
+		$this->content_relations = $content_relations;
 	}
 
 	/**
@@ -111,7 +133,7 @@ class SimpleTermTranslatorFields {
 		ob_start();
 		?>
 		<label for="<?php echo esc_attr( $create_id ); ?>" class="screen-reader-text">
-			<?php esc_html_e( 'Type here the term translation', 'multilingualpress' ); ?>
+			<?php esc_html_e( 'Enter name here', 'multilingualpress' ); ?>
 		</label>
 		<input
 			type="text"
@@ -137,42 +159,52 @@ class SimpleTermTranslatorFields {
 		\WP_Term $remote_term = null
 	): string {
 
+		$taxonomy = $source_term->taxonomy;
+
+		$options = $this->repository->get_terms_for_site( $remote_site_id, $taxonomy );
+
 		$output = $this->operation_select_input( self::RELATED_TERM_DO_SELECT, $remote_site_id, $remote_term );
 
 		$select_id = self::RELATED_TERM_SELECT . "-{$remote_site_id}";
 
-		if ( $remote_term ) {
-			$option_none_value = '-1';
-			$option_none_label = '<strong>' . esc_html__( 'Remove relationship', 'multilingualpress' ) . '</strong>';
-		} else {
-			$option_none_value = '';
-			$option_none_label = '---';
-		}
+		ob_start();
 		?>
 		<label for="<?php echo esc_attr( $select_id ); ?>"
 			class="screen-reader-text">
 			<?php esc_html_e( 'Use the dropdown to select a term for translation', 'multilingualpress' ); ?>
 		</label>
 		<?php
-		switch_to_blog( $remote_site_id );
+		if ( $options ) {
+			$option_none_value = $remote_term ? '-1' : '';
 
-		// TODO: The data entry with the relationship ID is missing - which means the JavaScript doesn't work anymore.
-		$output .= wp_dropdown_categories( [
-			'show_option_none'  => $option_none_label,
-			'option_none_value' => $option_none_value,
-			'orderby'           => 'name',
-			'order'             => 'ASC',
-			'hide_empty'        => false,
-			'echo'              => false,
-			'selected'          => $remote_term->term_taxonomy_id ?? '',
-			'name'              => self::RELATED_TERM_SELECT . "[{$remote_site_id}]",
-			'id'                => $select_id,
-			'class'             => 'regular-text',
-			'taxonomy'          => $source_term->taxonomy,
-			'value_field'       => 'term_taxonomy_id',
-		] );
+			$option_none_text = $remote_term ? __( 'Remove relationship', 'multilingualpress' ) : '';
 
-		restore_current_blog();
+			$current_term_taxonomy_id = (int) ( $remote_term->term_taxonomy_id ?? 0 );
+			?>
+			<select
+				name="<?php echo esc_attr( self::RELATED_TERM_SELECT . "[{$remote_site_id}]" ); ?>"
+				id="<?php echo esc_attr( $select_id ); ?>"
+				class="regular-text"
+				autocomplete="off">
+				<option value="<?php echo esc_attr( $option_none_value ); ?>" class="option-none">
+					<?php echo esc_html( $option_none_text ); ?>
+				</option>
+				<?php $this->render_term_options( $options, $current_term_taxonomy_id, $remote_site_id ); ?>
+			</select>
+			<?php
+		} else {
+			$text = get_taxonomy( $taxonomy )->labels->not_found ?? __( 'No terms found.', 'multilingualpress' );
+
+			$url = add_query_arg( compact( 'taxonomy' ), get_admin_url( $remote_site_id, 'edit-tags.php' ) );
+
+			printf(
+				'<p><a href="%2$s">%1$s</a></p>',
+				esc_html( $text ),
+				esc_url( $url )
+			);
+		}
+
+		$output .= ob_get_clean();
 
 		return $output;
 	}
@@ -219,5 +251,51 @@ class SimpleTermTranslatorFields {
 		}
 
 		return $input_markup;
+	}
+
+	/**
+	 * Renders the given term options.
+	 *
+	 * @param string[] $options Term options.
+	 * @param int      $current Currently selected term taxonomy ID.
+	 * @param int      $site_id Site ID.
+	 *
+	 * @return void
+	 */
+	private function render_term_options( array $options, int $current, int $site_id ) {
+
+		foreach ( $options as $term_taxonomy_id => $term_name ) {
+			printf(
+				'<option value="%2$d" data-relation="%4$s"%3$s>%1$s</option>',
+				$term_name,
+				$term_taxonomy_id,
+				selected( $term_taxonomy_id, $current, false ),
+				$this->get_relation_id( $site_id, $term_taxonomy_id )
+			);
+		}
+	}
+
+	/**
+	 * @param int $site_id
+	 * @param int $term_taxonomy_id
+	 *
+	 * @return string
+	 */
+	private function get_relation_id( $site_id, $term_taxonomy_id ) {
+
+		$translation_ids = $this->content_relations->get_existing_translation_ids(
+			$site_id,
+			0,
+			$term_taxonomy_id,
+			0,
+			'term'
+		);
+		if ( ! $translation_ids ) {
+			return '';
+		}
+
+		$relation = reset( $translation_ids );
+
+		return "{$relation['ml_source_blogid']}-{$relation['ml_source_elementid']}";
 	}
 }

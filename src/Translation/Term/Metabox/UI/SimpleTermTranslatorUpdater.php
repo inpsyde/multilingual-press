@@ -18,6 +18,13 @@ use function Inpsyde\MultilingualPress\site_exists;
 class SimpleTermTranslatorUpdater {
 
 	/**
+	 * TODO: Yeah, well, ehm, ... fix this.
+	 * Term translation is almost completely broken. It should use term TAXONOMY IDs (and not TERM IDs), creating new
+	 * terms on the fly has not really been discussed before, just like the according UI (and UX) for it, and term
+	 * deletion is not even taken care of so far.
+	 */
+
+	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -55,12 +62,12 @@ class SimpleTermTranslatorUpdater {
 	/**
 	 * Save the remote term. Runs in site context or remote term.
 	 *
-	 * @param \WP_Term $remote_term
 	 * @param int      $remote_site_id
+	 * @param \WP_Term $remote_term
 	 *
 	 * @return \WP_Term
 	 */
-	public function update( \WP_Term $remote_term, int $remote_site_id ): \WP_Term {
+	public function update( int $remote_site_id, \WP_Term $remote_term ): \WP_Term {
 
 		if (
 			! in_array( $remote_site_id, $this->save_context[ SourceTermSaveContext::RELATED_BLOGS ] )
@@ -71,6 +78,8 @@ class SimpleTermTranslatorUpdater {
 		}
 
 		$relation_helper = new TermRelationSaveHelper( $this->content_relations, $this->save_context );
+
+		// TODO: Check if ALL selected remote terms form a valid translation group. If not, BAIL!
 
 		$term_id_to_relate = $this->term_to_relate( $remote_site_id, $remote_term->taxonomy, $relation_helper );
 		if ( $term_id_to_relate === - 1 ) {

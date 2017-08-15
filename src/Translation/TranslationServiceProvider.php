@@ -139,11 +139,19 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			);
 		};
 
+		$container->share( 'multilingualpress.term_translation_options_repository', function ( Container $container ) {
+
+			return new Term\AutoFetchTermOptionsRepository(
+				$container['multilingualpress.site_relations']
+			);
+		} );
+
 		$container['multilingualpress.term_translation_simple_ui'] = function ( Container $container ) {
 
 			return new Term\MetaBox\UI\SimpleTermTranslator(
 				$container['multilingualpress.content_relations'],
-				$container['multilingualpress.server_request']
+				$container['multilingualpress.server_request'],
+				$container['multilingualpress.term_translation_options_repository']
 			);
 		};
 	}
