@@ -177,7 +177,6 @@ final class TranslationMetadataUpdater implements TermMetaUpdater {
 		 *
 		 * @param \WP_Term              $remote_term    Remote term object being saved.
 		 * @param int                   $remote_site_id Remote site ID.
-		 * @param string                $source_term    Source term object.
 		 * @param ServerRequest         $server_request Server request object.
 		 * @param SourceTermSaveContext $save_context   Save context object.
 		 */
@@ -185,8 +184,8 @@ final class TranslationMetadataUpdater implements TermMetaUpdater {
 			self::ACTION_SAVED_TERM,
 			$remote_term,
 			$this->remote_site_id,
-			$this->save_context,
-			$server_request
+			$server_request,
+			$this->save_context
 		);
 
 		return true;
