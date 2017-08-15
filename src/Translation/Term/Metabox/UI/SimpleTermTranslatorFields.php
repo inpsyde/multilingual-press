@@ -190,7 +190,7 @@ class SimpleTermTranslatorFields {
 		\WP_Term $remote_term = null
 	): string {
 
-		$operation_id = self::RELATED_TERM_OPERATION . "-{$remote_site_id}-select";
+		$operation_id = self::RELATED_TERM_OPERATION . "-{$remote_site_id}-{$operation}";
 
 		$create = $operation === self::RELATED_TERM_DO_CREATE;
 
