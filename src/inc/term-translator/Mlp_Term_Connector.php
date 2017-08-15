@@ -3,13 +3,6 @@
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
-/**
- * Mlp_Term_Connector
- *
- * @version 2015.07.06
- * @author  Inpsyde GmbH, toscho, tf
- * @license GPL
- */
 class Mlp_Term_Connector {
 
 	/**
@@ -81,11 +74,6 @@ class Mlp_Term_Connector {
 			return false;
 		}
 
-		/**
-		 * This is a core bug!
-		 *
-		 * @see https://core.trac.wordpress.org/ticket/32876
-		 */
 		$term_taxonomy_id = (int) $term_taxonomy_id;
 
 		$success = FALSE;
