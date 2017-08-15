@@ -103,7 +103,7 @@ final class SimpleTermTranslator implements MetaBoxUI {
 			int $remote_site_id,
 			ServerRequest $server_request,
 			SourceTermSaveContext $save_context
-		) {
+		): \WP_Term {
 
 			$updater = new SimpleTermTranslatorUpdater(
 				$this->content_relations,
@@ -111,8 +111,8 @@ final class SimpleTermTranslator implements MetaBoxUI {
 				$save_context
 			);
 
-			return $updater->update( $remote_term, $remote_site_id );
-		}, 30, 5 );
+			return $updater->update( $remote_site_id, $remote_term );
+		}, 30, 4 );
 	}
 
 	/**
@@ -138,7 +138,6 @@ final class SimpleTermTranslator implements MetaBoxUI {
 			$fields->set_update( ! empty( $data['update'] ) );
 
 			echo $fields->main_fields( $term, $remote_site_id, $remote_term );
-
 		}, TranslationMetaBoxView::POSITION_MAIN );
 	}
 }
