@@ -221,7 +221,7 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 			$opening = '<tr class="form-field"><th scope="row">%s</th><td>';
 			$closing = '</td></tr>';
 		} else {
-			$opening = '<div class="form-field" style="padding: 2em 0;"><strong>%s</strong>';
+			$opening = '<div class="form-field" style="margin-top: 2em;"><strong>%s</strong>';
 			$closing = '</div>';
 		}
 
