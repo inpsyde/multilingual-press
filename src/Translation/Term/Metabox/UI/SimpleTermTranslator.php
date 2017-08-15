@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\SourceTermSaveContext;
@@ -31,6 +32,11 @@ final class SimpleTermTranslator implements MetaBoxUI {
 	const ID = 'multilingualpress.simple_term_translator';
 
 	/**
+	 * @var AssetManager
+	 */
+	private $asset_manager;
+
+	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -51,11 +57,13 @@ final class SimpleTermTranslator implements MetaBoxUI {
 	 * @param ContentRelations      $content_relations
 	 * @param ServerRequest         $server_request
 	 * @param TermOptionsRepository $repository
+	 * @param AssetManager          $asset_manager
 	 */
 	public function __construct(
 		ContentRelations $content_relations,
 		ServerRequest $server_request,
-		TermOptionsRepository $repository
+		TermOptionsRepository $repository,
+		AssetManager $asset_manager
 	) {
 
 		$this->content_relations = $content_relations;
@@ -63,6 +71,8 @@ final class SimpleTermTranslator implements MetaBoxUI {
 		$this->server_request = $server_request;
 
 		$this->repository = $repository;
+
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
@@ -137,7 +147,12 @@ final class SimpleTermTranslator implements MetaBoxUI {
 	 */
 	public function register_view() {
 
-		$fields = new SimpleTermTranslatorFields( $this->server_request, $this->repository, $this->content_relations );
+		$fields = new SimpleTermTranslatorFields(
+			$this->server_request,
+			$this->repository,
+			$this->content_relations,
+			$this->asset_manager
+		);
 
 		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (

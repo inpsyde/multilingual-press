@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Translation\Term\TermOptionsRepository;
 
@@ -50,6 +51,11 @@ class SimpleTermTranslatorFields {
 	const RELATED_TERM_CREATE = 'mlp_related_term_create';
 
 	/**
+	 * @var AssetManager
+	 */
+	private $asset_manager;
+
+	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -75,11 +81,13 @@ class SimpleTermTranslatorFields {
 	 * @param ServerRequest         $server_request
 	 * @param TermOptionsRepository $repository
 	 * @param ContentRelations      $content_relations
+	 * @param AssetManager          $asset_manager
 	 */
 	public function __construct(
 		ServerRequest $server_request,
 		TermOptionsRepository $repository,
-		ContentRelations $content_relations
+		ContentRelations $content_relations,
+		AssetManager $asset_manager
 	) {
 
 		$this->server_request = $server_request;
@@ -87,6 +95,8 @@ class SimpleTermTranslatorFields {
 		$this->repository = $repository;
 
 		$this->content_relations = $content_relations;
+
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
@@ -139,7 +149,8 @@ class SimpleTermTranslatorFields {
 			type="text"
 			id="<?php echo esc_attr( $create_id ); ?>"
 			name="<?php echo esc_attr( self::RELATED_TERM_CREATE . "[{$remote_site_id}]" ); ?>"
-			class="regular-text">
+			data-site="<?php echo esc_attr( $remote_site_id ); ?>"
+			class="regular-text mlp-term-input">
 		<?php
 		$output .= ob_get_clean();
 
@@ -175,6 +186,8 @@ class SimpleTermTranslatorFields {
 		</label>
 		<?php
 		if ( $options ) {
+			$this->asset_manager->enqueue_script( 'multilingualpress-admin' );
+
 			$option_none_value = $remote_term ? '-1' : '';
 
 			$option_none_text = $remote_term ? __( 'Remove relationship', 'multilingualpress' ) : '';
@@ -184,7 +197,8 @@ class SimpleTermTranslatorFields {
 			<select
 				name="<?php echo esc_attr( self::RELATED_TERM_SELECT . "[{$remote_site_id}]" ); ?>"
 				id="<?php echo esc_attr( $select_id ); ?>"
-				class="regular-text"
+				class="regular-text mlp-term-select"
+				data-site="<?php echo esc_attr( $remote_site_id ); ?>"
 				autocomplete="off">
 				<option value="<?php echo esc_attr( $option_none_value ); ?>" class="option-none">
 					<?php echo esc_html( $option_none_text ); ?>

@@ -151,7 +151,8 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			return new Term\MetaBox\UI\SimpleTermTranslator(
 				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.server_request'],
-				$container['multilingualpress.term_translation_options_repository']
+				$container['multilingualpress.term_translation_options_repository'],
+				$container['multilingualpress.asset_manager']
 			);
 		};
 	}
