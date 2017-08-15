@@ -3,6 +3,7 @@
 
 const gulp = require( 'gulp' );
 
+const argv = require( 'yargs' ).argv;
 const autoprefixer = require( 'autoprefixer' );
 const babelify = require( 'babelify' );
 const browserify = require( 'browserify' );
@@ -237,7 +238,7 @@ gulp.task( 'tape', [
 	'lint-scripts',
 ], () => {
 	return gulp
-		.src( `${config.tests.js}**/*Test.js`, {
+		.src( argv.src || `${config.tests.js}**/*Test.js`, {
 			read: false
 		} )
 		.pipe( exec(
