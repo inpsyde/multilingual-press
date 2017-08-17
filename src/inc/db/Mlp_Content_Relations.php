@@ -144,7 +144,7 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 		}
 
 		$sql = "
-SELECT t.ml_blogid as site_id, t.ml_elementid as content_id
+SELECT DISTINCT t.ml_blogid as site_id, t.ml_elementid as content_id
 FROM {$this->link_table} s
 INNER JOIN {$this->link_table} t
 ON s.ml_source_blogid = t.ml_source_blogid
