@@ -183,15 +183,15 @@ class RelationshipControl extends Backbone.View {
 	 * @returns {Boolean} Whether or not the request has been sent.
 	 */
 	connectExistingPost( data ) {
-		const newPostID = Number( $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() || 0 );
+		const remotePostID = Number( $( 'input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked' ).val() || 0 );
 
-		if ( ! newPostID ) {
+		if ( ! remotePostID ) {
 			window.alert( this.settings.L10n.noPostSelected );
 
 			return false;
 		}
 
-		data.new_post_id = newPostID;
+		data.remote_post_id = remotePostID;
 
 		this.sendRequest( data );
 
