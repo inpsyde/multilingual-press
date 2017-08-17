@@ -533,7 +533,7 @@ test( 'connectExistingPost (input checked) ...', ( assert ) => {
 	);
 
 	// Manipulate data object for subsequent test.
-	data.new_post_id = postID;
+	data.remote_post_id = postID;
 
 	assert.deepEqual(
 		testee.sendRequest.calledWith( data ),

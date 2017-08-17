@@ -192,7 +192,7 @@ class RelationshipController {
 		}
 
 		$this->context = RelationshipContext::from_existing( $this->context, [
-			RelationshipContext::KEY_NEW_POST_ID => $new_post_id,
+			RelationshipContext::KEY_REMOTE_POST_ID => $new_post_id,
 		] );
 
 		return $this->connect_existing_post();
@@ -211,7 +211,7 @@ class RelationshipController {
 			$this->context->source_site_id(),
 			$this->context->remote_site_id(),
 			$this->context->source_post_id(),
-			$this->context->new_post_id(),
+			$this->context->remote_post_id(),
 			'post'
 		);
 	}
