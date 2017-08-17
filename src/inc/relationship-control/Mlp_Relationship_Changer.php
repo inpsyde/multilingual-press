@@ -194,13 +194,11 @@ class Mlp_Relationship_Changer {
 	 */
 	private function create_new_relation() {
 
-		$remote_is_relation = $this->remote_site_id === $this->relation_site_id;
-
 		return $this->content_relations->set_relation(
-			$this->relation_site_id,
-			$remote_is_relation ? $this->source_site_id : $this->remote_site_id,
-			$this->relation_post_id,
-			$remote_is_relation ? $this->source_post_id : $this->remote_post_id,
+			$this->source_site_id,
+			$this->remote_site_id,
+			$this->source_post_id,
+			$this->remote_post_id,
 			'post'
 		);
 	}
@@ -212,10 +210,6 @@ class Mlp_Relationship_Changer {
 
 		$source_site_id = $this->source_site_id;
 
-		$remote_site_id = $this->remote_site_id;
-
-		$remote_post_id = $this->remote_post_id;
-
 		$relation_site_id = $this->relation_site_id;
 
 		$relations = $this->content_relations->get_relations(
@@ -223,23 +217,15 @@ class Mlp_Relationship_Changer {
 			$this->relation_post_id,
 			'post'
 		);
-		if ( empty( $relations[ $source_site_id ] ) || 2 < count( $relations ) ) {
-			if ( $remote_site_id === $relation_site_id ) {
-				$remote_site_id = $source_site_id;
-
-				$remote_post_id = $this->source_post_id;
-			}
-		} else {
-			$remote_site_id = 0;
-
-			$remote_post_id = 0;
+		if ( empty( $relations[ $source_site_id ] ) ) {
+			return 0;
 		}
 
 		return $this->content_relations->delete_relation(
 			$relation_site_id,
-			$remote_site_id,
+			2 < count( $relations ) ? $source_site_id : 0,
 			$this->relation_post_id,
-			$remote_post_id,
+			0,
 			'post'
 		);
 	}

@@ -74,20 +74,43 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 			$type
 		);
 
-		$existing = $this->get_relations( $source_site_id, $source_content_id, $type );
+		if ( $translation_ids[ 'ml_source_blogid' ] === $target_site_id ) {
+			$target_site_id = $source_site_id;
 
-		if ( isset( $existing[ $target_site_id ] ) ) {
-			if ( $existing[ $target_site_id ] === $target_content_id ) {
+			$target_content_id = $source_content_id;
+		}
+
+		$existing = $this->get_relations(
+			$translation_ids[ 'ml_source_blogid' ],
+			$translation_ids[ 'ml_source_elementid' ],
+			$type
+		);
+
+		if ( isset( $existing[ $source_site_id ], $existing[ $target_site_id ] ) ) {
+			if (
+				$existing[ $source_site_id ] === $source_content_id
+				&& $existing[ $target_site_id ] === $target_content_id
+			) {
 				return TRUE;
+			}
+
+			if ( $existing[ $source_site_id ] !== $source_content_id ) {
+				$target_site_id = $source_site_id;
+
+				$target_content_id = $source_content_id;
 			}
 
 			$this->delete_relation(
 				$translation_ids[ 'ml_source_blogid' ],
 				$target_site_id,
 				$translation_ids[ 'ml_source_elementid' ],
-				0, // old content id
+				0,
 				$type
 			);
+		} elseif ( isset( $existing[ $target_site_id ] ) ) {
+			$target_site_id = $source_site_id;
+
+			$target_content_id = $source_content_id;
 		}
 
 		$result = (bool) $this->insert_row(
@@ -98,7 +121,11 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 			$type
 		);
 
-		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
+		$cache_key = $this->get_cache_key(
+			$translation_ids[ 'ml_source_blogid' ],
+			$translation_ids[ 'ml_source_elementid' ],
+			$type
+		);
 		wp_cache_delete( $cache_key, $this->cache_group );
 
 		do_action(
