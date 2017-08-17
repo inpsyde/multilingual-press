@@ -205,8 +205,6 @@ class RelationshipController {
 	 */
 	private function connect_existing_post(): bool {
 
-		$this->disconnect_post();
-
 		return $this->content_relations->set_relation(
 			$this->context->source_site_id(),
 			$this->context->remote_site_id(),
@@ -229,40 +227,32 @@ class RelationshipController {
 
 		$source_post_id = $this->context->source_post_id();
 
-		$remote_post_id = $this->context->remote_post_id();
-
 		$translation_ids = $this->content_relations->get_translation_ids(
 			$source_site_id,
 			$remote_site_id,
 			$source_post_id,
-			$remote_post_id,
+			$this->context->remote_post_id(),
 			'post'
 		);
+
+		$relationship_site_id = $translation_ids['ml_source_blogid'];
+
+		$relationship_post_id = $translation_ids['ml_source_elementid'];
 
 		$relations = $this->content_relations->get_relations(
-			$translation_ids['ml_source_blogid'],
-			$translation_ids['ml_source_elementid'],
+			$relationship_site_id,
+			$relationship_post_id,
 			'post'
 		);
-		if ( 2 < count( $relations ) ) {
-			if ( $translation_ids['ml_source_blogid'] !== $source_site_id ) {
-				$remote_site_id = $source_site_id;
-
-				if ( 0 !== $remote_post_id ) {
-					$remote_post_id = $source_post_id;
-				}
-			}
-		} else {
-			$remote_site_id = 0;
-
-			$remote_post_id = 0;
+		if ( empty( $relations[ $source_site_id ] ) ) {
+			return;
 		}
 
 		$this->content_relations->delete_relation(
-			$translation_ids['ml_source_blogid'],
-			$remote_site_id,
-			$translation_ids['ml_source_elementid'],
-			$remote_post_id,
+			$relationship_site_id,
+			2 < count( $relations ) ? $source_site_id : 0,
+			$relationship_post_id,
+			0,
 			'post'
 		);
 	}
