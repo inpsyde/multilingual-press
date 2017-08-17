@@ -1456,15 +1456,15 @@ var RelationshipControl = function (_Backbone$View) {
 
 
 	RelationshipControl.prototype.connectExistingPost = function connectExistingPost(data) {
-		var newPostID = Number($('input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked').val() || 0);
+		var remotePostID = Number($('input[name="mlp_add_post[' + data.remote_site_id + ']"]:checked').val() || 0);
 
-		if (!newPostID) {
+		if (!remotePostID) {
 			window.alert(this.settings.L10n.noPostSelected);
 
 			return false;
 		}
 
-		data.new_post_id = newPostID;
+		data.remote_post_id = remotePostID;
 
 		this.sendRequest(data);
 
