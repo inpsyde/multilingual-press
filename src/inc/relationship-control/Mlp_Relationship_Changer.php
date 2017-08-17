@@ -34,7 +34,12 @@ class Mlp_Relationship_Changer {
 	/**
 	 * @var int
 	 */
-	private $new_post_id    = 0;
+	private $relation_post_id = 0;
+
+	/**
+	 * @var int
+	 */
+	private $relation_site_id = 0;
 
 	/**
 	 * @var string
@@ -98,13 +103,13 @@ class Mlp_Relationship_Changer {
 		do_action( 'mlp_after_post_synchronization', $save_context );
 
 		if ( is_wp_error( $post_id ) )
-			return $post_id->get_error_messages();
+			return $post_id->get_error_message();
 
-		$this->new_post_id = $post_id;
+		$this->remote_post_id = $post_id;
 
 		$this->connect_existing();
 
-		return $this->new_post_id;
+		return $this->remote_post_id;
 	}
 
 	/**
@@ -113,6 +118,8 @@ class Mlp_Relationship_Changer {
 	 * @return int|string
 	 */
 	public function new_post() {
+
+		$this->prepare_relation_data();
 
 		return $this->new_relation();
 	}
@@ -177,6 +184,8 @@ class Mlp_Relationship_Changer {
 	 */
 	public function search_post() {
 
+		$this->prepare_relation_data();
+
 		return $this->connect_existing();
 	}
 
@@ -185,11 +194,13 @@ class Mlp_Relationship_Changer {
 	 */
 	private function create_new_relation() {
 
+		$remote_is_relation = $this->remote_site_id === $this->relation_site_id;
+
 		return $this->content_relations->set_relation(
-			$this->source_site_id,
-			$this->remote_site_id,
-			$this->source_post_id,
-			$this->new_post_id,
+			$this->relation_site_id,
+			$remote_is_relation ? $this->source_site_id : $this->remote_site_id,
+			$this->relation_post_id,
+			$remote_is_relation ? $this->source_post_id : $this->remote_post_id,
 			'post'
 		);
 	}
@@ -203,30 +214,20 @@ class Mlp_Relationship_Changer {
 
 		$remote_site_id = $this->remote_site_id;
 
-		$source_post_id = $this->source_post_id;
-
 		$remote_post_id = $this->remote_post_id;
 
-		$translation_ids = $this->content_relations->get_translation_ids(
-			$source_site_id,
-			$remote_site_id,
-			$source_post_id,
-			$remote_post_id,
-			'post'
-		);
+		$relation_site_id = $this->relation_site_id;
 
 		$relations = $this->content_relations->get_relations(
-			$translation_ids['ml_source_blogid'],
-			$translation_ids['ml_source_elementid'],
+			$relation_site_id,
+			$this->relation_post_id,
 			'post'
 		);
-		if ( 2 < count( $relations ) ) {
-			if ( $translation_ids['ml_source_blogid'] !== $source_site_id ) {
+		if ( empty( $relations[ $source_site_id ] ) || 2 < count( $relations ) ) {
+			if ( $remote_site_id === $relation_site_id ) {
 				$remote_site_id = $source_site_id;
 
-				if ( 0 !== $remote_post_id ) {
-					$remote_post_id = $source_post_id;
-				}
+				$remote_post_id = $this->source_post_id;
 			}
 		} else {
 			$remote_site_id = 0;
@@ -235,9 +236,9 @@ class Mlp_Relationship_Changer {
 		}
 
 		return $this->content_relations->delete_relation(
-			$translation_ids['ml_source_blogid'],
+			$relation_site_id,
 			$remote_site_id,
-			$translation_ids['ml_source_elementid'],
+			$this->relation_post_id,
 			$remote_post_id,
 			'post'
 		);
@@ -250,7 +251,30 @@ class Mlp_Relationship_Changer {
 	 */
 	public function disconnect_post() {
 
+		$this->prepare_relation_data();
+
 		return $this->disconnect();
+	}
+
+	/**
+	 * Reads the data from the request and sets up the correct relation data.
+	 *
+	 * @return void
+	 */
+	private function prepare_relation_data() {
+
+		$translation_ids = $this->content_relations->get_translation_ids(
+			$this->source_site_id,
+			$this->remote_site_id,
+			$this->source_post_id,
+			$this->remote_post_id,
+			'post'
+		);
+		if ( $translation_ids ) {
+			$this->relation_site_id = $translation_ids['ml_source_blogid'];
+
+			$this->relation_post_id = $translation_ids['ml_source_elementid'];
+		}
 	}
 
 	/**
@@ -265,7 +289,6 @@ class Mlp_Relationship_Changer {
 			'source_site_id',
 			'remote_post_id',
 			'remote_site_id',
-			'new_post_id',
 			'new_post_title',
 		);
 
@@ -279,5 +302,4 @@ class Mlp_Relationship_Changer {
 			}
 		}
 	}
-
 }
