@@ -22,15 +22,6 @@ class RelationshipContext {
 	 *
 	 * @var string
 	 */
-	const KEY_NEW_POST_ID = 'new_post_id';
-
-	/**
-	 * Data key.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string
-	 */
 	const KEY_NEW_POST_TITLE = 'new_post_title';
 
 	/**
@@ -90,7 +81,6 @@ class RelationshipContext {
 
 		if ( ! isset( static::$default_data ) ) {
 			static::$default_data = [
-				static::KEY_NEW_POST_ID    => 0,
 				static::KEY_NEW_POST_TITLE => '',
 				static::KEY_REMOTE_POST_ID => 0,
 				static::KEY_REMOTE_SITE_ID => 0,
@@ -144,7 +134,6 @@ class RelationshipContext {
 		}
 
 		$keys = [
-			static::KEY_NEW_POST_ID,
 			static::KEY_REMOTE_POST_ID,
 			static::KEY_REMOTE_SITE_ID,
 			static::KEY_SOURCE_POST_ID,
@@ -159,18 +148,6 @@ class RelationshipContext {
 		$data[ static::KEY_NEW_POST_TITLE ] = (string) $request->body_value( static::KEY_NEW_POST_TITLE );
 
 		return new static( $data );
-	}
-
-	/**
-	 * Returns the new post ID.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return int New post ID.
-	 */
-	public function new_post_id(): int {
-
-		return (int) $this->data[ static::KEY_NEW_POST_ID ];
 	}
 
 	/**

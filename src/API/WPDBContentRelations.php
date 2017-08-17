@@ -313,20 +313,43 @@ WHERE s.ml_blogid = %d
 			$type
 		);
 
-		$existing = $this->get_relations( $source_site_id, $source_content_id, $type );
+		if ( $translation_ids['ml_source_blogid'] === $target_site_id ) {
+			$target_site_id = $source_site_id;
 
-		if ( isset( $existing[ $target_site_id ] ) ) {
-			if ( $existing[ $target_site_id ] === $target_content_id ) {
+			$target_content_id = $source_content_id;
+		}
+
+		$existing = $this->get_relations(
+			$translation_ids['ml_source_blogid'],
+			$translation_ids['ml_source_elementid'],
+			$type
+		);
+
+		if ( isset( $existing[ $source_site_id ], $existing[ $target_site_id ] ) ) {
+			if (
+				$existing[ $source_site_id ] === $source_content_id
+				&& $existing[ $target_site_id ] === $target_content_id
+			) {
 				return true;
+			}
+
+			if ( $existing[ $source_site_id ] !== $source_content_id ) {
+				$target_site_id = $source_site_id;
+
+				$target_content_id = $source_content_id;
 			}
 
 			$this->delete_relation(
 				$translation_ids['ml_source_blogid'],
 				$target_site_id,
 				$translation_ids['ml_source_elementid'],
-				0, // old content id
+				0,
 				$type
 			);
+		} elseif ( isset( $existing[ $target_site_id ] ) ) {
+			$target_site_id = $source_site_id;
+
+			$target_content_id = $source_content_id;
 		}
 
 		$result = (bool) $this->insert_row(
