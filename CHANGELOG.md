@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2.8.0
+- Content Relations: Fix various (edge case) issue around adding a new post to an existing relationship, see [issue #280](https://github.com/inpsyde/MultilingualPress/issues/280).
 - DB: Always (try to) delete a table before creating it anew, see [issue #240](https://github.com/inpsyde/MultilingualPress/issues/240).
 - hreflang: Introduce a new filter, `multilingualpress.render_hreflang`, to force or prevent rendering.
 - hreflang: Introduce a new filter, `multilingualpress.hreflang_post_status`, to restrict post translations, and only query published posts, see [issue #276](https://github.com/inpsyde/MultilingualPress/issues/276) and [issue #277](https://github.com/inpsyde/MultilingualPress/issues/277).
