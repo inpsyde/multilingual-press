@@ -172,9 +172,13 @@ class Mlp_Relationship_Changer {
 	 */
 	public function connect_existing() {
 
-		$this->disconnect();
-		return $this->create_new_relation();
-
+		return $this->content_relations->set_relation(
+			$this->source_site_id,
+			$this->remote_site_id,
+			$this->source_post_id,
+			$this->remote_post_id,
+			'post'
+		);
 	}
 
 	/**
@@ -187,20 +191,6 @@ class Mlp_Relationship_Changer {
 		$this->prepare_relation_data();
 
 		return $this->connect_existing();
-	}
-
-	/**
-	 * @return bool
-	 */
-	private function create_new_relation() {
-
-		return $this->content_relations->set_relation(
-			$this->source_site_id,
-			$this->remote_site_id,
-			$this->source_post_id,
-			$this->remote_post_id,
-			'post'
-		);
 	}
 
 	/**
