@@ -79,7 +79,7 @@ class RelationshipContext {
 	 */
 	public function __construct( array $data = [] ) {
 
-		if ( ! isset( static::$default_data ) ) {
+		if ( ! static::$default_data ) {
 			static::$default_data = [
 				static::KEY_NEW_POST_TITLE => '',
 				static::KEY_REMOTE_POST_ID => 0,
@@ -208,7 +208,6 @@ class RelationshipContext {
 	public function source_post() {
 
 		static $source_post = false;
-
 		if ( false === $source_post ) {
 			$source_site_id = $this->source_site_id();
 			if ( ! $source_site_id ) {

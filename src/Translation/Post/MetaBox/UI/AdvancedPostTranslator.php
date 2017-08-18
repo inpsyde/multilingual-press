@@ -91,7 +91,11 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	public function initialize() {
 
 		static $done;
-		if ( ! $done && wp_doing_ajax() ) {
+		if ( $done ) {
+			return;
+		}
+
+		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_' . AdvancedPostTranslatorAJAXHandler::AJAX_ACTION, function () {
 
 				( new AdvancedPostTranslatorAJAXHandler( $this->server_request ) )->handle_request();

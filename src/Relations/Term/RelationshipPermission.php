@@ -16,8 +16,6 @@ use function Inpsyde\MultilingualPress\site_exists;
  */
 class RelationshipPermission {
 
-	// TODO: Discuss usage of term ID (instead of term taxonomy ID)! Content relations work with TTID, so why use TID?
-
 	/**
 	 * @var ContentRelations
 	 */

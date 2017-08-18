@@ -163,11 +163,11 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 */
 	private function is_valid_save_request( array $context ) {
 
-		static $called = 0;
-
 		if ( ms_is_switched() ) {
 			return false;
 		}
+
+		static $called;
 
 		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
 		$called ++;
@@ -207,9 +207,13 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 */
 	private function real_post_type( \WP_Post $post ) {
 
+		static $post_type;
+		if ( ! $post_type ) {
+			$post_type = [];
+		}
+
 		$post_id = (int) $post->ID;
 
-		static $post_type = [];
 		if ( isset( $post_type[ $post_id ] ) ) {
 			return $post_type[ $post_id ];
 		}
@@ -238,13 +242,15 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	private function is_connectable_status( \WP_Post $post, string $original_post_status ) {
 
 		static $connectable_statuses;
-		// TODO: Discuss post status "future"...
-		$connectable_statuses or $connectable_statuses = [
-			'publish',
-			'draft',
-			'private',
-			'auto-draft',
-		];
+		if ( ! $connectable_statuses ) {
+			// TODO: Discuss post status "future"...
+			$connectable_statuses = [
+				'publish',
+				'draft',
+				'private',
+				'auto-draft',
+			];
+		}
 
 		return
 			in_array( $post->post_status, $connectable_statuses, true )

@@ -60,7 +60,7 @@ class SimpleTermTranslatorUpdater {
 	}
 
 	/**
-	 * Save the remote term. Runs in site context or remote term.
+	 * Save the remote term. Runs in site context of remote term.
 	 *
 	 * @param int      $remote_site_id
 	 * @param \WP_Term $remote_term

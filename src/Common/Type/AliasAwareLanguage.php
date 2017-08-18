@@ -58,18 +58,21 @@ final class AliasAwareLanguage implements Language {
 	 */
 	public function offsetExists( $name ) {
 
-		static $names = [
-			'custom_name',
-			'english_name',
-			'http_code',
-			'iso_639_1',
-			'iso_639_2',
-			'is_rtl',
-			'locale',
-			'native_name',
-			'priority',
-			'text',
-		];
+		static $names;
+		if ( ! $names ) {
+			$names = [
+				'custom_name',
+				'english_name',
+				'http_code',
+				'iso_639_1',
+				'iso_639_2',
+				'is_rtl',
+				'locale',
+				'native_name',
+				'priority',
+				'text',
+			];
+		}
 
 		return in_array( (string) $name, $names, true );
 	}

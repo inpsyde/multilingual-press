@@ -59,7 +59,8 @@ class PostRelationSaveHelper {
 	public function __construct( ContentRelations $content_relations, SourcePostSaveContext $save_context ) {
 
 		$this->content_relations = $content_relations;
-		$this->save_context      = $save_context;
+
+		$this->save_context = $save_context;
 	}
 
 	/**
@@ -69,19 +70,20 @@ class PostRelationSaveHelper {
 	 */
 	public function get_related_post_parent( int $remote_site_id ): int {
 
-		if ( is_array( $this->parent_ids ) ) {
-			return (int) ( $this->parent_ids[ $remote_site_id ] ?? 0 );
+		static $parent_ids;
+		if ( isset( $parent_ids ) ) {
+			return (int) ( $parent_ids[ $remote_site_id ] ?? 0 );
 		}
 
 		if ( ! is_post_type_hierarchical( SourcePostSaveContext::POST_TYPE ) ) {
-			$this->parent_ids = [];
+			$parent_ids = [];
 
 			return 0;
 		}
 
 		$parent = $this->save_context[ SourcePostSaveContext::POST_PARENT ];
 		if ( ! $parent ) {
-			$this->parent_ids = [];
+			$parent_ids = [];
 
 			return 0;
 		}
@@ -91,9 +93,9 @@ class PostRelationSaveHelper {
 			return (int) $parent;
 		}
 
-		$this->parent_ids = $this->content_relations->get_relations( $source_site_id, $parent, 'post' );
+		$parent_ids = $this->content_relations->get_relations( $source_site_id, $parent, 'post' );
 
-		return (int) $this->parent_ids[ $remote_site_id ] ?? 0;
+		return (int) $parent_ids[ $remote_site_id ] ?? 0;
 	}
 
 	/**
