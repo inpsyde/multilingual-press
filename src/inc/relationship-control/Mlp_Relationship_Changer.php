@@ -198,22 +198,25 @@ class Mlp_Relationship_Changer {
 	 */
 	public function disconnect() {
 
-		$source_site_id = $this->source_site_id;
-
 		$relation_site_id = $this->relation_site_id;
+
+		$target_site_id = $this->remote_site_id;
+		if ( $target_site_id === $relation_site_id ) {
+			$target_site_id = $this->source_site_id;
+		}
 
 		$relations = $this->content_relations->get_relations(
 			$relation_site_id,
 			$this->relation_post_id,
 			'post'
 		);
-		if ( empty( $relations[ $source_site_id ] ) ) {
+		if ( empty( $relations[ $target_site_id ] ) ) {
 			return 0;
 		}
 
 		return $this->content_relations->delete_relation(
 			$relation_site_id,
-			2 < count( $relations ) ? $source_site_id : 0,
+			2 < count( $relations ) ? $target_site_id : 0,
 			$this->relation_post_id,
 			0,
 			'post'
