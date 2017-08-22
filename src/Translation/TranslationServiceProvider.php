@@ -322,17 +322,6 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$container['multilingualpress.http_post_request_globals_manipulator']->restore_data();
 		} );
 
-		$relationship_control_view = $container['multilingualpress.post_relationship_control_view'];
-
-		add_action( MetaBoxUIRegistry::ACTION_UI_SELECTED, function ( MetaBoxUI $selected_ui ) use (
-			$relationship_control_view
-		) {
-
-			if ( $selected_ui instanceof Post\MetaBox\UI\AdvancedPostTranslator ) {
-				$relationship_control_view->register();
-			}
-		} );
-
 		$server_request = $container['multilingualpress.server_request'];
 
 		$action = $server_request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
