@@ -225,12 +225,10 @@ class RelationshipController {
 
 		$remote_site_id = $this->context->remote_site_id();
 
-		$source_post_id = $this->context->source_post_id();
-
 		$translation_ids = $this->content_relations->get_translation_ids(
 			$source_site_id,
 			$remote_site_id,
-			$source_post_id,
+			$this->context->source_post_id(),
 			$this->context->remote_post_id(),
 			'post'
 		);
@@ -244,13 +242,19 @@ class RelationshipController {
 			$relationship_post_id,
 			'post'
 		);
-		if ( empty( $relations[ $source_site_id ] ) ) {
+
+		$target_site_id = $remote_site_id;
+		if ( $target_site_id === $relationship_site_id ) {
+			$target_site_id = $source_site_id;
+		}
+
+		if ( empty( $relations[ $target_site_id ] ) ) {
 			return;
 		}
 
 		$this->content_relations->delete_relation(
 			$relationship_site_id,
-			2 < count( $relations ) ? $source_site_id : 0,
+			2 < count( $relations ) ? $target_site_id : 0,
 			$relationship_post_id,
 			0,
 			'post'

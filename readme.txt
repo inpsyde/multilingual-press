@@ -114,6 +114,9 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 
 == Changelog ==
 
+= 2.8.1 =
+- Content Relations: Fix always disconnecting the source post.
+
 = 2.8.0 =
 - Content Relations: Fix various (edge case) issue around adding a new post to an existing relationship, see [issue #280](https://github.com/inpsyde/MultilingualPress/issues/280).
 - DB: Always (try to) delete a table before creating it anew, see [issue #240](https://github.com/inpsyde/MultilingualPress/issues/240).
