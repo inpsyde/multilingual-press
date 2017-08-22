@@ -210,14 +210,14 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 		) use ( $fields ) {
 
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
-				echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
-
 				$this->relationship_control_view->render( new RelationshipContext( [
 					RelationshipContext::KEY_REMOTE_POST_ID => $remote_post->ID ?? 0,
 					RelationshipContext::KEY_REMOTE_SITE_ID => $remote_site_id,
 					RelationshipContext::KEY_SOURCE_POST_ID => $post->ID,
 					RelationshipContext::KEY_SOURCE_SITE_ID => get_current_blog_id(),
 				] ) );
+
+				echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
 			}
 		} );
 	}
