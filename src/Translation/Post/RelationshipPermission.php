@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Relations\Post;
+namespace Inpsyde\MultilingualPress\Translation\Post;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 
@@ -11,7 +11,7 @@ use function Inpsyde\MultilingualPress\site_exists;
 /**
  * Permission checker to be used to either permit or prevent access to posts.
  *
- * @package Inpsyde\MultilingualPress\Relations\Post
+ * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
  */
 class RelationshipPermission {

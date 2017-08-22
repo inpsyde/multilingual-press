@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Relations\Term;
+namespace Inpsyde\MultilingualPress\Translation\Term;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 
@@ -11,7 +11,7 @@ use function Inpsyde\MultilingualPress\site_exists;
 /**
  * Permission checker to be used to either permit or prevent access to terms.
  *
- * @package Inpsyde\MultilingualPress\Relations\Term
+ * @package Inpsyde\MultilingualPress\Translation\Term
  * @since   3.0.0
  */
 class RelationshipPermission {

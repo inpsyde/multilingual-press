@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Relations\Post\Search;
+namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search;
 
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
+use Inpsyde\MultilingualPress\Translation\Post\RelationshipContext;
 
 /**
  * Relationship control search results view implementation displaying the post status of unpublished posts.
  *
- * @package Inpsyde\MultilingualPress\Relations\Post\Search
+ * @package Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search
  * @since   3.0.0
  */
 final class StatusAwareSearchResultsView implements SearchResultsView {

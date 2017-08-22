@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Relations\Post;
+namespace Inpsyde\MultilingualPress\Translation\Post;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
@@ -10,7 +10,7 @@ use Inpsyde\MultilingualPress\Common\HTTP\Request;
 /**
  * Relationship controller.
  *
- * @package Inpsyde\MultilingualPress\Relations\Post
+ * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
  */
 class RelationshipController {

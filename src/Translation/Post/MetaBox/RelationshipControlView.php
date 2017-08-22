@@ -2,24 +2,22 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Relations\Post;
+namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox;
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
-use Inpsyde\MultilingualPress\Relations\Post\Search\Search;
-use Inpsyde\MultilingualPress\Relations\Post\Search\SearchController;
-use Inpsyde\MultilingualPress\Relations\Post\Search\SearchResultsView;
-use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxView;
-use Inpsyde\MultilingualPress\Translation\Post\MetaBox\ViewInjection;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search\Search;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search\SearchController;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search\SearchResultsView;
+use Inpsyde\MultilingualPress\Translation\Post\RelationshipContext;
+use Inpsyde\MultilingualPress\Translation\Post\RelationshipController;
 
 /**
  * Relationship control view to be used within the Translation meta box.
  *
- * @package Inpsyde\MultilingualPress\Relations\Post
+ * @package Inpsyde\MultilingualPress\Translation\Post\MetaBox
  * @since   3.0.0
  */
 class RelationshipControlView {
-
-	use ViewInjection;
 
 	/**
 	 * @var AssetManager
@@ -52,41 +50,15 @@ class RelationshipControlView {
 	}
 
 	/**
-	 * @since 3.0.0
-	 */
-	public function register() {
-
-		/** @noinspection PhpUnusedParameterInspection */
-		$this->inject_into_view( function (
-			\WP_Post $post,
-			int $remote_site_id,
-			string $remote_language,
-			\WP_Post $remote_post = null,
-			array $data = []
-		) {
-
-			global $pagenow;
-			if ( 'post.php' !== $pagenow ) {
-				return;
-			}
-
-			$this->render( new RelationshipContext( [
-				RelationshipContext::KEY_REMOTE_POST_ID => $remote_post->ID ?? 0,
-				RelationshipContext::KEY_REMOTE_SITE_ID => $remote_site_id,
-				RelationshipContext::KEY_SOURCE_POST_ID => $post->ID,
-				RelationshipContext::KEY_SOURCE_SITE_ID => get_current_blog_id(),
-			] ) );
-		}, TranslationMetaBoxView::POSITION_BOTTOM, 0 );
-	}
-
-	/**
 	 * Renders the markup.
+	 *
+	 * @since 3.0.0
 	 *
 	 * @param RelationshipContext $context Relationship context data object.
 	 *
 	 * @return void
 	 */
-	private function render( RelationshipContext $context ) {
+	public function render( RelationshipContext $context ) {
 
 		$remote_post_id = $context->remote_post_id();
 

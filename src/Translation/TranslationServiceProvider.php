@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation;
 
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -86,11 +87,56 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			);
 		};
 
+		$container['multilingualpress.post_relationship_control_search'] = function ( Container $container ) {
+
+			return new Post\MetaBox\Search\RequestAwareSearch(
+				$container['multilingualpress.server_request']
+			);
+		};
+
+		$container['multilingualpress.post_relationship_control_search_controller'] = function ( Container $container ) {
+
+			return new Post\MetaBox\Search\SearchController(
+				$container['multilingualpress.post_relationship_control_search_results']
+			);
+		};
+
+		$container['multilingualpress.post_relationship_control_search_results'] = function ( Container $container ) {
+
+			return new Post\MetaBox\Search\StatusAwareSearchResultsView(
+				$container['multilingualpress.post_relationship_control_search']
+			);
+		};
+
+		$container['multilingualpress.post_relationship_control_view'] = function ( Container $container ) {
+
+			return new Post\MetaBox\RelationshipControlView(
+				$container['multilingualpress.post_relationship_control_search_results'],
+				$container['multilingualpress.asset_manager']
+			);
+		};
+
+		$container['multilingualpress.post_relationship_controller'] = function ( Container $container ) {
+
+			return new Post\RelationshipController(
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.server_request']
+			);
+		};
+
+		$container['multilingualpress.post_relationship_permission'] = function ( Container $container ) {
+
+			return new Post\RelationshipPermission(
+				$container['multilingualpress.content_relations']
+			);
+		};
+
 		$container['multilingualpress.post_translation_advanced_ui'] = function ( Container $container ) {
 
 			return new Post\MetaBox\UI\AdvancedPostTranslator(
 				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.server_request'],
+				$container['multilingualpress.post_relationship_control_view'],
 				$container['multilingualpress.asset_manager']
 			);
 		};
@@ -136,6 +182,13 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 				$container['multilingualpress.term_relationship_permission'],
 				$container['multilingualpress.server_request'],
 				$container['multilingualpress.nonce_factory']
+			);
+		};
+
+		$container['multilingualpress.term_relationship_permission'] = function ( Container $container ) {
+
+			return new Term\RelationshipPermission(
+				$container['multilingualpress.content_relations']
 			);
 		};
 
@@ -212,6 +265,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function bootstrap_post_translation( Container $container ) {
 
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		$meta_box_registrar = $container['multilingualpress.post_meta_box_registrar'];
 
 		$ui_registry = $container['multilingualpress.meta_box_ui_registry'];
@@ -264,6 +321,36 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 			$container['multilingualpress.http_post_request_globals_manipulator']->restore_data();
 		} );
+
+		$relationship_control_view = $container['multilingualpress.post_relationship_control_view'];
+
+		add_action( MetaBoxUIRegistry::ACTION_UI_SELECTED, function ( MetaBoxUI $selected_ui ) use (
+			$relationship_control_view
+		) {
+
+			if ( $selected_ui instanceof Post\MetaBox\UI\AdvancedPostTranslator ) {
+				$relationship_control_view->register();
+			}
+		} );
+
+		$server_request = $container['multilingualpress.server_request'];
+
+		$action = $server_request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
+		if ( is_string( $action ) && '' !== $action && wp_doing_ajax() ) {
+			switch ( $action ) {
+				case Post\MetaBox\Search\SearchController::ACTION:
+					$container['multilingualpress.post_relationship_control_search_controller']->initialize(
+						$server_request
+					);
+					break;
+
+				case Post\RelationshipController::ACTION_CONNECT_EXISTING:
+				case Post\RelationshipController::ACTION_CONNECT_NEW:
+				case Post\RelationshipController::ACTION_DISCONNECT:
+					$container['multilingualpress.post_relationship_controller']->initialize();
+					break;
+			}
+		}
 	}
 
 	/**
@@ -274,6 +361,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 * @return void
 	 */
 	private function bootstrap_term_translation( Container $container ) {
+
+		if ( ! is_admin() ) {
+			return;
+		}
 
 		$meta_box_registrar = $container['multilingualpress.term_meta_box_registrar'];
 

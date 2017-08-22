@@ -17,7 +17,6 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Post\PostMetaBoxView;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Post\PostMetaUpdater;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\PriorityAwareMetaBox;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\SiteAwareMetaBoxController;
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipPermission;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 
 use function Inpsyde\MultilingualPress\nonce_field;

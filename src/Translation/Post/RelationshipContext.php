@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Relations\Post;
+namespace Inpsyde\MultilingualPress\Translation\Post;
 
 use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
@@ -10,7 +10,7 @@ use Inpsyde\MultilingualPress\Common\HTTP\Request;
 /**
  * Relationship context data object.
  *
- * @package Inpsyde\MultilingualPress\Relations\Post
+ * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
  */
 class RelationshipContext {

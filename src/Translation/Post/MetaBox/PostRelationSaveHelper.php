@@ -41,11 +41,6 @@ class PostRelationSaveHelper {
 	private $metadata;
 
 	/**
-	 * @var array
-	 */
-	private $parent_ids;
-
-	/**
 	 * @var SourcePostSaveContext
 	 */
 	private $save_context;

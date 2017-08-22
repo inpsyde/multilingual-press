@@ -16,7 +16,6 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBox;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Term\TermMetaBoxView;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Term\TermMetaUpdater;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\SiteAwareMetaBoxController;
-use Inpsyde\MultilingualPress\Relations\Term\RelationshipPermission;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\SourceTermSaveContext;
 
 use function Inpsyde\MultilingualPress\nonce_field;

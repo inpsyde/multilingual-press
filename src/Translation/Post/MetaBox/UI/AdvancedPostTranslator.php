@@ -8,10 +8,12 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\RelationshipControlView;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxView;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetadataUpdater;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\ViewInjection;
+use Inpsyde\MultilingualPress\Translation\Post\RelationshipContext;
 
 /**
  * Advanced post translation user interface implementation.
@@ -43,6 +45,11 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	private $content_relations;
 
 	/**
+	 * @var RelationshipControlView
+	 */
+	private $relationship_control_view;
+
+	/**
 	 * @var ServerRequest
 	 */
 	private $server_request;
@@ -50,19 +57,23 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param ContentRelations $content_relations
-	 * @param ServerRequest    $server_request
-	 * @param AssetManager     $asset_manager
+	 * @param ContentRelations        $content_relations
+	 * @param ServerRequest           $server_request
+	 * @param RelationshipControlView $relationship_control_view
+	 * @param AssetManager            $asset_manager
 	 */
 	public function __construct(
 		ContentRelations $content_relations,
 		ServerRequest $server_request,
+		RelationshipControlView $relationship_control_view,
 		AssetManager $asset_manager
 	) {
 
 		$this->content_relations = $content_relations;
 
 		$this->server_request = $server_request;
+
+		$this->relationship_control_view = $relationship_control_view;
 
 		$this->asset_manager = $asset_manager;
 	}
@@ -200,6 +211,13 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
 				echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
+
+				$this->relationship_control_view->render( new RelationshipContext( [
+					RelationshipContext::KEY_REMOTE_POST_ID => $remote_post->ID ?? 0,
+					RelationshipContext::KEY_REMOTE_SITE_ID => $remote_site_id,
+					RelationshipContext::KEY_SOURCE_POST_ID => $post->ID,
+					RelationshipContext::KEY_SOURCE_SITE_ID => get_current_blog_id(),
+				] ) );
 			}
 		} );
 	}
