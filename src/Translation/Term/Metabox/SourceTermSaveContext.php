@@ -18,7 +18,7 @@ final class SourceTermSaveContext implements \ArrayAccess {
 
 	const TAXONOMY = 'taxonomy';
 
-	const TERM_ID = 'term_id';
+	const TERM_TAXONOMY_ID = 'term_taxonomy_id';
 
 	const TERM = 'term';
 
@@ -89,12 +89,12 @@ final class SourceTermSaveContext implements \ArrayAccess {
 		}
 
 		$empty_context = [
-			self::SITE_ID       => 0,
-			self::TAXONOMY      => '',
-			self::TERM_ID       => 0,
-			self::TERM_PARENT   => 0,
-			self::TERM          => new \WP_Term( new \stdClass() ),
-			self::RELATED_BLOGS => [],
+			self::SITE_ID          => 0,
+			self::TAXONOMY         => '',
+			self::TERM_TAXONOMY_ID => 0,
+			self::TERM_PARENT      => 0,
+			self::TERM             => new \WP_Term( new \stdClass() ),
+			self::RELATED_BLOGS    => [],
 		];
 
 		$source_site_id = (int) get_current_blog_id();
@@ -114,16 +114,19 @@ final class SourceTermSaveContext implements \ArrayAccess {
 			return $empty_context;
 		}
 
-		// TODO: Content relations are using TERM TAXONOMY ID (instead of TERM ID). Check if this is what we want!?!
-		$request_term_id = (int) $this->request->body_value( 'tag_ID', INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
+		$request_term = get_term_by(
+			'id',
+			(int) $this->request->body_value( 'tag_ID', INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT ),
+			$taxonomy
+		);
 
 		$context = [
-			self::SITE_ID       => $source_site_id,
-			self::TAXONOMY      => $taxonomy,
-			self::TERM_ID       => $request_term_id ?: (int) $this->term->term_id,
-			self::TERM_PARENT   => (int) $this->term->parent,
-			self::TERM          => $this->term,
-			self::RELATED_BLOGS => $related_blogs,
+			self::SITE_ID          => $source_site_id,
+			self::TAXONOMY         => $taxonomy,
+			self::TERM_TAXONOMY_ID => (int) ( $request_term->term_taxonomy_id ?? $this->term->term_taxonomy_id ),
+			self::TERM_PARENT      => (int) $this->term->parent,
+			self::TERM             => $this->term,
+			self::RELATED_BLOGS    => $related_blogs,
 		];
 
 		self::$contexts->attach( $this->term, $context );

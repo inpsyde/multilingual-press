@@ -312,7 +312,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 		}
 
 		$save_context = $this->factory->create_term_request_context( $term, $this->server_request );
-		if ( ! $save_context[ SourceTermSaveContext::TERM_ID ] ) {
+		if ( ! $save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ] ) {
 			return;
 		}
 

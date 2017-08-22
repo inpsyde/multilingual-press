@@ -81,12 +81,12 @@ class TermRelationSaveHelper {
 	/**
 	 * Set the source id of the element.
 	 *
-	 * @param   int $remote_site_id ID of remote site
-	 * @param   int $remote_term_id ID of remote term
+	 * @param   int $remote_site_id          ID of remote site
+	 * @param   int $remote_term_taxonomy_id ID of remote term
 	 *
 	 * @return  bool
 	 */
-	public function link_element( int $remote_site_id, int $remote_term_id ): bool {
+	public function link_element( int $remote_site_id, int $remote_term_taxonomy_id ): bool {
 
 		$source_site_id = $this->save_context[ SourceTermSaveContext::SITE_ID ];
 		if ( $source_site_id === $remote_site_id ) {
@@ -96,8 +96,8 @@ class TermRelationSaveHelper {
 		return $this->content_relations->set_relation(
 			$source_site_id,
 			$remote_site_id,
-			$this->save_context[ SourceTermSaveContext::TERM_ID ],
-			$remote_term_id,
+			$this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
+			$remote_term_taxonomy_id,
 			'term'
 		);
 	}
@@ -114,7 +114,7 @@ class TermRelationSaveHelper {
 		if ( ! is_array( $this->connected_ids ) ) {
 			$this->connected_ids = $this->content_relations->get_relations(
 				$this->save_context[ SourceTermSaveContext::SITE_ID ],
-				$this->save_context[ SourceTermSaveContext::TERM_ID ],
+				$this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
 				'term'
 			);
 		}
@@ -126,7 +126,7 @@ class TermRelationSaveHelper {
 		return $this->content_relations->delete_relation(
 			$this->save_context[ SourceTermSaveContext::SITE_ID ],
 			$remote_site_id,
-			$this->save_context[ SourceTermSaveContext::TERM_ID ],
+			$this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
 			$this->connected_ids[ $remote_site_id ],
 			'term'
 		);

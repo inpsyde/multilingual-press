@@ -95,12 +95,12 @@ class SimpleTermTranslatorUpdater {
 		if ( ! $new_remote_term instanceof \WP_Term ) {
 			return $this->create_empty_term();
 		}
-		if ( (int) $new_remote_term->term_id === (int) $remote_term->term_id ) {
+		if ( (int) $new_remote_term->term_taxonomy_id === (int) $remote_term->term_taxonomy_id ) {
 			return $remote_term;
 		}
 
 		// TODO: Shouldn't this be negated?
-		if ( $relation_helper->link_element( $remote_site_id, (int) $new_remote_term->term_id ) ) {
+		if ( $relation_helper->link_element( $remote_site_id, (int) $new_remote_term->term_taxonomy_id ) ) {
 			return $this->create_empty_term();
 		}
 
@@ -124,9 +124,7 @@ class SimpleTermTranslatorUpdater {
 			FILTER_REQUIRE_ARRAY
 		);
 
-		$operation = ( $operation_for_sites[ $remote_site_id ] ?? '' );
-
-		switch ( $operation ) {
+		switch ( $operation_for_sites[ $remote_site_id ] ?? '' ) {
 			case SimpleTermTranslatorFields::RELATED_TERM_DO_CREATE:
 				return $this->create_new_term( $remote_site_id, $taxonomy, $relations );
 			case SimpleTermTranslatorFields::RELATED_TERM_DO_SELECT:
