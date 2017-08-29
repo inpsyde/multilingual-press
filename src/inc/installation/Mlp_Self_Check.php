@@ -79,16 +79,7 @@ class Mlp_Self_Check {
 		// TODO: Remove with MultilingualPress 3.0.0.
 		$this->check_php_version();
 
-		/**
-		 * Filters if the system check should be forced regardless of the context.
-		 *
-		 * @since 2.9.0
-		 *
-		 * @param bool $force Whether or not the system check should be forced
-		 */
-		$force_check = (bool) apply_filters( 'multilingualpress.force_system_check', false );
-
-		if ( ! $force_check && ! $this->is_context_valid() ) {
+		if ( ! $this->is_plugin_page() ) {
 			return self::WRONG_PAGE_FOR_CHECK;
 		}
 
