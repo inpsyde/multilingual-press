@@ -290,7 +290,7 @@ class Mlp_Self_Check {
 	 *
 	 * @return bool
 	 */
-	private function is_context_valid() {
+	private function is_plugin_page() {
 
 		if ( ! is_admin() ) {
 			return FALSE;
