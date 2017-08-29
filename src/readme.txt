@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.2
 Tested up to: 4.8
-Stable tag: 2.8.1
+Stable tag: 2.9.0
 
 Create a fast translation network on WordPress multisite.
 
