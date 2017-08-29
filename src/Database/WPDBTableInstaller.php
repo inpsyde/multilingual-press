@@ -39,9 +39,9 @@ final class WPDBTableInstaller implements TableInstaller {
 	 */
 	public function __construct( \wpdb $db, Table $table = null ) {
 
-		$this->table = $table;
-
 		$this->db = $db;
+
+		$this->table = $table;
 	}
 
 	/**
@@ -212,8 +212,7 @@ final class WPDBTableInstaller implements TableInstaller {
 		}
 
 		$default_content = $table->default_content_sql();
-
-		if ( empty( $default_content ) ) {
+		if ( ! $default_content ) {
 			return;
 		}
 
