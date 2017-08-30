@@ -76,19 +76,23 @@ class PostRelationSaveHelper {
 			return 0;
 		}
 
-		$parent = $this->save_context[ SourcePostSaveContext::POST_PARENT ];
+		$parent = (int) $this->save_context[ SourcePostSaveContext::POST_PARENT ];
 		if ( ! $parent ) {
 			$parent_ids = [];
 
 			return 0;
 		}
 
-		$source_site_id = $this->save_context[ SourcePostSaveContext::SITE_ID ];
+		$source_site_id = (int) $this->save_context[ SourcePostSaveContext::SITE_ID ];
 		if ( $source_site_id === $remote_site_id ) {
-			return (int) $parent;
+			return $parent;
 		}
 
-		$parent_ids = $this->content_relations->get_relations( $source_site_id, $parent, 'post' );
+		$parent_ids = $this->content_relations->get_relations(
+			$source_site_id,
+			$parent,
+			ContentRelations::CONTENT_TYPE_POST
+		);
 
 		return (int) $parent_ids[ $remote_site_id ] ?? 0;
 	}
@@ -108,13 +112,27 @@ class PostRelationSaveHelper {
 			return true;
 		}
 
-		return $this->content_relations->set_relation(
-			$source_site_id,
-			$remote_site_id,
-			$this->save_context[ SourcePostSaveContext::POST_ID ],
-			$remote_post_id,
-			'post'
+		$post_ids = [
+			$source_site_id => $this->save_context[ SourcePostSaveContext::POST_ID ],
+			$remote_site_id => $remote_post_id,
+		];
+
+		$relationship_id = $this->content_relations->get_relationship_id(
+			$post_ids,
+			ContentRelations::CONTENT_TYPE_POST,
+			true
 		);
+		if ( ! $relationship_id ) {
+			return false;
+		}
+
+		foreach ( $post_ids as $site_id => $post_id ) {
+			if ( ! $this->content_relations->set_relation( $relationship_id, $site_id, $post_id ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
