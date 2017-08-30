@@ -1,7 +1,7 @@
 # Changelog
 
 ## 2.9.0
-- WP-CLI: Fix activate the plugin from WP-CLI, see [issue #281](https://github.com/inpsyde/MultilingualPress/issues/281).
+- Activation: Initialize the plugin upon activation, see [issue #281](https://github.com/inpsyde/MultilingualPress/issues/281).
 
 ## 2.8.1
 - Content Relations: Fix always disconnecting the source post.
