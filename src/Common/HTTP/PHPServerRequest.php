@@ -196,6 +196,11 @@ final class PHPServerRequest implements ServerRequest {
 			return;
 		}
 
+		// Not always available.
+		if ( ! function_exists( 'apache_request_headers' ) ) {
+			return;
+		}
+
 		// This seems to be the only way to get the Authorization header on Apache
 		$apache_request_headers = apache_request_headers();
 		if ( ! $apache_request_headers ) {
