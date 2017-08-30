@@ -11,16 +11,49 @@ namespace Inpsyde\MultilingualPress\API;
 interface ContentRelations {
 
 	/**
-	 * Deletes a relation according to the given arguments.
+	 * Content type.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int[]  $content_ids Array with site IDs as keys and content IDs as values.
-	 * @param string $type        Content type.
-	 *
-	 * @return int Number of deleted rows.
+	 * @var string
 	 */
-	public function delete_relation( array $content_ids, string $type ): int;
+	const CONTENT_TYPE_POST = 'post';
+
+	/**
+	 * Content type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const CONTENT_TYPE_TERM = 'term';
+
+	/**
+	 * Hook name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_POST_TYPE = 'multilingualpress.content_relations_post_type';
+
+	/**
+	 * Hook name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_POST_STATUS = 'multilingualpress.content_relations_post_status';
+
+	/**
+	 * Hook name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_TAXONOMY = 'multilingualpress.content_relations_taxonomy';
 
 	/**
 	 * Deletes all relations for the site with the given ID.
@@ -29,9 +62,21 @@ interface ContentRelations {
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return int Number of deleted rows.
+	 * @return bool Whether or not all relations were deleted successfully.
 	 */
-	public function delete_relations_for_site( int $site_id ): int;
+	public function delete_all_relations_for_site( int $site_id ): bool;
+
+	/**
+	 * Deletes a relation according to the given arguments.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int[]  $content_ids Array with site IDs as keys and content IDs as values.
+	 * @param string $type        Content type.
+	 *
+	 * @return bool Whether or not the relation was deleted successfully.
+	 */
+	public function delete_relation( array $content_ids, string $type ): bool;
 
 	/**
 	 * Copies all relations of the given (or any) content type from the given source site to the given destination site.
@@ -91,7 +136,7 @@ interface ContentRelations {
 	 *
 	 * @return int[] Array with site IDs as keys and content IDs as values.
 	 */
-	public function get_relations( int $site_id, int $content_id, string $type = 'post' ): array;
+	public function get_relations( int $site_id, int $content_id, string $type ): array;
 
 	/**
 	 * Returns the relationship ID for the given arguments.
@@ -126,12 +171,12 @@ interface ContentRelations {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $source_site_id      Source site ID.
-	 * @param int $destination_site_id Destination site ID.
+	 * @param int $site_1 Site ID.
+	 * @param int $site_2 Another site ID.
 	 *
-	 * @return int The number of relations inserted.
+	 * @return bool Whether or not all posts were related successfully.
 	 */
-	public function relate_all_posts( int $source_site_id, int $destination_site_id ): int;
+	public function relate_all_posts( int $site_1, int $site_2 ): bool;
 
 	/**
 	 * Relates all terms between the given source site and the given destination site.
@@ -141,12 +186,12 @@ interface ContentRelations {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $source_site_id      Source site ID.
-	 * @param int $destination_site_id Destination site ID.
+	 * @param int $site_1 Site ID.
+	 * @param int $site_2 Another site ID.
 	 *
-	 * @return int The number of relations inserted.
+	 * @return bool Whether or not all terms were related successfully.
 	 */
-	public function relate_all_terms( int $source_site_id, int $destination_site_id ): int;
+	public function relate_all_terms( int $site_1, int $site_2 ): bool;
 
 	/**
 	 * Sets a relation according to the given arguments.

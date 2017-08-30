@@ -31,7 +31,9 @@ final class APIServiceProvider implements ServiceProvider {
 			return new WPDBContentRelations(
 				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.content_relations_table'],
-				$container['multilingualpress.site_relations']
+				$container['multilingualpress.relationships_table'],
+				$container['multilingualpress.active_post_types'],
+				$container['multilingualpress.active_taxonomies']
 			);
 		} );
 
