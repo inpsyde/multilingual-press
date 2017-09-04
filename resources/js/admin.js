@@ -26,9 +26,7 @@ const MLP = {
 	 * @type {Controller}
 	 */
 	controller: new Controller(
-		new Registry(
-			new Router()
-		),
+		new Registry( new Router() ),
 		F.getSettings( 'mlpSettings' )
 	),
 

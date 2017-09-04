@@ -117,7 +117,6 @@ test( 'propagateSelectedTerm (not propagating, invalid relation) ...', ( assert 
 
 // TODO: See why this is not working as expected - skipping for now.
 test.skip( 'propagateSelectedTerm (not propagating, valid relation) ...', ( assert ) => {
-
 	const _elements = F.getRandomArray();
 
 	const $selects = new JqueryObject( { _elements } );
