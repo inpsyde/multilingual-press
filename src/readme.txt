@@ -114,6 +114,10 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 
 == Changelog ==
 
+= 2.9.0 =
+- Activation: Initialize the plugin upon activation, see [issue #281](https://github.com/inpsyde/MultilingualPress/issues/281).
+- Translations: Introduce a new filter, `multilingualpress.active_taxonomies`, to modify the allowed taxonomies, see [issue #282](https://github.com/inpsyde/MultilingualPress/issues/282).
+
 = 2.8.1 =
 - Content Relations: Fix always disconnecting the source post.
 
