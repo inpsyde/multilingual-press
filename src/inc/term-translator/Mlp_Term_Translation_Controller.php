@@ -179,7 +179,14 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			return array();
 		}
 
-		return get_object_taxonomies( $post_types );
+		/**
+		 * Filters the allowed taxonomies.
+		 *
+		 * @since 2.9.0
+		 *
+		 * @param string[] $active_taxonomies Allowed taxonomy names.
+		 */
+		return (array) apply_filters( 'multilingualpress.active_taxonomies', get_object_taxonomies( $post_types ) );
 	}
 
 	/**
