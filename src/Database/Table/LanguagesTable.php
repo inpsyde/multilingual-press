@@ -1900,7 +1900,7 @@ final class LanguagesTable implements Table {
 
 		$rows = array_map( function ( array $row ) {
 
-			return '(\'' . implode( '\',\'', $row ) . '\')';
+			return "('" . implode( "','", $row ) . "')";
 		}, $rows );
 
 		return implode( ',', $rows );
