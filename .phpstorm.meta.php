@@ -45,6 +45,7 @@ namespace PHPSTORM_META {
 
 	override( new \Inpsyde\MultilingualPress\Service\Container, map( [
 		'multilingualpress.accept_language_parser'                                 => \Inpsyde\MultilingualPress\Common\AcceptHeader\HeaderParser::class,
+		'multilingualpress.activator'                                              => \Inpsyde\MultilingualPress\Activation\Activator::class,
 		'multilingualpress.active_plugins'                                         => \Inpsyde\MultilingualPress\SiteDuplication\ActivePlugins::class,
 		'multilingualpress.active_post_types'                                      => \Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes::class,
 		'multilingualpress.active_taxonomies'                                      => \Inpsyde\MultilingualPress\Translation\Term\ActiveTaxonomies::class,
