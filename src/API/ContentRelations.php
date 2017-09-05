@@ -55,6 +55,27 @@ interface ContentRelations {
 	 */
 	const FILTER_TAXONOMY = 'multilingualpress.content_relations_taxonomy';
 
+
+	/**
+	 * Deletes all relations for posts that don't exist (anymore).
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $type Content type.
+	 *
+	 * @return bool Whether or not all relations were deleted successfully.
+	 */
+	public function delete_all_relations_for_invalid_content( string $type ): bool;
+
+	/**
+	 * Deletes all relations for sites that don't exist (anymore).
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool Whether or not all relations were deleted successfully.
+	 */
+	public function delete_all_relations_for_invalid_sites(): bool;
+
 	/**
 	 * Deletes all relations for the site with the given ID.
 	 *

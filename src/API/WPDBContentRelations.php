@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\API;
 
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 use Inpsyde\MultilingualPress\Translation\Term\ActiveTaxonomies;
@@ -69,6 +70,94 @@ final class WPDBContentRelations implements ContentRelations {
 		$this->active_post_types = $active_post_types;
 
 		$this->active_taxonomies = $active_taxonomies;
+	}
+
+	/**
+	 * Deletes all relations for posts that don't exist (anymore).
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $type Content type.
+	 *
+	 * @return bool Whether or not all relations were deleted successfully.
+	 */
+	public function delete_all_relations_for_invalid_content( string $type ): bool {
+
+		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
+		$query_template = sprintf(
+			'
+SELECT %2$s
+FROM %1$s
+WHERE %3$s = %%d
+	AND %2$s NOT IN (%%s)
+	AND %4$s IN (%%s)',
+			$this->table,
+			Table\ContentRelationsTable::COLUMN_CONTENT_ID,
+			Table\ContentRelationsTable::COLUMN_SITE_ID,
+			Table\ContentRelationsTable::COLUMN_RELATIONSHIP_ID
+		);
+
+		$relationship_ids = $this->get_relationship_ids_for_type( $type );
+		if ( ! $relationship_ids ) {
+			return true;
+		}
+
+		$relationship_ids = join( ',', $relationship_ids );
+
+		$network_state = NetworkState::create();
+
+		foreach ( $this->get_existing_site_ids() as $site_id ) {
+			switch_to_blog( $site_id );
+
+			$query = $this->db->prepare( $query_template, [
+				$site_id,
+				join( ',', $this->get_existing_content_ids( $type ) ),
+				$relationship_ids,
+			] );
+
+			$content_ids = $this->db->get_col( $query );
+			foreach ( $content_ids as $content_id ) {
+				$this->delete_relation( [
+					$site_id => (int) $content_id,
+				], $type );
+			}
+		}
+
+		$network_state->restore();
+
+		return true;
+	}
+
+	/**
+	 * Deletes all relations for sites that don't exist (anymore).
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return bool Whether or not all relations were deleted successfully.
+	 */
+	public function delete_all_relations_for_invalid_sites(): bool {
+
+		$query = sprintf(
+			'
+SELECT DISTINCT %2$s
+FROM %1$s
+WHERE %2$s NOT IN (
+		SELECT blog_id
+		FROM %3$s
+	)',
+			$this->table,
+			Table\ContentRelationsTable::COLUMN_SITE_ID,
+			$this->db->blogs
+		);
+
+		$site_ids = $this->db->get_col( $query );
+		foreach ( $site_ids as $site_id ) {
+			if ( ! $this->delete_all_relations_for_site( (int) $site_id ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -236,30 +325,6 @@ WHERE %4$s = %%d',
 		}
 
 		return $relationship_id;
-	}
-
-	/**
-	 * Returns the relationship IDs for the given type.
-	 *
-	 * @param string $type Content type.
-	 *
-	 * @return int[] Relationship IDs.
-	 */
-	public function get_relationship_ids_for_type( string $type ): array {
-
-		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
-		$query = sprintf(
-			'
-SELECT %2$s
-FROM %1$s
-WHERE %3$s = %%s',
-			$this->relationships_table,
-			Table\RelationshipsTable::COLUMN_ID,
-			Table\RelationshipsTable::COLUMN_TYPE
-		);
-		$query = $this->db->prepare( $query, $type );
-
-		return array_map( 'intval', $this->db->get_col( $query ) );
 	}
 
 	/**
@@ -529,6 +594,54 @@ WHERE %4$s = %%d',
 	}
 
 	/**
+	 * Returns the IDs of all existing content elements of the given type in the current site.
+	 *
+	 * @param string $type Content type.
+	 *
+	 * @return int[] Content IDs.
+	 */
+	private function get_existing_content_ids( string $type ): array {
+
+		switch ( $type ) {
+			case self::CONTENT_TYPE_POST:
+				$content_ids = $this->db->get_col( sprintf(
+					'SELECT ID FROM %s',
+					$this->db->posts
+				) );
+				break;
+
+			case self::CONTENT_TYPE_TERM:
+				$content_ids = $this->db->get_col( sprintf(
+					'SELECT term_taxonomy_id FROM %s',
+					$this->db->term_taxonomy
+				) );
+				break;
+
+			default:
+				return [];
+		}
+
+		return array_map( 'inval', $content_ids );
+	}
+
+	/**
+	 * Returns the IDs of all existing sites in the current network.
+	 *
+	 * @return int[] Site IDs.
+	 */
+	private function get_existing_site_ids() {
+
+		static $site_ids;
+		if ( ! isset( $site_ids ) ) {
+			$site_ids = get_sites( [
+				'fields' => 'ids',
+			] );
+		}
+
+		return $site_ids;
+	}
+
+	/**
 	 * Returns the IDs of the posts to relate for the current site.
 	 *
 	 * @return int[] Post IDs.
@@ -668,6 +781,30 @@ WHERE %3$s = %%d',
 			Table\ContentRelationsTable::COLUMN_SITE_ID
 		);
 		$query = $this->db->prepare( $query, $site_id );
+
+		return array_map( 'intval', $this->db->get_col( $query ) );
+	}
+
+	/**
+	 * Returns the relationship IDs for the given type.
+	 *
+	 * @param string $type Content type.
+	 *
+	 * @return int[] Relationship IDs.
+	 */
+	private function get_relationship_ids_for_type( string $type ): array {
+
+		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
+		$query = sprintf(
+			'
+SELECT %2$s
+FROM %1$s
+WHERE %3$s = %%s',
+			$this->relationships_table,
+			Table\RelationshipsTable::COLUMN_ID,
+			Table\RelationshipsTable::COLUMN_TYPE
+		);
+		$query = $this->db->prepare( $query, $type );
 
 		return array_map( 'intval', $this->db->get_col( $query ) );
 	}
