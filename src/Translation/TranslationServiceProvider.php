@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation;
 
-use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -265,6 +264,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function bootstrap_post_translation( Container $container ) {
 
+		$post_relationship_controller = $container['multilingualpress.post_relationship_controller'];
+
+		add_action( 'deleted_post', [ $post_relationship_controller, 'handle_deleted_post' ] );
+
 		if ( ! is_admin() ) {
 			return;
 		}
@@ -336,7 +339,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 				case Post\RelationshipController::ACTION_CONNECT_EXISTING:
 				case Post\RelationshipController::ACTION_CONNECT_NEW:
 				case Post\RelationshipController::ACTION_DISCONNECT:
-					$container['multilingualpress.post_relationship_controller']->initialize();
+					$post_relationship_controller->initialize();
 					break;
 			}
 		}

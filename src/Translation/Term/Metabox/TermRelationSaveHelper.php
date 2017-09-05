@@ -93,13 +93,15 @@ class TermRelationSaveHelper {
 			return true;
 		}
 
-		return $this->content_relations->set_relation(
-			$source_site_id,
-			$remote_site_id,
-			$this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
-			$remote_term_taxonomy_id,
-			'term'
-		);
+		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
+		//return $this->content_relations->set_relation(
+		//	$source_site_id,
+		//	$remote_site_id,
+		//	$this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
+		//	$remote_term_taxonomy_id,
+		//	'term'
+		//);
+		return false;
 	}
 
 	/**
@@ -111,10 +113,14 @@ class TermRelationSaveHelper {
 	 */
 	public function unlink_element( int $remote_site_id ): int {
 
+		$source_site_id = $this->save_context[ SourceTermSaveContext::SITE_ID ];
+
+		$source_content_id = $this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ];
+
 		if ( ! is_array( $this->connected_ids ) ) {
 			$this->connected_ids = $this->content_relations->get_relations(
-				$this->save_context[ SourceTermSaveContext::SITE_ID ],
-				$this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
+				$source_site_id,
+				$source_content_id,
 				'term'
 			);
 		}
@@ -123,12 +129,10 @@ class TermRelationSaveHelper {
 			return 0;
 		}
 
-		return $this->content_relations->delete_relation(
-			$this->save_context[ SourceTermSaveContext::SITE_ID ],
-			$remote_site_id,
-			$this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
-			$this->connected_ids[ $remote_site_id ],
-			'term'
-		);
+		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
+		return (int) $this->content_relations->delete_relation( [
+			$source_site_id => $source_content_id,
+			$remote_site_id => $this->connected_ids[ $remote_site_id ],
+		], 'term' );
 	}
 }
