@@ -178,7 +178,7 @@ ORDER BY site_id ASC',
 		}
 
 		$query = sprintf(
-			'INSERT IGNORE INTO %1$s (%2$s, %3$s) VALUES %4$s',
+			'INSERT IGNORE INTO %1$s (%2$s, %3$s) VALUES (%4$s)',
 			$this->table,
 			SiteRelationsTable::COLUMN_SITE_1,
 			SiteRelationsTable::COLUMN_SITE_2,
