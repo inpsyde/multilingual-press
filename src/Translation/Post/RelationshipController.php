@@ -130,6 +130,36 @@ class RelationshipController {
 	}
 
 	/**
+	 * Deletes the relation of the post with the given ID.
+	 *
+	 * @since   3.0.0
+	 * @wp-hook deleted_post
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return bool Whether or not the post was handled successfully.
+	 */
+	public function handle_deleted_post( $post_id ): bool {
+
+		return $this->delete_relation( (int) get_current_blog_id(), (int) $post_id );
+	}
+
+	/**
+	 * Deletes the relation for the given arguments.
+	 *
+	 * @param int $site_id Site ID.
+	 * @param int $post_id Post ID.
+	 *
+	 * @return bool Whether or not the post was handled successfully.
+	 */
+	private function delete_relation( int $site_id, int $post_id ): bool {
+
+		return $this->content_relations->delete_relation( [
+			$site_id => $post_id,
+		], ContentRelations::CONTENT_TYPE_POST );
+	}
+
+	/**
 	 * Disconnects the current post and the one given in the request.
 	 *
 	 * @since   3.0.0
@@ -139,9 +169,11 @@ class RelationshipController {
 	 */
 	public function handle_disconnect_post() {
 
-		$this->disconnect_post();
+		if ( $this->disconnect_post() ) {
+			wp_send_json_success();
+		}
 
-		wp_send_json_success();
+		wp_send_json_error( $this->last_error );
 	}
 
 	/**
@@ -205,60 +237,37 @@ class RelationshipController {
 	 */
 	private function connect_existing_post(): bool {
 
-		return $this->content_relations->set_relation(
-			$this->context->source_site_id(),
-			$this->context->remote_site_id(),
-			$this->context->source_post_id(),
-			$this->context->remote_post_id(),
-			'post'
+		$content_ids = [
+			$this->context->source_site_id() => $this->context->source_post_id(),
+			$this->context->remote_site_id() => $this->context->remote_post_id(),
+		];
+
+		$relationship_id = $this->content_relations->get_relationship_id(
+			$content_ids,
+			ContentRelations::CONTENT_TYPE_POST,
+			true
 		);
+		if ( ! $relationship_id ) {
+			return false;
+		}
+
+		foreach ( $content_ids as $site_id => $post_id ) {
+			if ( ! $this->content_relations->set_relation( $relationship_id, $site_id, $post_id ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
 	 * Disconnects the current post with the one given in the request.
 	 *
-	 * @return void
+	 * @return bool Whether or not the post was disconnected successfully.
 	 */
 	private function disconnect_post() {
 
-		$source_site_id = $this->context->source_site_id();
-
-		$remote_site_id = $this->context->remote_site_id();
-
-		$translation_ids = $this->content_relations->get_translation_ids(
-			$source_site_id,
-			$remote_site_id,
-			$this->context->source_post_id(),
-			$this->context->remote_post_id(),
-			'post'
-		);
-
-		$relationship_site_id = $translation_ids['ml_source_blogid'];
-
-		$relationship_post_id = $translation_ids['ml_source_elementid'];
-
-		$relations = $this->content_relations->get_relations(
-			$relationship_site_id,
-			$relationship_post_id,
-			'post'
-		);
-
-		$target_site_id = $remote_site_id;
-		if ( $target_site_id === $relationship_site_id ) {
-			$target_site_id = $source_site_id;
-		}
-
-		if ( empty( $relations[ $target_site_id ] ) ) {
-			return;
-		}
-
-		$this->content_relations->delete_relation(
-			$relationship_site_id,
-			2 < count( $relations ) ? $target_site_id : 0,
-			$relationship_post_id,
-			0,
-			'post'
-		);
+		return $this->delete_relation( $this->context->remote_site_id(), $this->context->remote_post_id() );
 	}
 
 	/**

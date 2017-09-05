@@ -22,6 +22,15 @@ interface Search {
 	const ARG_NAME = 's';
 
 	/**
+	 * Hook name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_ARGUMENTS = 'multilingualpress.remote_post_search_arguments';
+
+	/**
 	 * Returns the latest/best-matching posts with respect to the given context.
 	 *
 	 * @since 3.0.0

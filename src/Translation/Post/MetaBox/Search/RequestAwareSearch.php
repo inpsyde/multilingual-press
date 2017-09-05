@@ -78,7 +78,18 @@ final class RequestAwareSearch implements Search {
 		}
 
 		switch_to_blog( $remote_site_id );
+
+		/**
+		 * Filters the query arguments for the remote post search.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param array $args Query arguments.
+		 */
+		$args = (array) apply_filters( Search::FILTER_ARGUMENTS, $args );
+
 		$posts = (array) get_posts( $args );
+
 		restore_current_blog();
 
 		return $posts;

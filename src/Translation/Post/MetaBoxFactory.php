@@ -79,7 +79,11 @@ class MetaBoxFactory {
 			return [];
 		}
 
-		$relations = $this->content_relations->get_relations( $current_site_id, $post->ID, 'post' );
+		$relations = $this->content_relations->get_relations(
+			$current_site_id,
+			$post->ID,
+			ContentRelations::CONTENT_TYPE_POST
+		);
 
 		$controllers = [];
 

@@ -102,7 +102,11 @@ class RelationshipPermission {
 			return $this->related_posts[ $post_id ];
 		}
 
-		$this->related_posts[ $post_id ] = $this->content_relations->get_relations( get_current_blog_id(), $post_id );
+		$this->related_posts[ $post_id ] = $this->content_relations->get_relations(
+			get_current_blog_id(),
+			$post_id,
+			ContentRelations::CONTENT_TYPE_POST
+		);
 
 		return $this->related_posts[ $post_id ];
 	}
