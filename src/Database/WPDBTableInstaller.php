@@ -220,6 +220,6 @@ final class WPDBTableInstaller implements TableInstaller {
 		$columns = array_diff( $columns, $table->columns_without_default_content() );
 		$columns = implode( ',', $columns );
 
-		$this->db->query( "INSERT INTO {$table_name} ({$columns}) VALUES {$default_content}" );
+		$this->db->query( "INSERT INTO {$table_name} ({$columns}) VALUES ({$default_content})" );
 	}
 }
