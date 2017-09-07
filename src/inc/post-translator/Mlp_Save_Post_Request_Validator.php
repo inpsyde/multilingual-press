@@ -18,8 +18,8 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 	 *
 	 * @param Inpsyde_Nonce_Validator_Interface $nonce
 	 */
-	function __construct( Inpsyde_Nonce_Validator_Interface $nonce )
-	{
+	public function __construct( Inpsyde_Nonce_Validator_Interface $nonce ) {
+
 		$this->nonce = $nonce;
 	}
 
@@ -29,8 +29,8 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 	 * @param  int $context Post id
 	 * @return bool
 	 */
-	public function is_valid( $context = null )
-	{
+	public function is_valid( $context = null ) {
+
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return false;
 		}

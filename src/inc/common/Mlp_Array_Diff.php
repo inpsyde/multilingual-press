@@ -45,7 +45,7 @@ class Mlp_Array_Diff {
 			$arr_diff = array_diff_assoc( $old_data_array, $new[ $old_id ] );
 
 			if ( ! empty( $arr_diff ) ) {
-				 $diff[ $old_id ] = $new[ $old_id ];
+				$diff[ $old_id ] = $new[ $old_id ];
 			}
 		}
 
@@ -103,7 +103,7 @@ class Mlp_Array_Diff {
 		}
 
 		if ( 'input_checkbox' === $col_params['type'] ) {
-			if ( ! isset( $new_data[ $col_name ] ) or '0' === $new_data[ $col_name ] ) {
+			if ( ! isset( $new_data[ $col_name ] ) || '0' === $new_data[ $col_name ] ) {
 				return 0;
 			}
 
@@ -143,7 +143,6 @@ class Mlp_Array_Diff {
 
 			// at least one of 'min' or 'max' is given
 
-
 			if ( isset( $col_params['attributes']['min'] ) ) {
 				$return = max(
 					array(
@@ -168,31 +167,3 @@ class Mlp_Array_Diff {
 		return $return;
 	}
 }
-
-/* $columns format:
-array(
-	'native_name' => array(
-		'header'     => esc_html__( 'Native name', 'multilingual-press' ),
-		'type'       => 'input_text',
-		'attributes' => array(
-			'size' => 20
-		)
-	),
-	'is_rtl' => array(
-		'header'     => esc_html__( 'RTL', 'multilingual-press' ),
-		'type'       => 'input_checkbox',
-		'attributes' => array(
-			'size' => 20
-		)
-	),
-	'priority' => array(
-		'header'     => esc_html__( 'Priority', 'multilingual-press' ),
-		'type'       => 'input_number',
-		'attributes' => array(
-			'min'  => 1,
-			'max'  => 10,
-			'size' => 3
-		)
-	),
-)
- */

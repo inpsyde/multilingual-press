@@ -12,8 +12,8 @@
  * @package    Inpsyde
  * @subpackage Autoload
  */
-class Inpsyde_Autoload
-{
+class Inpsyde_Autoload {
+
 	/**
 	 * List of auto-load rules
 	 *
@@ -24,8 +24,8 @@ class Inpsyde_Autoload
 	/**
 	 * Constructor
 	 */
-	public function __construct()
-	{
+	public function __construct() {
+
 		spl_autoload_register( array( $this, 'load' ) );
 	}
 
@@ -35,8 +35,7 @@ class Inpsyde_Autoload
 	 * @param  Inpsyde_Autoload_Rule_Interface $rule
 	 * @return Inpsyde_Autoload
 	 */
-	public function add_rule( Inpsyde_Autoload_Rule_Interface $rule )
-	{
+	public function add_rule( Inpsyde_Autoload_Rule_Interface $rule ) {
 		$this->rules[] = $rule;
 		return $this;
 	}
@@ -46,8 +45,7 @@ class Inpsyde_Autoload
 	 *
 	 * @param  string  $name
 	 */
-	public function load( $name )
-	{
+	public function load( $name ) {
 		/** @var Inpsyde_Autoload_Rule_Interface $rule */
 		foreach ( $this->rules as $rule ) {
 			if ( $rule->load( $name ) ) {

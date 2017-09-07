@@ -6,8 +6,8 @@
  * @version 2014.04.16
  * @author  Inpsyde GmbH, toscho
  */
-class Mlp_Copy_Attachments
-{
+class Mlp_Copy_Attachments {
+
 	/**
 	 * ID of base blog.
 	 *

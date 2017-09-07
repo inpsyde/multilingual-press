@@ -51,7 +51,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 * @param string                          $link_table
 	 * @param Mlp_Content_Relations_Interface $content_relations
 	 */
-	function __construct(
+	public function __construct(
 		$deprecated,
 		array $allowed_post_types,
 		$link_table,

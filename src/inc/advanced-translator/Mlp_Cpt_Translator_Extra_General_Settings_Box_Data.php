@@ -7,8 +7,8 @@
  */
 
 class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
-	implements Mlp_Extra_General_Settings_Box_Data_Interface
-{
+	implements Mlp_Extra_General_Settings_Box_Data_Interface {
+
 	/**
 	 * @var Mlp_Updatable
 	 */

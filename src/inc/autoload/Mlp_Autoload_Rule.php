@@ -9,8 +9,8 @@
  * @package    MultilingualPress
  * @subpackage Autoload
  */
-class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
-{
+class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface {
+
 	/**
 	 * Path to Inpsyde Suite directory.
 	 *
@@ -35,7 +35,8 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 	 */
 	public function load( $name ) {
 
-		if ( ! $name = $this->prepare_name( $name ) ) {
+		$name = $this->prepare_name( $name );
+		if ( ! $name ) {
 			return false;
 		}
 

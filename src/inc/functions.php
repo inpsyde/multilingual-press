@@ -180,7 +180,6 @@ if ( ! function_exists( 'get_blog_language' ) ) {
 
 		return Mlp_Helpers::get_blog_language( $blog_id, $short );
 	}
-
 }
 
 /**
