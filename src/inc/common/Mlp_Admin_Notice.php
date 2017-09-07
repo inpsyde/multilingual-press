@@ -30,10 +30,11 @@ class Mlp_Admin_Notice {
 
 		$this->msg   = $msg;
 
-		if ( empty( $attrs ) )
+		if ( empty( $attrs ) ) {
 			$attrs = array( 'class' => 'error' );
-		elseif ( empty( $attrs[ 'class' ] ) )
-			$attrs[ 'class' ] = 'error';
+		} elseif ( empty( $attrs['class'] ) ) {
+			$attrs['class'] = 'error';
+        }
 
 		$this->attrs = $attrs;
 	}

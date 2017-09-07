@@ -85,7 +85,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		$post_data = $this->get_post_data();
 
-		$delete = isset( $_POST[ 'action' ] ) && 'delete-tag' === $_POST[ 'action' ];
+		$delete = isset( $_POST['action'] ) && 'delete-tag' === $_POST['action'];
 
 		if ( $post_data ) {
 			$this->activate_switcher();
@@ -105,15 +105,15 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	 */
 	private function get_post_data() {
 
-		if ( 'POST' !== $_SERVER[ 'REQUEST_METHOD' ] ) {
+		if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 			return array();
 		}
 
-		if ( empty( $_POST[ 'mlp' ][ 'term_translation' ] ) ) {
+		if ( empty( $_POST['mlp']['term_translation'] ) ) {
 			return array();
 		}
 
-		return (array) $_POST[ 'mlp' ][ 'term_translation' ];
+		return (array) $_POST['mlp']['term_translation'];
 	}
 
 	/**

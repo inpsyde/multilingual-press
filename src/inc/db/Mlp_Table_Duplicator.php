@@ -44,15 +44,17 @@ class Mlp_Table_Duplicator implements Mlp_Table_Duplicator_Interface {
 
 		$has_primary_keys = $this->has_primary_key( $new_table );
 
-		if ( $has_primary_keys )
+		if ( $has_primary_keys ) {
 			$this->wpdb->query( "ALTER TABLE $new_table DISABLE KEYS" );
+        }
 
 		$this->wpdb->query( "TRUNCATE TABLE $new_table" );
 
 		$inserted = $this->wpdb->query( "INSERT INTO $new_table SELECT * FROM $old_table" );
 
-		if ( $has_primary_keys )
+		if ( $has_primary_keys ) {
 			$this->wpdb->query( "ALTER TABLE $new_table ENABLE KEYS" );
+        }
 
 		return (int) $inserted;
 	}
@@ -65,8 +67,9 @@ class Mlp_Table_Duplicator implements Mlp_Table_Duplicator_Interface {
 	 */
 	private function has_primary_key( $table_name ) {
 
-		if ( isset( $this->primary_keys[ $table_name ] ) )
+		if ( isset( $this->primary_keys[ $table_name ] ) ) {
 			return $this->primary_keys[ $table_name ];
+        }
 
 		$query  = "SHOW KEYS FROM $table_name WHERE Key_name = 'PRIMARY'";
 		$result = $this->wpdb->get_results( $query );

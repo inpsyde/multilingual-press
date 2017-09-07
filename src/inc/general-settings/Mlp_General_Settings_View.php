@@ -135,10 +135,11 @@ class Mlp_General_Settings_View {
 	 */
 	private function get_module_title( array $module ) {
 
-		if ( isset( $module[ 'display_name_callback' ] ) )
-			return call_user_func( $module[ 'display_name_callback' ] );
+		if ( isset( $module['display_name_callback'] ) ) {
+			return call_user_func( $module['display_name_callback'] );
+        }
 
-		return $module[ 'display_name' ];
+		return $module['display_name'];
 	}
 
 	/**
@@ -149,9 +150,10 @@ class Mlp_General_Settings_View {
 	 */
 	private function get_module_description( array $module ) {
 
-		if ( isset( $module[ 'description_callback' ] ) )
-			return call_user_func( $module[ 'description_callback' ] );
+		if ( isset( $module['description_callback'] ) ) {
+			return call_user_func( $module['description_callback'] );
+        }
 
-		return $module[ 'description' ];
+		return $module['description'];
 	}
 }

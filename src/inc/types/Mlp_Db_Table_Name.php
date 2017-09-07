@@ -73,12 +73,12 @@ class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 	private function is_valid() {
 
 		// too long
-		if ( isset( $this->table_name[ 64 ] ) ) {
+		if ( isset( $this->table_name[64] ) ) {
 			return false;
 		}
 
 		// too short
-		if ( ! isset( $this->table_name[ 0 ] ) ) {
+		if ( ! isset( $this->table_name[0] ) ) {
 			return false;
 		}
 

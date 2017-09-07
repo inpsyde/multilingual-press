@@ -18,10 +18,11 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 	 */
 	public function __construct( $version ) {
 
-		if ( ! is_scalar( $version ) )
+		if ( ! is_scalar( $version ) ) {
 			$this->version = self::FALLBACK_VERSION;
-		else
+		} else {
 			$this->version = $this->sanitize( $version );
+        }
 	}
 
 	/**
@@ -45,8 +46,9 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 
 		$version = $this->replace_chars( $version );
 
-		if ( '' === $version )
+		if ( '' === $version ) {
 			return self::FALLBACK_VERSION;
+        }
 
 		return $this->fill_numbers( $version );
 	}
@@ -60,14 +62,16 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 	 */
 	private function fill_numbers( $version ) {
 
-		if ( preg_match( '~^\d+\.\d+\.\d+~', $version ) )
+		if ( preg_match( '~^\d+\.\d+\.\d+~', $version ) ) {
 			return $version;
+        }
 
 		$parts  = explode( '.', $version );
 		$new    = $append = array();
 
-		foreach ( $parts as $part )
+		foreach ( $parts as $part ) {
 			$this->sort_values( $part, $new, $append );
+        }
 
 		$new = $this->pad_with_zero( $new );
 		$new = array_merge( $new, $append );

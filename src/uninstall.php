@@ -10,8 +10,9 @@
 defined( 'WP_UNINSTALL_PLUGIN' ) || die();
 
 // We don't do anything on single sites anyway.
-if ( ! is_multisite() )
+if ( ! is_multisite() ) {
 	return;
+}
 
 
 // check if the "pro"-version is available and activated
@@ -31,13 +32,15 @@ $check   = '';
 
 if ( WP_UNINSTALL_PLUGIN === 'multilingual-press/multilingual-press.php' ) {
 	// checking if the pro is available (not active) when the free is uninstalled
-	if ( array_key_exists( 'multilingual-press-pro/multilingual-press.php', $plugins ) )
+	if ( array_key_exists( 'multilingual-press-pro/multilingual-press.php', $plugins ) ) {
 		return;
+    }
 }
 else if ( WP_UNINSTALL_PLUGIN === 'multilingual-press-pro/multilingual-press.php' ) {
 	// checking if the free is available (not active) when the pro is uninstalled
-	if ( array_key_exists( 'multilingual-press/multilingual-press.php', $plugins ) )
+	if ( array_key_exists( 'multilingual-press/multilingual-press.php', $plugins ) ) {
 		return;
+    }
 }
 
 
@@ -47,8 +50,9 @@ else if ( WP_UNINSTALL_PLUGIN === 'multilingual-press-pro/multilingual-press.php
  */
 global $wpdb;
 
-foreach ( array ( 'mlp_languages', 'multilingual_linked', 'mlp_site_relations' ) as $table )
+foreach ( array ( 'mlp_languages', 'multilingual_linked', 'mlp_site_relations' ) as $table ) {
 	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->base_prefix . $table );
+}
 
 
 // ------ Site options ------

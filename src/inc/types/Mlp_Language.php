@@ -33,11 +33,11 @@ class Mlp_Language implements Mlp_Language_Interface {
 
 		$data = $this->prepare_raw_data( $raw_data );
 
-		$this->priority = (int) $data[ 'priority' ];
-		unset( $data[ 'priority' ] );
+		$this->priority = (int) $data['priority'];
+		unset( $data['priority'] );
 
-		$this->is_rtl = empty( $data[ 'is_rtl' ] );
-		unset( $data[ 'is_rtl' ] );
+		$this->is_rtl = empty( $data['is_rtl'] );
+		unset( $data['is_rtl'] );
 
 		$this->names = $data;
 	}
@@ -84,7 +84,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 		}
 
 		if ( $name === 'language_long' ) {
-			return $this->names[ 'http_name' ];
+			return $this->names['http_name'];
 		}
 
 		if ( $name === 'none' ) {
@@ -131,8 +131,8 @@ class Mlp_Language implements Mlp_Language_Interface {
 			'text'         => '',
 		);
 
-		if ( isset( $raw_data[ 'text' ] ) ) {
-			$default[ 'custom_name' ] = $raw_data[ 'text' ];
+		if ( isset( $raw_data['text'] ) ) {
+			$default['custom_name'] = $raw_data['text'];
 		}
 
 		return wp_parse_args( $raw_data, $default );

@@ -87,10 +87,11 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 		status_header( 200 );
 
 		// Never visible for the user, for debugging only.
-		if ( is_scalar( $result ) )
+		if ( is_scalar( $result ) ) {
 			print $result;
-		else
+		} else {
 			print '<pre>' . print_r( $result, 1 ) . '</pre>';
+        }
 
 		mlp_exit();
 	}
@@ -113,15 +114,16 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 
 		global $pagenow;
 
-		if ( 'post-new.php' === $pagenow )
+		if ( 'post-new.php' === $pagenow ) {
 			return; // maybe later, for now, we work on existing posts only
+        }
 
 		$this->data->set_ids(
 		   array(
 			   'source_post_id' => $post->ID,
 			   'source_site_id' => get_current_blog_id(),
 			   'remote_site_id' => $remote_site_id,
-			   'remote_post_id' => $remote_post->ID
+			   'remote_post_id' => $remote_post->ID,
 		   )
 		);
 		$view = new Mlp_Relationship_Control_Meta_Box_View( $this->data, $this );

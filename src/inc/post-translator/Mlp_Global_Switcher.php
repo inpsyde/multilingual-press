@@ -35,8 +35,9 @@ class Mlp_Global_Switcher {
 	 */
 	public function __construct( $type ) {
 
-		if ( self::TYPE_GET === $type )
+		if ( self::TYPE_GET === $type ) {
 			$this->type = $type;
+        }
 
 		$this->type = self::TYPE_POST;
 	}
@@ -46,8 +47,9 @@ class Mlp_Global_Switcher {
 	 */
 	public function strip() {
 
-		if ( self::TYPE_GET === $this->type )
+		if ( self::TYPE_GET === $this->type ) {
 			return $this->strip_get();
+        }
 
 		return $this->strip_post();
 	}
@@ -57,15 +59,17 @@ class Mlp_Global_Switcher {
 	 */
 	public function fill() {
 
-		if ( empty( $this->storage ) )
+		if ( empty( $this->storage ) ) {
 			return 0;
+        }
 
 		$amount = count( $this->storage );
 
-		if ( self::TYPE_GET === $this->type )
+		if ( self::TYPE_GET === $this->type ) {
 			$this->fill_get();
-		else
+		} else {
 			$this->fill_post();
+        }
 
 		return $amount;
 	}
@@ -75,8 +79,9 @@ class Mlp_Global_Switcher {
 	 */
 	private function strip_get() {
 
-		if ( empty( $_GET ) )
+		if ( empty( $_GET ) ) {
 			return 0;
+        }
 
 		$amount = count( $_GET );
 
@@ -93,8 +98,9 @@ class Mlp_Global_Switcher {
 	 */
 	private function fill_get() {
 
-		foreach ( $this->storage as $name => $value )
+		foreach ( $this->storage as $name => $value ) {
 			$_REQUEST[ $name ] = $_GET[ $name ] = $value;
+        }
 	}
 
 	/**
@@ -102,8 +108,9 @@ class Mlp_Global_Switcher {
 	 */
 	private function strip_post() {
 
-		if ( empty( $_POST ) )
+		if ( empty( $_POST ) ) {
 			return 0;
+        }
 
 		$amount = count( $_POST );
 
@@ -120,7 +127,8 @@ class Mlp_Global_Switcher {
 	 */
 	private function fill_post() {
 
-		foreach ( $this->storage as $name => $value )
+		foreach ( $this->storage as $name => $value ) {
 			$_REQUEST[ $name ] = $_POST[ $name ] = $value;
+        }
 	}
 }

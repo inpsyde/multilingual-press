@@ -84,8 +84,9 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		if ( ! check_admin_referer(
 			$this->tab_page_data->get_nonce_action(),
 			$this->tab_page_data->get_nonce_name()
-			) )
+			) ) {
 			wp_die( 'Invalid', 'Invalid', array( 'response' => 403 ) );
+        }
 
 		$blog_id = $this->get_blog_id();
 
@@ -100,7 +101,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		 */
 		do_action( 'mlp_blogs_save_fields', $_POST );
 
-		$url = add_query_arg( 'msg', 'updated', $_POST[ '_wp_http_referer' ] );
+		$url = add_query_arg( 'msg', 'updated', $_POST['_wp_http_referer'] );
 		wp_safe_redirect( $url );
 		mlp_exit();
 	}
@@ -113,20 +114,21 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 
 		$languages = (array) get_site_option( 'inpsyde_multilingual', array() );
 
-		if ( empty( $languages[ $blog_id ] ) )
+		if ( empty( $languages[ $blog_id ] ) ) {
 			$languages[ $blog_id ] = array();
+        }
 
-		if ( ! isset( $_POST[ 'inpsyde_multilingual_lang' ] )
-			or '-1' === $_POST[ 'inpsyde_multilingual_lang' ]
+		if ( ! isset( $_POST['inpsyde_multilingual_lang'] )
+			or '-1' === $_POST['inpsyde_multilingual_lang']
 			) {
-			unset( $languages[ $blog_id ][ 'lang' ] );
+			unset( $languages[ $blog_id ]['lang'] );
 		}
 		else {
-			$languages[ $blog_id ][ 'lang' ] = $_POST[ 'inpsyde_multilingual_lang' ];
+			$languages[ $blog_id ]['lang'] = $_POST['inpsyde_multilingual_lang'];
 
 			// Set alternate title
-			if ( isset( $_POST[ 'inpsyde_multilingual_text' ] ) ) {
-				$languages[ $blog_id ][ 'text' ] = $_POST[ 'inpsyde_multilingual_text' ];
+			if ( isset( $_POST['inpsyde_multilingual_text'] ) ) {
+				$languages[ $blog_id ]['text'] = $_POST['inpsyde_multilingual_text'];
 			}
 		}
 
@@ -141,8 +143,9 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 
 		$flag_url = '';
 
-		if ( isset( $_POST[ 'inpsyde_multilingual_flag_url' ] ) )
-			$flag_url = esc_url( $_POST[ 'inpsyde_multilingual_flag_url' ] );
+		if ( isset( $_POST['inpsyde_multilingual_flag_url'] ) ) {
+			$flag_url = esc_url( $_POST['inpsyde_multilingual_flag_url'] );
+        }
 
 		return update_blog_option( $blog_id, 'inpsyde_multilingual_flag_url', $flag_url );
 	}
@@ -160,16 +163,19 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$old_related = $relations->get_related_sites( $blog_id, false );
 
 		// All relations removed.
-		if ( empty( $new_related ) && ! empty( $old_related ) )
+		if ( empty( $new_related ) && ! empty( $old_related ) ) {
 			return $relations->delete_relation( $blog_id );
+        }
 
 		$add_ids = $this->get_new_relations( $new_related, $old_related );
 
-		if ( ! empty( $add_ids ) )
+		if ( ! empty( $add_ids ) ) {
 			$changed += $relations->set_relation( $blog_id, $add_ids );
+        }
 
-		if ( ! empty( $old_related ) )
+		if ( ! empty( $old_related ) ) {
 			$changed += $this->delete_unset_relations( $blog_id, $old_related, $new_related, $relations, $changed );
+        }
 
 		return $changed;
 	}
@@ -197,10 +203,11 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function get_blog_id() {
 
-		if ( empty( $_REQUEST[ 'id' ] ) )
+		if ( empty( $_REQUEST['id'] ) ) {
 			return get_current_blog_id();
+        }
 
-		return (int) $_REQUEST[ 'id' ];
+		return (int) $_REQUEST['id'];
 	}
 
 	/**
@@ -210,8 +217,9 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function show_update_message() {
 
-		if ( empty( $_GET[ 'msg' ] ) or 'updated' !== $_GET[ 'msg' ] )
+		if ( empty( $_GET['msg'] ) or 'updated' !== $_GET['msg'] ) {
 			return;
+        }
 
 		$msg    = esc_html__( 'Settings saved.', 'multilingual-press' );
 		$notice = new Mlp_Admin_Notice( $msg, array( 'class' => 'updated' ) );
@@ -223,10 +231,11 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function get_new_related_blogs() {
 
-		if ( ! isset( $_POST[ 'related_blogs' ] ) )
+		if ( ! isset( $_POST['related_blogs'] ) ) {
 			return array();
+        }
 
-		$new_related = (array) $_POST[ 'related_blogs' ];
+		$new_related = (array) $_POST['related_blogs'];
 		return array_map( 'intval', $new_related );
 	}
 
@@ -242,11 +251,13 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		// Set new relations.
 		foreach ( $new_related as $new_blog_id ) {
 
-			if ( 0 === $new_blog_id )
+			if ( 0 === $new_blog_id ) {
 				continue;
+            }
 
-			if ( ! in_array( $new_blog_id, $old_related ) )
-				$add_ids[ ] = $new_blog_id;
+			if ( ! in_array( $new_blog_id, $old_related ) ) {
+				$add_ids[] = $new_blog_id;
+            }
 		}
 
 		return $add_ids;

@@ -51,8 +51,9 @@ class Multilingual_Press {
 		 * this new version of the class, and the second parameter is missing.
 		 * This is where we stop.
 		 */
-		if ( null === $wpdb )
+		if ( null === $wpdb ) {
 			return;
+        }
 
 		$this->plugin_data = $data;
 		$this->wpdb        = $wpdb;
@@ -74,8 +75,9 @@ class Multilingual_Press {
 
 		require 'functions.php';
 
-		if ( ! $this->is_active_site() )
+		if ( ! $this->is_active_site() ) {
 			return;
+        }
 
 		// Hooks and filters
 		add_action( 'inpsyde_mlp_loaded', array( $this, 'load_plugin_textdomain' ), 1 );
@@ -107,10 +109,11 @@ class Multilingual_Press {
 		 */
 		do_action( 'inpsyde_mlp_loaded', $this->plugin_data, $this->wpdb );
 
-		if ( is_admin() )
+		if ( is_admin() ) {
 			$this->run_admin_actions();
-		else
+		} else {
 			$this->run_frontend_actions();
+        }
 	}
 
 	/**
@@ -126,13 +129,15 @@ class Multilingual_Press {
 			return true;
 		}
 
-		if ( is_network_admin() )
+		if ( is_network_admin() ) {
 			return true;
+        }
 
 		$relations = get_site_option( 'inpsyde_multilingual', array() );
 
-		if ( array_key_exists( get_current_blog_id(), $relations ) )
+		if ( array_key_exists( get_current_blog_id(), $relations ) ) {
 			return true;
+        }
 
 		return false;
 	}
@@ -247,13 +252,15 @@ class Multilingual_Press {
 
 		$path = $this->plugin_data->get( 'plugin_dir_path' ) . "/inc";
 
-		if ( ! is_readable( $path ) )
+		if ( ! is_readable( $path ) ) {
 			return $found;
+        }
 
 		$files = glob( "$path/feature.*.php" );
 
-		if ( empty( $files ) )
+		if ( empty( $files ) ) {
 			return $found;
+        }
 
 		foreach ( $files as $file ) {
 			$found[] = $file;
@@ -356,17 +363,20 @@ class Multilingual_Press {
 	 */
 	public function check_for_errors() {
 
-		if ( defined( 'DOING_AJAX' ) )
+		if ( defined( 'DOING_AJAX' ) ) {
 			return false;
+        }
 
-		if ( is_network_admin() )
+		if ( is_network_admin() ) {
 			return false;
+        }
 
 		// Get blogs related to the current blog
 		$all_blogs = get_site_option( 'inpsyde_multilingual', array() );
 
-		if ( 1 > count( $all_blogs ) && is_super_admin() )
+		if ( 1 > count( $all_blogs ) && is_super_admin() ) {
 			return true;
+        }
 
 		return false;
 	}

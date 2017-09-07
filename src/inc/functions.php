@@ -131,7 +131,7 @@ function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecate
 	$params = wp_parse_args( $args, $defaults );
 	$output = Mlp_Helpers::show_linked_elements( $params );
 
-	$echo = isset( $params[ 'echo' ] ) ? $params[ 'echo' ] : $deprecated_echo;
+	$echo = isset( $params['echo'] ) ? $params['echo'] : $deprecated_echo;
 	if ( $echo ) {
 		echo $output;
 	}
@@ -216,13 +216,15 @@ if ( ! function_exists( 'blog_exists' ) ) {
 
 		$site_id = (int) $site_id;
 
-		if ( 0 === $site_id )
+		if ( 0 === $site_id ) {
 			$site_id = get_current_site()->id;
+        }
 
 		if ( empty( $cache ) or empty( $cache[ $site_id ] ) ) {
 
-			if ( wp_is_large_network() ) // we do not test large sites.
+			if ( wp_is_large_network() ) { // we do not test large sites.
 				return true;
+            }
 
 			$query = "SELECT `blog_id` FROM $wpdb->blogs
 					WHERE site_id = $site_id AND deleted = 0";
@@ -230,10 +232,11 @@ if ( ! function_exists( 'blog_exists' ) ) {
 			$result = $wpdb->get_col( $query );
 
 			// Make sure the array is always filled with something.
-			if ( empty( $result ) )
+			if ( empty( $result ) ) {
 				$cache[ $site_id ] = array( 'do not check again' );
-			else
+			} else {
 				$cache[ $site_id ] = $result;
+            }
 		}
 
 		return in_array( $blog_id, $cache[ $site_id ] );

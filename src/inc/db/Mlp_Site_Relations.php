@@ -47,8 +47,9 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 
 		$site_id = $this->empty_site_id_fallback( $site_id );
 
-		if ( isset( $this->related_sites[ $site_id ] ) )
+		if ( isset( $this->related_sites[ $site_id ] ) ) {
 			return $this->related_sites[ $site_id ];
+        }
 
 		$sql = $this->get_related_sites_sql( $site_id );
 
@@ -69,12 +70,14 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 		$values = array();
 
 		foreach ( $sites as $site_id ) {
-			if ( $site_1 !== $site_id )
+			if ( $site_1 !== $site_id ) {
 				$values[] = $this->get_value_pair( $site_1, $site_id );
+            }
 		}
 
-		if ( empty( $values ) )
+		if ( empty( $values ) ) {
 			return 0;
+        }
 
 		$sql    = 'INSERT IGNORE INTO `' . $this->link_table_name
 			. '` ( `site_1`, `site_2` ) VALUES '
@@ -96,8 +99,9 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 		$site_2 = (int) $site_2;
 		$sql    = "DELETE FROM {$this->link_table_name} WHERE (`site_1` = $site_1 OR `site_2` = $site_1)";
 
-		if ( 0 < $site_2 )
+		if ( 0 < $site_2 ) {
 			$sql .= " AND (`site_1` = $site_2 OR `site_2` = $site_2)";
+        }
 
 		return (int) $this->wpdb->query( $sql );
 	}
@@ -127,8 +131,9 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 	private function get_value_pair( $site_1, $site_2 ) {
 
 		// Swap values to make sure the lower value is the first.
-		if ( $site_1 > $site_2 )
+		if ( $site_1 > $site_2 ) {
 			list ( $site_1, $site_2 ) = array( $site_2, $site_1 );
+        }
 
 		return '(' . (int) $site_1 . ', ' . (int) $site_2 . ')';
 	}
@@ -141,8 +146,9 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 	 */
 	private function empty_site_id_fallback( $site_id ) {
 
-		if ( 0 === (int) $site_id )
+		if ( 0 === (int) $site_id ) {
 			$site_id = get_current_blog_id();
+        }
 
 		return $site_id;
 	}

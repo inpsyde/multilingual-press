@@ -48,8 +48,9 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_cpt_translator_settings' );
 
 		// Quit here if module is turned off
-		if ( ! $this->register_setting() )
+		if ( ! $this->register_setting() ) {
 			return;
+        }
 
 		add_filter( 'mlp_allowed_post_types', array( $this, 'filter_allowed_post_types' ) );
 
@@ -130,8 +131,9 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		$post_types = $this->get_custom_post_types();
 
-		if ( empty( $post_types ) )
+		if ( empty( $post_types ) ) {
 			return;
+        }
 
 		$data = new Mlp_Cpt_Translator_Extra_General_Settings_Box_Data(
 			$this,
@@ -163,25 +165,27 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 */
 	public function save_options_page_form_fields() {
 
-		if ( ! $this->nonce_validator->is_valid() )
+		if ( ! $this->nonce_validator->is_valid() ) {
 			return false;
+        }
 
 		$options    = get_site_option( 'inpsyde_multilingual_cpt' );
 		$post_types = $this->get_custom_post_types();
 
 		if ( empty( $post_types ) or empty( $_POST[ $this->form_name ] ) ) {
-			$options[ 'post_types' ] = array();
+			$options['post_types'] = array();
 			return update_site_option( 'inpsyde_multilingual_cpt', $options );
 		}
 
 		foreach ( $post_types as $cpt => $cpt_params ) {
 
-			if ( empty( $_POST[ $this->form_name ][ $cpt ] ) )
-				$options[ 'post_types' ][ $cpt ] = 0;
-			elseif ( empty( $_POST[ $this->form_name ][ $cpt . '|links' ] ) )
-				$options[ 'post_types' ][ $cpt ] = 1;
-			else
-				$options[ 'post_types' ][ $cpt ] = 2;
+			if ( empty( $_POST[ $this->form_name ][ $cpt ] ) ) {
+				$options['post_types'][ $cpt ] = 0;
+			} elseif ( empty( $_POST[ $this->form_name ][ $cpt . '|links' ] ) ) {
+				$options['post_types'][ $cpt ] = 1;
+			} else {
+				$options['post_types'][ $cpt ] = 2;
+            }
 		}
 
 		return update_site_option( 'inpsyde_multilingual_cpt', $options );
@@ -232,12 +236,14 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		$options = get_site_option( 'inpsyde_multilingual_cpt' );
 		$out     = array();
 
-		if ( empty( $options ) or empty( $options[ 'post_types' ] ) )
+		if ( empty( $options ) or empty( $options['post_types'] ) ) {
 			return $out;
+        }
 
-		foreach ( $options[ 'post_types' ] as $post_type => $setting ) {
-			if ( 0 != $setting )
+		foreach ( $options['post_types'] as $post_type => $setting ) {
+			if ( 0 != $setting ) {
 				$out[] = $post_type;
+            }
 		}
 
 		return array_unique( $out );
@@ -306,19 +312,21 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 */
 	public function change_cpt_slug( $post_link, $post ) {
 
-		if ( ! $this->is_cpt_with_dynamic_permalink( $post->post_type ) )
+		if ( ! $this->is_cpt_with_dynamic_permalink( $post->post_type ) ) {
 			return $post_link;
+        }
 
 		$draft_or_pending = $this->is_draft_or_pending( $post );
 		$post_type        = get_post_type_object( $post->post_type );
 
-		if ( $post_type->query_var && ( isset( $post->post_status ) && ! $draft_or_pending ) )
+		if ( $post_type->query_var && ( isset( $post->post_status ) && ! $draft_or_pending ) ) {
 			$post_link = add_query_arg( $post_type->query_var, $post->post_name, '' );
-		else
+		} else {
 			$post_link = add_query_arg(
 				array( 'post_type' => $post->post_type, 'p' => $post->ID ),
 				''
 			);
+        }
 
 		return home_url( $post_link );
 	}
@@ -333,16 +341,19 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		$options = get_site_option( 'inpsyde_multilingual_cpt' );
 
-		if ( empty( $options ) )
+		if ( empty( $options ) ) {
 			return false;
+        }
 
-		if ( empty( $options[ 'post_types' ] ) )
+		if ( empty( $options['post_types'] ) ) {
 			return false;
+        }
 
-		if ( empty( $options[ 'post_types' ][ $post_type ] ) )
+		if ( empty( $options['post_types'][ $post_type ] ) ) {
 			return false;
+        }
 
-		return (int) $options[ 'post_types' ][ $post_type ] > 1;
+		return (int) $options['post_types'][ $post_type ] > 1;
 	}
 
 	/**
@@ -353,8 +364,9 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 */
 	public function is_draft_or_pending( $post ) {
 
-		if ( empty( $post->post_status ) )
+		if ( empty( $post->post_status ) ) {
 			return false;
+        }
 
 		return in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ), true );
 	}

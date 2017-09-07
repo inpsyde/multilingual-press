@@ -60,9 +60,9 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	public function __construct(
 		Inpsyde_Property_List_Interface $data,
 		$table_name,
-		Mlp_Site_Relations_Interface    $site_relations,
+		Mlp_Site_Relations_Interface $site_relations,
 		Mlp_Content_Relations_Interface $content_relations,
-		wpdb                            $wpdb
+		wpdb $wpdb
 	) {
 		$this->data              = $data;
 		$this->wpdb              = $wpdb;
@@ -123,29 +123,35 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 			$related_blogs = $this->get_related_sites( $base_site, true );
 
-			if ( empty( $related_blogs ) )
+			if ( empty( $related_blogs ) ) {
 				return array();
+            }
 		}
 
-		if ( ! is_array( $languages ) )
+		if ( ! is_array( $languages ) ) {
 			return array();
+        }
 
 		foreach ( $languages as $site_id => $language_data ) {
 
 			// Filter out blogs that are not related
-			if ( ! in_array( $site_id, $related_blogs ) && 0 !== $base_site )
+			if ( ! in_array( $site_id, $related_blogs ) && 0 !== $base_site ) {
 				continue;
+            }
 
 			$lang = '';
 
-			if ( isset( $language_data[ 'text' ] ) )
-				$lang = $language_data[ 'text' ];
+			if ( isset( $language_data['text'] ) ) {
+				$lang = $language_data['text'];
+            }
 
-			if ( empty( $language_data[ 'lang' ] ) )
+			if ( empty( $language_data['lang'] ) ) {
 				continue;
+            }
 
-			if ( '' === $lang )
-				$lang = $this->get_lang_data_by_iso( $language_data[ 'lang' ] );
+			if ( '' === $lang ) {
+				$lang = $this->get_lang_data_by_iso( $language_data['lang'] );
+            }
 
 			$options[ $site_id ] = $lang;
 		}
@@ -205,26 +211,28 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$arguments = $this->prepare_translation_arguments( $args );
 
 		$sites = $this->get_related_sites(
-			$arguments[ 'site_id' ],
-			$arguments[ 'include_base' ]
+			$arguments['site_id'],
+			$arguments['include_base']
 		);
 
-		if ( empty( $sites ) )
+		if ( empty( $sites ) ) {
 			return array();
+        }
 
 		$content_relations = array();
 
-		if ( ! empty( $arguments[ 'content_id' ] ) ) {
+		if ( ! empty( $arguments['content_id'] ) ) {
 
 			// array with site_ids as keys, content_ids as values
 			$content_relations = $this->get_related_content_ids(
-				$arguments[ 'site_id' ],
-				$arguments[ 'content_id' ],
-				$arguments[ 'type' ]
+				$arguments['site_id'],
+				$arguments['content_id'],
+				$arguments['type']
 			);
 
-			if ( empty( $content_relations ) && $arguments[ 'strict' ] )
+			if ( empty( $content_relations ) && $arguments['strict'] ) {
 				return array();
+            }
 		}
 
 		$translations      = array();
@@ -232,15 +240,16 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		foreach ( $sites as $site_id ) {
 
-			if ( ! isset( $languages[ $site_id ] ) )
+			if ( ! isset( $languages[ $site_id ] ) ) {
 				continue;
+            }
 
 			$translations[ $site_id ] = array(
-				'source_site_id'    => $arguments[ 'site_id' ],
+				'source_site_id'    => $arguments['site_id'],
 				'target_site_id'    => $site_id,
-				'type'              => $arguments[ 'type' ],
+				'type'              => $arguments['type'],
 				'target_content_id' => 0,
-				'target_title'      => ''
+				'target_title'      => '',
 			);
 		}
 
@@ -253,19 +262,20 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			if ( ! empty( $content_relations[ $site_id ] ) ) {
 
 				$content_id                 = $content_relations[ $site_id ];
-				$arr[ 'target_content_id' ] = $content_id;
+				$arr['target_content_id'] = $content_id;
 
-				if ( 'term' === $arguments[ 'type' ] ) {
+				if ( 'term' === $arguments['type'] ) {
 
 					$term_translation = new Mlp_Term_Translation( $this->wpdb, $wp_rewrite );
 					$translation      = $term_translation->get_translation( $content_id, $site_id );
 
-					if ( ! $translation )
+					if ( ! $translation ) {
 						$valid = false;
-					else
+					} else {
 						$arr = array_merge( $arr, $translation );
+                    }
 				}
-				elseif ( 'post' === $arguments[ 'type' ] ) {
+				elseif ( 'post' === $arguments['type'] ) {
 
 					switch_to_blog( $site_id );
 
@@ -275,10 +285,11 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 						$arguments['strict']
 					);
 
-					if ( ! $translation )
+					if ( ! $translation ) {
 						$valid = false;
-					else
+					} else {
 						$arr = array_merge( $arr, $translation );
+                    }
 
 					restore_current_blog();
 				}
@@ -287,30 +298,31 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 				switch_to_blog( $site_id );
 
-				if ( 'search' === $arguments[ 'type' ] ) {
+				if ( 'search' === $arguments['type'] ) {
 
-					$url                 = get_search_link( $arguments[ 'search_term' ] );
-					$arr[ 'target_url' ] = Mlp_Url_Factory::create( $url );
+					$url                 = get_search_link( $arguments['search_term'] );
+					$arr['target_url'] = Mlp_Url_Factory::create( $url );
 				}
-				elseif ( 'post_type_archive' === $arguments[ 'type' ]
-					&& ! empty( $arguments[ 'post_type' ] )
+				elseif ( 'post_type_archive' === $arguments['type']
+					&& ! empty( $arguments['post_type'] )
 				) {
 
 					$translation = $this->get_post_type_archive_translation(
-						$arguments[ 'post_type' ]
+						$arguments['post_type']
 					);
 					$arr = array_merge( $arr, $translation );
 				}
 
 				// Nothing found, use fallback if allowed
-				if ( ( empty( $arr[ 'target_url' ] ) && ! $arguments[ 'strict' ] )
-					|| 'front_page' === $arguments[ 'type' ]
+				if ( ( empty( $arr['target_url'] ) && ! $arguments['strict'] )
+					|| 'front_page' === $arguments['type']
 				) {
-					$arr[ 'target_url' ] = get_home_url( $site_id, '/' );
+					$arr['target_url'] = get_home_url( $site_id, '/' );
 				}
 
-				if ( empty( $arr[ 'target_url' ] ) )
+				if ( empty( $arr['target_url'] ) ) {
 					$valid = false;
+                }
 
 				restore_current_blog();
 			}
@@ -322,20 +334,21 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 			$data = $languages[ $site_id ];
 
-			if ( ! isset( $data[ 'http_name' ] ) ) {
-				if ( isset( $data[ 'lang' ] ) )
-					$data[ 'http_name' ] = $data[ 'lang' ];
-				else
-					$data[ 'http_name' ] = '';
+			if ( ! isset( $data['http_name'] ) ) {
+				if ( isset( $data['lang'] ) ) {
+					$data['http_name'] = $data['lang'];
+				} else {
+					$data['http_name'] = '';
+                }
 			}
 
-			if ( '' !== $data[ 'http_name' ] ) {
-				$arr[ 'icon' ] = $this->get_flag_by_language(
-					$data[ 'http_name' ],
+			if ( '' !== $data['http_name'] ) {
+				$arr['icon'] = $this->get_flag_by_language(
+					$data['http_name'],
 					$site_id
 				);
 			} else {
-				$arr[ 'icon' ] = '';
+				$arr['icon'] = '';
 			}
 
 			$arr['suppress_filters'] = $arguments['suppress_filters'];
@@ -365,11 +378,12 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$return = array();
 
 		$url                    = get_post_type_archive_link( $post_type );
-		$return[ 'target_url' ] = Mlp_Url_Factory::create( $url );
+		$return['target_url'] = Mlp_Url_Factory::create( $url );
 		$obj                    = get_post_type_object( $post_type );
 
-		if ( $obj )
-			$return[ 'target_title' ] = $obj->labels->name;
+		if ( $obj ) {
+			$return['target_title'] = $obj->labels->name;
+        }
 
 		return $return;
 	}
@@ -387,8 +401,9 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		$post  = get_post( $content_id );
 
-		if ( ! $post )
+		if ( ! $post ) {
 			return false;
+        }
 
 		if ( $post_status && ! in_array( $post->post_status, $post_status, true ) ) {
 			return false;
@@ -400,12 +415,13 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		// edit post screen
 		if ( is_admin() ) {
 
-			if ( ! $editable )
+			if ( ! $editable ) {
 				return false;
+            }
 
 			return array(
 				'target_title' => $title,
-				'target_url'   => Mlp_Url_Factory::create( get_edit_post_link( $content_id ) )
+				'target_url'   => Mlp_Url_Factory::create( get_edit_post_link( $content_id ) ),
 			);
 		}
 
@@ -414,19 +430,21 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$url = get_permalink( $content_id );
 		do_action( 'mlp_after_link' );
 
-		if ( 'publish' === $post->post_status || $editable )
+		if ( 'publish' === $post->post_status || $editable ) {
 			return array(
 				'target_title' => $title,
-				'target_url'   => empty( $url ) ? '' : Mlp_Url_Factory::create( $url )
+				'target_url'   => empty( $url ) ? '' : Mlp_Url_Factory::create( $url ),
 			);
+        }
 
 		// unpublished post, not editable
-		if ( $strict )
+		if ( $strict ) {
 			return false;
+        }
 
 		return array(
 			'target_title' => $title,
-			'target_url'   => ''
+			'target_url'   => '',
 		);
 	}
 
@@ -463,22 +481,25 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 */
 	private function get_all_language_data() {
 
-		if ( ! empty( $this->language_data_from_db ) )
+		if ( ! empty( $this->language_data_from_db ) ) {
 			return $this->language_data_from_db;
+        }
 
 		$languages = (array) get_site_option( 'inpsyde_multilingual', array() );
 
-		if ( empty( $languages ) )
+		if ( empty( $languages ) ) {
 			return array();
+        }
 
 		$tags     = array();
 		$add_like = array();
 
 		foreach ( $languages as $site_id => $data ) {
-			if ( ! empty( $data[ 'lang' ] ) )
-				$tags[ $site_id ] = str_replace('_', '-', $data[ 'lang' ] );
-			elseif ( ! empty( $data[ 'text' ] ) && preg_match( '~[a-zA-Z-]+~', $data[ 'text' ] ) )
-				$tags[ $site_id ] = str_replace('_', '-', $data[ 'text' ] );
+			if ( ! empty( $data['lang'] ) ) {
+				$tags[ $site_id ] = str_replace('_', '-', $data['lang'] );
+			} elseif ( ! empty( $data['text'] ) && preg_match( '~[a-zA-Z-]+~', $data['text'] ) ) {
+				$tags[ $site_id ] = str_replace('_', '-', $data['text'] );
+            }
 
 			// a site might have just 'EN' as text and no other values
 			if ( isset( $tags[ $site_id ] ) && false === strpos( $tags[ $site_id ], '-' ) ) {
@@ -510,7 +531,7 @@ WHERE `http_name` IN( $values )";
 					$languages[ $site ] += $arr;
 				}
 				elseif ( isset( $add_like[ $site ] )
-					&& $arr[ 'iso_639_1' ] === $add_like[ $site ]
+					&& $arr['iso_639_1'] === $add_like[ $site ]
 				) {
 					$languages[ $site ] += $arr;
 				}
@@ -531,13 +552,13 @@ WHERE `http_name` IN( $values )";
 
 		$tag = $like = '';
 
-		if ( ! empty( $language_data[ 'lang' ] ) ) {
-			$tag = str_replace( '_', '-', $language_data[ 'lang' ] );
+		if ( ! empty( $language_data['lang'] ) ) {
+			$tag = str_replace( '_', '-', $language_data['lang'] );
 		} elseif (
-			! empty( $language_data[ 'text' ] )
-			&& preg_match( '~[a-zA-Z-]+~', $language_data[ 'text' ] )
+			! empty( $language_data['text'] )
+			&& preg_match( '~[a-zA-Z-]+~', $language_data['text'] )
 		) {
-			$tag = str_replace( '_', '-', $language_data[ 'text' ] );
+			$tag = str_replace( '_', '-', $language_data['text'] );
 		}
 
 		// a site might have just 'EN' as text and no other values
@@ -609,8 +630,9 @@ WHERE `http_name` IN( $values )";
 
 		$queried_object = get_queried_object();
 
-		if ( ! isset( $queried_object->taxonomy ) )
+		if ( ! isset( $queried_object->taxonomy ) ) {
 			return false;
+        }
 
 		return isset( $queried_object->name );
 	}
@@ -622,16 +644,19 @@ WHERE `http_name` IN( $values )";
 	 */
 	private function get_related_sites( $site_id, $include_base ) {
 
-		if ( empty( $site_id ) )
+		if ( empty( $site_id ) ) {
 			$site_id = get_current_blog_id();
+        }
 
 		$sites = $this->site_relations->get_related_sites( $site_id );
 
-		if ( empty( $sites ) )
+		if ( empty( $sites ) ) {
 			return array();
+        }
 
-		if ( $include_base )
+		if ( $include_base ) {
 			$sites[] = $site_id;
+        }
 
 		return $sites;
 	}
@@ -649,8 +674,9 @@ WHERE `http_name` IN( $values )";
 
 		$post_type = get_query_var( 'post_type' );
 
-		if ( is_array( $post_type ) )
+		if ( is_array( $post_type ) ) {
 			$post_type = reset( $post_type );
+        }
 
 		return (string) $post_type;
 	}
@@ -709,17 +735,19 @@ WHERE `http_name` IN( $values )";
 	 */
 	private function prepare_translation_relations( array $arguments ) {
 
-		if ( ! $this->can_have_relations( $arguments ) )
+		if ( ! $this->can_have_relations( $arguments ) ) {
 			return array();
+        }
 
 		$relations = $this->get_related_content_ids(
-			$arguments[ 'site_id' ],
-			$arguments[ 'content_id' ],
-			$arguments[ 'type' ]
+			$arguments['site_id'],
+			$arguments['content_id'],
+			$arguments['type']
 		);
 
-		if ( 'post' !== $arguments[ 'type' ] || is_admin() )
+		if ( 'post' !== $arguments['type'] || is_admin() ) {
 			return $relations;
+        }
 
 		return $this->remove_unpublished_posts( $relations );
 	}
@@ -732,8 +760,9 @@ WHERE `http_name` IN( $values )";
 	 */
 	private function can_have_relations( array $arguments ) {
 
-		if ( empty( $arguments[ 'content_id' ] ) )
+		if ( empty( $arguments['content_id'] ) ) {
 			return false;
+        }
 
 		return in_array( $arguments['type'], array( 'post', 'term' ), true );
 	}
@@ -748,8 +777,9 @@ WHERE `http_name` IN( $values )";
 
 			$post = get_blog_post( $site_id, $content_id );
 
-			if ( ! $post || 'publish' !== $post->post_status )
+			if ( ! $post || 'publish' !== $post->post_status ) {
 				unset( $relations[ $site_id ] );
+            }
 		}
 
 		return $relations;

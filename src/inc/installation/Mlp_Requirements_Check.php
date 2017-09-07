@@ -116,7 +116,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 			'This plugin requires PHP version %1$s, your version %2$s is too old. Please upgrade.',
 			'multilingual-press'
 		);
-		$this->errors[ 'php' ] = sprintf( $msg, $required, $current );
+		$this->errors['php'] = sprintf( $msg, $required, $current );
 	}
 
 	/**
@@ -139,7 +139,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 			'This plugin requires WordPress version %1$s, your version %2$s is too old. Please upgrade.',
 			'multilingual-press'
 		);
-		$this->errors[ 'wp' ] = sprintf( $msg, $required, $current );
+		$this->errors['wp'] = sprintf( $msg, $required, $current );
 	}
 
 	/**
@@ -162,7 +162,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 			'This plugin needs to run in a multisite. Please <a href="%s">convert this WordPress installation to multisite</a>.',
 			'multilingual-press'
 		);
-		$this->errors[ 'installation' ] = sprintf(
+		$this->errors['installation'] = sprintf(
 			$msg,
 			'http://make.multilingualpress.pro/2014/02/how-to-install-multi-site/'
 		);
@@ -189,7 +189,7 @@ class Mlp_Requirements_Check implements Mlp_Requirements_Check_Interface {
 			'multilingual-press'
 		);
 		$url = network_admin_url( 'plugins.php' );
-		$this->errors[ 'activation' ] = sprintf( $msg, $url );
+		$this->errors['activation'] = sprintf( $msg, $url );
 	}
 
 	/**

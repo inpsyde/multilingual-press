@@ -42,8 +42,9 @@ class Mlp_Custom_Columns {
 	 */
 	public function render_column( $name, $id ) {
 
-		if ( $this->settings[ 'id' ] === $name )
-			echo call_user_func( $this->settings[ 'content_callback' ], $name, $id );
+		if ( $this->settings['id'] === $name ) {
+			echo call_user_func( $this->settings['content_callback'], $name, $id );
+        }
 	}
 
 	/**
@@ -56,7 +57,7 @@ class Mlp_Custom_Columns {
 	 */
 	public function add_header( array $columns ) {
 
-		$columns[ $this->settings[ 'id' ] ] = $this->settings[ 'header' ];
+		$columns[ $this->settings['id'] ] = $this->settings['header'];
 
 		return $columns;
 	}

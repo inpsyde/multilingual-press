@@ -1849,7 +1849,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 		$out = array();
 
 		foreach ( $fields as $field ) {
-			$out[ ] = "( '" . join( "', '", array_values( $field ) ) . "' )";
+			$out[] = "( '" . join( "', '", array_values( $field ) ) . "' )";
 		}
 
 		return join( ",", $out );

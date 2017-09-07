@@ -64,8 +64,8 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	public function __construct(
 		Inpsyde_Property_List_Interface $data,
-		Mlp_Data_Access                 $database,
-		wpdb                            $wpdb
+		Mlp_Data_Access $database,
+		wpdb $wpdb
 		) {
 
 		$this->plugin_data     = $data;
@@ -178,7 +178,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			array(
 				'action'                           => $this->reset_action,
 				$this->page_data->get_nonce_name() => $nonce,
-				'_wp_http_referer'                 => esc_attr( $request )
+				'_wp_http_referer'                 => esc_attr( $request ),
 			),
 			$this->page_data->get_form_action()
 		);
@@ -213,7 +213,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		 */
 		do_action( 'mlp_reset_table_done', $table_schema );
 
-		$url = add_query_arg( 'msg', 'resettable', $_REQUEST[ '_wp_http_referer' ] );
+		$url = add_query_arg( 'msg', 'resettable', $_REQUEST['_wp_http_referer'] );
 		wp_safe_redirect( $url );
 		mlp_exit();
 	}
@@ -235,7 +235,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	private function get_update_message() {
 
-		$type  = strtok( $_GET[ 'msg' ], '-' );
+		$type  = strtok( $_GET['msg'], '-' );
 		$num   = (int) strtok( '-' );
 		$num_f = number_format_i18n( $num );
 		$text  = '';
@@ -258,8 +258,9 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			);
 		}
 
-		if ( '' === $text )
+		if ( '' === $text ) {
 			return '';
+        }
 
 		return '<div class="updated"><p>' . esc_html( $text ) . '</p></div>';
 	}
@@ -324,8 +325,9 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	private function get_pagination_object() {
 
-		if ( ! is_a( $this->pagination_view, 'Mlp_Table_Pagination_View' ) )
+		if ( ! is_a( $this->pagination_view, 'Mlp_Table_Pagination_View' ) ) {
 			$this->pagination_view = new Mlp_Table_Pagination_View( $this->pagination_data );
+        }
 
 		return $this->pagination_view;
 	}
@@ -355,50 +357,50 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 				'header'     => __( 'Native name', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array(
-					'size' => 20
-				)
+					'size' => 20,
+				),
 			),
 			'english_name' => array(
 				'header'     => __( 'English name', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array(
-					'size' => 20
-				)
+					'size' => 20,
+				),
 			),
 			'is_rtl' => array(
 				'header'     => __( 'RTL', 'multilingual-press' ),
 				'type'       => 'input_checkbox',
 				'attributes' => array(
-					'size' => 20
-				)
+					'size' => 20,
+				),
 			),
 			'http_name' => array(
 				'header'     => __( 'HTTP', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array(
-					'size' => 5
-				)
+					'size' => 5,
+				),
 			),
 			'iso_639_1' => array(
 				'header'     => __( 'ISO&#160;639-1', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array(
-					'size' => 5
-				)
+					'size' => 5,
+				),
 			),
 			'iso_639_2' => array(
 				'header'     => __( 'ISO&#160;639-2', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array(
-					'size' => 5
-				)
+					'size' => 5,
+				),
 			),
 			'wp_locale' => array(
 				'header'     => __( 'wp_locale', 'multilingual-press' ),
 				'type'       => 'input_text',
 				'attributes' => array(
-					'size' => 5
-				)
+					'size' => 5,
+				),
 			),
 			'priority' => array(
 				'header'     => __( 'Priority', 'multilingual-press' ),
@@ -406,8 +408,8 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 				'attributes' => array(
 					'min'  => 1,
 					'max'  => 10,
-					'size' => 3
-				)
+					'size' => 3,
+				),
 			),
 		);
 	}

@@ -91,11 +91,12 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 * @return void|Inpsyde_Property_List
 	 */
 	public function set( $name, $value ) {
-		if ( $this->frozen )
+		if ( $this->frozen ) {
 			return $this->stop(
 				'This object has been frozen.
 				You cannot set properties anymore.'
 			);
+        }
 
 		$this->properties[ $name ] = $value;
 		unset( $this->deleted[ $name ] );
@@ -110,20 +111,23 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 * @return void|Inpsyde_Property_List
 	 */
 	public function import( $var ) {
-		if ( $this->frozen )
+		if ( $this->frozen ) {
 			return $this->stop(
 				'This object has been frozen.
 				You cannot set properties anymore.'
 			);
+        }
 
-		if ( ! is_array( $var ) and ! is_object( $var ) )
+		if ( ! is_array( $var ) and ! is_object( $var ) ) {
 			return $this->stop(
 				'Cannot import this variable.
 				Use arrays and objects only, not a "' . gettype( $var ) . '".'
 			);
+        }
 
-		foreach ( $var as $name => $value )
+		foreach ( $var as $name => $value ) {
 			$this->properties[ $name ] = $value;
+        }
 
 		return $this;
 	}
@@ -138,14 +142,17 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 */
 	public function get( $name ) {
 
-		if ( isset( $this->properties[ $name ] ) )
+		if ( isset( $this->properties[ $name ] ) ) {
 			return $this->properties[ $name ];
+        }
 
-		if ( isset( $this->deleted[ $name ] ) )
+		if ( isset( $this->deleted[ $name ] ) ) {
 			return null;
+        }
 
-		if ( null === $this->parent )
+		if ( null === $this->parent ) {
 			return null;
+        }
 
 		return $this->parent->get( $name );
 	}
@@ -157,8 +164,9 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 * @return array
 	 */
 	public function get_all( $use_parent = false ) {
-		if ( ! $use_parent )
+		if ( ! $use_parent ) {
 			return $this->properties;
+        }
 
 		$parent_properties = $this->parent->get_all( true );
 		$all               = array_merge( $parent_properties, $this->properties );
@@ -178,14 +186,17 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 */
 	public function has( $name ) {
 
-		if ( isset( $this->properties[ $name ] ) )
+		if ( isset( $this->properties[ $name ] ) ) {
 			return true;
+        }
 
-		if ( isset( $this->deleted[ $name ] ) )
+		if ( isset( $this->deleted[ $name ] ) ) {
 			return false;
+        }
 
-		if ( null === $this->parent )
+		if ( null === $this->parent ) {
 			return false;
+        }
 
 		return $this->parent->has( $name );
 	}
@@ -200,11 +211,12 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 */
 	public function delete( $name ) {
 
-		if ( $this->frozen )
+		if ( $this->frozen ) {
 			return $this->stop(
 				'This object has been frozen.
 				You cannot delete properties anymore.'
 			);
+        }
 
 		$this->deleted[ $name ] = true;
 		unset( $this->properties[ $name ] );
@@ -220,11 +232,12 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 */
 	public function set_parent( Inpsyde_Property_List_Interface $object ) {
 
-		if ( $this->frozen )
+		if ( $this->frozen ) {
 			return $this->stop(
 				'This object has been frozen.
 				You cannot change the parent anymore.'
 			);
+        }
 
 		$this->parent = $object;
 
@@ -275,11 +288,13 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 */
 	protected function stop( $msg, $code = '' ) {
 
-		if ( '' === $code )
+		if ( '' === $code ) {
 			$code = __CLASS__;
+        }
 
-		if ( class_exists( 'WP_Error' ) )
+		if ( class_exists( 'WP_Error' ) ) {
 			return Mlp_WP_Error_Factory::create( $code, $msg );
+        }
 
 		throw new Exception( $msg, $code );
 	}

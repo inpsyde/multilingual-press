@@ -53,10 +53,10 @@ class Mlp_Admin_Table_View {
 	 * @param string             $name
 	 */
 	public function __construct(
-		Mlp_Data_Access    $data,
+		Mlp_Data_Access $data,
 		Mlp_Html_Interface $html,
-		Mlp_Browsable      $pagination_data,
-		array              $columns,
+		Mlp_Browsable $pagination_data,
+		array $columns,
 		$id,
 		$name
 	) {
@@ -90,7 +90,7 @@ class Mlp_Admin_Table_View {
 	private function print_tbody() {
 
 		$params = array(
-			'page' => $this->pagination_data->get_current_page()
+			'page' => $this->pagination_data->get_current_page(),
 		);
 		$rows = $this->data->get_items( $params );
 
@@ -225,7 +225,7 @@ class Mlp_Admin_Table_View {
 		return array(
 			$this->get_input_name( $id, $col ),
 			$this->html->array_to_attrs( $attributes ),
-			$value
+			$value,
 		);
 	}
 

@@ -54,7 +54,7 @@ class Mlp_Nav_Menu_Controller {
 	 */
 	public function __construct(
 		Mlp_Language_Api_Interface $language_api,
-		Mlp_Assets_Interface       $assets
+		Mlp_Assets_Interface $assets
 	) {
 
 		$this->language_api = $language_api;

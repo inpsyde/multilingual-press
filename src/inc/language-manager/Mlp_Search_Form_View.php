@@ -17,7 +17,7 @@ class Mlp_Search_Form_View {
 		$default = array(
 			'type'  => 'search',
 			'name'  => 's',
-			'value' => ''
+			'value' => '',
 		);
 
 		$attributes = array_merge( $default, $attributes );
@@ -42,8 +42,9 @@ class Mlp_Search_Form_View {
 
 		$return = '';
 
-		foreach ( $attributes as $key => $value )
+		foreach ( $attributes as $key => $value ) {
 			$return .= " $key='" . esc_attr( $value ) . "'";
+        }
 
 		return $return;
 	}

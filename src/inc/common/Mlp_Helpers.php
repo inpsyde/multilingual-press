@@ -30,8 +30,9 @@ class Mlp_Helpers {
 	 */
 	public static function is_redirect( $blogid = false ) {
 
-		if ( ! $blogid )
+		if ( ! $blogid ) {
 			$blogid = get_current_blog_id();
+        }
 
 		$redirect = get_blog_option( $blogid, 'inpsyde_multilingual_redirect' );
 
@@ -53,13 +54,15 @@ class Mlp_Helpers {
 		$blogid = get_current_blog_id();
 
 		// If this blog is in a language
-		if ( ! isset( $languages[ $blogid ][ 'lang' ] ) )
+		if ( ! isset( $languages[ $blogid ]['lang'] ) ) {
 			return '';
+        }
 
-		if ( ! $short )
-			return $languages[ $blogid ][ 'lang' ];
+		if ( ! $short ) {
+			return $languages[ $blogid ]['lang'];
+        }
 
-		return strtok( $languages[ $blogid ][ 'lang' ], '_' );
+		return strtok( $languages[ $blogid ]['lang'], '_' );
 	}
 
 	/**
@@ -79,11 +82,12 @@ class Mlp_Helpers {
 		// Get all registered blogs
 		$languages = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty( $languages ) )
+		if ( empty( $languages ) ) {
 			return array();
+        }
 
 		/** @var Mlp_Site_Relations $site_relations */
-		$site_relations = self::$dependencies[ 'site_relations' ];
+		$site_relations = self::$dependencies['site_relations'];
 
 		// Do we need related blogs only?
 		if ( false === $not_related ) {
@@ -93,8 +97,9 @@ class Mlp_Helpers {
 			);
 
 			// No related blogs? Leave here.
-			if ( empty( $related_blogs ) )
+			if ( empty( $related_blogs ) ) {
 				return array();
+            }
 		}
 
 		$options = array();
@@ -103,14 +108,16 @@ class Mlp_Helpers {
 		foreach ( $languages as $language_blogid => $language_data ) {
 
 			// no blogs with a link to other blogs
-			if ( empty( $language_data[ 'lang' ] ) || '-1' === $language_data[ 'lang' ] )
+			if ( empty( $language_data['lang'] ) || '-1' === $language_data['lang'] ) {
 				continue;
+            }
 
 			// Filter out blogs that are not related
-			if ( ! $not_related && ! in_array( $language_blogid, $related_blogs ) )
+			if ( ! $not_related && ! in_array( $language_blogid, $related_blogs ) ) {
 				continue;
+            }
 
-			$lang = $language_data[ 'lang' ];
+			$lang = $language_data['lang'];
 
 			$options[ $language_blogid ] = $lang;
 		}
@@ -165,18 +172,21 @@ class Mlp_Helpers {
 
 		$element_id = self::get_default_content_id( $element_id );
 
-		if ( ! $element_id )
+		if ( ! $element_id ) {
 			return array();
+        }
 
 		// If no ID is provided, get current blogs' ID
-		if ( 0 === $blog_id )
+		if ( 0 === $blog_id ) {
 			$blog_id = get_current_blog_id();
+        }
 
-		if ( '' === $type )
+		if ( '' === $type ) {
 			$type = 'post';
+        }
 
 		/** @var Mlp_Language_Api $api */
-		$api = self::$dependencies[ 'language_api' ];
+		$api = self::$dependencies['language_api'];
 
 		return $api->get_related_content_ids( $blog_id, $element_id, $type );
 	}
@@ -191,38 +201,43 @@ class Mlp_Helpers {
 	 */
 	public static function get_interlinked_permalinks( $element_id = 0, $type = '' ) {
 
-		if ( ! is_singular() && ! is_tag() && !is_category() && ! is_tax() )
+		if ( ! is_singular() && ! is_tag() && !is_category() && ! is_tax() ) {
 			return array();
+        }
 
 		$return     = array();
 		              /** @var Mlp_Language_Api $api */
-		$api        = self::$dependencies[ 'language_api' ];
+		$api        = self::$dependencies['language_api'];
 		$site_id    = get_current_blog_id();
 		$element_id = self::get_default_content_id( $element_id );
 
 		$args = array(
 			'site_id'    => $site_id,
-			'content_id' => $element_id
+			'content_id' => $element_id,
 		);
-		if ( '' !== $type )
+		if ( '' !== $type ) {
 			$args['type'] = $type;
+        }
 
 		// Array of Mlp_Translation instances, site IDs are the keys
 		$related = $api->get_translations( $args );
 
-		if ( empty( $related ) )
+		if ( empty( $related ) ) {
 			return $return;
+        }
 
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $related as $remote_site_id => $translation ) {
 
-			if ( $site_id === (int) $remote_site_id )
+			if ( $site_id === (int) $remote_site_id ) {
 				continue;
+            }
 
 			$url = $translation->get_remote_url();
 
-			if ( empty( $url ) )
+			if ( empty( $url ) ) {
 				continue;
+            }
 
 			$return[ $remote_site_id ] = array(
 				'post_id'        => $translation->get_target_content_id(),
@@ -256,29 +271,34 @@ class Mlp_Helpers {
 		$element_id, $type, $blog_id, $hook, $param
 	) {
 
-		if ( empty( $element_id ) )
+		if ( empty( $element_id ) ) {
 			return Mlp_WP_Error_Factory::create(
 				'mlp_empty_custom_element',
 				__( 'Empty Element', 'multilingual-press' )
 			);
+        }
 
-		if ( empty( $type ) )
+		if ( empty( $type ) ) {
 			return Mlp_WP_Error_Factory::create( 'mlp_empty_custom_type', __( 'Empty Type', 'multilingual-press' ) );
+        }
 
-		if ( empty( $hook ) || ! is_callable( $hook ) )
+		if ( empty( $hook ) || ! is_callable( $hook ) ) {
 			return Mlp_WP_Error_Factory::create( 'mlp_empty_custom_hook', __( 'Invalid Hook', 'multilingual-press' ) );
+        }
 
 		// set the current element in the mlp class
 		$languages    = mlp_get_available_languages();
 		$current_blog_id = get_current_blog_id();
 
-		if ( 0 == count( $languages ) )
+		if ( 0 == count( $languages ) ) {
 			return null;
+        }
 
 		foreach ( $languages as $language_id => $language_name ) {
 
-			if ( $current_blog_id == $language_id )
+			if ( $current_blog_id == $language_id ) {
 				continue;
+            }
 
 			switch_to_blog( $language_id );
 
@@ -301,16 +321,18 @@ class Mlp_Helpers {
 	 */
 	public static function get_language_flag( $site_id = 0 ) {
 
-		if ( 0 === $site_id )
+		if ( 0 === $site_id ) {
 			$site_id = get_current_blog_id();
+        }
 
 		$languages = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty( $languages[ $site_id ]['lang'] ) )
+		if ( empty( $languages[ $site_id ]['lang'] ) ) {
 			return '';
+        }
 
 		/** @var Mlp_Language_Api $api */
-		$api = self::$dependencies[ 'language_api' ];
+		$api = self::$dependencies['language_api'];
 
 		$url = (string) $api->get_flag_by_language( $languages[ $site_id ]['lang'], $site_id );
 
@@ -328,22 +350,26 @@ class Mlp_Helpers {
 
 		static $languages;
 
-		if ( 0 == $site_id )
+		if ( 0 == $site_id ) {
 			$site_id = get_current_blog_id();
+        }
 
-		if ( empty( $languages ) )
+		if ( empty( $languages ) ) {
 			$languages = get_site_option( 'inpsyde_multilingual' );
+        }
 
 		if ( empty( $languages )
 			or empty( $languages[ $site_id ] )
-			or empty( $languages[ $site_id ][ 'lang' ] )
-		)
+			or empty( $languages[ $site_id ]['lang'] )
+		) {
 			return '';
+        }
 
-		if ( ! $short )
-			return $languages[ $site_id ][ 'lang' ];
+		if ( ! $short ) {
+			return $languages[ $site_id ]['lang'];
+        }
 
-		return strtok( $languages[ $site_id ][ 'lang' ], '_' );
+		return strtok( $languages[ $site_id ]['lang'], '_' );
 	}
 
 	/**
@@ -365,7 +391,7 @@ class Mlp_Helpers {
 		$params = wp_parse_args( $args, $defaults );
 
 		// TODO: Eventually remove this, with version 2.2.0 + 4 at the earliest.
-		switch ( $params[ 'link_text' ] ) {
+		switch ( $params['link_text'] ) {
 			case 'text_flag':
 				_doing_it_wrong(
 					__METHOD__,
@@ -373,8 +399,8 @@ class Mlp_Helpers {
 					'2.2.0'
 				);
 
-				$params[ 'link_text' ] = 'native';
-				$params[ 'display_flag' ] = true;
+				$params['link_text'] = 'native';
+				$params['display_flag'] = true;
 				break;
 
 			case 'flag':
@@ -384,8 +410,8 @@ class Mlp_Helpers {
 					'2.2.0'
 				);
 
-				$params[ 'link_text' ] = 'none';
-				$params[ 'display_flag' ] = true;
+				$params['link_text'] = 'none';
+				$params['display_flag'] = true;
 				break;
 		}
 
@@ -401,8 +427,8 @@ class Mlp_Helpers {
 		}
 
 		$translations_args = array(
-			'strict'       => $params[ 'strict' ],
-			'include_base' => $params[ 'show_current_blog' ],
+			'strict'       => $params['strict'],
+			'include_base' => $params['show_current_blog'],
 		);
 		$translations = $api->get_translations( $translations_args );
 		if ( empty( $translations ) ) {
@@ -423,13 +449,13 @@ class Mlp_Helpers {
 			$items[ $site_id ] = array(
 				'url'      => $url,
 				'http'     => $language->get_name( 'http' ),
-				'name'     => $language->get_name( $params[ 'link_text' ] ),
+				'name'     => $language->get_name( $params['link_text'] ),
 				'priority' => $language->get_priority(),
 				'icon'     => (string) $translation->get_icon_url(),
 			);
 		}
 
-		switch ( $params[ 'sort' ] ) {
+		switch ( $params['sort'] ) {
 			case 'blogid':
 				ksort( $items );
 				break;
@@ -446,7 +472,7 @@ class Mlp_Helpers {
 		$output = '<div class="mlp-language-box mlp_language_box"><ul>';
 
 		foreach ( $items as $site_id => $item ) {
-			$text = $item[ 'name' ];
+			$text = $item['name'];
 
 			$img = ( ! empty( $item['icon'] ) && $params['display_flag'] )
 				? '<img src="' . esc_url( $item['icon'] ) . '" alt="' . esc_attr( $item['name'] ) . '"> '
@@ -458,7 +484,7 @@ class Mlp_Helpers {
 				$output .= sprintf(
 					'<li><a rel="alternate" hreflang="%1$s" href="%2$s">%3$s%4$s</a></li>',
 					esc_attr( $item['http'] ),
-					esc_url( $item[ 'url' ] ),
+					esc_url( $item['url'] ),
 					$img,
 					esc_html( $text )
 				);
@@ -502,8 +528,9 @@ class Mlp_Helpers {
 	 */
 	private static function sort_priorities( array $a, array $b ) {
 
-		if ( $a['priority'] === $b['priority'] )
+		if ( $a['priority'] === $b['priority'] ) {
 			return 0;
+        }
 
 		return ( $a['priority'] < $b['priority'] ) ? 1 : -1;
 	}
@@ -514,8 +541,9 @@ class Mlp_Helpers {
 	 */
 	private static function get_default_content_id( $content_id = 0 ) {
 
-		if ( 0 < (int) $content_id )
+		if ( 0 < (int) $content_id ) {
 			return $content_id;
+        }
 
 		return get_queried_object_id();
 	}

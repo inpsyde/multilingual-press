@@ -57,7 +57,7 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	 *
 	 * @return void
 	 */
-	public function initialize( ) {
+	public function initialize() {
 
 		// Quit here if module is turned off
 		if ( ! $this->register_setting() ) {

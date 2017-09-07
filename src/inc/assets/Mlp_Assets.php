@@ -93,28 +93,28 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 			}
 
 			/** @var Mlp_Asset_Url_Interface $url_object */
-			$url_object = $properties[ 'url' ];
+			$url_object = $properties['url'];
 			$url = $url_object->__toString();
 			$version = $url_object->get_version();
 
-			if ( 'js' === $properties[ 'ext' ] ) {
+			if ( 'js' === $properties['ext'] ) {
 				wp_register_script(
 					$handle,
 					$url,
-					$properties[ 'dependencies' ],
+					$properties['dependencies'],
 					$version,
 					true
 				);
-			} elseif ( 'css' === $properties[ 'ext' ] ) {
+			} elseif ( 'css' === $properties['ext'] ) {
 				wp_register_style(
 					$handle,
 					$url,
-					$properties[ 'dependencies' ],
+					$properties['dependencies'],
 					$version
 				);
 			}
 
-			$this->registered[ $handle ] = $properties[ 'ext' ];
+			$this->registered[ $handle ] = $properties['ext'];
 		}
 	}
 
@@ -171,7 +171,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 
 		if ( $this->is_login_page() ) {
 
-			if ( empty( $GLOBALS[ 'interim_login' ] ) ) {
+			if ( empty( $GLOBALS['interim_login'] ) ) {
 				return 'login_enqueue_scripts';
 			}
 
@@ -194,7 +194,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	 */
 	private function is_login_page() {
 
-		return 0 === strpos( $_SERVER[ 'REQUEST_URI' ], '/wp-login.php' );
+		return 0 === strpos( $_SERVER['REQUEST_URI'], '/wp-login.php' );
 	}
 
 	/**

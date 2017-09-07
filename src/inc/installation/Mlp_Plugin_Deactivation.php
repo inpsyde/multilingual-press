@@ -51,7 +51,7 @@ class Mlp_Plugin_Deactivation {
 		$this->print_errors();
 
 		// Suppress "Plugin activated" notice.
-		unset( $_GET[ 'activate' ] );
+		unset( $_GET['activate'] );
 
 		deactivate_plugins( $this->plugin_base_name );
 

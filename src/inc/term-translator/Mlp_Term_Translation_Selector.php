@@ -147,11 +147,11 @@ class Mlp_Term_Translation_Selector {
 	 */
 	private function get_current_term( $site_id ) {
 
-		if ( empty( $_GET[ 'tag_ID' ] ) ) {
+		if ( empty( $_GET['tag_ID'] ) ) {
 			return 0;
 		}
 
-		return $this->presenter->get_current_term( $site_id, (int) $_GET[ 'tag_ID' ] );
+		return $this->presenter->get_current_term( $site_id, (int) $_GET['tag_ID'] );
 	}
 
 	/**

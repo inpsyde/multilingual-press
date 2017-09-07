@@ -73,7 +73,7 @@ function mlp_init() {
 			'text_domain_path' => 'Domain Path',
 			'plugin_uri'       => 'Plugin URI',
 			'plugin_name'      => 'Plugin Name',
-			'version'          => 'Version'
+			'version'          => 'Version',
 		)
 	);
 	foreach ( $headers as $name => $value ) {

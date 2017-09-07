@@ -40,9 +40,9 @@ class Mlp_Duplicate_Blogs {
 	 */
 	public function __construct(
 		                               $link_table,
-		wpdb                           $wpdb,
+		wpdb $wpdb,
 		Mlp_Table_Duplicator_Interface $duplicator,
-		Mlp_Db_Table_List_Interface    $table_names
+		Mlp_Db_Table_List_Interface $table_names
 	) {
 
 		$this->link_table  = $link_table;
@@ -72,10 +72,11 @@ class Mlp_Duplicate_Blogs {
 	public function wpmu_new_blog( $blog_id ) {
 
 		// Return if we don't have a blog
-		if ( ! isset( $_POST[ 'blog' ][ 'basedon' ] ) || 1 > $_POST[ 'blog' ][ 'basedon' ] )
+		if ( ! isset( $_POST['blog']['basedon'] ) || 1 > $_POST['blog']['basedon'] ) {
 			return;
+        }
 
-		$source_blog_id = (int) $_POST[ 'blog' ][ 'basedon' ];
+		$source_blog_id = (int) $_POST['blog']['basedon'];
 
 		// Hook information
 		$context = array(
@@ -122,10 +123,11 @@ class Mlp_Duplicate_Blogs {
 
 		// if an url was used in the old blog, we set it to this url to change all content elements
 		// change siteurl -> will start url rename plugin
-		if ( '' != $domain )
+		if ( '' != $domain ) {
 			update_option( 'siteurl', $domain );
+        }
 
-		update_option( 'blogname', stripslashes( $_POST [ 'blog' ][ 'title' ] ) );
+		update_option( 'blogname', stripslashes( $_POST ['blog']['title'] ) );
 		update_option( 'home', $url );
 
 		// change siteurl -> will start url rename plugin
@@ -141,8 +143,8 @@ class Mlp_Duplicate_Blogs {
 		$this->copy_attachments( $source_blog_id, $blog_id, $blog_id );
 
 		// Set the search engine visibility
-		if ( isset( $_POST[ 'blog' ][ 'visibility' ] ) ) {
-			update_option( 'blog_public', (bool) $_POST[ 'blog' ][ 'visibility' ] );
+		if ( isset( $_POST['blog']['visibility'] ) ) {
+			update_option( 'blog_public', (bool) $_POST['blog']['visibility'] );
 		}
 
 		$theme = wp_get_theme();
@@ -187,15 +189,17 @@ class Mlp_Duplicate_Blogs {
 	 */
 	private function get_mapped_domain() {
 
-		if ( empty( $this->wpdb->dmtable ) )
+		if ( empty( $this->wpdb->dmtable ) ) {
 			return '';
+        }
 
 		$sql    = 'SELECT domain FROM ' . $this->wpdb->dmtable . ' WHERE active = 1 AND blog_id = %s LIMIT 1';
 		$sql    = $this->wpdb->prepare( $sql, get_current_blog_id() );
 		$domain = $this->wpdb->get_var( $sql );
 
-		if ( '' === $domain )
+		if ( '' === $domain ) {
 			return '';
+        }
 
 		return ( is_ssl() ? 'https://' : 'http://' ) . $domain;
 	}
@@ -209,7 +213,7 @@ class Mlp_Duplicate_Blogs {
 	private function get_table_names( array $context ) {
 
 		$tables = $this->table_names->get_site_core_tables(
-			$context[ 'source_blog_id' ]
+			$context['source_blog_id']
 		);
 
 		/**
@@ -235,8 +239,9 @@ class Mlp_Duplicate_Blogs {
 	 */
 	private function insert_post_relations( $source_blog_id, $target_blog_id ) {
 
-		if ( $this->has_related_blogs( $source_blog_id ) )
+		if ( $this->has_related_blogs( $source_blog_id ) ) {
 			return $this->copy_post_relationships( $source_blog_id, $target_blog_id );
+        }
 
 		return $this->create_post_relationships( $source_blog_id, $target_blog_id );
 	}
@@ -330,8 +335,9 @@ LIMIT 2";
 
 		$copy_files = new Mlp_Copy_Attachments( $from_id, $to_id, $final_id );
 
-		if ( $copy_files->copy_attachments() )
+		if ( $copy_files->copy_attachments() ) {
 			$this->update_file_urls( $copy_files );
+        }
 	}
 
 	/**
@@ -380,11 +386,11 @@ LIMIT 2";
 				'post_content_filtered',
 			),
 			$this->wpdb->term_taxonomy => array(
-				'description'
+				'description',
 			),
 			$this->wpdb->comments      => array(
-				'comment_content'
-			)
+				'comment_content',
+			),
 		);
 
 		$db_replace    = new Mlp_Db_Replace( $this->wpdb );

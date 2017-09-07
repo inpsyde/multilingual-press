@@ -234,7 +234,7 @@ class Mlp_Term_Translation_Presenter {
 
 		$relation = reset( $translation_ids );
 
-		return $relation[ 'ml_source_blogid' ] . '-' . $relation[ 'ml_source_elementid' ];
+		return $relation['ml_source_blogid'] . '-' . $relation['ml_source_elementid'];
 	}
 
 }

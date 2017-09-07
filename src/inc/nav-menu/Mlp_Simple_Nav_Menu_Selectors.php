@@ -107,8 +107,9 @@ class Mlp_Simple_Nav_Menu_Selectors {
 		?>
 		<ul id="<?php echo esc_attr( $list_id ); ?>" class="tabs-panel-active">
 			<?php
-			foreach ( $items as $value => $text )
+			foreach ( $items as $value => $text ) {
 				$this->print_item( $value, $text );
+            }
 			?>
 		</ul>
 	<?php
@@ -138,11 +139,12 @@ class Mlp_Simple_Nav_Menu_Selectors {
 
 		$button_id         = $this->data->get_button_id();
 		$button_attributes = array(
-			'id' => "submit-$button_id"
+			'id' => "submit-$button_id",
 		);
 
-		if ( ! $this->data->has_menu() )
-			$button_attributes[ 'disabled' ] = 'disabled';
+		if ( ! $this->data->has_menu() ) {
+			$button_attributes['disabled'] = 'disabled';
+        }
 		?>
 
 		<span class="add-to-menu">

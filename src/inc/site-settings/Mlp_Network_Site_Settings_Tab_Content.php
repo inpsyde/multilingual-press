@@ -116,11 +116,11 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 		// Custom names are now set in the Language Manager
 		//$lang_title = isset( $siteoption[ $this->blog_id ][ 'text' ] ) ? stripslashes( $siteoption[ $this->blog_id ][ 'text' ] ) : '';
-		$selected        = isset( $site_option[ $this->blog_id ][ 'lang' ] ) ? $site_option[ $this->blog_id ][ 'lang' ]	: '';
+		$selected        = isset( $site_option[ $this->blog_id ]['lang'] ) ? $site_option[ $this->blog_id ]['lang']	: '';
 		$blogoption_flag = get_blog_option( $this->blog_id, 'inpsyde_multilingual_flag_url' );
 
 		// Sanitize lang title
-		$lang_title = isset( $site_option[ $this->blog_id ][ 'text' ] ) ? stripslashes( $site_option[ $this->blog_id ][ 'text' ] ) : '';
+		$lang_title = isset( $site_option[ $this->blog_id ]['text'] ) ? stripslashes( $site_option[ $this->blog_id ]['text'] ) : '';
 		?>
 		<tr class="form-field">
 			<th scope="row">
@@ -198,11 +198,13 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 		$parts = array();
 
-		if ( ! empty( $language->english_name ) )
+		if ( ! empty( $language->english_name ) ) {
 			$parts[] = $language->english_name;
+        }
 
-		if ( ! empty( $language->native_name ) )
+		if ( ! empty( $language->native_name ) ) {
 			$parts[] = $language->native_name;
+        }
 
 		$parts = array_unique( $parts );
 

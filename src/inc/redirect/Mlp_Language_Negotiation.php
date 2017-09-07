@@ -30,7 +30,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 * @param Mlp_Accept_Header_Parser_Interface $parser
 	 */
 	public function __construct(
-		Mlp_Language_Api_Interface         $language_api,
+		Mlp_Language_Api_Interface $language_api,
 		Mlp_Accept_Header_Parser_Interface $parser
 	) {
 
@@ -75,13 +75,15 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 			'post_status'  => $post_status,
 		), $args ) );
 
-		if ( empty( $translations ) )
+		if ( empty( $translations ) ) {
 			return $this->get_fallback_match();
+        }
 
 		$possible = $this->get_possible_matches( $translations );
 
-		if ( empty( $possible ) )
+		if ( empty( $possible ) ) {
 			return $this->get_fallback_match();
+        }
 
 		uasort( $possible, array( $this, 'sort_priorities' ) );
 
@@ -94,7 +96,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	private function get_possible_matches( array $translations ) {
 
-		$user = $this->parse_accept_header( $_SERVER[ 'HTTP_ACCEPT_LANGUAGE' ] );
+		$user = $this->parse_accept_header( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
 		if ( empty( $user ) ) {
 			return array();
 		}
@@ -139,22 +141,24 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 * @return void
 	 */
 	private function collect_matches(
-		array           &$possible,
+		array &$possible,
 		                $site_id,
 		Mlp_Translation $translation,
-		array           $user
+		array $user
 	) {
 
 		$language      = $translation->get_language();
 		$user_priority = $this->get_user_priority( $language, $user );
 
-		if ( 0 === $user_priority )
+		if ( 0 === $user_priority ) {
 			return;
+        }
 
 		$url = $translation->get_remote_url();
 
-		if ( empty( $url ) )
+		if ( empty( $url ) ) {
 			return;
+        }
 
 		$combined_value   = $language->get_priority() * $user_priority;
 		$possible[]       = array(
@@ -175,10 +179,11 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	private function sort_priorities( $a, $b ) {
 
-		if ( $a[ 'priority' ] === $b[ 'priority' ] )
+		if ( $a['priority'] === $b['priority'] ) {
 			return 0;
+        }
 
-		return ( $a[ 'priority' ] < $b[ 'priority' ] ) ? -1 : 1;
+		return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
 	}
 
 	/**
@@ -191,14 +196,16 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		$lang_http = $language->get_name( 'http_name' );
 		$lang_http = strtolower( $lang_http );
 
-		if ( isset( $user[ $lang_http ] ) )
+		if ( isset( $user[ $lang_http ] ) ) {
 			return $user[ $lang_http ];
+        }
 
 		$lang_short = $language->get_name( 'language_short' );
 		$lang_short = strtolower( $lang_short );
 
-		if ( isset( $user[ $lang_short ] ) )
+		if ( isset( $user[ $lang_short ] ) ) {
 			return $this->language_only_priority_factor * $user[ $lang_short ];
+        }
 
 		return 0;
 	}
@@ -213,8 +220,9 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 		$fields = $this->parser->parse( $accept_header );
 
-		if ( empty( $fields ) )
+		if ( empty( $fields ) ) {
 			return $fields;
+        }
 
 		$out = array();
 
@@ -225,8 +233,9 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 			$short = $this->get_short_form( $name );
 
-			if ( $short && ( $short !== $name ) && ! isset( $out[ $short ] ) )
+			if ( $short && ( $short !== $name ) && ! isset( $out[ $short ] ) ) {
 				$out[ $short ] = $priority;
+            }
 		}
 
 		return $out;
@@ -240,8 +249,9 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	private function get_short_form( $long ) {
 
-		if ( ! strpos( $long, '-' ) )
+		if ( ! strpos( $long, '-' ) ) {
 			return '';
+        }
 
 		return strtok( $long, '-' );
 	}

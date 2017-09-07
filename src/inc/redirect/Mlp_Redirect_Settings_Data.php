@@ -43,8 +43,9 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 	 */
 	public function save( array $data ) {
 
-		if ( ! $this->nonce->is_valid() )
+		if ( ! $this->nonce->is_valid() ) {
 			return false;
+        }
 
 		$id    = $this->get_current_blog_id( $data, get_current_blog_id() );
 		$value = $this->get_sent_value( $data );
@@ -79,8 +80,9 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 	 */
 	private function get_current_blog_id( array $data, $default = 0 ) {
 
-		if ( isset( $data[ 'id' ] ) )
-			return (int) $data[ 'id' ];
+		if ( isset( $data['id'] ) ) {
+			return (int) $data['id'];
+        }
 
 		return $default;
 	}
@@ -91,8 +93,9 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 	 */
 	private function get_sent_value( array $data ) {
 
-		if ( ! isset( $data[ $this->option_name ] ) )
+		if ( ! isset( $data[ $this->option_name ] ) ) {
 			return 0;
+        }
 
 		$value = (int) $data[ $this->option_name ];
 

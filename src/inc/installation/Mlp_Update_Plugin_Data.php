@@ -52,9 +52,9 @@ class Mlp_Update_Plugin_Data {
 	 */
 	public function __construct(
 		Inpsyde_Property_List_Interface $plugin_data,
-		wpdb                            $wpdb,
-		Mlp_Version_Number_Interface    $current_version,
-		Mlp_Version_Number_Interface    $last_version
+		wpdb $wpdb,
+		Mlp_Version_Number_Interface $current_version,
+		Mlp_Version_Number_Interface $last_version
 	) {
 
 		$this->plugin_data     = $plugin_data;
@@ -82,7 +82,7 @@ class Mlp_Update_Plugin_Data {
 		$deactivator->deactivate(
 			array(
 				'disable-acf.php',
-				'mlp-wp-seo-compat.php'
+				'mlp-wp-seo-compat.php',
 			)
 		);
 		// add hook to import active languages when reset is done
@@ -90,10 +90,11 @@ class Mlp_Update_Plugin_Data {
 
 		// The site option with the version number exists since 2.0. If the last
 		// version is a fallback, it is a version below 2.0.
-		if ( Mlp_Version_Number_Interface::FALLBACK_VERSION === $this->last_version )
+		if ( Mlp_Version_Number_Interface::FALLBACK_VERSION === $this->last_version ) {
 			$this->update_plugin_data( 1 );
-		else
+		} else {
 			$this->update_plugin_data( $this->last_version );
+        }
 	}
 
 	/**
@@ -177,15 +178,16 @@ class Mlp_Update_Plugin_Data {
 		// get active languages
 		$mlp_settings = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty( $mlp_settings ) )
+		if ( empty( $mlp_settings ) ) {
 			return;
+        }
 
 		$table = $languages->get_table_name();
 		$sql   = 'SELECT ID FROM ' . $table . 'WHERE wp_locale = %s OR iso_639_1 = %s';
 
 		foreach ( $mlp_settings as $mlp_site ) {
-			$text    = $mlp_site[ 'text' ] != '' ? $mlp_site[ 'text' ] : $mlp_site[ 'lang' ];
-			$query   = $this->wpdb->prepare( $sql, $mlp_site[ 'lang' ], $mlp_site[ 'lang' ] );
+			$text    = $mlp_site['text'] != '' ? $mlp_site['text'] : $mlp_site['lang'];
+			$query   = $this->wpdb->prepare( $sql, $mlp_site['lang'], $mlp_site['lang'] );
 			$lang_id = $this->wpdb->get_var( $query );
 
 			// language not found -> insert
@@ -195,8 +197,8 @@ class Mlp_Update_Plugin_Data {
 					$table,
 				   array(
 					   'english_name' => $text,
-					   'wp_locale'    => $mlp_site[ 'lang' ],
-					   'http_name'    => str_replace( '_', '-', $mlp_site[ 'lang' ] )
+					   'wp_locale'    => $mlp_site['lang'],
+					   'http_name'    => str_replace( '_', '-', $mlp_site['lang'] ),
 				   )
 				);
 			}

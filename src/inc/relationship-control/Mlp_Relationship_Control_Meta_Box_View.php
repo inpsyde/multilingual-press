@@ -47,7 +47,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	 */
 	public function __construct(
 		Mlp_Relationship_Control_Data $data,
-		Mlp_Updatable                 $updater
+		Mlp_Updatable $updater
 	) {
 
 		$this->post            = $data->get_source_post();
@@ -87,10 +87,11 @@ class Mlp_Relationship_Control_Meta_Box_View {
 							'new'  => esc_html__( 'Create new post', 'multilingual-press' ),
 						);
 
-						if ( $this->remote_post_id )
-							$actions[ 'disconnect' ] = esc_html__( 'Remove relationship', 'multilingual-press' );
+						if ( $this->remote_post_id ) {
+							$actions['disconnect'] = esc_html__( 'Remove relationship', 'multilingual-press' );
+                        }
 
-						foreach ( $actions as $key => $label )
+						foreach ( $actions as $key => $label ) {
 							print '<p>'
 								. $this->get_radio(
 									   $key,
@@ -100,6 +101,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 										   'mlp-rc-input-id-' . $this->remote_site_id
 								)
 								. '</p>';
+                        }
 
 					?>
 					<p>
@@ -212,8 +214,9 @@ class Mlp_Relationship_Control_Meta_Box_View {
 			'remote-post-id'       => $this->remote_post_id,
 		);
 
-		foreach ( $data as $key => $value )
+		foreach ( $data as $key => $value ) {
 			$str .= " data-$key='$value'";
+        }
 
 		return $str;
 	}

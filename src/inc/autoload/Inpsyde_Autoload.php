@@ -49,8 +49,10 @@ class Inpsyde_Autoload
 	public function load( $name )
 	{
 		/** @var Inpsyde_Autoload_Rule_Interface $rule */
-		foreach ( $this->rules as $rule )
-			if ( $rule->load( $name ) )
+		foreach ( $this->rules as $rule ) {
+			if ( $rule->load( $name ) ) {
 				return;
+            }
+        }
 	}
 }

@@ -62,7 +62,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function register( array $module ) {
 
-		$slug = $module[ 'slug' ];
+		$slug = $module['slug'];
 
 		if ( ! isset( $this->states[ $slug ] ) ) {
 			$state = 'off';
@@ -73,7 +73,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 			$this->save();
 		}
 
-		$module[ 'state' ] = $this->states[ $slug ];
+		$module['state'] = $this->states[ $slug ];
 
 		$this->modules[ $slug ] = $module;
 
@@ -88,8 +88,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function unregister( $slug ) {
 
-		if ( ! isset( $this->modules[ $slug ] ) )
+		if ( ! isset( $this->modules[ $slug ] ) ) {
 			return false;
+        }
 
 		unset( $this->modules[ $slug ] );
 
@@ -104,8 +105,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function is_active( $slug ) {
 
-		if ( ! isset( $this->states[ $slug ] ) )
+		if ( ! isset( $this->states[ $slug ] ) ) {
 			return false;
+        }
 
 		return 'on' === $this->states[ $slug ];
 	}
@@ -144,8 +146,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 
 		$this->modules[ $slug ][ $key ] = $value;
 
-		if ( 'state' === $key )
+		if ( 'state' === $key ) {
 			$this->states[ $slug ] = $value;
+        }
 
 		return $this->modules[ $slug ];
 	}
@@ -158,8 +161,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function get_modules( $status = 'all' ) {
 
-		if ( 'all' === $status )
+		if ( 'all' === $status ) {
 			return $this->modules;
+        }
 
 		// Filter modules by state
 		$find = 'active' === $status ? 'on' : 'off';
@@ -176,8 +180,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 		$out  = array();
 
 		foreach ( $this->modules as $slug => $module ) {
-			if ( $this->states[ $slug ] === $status )
+			if ( $this->states[ $slug ] === $status ) {
 				$out[ $slug ] = $module;
+            }
 		}
 
 		return $out;
@@ -191,8 +196,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function get_module( $slug ) {
 
-		if ( ! isset( $this->modules[ $slug ] ) )
+		if ( ! isset( $this->modules[ $slug ] ) ) {
 			return array();
+        }
 
 		return $this->modules[ $slug ];
 	}

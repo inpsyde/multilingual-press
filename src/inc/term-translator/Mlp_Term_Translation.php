@@ -62,17 +62,19 @@ class Mlp_Term_Translation {
 
 		$term = $this->get_term_by_term_taxonomy_id( $term_taxonomy_id );
 
-		if ( empty( $term ) )
+		if ( empty( $term ) ) {
 			return false;
+        }
 
-		if ( is_admin() )
-			return $this->get_admin_translation( $term, $term[ 'taxonomy'] );
+		if ( is_admin() ) {
+			return $this->get_admin_translation( $term, $term['taxonomy'] );
+        }
 
-		$url = $this->get_public_url( (int) $term[ 'term_id'], $term[ 'taxonomy'] );
+		$url = $this->get_public_url( (int) $term['term_id'], $term['taxonomy'] );
 
 		return array(
 			'target_url'   => Mlp_Url_Factory::create( $url ),
-			'target_title' => $term[ 'name' ]
+			'target_title' => $term['name'],
 		);
 	}
 
@@ -89,11 +91,11 @@ class Mlp_Term_Translation {
 			return false;
 		}
 
-		$url = get_edit_term_link( (int) $term[ 'term_id' ], $taxonomy );
+		$url = get_edit_term_link( (int) $term['term_id'], $taxonomy );
 
 		return array(
 			'target_url'   => Mlp_Url_Factory::create( $url ),
-			'target_title' => $term[ 'name' ]
+			'target_title' => $term['name'],
 		);
 	}
 
@@ -109,11 +111,13 @@ class Mlp_Term_Translation {
 		$changed = $this->fix_term_base( $taxonomy );
 		$url     = get_term_link( (int) $term_id, $taxonomy );
 
-		if ( is_wp_error( $url ) )
+		if ( is_wp_error( $url ) ) {
 			$url = '';
+        }
 
-		if ( $changed )
+		if ( $changed ) {
 			$this->set_permastruct( $taxonomy, $changed );
+        }
 
 		return $url;
 	}
@@ -129,8 +133,9 @@ class Mlp_Term_Translation {
 		$expected = $this->get_expected_base( $taxonomy );
 		$existing = $this->wp_rewrite->get_extra_permastruct( $taxonomy );
 
-		if ( ! $this->update_required( $expected, $existing ) )
+		if ( ! $this->update_required( $expected, $existing ) ) {
 			return false;
+        }
 
 		$this->set_permastruct( $taxonomy, $expected );
 
@@ -146,11 +151,13 @@ class Mlp_Term_Translation {
 	 */
 	private function update_required( $expected, $existing ) {
 
-		if ( ! $expected )
+		if ( ! $expected ) {
 			return false;
+        }
 
-		if ( ! $existing )
+		if ( ! $existing ) {
 			return false;
+        }
 
 		return $existing !== $expected;
 	}
@@ -165,15 +172,17 @@ class Mlp_Term_Translation {
 
 		$taxonomies = array(
 			'category' => 'category_base',
-			'post_tag' => 'tag_base'
+			'post_tag' => 'tag_base',
 		);
-		if ( ! isset( $taxonomies[ $taxonomy ] ) )
+		if ( ! isset( $taxonomies[ $taxonomy ] ) ) {
 			return false;
+        }
 
 		$option = get_option( $taxonomies[ $taxonomy ] );
 
-		if ( ! $option )
+		if ( ! $option ) {
 			return false;
+        }
 
 		return $option . '/%' . $taxonomy . '%';
 	}

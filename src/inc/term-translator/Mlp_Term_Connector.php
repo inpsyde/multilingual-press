@@ -157,15 +157,15 @@ class Mlp_Term_Connector {
 				'term'
 			);
 
-			if ( $translation_ids[ 'ml_source_blogid' ] !== $this->current_site_id ) {
+			if ( $translation_ids['ml_source_blogid'] !== $this->current_site_id ) {
 				$target_site_id = $this->current_site_id;
 				$target_term_taxonomy_id = $term_taxonomy_id;
 			}
 
 			$result = $this->content_relations->set_relation(
-				$translation_ids[ 'ml_source_blogid' ],
+				$translation_ids['ml_source_blogid'],
 				$target_site_id,
-				$translation_ids[ 'ml_source_elementid' ],
+				$translation_ids['ml_source_elementid'],
 				$target_term_taxonomy_id,
 				'term'
 			);
@@ -282,7 +282,7 @@ class Mlp_Term_Connector {
 			'term'
 		);
 
-		if ( $translation_ids[ 'ml_source_blogid' ] !== $this->current_site_id ) {
+		if ( $translation_ids['ml_source_blogid'] !== $this->current_site_id ) {
 			$target_site_id = $this->current_site_id;
 			if ( 0 !== $target_term_taxonomy_id ) {
 				$target_term_taxonomy_id = $source_term_taxonomy_id;
@@ -292,18 +292,18 @@ class Mlp_Term_Connector {
 		// Delete a relation
 		if ( 0 === $target_term_taxonomy_id ) {
 			return $this->content_relations->delete_relation(
-				$translation_ids[ 'ml_source_blogid' ],
+				$translation_ids['ml_source_blogid'],
 				$target_site_id,
-				$translation_ids[ 'ml_source_elementid' ],
+				$translation_ids['ml_source_elementid'],
 				0,
 				'term'
 			);
 		}
 
 		return $this->content_relations->set_relation(
-			$translation_ids[ 'ml_source_blogid' ],
+			$translation_ids['ml_source_blogid'],
 			$target_site_id,
-			$translation_ids[ 'ml_source_elementid' ],
+			$translation_ids['ml_source_elementid'],
 			$target_term_taxonomy_id,
 			'term'
 		);

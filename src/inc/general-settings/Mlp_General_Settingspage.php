@@ -92,7 +92,7 @@ class Mlp_General_Settingspage {
 			return;
 		}
 
-		if ( ! isset( $_GET[ 'message' ] ) ) {
+		if ( ! isset( $_GET['message'] ) ) {
 			return;
 		}
 

@@ -30,8 +30,8 @@ class Mlp_Language_Manager_Page_View {
 	 */
 	public function __construct(
 		Mlp_Options_Page_Data $page_data,
-		Mlp_Updatable         $watcher,
-		Mlp_Browsable         $pagination_data
+		Mlp_Updatable $watcher,
+		Mlp_Browsable $pagination_data
 	) {
 		$this->watcher         = $watcher;
 		$this->page_data       = $page_data;
