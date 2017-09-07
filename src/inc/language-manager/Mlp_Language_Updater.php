@@ -90,7 +90,7 @@ class Mlp_Language_Updater {
 			$this->page_data->get_nonce_name()
 		);
 
-		if ( empty ( $_POST[ 'languages' ] ) )
+		if ( empty( $_POST[ 'languages' ] ) )
 			mlp_exit( 'invalid request' );
 
 		return (array) $_POST[ 'languages' ];
@@ -122,7 +122,7 @@ class Mlp_Language_Updater {
 	 * @param  array   $diff
 	 * @return integer Number of changed items.
 	 */
-	private function update_changed_items( Array $diff ) {
+	private function update_changed_items( array $diff ) {
 
 		$amount = count( $diff );
 
@@ -131,7 +131,7 @@ class Mlp_Language_Updater {
 
 		$this->db->update_items_by_id(
 			$diff,
-			array (
+			array(
 				'%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d'
 			)
 		);

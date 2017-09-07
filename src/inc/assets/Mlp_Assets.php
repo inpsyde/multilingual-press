@@ -129,7 +129,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 
 		$to_load = $this->get_valid_handles( (array) $handles );
 
-		if ( empty ( $to_load ) ) {
+		if ( empty( $to_load ) ) {
 			return FALSE;
 		}
 
@@ -151,12 +151,12 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	 *
 	 * @return array
 	 */
-	private function get_valid_handles( Array $handles ) {
+	private function get_valid_handles( array $handles ) {
 
 		$to_load = array();
 
 		foreach ( $handles as $handle ) {
-			if ( ! empty ( $this->registered[ $handle ] ) ) {
+			if ( ! empty( $this->registered[ $handle ] ) ) {
 				$to_load[ $handle ] = $this->registered[ $handle ];
 			}
 		}
@@ -171,7 +171,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 
 		if ( $this->is_login_page() ) {
 
-			if ( empty ( $GLOBALS[ 'interim_login' ] ) ) {
+			if ( empty( $GLOBALS[ 'interim_login' ] ) ) {
 				return 'login_enqueue_scripts';
 			}
 

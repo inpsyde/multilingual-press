@@ -12,9 +12,9 @@ class Mlp_Search_Form_View {
 	 * @param array $attributes
 	 * @return string
 	 */
-	public function get_search_field( Array $attributes = array() ) {
+	public function get_search_field( array $attributes = array() ) {
 
-		$default = array (
+		$default = array(
 			'type'  => 'search',
 			'name'  => 's',
 			'value' => ''
@@ -38,7 +38,7 @@ class Mlp_Search_Form_View {
 	 * @param  array $attributes
 	 * @return string
 	 */
-	private function html_attributes( Array $attributes ) {
+	private function html_attributes( array $attributes ) {
 
 		$return = '';
 

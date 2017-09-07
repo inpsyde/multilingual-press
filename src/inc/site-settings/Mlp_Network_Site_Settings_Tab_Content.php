@@ -139,7 +139,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 						$language_code = str_replace( '-', '_', $language->http_name );
 
 						// missing HTTP code
-						if ( empty ( $language_code ) ) {
+						if ( empty( $language_code ) ) {
 							continue;
 						}
 
@@ -198,10 +198,10 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 		$parts = array();
 
-		if ( ! empty ( $language->english_name ) )
+		if ( ! empty( $language->english_name ) )
 			$parts[] = $language->english_name;
 
-		if ( ! empty ( $language->native_name ) )
+		if ( ! empty( $language->native_name ) )
 			$parts[] = $language->native_name;
 
 		$parts = array_unique( $parts );
@@ -219,9 +219,9 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			return;
 		}
 
-		unset ( $site_option[ $this->blog_id ] );
+		unset( $site_option[ $this->blog_id ] );
 
-		if ( empty ( $site_option ) ) {
+		if ( empty( $site_option ) ) {
 			return;
 		}
 

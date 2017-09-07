@@ -199,7 +199,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	 * @param string $where_format
 	 * @return array
 	 */
-	public function update_items_by_id( Array $items, $field_format = '%s', $where_format = '%d' ) {
+	public function update_items_by_id( array $items, $field_format = '%s', $where_format = '%d' ) {
 
 		global $wpdb;
 
@@ -224,7 +224,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	 * @param array $params
 	 * @return void
 	 */
-	public function insert_item( Array $params ) {}
+	public function insert_item( array $params ) {}
 
 	/**
 	 * @param $page_size

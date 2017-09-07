@@ -11,7 +11,7 @@
 class Mlp_Plugin_Deactivation {
 
 	/**
-	 * @var Array
+	 * @var array
 	 */
 	private $errors;
 
@@ -26,12 +26,12 @@ class Mlp_Plugin_Deactivation {
 	private $plugin_base_name;
 
 	/**
-	 * @param Array  $errors
+	 * @param array  $errors
 	 * @param string $plugin_name
 	 * @param string $plugin_base_name
 	 */
 	public function __construct(
-		Array $errors,
+		array $errors,
 		      $plugin_name,
 		      $plugin_base_name
 	) {

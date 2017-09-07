@@ -17,7 +17,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	/**
 	 * @var array
 	 */
-	private $post_types = array ();
+	private $post_types = array();
 
 	/**
 	 * Prefix for 'name' attribute in form fields.
@@ -77,7 +77,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 
 		$post_types = $this->get_custom_post_types();
 
-		if ( empty ( $post_types ) )
+		if ( empty( $post_types ) )
 			return '';
 
 		return 'mlp_cpt_' . key( $post_types );
@@ -118,7 +118,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 		$options    = (array) get_site_option( 'inpsyde_multilingual_cpt' );
 		$s_label    = esc_html__( 'Use dynamic permalinks', 'multilingual-press' );
 
-		if ( empty ( $post_types ) )
+		if ( empty( $post_types ) )
 			return '';
 
 		$out = wp_nonce_field(
@@ -144,11 +144,11 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	 * @param string   $s_label
 	 * @return string
 	 */
-	private function get_row( $cpt, $cpt_params, Array $options, $s_label ) {
+	private function get_row( $cpt, $cpt_params, array $options, $s_label ) {
 
 		$id = 'mlp_cpt_' . $cpt;
 
-		if ( empty ( $options[ 'post_types' ][ $cpt ] ) )
+		if ( empty( $options[ 'post_types' ][ $cpt ] ) )
 			$active = 0;
 		else
 			$active = (int) $options[ 'post_types' ][ $cpt ];
@@ -208,7 +208,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 	 */
 	private function get_custom_post_types() {
 
-		if ( empty ( $this->post_types ) )
+		if ( empty( $this->post_types ) )
 			$this->post_types = $this->update->update( 'custom.post-type.list' );
 
 		return $this->post_types;

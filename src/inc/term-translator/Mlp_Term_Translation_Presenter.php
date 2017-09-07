@@ -93,7 +93,7 @@ class Mlp_Term_Translation_Presenter {
 		foreach ( $terms as $term ) {
 			if ( is_taxonomy_hierarchical( $this->taxonomy_name ) ) {
 				$ancestors = get_ancestors( $term->term_id, $this->taxonomy_name );
-				if ( ! empty ( $ancestors ) ) {
+				if ( ! empty( $ancestors ) ) {
 					foreach ( $ancestors as $ancestor ) {
 						$parent_term = get_term( $ancestor, $this->taxonomy_name );
 						$term->name = $parent_term->name . '/' . $term->name;

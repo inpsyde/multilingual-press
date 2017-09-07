@@ -40,7 +40,7 @@ class Mlp_Db_Replace {
 	 */
 	public function replace_string(
 		Mlp_Db_Table_Name_Interface $table,
-		Array                       $columns,
+		array                       $columns,
 		                            $search,
 		                            $replacement
 	) {
@@ -48,7 +48,7 @@ class Mlp_Db_Replace {
 		$name         = $table->get_name();
 		$replacements = $this->get_replacement_sql( $columns, $search, $replacement );
 
-		if ( empty ( $replacements ) )
+		if ( empty( $replacements ) )
 			return 0;
 
 		$this->wpdb->query( 'SET autocommit = 0;' );
@@ -79,9 +79,9 @@ class Mlp_Db_Replace {
 	 * @param  string $replacement
 	 * @return string
 	 */
-	private function get_replacement_sql( Array $columns, $search, $replacement ) {
+	private function get_replacement_sql( array $columns, $search, $replacement ) {
 
-		$rows = array ();
+		$rows = array();
 
 		foreach ( $columns as $column ) {
 			if ( ! $this->is_valid_column_name( $column ) ) {
@@ -91,7 +91,7 @@ class Mlp_Db_Replace {
 
 			$sql = $this->get_column_sql( $column, $search, $replacement );
 
-			if ( ! empty ( $sql ) )
+			if ( ! empty( $sql ) )
 				$rows[] = $sql;
 		}
 

@@ -88,7 +88,7 @@ class Mlp_Nav_Menu_Controller {
 			$this->language_api
 		);
 
-		add_filter( 'wp_nav_menu_objects', array ( $frontend, 'filter_items' ) );
+		add_filter( 'wp_nav_menu_objects', array( $frontend, 'filter_items' ) );
 	}
 
 	/**
@@ -117,7 +117,7 @@ class Mlp_Nav_Menu_Controller {
 		add_meta_box(
 			$this->handle,
 			$title,
-			array ( $this->view, 'show_available_languages' ),
+			array( $this->view, 'show_available_languages' ),
 			'nav-menus',
 			'side',
 			'low'
@@ -153,17 +153,17 @@ class Mlp_Nav_Menu_Controller {
 
 		add_action(
 			'load-nav-menus.php',
-			array ( $this->data, 'register_script' )
+			array( $this->data, 'register_script' )
 		);
 
 		add_action(
 			'admin_enqueue_scripts',
-			array ( $this->data, 'load_script' )
+			array( $this->data, 'load_script' )
 		);
 
 		add_action(
 			"wp_ajax_$this->handle",
-			array ( $this->view, 'show_selected_languages' )
+			array( $this->view, 'show_selected_languages' )
 		);
 
 		add_action(

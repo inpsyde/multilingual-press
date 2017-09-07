@@ -28,7 +28,7 @@ interface Mlp_Module_Manager_Interface {
 	 * @param  array $module Required: slug, description and display_name
 	 * @return bool TRUE if the module is active, FALSE if it isn't.
 	 */
-	public function register( Array $module );
+	public function register( array $module );
 
 	/**
 	 * Remove a module from list. Does not remove the entry in the option.

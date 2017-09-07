@@ -82,7 +82,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 				<div class="mlp-rc-settings">
 					<div class="mlp-rc-actions" style="float: left; width: 20em;">
 						<?php
-						$actions = array (
+						$actions = array(
 							'stay' => esc_html__( 'Leave as is', 'multilingual-press' ),
 							'new'  => esc_html__( 'Create new post', 'multilingual-press' ),
 						);
@@ -204,7 +204,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	 */
 	private function add_id_values( $str ) {
 
-		$data = array (
+		$data = array(
 			'results-container-id' => "mlp-search-results-{$this->remote_site_id}",
 			'source-site-id'       => $this->site_id,
 			'source-post-id'       => $this->post->ID,

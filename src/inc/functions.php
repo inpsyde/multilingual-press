@@ -212,14 +212,14 @@ if ( ! function_exists( 'blog_exists' ) ) {
 
 		/** @type wpdb $wpdb */
 		global $wpdb;
-		static $cache = array ();
+		static $cache = array();
 
 		$site_id = (int) $site_id;
 
 		if ( 0 === $site_id )
 			$site_id = get_current_site()->id;
 
-		if ( empty ( $cache ) or empty ( $cache[ $site_id ] ) ) {
+		if ( empty( $cache ) or empty( $cache[ $site_id ] ) ) {
 
 			if ( wp_is_large_network() ) // we do not test large sites.
 				return TRUE;
@@ -230,8 +230,8 @@ if ( ! function_exists( 'blog_exists' ) ) {
 			$result = $wpdb->get_col( $query );
 
 			// Make sure the array is always filled with something.
-			if ( empty ( $result ) )
-				$cache[ $site_id ] = array ( 'do not check again' );
+			if ( empty( $result ) )
+				$cache[ $site_id ] = array( 'do not check again' );
 			else
 				$cache[ $site_id ] = $result;
 		}

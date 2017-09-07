@@ -23,7 +23,7 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 	 *
 	 * @var array
 	 */
-	private $related_sites = array ();
+	private $related_sites = array();
 
 	/**
 	 * Constructor
@@ -47,7 +47,7 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 
 		$site_id = $this->empty_site_id_fallback( $site_id );
 
-		if ( isset ( $this->related_sites[ $site_id ] ) )
+		if ( isset( $this->related_sites[ $site_id ] ) )
 			return $this->related_sites[ $site_id ];
 
 		$sql = $this->get_related_sites_sql( $site_id );
@@ -66,14 +66,14 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 	 */
 	public function set_relation( $site_1, $sites ) {
 		$sites  = (array) $sites;
-		$values = array ();
+		$values = array();
 
 		foreach ( $sites as $site_id ) {
 			if ( $site_1 !== $site_id )
 				$values[] = $this->get_value_pair( $site_1, $site_id );
 		}
 
-		if ( empty ( $values ) )
+		if ( empty( $values ) )
 			return 0;
 
 		$sql    = 'INSERT IGNORE INTO `' . $this->link_table_name
@@ -128,7 +128,7 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 
 		// Swap values to make sure the lower value is the first.
 		if ( $site_1 > $site_2 )
-			list ( $site_1, $site_2 ) = array ( $site_2, $site_1 );
+			list ( $site_1, $site_2 ) = array( $site_2, $site_1 );
 
 		return '(' . (int) $site_1 . ', ' . (int) $site_2 . ')';
 	}

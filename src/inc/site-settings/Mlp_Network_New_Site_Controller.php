@@ -49,7 +49,7 @@ class Mlp_Network_New_Site_Controller {
 		$this->site_relation = $site_relation;
 		$this->assets        = $assets;
 
-		add_action( 'wpmu_new_blog', array ( $this, 'update' ) );
+		add_action( 'wpmu_new_blog', array( $this, 'update' ) );
 
 		add_action( 'load-site-new.php', array( $this, 'provide_assets' ) );
 
@@ -91,13 +91,13 @@ class Mlp_Network_New_Site_Controller {
 
 		$languages = (array) get_site_option( 'inpsyde_multilingual', array() );
 
-		if ( empty ( $languages[ $blog_id ] ) )
-			$languages[ $blog_id ] = array ();
+		if ( empty( $languages[ $blog_id ] ) )
+			$languages[ $blog_id ] = array();
 
 		$languages[ $blog_id ][ 'lang' ] = str_replace( '-', '_', $posted );
 
 		// Set alternative title
-		if ( isset ( $_POST[ 'inpsyde_multilingual_text' ] ) )
+		if ( isset( $_POST[ 'inpsyde_multilingual_text' ] ) )
 			$languages[ $blog_id ][ 'text' ] = $_POST[ 'inpsyde_multilingual_text' ];
 
 		update_site_option( 'inpsyde_multilingual', $languages );
@@ -110,7 +110,7 @@ class Mlp_Network_New_Site_Controller {
 	 */
 	private function get_posted_language() {
 
-		if ( ! isset ( $_POST[ 'inpsyde_multilingual_lang' ] ) )
+		if ( ! isset( $_POST[ 'inpsyde_multilingual_lang' ] ) )
 			return FALSE;
 
 		if ( '-1' === $_POST[ 'inpsyde_multilingual_lang' ] )
@@ -171,7 +171,7 @@ class Mlp_Network_New_Site_Controller {
 	 */
 	private function update_relation( $blog_id ) {
 
-		if ( empty ( $_POST[ 'related_blogs' ] ) )
+		if ( empty( $_POST[ 'related_blogs' ] ) )
 			return 0;
 
 		$new_related = (array) $_POST[ 'related_blogs' ];

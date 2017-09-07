@@ -29,15 +29,15 @@ class Mlp_Language implements Mlp_Language_Interface {
 	 *
 	 * @param array $raw_data
 	 */
-	public function __construct( Array $raw_data ) {
+	public function __construct( array $raw_data ) {
 
 		$data = $this->prepare_raw_data( $raw_data );
 
 		$this->priority = (int) $data[ 'priority' ];
-		unset ( $data[ 'priority' ] );
+		unset( $data[ 'priority' ] );
 
-		$this->is_rtl = empty ( $data[ 'is_rtl' ] );
-		unset ( $data[ 'is_rtl' ] );
+		$this->is_rtl = empty( $data[ 'is_rtl' ] );
+		unset( $data[ 'is_rtl' ] );
 
 		$this->names = $data;
 	}

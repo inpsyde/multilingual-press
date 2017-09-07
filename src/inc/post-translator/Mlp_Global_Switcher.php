@@ -57,7 +57,7 @@ class Mlp_Global_Switcher {
 	 */
 	public function fill() {
 
-		if ( empty ( $this->storage ) )
+		if ( empty( $this->storage ) )
 			return 0;
 
 		$amount = count( $this->storage );
@@ -75,14 +75,14 @@ class Mlp_Global_Switcher {
 	 */
 	private function strip_get() {
 
-		if ( empty ( $_GET ) )
+		if ( empty( $_GET ) )
 			return 0;
 
 		$amount = count( $_GET );
 
 		foreach ( $_GET as $name => $value ) {
 			$this->storage[ $name ] = $value;
-			unset ( $_REQUEST[ $name ], $_GET[ $name ] );
+			unset( $_REQUEST[ $name ], $_GET[ $name ] );
 		}
 
 		return $amount;
@@ -102,14 +102,14 @@ class Mlp_Global_Switcher {
 	 */
 	private function strip_post() {
 
-		if ( empty ( $_POST ) )
+		if ( empty( $_POST ) )
 			return 0;
 
 		$amount = count( $_POST );
 
 		foreach ( $_POST as $name => $value ) {
 			$this->storage[ $name ] = $value;
-			unset ( $_REQUEST[ $name ], $_POST[ $name ] );
+			unset( $_REQUEST[ $name ], $_POST[ $name ] );
 		}
 
 		return $amount;

@@ -21,14 +21,14 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 *
 	 * @type array
 	 */
-	private $modules = array ();
+	private $modules = array();
 
 	/**
 	 * Activation status. Saved in option.
 	 *
 	 * @type array
 	 */
-	private $states = array ();
+	private $states = array();
 
 	/**
 	 * Constructor.
@@ -38,7 +38,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	public function __construct( $option_name ) {
 
 		$this->option_name = $option_name;
-		$this->states      = get_site_option( $option_name, array () );
+		$this->states      = get_site_option( $option_name, array() );
 	}
 
 	/**
@@ -49,7 +49,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	public function save() {
 
 		$return       = update_site_option( $this->option_name, $this->states );
-		$this->states = get_site_option( $this->option_name, array () );
+		$this->states = get_site_option( $this->option_name, array() );
 
 		return $return;
 	}
@@ -60,7 +60,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * @param  array $module Required: slug, description and display_name
 	 * @return bool TRUE if the module is active, FALSE if it isn't.
 	 */
-	public function register( Array $module ) {
+	public function register( array $module ) {
 
 		$slug = $module[ 'slug' ];
 
@@ -88,10 +88,10 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function unregister( $slug ) {
 
-		if ( ! isset ( $this->modules[ $slug ] ) )
+		if ( ! isset( $this->modules[ $slug ] ) )
 			return FALSE;
 
-		unset ( $this->modules[ $slug ] );
+		unset( $this->modules[ $slug ] );
 
 		return TRUE;
 	}
@@ -104,7 +104,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function is_active( $slug ) {
 
-		if ( ! isset ( $this->states[ $slug ] ) )
+		if ( ! isset( $this->states[ $slug ] ) )
 			return FALSE;
 
 		return 'on' === $this->states[ $slug ];
@@ -173,7 +173,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	private function get_modules_by_status( $status ) {
 
-		$out  = array ();
+		$out  = array();
 
 		foreach ( $this->modules as $slug => $module ) {
 			if ( $this->states[ $slug ] === $status )
@@ -191,8 +191,8 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function get_module( $slug ) {
 
-		if ( ! isset ( $this->modules[ $slug ] ) )
-			return array ();
+		if ( ! isset( $this->modules[ $slug ] ) )
+			return array();
 
 		return $this->modules[ $slug ];
 	}

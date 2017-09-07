@@ -15,7 +15,7 @@ class Mlp_Helpers {
 	 * @see Mlp_Helpers::insert_dependency()
 	 * @type array
 	 */
-	private static $dependencies = array ();
+	private static $dependencies = array();
 
 	/**
 	 * @var string
@@ -53,7 +53,7 @@ class Mlp_Helpers {
 		$blogid = get_current_blog_id();
 
 		// If this blog is in a language
-		if ( ! isset ( $languages[ $blogid ][ 'lang' ] ) )
+		if ( ! isset( $languages[ $blogid ][ 'lang' ] ) )
 			return '';
 
 		if ( ! $short )
@@ -74,13 +74,13 @@ class Mlp_Helpers {
 	 */
 	public static function get_available_languages( $not_related = FALSE ) {
 
-		$related_blogs = array ();
+		$related_blogs = array();
 
 		// Get all registered blogs
 		$languages = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty ( $languages ) )
-			return array ();
+		if ( empty( $languages ) )
+			return array();
 
 		/** @var Mlp_Site_Relations $site_relations */
 		$site_relations = self::$dependencies[ 'site_relations' ];
@@ -93,17 +93,17 @@ class Mlp_Helpers {
 			);
 
 			// No related blogs? Leave here.
-			if ( empty ( $related_blogs ) )
-				return array ();
+			if ( empty( $related_blogs ) )
+				return array();
 		}
 
-		$options = array ();
+		$options = array();
 
 		// Loop through blogs
 		foreach ( $languages as $language_blogid => $language_data ) {
 
 			// no blogs with a link to other blogs
-			if ( empty ( $language_data[ 'lang' ] ) || '-1' === $language_data[ 'lang' ] )
+			if ( empty( $language_data[ 'lang' ] ) || '-1' === $language_data[ 'lang' ] )
 				continue;
 
 			// Filter out blogs that are not related
@@ -194,7 +194,7 @@ class Mlp_Helpers {
 		if ( ! is_singular() && ! is_tag() && !is_category() && ! is_tax() )
 			return array();
 
-		$return     = array ();
+		$return     = array();
 		              /** @var Mlp_Language_Api $api */
 		$api        = self::$dependencies[ 'language_api' ];
 		$site_id    = get_current_blog_id();
@@ -210,7 +210,7 @@ class Mlp_Helpers {
 		// Array of Mlp_Translation instances, site IDs are the keys
 		$related = $api->get_translations( $args );
 
-		if ( empty ( $related ) )
+		if ( empty( $related ) )
 			return $return;
 
 		/** @var Mlp_Translation_Interface $translation */
@@ -221,10 +221,10 @@ class Mlp_Helpers {
 
 			$url = $translation->get_remote_url();
 
-			if ( empty ( $url ) )
+			if ( empty( $url ) )
 				continue;
 
-			$return[ $remote_site_id ] = array (
+			$return[ $remote_site_id ] = array(
 				'post_id'        => $translation->get_target_content_id(),
 				'post_title'     => $translation->get_target_title(),
 				'permalink'      => $url,
@@ -265,7 +265,7 @@ class Mlp_Helpers {
 		if ( empty( $type ) )
 			return Mlp_WP_Error_Factory::create( 'mlp_empty_custom_type', __( 'Empty Type', 'multilingual-press' ) );
 
-		if ( empty ( $hook ) || ! is_callable( $hook ) )
+		if ( empty( $hook ) || ! is_callable( $hook ) )
 			return Mlp_WP_Error_Factory::create( 'mlp_empty_custom_hook', __( 'Invalid Hook', 'multilingual-press' ) );
 
 		// set the current element in the mlp class
@@ -306,7 +306,7 @@ class Mlp_Helpers {
 
 		$languages = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty ( $languages[ $site_id ]['lang'] ) )
+		if ( empty( $languages[ $site_id ]['lang'] ) )
 			return '';
 
 		/** @var Mlp_Language_Api $api */
@@ -331,12 +331,12 @@ class Mlp_Helpers {
 		if ( 0 == $site_id )
 			$site_id = get_current_blog_id();
 
-		if ( empty ( $languages ) )
+		if ( empty( $languages ) )
 			$languages = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty ( $languages )
-			or empty ( $languages[ $site_id ] )
-			or empty ( $languages[ $site_id ][ 'lang' ] )
+		if ( empty( $languages )
+			or empty( $languages[ $site_id ] )
+			or empty( $languages[ $site_id ][ 'lang' ] )
 		)
 			return '';
 
@@ -488,7 +488,7 @@ class Mlp_Helpers {
 	 * @param array $b
 	 * @return int
 	 */
-	private static function strcasecmp_sort_names( Array $a, Array $b ) {
+	private static function strcasecmp_sort_names( array $a, array $b ) {
 
 		return strcasecmp( $a['name'], $b['name'] );
 	}
@@ -500,7 +500,7 @@ class Mlp_Helpers {
 	 * @param array $b
 	 * @return int
 	 */
-	private static function sort_priorities( Array $a, Array $b ) {
+	private static function sort_priorities( array $a, array $b ) {
 
 		if ( $a['priority'] === $b['priority'] )
 			return 0;

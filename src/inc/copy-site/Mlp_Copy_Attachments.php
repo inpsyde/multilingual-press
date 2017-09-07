@@ -138,7 +138,7 @@ class Mlp_Copy_Attachments
 
 		$source_paths = $this->get_attachment_paths();
 
-		if ( empty ( $source_paths ) )
+		if ( empty( $source_paths ) )
 			return FALSE;
 
 		// $dir is a path relative to upload dir, $paths an array of paths relative to $dir
@@ -156,7 +156,7 @@ class Mlp_Copy_Attachments
 	 * @param  string $dest_dir   Full target directory path
 	 * @return void
 	 */
-	private function copy_dir( Array $paths, $source_dir, $dest_dir ) {
+	private function copy_dir( array $paths, $source_dir, $dest_dir ) {
 
 		if ( ! is_dir( $source_dir ) )
 			return;
@@ -203,7 +203,7 @@ class Mlp_Copy_Attachments
 
 		global $wpdb;
 
-		$out = array ();
+		$out = array();
 
 		$meta = $wpdb->get_results( "SELECT `meta_value`
 			FROM `$wpdb->postmeta`
@@ -225,17 +225,17 @@ class Mlp_Copy_Attachments
 	 * @param  string $meta Data from SQL query against postmeta table.
 	 * @return void
 	 */
-	private function add_paths_for_file( Array &$list, $meta ) {
+	private function add_paths_for_file( array &$list, $meta ) {
 
 		$meta           = maybe_unserialize( $meta );
 
-		if ( empty ( $meta[ 'file' ] ) )
+		if ( empty( $meta[ 'file' ] ) )
 			return;
 
 		$dir             = dirname( $meta[ 'file' ] );
 		$list[ $dir ][ ] = basename( $meta[ 'file' ] );
 
-		if ( empty ( $meta[ 'sizes' ] ) )
+		if ( empty( $meta[ 'sizes' ] ) )
 			return;
 
 		foreach ( $meta[ 'sizes' ] as $data )

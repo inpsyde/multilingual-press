@@ -513,7 +513,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 * Check for hidden auto-draft
 	 *
 	 * Auto-drafts are sent as revision with a status 'inherit'.
-	 * We have to inspect the $_POST array ($request) to distinguish them from
+	 * We have to inspect the $_POST array($request) to distinguish them from
 	 * real revisions and attachments (which have the same status)
 	 *
 	 * @param  WP_Post $post

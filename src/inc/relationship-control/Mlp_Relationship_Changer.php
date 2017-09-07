@@ -87,7 +87,7 @@ class Mlp_Relationship_Changer {
 		switch_to_blog( $this->remote_site_id );
 
 		$post_id = wp_insert_post(
-			array (
+			array(
 				'post_type'   => $source_post->post_type,
 				'post_status' => 'draft',
 				'post_title'  => $this->new_post_title
@@ -137,7 +137,7 @@ class Mlp_Relationship_Changer {
 		if ( 'revision' !== $post->post_type )
 			return $post->post_type;
 
-		if ( empty ( $_POST[ 'post_type' ] ) )
+		if ( empty( $_POST[ 'post_type' ] ) )
 			return $post->post_type;
 
 		if ( 'revision' === $_POST[ 'post_type' ] )
@@ -263,7 +263,7 @@ class Mlp_Relationship_Changer {
 	 */
 	private function prepare_values() {
 
-		$find = array (
+		$find = array(
 			'source_post_id',
 			'source_site_id',
 			'remote_post_id',
@@ -272,7 +272,7 @@ class Mlp_Relationship_Changer {
 		);
 
 		foreach ( $find as $value ) {
-			if ( ! empty ( $_REQUEST[ $value ] ) ) {
+			if ( ! empty( $_REQUEST[ $value ] ) ) {
 
 				if ( 'new_post_title' === $value )
 					$this->$value = (string) $_REQUEST[ $value ];

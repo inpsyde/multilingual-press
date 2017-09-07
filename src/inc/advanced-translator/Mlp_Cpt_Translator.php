@@ -51,7 +51,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		if ( ! $this->register_setting() )
 			return;
 
-		add_filter( 'mlp_allowed_post_types', array ( $this, 'filter_allowed_post_types' ) );
+		add_filter( 'mlp_allowed_post_types', array( $this, 'filter_allowed_post_types' ) );
 
 		add_action( 'mlp_modules_add_fields', array( $this, 'draw_options_page_form_fields' ) );
 		// Use this hook to handle the user input of your modules' options page form fields
@@ -69,7 +69,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 * @param   array $post_types
 	 * @return  array
 	 */
-	public function filter_allowed_post_types( Array $post_types ) {
+	public function filter_allowed_post_types( array $post_types ) {
 
 		return array_merge( $post_types, $this->get_active_post_types() );
 	}
@@ -110,7 +110,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		$found = $this->get_custom_post_types();
 
-		if ( empty ( $found ) ) {
+		if ( empty( $found ) ) {
 			return '<p class="mlp-callback-indent"><em>'
 				. __( 'No custom post type found.', 'multilingual-press' )
 				. '</em></p>';
@@ -130,7 +130,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		$post_types = $this->get_custom_post_types();
 
-		if ( empty ( $post_types ) )
+		if ( empty( $post_types ) )
 			return;
 
 		$data = new Mlp_Cpt_Translator_Extra_General_Settings_Box_Data(
@@ -169,16 +169,16 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		$options    = get_site_option( 'inpsyde_multilingual_cpt' );
 		$post_types = $this->get_custom_post_types();
 
-		if ( empty ( $post_types ) or empty ( $_POST[ $this->form_name ] ) ) {
+		if ( empty( $post_types ) or empty( $_POST[ $this->form_name ] ) ) {
 			$options[ 'post_types' ] = array();
 			return update_site_option( 'inpsyde_multilingual_cpt', $options );
 		}
 
 		foreach ( $post_types as $cpt => $cpt_params ) {
 
-			if ( empty ( $_POST[ $this->form_name ][ $cpt ] ) )
+			if ( empty( $_POST[ $this->form_name ][ $cpt ] ) )
 				$options[ 'post_types' ][ $cpt ] = 0;
-			elseif ( empty ( $_POST[ $this->form_name ][ $cpt . '|links' ] ) )
+			elseif ( empty( $_POST[ $this->form_name ][ $cpt . '|links' ] ) )
 				$options[ 'post_types' ][ $cpt ] = 1;
 			else
 				$options[ 'post_types' ][ $cpt ] = 2;
@@ -230,9 +230,9 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	public function get_active_post_types() {
 
 		$options = get_site_option( 'inpsyde_multilingual_cpt' );
-		$out     = array ();
+		$out     = array();
 
-		if ( empty ( $options ) or empty ( $options[ 'post_types' ] ) )
+		if ( empty( $options ) or empty( $options[ 'post_types' ] ) )
 			return $out;
 
 		foreach ( $options[ 'post_types' ] as $post_type => $setting ) {
@@ -312,11 +312,11 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		$draft_or_pending = $this->is_draft_or_pending( $post );
 		$post_type        = get_post_type_object( $post->post_type );
 
-		if ( $post_type->query_var && ( isset ( $post->post_status ) && ! $draft_or_pending ) )
+		if ( $post_type->query_var && ( isset( $post->post_status ) && ! $draft_or_pending ) )
 			$post_link = add_query_arg( $post_type->query_var, $post->post_name, '' );
 		else
 			$post_link = add_query_arg(
-				array ( 'post_type' => $post->post_type, 'p' => $post->ID ),
+				array( 'post_type' => $post->post_type, 'p' => $post->ID ),
 				''
 			);
 
@@ -333,13 +333,13 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		$options = get_site_option( 'inpsyde_multilingual_cpt' );
 
-		if ( empty ( $options ) )
+		if ( empty( $options ) )
 			return FALSE;
 
-		if ( empty ( $options[ 'post_types' ] ) )
+		if ( empty( $options[ 'post_types' ] ) )
 			return FALSE;
 
-		if ( empty ( $options[ 'post_types' ][ $post_type ] ) )
+		if ( empty( $options[ 'post_types' ][ $post_type ] ) )
 			return FALSE;
 
 		return (int) $options[ 'post_types' ][ $post_type ] > 1;
@@ -353,7 +353,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 */
 	public function is_draft_or_pending( $post ) {
 
-		if ( empty ( $post->post_status ) )
+		if ( empty( $post->post_status ) )
 			return FALSE;
 
 		return in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ), true );

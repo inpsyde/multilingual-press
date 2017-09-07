@@ -51,9 +51,9 @@ class Mlp_Language_Formatter {
 			return $this->get_short_name();
 
 		if ( 'is_rtl' === $name )
-			return empty ( $this->raw_data->is_rtl ) ? 0 : $this->raw_data->is_rtl;
+			return empty( $this->raw_data->is_rtl ) ? 0 : $this->raw_data->is_rtl;
 
-		if ( isset ( $this->raw_data->$name ) )
+		if ( isset( $this->raw_data->$name ) )
 			return $this->raw_data->$name;
 
 		if ( 'ID' === $name ) // new language
@@ -104,10 +104,10 @@ class Mlp_Language_Formatter {
 	 */
 	private function get_short_name() {
 
-		if ( ! empty ( $this->raw_data->short_name ) )
+		if ( ! empty( $this->raw_data->short_name ) )
 			return $this->raw_data->short_name;
 
-		if ( ! empty ( $this->raw_data->iso_639_1 ) )
+		if ( ! empty( $this->raw_data->iso_639_1 ) )
 			return strtok( $this->raw_data->iso_639_1, '_' );
 
 		return '';

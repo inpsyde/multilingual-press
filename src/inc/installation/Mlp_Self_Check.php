@@ -287,7 +287,7 @@ class Mlp_Self_Check {
 
 		$mlp_settings = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty ( $mlp_settings ) ) {
+		if ( empty( $mlp_settings ) ) {
 			return self::NEEDS_INSTALLATION;
 		}
 

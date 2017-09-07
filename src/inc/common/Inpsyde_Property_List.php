@@ -52,7 +52,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 *
 	 * @type array
 	 */
-	protected $properties = array ();
+	protected $properties = array();
 
 	/**
 	 * Parent object.
@@ -72,7 +72,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 * @see  get()
 	 * @type array
 	 */
-	protected $deleted = array ();
+	protected $deleted = array();
 
 	/**
 	 * Write and delete protection.
@@ -98,7 +98,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 			);
 
 		$this->properties[ $name ] = $value;
-		unset ( $this->deleted[ $name ] );
+		unset( $this->deleted[ $name ] );
 
 		return $this;
 	}
@@ -138,10 +138,10 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 */
 	public function get( $name ) {
 
-		if ( isset ( $this->properties[ $name ] ) )
+		if ( isset( $this->properties[ $name ] ) )
 			return $this->properties[ $name ];
 
-		if ( isset ( $this->deleted[ $name ] ) )
+		if ( isset( $this->deleted[ $name ] ) )
 			return NULL;
 
 		if ( NULL === $this->parent )
@@ -178,10 +178,10 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	 */
 	public function has( $name ) {
 
-		if ( isset ( $this->properties[ $name ] ) )
+		if ( isset( $this->properties[ $name ] ) )
 			return TRUE;
 
-		if ( isset ( $this->deleted[ $name ] ) )
+		if ( isset( $this->deleted[ $name ] ) )
 			return FALSE;
 
 		if ( NULL === $this->parent )
@@ -207,7 +207,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 			);
 
 		$this->deleted[ $name ] = TRUE;
-		unset ( $this->properties[ $name ] );
+		unset( $this->properties[ $name ] );
 
 		return $this;
 	}

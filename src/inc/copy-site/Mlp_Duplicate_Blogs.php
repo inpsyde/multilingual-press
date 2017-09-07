@@ -58,8 +58,8 @@ class Mlp_Duplicate_Blogs {
 	 */
 	public function setup() {
 
-		add_filter( 'wpmu_new_blog', array ( $this, 'wpmu_new_blog' ), 10, 2 );
-		add_filter( 'mlp_after_new_blog_fields', array ( $this, 'display_fields' ) );
+		add_filter( 'wpmu_new_blog', array( $this, 'wpmu_new_blog' ), 10, 2 );
+		add_filter( 'mlp_after_new_blog_fields', array( $this, 'display_fields' ) );
 	}
 
 	/**
@@ -72,13 +72,13 @@ class Mlp_Duplicate_Blogs {
 	public function wpmu_new_blog( $blog_id ) {
 
 		// Return if we don't have a blog
-		if ( ! isset ( $_POST[ 'blog' ][ 'basedon' ] ) || 1 > $_POST[ 'blog' ][ 'basedon' ] )
+		if ( ! isset( $_POST[ 'blog' ][ 'basedon' ] ) || 1 > $_POST[ 'blog' ][ 'basedon' ] )
 			return;
 
 		$source_blog_id = (int) $_POST[ 'blog' ][ 'basedon' ];
 
 		// Hook information
-		$context = array (
+		$context = array(
 			'source_blog_id' => $source_blog_id,
 			'new_blog_id'    => $blog_id,
 		);
@@ -187,7 +187,7 @@ class Mlp_Duplicate_Blogs {
 	 */
 	private function get_mapped_domain() {
 
-		if ( empty ( $this->wpdb->dmtable ) )
+		if ( empty( $this->wpdb->dmtable ) )
 			return '';
 
 		$sql    = 'SELECT domain FROM ' . $this->wpdb->dmtable . ' WHERE active = 1 AND blog_id = %s LIMIT 1';
@@ -206,7 +206,7 @@ class Mlp_Duplicate_Blogs {
 	 * @param array $context
 	 * @return array
 	 */
-	private function get_table_names( Array $context ) {
+	private function get_table_names( array $context ) {
 
 		$tables = $this->table_names->get_site_core_tables(
 			$context[ 'source_blog_id' ]
@@ -372,17 +372,17 @@ LIMIT 2";
 	 */
 	private function update_file_urls( $copy_files ) {
 
-		$tables = array (
-			$this->wpdb->posts         => array (
+		$tables = array(
+			$this->wpdb->posts         => array(
 				'guid',
 				'post_content',
 				'post_excerpt',
 				'post_content_filtered',
 			),
-			$this->wpdb->term_taxonomy => array (
+			$this->wpdb->term_taxonomy => array(
 				'description'
 			),
-			$this->wpdb->comments      => array (
+			$this->wpdb->comments      => array(
 				'comment_content'
 			)
 		);

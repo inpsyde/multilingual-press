@@ -15,7 +15,7 @@ class Mlp_Custom_Columns {
 	 *
 	 * @type array
 	 */
-	protected $settings = array ();
+	protected $settings = array();
 
 	/**
 	 * Constructor
@@ -27,7 +27,7 @@ class Mlp_Custom_Columns {
 	 * 				header           = header text
 	 * 				content_callback = render column content
 	 */
-	public function __construct( Array $settings ) {
+	public function __construct( array $settings ) {
 		$this->settings = $settings;
 	}
 
@@ -54,7 +54,7 @@ class Mlp_Custom_Columns {
 	 * @param   array $columns Existing columns
 	 * @return  array
 	 */
-	public function add_header( Array $columns ) {
+	public function add_header( array $columns ) {
 
 		$columns[ $this->settings[ 'id' ] ] = $this->settings[ 'header' ];
 

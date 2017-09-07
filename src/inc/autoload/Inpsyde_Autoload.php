@@ -19,14 +19,14 @@ class Inpsyde_Autoload
 	 *
 	 * @var array
 	 */
-	private $rules = array ();
+	private $rules = array();
 
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		spl_autoload_register( array ( $this, 'load' ) );
+		spl_autoload_register( array( $this, 'load' ) );
 	}
 
 	/**

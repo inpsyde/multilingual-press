@@ -56,9 +56,9 @@ class Mlp_Relationship_Control_Ajax_Search {
 	 * @param array $results
 	 * @return string
 	 */
-	private function format_results( Array $results ) {
+	private function format_results( array $results ) {
 
-		if ( empty ( $results ) )
+		if ( empty( $results ) )
 			return '<li>'
 			. esc_html__( 'Nothing found.', 'multilingual-press' )
 			. '</li>';
@@ -108,9 +108,9 @@ class Mlp_Relationship_Control_Ajax_Search {
 	 * @param  array $posts
 	 * @return array
 	 */
-	private function prepare_titles( Array $posts ) {
+	private function prepare_titles( array $posts ) {
 
-		$out = $titles = $duplicates = array ();
+		$out = $titles = $duplicates = array();
 
 		/** @var WP_Post $post */
 		foreach ( $posts as $post ) {
@@ -127,7 +127,7 @@ class Mlp_Relationship_Control_Ajax_Search {
 			$titles[ $post->ID ] = $post->post_title;
 		}
 
-		if ( empty ( $duplicates ) )
+		if ( empty( $duplicates ) )
 			return $out;
 
 		$duplicates = array_unique( $duplicates );

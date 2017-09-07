@@ -15,7 +15,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 *
 	 * @type array
 	 */
-	private $properties = array ();
+	private $properties = array();
 
 	/**
 	 * Parent object.
@@ -35,7 +35,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 * @see  get()
 	 * @type array
 	 */
-	private $deleted = array ();
+	private $deleted = array();
 
 	/**
 	 * Write and delete protection.
@@ -70,7 +70,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 		else
 			$this->properties[ $name ] = $value;
 
-		unset ( $this->deleted[ $name ] );
+		unset( $this->deleted[ $name ] );
 
 		return $this;
 	}
@@ -109,10 +109,10 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 		if ( 'plugin_url' === $name )
 			return $this->locations->get_dir( 'plugin', 'url' );
 
-		if ( isset ( $this->properties[ $name ] ) )
+		if ( isset( $this->properties[ $name ] ) )
 			return $this->properties[ $name ];
 
-		if ( isset ( $this->deleted[ $name ] ) )
+		if ( isset( $this->deleted[ $name ] ) )
 			return NULL;
 
 		if ( NULL === $this->parent )
@@ -131,10 +131,10 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	public function has( $name ) {
 
-		if ( isset ( $this->properties[ $name ] ) )
+		if ( isset( $this->properties[ $name ] ) )
 			return TRUE;
 
-		if ( isset ( $this->deleted[ $name ] ) )
+		if ( isset( $this->deleted[ $name ] ) )
 			return FALSE;
 
 		if ( NULL === $this->parent )
@@ -160,7 +160,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 			);
 
 		$this->deleted[ $name ] = TRUE;
-		unset ( $this->properties[ $name ] );
+		unset( $this->properties[ $name ] );
 
 		return $this;
 	}

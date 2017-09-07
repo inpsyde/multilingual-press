@@ -28,5 +28,5 @@ interface Mlp_Redirect_Settings_Data_Interface {
 	 * @param  array $data User input
 	 * @return bool
 	 */
-	public function save( Array $data );
+	public function save( array $data );
 }

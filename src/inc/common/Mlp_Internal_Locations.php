@@ -36,7 +36,7 @@ class Mlp_Internal_Locations implements Mlp_Locations_Interface {
 	 */
 	public function get_dir( $identifier, $type ) {
 
-		if ( isset ( $this->directories[ $identifier ][ $type ] ) )
+		if ( isset( $this->directories[ $identifier ][ $type ] ) )
 			return $this->directories[ $identifier ][ $type ];
 
 		return '';
@@ -50,6 +50,6 @@ class Mlp_Internal_Locations implements Mlp_Locations_Interface {
 	 */
 	public function has_dir( $identifier ) {
 
-		return ! empty ( $this->directories[ $identifier ] );
+		return ! empty( $this->directories[ $identifier ] );
 	}
 }

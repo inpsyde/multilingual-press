@@ -150,7 +150,7 @@ class Mlp_Quicklink_Positions_Data implements Mlp_Extra_General_Settings_Box_Dat
 	 */
 	private function get_position_names() {
 
-		return array (
+		return array(
 			'tl' => esc_attr__( 'Top left', 'multilingual-press' ),
 			'tr' => esc_attr__( 'Top right', 'multilingual-press' ),
 			'bl' => esc_attr__( 'Bottom left', 'multilingual-press' ),

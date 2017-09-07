@@ -163,7 +163,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 * @param array $exclude
 	 * @return array
 	 */
-	private function query_information_schema( Array $exclude = array() ) {
+	private function query_information_schema( array $exclude = array() ) {
 
 		$sql = $this->get_information_schema_sql( $exclude );
 
@@ -185,7 +185,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		preg_match_all( $pattern, $schema, $matches );
 
-		if ( empty ( $matches[ 1 ] ) )
+		if ( empty( $matches[ 1 ] ) )
 			return array();
 
 		return $matches[ 1 ];
@@ -195,7 +195,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 * @param array $tables
 	 * @return string
 	 */
-	private function get_exclude_sql( Array $tables ) {
+	private function get_exclude_sql( array $tables ) {
 
 		$joined = join( "','", $tables );
 
@@ -209,7 +209,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 * @param  string $prefix
 	 * @return array
 	 */
-	private function prefix_table_names( Array $tables, $prefix ) {
+	private function prefix_table_names( array $tables, $prefix ) {
 
 		foreach ( $tables as $key => $name )
 			$tables[ $key ] = $prefix . $name;
@@ -221,13 +221,13 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 * @param array $exclude
 	 * @return string
 	 */
-	private function get_information_schema_sql( Array $exclude = array() ) {
+	private function get_information_schema_sql( array $exclude = array() ) {
 		$sql = "
 			SELECT TABLE_NAME
 			FROM information_schema.tables
 			WHERE TABLE_NAME REGEXP '{$this->wpdb->prefix}[^0-9]'";
 
-		if ( ! empty ( $exclude ) )
+		if ( ! empty( $exclude ) )
 			$sql .= $this->get_exclude_sql( $exclude );
 
 		return $sql;

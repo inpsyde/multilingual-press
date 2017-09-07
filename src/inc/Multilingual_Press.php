@@ -78,7 +78,7 @@ class Multilingual_Press {
 			return;
 
 		// Hooks and filters
-		add_action( 'inpsyde_mlp_loaded', array ( $this, 'load_plugin_textdomain' ), 1 );
+		add_action( 'inpsyde_mlp_loaded', array( $this, 'load_plugin_textdomain' ), 1 );
 
 		// Load modules
 		$this->load_features();
@@ -92,12 +92,12 @@ class Multilingual_Press {
 		do_action( 'inpsyde_mlp_init', $this->plugin_data, $this->wpdb );
 
 		// Cleanup upon blog delete
-		add_filter( 'delete_blog', array ( $this, 'delete_blog' ), 10, 2 );
+		add_filter( 'delete_blog', array( $this, 'delete_blog' ), 10, 2 );
 
 		// Check for errors
-		add_filter( 'all_admin_notices', array ( $this, 'check_for_user_errors_admin_notice' ) );
+		add_filter( 'all_admin_notices', array( $this, 'check_for_user_errors_admin_notice' ) );
 
-		add_action( 'wp_loaded', array ( $this, 'late_load' ), 0 );
+		add_action( 'wp_loaded', array( $this, 'late_load' ), 0 );
 
 		/**
 		 * Runs after internal actions have been registered.
@@ -129,7 +129,7 @@ class Multilingual_Press {
 		if ( is_network_admin() )
 			return TRUE;
 
-		$relations = get_site_option( 'inpsyde_multilingual', array () );
+		$relations = get_site_option( 'inpsyde_multilingual', array() );
 
 		if ( array_key_exists( get_current_blog_id(), $relations ) )
 			return TRUE;
@@ -243,7 +243,7 @@ class Multilingual_Press {
 	 */
 	protected function load_features() {
 
-		$found = array ();
+		$found = array();
 
 		$path = $this->plugin_data->get( 'plugin_dir_path' ) . "/inc";
 
@@ -252,7 +252,7 @@ class Multilingual_Press {
 
 		$files = glob( "$path/feature.*.php" );
 
-		if ( empty ( $files ) )
+		if ( empty( $files ) )
 			return $found;
 
 		foreach ( $files as $file ) {
@@ -363,7 +363,7 @@ class Multilingual_Press {
 			return FALSE;
 
 		// Get blogs related to the current blog
-		$all_blogs = get_site_option( 'inpsyde_multilingual', array () );
+		$all_blogs = get_site_option( 'inpsyde_multilingual', array() );
 
 		if ( 1 > count( $all_blogs ) && is_super_admin() )
 			return TRUE;

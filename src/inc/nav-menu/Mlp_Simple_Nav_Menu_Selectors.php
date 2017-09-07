@@ -99,7 +99,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 
 		$items = $this->data->get_list();
 
-		if ( empty ( $items ) ) {
+		if ( empty( $items ) ) {
 			esc_html_e( 'No languages found', 'multilingual-press' );
 			return;
 		}
@@ -137,7 +137,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 	private function print_add_button() {
 
 		$button_id         = $this->data->get_button_id();
-		$button_attributes = array (
+		$button_attributes = array(
 			'id' => "submit-$button_id"
 		);
 

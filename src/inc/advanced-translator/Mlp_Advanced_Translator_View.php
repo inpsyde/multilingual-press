@@ -321,7 +321,7 @@ class Mlp_Advanced_Translator_View {
 	 *
 	 * @return void
 	 */
-	private function list_terms( $taxonomy, Array $data, $remote_blog_id, $input_type ) {
+	private function list_terms( $taxonomy, array $data, $remote_blog_id, $input_type ) {
 
 		$name = $this->get_name( $remote_blog_id, 'tax' ) . '[' . $taxonomy . ']';
 

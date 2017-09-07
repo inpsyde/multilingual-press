@@ -83,7 +83,7 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 	 * @param  array  $append
 	 * @return void
 	 */
-	private function sort_values( $part, Array &$new, Array &$append ) {
+	private function sort_values( $part, array &$new, array &$append ) {
 
 		if ( 3 <= count( $new ) ) {
 			$append[] = $part;
@@ -103,7 +103,7 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 	 * @param  array $numbers
 	 * @return array
 	 */
-	private function pad_with_zero( Array $numbers ) {
+	private function pad_with_zero( array $numbers ) {
 
 		return array_pad( $numbers, 3, 0 );
 	}

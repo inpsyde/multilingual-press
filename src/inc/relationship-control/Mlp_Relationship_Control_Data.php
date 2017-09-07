@@ -12,7 +12,7 @@ class Mlp_Relationship_Control_Data {
 	/**
 	 * @var array
 	 */
-	private $ids = array (
+	private $ids = array(
 		'source_post_id' => 0,
 		'source_site_id' => 0,
 		'remote_site_id' => 0,
@@ -27,19 +27,19 @@ class Mlp_Relationship_Control_Data {
 	/**
 	 * @param array $ids
 	 */
-	public function __construct( Array $ids = array () ) {
+	public function __construct( array $ids = array() ) {
 
-		if ( ! empty ( $ids ) ) {
+		if ( ! empty( $ids ) ) {
 			$this->ids = $ids;
 			return;
 		}
 
 		foreach ( $this->ids as $id => $value ) {
-			if ( isset ( $_REQUEST[ $id ] ) )
+			if ( isset( $_REQUEST[ $id ] ) )
 				$this->ids[ $id ] = (int) $_REQUEST[ $id ];
 		}
 
-		if ( isset ( $_REQUEST['s'] ) )
+		if ( isset( $_REQUEST['s'] ) )
 			$this->search = $_REQUEST['s'];
 	}
 
@@ -49,7 +49,7 @@ class Mlp_Relationship_Control_Data {
 	 * @param  array $ids
 	 * @return array
 	 */
-	public function set_ids( Array $ids ) {
+	public function set_ids( array $ids ) {
 
 		$this->ids = $ids;
 
@@ -91,20 +91,20 @@ class Mlp_Relationship_Control_Data {
 		if ( 0 === $this->ids[ 'remote_site_id' ]
 			or 0 === $this->ids[ 'source_site_id' ]
 		)
-			return array ();
+			return array();
 
 		$source_post = $this->get_source_post();
 
 		if ( ! $source_post )
-			return array ();
+			return array();
 
-		$args = array (
+		$args = array(
 			'numberposts' => 10,
 			'post_type'   => $source_post->post_type,
-			'post_status' => array ( 'draft', 'publish', 'private' )
+			'post_status' => array( 'draft', 'publish', 'private' )
 		);
 
-		if ( ! empty ( $this->ids[ 'remote_post_id' ] ) )
+		if ( ! empty( $this->ids[ 'remote_post_id' ] ) )
 			$args[ 'exclude' ] = $this->ids[ 'remote_post_id' ];
 
 		if ( ! empty( $this->search ) ) {
@@ -116,8 +116,8 @@ class Mlp_Relationship_Control_Data {
 		$posts = get_posts( $args );
 		restore_current_blog();
 
-		if ( empty ( $posts ) )
-			return array ();
+		if ( empty( $posts ) )
+			return array();
 
 		return $posts;
 	}

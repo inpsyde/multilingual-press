@@ -62,7 +62,7 @@ class Mlp_Extra_General_Settings_Box {
 
 		$label_id = $this->data->get_main_label_id();
 
-		if ( ! empty ( $label_id ) )
+		if ( ! empty( $label_id ) )
 			$desc = "<label for='$label_id' class='mlp-block-label'>$desc</label>";
 
 		return "<p>$desc</p>";

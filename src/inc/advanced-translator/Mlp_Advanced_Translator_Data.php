@@ -519,11 +519,11 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function get_remote_post_title( array $data ) {
 
-		if ( isset ( $data['title'] ) ) {
+		if ( isset( $data['title'] ) ) {
 			return $data['title'];
 		}
 
-		if ( isset ( $this->post_request_data['post_title'] ) ) {
+		if ( isset( $this->post_request_data['post_title'] ) ) {
 			return (string) $this->post_request_data['post_title'];
 		}
 
@@ -539,11 +539,11 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function get_remote_post_name( array $data ) {
 
-		if ( isset ( $data['name'] ) ) {
+		if ( isset( $data['name'] ) ) {
 			return $data['name'];
 		}
 
-		if ( isset ( $this->post_request_data['post_name'] ) ) {
+		if ( isset( $this->post_request_data['post_name'] ) ) {
 			return (string) $this->post_request_data['post_name'];
 		}
 
@@ -559,11 +559,11 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function get_remote_post_content( array $data ) {
 
-		if ( isset ( $data['content'] ) ) {
+		if ( isset( $data['content'] ) ) {
 			return $data['content'];
 		}
 
-		if ( isset ( $this->post_request_data['post_content'] ) ) {
+		if ( isset( $this->post_request_data['post_content'] ) ) {
 			return (string) $this->post_request_data['post_content'];
 		}
 

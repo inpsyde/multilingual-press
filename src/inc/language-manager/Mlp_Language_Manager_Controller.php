@@ -89,7 +89,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		add_action(
 			'admin_post_mlp_update_languages',
-			array ( $updater, 'update_languages' )
+			array( $updater, 'update_languages' )
 		);
 		add_action(
 			'network_admin_menu',
@@ -97,7 +97,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		);
 		add_action(
 			"admin_post_{$this->reset_action}",
-			array ( $this, 'reset_table' )
+			array( $this, 'reset_table' )
 		);
 	}
 
@@ -115,7 +115,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			array( $this->view, 'render' )
 		);
 
-		add_action( "load-$page_id", array ( $this, 'enqueue_style' ) );
+		add_action( "load-$page_id", array( $this, 'enqueue_style' ) );
 	}
 
 	/**
@@ -175,7 +175,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		$request = remove_query_arg( 'msg', wp_unslash( $_SERVER['REQUEST_URI'] ) );
 		$nonce   = wp_create_nonce( $this->page_data->get_nonce_action() );
 		$url     = add_query_arg(
-			array (
+			array(
 				'action'                           => $this->reset_action,
 				$this->page_data->get_nonce_name() => $nonce,
 				'_wp_http_referer'                 => esc_attr( $request )
@@ -350,60 +350,60 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 * @return array
 	 */
 	private function get_columns() {
-		return array (
-			'native_name' => array (
+		return array(
+			'native_name' => array(
 				'header'     => __( 'Native name', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
+				'attributes' => array(
 					'size' => 20
 				)
 			),
-			'english_name' => array (
+			'english_name' => array(
 				'header'     => __( 'English name', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
+				'attributes' => array(
 					'size' => 20
 				)
 			),
-			'is_rtl' => array (
+			'is_rtl' => array(
 				'header'     => __( 'RTL', 'multilingual-press' ),
 				'type'       => 'input_checkbox',
-				'attributes' => array (
+				'attributes' => array(
 					'size' => 20
 				)
 			),
-			'http_name' => array (
+			'http_name' => array(
 				'header'     => __( 'HTTP', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
+				'attributes' => array(
 					'size' => 5
 				)
 			),
-			'iso_639_1' => array (
+			'iso_639_1' => array(
 				'header'     => __( 'ISO&#160;639-1', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
+				'attributes' => array(
 					'size' => 5
 				)
 			),
-			'iso_639_2' => array (
+			'iso_639_2' => array(
 				'header'     => __( 'ISO&#160;639-2', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
+				'attributes' => array(
 					'size' => 5
 				)
 			),
-			'wp_locale' => array (
+			'wp_locale' => array(
 				'header'     => __( 'wp_locale', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
+				'attributes' => array(
 					'size' => 5
 				)
 			),
-			'priority' => array (
+			'priority' => array(
 				'header'     => __( 'Priority', 'multilingual-press' ),
 				'type'       => 'input_number',
-				'attributes' => array (
+				'attributes' => array(
 					'min'  => 1,
 					'max'  => 10,
 					'size' => 3

@@ -121,7 +121,7 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 
 		$to_remove = $db_info->get_autofilled_keys();
 		foreach ( $to_remove as $remove_key ) {
-			unset ( $columns[ $remove_key ] );
+			unset( $columns[ $remove_key ] );
 		}
 
 		$keys = join( ",", array_keys( $columns ) );

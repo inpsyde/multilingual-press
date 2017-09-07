@@ -125,7 +125,7 @@ class Mlp_Trasher {
 	public function save_post( $post_id ) {
 
 		// leave function if box was not available
-		if ( ! isset ( $_POST['trasher_box'] ) ) {
+		if ( ! isset( $_POST['trasher_box'] ) ) {
 			return;
 		}
 

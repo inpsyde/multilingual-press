@@ -42,7 +42,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 		if ( $this->is_ajax() ) {
 			$this->set_up_ajax();
 		} else {
-			add_action( 'mlp_translation_meta_box_bottom', array ( $this, 'set_up_meta_box_handlers' ), 200, 3 );
+			add_action( 'mlp_translation_meta_box_bottom', array( $this, 'set_up_meta_box_handlers' ), 200, 3 );
 		}
 	}
 
@@ -117,7 +117,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 			return; // maybe later, for now, we work on existing posts only
 
 		$this->data->set_ids(
-		   array (
+		   array(
 			   'source_post_id' => $post->ID,
 			   'source_site_id' => get_current_blog_id(),
 			   'remote_site_id' => $remote_site_id,
