@@ -92,7 +92,7 @@ class Mlp_Language_Updater {
 
 		if ( empty( $_POST['languages'] ) ) {
 			mlp_exit( 'invalid request' );
-        }
+		}
 
 		return (array) $_POST['languages'];
 	}
@@ -113,7 +113,7 @@ class Mlp_Language_Updater {
 
 		foreach ( $before as $id => $data ) {
 			$return[ $id ] = (array) $data;
-        }
+		}
 
 		return $return;
 	}
@@ -130,7 +130,7 @@ class Mlp_Language_Updater {
 
 		if ( 0 === $amount ) {
 			return 0;
-        }
+		}
 
 		$this->db->update_items_by_id(
 			$diff,
@@ -154,7 +154,7 @@ class Mlp_Language_Updater {
 
 		if ( 0 === $amount ) {
 			return remove_query_arg( 'msg', $url );
-        }
+		}
 
 		return add_query_arg( 'msg', "updated-$amount", $url );
 	}

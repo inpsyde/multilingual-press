@@ -13,7 +13,7 @@ function mlp_feature_relationship_control( Inpsyde_Property_List_Interface $data
 
 	if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		return;
-    }
+	}
 
 	$switcher = new Mlp_Global_Switcher( Mlp_Global_Switcher::TYPE_POST );
 

@@ -45,7 +45,7 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 
 		if ( ! $this->nonce->is_valid() ) {
 			return false;
-        }
+		}
 
 		$id    = $this->get_current_blog_id( $data, get_current_blog_id() );
 		$value = $this->get_sent_value( $data );
@@ -82,7 +82,7 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 
 		if ( isset( $data['id'] ) ) {
 			return (int) $data['id'];
-        }
+		}
 
 		return $default;
 	}
@@ -95,7 +95,7 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 
 		if ( ! isset( $data[ $this->option_name ] ) ) {
 			return 0;
-        }
+		}
 
 		$value = (int) $data[ $this->option_name ];
 

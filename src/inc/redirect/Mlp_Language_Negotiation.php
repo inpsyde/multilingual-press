@@ -77,13 +77,13 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 		if ( empty( $translations ) ) {
 			return $this->get_fallback_match();
-        }
+		}
 
 		$possible = $this->get_possible_matches( $translations );
 
 		if ( empty( $possible ) ) {
 			return $this->get_fallback_match();
-        }
+		}
 
 		uasort( $possible, array( $this, 'sort_priorities' ) );
 
@@ -142,7 +142,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	private function collect_matches(
 		array &$possible,
-		                $site_id,
+						$site_id,
 		Mlp_Translation $translation,
 		array $user
 	) {
@@ -152,13 +152,13 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 		if ( 0 === $user_priority ) {
 			return;
-        }
+		}
 
 		$url = $translation->get_remote_url();
 
 		if ( empty( $url ) ) {
 			return;
-        }
+		}
 
 		$combined_value   = $language->get_priority() * $user_priority;
 		$possible[]       = array(
@@ -181,7 +181,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 		if ( $a['priority'] === $b['priority'] ) {
 			return 0;
-        }
+		}
 
 		return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
 	}
@@ -198,14 +198,14 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 		if ( isset( $user[ $lang_http ] ) ) {
 			return $user[ $lang_http ];
-        }
+		}
 
 		$lang_short = $language->get_name( 'language_short' );
 		$lang_short = strtolower( $lang_short );
 
 		if ( isset( $user[ $lang_short ] ) ) {
 			return $this->language_only_priority_factor * $user[ $lang_short ];
-        }
+		}
 
 		return 0;
 	}
@@ -222,7 +222,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 		if ( empty( $fields ) ) {
 			return $fields;
-        }
+		}
 
 		$out = array();
 
@@ -235,7 +235,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 			if ( $short && ( $short !== $name ) && ! isset( $out[ $short ] ) ) {
 				$out[ $short ] = $priority;
-            }
+			}
 		}
 
 		return $out;
@@ -251,7 +251,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 
 		if ( ! strpos( $long, '-' ) ) {
 			return '';
-        }
+		}
 
 		return strtok( $long, '-' );
 	}

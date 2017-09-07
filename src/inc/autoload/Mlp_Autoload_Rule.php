@@ -37,19 +37,19 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 
 		if ( ! $name = $this->prepare_name( $name ) ) {
 			return false;
-        }
+		}
 
 		foreach ( array( 'core', 'pro' ) as $main_dir ) {
 
 			if ( ! is_dir( "$this->dir/$main_dir" ) ) {
 				continue;
-            }
+			}
 
 			foreach ( array( 'controllers', 'models', 'views' ) as $sub_dir ) {
 
 				if ( ! is_dir( "$this->dir/$main_dir/$sub_dir" ) ) {
 					continue;
-                }
+				}
 
 				$file = "$this->dir/$main_dir/$sub_dir/$name.php";
 
@@ -76,12 +76,12 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 		// Our classes are not in a dedicated namespace (yet).
 		if ( false !== strpos( $name, '\\' ) ) {
 			return false;
-        }
+		}
 
 		// Our classes start with "Mlp_" always.
 		if ( 0 !== strpos( $name, 'Mlp_' ) && 0 !== strpos( $name, 'Inpsyde_' ) ) {
 			return false;
-        }
+		}
 
 		return $name;
 	}

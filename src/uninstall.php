@@ -34,13 +34,12 @@ if ( WP_UNINSTALL_PLUGIN === 'multilingual-press/multilingual-press.php' ) {
 	// checking if the pro is available (not active) when the free is uninstalled
 	if ( array_key_exists( 'multilingual-press-pro/multilingual-press.php', $plugins ) ) {
 		return;
-    }
-}
-else if ( WP_UNINSTALL_PLUGIN === 'multilingual-press-pro/multilingual-press.php' ) {
+	}
+} else if ( WP_UNINSTALL_PLUGIN === 'multilingual-press-pro/multilingual-press.php' ) {
 	// checking if the free is available (not active) when the pro is uninstalled
 	if ( array_key_exists( 'multilingual-press/multilingual-press.php', $plugins ) ) {
 		return;
-    }
+	}
 }
 
 

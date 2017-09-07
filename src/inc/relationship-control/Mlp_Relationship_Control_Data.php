@@ -37,12 +37,12 @@ class Mlp_Relationship_Control_Data {
 		foreach ( $this->ids as $id => $value ) {
 			if ( isset( $_REQUEST[ $id ] ) ) {
 				$this->ids[ $id ] = (int) $_REQUEST[ $id ];
-            }
+			}
 		}
 
 		if ( isset( $_REQUEST['s'] ) ) {
 			$this->search = $_REQUEST['s'];
-        }
+		}
 	}
 
 	/**
@@ -94,13 +94,13 @@ class Mlp_Relationship_Control_Data {
 			or 0 === $this->ids['source_site_id']
 		) {
 			return array();
-        }
+		}
 
 		$source_post = $this->get_source_post();
 
 		if ( ! $source_post ) {
 			return array();
-        }
+		}
 
 		$args = array(
 			'numberposts' => 10,
@@ -110,7 +110,7 @@ class Mlp_Relationship_Control_Data {
 
 		if ( ! empty( $this->ids['remote_post_id'] ) ) {
 			$args['exclude'] = $this->ids['remote_post_id'];
-        }
+		}
 
 		if ( ! empty( $this->search ) ) {
 			$args['s'] = $this->search;
@@ -123,7 +123,7 @@ class Mlp_Relationship_Control_Data {
 
 		if ( empty( $posts ) ) {
 			return array();
-        }
+		}
 
 		return $posts;
 	}

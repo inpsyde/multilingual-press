@@ -89,7 +89,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 						if ( $this->remote_post_id ) {
 							$actions['disconnect'] = esc_html__( 'Remove relationship', 'multilingual-press' );
-                        }
+						}
 
 						foreach ( $actions as $key => $label ) {
 							print '<p>'
@@ -101,7 +101,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 										   'mlp-rc-input-id-' . $this->remote_site_id
 								)
 								. '</p>';
-                        }
+						}
 
 					?>
 					<p>
@@ -216,7 +216,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 		foreach ( $data as $key => $value ) {
 			$str .= " data-$key='$value'";
-        }
+		}
 
 		return $str;
 	}

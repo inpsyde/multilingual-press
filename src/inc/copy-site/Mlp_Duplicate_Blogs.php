@@ -39,7 +39,7 @@ class Mlp_Duplicate_Blogs {
 	 * @param Mlp_Db_Table_List_Interface    $table_names
 	 */
 	public function __construct(
-		                               $link_table,
+									   $link_table,
 		wpdb $wpdb,
 		Mlp_Table_Duplicator_Interface $duplicator,
 		Mlp_Db_Table_List_Interface $table_names
@@ -66,15 +66,15 @@ class Mlp_Duplicate_Blogs {
 	 * Duplicates the old blog to the new blog
 	 *
 	 * @global    wpdb $wpdb WordPress Database Wrapper
-	 * @param	int $blog_id the new blog id
-	 * @return	void
+	 * @param   int $blog_id the new blog id
+	 * @return  void
 	 */
 	public function wpmu_new_blog( $blog_id ) {
 
 		// Return if we don't have a blog
 		if ( ! isset( $_POST['blog']['basedon'] ) || 1 > $_POST['blog']['basedon'] ) {
 			return;
-        }
+		}
 
 		$source_blog_id = (int) $_POST['blog']['basedon'];
 
@@ -125,7 +125,7 @@ class Mlp_Duplicate_Blogs {
 		// change siteurl -> will start url rename plugin
 		if ( '' != $domain ) {
 			update_option( 'siteurl', $domain );
-        }
+		}
 
 		update_option( 'blogname', stripslashes( $_POST ['blog']['title'] ) );
 		update_option( 'home', $url );
@@ -191,7 +191,7 @@ class Mlp_Duplicate_Blogs {
 
 		if ( empty( $this->wpdb->dmtable ) ) {
 			return '';
-        }
+		}
 
 		$sql    = 'SELECT domain FROM ' . $this->wpdb->dmtable . ' WHERE active = 1 AND blog_id = %s LIMIT 1';
 		$sql    = $this->wpdb->prepare( $sql, get_current_blog_id() );
@@ -199,7 +199,7 @@ class Mlp_Duplicate_Blogs {
 
 		if ( '' === $domain ) {
 			return '';
-        }
+		}
 
 		return ( is_ssl() ? 'https://' : 'http://' ) . $domain;
 	}
@@ -241,7 +241,7 @@ class Mlp_Duplicate_Blogs {
 
 		if ( $this->has_related_blogs( $source_blog_id ) ) {
 			return $this->copy_post_relationships( $source_blog_id, $target_blog_id );
-        }
+		}
 
 		return $this->create_post_relationships( $source_blog_id, $target_blog_id );
 	}
@@ -297,7 +297,7 @@ SELECT %d, ID, %d, ID, 'post'
 FROM {$this->wpdb->posts}
 WHERE post_status IN ( 'publish', 'future', 'draft', 'pending', 'private' )";
 
-		foreach( array( $source_site_id, $target_site_id ) as $site_id ) {
+		foreach ( array( $source_site_id, $target_site_id ) as $site_id ) {
 			$result += (int) $this->wpdb->query( $this->wpdb->prepare( $query, $source_site_id, $site_id ) );
 		}
 
@@ -337,7 +337,7 @@ LIMIT 2";
 
 		if ( $copy_files->copy_attachments() ) {
 			$this->update_file_urls( $copy_files );
-        }
+		}
 	}
 
 	/**
@@ -412,7 +412,7 @@ LIMIT 2";
 	/**
 	 * Add copy field at "Add new site" screen
 	 *
-	 * @return	void
+	 * @return  void
 	 */
 	public function display_fields() {
 

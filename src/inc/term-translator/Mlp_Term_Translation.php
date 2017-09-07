@@ -64,11 +64,11 @@ class Mlp_Term_Translation {
 
 		if ( empty( $term ) ) {
 			return false;
-        }
+		}
 
 		if ( is_admin() ) {
 			return $this->get_admin_translation( $term, $term['taxonomy'] );
-        }
+		}
 
 		$url = $this->get_public_url( (int) $term['term_id'], $term['taxonomy'] );
 
@@ -113,11 +113,11 @@ class Mlp_Term_Translation {
 
 		if ( is_wp_error( $url ) ) {
 			$url = '';
-        }
+		}
 
 		if ( $changed ) {
 			$this->set_permastruct( $taxonomy, $changed );
-        }
+		}
 
 		return $url;
 	}
@@ -135,7 +135,7 @@ class Mlp_Term_Translation {
 
 		if ( ! $this->update_required( $expected, $existing ) ) {
 			return false;
-        }
+		}
 
 		$this->set_permastruct( $taxonomy, $expected );
 
@@ -153,11 +153,11 @@ class Mlp_Term_Translation {
 
 		if ( ! $expected ) {
 			return false;
-        }
+		}
 
 		if ( ! $existing ) {
 			return false;
-        }
+		}
 
 		return $existing !== $expected;
 	}
@@ -176,13 +176,13 @@ class Mlp_Term_Translation {
 		);
 		if ( ! isset( $taxonomies[ $taxonomy ] ) ) {
 			return false;
-        }
+		}
 
 		$option = get_option( $taxonomies[ $taxonomy ] );
 
 		if ( ! $option ) {
 			return false;
-        }
+		}
 
 		return $option . '/%' . $taxonomy . '%';
 	}

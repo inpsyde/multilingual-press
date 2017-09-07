@@ -49,7 +49,7 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 
 		if ( isset( $this->related_sites[ $site_id ] ) ) {
 			return $this->related_sites[ $site_id ];
-        }
+		}
 
 		$sql = $this->get_related_sites_sql( $site_id );
 
@@ -72,12 +72,12 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 		foreach ( $sites as $site_id ) {
 			if ( $site_1 !== $site_id ) {
 				$values[] = $this->get_value_pair( $site_1, $site_id );
-            }
+			}
 		}
 
 		if ( empty( $values ) ) {
 			return 0;
-        }
+		}
 
 		$sql    = 'INSERT IGNORE INTO `' . $this->link_table_name
 			. '` ( `site_1`, `site_2` ) VALUES '
@@ -101,7 +101,7 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 
 		if ( 0 < $site_2 ) {
 			$sql .= " AND (`site_1` = $site_2 OR `site_2` = $site_2)";
-        }
+		}
 
 		return (int) $this->wpdb->query( $sql );
 	}
@@ -133,7 +133,7 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 		// Swap values to make sure the lower value is the first.
 		if ( $site_1 > $site_2 ) {
 			list ( $site_1, $site_2 ) = array( $site_2, $site_1 );
-        }
+		}
 
 		return '(' . (int) $site_1 . ', ' . (int) $site_2 . ')';
 	}
@@ -148,7 +148,7 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 
 		if ( 0 === (int) $site_id ) {
 			$site_id = get_current_blog_id();
-        }
+		}
 
 		return $site_id;
 	}

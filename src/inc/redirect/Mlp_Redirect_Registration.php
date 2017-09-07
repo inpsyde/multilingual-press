@@ -37,8 +37,8 @@ class Mlp_Redirect_Registration {
 		);
 
 		$settings = array(
-			'display_name'	=> __( 'HTTP Redirect', 'multilingual-press' ),
-			'slug'			=> 'class-' . __CLASS__,
+			'display_name'  => __( 'HTTP Redirect', 'multilingual-press' ),
+			'slug'          => 'class-' . __CLASS__,
 			'description'   => $desc,
 		);
 

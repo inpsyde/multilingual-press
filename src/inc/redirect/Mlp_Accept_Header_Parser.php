@@ -35,7 +35,7 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 
 		if ( '' === $accept_header ) {
 			return array();
-        }
+		}
 
 		$out   = array();
 		$parts = $this->separate_values( $accept_header );
@@ -46,7 +46,7 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 
 			if ( empty( $separated ) ) {
 				continue;
-            }
+			}
 
 			list ( $key, $priority ) = $separated;
 
@@ -66,7 +66,7 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 
 			if ( ! $this->validator->is_valid( $part ) ) {
 				return array();
-            }
+			}
 
 			return array( $part, 1 );
 		}
@@ -76,7 +76,7 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 
 		if ( ! $this->validator->is_valid( $key ) ) {
 			return array();
-        }
+		}
 
 		strtok( '=' );
 

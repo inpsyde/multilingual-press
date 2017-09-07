@@ -36,7 +36,7 @@ class Mlp_Array_Diff {
 
 			if ( ! isset( $new[ $old_id ] ) ) {
 				continue;
-            }
+			}
 
 			unset( $old_data_array['ID'] );
 
@@ -46,7 +46,7 @@ class Mlp_Array_Diff {
 
 			if ( ! empty( $arr_diff ) ) {
 				 $diff[ $old_id ] = $new[ $old_id ];
-            }
+			}
 		}
 
 		return $diff;
@@ -69,7 +69,7 @@ class Mlp_Array_Diff {
 
 				if ( ! isset( $old[ $new_id ] ) ) {
 					continue;
-                }
+				}
 
 				$out[ $new_id ][ $col_name ] = $this->normalize_new_field(
 					$col_name,
@@ -97,7 +97,7 @@ class Mlp_Array_Diff {
 		if ( 'input_text' === $col_params['type'] ) {
 			if ( ! isset( $new_data[ $col_name ] ) ) {
 				return '';
-            }
+			}
 
 			return (string) $new_data[ $col_name ];
 		}
@@ -105,7 +105,7 @@ class Mlp_Array_Diff {
 		if ( 'input_checkbox' === $col_params['type'] ) {
 			if ( ! isset( $new_data[ $col_name ] ) or '0' === $new_data[ $col_name ] ) {
 				return 0;
-            }
+			}
 
 			return 1;
 		}
@@ -115,15 +115,15 @@ class Mlp_Array_Diff {
 			if ( ! isset( $new_data[ $col_name ] ) ) {
 				if ( ! isset( $col_params['attributes'] ) ) {
 					return isset( $old_data[ $col_name ] ) ? $old_data[ $col_name ] : 1;
-                }
+				}
 
 				if ( isset( $col_params['attributes']['min'] ) ) {
 					return $col_params['attributes']['min'];
-                }
+				}
 
 				if ( isset( $col_params['attributes']['max'] ) ) {
 					return $col_params['attributes']['max'];
-                }
+				}
 
 				// might be wrong. we might need a 'default' value for missing data.
 				return isset( $old_data[ $col_name ] ) ? $old_data[ $col_name ] : 1;
@@ -133,13 +133,13 @@ class Mlp_Array_Diff {
 
 			if ( ! isset( $col_params['attributes'] ) ) {
 				return (int) $new_data[ $col_name ];
-            }
+			}
 
 			if ( ! isset( $col_params['attributes']['min'] )
 				&& ! isset( $col_params['attributes']['max'] )
 				) {
 				return (int) $new_data[ $col_name ];
-            }
+			}
 
 			// at least one of 'min' or 'max' is given
 

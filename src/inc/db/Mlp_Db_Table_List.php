@@ -32,7 +32,7 @@ class Mlp_Db_Table_List implements Mlp_Db_Table_List_Interface {
 
 		if ( ! function_exists( 'wp_get_db_schema' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/schema.php';
-        }
+		}
 	}
 
 	/**
@@ -47,7 +47,7 @@ class Mlp_Db_Table_List implements Mlp_Db_Table_List_Interface {
 
 		if ( array( $this->no_tables_found ) === $names ) {
 			return array();
-        }
+		}
 
 		return $names;
 	}
@@ -102,7 +102,7 @@ class Mlp_Db_Table_List implements Mlp_Db_Table_List_Interface {
 
 			if ( $this->is_valid_custom_site_table( $name, $exclude, $prefix ) ) {
 				$out[] = $name;
-            }
+			}
 		}
 
 		return $out;
@@ -153,7 +153,7 @@ class Mlp_Db_Table_List implements Mlp_Db_Table_List_Interface {
 
 		if ( $site_prefix !== $this->wpdb->base_prefix ) {
 			return $core;
-        }
+		}
 
 		// We are on the main site. This is difficult, because there is no clear
 		// distinction between custom network tables and custom site tables.
@@ -192,7 +192,7 @@ class Mlp_Db_Table_List implements Mlp_Db_Table_List_Interface {
 
 		if ( empty( $matches[1] ) ) {
 			return array();
-        }
+		}
 
 		return $matches[1];
 	}
@@ -210,7 +210,7 @@ class Mlp_Db_Table_List implements Mlp_Db_Table_List_Interface {
 		// Make sure there is something in the array, so we don't try that again.
 		if ( empty( $names ) ) {
 			return array( $this->no_tables_found );
-        }
+		}
 
 		return $names;
 	}

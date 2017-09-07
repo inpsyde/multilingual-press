@@ -62,7 +62,7 @@ class Mlp_Relationship_Control_Ajax_Search {
 			return '<li>'
 			. esc_html__( 'Nothing found.', 'multilingual-press' )
 			. '</li>';
-        }
+		}
 
 		$out      = '';
 		$site_id  = $this->data->get_remote_site_id();
@@ -99,7 +99,7 @@ class Mlp_Relationship_Control_Ajax_Search {
 
 		if ( isset( $statuses[ $status ] ) ) {
 			return $statuses[ $status ];
-        }
+		}
 
 		return esc_html( ucfirst( $status ) );
 	}
@@ -131,13 +131,13 @@ class Mlp_Relationship_Control_Ajax_Search {
 
 		if ( empty( $duplicates ) ) {
 			return $out;
-        }
+		}
 
 		$duplicates = array_unique( $duplicates );
 
 		foreach ( $duplicates as $id ) {
 			$out[ $id ]->post_title = $out[ $id ]->post_title . ' [#' . $id . ']';
-        }
+		}
 
 		return $out;
 	}

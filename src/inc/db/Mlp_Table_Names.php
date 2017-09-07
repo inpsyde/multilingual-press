@@ -39,7 +39,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		if ( ! function_exists( 'wp_get_db_schema' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/schema.php';
-        }
+		}
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		if ( $cache ) {
 			return $cache;
-        }
+		}
 
 		$schema = wp_get_db_schema( 'global' );
 		$tables = $this->extract_names_from_schema( $schema, $this->wpdb->base_prefix );
@@ -81,11 +81,11 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		if ( $cache ) {
 			return $cache;
-        }
+		}
 
 		if ( $this->wpdb->base_prefix === $this->wpdb->prefix ) {
 			$exclude = $this->get_core_network_tables();
-        }
+		}
 
 		$tables = $this->query_information_schema( $exclude );
 
@@ -108,18 +108,18 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		if ( $cache ) {
 			return $cache;
-        }
+		}
 
 		if ( $this->site_id !== get_current_blog_id() ) {
 			switch_to_blog( $this->site_id );
-        }
+		}
 
 		$schema = wp_get_db_schema( 'blog', $this->site_id );
 		$tables = $this->extract_names_from_schema( $schema, $this->wpdb->prefix );
 
 		if ( $do_prefix ) {
 			$tables = $this->prefix_table_names( $tables, $this->wpdb->prefix );
-        }
+		}
 
 		restore_current_blog();
 
@@ -140,14 +140,14 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		if ( $cache ) {
 			return $cache;
-        }
+		}
 
 		$exclude = $this->get_core_site_tables();
 		$tables  = $this->query_information_schema( $exclude );
 
 		if ( $this->wpdb->base_prefix === $this->wpdb->prefix ) {
 			$tables = array_diff( $tables, $this->get_core_network_tables() );
-        }
+		}
 
 		wp_cache_set( $cache_key, $tables, $this->cache_group );
 
@@ -164,7 +164,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		if ( 0 === $site_id ) {
 			return get_current_blog_id();
-        }
+		}
 
 		return $site_id;
 	}
@@ -197,7 +197,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		if ( empty( $matches[1] ) ) {
 			return array();
-        }
+		}
 
 		return $matches[1];
 	}
@@ -224,7 +224,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		foreach ( $tables as $key => $name ) {
 			$tables[ $key ] = $prefix . $name;
-        }
+		}
 
 		return $tables;
 	}
@@ -241,7 +241,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 
 		if ( ! empty( $exclude ) ) {
 			$sql .= $this->get_exclude_sql( $exclude );
-        }
+		}
 
 		return $sql;
 	}

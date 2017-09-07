@@ -24,7 +24,7 @@ class Mlp_Internal_Locations implements Mlp_Locations_Interface {
 
 		if ( '' === $identifier ) {
 			$identifier = basename( $path ); // is without slashes already
-        }
+		}
 
 		$this->directories[ $identifier ]['path'] = rtrim( $path, '/' );
 		$this->directories[ $identifier ]['url']  = rtrim( $url, '/' ) . '/';
@@ -39,7 +39,7 @@ class Mlp_Internal_Locations implements Mlp_Locations_Interface {
 
 		if ( isset( $this->directories[ $identifier ][ $type ] ) ) {
 			return $this->directories[ $identifier ][ $type ];
-        }
+		}
 
 		return '';
 	}

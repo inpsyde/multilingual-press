@@ -38,10 +38,10 @@ class Mlp_General_Settings_View {
 	/**
 	 * Modules Manager
 	 *
-	 * @since	0.1
-	 * @uses	get_site_option, _e, admin_url, wp_nonce_field,
-	 * 			do_action, submit_button
-	 * @return	void
+	 * @since   0.1
+	 * @uses    get_site_option, _e, admin_url, wp_nonce_field,
+	 *          do_action, submit_button
+	 * @return  void
 	 */
 	public function modules_form() {
 
@@ -137,7 +137,7 @@ class Mlp_General_Settings_View {
 
 		if ( isset( $module['display_name_callback'] ) ) {
 			return call_user_func( $module['display_name_callback'] );
-        }
+		}
 
 		return $module['display_name'];
 	}
@@ -152,7 +152,7 @@ class Mlp_General_Settings_View {
 
 		if ( isset( $module['description_callback'] ) ) {
 			return call_user_func( $module['description_callback'] );
-        }
+		}
 
 		return $module['description'];
 	}

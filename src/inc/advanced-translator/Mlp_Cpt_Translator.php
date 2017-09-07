@@ -1,10 +1,10 @@
 <?php
 /**
- * Module Name:	MultilingualPress Custom Post Type Module
- * Description:	Allow MlP functionality for specific custom post types
- * Author:		Inpsyde GmbH
- * Version:		0.9
- * Author URI:	http://inpsyde.com
+ * Module Name: MultilingualPress Custom Post Type Module
+ * Description: Allow MlP functionality for specific custom post types
+ * Author:      Inpsyde GmbH
+ * Version:     0.9
+ * Author URI:  http://inpsyde.com
  */
 
 class Mlp_Cpt_Translator implements Mlp_Updatable {
@@ -12,9 +12,9 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	/**
 	 * Registered post types
 	 *
-	 * @access	private
-	 * @since	0.1
-	 * @var		array $post_types
+	 * @access  private
+	 * @since   0.1
+	 * @var     array $post_types
 	 */
 	private $post_types;
 
@@ -50,7 +50,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		// Quit here if module is turned off
 		if ( ! $this->register_setting() ) {
 			return;
-        }
+		}
 
 		add_filter( 'mlp_allowed_post_types', array( $this, 'filter_allowed_post_types' ) );
 
@@ -125,7 +125,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 * used to display the modules options page
 	 * form fields
 	 *
-	 * @return	void
+	 * @return  void
 	 */
 	public function draw_options_page_form_fields() {
 
@@ -133,7 +133,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		if ( empty( $post_types ) ) {
 			return;
-        }
+		}
 
 		$data = new Mlp_Cpt_Translator_Extra_General_Settings_Box_Data(
 			$this,
@@ -167,7 +167,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		if ( ! $this->nonce_validator->is_valid() ) {
 			return false;
-        }
+		}
 
 		$options    = get_site_option( 'inpsyde_multilingual_cpt' );
 		$post_types = $this->get_custom_post_types();
@@ -185,7 +185,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 				$options['post_types'][ $cpt ] = 1;
 			} else {
 				$options['post_types'][ $cpt ] = 2;
-            }
+			}
 		}
 
 		return update_site_option( 'inpsyde_multilingual_cpt', $options );
@@ -238,12 +238,12 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		if ( empty( $options ) or empty( $options['post_types'] ) ) {
 			return $out;
-        }
+		}
 
 		foreach ( $options['post_types'] as $post_type => $setting ) {
 			if ( 0 != $setting ) {
 				$out[] = $post_type;
-            }
+			}
 		}
 
 		return array_unique( $out );
@@ -281,7 +281,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 *
 	 * @access  public
 	 * @since   0.9
-	 * @uses	add_filter
+	 * @uses    add_filter
 	 * @return  void
 	 */
 	public function before_mlp_link() {
@@ -294,7 +294,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	 *
 	 * @access  public
 	 * @since   0.9
-	 * @uses	remove_filter
+	 * @uses    remove_filter
 	 * @return  void
 	 */
 	public function after_mlp_link() {
@@ -314,7 +314,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		if ( ! $this->is_cpt_with_dynamic_permalink( $post->post_type ) ) {
 			return $post_link;
-        }
+		}
 
 		$draft_or_pending = $this->is_draft_or_pending( $post );
 		$post_type        = get_post_type_object( $post->post_type );
@@ -326,7 +326,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 				array( 'post_type' => $post->post_type, 'p' => $post->ID ),
 				''
 			);
-        }
+		}
 
 		return home_url( $post_link );
 	}
@@ -343,15 +343,15 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		if ( empty( $options ) ) {
 			return false;
-        }
+		}
 
 		if ( empty( $options['post_types'] ) ) {
 			return false;
-        }
+		}
 
 		if ( empty( $options['post_types'][ $post_type ] ) ) {
 			return false;
-        }
+		}
 
 		return (int) $options['post_types'][ $post_type ] > 1;
 	}
@@ -366,7 +366,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 
 		if ( empty( $post->post_status ) ) {
 			return false;
-        }
+		}
 
 		return in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ), true );
 	}

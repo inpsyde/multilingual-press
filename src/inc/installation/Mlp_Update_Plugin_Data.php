@@ -94,7 +94,7 @@ class Mlp_Update_Plugin_Data {
 			$this->update_plugin_data( 1 );
 		} else {
 			$this->update_plugin_data( $this->last_version );
-        }
+		}
 	}
 
 	/**
@@ -180,7 +180,7 @@ class Mlp_Update_Plugin_Data {
 
 		if ( empty( $mlp_settings ) ) {
 			return;
-        }
+		}
 
 		$table = $languages->get_table_name();
 		$sql   = 'SELECT ID FROM ' . $table . 'WHERE wp_locale = %s OR iso_639_1 = %s';
@@ -201,8 +201,7 @@ class Mlp_Update_Plugin_Data {
 					   'http_name'    => str_replace( '_', '-', $mlp_site['lang'] ),
 				   )
 				);
-			}
-			// language found -> change priority
+			} // language found -> change priority
 			else {
 				$this->wpdb->update(
 					$table,

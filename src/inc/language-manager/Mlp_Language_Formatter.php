@@ -37,7 +37,7 @@ class Mlp_Language_Formatter {
 
 		if ( 'form' !== $this->type ) {
 			return $this->get_content( $name );
-        }
+		}
 
 		return $this->get_form_element( $name );
 	}
@@ -50,19 +50,19 @@ class Mlp_Language_Formatter {
 
 		if ( 'short_name' === $name ) {
 			return $this->get_short_name();
-        }
+		}
 
 		if ( 'is_rtl' === $name ) {
 			return empty( $this->raw_data->is_rtl ) ? 0 : $this->raw_data->is_rtl;
-        }
+		}
 
 		if ( isset( $this->raw_data->$name ) ) {
 			return $this->raw_data->$name;
-        }
+		}
 
 		if ( 'ID' === $name ) { // new language
 			return 0;
-        }
+		}
 
 		return '';
 	}
@@ -78,17 +78,17 @@ class Mlp_Language_Formatter {
 
 		if ( 'checkbox' === $name ) {
 			return "<input type='checkbox' id='lang_$id' name='delete_languages[]' value='$id' />";
-        }
+		}
 
 		$content = esc_attr( $this->get_content( $name ) );
 
 		if ( 'priority' === $name ) {
 			return "<input type='number' name='languages[$id][is_rtl]' value='$content' min=1 max=10 size=3 />";
-        }
+		}
 
 		if ( 'is_rtl' === $name ) {
 			return $this->get_rtl_checkbox( $content, $id );
-        }
+		}
 
 		return "<input type='text' name='languages[$id]" . "[$name]" . "' value='" . $content . "' $size />";
 	}
@@ -114,11 +114,11 @@ class Mlp_Language_Formatter {
 
 		if ( ! empty( $this->raw_data->short_name ) ) {
 			return $this->raw_data->short_name;
-        }
+		}
 
 		if ( ! empty( $this->raw_data->iso_639_1 ) ) {
 			return strtok( $this->raw_data->iso_639_1, '_' );
-        }
+		}
 
 		return '';
 	}

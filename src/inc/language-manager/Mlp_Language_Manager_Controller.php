@@ -260,7 +260,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		if ( '' === $text ) {
 			return '';
-        }
+		}
 
 		return '<div class="updated"><p>' . esc_html( $text ) . '</p></div>';
 	}
@@ -327,7 +327,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		if ( ! is_a( $this->pagination_view, 'Mlp_Table_Pagination_View' ) ) {
 			$this->pagination_view = new Mlp_Table_Pagination_View( $this->pagination_data );
-        }
+		}
 
 		return $this->pagination_view;
 	}

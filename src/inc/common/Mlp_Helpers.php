@@ -32,7 +32,7 @@ class Mlp_Helpers {
 
 		if ( ! $blogid ) {
 			$blogid = get_current_blog_id();
-        }
+		}
 
 		$redirect = get_blog_option( $blogid, 'inpsyde_multilingual_redirect' );
 
@@ -56,11 +56,11 @@ class Mlp_Helpers {
 		// If this blog is in a language
 		if ( ! isset( $languages[ $blogid ]['lang'] ) ) {
 			return '';
-        }
+		}
 
 		if ( ! $short ) {
 			return $languages[ $blogid ]['lang'];
-        }
+		}
 
 		return strtok( $languages[ $blogid ]['lang'], '_' );
 	}
@@ -84,7 +84,7 @@ class Mlp_Helpers {
 
 		if ( empty( $languages ) ) {
 			return array();
-        }
+		}
 
 		/** @var Mlp_Site_Relations $site_relations */
 		$site_relations = self::$dependencies['site_relations'];
@@ -99,7 +99,7 @@ class Mlp_Helpers {
 			// No related blogs? Leave here.
 			if ( empty( $related_blogs ) ) {
 				return array();
-            }
+			}
 		}
 
 		$options = array();
@@ -110,12 +110,12 @@ class Mlp_Helpers {
 			// no blogs with a link to other blogs
 			if ( empty( $language_data['lang'] ) || '-1' === $language_data['lang'] ) {
 				continue;
-            }
+			}
 
 			// Filter out blogs that are not related
 			if ( ! $not_related && ! in_array( $language_blogid, $related_blogs ) ) {
 				continue;
-            }
+			}
 
 			$lang = $language_data['lang'];
 
@@ -174,16 +174,16 @@ class Mlp_Helpers {
 
 		if ( ! $element_id ) {
 			return array();
-        }
+		}
 
 		// If no ID is provided, get current blogs' ID
 		if ( 0 === $blog_id ) {
 			$blog_id = get_current_blog_id();
-        }
+		}
 
 		if ( '' === $type ) {
 			$type = 'post';
-        }
+		}
 
 		/** @var Mlp_Language_Api $api */
 		$api = self::$dependencies['language_api'];
@@ -203,10 +203,10 @@ class Mlp_Helpers {
 
 		if ( ! is_singular() && ! is_tag() && !is_category() && ! is_tax() ) {
 			return array();
-        }
+		}
 
 		$return     = array();
-		              /** @var Mlp_Language_Api $api */
+					  /** @var Mlp_Language_Api $api */
 		$api        = self::$dependencies['language_api'];
 		$site_id    = get_current_blog_id();
 		$element_id = self::get_default_content_id( $element_id );
@@ -217,27 +217,27 @@ class Mlp_Helpers {
 		);
 		if ( '' !== $type ) {
 			$args['type'] = $type;
-        }
+		}
 
 		// Array of Mlp_Translation instances, site IDs are the keys
 		$related = $api->get_translations( $args );
 
 		if ( empty( $related ) ) {
 			return $return;
-        }
+		}
 
 		/** @var Mlp_Translation_Interface $translation */
 		foreach ( $related as $remote_site_id => $translation ) {
 
 			if ( $site_id === (int) $remote_site_id ) {
 				continue;
-            }
+			}
 
 			$url = $translation->get_remote_url();
 
 			if ( empty( $url ) ) {
 				continue;
-            }
+			}
 
 			$return[ $remote_site_id ] = array(
 				'post_id'        => $translation->get_target_content_id(),
@@ -276,15 +276,15 @@ class Mlp_Helpers {
 				'mlp_empty_custom_element',
 				__( 'Empty Element', 'multilingual-press' )
 			);
-        }
+		}
 
 		if ( empty( $type ) ) {
 			return Mlp_WP_Error_Factory::create( 'mlp_empty_custom_type', __( 'Empty Type', 'multilingual-press' ) );
-        }
+		}
 
 		if ( empty( $hook ) || ! is_callable( $hook ) ) {
 			return Mlp_WP_Error_Factory::create( 'mlp_empty_custom_hook', __( 'Invalid Hook', 'multilingual-press' ) );
-        }
+		}
 
 		// set the current element in the mlp class
 		$languages    = mlp_get_available_languages();
@@ -292,13 +292,13 @@ class Mlp_Helpers {
 
 		if ( 0 == count( $languages ) ) {
 			return null;
-        }
+		}
 
 		foreach ( $languages as $language_id => $language_name ) {
 
 			if ( $current_blog_id == $language_id ) {
 				continue;
-            }
+			}
 
 			switch_to_blog( $language_id );
 
@@ -323,13 +323,13 @@ class Mlp_Helpers {
 
 		if ( 0 === $site_id ) {
 			$site_id = get_current_blog_id();
-        }
+		}
 
 		$languages = get_site_option( 'inpsyde_multilingual' );
 
 		if ( empty( $languages[ $site_id ]['lang'] ) ) {
 			return '';
-        }
+		}
 
 		/** @var Mlp_Language_Api $api */
 		$api = self::$dependencies['language_api'];
@@ -352,22 +352,22 @@ class Mlp_Helpers {
 
 		if ( 0 == $site_id ) {
 			$site_id = get_current_blog_id();
-        }
+		}
 
 		if ( empty( $languages ) ) {
 			$languages = get_site_option( 'inpsyde_multilingual' );
-        }
+		}
 
 		if ( empty( $languages )
 			or empty( $languages[ $site_id ] )
 			or empty( $languages[ $site_id ]['lang'] )
 		) {
 			return '';
-        }
+		}
 
 		if ( ! $short ) {
 			return $languages[ $site_id ]['lang'];
-        }
+		}
 
 		return strtok( $languages[ $site_id ]['lang'], '_' );
 	}
@@ -530,7 +530,7 @@ class Mlp_Helpers {
 
 		if ( $a['priority'] === $b['priority'] ) {
 			return 0;
-        }
+		}
 
 		return ( $a['priority'] < $b['priority'] ) ? 1 : -1;
 	}
@@ -543,7 +543,7 @@ class Mlp_Helpers {
 
 		if ( 0 < (int) $content_id ) {
 			return $content_id;
-        }
+		}
 
 		return get_queried_object_id();
 	}

@@ -44,7 +44,7 @@ class Mlp_Network_New_Site_Controller {
 
 		if ( ! is_network_admin() ) {
 			return;
-        }
+		}
 
 		$this->language_api  = $language_api;
 		$this->site_relation = $site_relation;
@@ -89,20 +89,20 @@ class Mlp_Network_New_Site_Controller {
 
 		if ( ! $posted ) {
 			return;
-        }
+		}
 
 		$languages = (array) get_site_option( 'inpsyde_multilingual', array() );
 
 		if ( empty( $languages[ $blog_id ] ) ) {
 			$languages[ $blog_id ] = array();
-        }
+		}
 
 		$languages[ $blog_id ]['lang'] = str_replace( '-', '_', $posted );
 
 		// Set alternative title
 		if ( isset( $_POST['inpsyde_multilingual_text'] ) ) {
 			$languages[ $blog_id ]['text'] = $_POST['inpsyde_multilingual_text'];
-        }
+		}
 
 		update_site_option( 'inpsyde_multilingual', $languages );
 	}
@@ -116,11 +116,11 @@ class Mlp_Network_New_Site_Controller {
 
 		if ( ! isset( $_POST['inpsyde_multilingual_lang'] ) ) {
 			return false;
-        }
+		}
 
 		if ( '-1' === $_POST['inpsyde_multilingual_lang'] ) {
 			return false;
-        }
+		}
 
 		return $_POST['inpsyde_multilingual_lang'];
 	}
@@ -137,7 +137,7 @@ class Mlp_Network_New_Site_Controller {
 
 		if ( ! $posted ) {
 			return;
-        }
+		}
 
 		// search for wp_locale where search = $http_name
 		$search = array(
@@ -157,7 +157,7 @@ class Mlp_Network_New_Site_Controller {
 		// no results found? -> return
 		if ( empty( $available_language ) ) {
 			return;
-        }
+		}
 
 		// getting the first wp_locale
 		$wp_locale = $available_language[0]->wp_locale;
@@ -181,7 +181,7 @@ class Mlp_Network_New_Site_Controller {
 
 		if ( empty( $_POST['related_blogs'] ) ) {
 			return 0;
-        }
+		}
 
 		$new_related = (array) $_POST['related_blogs'];
 		$related     = array_map( 'intval', $new_related );

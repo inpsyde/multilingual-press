@@ -109,7 +109,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 			<?php
 			foreach ( $items as $value => $text ) {
 				$this->print_item( $value, $text );
-            }
+			}
 			?>
 		</ul>
 	<?php
@@ -144,7 +144,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 
 		if ( ! $this->data->has_menu() ) {
 			$button_attributes['disabled'] = 'disabled';
-        }
+		}
 		?>
 
 		<span class="add-to-menu">

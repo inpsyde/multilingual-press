@@ -53,7 +53,7 @@ class Multilingual_Press {
 		 */
 		if ( null === $wpdb ) {
 			return;
-        }
+		}
 
 		$this->plugin_data = $data;
 		$this->wpdb        = $wpdb;
@@ -62,8 +62,8 @@ class Multilingual_Press {
 	/**
 	 * Initial setup handler.
 	 *
-	 * @global	$wpdb wpdb WordPress Database Wrapper
-	 * @global	$pagenow string Current Page Wrapper
+	 * @global  $wpdb wpdb WordPress Database Wrapper
+	 * @global  $pagenow string Current Page Wrapper
 	 * @return void
 	 */
 	public function setup() {
@@ -77,7 +77,7 @@ class Multilingual_Press {
 
 		if ( ! $this->is_active_site() ) {
 			return;
-        }
+		}
 
 		// Hooks and filters
 		add_action( 'inpsyde_mlp_loaded', array( $this, 'load_plugin_textdomain' ), 1 );
@@ -113,7 +113,7 @@ class Multilingual_Press {
 			$this->run_admin_actions();
 		} else {
 			$this->run_frontend_actions();
-        }
+		}
 	}
 
 	/**
@@ -131,13 +131,13 @@ class Multilingual_Press {
 
 		if ( is_network_admin() ) {
 			return true;
-        }
+		}
 
 		$relations = get_site_option( 'inpsyde_multilingual', array() );
 
 		if ( array_key_exists( get_current_blog_id(), $relations ) ) {
 			return true;
-        }
+		}
 
 		return false;
 	}
@@ -242,9 +242,9 @@ class Multilingual_Press {
 	/**
 	 * Find and load core and pro features.
 	 *
-	 * @access	public
-	 * @since	0.1
-	 * @return	array Files to include
+	 * @access  public
+	 * @since   0.1
+	 * @return  array Files to include
 	 */
 	protected function load_features() {
 
@@ -254,13 +254,13 @@ class Multilingual_Press {
 
 		if ( ! is_readable( $path ) ) {
 			return $found;
-        }
+		}
 
 		$files = glob( "$path/feature.*.php" );
 
 		if ( empty( $files ) ) {
 			return $found;
-        }
+		}
 
 		foreach ( $files as $file ) {
 			$found[] = $file;
@@ -331,10 +331,10 @@ class Multilingual_Press {
 	/**
 	 * Checks for errors
 	 *
-	 * @access	public
-	 * @since	0.8
+	 * @access  public
+	 * @since   0.8
 	 * @uses
-	 * @return	boolean
+	 * @return  boolean
 	 */
 	public function check_for_user_errors() {
 
@@ -344,10 +344,10 @@ class Multilingual_Press {
 	/**
 	 * Checks for errors
 	 *
-	 * @access	public
-	 * @since	0.9
+	 * @access  public
+	 * @since   0.9
 	 * @uses
-	 * @return	void
+	 * @return  void
 	 */
 	public function check_for_user_errors_admin_notice() {
 
@@ -359,24 +359,24 @@ class Multilingual_Press {
 	/**
 	 * Checks for errors
 	 *
-	 * @return	boolean
+	 * @return  boolean
 	 */
 	public function check_for_errors() {
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			return false;
-        }
+		}
 
 		if ( is_network_admin() ) {
 			return false;
-        }
+		}
 
 		// Get blogs related to the current blog
 		$all_blogs = get_site_option( 'inpsyde_multilingual', array() );
 
 		if ( 1 > count( $all_blogs ) && is_super_admin() ) {
 			return true;
-        }
+		}
 
 		return false;
 	}

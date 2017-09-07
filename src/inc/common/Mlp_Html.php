@@ -24,7 +24,7 @@ class Mlp_Html implements Mlp_Html_Interface {
 		foreach ( $attrs as $key => $value ) {
 			if ( true === $value ) {
 				( $xml and $value = "='$key'" ) or $value = '';
-            }
+			}
 
 			$str .= " $key='" . esc_attr( $value) . "'";
 		}

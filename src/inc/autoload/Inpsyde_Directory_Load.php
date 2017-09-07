@@ -41,11 +41,11 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 
 		if ( empty( $this->found ) ) {
 			$this->found = $this->read_files();
-        }
+		}
 
 		if ( ! isset( $this->found[ $name ] ) ) {
 			return false;
-        }
+		}
 
 		require $this->dir . "/$name.php";
 
@@ -65,15 +65,15 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 		// Catch empty values to prevent multiple attempts to read the directory.
 		if ( false === $files ) {
 			return array( 'error' );
-        }
+		}
 
 		if ( array() === $files ) {
 			return array( 'empty' );
-        }
+		}
 
 		foreach ( $files as $file ) {
 			$return[ basename( $file, '.php' ) ] = 1;
-        }
+		}
 
 		return $return;
 	}

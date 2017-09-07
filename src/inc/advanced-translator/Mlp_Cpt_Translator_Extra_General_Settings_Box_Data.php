@@ -79,7 +79,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 
 		if ( empty( $post_types ) ) {
 			return '';
-        }
+		}
 
 		return 'mlp_cpt_' . key( $post_types );
 	}
@@ -121,7 +121,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 
 		if ( empty( $post_types ) ) {
 			return '';
-        }
+		}
 
 		$out = wp_nonce_field(
 			$this->nonce_validator->get_action(),
@@ -133,7 +133,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 
 		foreach ( $post_types as $cpt => $cpt_params ) {
 			$out .= $this->get_row( $cpt, $cpt_params, $options, $s_label );
-        }
+		}
 
 		return "$out</tbody></table>";
 	}
@@ -155,7 +155,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 			$active = 0;
 		} else {
 			$active = (int) $options['post_types'][ $cpt ];
-        }
+		}
 
 		$check_use = $this->get_checkbox(
 			$this->form_name . '[' . $cpt . ']',
@@ -214,7 +214,7 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 
 		if ( empty( $this->post_types ) ) {
 			$this->post_types = $this->update->update( 'custom.post-type.list' );
-        }
+		}
 
 		return $this->post_types;
 	}

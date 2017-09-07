@@ -37,7 +37,7 @@ class Mlp_Global_Switcher {
 
 		if ( self::TYPE_GET === $type ) {
 			$this->type = $type;
-        }
+		}
 
 		$this->type = self::TYPE_POST;
 	}
@@ -49,7 +49,7 @@ class Mlp_Global_Switcher {
 
 		if ( self::TYPE_GET === $this->type ) {
 			return $this->strip_get();
-        }
+		}
 
 		return $this->strip_post();
 	}
@@ -61,7 +61,7 @@ class Mlp_Global_Switcher {
 
 		if ( empty( $this->storage ) ) {
 			return 0;
-        }
+		}
 
 		$amount = count( $this->storage );
 
@@ -69,7 +69,7 @@ class Mlp_Global_Switcher {
 			$this->fill_get();
 		} else {
 			$this->fill_post();
-        }
+		}
 
 		return $amount;
 	}
@@ -81,7 +81,7 @@ class Mlp_Global_Switcher {
 
 		if ( empty( $_GET ) ) {
 			return 0;
-        }
+		}
 
 		$amount = count( $_GET );
 
@@ -100,7 +100,7 @@ class Mlp_Global_Switcher {
 
 		foreach ( $this->storage as $name => $value ) {
 			$_REQUEST[ $name ] = $_GET[ $name ] = $value;
-        }
+		}
 	}
 
 	/**
@@ -110,7 +110,7 @@ class Mlp_Global_Switcher {
 
 		if ( empty( $_POST ) ) {
 			return 0;
-        }
+		}
 
 		$amount = count( $_POST );
 
@@ -129,6 +129,6 @@ class Mlp_Global_Switcher {
 
 		foreach ( $this->storage as $name => $value ) {
 			$_REQUEST[ $name ] = $_POST[ $name ] = $value;
-        }
+		}
 	}
 }

@@ -52,7 +52,7 @@ class Inpsyde_Autoload
 		foreach ( $this->rules as $rule ) {
 			if ( $rule->load( $name ) ) {
 				return;
-            }
-        }
+			}
+		}
 	}
 }

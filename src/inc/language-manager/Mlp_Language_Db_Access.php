@@ -22,16 +22,16 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	 * @var array
 	 */
 	private $fields = array(
-		    'ID' => '%d',
-            'english_name' => '%s',
-            'native_name' =>  '%s',
-            'custom_name' => '%s',
-            'is_rtl' => '%d',
-            'iso_639_1' => '%s',
-            'iso_639_2' => '%s',
-            'wp_locale' => '%s',
-            'http_name' => '%s',
-            'priority' => '%d',
+			'ID' => '%d',
+			'english_name' => '%s',
+			'native_name' =>  '%s',
+			'custom_name' => '%s',
+			'is_rtl' => '%d',
+			'iso_639_1' => '%s',
+			'iso_639_2' => '%s',
+			'wp_locale' => '%s',
+			'http_name' => '%s',
+			'priority' => '%d',
 	);
 
 	/**

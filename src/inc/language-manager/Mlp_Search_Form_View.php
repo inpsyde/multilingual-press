@@ -44,7 +44,7 @@ class Mlp_Search_Form_View {
 
 		foreach ( $attributes as $key => $value ) {
 			$return .= " $key='" . esc_attr( $value ) . "'";
-        }
+		}
 
 		return $return;
 	}

@@ -91,7 +91,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 			print $result;
 		} else {
 			print '<pre>' . print_r( $result, 1 ) . '</pre>';
-        }
+		}
 
 		mlp_exit();
 	}
@@ -108,7 +108,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	 */
 	public function set_up_meta_box_handlers(
 		WP_Post $post,
-		        $remote_site_id,
+				$remote_site_id,
 		WP_Post $remote_post
 	) {
 
@@ -116,7 +116,7 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 
 		if ( 'post-new.php' === $pagenow ) {
 			return; // maybe later, for now, we work on existing posts only
-        }
+		}
 
 		$this->data->set_ids(
 		   array(

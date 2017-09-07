@@ -34,7 +34,7 @@ class Mlp_Network_Plugin_Deactivation implements Mlp_Network_Plugin_Deactivation
 
 		if ( empty( $remove ) ) {
 			return $remove;
-        }
+		}
 
 		$active_plugins = $this->remove_plugins( $active_plugins, $remove );
 
@@ -59,7 +59,7 @@ class Mlp_Network_Plugin_Deactivation implements Mlp_Network_Plugin_Deactivation
 
 				if ( false !== strpos( $file, $plugin ) ) {
 					$return[ $file ] = 1;
-                }
+				}
 			}
 		}
 
@@ -80,7 +80,7 @@ class Mlp_Network_Plugin_Deactivation implements Mlp_Network_Plugin_Deactivation
 		foreach ( $files as $file ) {
 			if ( isset( $to_remove[ $file ] ) ) {
 				unset( $active_plugins[ $file ] );
-            }
+			}
 		}
 
 		return $active_plugins;

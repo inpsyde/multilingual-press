@@ -33,15 +33,15 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 	{
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return false;
-        }
+		}
 
 		if ( $this->is_real_revision( $context ) ) {
 			return false;
-        }
+		}
 
 		if ( ! current_user_can( 'edit_post', $context ) ) {
 			return false;
-        }
+		}
 
 		return $this->nonce->is_valid();
 	}
@@ -58,7 +58,7 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 
 		if ( ! wp_is_post_revision( $post_id ) ) {
 			false;
-        }
+		}
 
 		$post = get_post( $post_id );
 
@@ -73,11 +73,11 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 
 		if ( 'inherit' !== $post->post_status ) {
 			return false;
-        }
+		}
 
 		if ( 'revision' !== $post->post_type ) {
 			return false;
-        }
+		}
 
 		return 'auto-draft' !== filter_input( INPUT_POST, 'original_post_status' );
 	}

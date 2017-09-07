@@ -90,7 +90,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 
 		if ( ! isset( $this->modules[ $slug ] ) ) {
 			return false;
-        }
+		}
 
 		unset( $this->modules[ $slug ] );
 
@@ -107,7 +107,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 
 		if ( ! isset( $this->states[ $slug ] ) ) {
 			return false;
-        }
+		}
 
 		return 'on' === $this->states[ $slug ];
 	}
@@ -148,7 +148,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 
 		if ( 'state' === $key ) {
 			$this->states[ $slug ] = $value;
-        }
+		}
 
 		return $this->modules[ $slug ];
 	}
@@ -163,7 +163,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 
 		if ( 'all' === $status ) {
 			return $this->modules;
-        }
+		}
 
 		// Filter modules by state
 		$find = 'active' === $status ? 'on' : 'off';
@@ -182,7 +182,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 		foreach ( $this->modules as $slug => $module ) {
 			if ( $this->states[ $slug ] === $status ) {
 				$out[ $slug ] = $module;
-            }
+			}
 		}
 
 		return $out;
@@ -198,7 +198,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 
 		if ( ! isset( $this->modules[ $slug ] ) ) {
 			return array();
-        }
+		}
 
 		return $this->modules[ $slug ];
 	}

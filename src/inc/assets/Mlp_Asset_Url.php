@@ -70,7 +70,7 @@ class Mlp_Asset_Url implements Mlp_Asset_Url_Interface {
 
 		if ( ! is_readable( $file_path ) ) {
 			return '';
-        }
+		}
 
 		$this->version = filemtime( $file_path );
 
@@ -89,17 +89,17 @@ class Mlp_Asset_Url implements Mlp_Asset_Url_Interface {
 		// We do not minify in debug mode
 		if ( $this->is_debug_mode() ) {
 			return $file_name;
-        }
+		}
 
 		$minified_file_name = $this->get_minified_file_name( $file_name );
 
 		if ( $minified_file_name === $file_name ) {
 			return $file_name;
-        }
+		}
 
 		if ( ! is_readable( "$dir_path/$minified_file_name" ) ) {
 			return $file_name;
-        };
+		};
 
 		return $minified_file_name;
 	}
@@ -111,7 +111,7 @@ class Mlp_Asset_Url implements Mlp_Asset_Url_Interface {
 
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 			return true;
-        }
+		}
 
 		return defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG;
 	}
@@ -127,7 +127,7 @@ class Mlp_Asset_Url implements Mlp_Asset_Url_Interface {
 		// This is already a minified file.
 		if ( false !== strpos( $file_name, '.min.' ) ) {
 			return $file_name;
-        }
+		}
 
 		// The file might have a name like 'plugin.admin.network.css'
 		$parts     = explode( '.', $file_name );

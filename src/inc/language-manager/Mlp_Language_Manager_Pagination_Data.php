@@ -66,7 +66,7 @@ class Mlp_Language_Manager_Pagination_Data implements Mlp_Browsable {
 		// can be sent per GET or POST
 		if ( empty( $_REQUEST['paged'] ) || 2 > $_REQUEST['paged'] ) {
 			return 1;
-        }
+		}
 
 		// fix calls to page 99 when there are just 10 possible pages
 		$page = min( $_REQUEST['paged'], $this->get_total_pages() );

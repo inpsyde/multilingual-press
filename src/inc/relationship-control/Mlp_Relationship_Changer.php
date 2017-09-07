@@ -73,7 +73,7 @@ class Mlp_Relationship_Changer {
 
 		if ( ! $source_post ) {
 			return 'source not found';
-        }
+		}
 
 		$save_context = array(
 			'source_blog'    => $this->source_site_id,
@@ -105,7 +105,7 @@ class Mlp_Relationship_Changer {
 
 		if ( is_wp_error( $post_id ) ) {
 			return $post_id->get_error_message();
-        }
+		}
 
 		$this->remote_post_id = $post_id;
 
@@ -138,19 +138,19 @@ class Mlp_Relationship_Changer {
 
 		if ( 'revision' !== $post->post_type ) {
 			return $post->post_type;
-        }
+		}
 
 		if ( empty( $_POST['post_type'] ) ) {
 			return $post->post_type;
-        }
+		}
 
 		if ( 'revision' === $_POST['post_type'] ) {
 			return $post->post_type;
-        }
+		}
 
 		if ( is_string( $_POST['post_type'] ) ) {
 			return $_POST['post_type']; // auto-draft
-        }
+		}
 
 		return $post->post_type;
 	}
@@ -284,7 +284,7 @@ class Mlp_Relationship_Changer {
 					$this->$value = (string) $_REQUEST[ $value ];
 				} else {
 					$this->$value = (int) $_REQUEST[ $value ];
-                }
+				}
 			}
 		}
 	}

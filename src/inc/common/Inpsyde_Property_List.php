@@ -96,7 +96,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 				'This object has been frozen.
 				You cannot set properties anymore.'
 			);
-        }
+		}
 
 		$this->properties[ $name ] = $value;
 		unset( $this->deleted[ $name ] );
@@ -116,18 +116,18 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 				'This object has been frozen.
 				You cannot set properties anymore.'
 			);
-        }
+		}
 
 		if ( ! is_array( $var ) and ! is_object( $var ) ) {
 			return $this->stop(
 				'Cannot import this variable.
 				Use arrays and objects only, not a "' . gettype( $var ) . '".'
 			);
-        }
+		}
 
 		foreach ( $var as $name => $value ) {
 			$this->properties[ $name ] = $value;
-        }
+		}
 
 		return $this;
 	}
@@ -144,15 +144,15 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 
 		if ( isset( $this->properties[ $name ] ) ) {
 			return $this->properties[ $name ];
-        }
+		}
 
 		if ( isset( $this->deleted[ $name ] ) ) {
 			return null;
-        }
+		}
 
 		if ( null === $this->parent ) {
 			return null;
-        }
+		}
 
 		return $this->parent->get( $name );
 	}
@@ -166,7 +166,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 	public function get_all( $use_parent = false ) {
 		if ( ! $use_parent ) {
 			return $this->properties;
-        }
+		}
 
 		$parent_properties = $this->parent->get_all( true );
 		$all               = array_merge( $parent_properties, $this->properties );
@@ -188,15 +188,15 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 
 		if ( isset( $this->properties[ $name ] ) ) {
 			return true;
-        }
+		}
 
 		if ( isset( $this->deleted[ $name ] ) ) {
 			return false;
-        }
+		}
 
 		if ( null === $this->parent ) {
 			return false;
-        }
+		}
 
 		return $this->parent->has( $name );
 	}
@@ -216,7 +216,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 				'This object has been frozen.
 				You cannot delete properties anymore.'
 			);
-        }
+		}
 
 		$this->deleted[ $name ] = true;
 		unset( $this->properties[ $name ] );
@@ -237,7 +237,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 				'This object has been frozen.
 				You cannot change the parent anymore.'
 			);
-        }
+		}
 
 		$this->parent = $object;
 
@@ -290,11 +290,11 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 
 		if ( '' === $code ) {
 			$code = __CLASS__;
-        }
+		}
 
 		if ( class_exists( 'WP_Error' ) ) {
 			return Mlp_WP_Error_Factory::create( $code, $msg );
-        }
+		}
 
 		throw new Exception( $msg, $code );
 	}

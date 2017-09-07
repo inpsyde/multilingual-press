@@ -116,7 +116,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 		// Custom names are now set in the Language Manager
 		//$lang_title = isset( $siteoption[ $this->blog_id ][ 'text' ] ) ? stripslashes( $siteoption[ $this->blog_id ][ 'text' ] ) : '';
-		$selected        = isset( $site_option[ $this->blog_id ]['lang'] ) ? $site_option[ $this->blog_id ]['lang']	: '';
+		$selected        = isset( $site_option[ $this->blog_id ]['lang'] ) ? $site_option[ $this->blog_id ]['lang'] : '';
 		$blogoption_flag = get_blog_option( $this->blog_id, 'inpsyde_multilingual_flag_url' );
 
 		// Sanitize lang title
@@ -164,7 +164,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 					value="<?php echo esc_attr( $lang_title ); ?>" />
 				<p class="description">
 					<?php esc_html_e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
-					                  'multilingual-press' ); ?>
+									  'multilingual-press' ); ?>
 				</p>
 			</td>
 		</tr>
@@ -200,11 +200,11 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 		if ( ! empty( $language->english_name ) ) {
 			$parts[] = $language->english_name;
-        }
+		}
 
 		if ( ! empty( $language->native_name ) ) {
 			$parts[] = $language->native_name;
-        }
+		}
 
 		$parts = array_unique( $parts );
 

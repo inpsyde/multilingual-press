@@ -40,15 +40,15 @@ class Mlp_User_Settings_Updater implements Mlp_User_Settings_Updater_Interface {
 
 		if ( ! $this->nonce->is_valid() ) {
 			return false;
-        }
+		}
 
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
 			return false;
-        }
+		}
 
 		if ( empty( $_POST[ $this->key ] ) or '' === trim( $_POST[ $this->key ] ) ) {
 			return delete_user_meta( $user_id, $this->key );
-        }
+		}
 
 		return update_user_meta( $user_id, $this->key, $_POST[ $this->key ] );
 	}

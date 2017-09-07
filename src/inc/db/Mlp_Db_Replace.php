@@ -41,8 +41,8 @@ class Mlp_Db_Replace {
 	public function replace_string(
 		Mlp_Db_Table_Name_Interface $table,
 		array $columns,
-		                            $search,
-		                            $replacement
+									$search,
+									$replacement
 	) {
 
 		$name         = $table->get_name();
@@ -50,7 +50,7 @@ class Mlp_Db_Replace {
 
 		if ( empty( $replacements ) ) {
 			return 0;
-        }
+		}
 
 		$this->wpdb->query( 'SET autocommit = 0;' );
 		$num = (int) $this->wpdb->query( "UPDATE `$name` SET $replacements" );
@@ -94,7 +94,7 @@ class Mlp_Db_Replace {
 
 			if ( ! empty( $sql ) ) {
 				$rows[] = $sql;
-            }
+			}
 		}
 
 		return join( ",\n", $rows );

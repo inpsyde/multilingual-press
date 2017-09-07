@@ -32,8 +32,8 @@ class Mlp_Plugin_Deactivation {
 	 */
 	public function __construct(
 		array $errors,
-		      $plugin_name,
-		      $plugin_base_name
+			  $plugin_name,
+			  $plugin_base_name
 	) {
 
 		$this->errors           = $errors;
