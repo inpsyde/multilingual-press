@@ -18,5 +18,5 @@ interface Mlp_Html_Interface {
 	 * @param  bool  $xml
 	 * @return string
 	 */
-	public function array_to_attrs( array $attrs, $xml = FALSE );
+	public function array_to_attrs( array $attrs, $xml = false );
 }

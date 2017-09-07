@@ -36,7 +36,7 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 	public function load( $name ) {
 
 		if ( ! $name = $this->prepare_name( $name ) )
-			return FALSE;
+			return false;
 
 		foreach ( array( 'core', 'pro' ) as $main_dir ) {
 
@@ -52,31 +52,31 @@ class Mlp_Autoload_Rule implements Inpsyde_Autoload_Rule_Interface
 
 				if ( file_exists( $file ) ) {
 					include $file;
-					return TRUE;
+					return true;
 				}
 			}
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	/**
 	 * Check for namespaces and matching file name.
 	 *
 	 * @param  string $name   The class/interface name.
-	 * @return string|boolean The class name or FALSE
+	 * @return string|boolean The class name or false
 	 */
 	private function prepare_name( $name ) {
 
 		$name = trim( $name, '\\' );
 
 		// Our classes are not in a dedicated namespace (yet).
-		if ( FALSE !== strpos( $name, '\\' ) )
-			return FALSE;
+		if ( false !== strpos( $name, '\\' ) )
+			return false;
 
 		// Our classes start with "Mlp_" always.
 		if ( 0 !== strpos( $name, 'Mlp_' ) && 0 !== strpos( $name, 'Inpsyde_' ) )
-			return FALSE;
+			return false;
 
 		return $name;
 	}

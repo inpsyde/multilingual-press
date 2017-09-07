@@ -20,7 +20,7 @@ interface Mlp_Language_Api_Interface {
 	 *
 	 * Usage:
 	 * <code>
-	 * $mlp_language_api = apply_filters( 'mlp_language_api', NULL );
+	 * $mlp_language_api = apply_filters( 'mlp_language_api', null );
 	 * if ( is_a( $mlp_language_api, 'Mlp_Language_Api_Interface' ) ) {
 	 *     // do something
 	 * }
@@ -39,7 +39,7 @@ interface Mlp_Language_Api_Interface {
 	 *     - 'site_id'              Base site
 	 *     - 'content_id'           post or term_taxonomy ID, *not* term ID
 	 *     - 'type'                 see Mlp_Language_Api::get_request_type(),
-	 *     - 'strict'               When TRUE only matching exact translations will be included
+	 *     - 'strict'               When true only matching exact translations will be included
 	 *     - 'search_term'          if you want to translate a search
 	 *     - 'post_type'            for post type archives
 	 *     - 'include_base'         bool. Include the base site in returned list

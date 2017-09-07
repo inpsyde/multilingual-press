@@ -56,7 +56,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 		$ext = $this->get_extension( $file );
 
 		if ( ! $this->locations->has_dir( $ext ) ) {
-			return FALSE;
+			return false;
 		}
 
 		$url = new Mlp_Asset_Url(
@@ -75,7 +75,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 			$this->l10n[ $handle ] = $l10n;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -103,7 +103,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 					$url,
 					$properties[ 'dependencies' ],
 					$version,
-					TRUE
+					true
 				);
 			} elseif ( 'css' === $properties[ 'ext' ] ) {
 				wp_register_style(
@@ -130,20 +130,20 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 		$to_load = $this->get_valid_handles( (array) $handles );
 
 		if ( empty( $to_load ) ) {
-			return FALSE;
+			return false;
 		}
 
 		$action = $this->get_enqueue_action();
 
 		if ( '' === $action ) {
-			return FALSE;
+			return false;
 		}
 
 		$loader = new Mlp_Asset_Loader( $to_load, $this->l10n );
 
 		add_action( $action, array( $loader, 'enqueue' ) );
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -208,7 +208,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 
 		$last_dot = strrchr( $file_name, '.' );
 
-		if ( FALSE === $last_dot ) {
+		if ( false === $last_dot ) {
 			return '_invalid_';
 		}
 

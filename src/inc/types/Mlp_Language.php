@@ -17,7 +17,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 	/**
 	 * @var bool
 	 */
-	private $is_rtl = FALSE;
+	private $is_rtl = false;
 
 	/**
 	 * @var array
@@ -124,7 +124,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 			'english_name' => '',
 			'native_name'  => '',
 			'custom_name'  => '',
-			'is_rtl'       => FALSE,
+			'is_rtl'       => false,
 			'http_name'    => '',
 			'priority'     => 1,
 			'wp_locale'    => '',

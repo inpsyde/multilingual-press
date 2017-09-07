@@ -20,7 +20,7 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 	/**
 	 * @param Mlp_Accept_Header_Validator_Interface $validator
 	 */
-	public function __construct( Mlp_Accept_Header_Validator_Interface $validator = NULL ) {
+	public function __construct( Mlp_Accept_Header_Validator_Interface $validator = null ) {
 
 		$this->validator = $validator;
 	}
@@ -60,7 +60,7 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 	 */
 	private function separate_priority( $part ) {
 
-		if ( FALSE === strpos( $part, ';' ) ) {
+		if ( false === strpos( $part, ';' ) ) {
 
 			if ( ! $this->validator->is_valid( $part ) )
 				return array();
@@ -120,12 +120,12 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 	 */
 	private function remove_comment( $header ) {
 
-		$unescape_delimiter = FALSE;
+		$unescape_delimiter = false;
 
-		if ( FALSE !== strpos( $header, '~' ) ) {
+		if ( false !== strpos( $header, '~' ) ) {
 
 			$header      = str_replace( '~', '\~', $header );
-			$unescape_delimiter = TRUE;
+			$unescape_delimiter = true;
 		}
 
 		$no_comment = preg_replace( '~\([^)]*\)~', '', $header );

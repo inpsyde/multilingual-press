@@ -44,7 +44,7 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 	public function save( array $data ) {
 
 		if ( ! $this->nonce->is_valid() )
-			return FALSE;
+			return false;
 
 		$id    = $this->get_current_blog_id( $data, get_current_blog_id() );
 		$value = $this->get_sent_value( $data );

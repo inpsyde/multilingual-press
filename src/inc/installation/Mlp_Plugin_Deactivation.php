@@ -55,7 +55,7 @@ class Mlp_Plugin_Deactivation {
 
 		deactivate_plugins( $this->plugin_base_name );
 
-		return TRUE;
+		return true;
 	}
 
 	/**

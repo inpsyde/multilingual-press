@@ -36,7 +36,7 @@ class Mlp_Table_Duplicator implements Mlp_Table_Duplicator_Interface {
 	 * @param  bool   $create Create the new table based on the old one.
 	 * @return int Number of inserted rows
 	 */
-	public function replace_content( $new_table, $old_table, $create = FALSE ) {
+	public function replace_content( $new_table, $old_table, $create = false ) {
 
 		if ( $create ) {
 			$this->create_table( $new_table, $old_table );

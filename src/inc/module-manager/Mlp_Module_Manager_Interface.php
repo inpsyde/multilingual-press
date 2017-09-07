@@ -18,7 +18,7 @@ interface Mlp_Module_Manager_Interface {
 	/**
 	 * Save option to database.
 	 *
-	 * @return bool TRUE if saving was successful, FALSE if not.
+	 * @return bool true if saving was successful, false if not.
 	 */
 	public function save();
 
@@ -26,7 +26,7 @@ interface Mlp_Module_Manager_Interface {
 	 * Register a module.
 	 *
 	 * @param  array $module Required: slug, description and display_name
-	 * @return bool TRUE if the module is active, FALSE if it isn't.
+	 * @return bool true if the module is active, false if it isn't.
 	 */
 	public function register( array $module );
 

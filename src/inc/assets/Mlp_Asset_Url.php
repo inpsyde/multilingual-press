@@ -106,7 +106,7 @@ class Mlp_Asset_Url implements Mlp_Asset_Url_Interface {
 	private function is_debug_mode() {
 
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
-			return TRUE;
+			return true;
 
 		return defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG;
 	}
@@ -120,7 +120,7 @@ class Mlp_Asset_Url implements Mlp_Asset_Url_Interface {
 	private function get_minified_file_name( $file_name ) {
 
 		// This is already a minified file.
-		if ( FALSE !== strpos( $file_name, '.min.' ) )
+		if ( false !== strpos( $file_name, '.min.' ) )
 			return $file_name;
 
 		// The file might have a name like 'plugin.admin.network.css'

@@ -43,11 +43,11 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 			$this->found = $this->read_files();
 
 		if ( ! isset( $this->found[ $name ] ) )
-			return FALSE;
+			return false;
 
 		require $this->dir . "/$name.php";
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 		$files  = glob( $this->dir . '/*.php' );
 
 		// Catch empty values to prevent multiple attempts to read the directory.
-		if ( FALSE === $files )
+		if ( false === $files )
 			return array( 'error' );
 
 		if ( array() === $files )

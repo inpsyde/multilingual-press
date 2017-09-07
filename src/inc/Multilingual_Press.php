@@ -44,14 +44,14 @@ class Multilingual_Press {
 	 * @param Inpsyde_Property_List_Interface $data
 	 * @param wpdb $wpdb
 	 */
-	public function __construct( Inpsyde_Property_List_Interface $data, wpdb $wpdb = NULL ) {
+	public function __construct( Inpsyde_Property_List_Interface $data, wpdb $wpdb = null ) {
 
 		/* Someone has an old Free version active and activates the new Pro on
 		 * top of that. The old Free version tries now to create an instance of
 		 * this new version of the class, and the second parameter is missing.
 		 * This is where we stop.
 		 */
-		if ( NULL === $wpdb )
+		if ( null === $wpdb )
 			return;
 
 		$this->plugin_data = $data;
@@ -127,14 +127,14 @@ class Multilingual_Press {
 		}
 
 		if ( is_network_admin() )
-			return TRUE;
+			return true;
 
 		$relations = get_site_option( 'inpsyde_multilingual', array() );
 
 		if ( array_key_exists( get_current_blog_id(), $relations ) )
-			return TRUE;
+			return true;
 
-		return FALSE;
+		return false;
 	}
 	/**
 	 * @return void
@@ -162,7 +162,7 @@ class Multilingual_Press {
 		$rel_path = dirname( plugin_basename( $this->plugin_file_path ) )
 				. $this->plugin_data->get( 'text_domain_path' );
 
-		load_plugin_textdomain( 'multilingual-press', FALSE, $rel_path );
+		load_plugin_textdomain( 'multilingual-press', false, $rel_path );
 	}
 
 	/**
@@ -344,7 +344,7 @@ class Multilingual_Press {
 	 */
 	public function check_for_user_errors_admin_notice() {
 
-		if ( TRUE == $this->check_for_errors() ) {
+		if ( true == $this->check_for_errors() ) {
 			?><div class="error"><p><?php _e( 'You didn\'t setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships.' , 'multilingual-press' ); ?></p></div><?php
 		}
 	}
@@ -357,18 +357,18 @@ class Multilingual_Press {
 	public function check_for_errors() {
 
 		if ( defined( 'DOING_AJAX' ) )
-			return FALSE;
+			return false;
 
 		if ( is_network_admin() )
-			return FALSE;
+			return false;
 
 		// Get blogs related to the current blog
 		$all_blogs = get_site_option( 'inpsyde_multilingual', array() );
 
 		if ( 1 > count( $all_blogs ) && is_super_admin() )
-			return TRUE;
+			return true;
 
-		return FALSE;
+		return false;
 	}
 
 	/**

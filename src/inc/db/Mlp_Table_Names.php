@@ -96,7 +96,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 * @param  bool $do_prefix Should the table names be prefixed?
 	 * @return array
 	 */
-	public function get_core_site_tables( $do_prefix = TRUE ) {
+	public function get_core_site_tables( $do_prefix = true ) {
 
 		$cache_key = "site-core-{$this->site_id}-"
 			. ( $do_prefix ? 1 : 0 );

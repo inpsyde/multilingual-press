@@ -152,7 +152,7 @@ class Mlp_User_Backend_Language {
 	 */
 	public function get_user_language( $user_id, $default = '' ) {
 
-		$setting = get_user_meta( $user_id, $this->key, TRUE );
+		$setting = get_user_meta( $user_id, $this->key, true );
 
 		if ( empty( $setting ) ) {
 			return $default;
@@ -190,7 +190,7 @@ class Mlp_User_Backend_Language {
 		$output = array();
 
 		// Inherit site specific language
-		$output[ ] = '<option value=""' . selected( $current, '', FALSE ) . '>'
+		$output[ ] = '<option value=""' . selected( $current, '', false ) . '>'
 			. __( 'Site Language', 'multilingual-press' ) . "</option>";
 
 		foreach ( (array) $lang_files as $file_name ) {
@@ -206,7 +206,7 @@ class Mlp_User_Backend_Language {
 
 			$lang = esc_html( $lang );
 
-			$selected = selected( $code_lang, $current, FALSE );
+			$selected = selected( $code_lang, $current, false );
 			if ( '' !== $selected ) {
 				$selected = ' ' . $selected;
 			}

@@ -42,7 +42,7 @@ class Mlp_Term_Translation_Selector {
 
 		echo $this->get_fieldset_id();
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Mlp_Term_Translation_Selector {
 
 		echo $this->get_title();
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -69,7 +69,7 @@ class Mlp_Term_Translation_Selector {
 	public function print_table() {
 
 		if ( empty( $this->related_sites ) ) {
-			return FALSE;
+			return false;
 		}
 
 		echo $this->presenter->get_nonce_field();
@@ -108,7 +108,7 @@ class Mlp_Term_Translation_Selector {
 			<?php endforeach; ?>
 		</table>
 		<?php
-		return TRUE;
+		return true;
 	}
 
 	/**

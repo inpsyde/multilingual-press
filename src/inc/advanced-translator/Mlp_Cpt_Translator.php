@@ -164,7 +164,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	public function save_options_page_form_fields() {
 
 		if ( ! $this->nonce_validator->is_valid() )
-			return FALSE;
+			return false;
 
 		$options    = get_site_option( 'inpsyde_multilingual_cpt' );
 		$post_types = $this->get_custom_post_types();
@@ -334,13 +334,13 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		$options = get_site_option( 'inpsyde_multilingual_cpt' );
 
 		if ( empty( $options ) )
-			return FALSE;
+			return false;
 
 		if ( empty( $options[ 'post_types' ] ) )
-			return FALSE;
+			return false;
 
 		if ( empty( $options[ 'post_types' ][ $post_type ] ) )
-			return FALSE;
+			return false;
 
 		return (int) $options[ 'post_types' ][ $post_type ] > 1;
 	}
@@ -354,7 +354,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 	public function is_draft_or_pending( $post ) {
 
 		if ( empty( $post->post_status ) )
-			return FALSE;
+			return false;
 
 		return in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ), true );
 	}

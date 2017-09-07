@@ -44,7 +44,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	/**
 	 * Save option to database.
 	 *
-	 * @return bool TRUE if saving was successful, FALSE if not.
+	 * @return bool true if saving was successful, false if not.
 	 */
 	public function save() {
 
@@ -58,7 +58,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * Register a module.
 	 *
 	 * @param  array $module Required: slug, description and display_name
-	 * @return bool TRUE if the module is active, FALSE if it isn't.
+	 * @return bool true if the module is active, false if it isn't.
 	 */
 	public function register( array $module ) {
 
@@ -89,11 +89,11 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	public function unregister( $slug ) {
 
 		if ( ! isset( $this->modules[ $slug ] ) )
-			return FALSE;
+			return false;
 
 		unset( $this->modules[ $slug ] );
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -105,7 +105,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	public function is_active( $slug ) {
 
 		if ( ! isset( $this->states[ $slug ] ) )
-			return FALSE;
+			return false;
 
 		return 'on' === $this->states[ $slug ];
 	}

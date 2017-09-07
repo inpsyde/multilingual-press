@@ -92,7 +92,7 @@ class Mlp_Relationship_Control_Ajax_Search {
 	 */
 	private function get_translated_status( $status ) {
 
-		static $statuses = FALSE;
+		static $statuses = false;
 
 		! $statuses and $statuses = get_post_statuses();
 

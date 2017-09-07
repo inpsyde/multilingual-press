@@ -85,7 +85,7 @@ class Mlp_Term_Connector {
 		 */
 		$term_taxonomy_id = (int) $term_taxonomy_id;
 
-		$success = FALSE;
+		$success = false;
 
 		$current_filter = current_filter();
 
@@ -136,10 +136,10 @@ class Mlp_Term_Connector {
 	public function create_term( $term_taxonomy_id ) {
 
 		if ( ! $this->nonce->is_valid() ) {
-			return FALSE;
+			return false;
 		}
 
-		$success = FALSE;
+		$success = false;
 
 		foreach ( $this->post_data as $target_site_id => $target_term_taxonomy_id ) {
 			$target_term_taxonomy_id = (int) $target_term_taxonomy_id;
@@ -170,7 +170,7 @@ class Mlp_Term_Connector {
 				'term'
 			);
 			if ( $result ) {
-				$success = TRUE;
+				$success = true;
 			}
 		}
 
@@ -221,10 +221,10 @@ class Mlp_Term_Connector {
 	public function edit_term( $term_taxonomy_id ) {
 
 		if ( ! $this->nonce->is_valid() ) {
-			return FALSE;
+			return false;
 		}
 
-		$success = FALSE;
+		$success = false;
 
 		$existing = $this->content_relations->get_relations(
 			$this->current_site_id,
@@ -240,7 +240,7 @@ class Mlp_Term_Connector {
 				(int) $target_term_taxonomy_id
 			);
 			if ( $result ) {
-				$success = TRUE;
+				$success = true;
 			}
 		}
 
@@ -264,14 +264,14 @@ class Mlp_Term_Connector {
 
 		// There's nothing to do here
 		if ( -1 === $target_term_taxonomy_id ) {
-			return TRUE;
+			return true;
 		}
 
 		if (
 			isset( $existing[ $target_site_id ] )
 			&& $existing[ $target_site_id ] === $target_term_taxonomy_id
 		) {
-			return TRUE;
+			return true;
 		}
 
 		$translation_ids = $this->content_relations->get_translation_ids(

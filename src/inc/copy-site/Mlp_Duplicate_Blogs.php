@@ -108,7 +108,7 @@ class Mlp_Duplicate_Blogs {
 			$this->duplicator->replace_content(
 				$new_name,
 				$table_name,
-				TRUE
+				true
 			);
 		}
 

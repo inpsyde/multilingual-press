@@ -88,7 +88,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 *
 	 * Usage:
 	 * <code>
-	 * $mlp_language_api = apply_filters( 'mlp_language_api', NULL );
+	 * $mlp_language_api = apply_filters( 'mlp_language_api', null );
 	 * if ( is_a( $mlp_language_api, 'Mlp_Language_Api_Interface' ) ) {
 	 *     // do something
 	 * }
@@ -121,7 +121,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		if ( 0 !== $base_site ) {
 
-			$related_blogs = $this->get_related_sites( $base_site, TRUE );
+			$related_blogs = $this->get_related_sites( $base_site, true );
 
 			if ( empty( $related_blogs ) )
 				return array();
@@ -171,7 +171,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		);
 		$result = $this->wpdb->get_var( $query );
 
-		$return = NULL === $result ? '' : $result;
+		$return = null === $result ? '' : $result;
 
 		return $return;
 	}
@@ -188,7 +188,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 *     @type int    $site_id       Base site
 	 *     @type int    $content_id    post or term_taxonomy ID, *not* term ID
 	 *     @type string $type          @see Mlp_Language_Api::get_request_type()
-	 *     @type bool   $strict        When TRUE (default) only matching exact
+	 *     @type bool   $strict        When true (default) only matching exact
 	 *                                 translations will be included
 	 *     @type string $search_term   If you want to translate a search
 	 *     @type string $post_type     For post type archives
@@ -248,7 +248,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		foreach ( $translations as $site_id => &$arr ) {
 
-			$valid = TRUE;
+			$valid = true;
 
 			if ( ! empty( $content_relations[ $site_id ] ) ) {
 
@@ -261,7 +261,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 					$translation      = $term_translation->get_translation( $content_id, $site_id );
 
 					if ( ! $translation )
-						$valid = FALSE;
+						$valid = false;
 					else
 						$arr = array_merge( $arr, $translation );
 				}
@@ -276,7 +276,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 					);
 
 					if ( ! $translation )
-						$valid = FALSE;
+						$valid = false;
 					else
 						$arr = array_merge( $arr, $translation );
 
@@ -310,7 +310,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				}
 
 				if ( empty( $arr[ 'target_url' ] ) )
-					$valid = FALSE;
+					$valid = false;
 
 				restore_current_blog();
 			}
@@ -388,10 +388,10 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$post  = get_post( $content_id );
 
 		if ( ! $post )
-			return FALSE;
+			return false;
 
 		if ( $post_status && ! in_array( $post->post_status, $post_status, true ) ) {
-			return FALSE;
+			return false;
 		}
 
 		$title    = get_the_title( $content_id );
@@ -401,7 +401,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		if ( is_admin() ) {
 
 			if ( ! $editable )
-				return FALSE;
+				return false;
 
 			return array(
 				'target_title' => $title,
@@ -422,7 +422,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		// unpublished post, not editable
 		if ( $strict )
-			return FALSE;
+			return false;
 
 		return array(
 			'target_title' => $title,
@@ -481,7 +481,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 				$tags[ $site_id ] = str_replace('_', '-', $data[ 'text' ] );
 
 			// a site might have just 'EN' as text and no other values
-			if ( isset( $tags[ $site_id ] ) && FALSE === strpos( $tags[ $site_id ], '-' ) ) {
+			if ( isset( $tags[ $site_id ] ) && false === strpos( $tags[ $site_id ], '-' ) ) {
 				$tags[ $site_id ] = strtolower( $tags[ $site_id ] );
 				$add_like[ $site_id ] = $tags[ $site_id ];
 			}
@@ -541,7 +541,7 @@ WHERE `http_name` IN( $values )";
 		}
 
 		// a site might have just 'EN' as text and no other values
-		if ( FALSE === strpos( $tag, '-' ) ) {
+		if ( false === strpos( $tag, '-' ) ) {
 			$tag = strtolower( $tag );
 			$like = $tag;
 		}
@@ -583,7 +583,7 @@ WHERE `http_name` IN( $values )";
 	private function is_singular() {
 
 		if ( is_singular() ) {
-			return TRUE;
+			return true;
 		}
 
 		return $this->is_separate_home_page();
@@ -610,7 +610,7 @@ WHERE `http_name` IN( $values )";
 		$queried_object = get_queried_object();
 
 		if ( ! isset( $queried_object->taxonomy ) )
-			return FALSE;
+			return false;
 
 		return isset( $queried_object->name );
 	}
@@ -733,7 +733,7 @@ WHERE `http_name` IN( $values )";
 	private function can_have_relations( array $arguments ) {
 
 		if ( empty( $arguments[ 'content_id' ] ) )
-			return FALSE;
+			return false;
 
 		return in_array( $arguments['type'], array( 'post', 'term' ), true );
 	}

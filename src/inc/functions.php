@@ -20,9 +20,9 @@ function mlp_exit( $status = '' ) {
  *
  * @since	0.5.2a
  * @param	bool $blogid
- * @return	bool TRUE/FALSE
+ * @return	bool true/false
  */
-function mlp_is_redirect( $blogid = FALSE ) {
+function mlp_is_redirect( $blogid = false ) {
 	return Mlp_Helpers::is_redirect( $blogid );
 }
 
@@ -35,7 +35,7 @@ function mlp_is_redirect( $blogid = FALSE ) {
  * @param   bool $short
  * @return	array Available languages
  */
-function mlp_get_current_blog_language( $short = FALSE ) {
+function mlp_get_current_blog_language( $short = false ) {
 	return Mlp_Helpers::get_current_blog_language( $short );
 }
 
@@ -47,7 +47,7 @@ function mlp_get_current_blog_language( $short = FALSE ) {
  * @param  bool $nonrelated
  * @return	array Available languages
  */
-function mlp_get_available_languages( $nonrelated = FALSE ) {
+function mlp_get_available_languages( $nonrelated = false ) {
 	return Mlp_Helpers::get_available_languages( $nonrelated );
 }
 
@@ -59,7 +59,7 @@ function mlp_get_available_languages( $nonrelated = FALSE ) {
  * @param  bool $related
  * @return	array Available languages
  */
-function mlp_get_available_languages_titles( $related = TRUE ) {
+function mlp_get_available_languages_titles( $related = true ) {
 	return Mlp_Helpers::get_available_languages_titles( $related );
 }
 
@@ -85,9 +85,9 @@ function mlp_get_linked_elements( $element_id = 0, $type = '', $blog_id = 0 ) {
  * @param	int $blog_id ID of the selected blog
  * @param	string $hook name of the hook that will be executed
  * @param	array $param parameters for the function
- * @return	WP_Error|NULL
+ * @return	WP_Error|null
  */
-function mlp_run_custom_plugin( $element_id = 0, $type = '', $blog_id = 0, $hook = NULL, $param = NULL ) {
+function mlp_run_custom_plugin( $element_id = 0, $type = '', $blog_id = 0, $hook = null, $param = null ) {
 	return Mlp_Helpers::run_custom_plugin( $element_id, $type, $blog_id, $hook, $param );
 }
 
@@ -108,12 +108,12 @@ function mlp_get_language_flag( $blog_id = 0 ) {
  * @see Mlp_Helpers::show_linked_elements()
  *
  * @param array|string $args_or_deprecated_text Arguments array, or value for the 'link_text' argument.
- * @param bool         $deprecated_echo         Optional. Display the output? Defaults to TRUE.
+ * @param bool         $deprecated_echo         Optional. Display the output? Defaults to true.
  * @param string       $deprecated_sort         Optional. Sort elements. Defaults to 'blogid'.
  *
  * @return string
  */
-function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecated_echo = TRUE, $deprecated_sort = 'blogid' ) {
+function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecated_echo = true, $deprecated_sort = 'blogid' ) {
 
 	$args = is_array( $args_or_deprecated_text )
 		? $args_or_deprecated_text
@@ -124,9 +124,9 @@ function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecate
 	$defaults = array(
 		'link_text'         => 'text',
 		'sort'              => 'priority',
-		'show_current_blog' => FALSE,
-		'display_flag'      => FALSE,
-		'strict'            => FALSE, // get exact translations only
+		'show_current_blog' => false,
+		'display_flag'      => false,
+		'strict'            => false, // get exact translations only
 	);
 	$params = wp_parse_args( $args, $defaults );
 	$output = Mlp_Helpers::show_linked_elements( $params );
@@ -158,7 +158,7 @@ function mlp_get_interlinked_permalinks( $element_id = 0 ) {
  *
  * @return string
  */
-function mlp_get_blog_language( $blog_id = 0, $short = TRUE ) {
+function mlp_get_blog_language( $blog_id = 0, $short = true ) {
 
 	return Mlp_Helpers::get_blog_language( $blog_id, $short );
 }
@@ -174,7 +174,7 @@ if ( ! function_exists( 'get_blog_language' ) ) {
 	 *
 	 * @return string
 	 */
-	function get_blog_language( $blog_id = 0, $short = TRUE ) {
+	function get_blog_language( $blog_id = 0, $short = true ) {
 
 		_deprecated_function( __FUNCTION__, '2.2.0', 'mlp_get_blog_language' );
 
@@ -190,7 +190,7 @@ if ( ! function_exists( 'get_blog_language' ) ) {
  * @param string $iso Two-letter code like "en" or "de"
  * @param string $field Sub-key name: "iso_639_2", "en" or "native",
  *               defaults to "native", "all" returns the complete list.
- * @return boolean|array|string FALSE for unknown language codes or fields,
+ * @return boolean|array|string false for unknown language codes or fields,
  *               array for $field = 'all' and string for specific fields
  */
 function mlp_get_lang_by_iso( $iso, $field = 'native_name' ) {
@@ -222,7 +222,7 @@ if ( ! function_exists( 'blog_exists' ) ) {
 		if ( empty( $cache ) or empty( $cache[ $site_id ] ) ) {
 
 			if ( wp_is_large_network() ) // we do not test large sites.
-				return TRUE;
+				return true;
 
 			$query = "SELECT `blog_id` FROM $wpdb->blogs
 					WHERE site_id = $site_id AND deleted = 0";

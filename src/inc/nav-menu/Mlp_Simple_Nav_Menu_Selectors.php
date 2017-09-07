@@ -151,7 +151,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 					esc_attr__( 'Add to Menu', 'multilingual-press' ),
 					'button-secondary submit-add-to-menu right',
 					"add-$button_id-item",
-					FALSE,
+					false,
 					$button_attributes
 				);
 				?>

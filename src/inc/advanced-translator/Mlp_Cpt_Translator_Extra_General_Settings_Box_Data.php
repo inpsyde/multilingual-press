@@ -124,8 +124,8 @@ class Mlp_Cpt_Translator_Extra_General_Settings_Box_Data
 		$out = wp_nonce_field(
 			$this->nonce_validator->get_action(),
 			$this->nonce_validator->get_name(),
-			TRUE,
-			FALSE
+			true,
+			false
 		);
 		$out .= '<table><tbody>';
 

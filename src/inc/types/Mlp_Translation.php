@@ -128,7 +128,7 @@ class Mlp_Translation implements Mlp_Translation_Interface {
 		 * @param string                    $remote_url        URL of the remote post.
 		 * @param int                       $target_site_id    ID of the target site.
 		 * @param int                       $target_content_id ID of the target post.
-		 * @param Mlp_Translation_Interface $translation       Translation object. NULL, if there is no translation.
+		 * @param Mlp_Translation_Interface $translation       Translation object. null, if there is no translation.
 		 */
 		$remote_url = (string) apply_filters(
 			'mlp_linked_element_link',

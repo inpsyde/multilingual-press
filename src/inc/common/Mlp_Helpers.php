@@ -28,7 +28,7 @@ class Mlp_Helpers {
 	 * @param    bool $blogid | blog to check setting for
 	 * @return    bool $redirect
 	 */
-	public static function is_redirect( $blogid = FALSE ) {
+	public static function is_redirect( $blogid = false ) {
 
 		if ( ! $blogid )
 			$blogid = get_current_blog_id();
@@ -44,7 +44,7 @@ class Mlp_Helpers {
 	 * @param  bool $short
 	 * @return string the language code
 	 */
-	public static function get_current_blog_language( $short = FALSE ) {
+	public static function get_current_blog_language( $short = false ) {
 
 		// Get all registered blogs
 		$languages = get_site_option( 'inpsyde_multilingual' );
@@ -72,7 +72,7 @@ class Mlp_Helpers {
 	 * @param   $not_related | filter out non-related blogs? By default
 	 * @return  array $options
 	 */
-	public static function get_available_languages( $not_related = FALSE ) {
+	public static function get_available_languages( $not_related = false ) {
 
 		$related_blogs = array();
 
@@ -86,7 +86,7 @@ class Mlp_Helpers {
 		$site_relations = self::$dependencies[ 'site_relations' ];
 
 		// Do we need related blogs only?
-		if ( FALSE === $not_related ) {
+		if ( false === $not_related ) {
 			$related_blogs = $site_relations->get_related_sites(
 				get_current_blog_id(),
 				! is_user_logged_in()
@@ -129,7 +129,7 @@ class Mlp_Helpers {
 	 * @param   bool $related Filter out unrelated blogs?
 	 * @return  array $options
 	 */
-	public static function get_available_languages_titles( $related = TRUE ) {
+	public static function get_available_languages_titles( $related = true ) {
 
 		/** @var Mlp_Language_Api $api */
 		$api  = self::$dependencies['language_api'];
@@ -249,7 +249,7 @@ class Mlp_Helpers {
 	 * @param   int    $blog_id    ID of the selected blog
 	 * @param   string $hook
 	 * @param   mixed  $param
-	 * @return  WP_Error|NULL
+	 * @return  WP_Error|null
 	 */
 	public static function run_custom_plugin(
 		/** @noinspection PhpUnusedParameterInspection */
@@ -273,7 +273,7 @@ class Mlp_Helpers {
 		$current_blog_id = get_current_blog_id();
 
 		if ( 0 == count( $languages ) )
-			return NULL;
+			return null;
 
 		foreach ( $languages as $language_id => $language_name ) {
 
@@ -290,7 +290,7 @@ class Mlp_Helpers {
 			restore_current_blog();
 		}
 
-		return NULL;
+		return null;
 	}
 
 	/**
@@ -324,7 +324,7 @@ class Mlp_Helpers {
 	 * @param  bool  $short   Return only the first part of the language code.
 	 * @return    string Second part of language identifier
 	 */
-	public static function get_blog_language( $site_id = 0, $short = TRUE ) {
+	public static function get_blog_language( $site_id = 0, $short = true ) {
 
 		static $languages;
 
@@ -357,10 +357,10 @@ class Mlp_Helpers {
 
 		$defaults = array(
 			'link_text'         => 'native',
-			'display_flag'      => FALSE,
+			'display_flag'      => false,
 			'sort'              => 'priority',
-			'show_current_blog' => FALSE,
-			'strict'            => FALSE, // get exact translations only
+			'show_current_blog' => false,
+			'strict'            => false, // get exact translations only
 		);
 		$params = wp_parse_args( $args, $defaults );
 
@@ -369,23 +369,23 @@ class Mlp_Helpers {
 			case 'text_flag':
 				_doing_it_wrong(
 					__METHOD__,
-					"The value 'text_flag' for the argument 'link_text' is deprecated and will be removed in the future. Please use the value TRUE for the argument 'display_flag', and choose one of the possible options for the argument 'link_text'.",
+					"The value 'text_flag' for the argument 'link_text' is deprecated and will be removed in the future. Please use the value true for the argument 'display_flag', and choose one of the possible options for the argument 'link_text'.",
 					'2.2.0'
 				);
 
 				$params[ 'link_text' ] = 'native';
-				$params[ 'display_flag' ] = TRUE;
+				$params[ 'display_flag' ] = true;
 				break;
 
 			case 'flag':
 				_doing_it_wrong(
 					__METHOD__,
-					"The value 'flag' for the argument 'link_text' is deprecated and will be removed in the future. Please use the value TRUE for the argument 'display_flag', and the value 'none' for the argument 'link_text'.",
+					"The value 'flag' for the argument 'link_text' is deprecated and will be removed in the future. Please use the value true for the argument 'display_flag', and the value 'none' for the argument 'link_text'.",
 					'2.2.0'
 				);
 
 				$params[ 'link_text' ] = 'none';
-				$params[ 'display_flag' ] = TRUE;
+				$params[ 'display_flag' ] = true;
 				break;
 		}
 
@@ -394,7 +394,7 @@ class Mlp_Helpers {
 		 *
 		 * @param Mlp_Language_Api_Interface $language_api Language API object.
 		 */
-		$api = apply_filters( 'mlp_language_api', NULL );
+		$api = apply_filters( 'mlp_language_api', null );
 		/** @var Mlp_Language_Api_Interface $api */
 		if ( ! is_a( $api, 'Mlp_Language_Api_Interface' ) ) {
 			return '';

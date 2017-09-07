@@ -92,7 +92,7 @@ class Mlp_Relationship_Changer {
 				'post_status' => 'draft',
 				'post_title'  => $this->new_post_title
 			),
-			TRUE
+			true
 		);
 
 		restore_current_blog();

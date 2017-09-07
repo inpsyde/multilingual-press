@@ -48,7 +48,7 @@ class Mlp_Copy_Attachments
 	 *
 	 * @type bool
 	 */
-	private $found_files = FALSE;
+	private $found_files = false;
 
 	/**
 	 * Upload base URL for source blog.
@@ -134,12 +134,12 @@ class Mlp_Copy_Attachments
 	public function copy_attachments() {
 
 		if ( ! is_dir( $this->source_dir ) OR ! is_readable( $this->source_dir ) )
-			return FALSE;
+			return false;
 
 		$source_paths = $this->get_attachment_paths();
 
 		if ( empty( $source_paths ) )
-			return FALSE;
+			return false;
 
 		// $dir is a path relative to upload dir, $paths an array of paths relative to $dir
 		foreach ( $source_paths as $dir => $paths )
@@ -184,7 +184,7 @@ class Mlp_Copy_Attachments
 			$copied = copy( $source, $dest );
 
 			if ( $copied )
-				$this->found_files = TRUE;
+				$this->found_files = true;
 		}
 	}
 

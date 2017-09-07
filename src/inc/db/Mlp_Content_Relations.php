@@ -91,7 +91,7 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 				$existing[ $source_site_id ] === $source_content_id
 				&& $existing[ $target_site_id ] === $target_content_id
 			) {
-				return TRUE;
+				return true;
 			}
 
 			if ( $existing[ $source_site_id ] !== $source_content_id ) {

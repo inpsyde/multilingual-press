@@ -56,7 +56,7 @@ class Mlp_Network_Plugin_Deactivation implements Mlp_Network_Plugin_Deactivation
 
 			foreach ( $plugins as $plugin ) {
 
-				if ( FALSE !== strpos( $file, $plugin ) )
+				if ( false !== strpos( $file, $plugin ) )
 					$return[ $file ] = 1;
 			}
 		}

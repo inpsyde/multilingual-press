@@ -144,7 +144,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 						}
 
 						$language_name = esc_html( $this->get_language_name( $language ) );
-						$select        = selected( $selected, $language_code, FALSE );
+						$select        = selected( $selected, $language_code, false );
 						echo '<option value="' . esc_attr( $language_code ) . '" ' . $select . '>' . esc_html( $language_name ) . '</option>';
 					}
 					?>
@@ -240,7 +240,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 					// Get current settings
 					$related_blogs = $this->relations->get_related_sites( $this->blog_id );
-					$checked       = checked( TRUE, in_array( $blog_id, $related_blogs ), FALSE );
+					$checked       = checked( true, in_array( $blog_id, $related_blogs ), false );
 					$id            = 'related_blog_' . $blog_id;
 					?>
 					<p>

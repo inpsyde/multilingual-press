@@ -71,7 +71,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 		) );
 
 		$translations = $this->language_api->get_translations( array_merge( array(
-			'include_base' => TRUE,
+			'include_base' => true,
 			'post_status'  => $post_status,
 		), $args ) );
 

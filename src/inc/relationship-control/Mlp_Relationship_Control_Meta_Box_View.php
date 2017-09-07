@@ -235,7 +235,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 			</label>',
 			$key,
 			$label,
-			selected( $name, $selected, FALSE ),
+			selected( $name, $selected, false ),
 			$name,
 			$id_base
 		);

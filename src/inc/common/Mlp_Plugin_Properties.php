@@ -24,7 +24,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 *
 	 * @type Inpsyde_Property_List
 	 */
-	private $parent = NULL;
+	private $parent = null;
 
 	/**
 	 * Record of deleted properties.
@@ -44,7 +44,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 * @see  is_frozen()
 	 * @type bool
 	 */
-	private $frozen = FALSE;
+	private $frozen = false;
 
 	/**
 	 * @type Mlp_Internal_Locations
@@ -113,10 +113,10 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 			return $this->properties[ $name ];
 
 		if ( isset( $this->deleted[ $name ] ) )
-			return NULL;
+			return null;
 
-		if ( NULL === $this->parent )
-			return NULL;
+		if ( null === $this->parent )
+			return null;
 
 		return $this->parent->get( $name );
 	}
@@ -132,13 +132,13 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	public function has( $name ) {
 
 		if ( isset( $this->properties[ $name ] ) )
-			return TRUE;
+			return true;
 
 		if ( isset( $this->deleted[ $name ] ) )
-			return FALSE;
+			return false;
 
-		if ( NULL === $this->parent )
-			return FALSE;
+		if ( null === $this->parent )
+			return false;
 
 		return $this->parent->has( $name );
 	}
@@ -159,7 +159,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 						You cannot delete properties anymore.'
 			);
 
-		$this->deleted[ $name ] = TRUE;
+		$this->deleted[ $name ] = true;
 		unset( $this->properties[ $name ] );
 
 		return $this;
@@ -191,7 +191,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	public function has_parent() {
 
-		return NULL !== $this->parent;
+		return null !== $this->parent;
 	}
 
 	/**
@@ -201,7 +201,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	public function freeze() {
 
-		$this->frozen = TRUE;
+		$this->frozen = true;
 
 		return $this;
 	}

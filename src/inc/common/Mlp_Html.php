@@ -18,11 +18,11 @@ class Mlp_Html implements Mlp_Html_Interface {
 	 * @param  bool  $xml
 	 * @return string
 	 */
-	public function array_to_attrs( array $attrs, $xml = FALSE ) {
+	public function array_to_attrs( array $attrs, $xml = false ) {
 		$str = '';
 
 		foreach ( $attrs as $key => $value ) {
-			if ( TRUE === $value )
+			if ( true === $value )
 				( $xml and $value = "='$key'" ) or $value = '';
 
 			$str .= " $key='" . esc_attr( $value) . "'";

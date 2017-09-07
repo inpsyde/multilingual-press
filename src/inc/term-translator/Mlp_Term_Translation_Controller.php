@@ -17,7 +17,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	/**
 	 * @var Mlp_Term_Translation_Selector
 	 */
-	private $view = NULL;
+	private $view = null;
 
 	/**
 	 * @var Inpsyde_Nonce_Validator
@@ -75,7 +75,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		$taxonomies = $this->get_valid_taxonomies();
 		if ( empty( $taxonomies ) ) {
-			return FALSE;
+			return false;
 		}
 
 		$fields = new Mlp_Term_Fields( $taxonomies, $this );
@@ -94,10 +94,10 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 		if ( $post_data || $delete ) {
 			$this->activate_term_connector( $taxonomies, $post_data, $delete );
 
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	/**
@@ -145,7 +145,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			return $view->get_title();
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	/**

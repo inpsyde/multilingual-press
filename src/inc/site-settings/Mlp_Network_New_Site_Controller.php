@@ -111,10 +111,10 @@ class Mlp_Network_New_Site_Controller {
 	private function get_posted_language() {
 
 		if ( ! isset( $_POST[ 'inpsyde_multilingual_lang' ] ) )
-			return FALSE;
+			return false;
 
 		if ( '-1' === $_POST[ 'inpsyde_multilingual_lang' ] )
-			return FALSE;
+			return false;
 
 		return $_POST[ 'inpsyde_multilingual_lang' ];
 	}

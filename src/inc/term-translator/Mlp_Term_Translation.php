@@ -63,7 +63,7 @@ class Mlp_Term_Translation {
 		$term = $this->get_term_by_term_taxonomy_id( $term_taxonomy_id );
 
 		if ( empty( $term ) )
-			return FALSE;
+			return false;
 
 		if ( is_admin() )
 			return $this->get_admin_translation( $term, $term[ 'taxonomy'] );
@@ -86,7 +86,7 @@ class Mlp_Term_Translation {
 	private function get_admin_translation( array $term, $taxonomy ) {
 
 		if ( ! current_user_can( 'edit_terms', $taxonomy ) ) {
-			return FALSE;
+			return false;
 		}
 
 		$url = get_edit_term_link( (int) $term[ 'term_id' ], $taxonomy );
@@ -122,7 +122,7 @@ class Mlp_Term_Translation {
 	 * Updates the global wp_rewrite instance if it is wrong
 	 *
 	 * @param  string $taxonomy
-	 * @return bool|string FALSE or the original string for later restore
+	 * @return bool|string false or the original string for later restore
 	 */
 	private function fix_term_base( $taxonomy ) {
 
@@ -130,7 +130,7 @@ class Mlp_Term_Translation {
 		$existing = $this->wp_rewrite->get_extra_permastruct( $taxonomy );
 
 		if ( ! $this->update_required( $expected, $existing ) )
-			return FALSE;
+			return false;
 
 		$this->set_permastruct( $taxonomy, $expected );
 
@@ -142,15 +142,15 @@ class Mlp_Term_Translation {
 	 *
 	 * @param  string|bool $expected
 	 * @param  string|bool $existing
-	 * @return bool TRUE if both are not FALSE and different
+	 * @return bool true if both are not false and different
 	 */
 	private function update_required( $expected, $existing ) {
 
 		if ( ! $expected )
-			return FALSE;
+			return false;
 
 		if ( ! $existing )
-			return FALSE;
+			return false;
 
 		return $existing !== $expected;
 	}
@@ -159,7 +159,7 @@ class Mlp_Term_Translation {
 	 * Find a custom taxonomy base
 	 *
 	 * @param  string $taxonomy
-	 * @return bool|string FALSE or the prepared string
+	 * @return bool|string false or the prepared string
 	 */
 	private function get_expected_base( $taxonomy ) {
 
@@ -168,12 +168,12 @@ class Mlp_Term_Translation {
 			'post_tag' => 'tag_base'
 		);
 		if ( ! isset( $taxonomies[ $taxonomy ] ) )
-			return FALSE;
+			return false;
 
 		$option = get_option( $taxonomies[ $taxonomy ] );
 
 		if ( ! $option )
-			return FALSE;
+			return false;
 
 		return $option . '/%' . $taxonomy . '%';
 	}

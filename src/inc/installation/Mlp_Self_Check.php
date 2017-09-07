@@ -302,11 +302,11 @@ class Mlp_Self_Check {
 	private function is_context_valid() {
 
 		if ( ! is_admin() ) {
-			return FALSE;
+			return false;
 		}
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			return FALSE;
+			return false;
 		}
 
 		return 'plugins.php' === $this->pagenow;

@@ -245,7 +245,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 * @param  int      $new_id
 	 * @param  stdClass $thumb_data
 	 *
-	 * @return bool     TRUE on success, FALSE when the image could not be copied.
+	 * @return bool     true on success, false when the image could not be copied.
 	 */
 	private function copy_thumb( $new_id, stdClass $thumb_data ) {
 
@@ -477,7 +477,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 * @param  int   $new_id
 	 * @param  array $tax_data
 	 *
-	 * @return bool TRUE on complete success, FALSE when there were errors.
+	 * @return bool true on complete success, false when there were errors.
 	 */
 	private function set_remote_tax_terms( $new_id, array $tax_data ) {
 

@@ -34,7 +34,7 @@ class Mlp_Install_Requirements implements Mlp_Requirements_Interface {
 	 */
 	public function multisite_required() {
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Mlp_Install_Requirements implements Mlp_Requirements_Interface {
 	 */
 	public function network_activation_required() {
 
-		return TRUE;
+		return true;
 	}
 
 }

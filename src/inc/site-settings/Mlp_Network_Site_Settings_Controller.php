@@ -157,7 +157,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$relations   = $this->plugin_data->get( 'site_relations' );
 		$changed     = 0;
 		$new_related = $this->get_new_related_blogs();
-		$old_related = $relations->get_related_sites( $blog_id, FALSE );
+		$old_related = $relations->get_related_sites( $blog_id, false );
 
 		// All relations removed.
 		if ( empty( $new_related ) && ! empty( $old_related ) )

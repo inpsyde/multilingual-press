@@ -47,7 +47,7 @@ class Mlp_Redirect_User_Settings_Html implements Mlp_User_Settings_View_Interfac
 	public function show_content( WP_User $user ) {
 
 		$current = (int) get_user_meta( $user->ID, $this->key );
-		$check   = checked( 1, $current, FALSE );
+		$check   = checked( 1, $current, false );
 		$text    = __(
 			'Do not redirect me automatically to the best matching language version.',
 			'multilingual-press'

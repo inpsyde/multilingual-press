@@ -31,7 +31,7 @@ class Mlp_Search_Form_View {
 	 */
 	public function get_search_button( $text ) {
 
-		return get_submit_button( $text, 'secondary', 'submit', FALSE );
+		return get_submit_button( $text, 'secondary', 'submit', false );
 	}
 
 	/**
