@@ -109,7 +109,7 @@ final class AddOnlyContainer implements Container {
 
 		if ( ! array_key_exists( $name, $this->values ) ) {
 
-			$this->values[ $name ] = $this->factories[$name]( $this );
+			$this->values[ $name ] = $this->factories[ $name ]( $this );
 
 			if ( $this->is_locked ) {
 				unset( $this->factories[ $name ] );

@@ -58,7 +58,11 @@ final class CachingBasePathAdapter implements BasePathAdapter {
 			return $base_url;
 		}
 
-		return str_replace( parse_url( $base_url, PHP_URL_HOST ), parse_url( $site_url, PHP_URL_HOST ), $base_url );
+		return str_replace(
+			wp_parse_url( $base_url, PHP_URL_HOST ),
+			wp_parse_url( $site_url, PHP_URL_HOST ),
+			$base_url
+		);
 	}
 
 	/**

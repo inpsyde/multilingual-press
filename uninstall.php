@@ -13,7 +13,7 @@ use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Installation\Uninstaller;
 
-defined( 'ABSPATH' ) or die();
+defined( 'ABSPATH' ) || die();
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	return;

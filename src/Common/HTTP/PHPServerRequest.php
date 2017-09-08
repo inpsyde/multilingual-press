@@ -289,6 +289,7 @@ final class PHPServerRequest implements ServerRequest {
 		}
 
 		// When not GET nor POST method is used, but content is URL-encoded, we can safely decode raw body stream.
+		// @codingStandardsIgnoreLine
 		@parse_str( $this->body(), $values );
 
 		self::$values[ INPUT_REQUEST ] = is_array( $values )

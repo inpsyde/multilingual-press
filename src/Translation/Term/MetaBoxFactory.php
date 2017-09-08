@@ -42,7 +42,7 @@ class MetaBoxFactory {
 	 *
 	 * @param SiteRelations    $site_relations    Site relations API object.
 	 * @param ContentRelations $content_relations Content relations API object.
-	 * @param ActiveTaxonomies  $active_taxonomies Active taxonomies object.
+	 * @param ActiveTaxonomies $active_taxonomies Active taxonomies object.
 	 */
 	public function __construct(
 		SiteRelations $site_relations,

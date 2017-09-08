@@ -63,7 +63,7 @@ class AdvancedPostTranslatorUpdater {
 	public function update( \WP_Post $remote_post, int $remote_site_id ): \WP_Post {
 
 		if (
-			! in_array( $remote_site_id, $this->save_context[ SourcePostSaveContext::RELATED_BLOGS ] )
+			! in_array( $remote_site_id, $this->save_context[ SourcePostSaveContext::RELATED_BLOGS ], true )
 			|| ! site_exists( $remote_site_id )
 		) {
 			return $this->create_empty_post();
@@ -271,10 +271,9 @@ class AdvancedPostTranslatorUpdater {
 			return ! is_wp_error( wp_set_object_terms( $remote_post->ID, $term_ids, $taxonomy ) );
 		}
 
-		// When user unchecked all terms from UI but post has already some terms, let's remove them.
-
 		$post_terms = get_the_terms( $remote_post, $taxonomy );
 
+		// When user unchecked all terms from UI but post has already some terms, let's remove them.
 		$post_term_ids = is_array( $post_terms ) && $post_terms
 			? array_column( $post_terms, 'term_id' )
 			: [];

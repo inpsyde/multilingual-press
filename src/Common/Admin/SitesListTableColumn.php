@@ -90,7 +90,9 @@ class SitesListTableColumn {
 			return (array) $callback( $columns, $this->id, $this->name );
 		}
 
-		return array_merge( $columns, [ $this->id => $this->name ] );
+		return array_merge( $columns, [
+			$this->id => $this->name,
+		] );
 	}
 
 	/**

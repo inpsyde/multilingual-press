@@ -36,7 +36,7 @@ final class AliasAwareLanguage implements Language {
 	 */
 	public function __construct( array $data ) {
 
-		// TODO: Introduce method/trait for normalizing language data (i.e., handle both types of constants as keys).
+		/* TODO: Introduce method/trait for normalizing language data (i.e., handle both types of constants as keys). */
 
 		$this->is_rtl = (bool) ( $data['is_rtl'] ?? false );
 
@@ -169,8 +169,9 @@ final class AliasAwareLanguage implements Language {
 			return (string) $this->names[ $output ];
 		}
 
-		if ( ! empty( $this->names["{$output}_name"] ) ) {
-			return (string) $this->names["{$output}_name"];
+		$name = "{$output}_name";
+		if ( ! empty( $this->names[ $name ] ) ) {
+			return (string) $this->names[ $name ];
 		}
 
 		if ( in_array( $output, [ 'language_short', 'lang' ], true ) ) {

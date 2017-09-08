@@ -260,7 +260,9 @@ final class WPDBLanguages implements Languages {
 			$updated += (int) $this->db->update(
 				$this->table,
 				(array) $language,
-				[ LanguagesTable::COLUMN_ID => $id ],
+				[
+					LanguagesTable::COLUMN_ID => $id,
+				],
 				$this->get_field_specifications( $language ),
 				'%d'
 			);

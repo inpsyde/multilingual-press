@@ -198,11 +198,12 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 
 			add_action( "{$screen->taxonomy}_add_form_fields", function ( string $taxonomy ) {
 
-				$this->add_meta_boxes( new \WP_Term( (object) [ 'taxonomy' => $taxonomy, 'term_id' => 0 ] ), false );
+				$this->add_meta_boxes( new \WP_Term( (object) [
+					'taxonomy' => $taxonomy,
+					'term_id'  => 0,
+				] ), false );
 			} );
 		} );
-
-		// There are 2 different actions for saving terms
 
 		/** @noinspection PhpUnusedParameterInspection */
 		add_action( 'edit_term', function ( $term_id, $tt_id, $taxonomy ) {

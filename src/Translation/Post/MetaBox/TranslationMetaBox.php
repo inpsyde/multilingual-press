@@ -100,7 +100,7 @@ final class TranslationMetaBox implements PriorityAwareMetaBox {
 	 */
 	private function get_translated_post_status( \WP_Post $post ) {
 
-		$post_statuses= get_post_statuses();
+		$post_statuses = get_post_statuses();
 
 		$status = get_post_status( $post );
 

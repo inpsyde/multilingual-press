@@ -767,7 +767,10 @@ function get_post_taxonomies_with_terms( \WP_Post $post ) {
 	$slugs = array_column( $taxonomies, 'name' );
 
 	/** @var \WP_Term[] $all_terms */
-	$all_terms = get_terms( [ 'taxonomy' => $slugs, 'hide_empty' => false ] );
+	$all_terms = get_terms( [
+		'taxonomy'   => $slugs,
+		'hide_empty' => false,
+	] );
 
 	if ( ! $all_terms || is_wp_error( $all_terms ) ) {
 		return [];

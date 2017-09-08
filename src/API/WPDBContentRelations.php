@@ -500,9 +500,9 @@ LIMIT 1',
 		}
 
 		return false !== $this->db->delete( $this->table, [
-				Table\ContentRelationsTable::COLUMN_RELATIONSHIP_ID => $relationship_id,
-				Table\ContentRelationsTable::COLUMN_SITE_ID         => $site_id,
-			], '%d' );
+			Table\ContentRelationsTable::COLUMN_RELATIONSHIP_ID => $relationship_id,
+			Table\ContentRelationsTable::COLUMN_SITE_ID         => $site_id,
+		], '%d' );
 	}
 
 	/**
@@ -515,14 +515,14 @@ LIMIT 1',
 	private function delete_relationship( int $relationship_id ): bool {
 
 		if ( false === $this->db->delete( $this->relationships_table, [
-				Table\RelationshipsTable::COLUMN_ID => $relationship_id,
-			], '%d' ) ) {
+			Table\RelationshipsTable::COLUMN_ID => $relationship_id,
+		], '%d' ) ) {
 			return false;
 		}
 
 		return false !== $this->db->delete( $this->table, [
-				Table\ContentRelationsTable::COLUMN_RELATIONSHIP_ID => $relationship_id,
-			], '%d' );
+			Table\ContentRelationsTable::COLUMN_RELATIONSHIP_ID => $relationship_id,
+		], '%d' );
 	}
 
 	/**

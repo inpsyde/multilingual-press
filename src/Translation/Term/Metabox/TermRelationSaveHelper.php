@@ -93,14 +93,15 @@ class TermRelationSaveHelper {
 			return true;
 		}
 
-		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
-		//return $this->content_relations->set_relation(
-		//	$source_site_id,
-		//	$remote_site_id,
-		//	$this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
-		//	$remote_term_taxonomy_id,
-		//	'term'
-		//);
+		/* TODO: Revisit and correct the following! This is only a quick-fix to test the post translation. */
+
+		// return $this->content_relations->set_relation(
+		// $source_site_id,
+		// $remote_site_id,
+		// $this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
+		// $remote_term_taxonomy_id,
+		// 'term'
+		// );
 		return false;
 	}
 

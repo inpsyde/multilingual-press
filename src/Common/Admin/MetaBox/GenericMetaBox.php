@@ -325,10 +325,9 @@ final class GenericMetaBox implements PriorityAwareMetaBox {
 		];
 
 		if ( is_string( $screen ) ) {
-			return shortcode_atts(
-				$default_data,
-				[ $key => $screen ]
-			);
+			return shortcode_atts( $default_data, [
+				$key => $screen,
+			] );
 		}
 
 		if ( is_array( $screen ) ) {

@@ -98,8 +98,12 @@ class Updater {
 				if ( $language_id ) {
 					$this->db->update(
 						$table,
-						[ LanguagesTable::COLUMN_PRIORITY => 10 ],
-						[ LanguagesTable::COLUMN_ID => $language_id ]
+						[
+							LanguagesTable::COLUMN_PRIORITY => 10,
+						],
+						[
+							LanguagesTable::COLUMN_ID => $language_id,
+						]
 					);
 
 					return;

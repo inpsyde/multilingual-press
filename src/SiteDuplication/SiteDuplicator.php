@@ -301,8 +301,12 @@ class SiteDuplicator {
 
 		$this->db->update(
 			$this->db->options,
-			[ 'option_value' => $admin_email ],
-			[ 'option_name' => 'admin_email' ]
+			[
+				'option_value' => $admin_email,
+			],
+			[
+				'option_name' => 'admin_email',
+			]
 		);
 	}
 
@@ -317,8 +321,12 @@ class SiteDuplicator {
 
 		$this->db->update(
 			$this->db->options,
-			[ 'option_name' => "{$this->db->prefix}user_roles" ],
-			[ 'option_name' => "{$table_prefix}user_roles" ]
+			[
+				'option_name' => "{$this->db->prefix}user_roles",
+			],
+			[
+				'option_name' => "{$table_prefix}user_roles",
+			]
 		);
 	}
 

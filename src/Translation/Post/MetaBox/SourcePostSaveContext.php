@@ -109,13 +109,19 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			FILTER_SANITIZE_STRING
 		);
 
-		$context = array_merge( $empty_context, [ self::POST_STATUS => $original_post_status ] );
+		$context = array_merge( $empty_context, [
+			self::POST_STATUS => $original_post_status,
+		] );
 
 		// TODO: Make sure this is right! Think about remote posts being updated just now by MLP. Attach empty context?!
-		if ( ms_is_switched() && ! $this->is_valid_save_request( [ self::POST_STATUS => $original_post_status ] ) ) {
-			self::$contexts->attach( $this->post, $context );
+		if ( ms_is_switched() ) {
+			if ( ! $this->is_valid_save_request( [
+				self::POST_STATUS => $original_post_status,
+			] ) ) {
+				self::$contexts->attach( $this->post, $context );
 
-			return $empty_context;
+				return $empty_context;
+			}
 		}
 
 		$source_site_id = (int) get_current_blog_id();
@@ -264,7 +270,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 * We inspect value from request to distinguish them from real revisions and attachments which have the same status.
 	 *
 	 * @param  \WP_Post $post                 Post object.
-	 * @param string    $original_post_status Post status sent with request.
+	 * @param string   $original_post_status Post status sent with request.
 	 *
 	 * @return bool
 	 */

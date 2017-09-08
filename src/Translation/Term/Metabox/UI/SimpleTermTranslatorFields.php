@@ -118,8 +118,8 @@ class SimpleTermTranslatorFields {
 
 		ob_start();
 		?>
-		<p><?php echo $this->create_term_inputs( $remote_site_id, $remote_term ) ?></p>
-		<p><?php echo $this->select_term_inputs( $remote_site_id, $source_term, $remote_term ) ?></p>
+		<p><?php echo $this->create_term_inputs( $remote_site_id, $remote_term ); ?></p>
+		<p><?php echo $this->select_term_inputs( $remote_site_id, $source_term, $remote_term ); ?></p>
 		<?php
 
 		return ob_get_clean();
@@ -297,13 +297,13 @@ class SimpleTermTranslatorFields {
 	 */
 	private function get_relation_id( $site_id, $term_taxonomy_id ) {
 
-		//$translation_ids = $this->content_relations->get_existing_translation_ids(
-		//	$site_id,
-		//	0,
-		//	$term_taxonomy_id,
-		//	0,
-		//	'term'
-		//);
+		// $translation_ids = $this->content_relations->get_existing_translation_ids(
+		// $site_id,
+		// 0,
+		// $term_taxonomy_id,
+		// 0,
+		// 'term'
+		// );
 		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
 		$translation_ids = [
 			'ml_source_blogid'    => 0,

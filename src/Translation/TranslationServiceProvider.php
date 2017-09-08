@@ -292,11 +292,13 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 		}, 0 );
 
 		// To toggle the UI, just put either one or two asterisks in the following comment. Magic. ;)
+		// @codingStandardsIgnoreStart
 		/**/
 		$post_translation_ui = $container['multilingualpress.post_translation_advanced_ui'];
 		/*/
 		$post_translation_ui = $container['multilingualpress.post_translation_simple_ui'];
 		/**/
+		// @codingStandardsIgnoreEnd
 
 		// For the moment, let's set select here the UI for posts
 		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use (

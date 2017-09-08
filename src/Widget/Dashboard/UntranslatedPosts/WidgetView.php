@@ -150,7 +150,8 @@ final class WidgetView implements View {
 					<?php echo esc_html( get_the_time( get_option( 'date_format' ), $post_id ) ); ?>
 				</td>
 			</tr>
-		<?php endforeach;
+		<?php
+		endforeach;
 	}
 
 	/**

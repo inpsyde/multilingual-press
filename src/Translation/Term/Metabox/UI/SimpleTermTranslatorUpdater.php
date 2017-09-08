@@ -70,7 +70,7 @@ class SimpleTermTranslatorUpdater {
 	public function update( int $remote_site_id, \WP_Term $remote_term ): \WP_Term {
 
 		if (
-			! in_array( $remote_site_id, $this->save_context[ SourceTermSaveContext::RELATED_BLOGS ] )
+			! in_array( $remote_site_id, $this->save_context[ SourceTermSaveContext::RELATED_BLOGS ], true )
 			|| ! site_exists( $remote_site_id )
 			|| ! taxonomy_exists( $remote_term->taxonomy )
 		) {
@@ -79,7 +79,7 @@ class SimpleTermTranslatorUpdater {
 
 		$relation_helper = new TermRelationSaveHelper( $this->content_relations, $this->save_context );
 
-		// TODO: Check if ALL selected remote terms form a valid translation group. If not, BAIL!
+		/* TODO: Check if ALL selected remote terms form a valid translation group. If not, BAIL! */
 
 		$term_id_to_relate = $this->term_to_relate( $remote_site_id, $remote_term->taxonomy, $relation_helper );
 		if ( $term_id_to_relate === - 1 ) {
@@ -171,8 +171,6 @@ class SimpleTermTranslatorUpdater {
 
 		// We are going to create a new term, let's see if we need to set a parent
 		$parent = $relations->related_term_parent( $remote_site_id );
-
-		// Create the term and then return the just created term id if creation was successful
 
 		$insert = wp_insert_term( $to_relate_name, $taxonomy, compact( 'parent' ) );
 

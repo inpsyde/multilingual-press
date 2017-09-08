@@ -44,7 +44,7 @@ class AdvancedPostTranslatorFields {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param AssetManager     $asset_manager
+	 * @param AssetManager $asset_manager
 	 */
 	public function __construct( AssetManager $asset_manager ) {
 

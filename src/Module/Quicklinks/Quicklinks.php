@@ -111,7 +111,9 @@ class Quicklinks {
 
 		$languages = array_reduce( $translations, function ( $languages, Translation $translation ) {
 
-			return array_merge( $languages, [ $translation->remote_url() => $translation->language() ] );
+			return array_merge( $languages, [
+				$translation->remote_url() => $translation->language(),
+			] );
 		}, [] );
 
 		$current_position = $this->repository->get_current_position();

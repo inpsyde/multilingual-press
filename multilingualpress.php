@@ -1,4 +1,5 @@
 <?php # -*- coding: utf-8 -*-
+
 /*
  * Plugin Name: MultilingualPress
  * Plugin URI:  https://wordpress.org/plugins/multilingualpress/
@@ -32,7 +33,7 @@ use Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicationServiceProvider;
 use Inpsyde\MultilingualPress\Translation\TranslationServiceProvider;
 use Inpsyde\MultilingualPress\Widget\WidgetServiceProvider;
 
-defined( 'ABSPATH' ) or die();
+defined( 'ABSPATH' ) || die();
 
 /**
  * Action name.

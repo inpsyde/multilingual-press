@@ -42,10 +42,10 @@ class TrasherSettingView {
 	 * @param ActivePostTypes          $active_post_types  Active post types storage object.
 	 */
 	public function __construct(
-        TrasherSettingRepository $setting_repository,
-        Nonce $nonce,
-        ActivePostTypes $active_post_types
-    ) {
+		TrasherSettingRepository $setting_repository,
+		Nonce $nonce,
+		ActivePostTypes $active_post_types
+	) {
 
 		$this->setting_repository = $setting_repository;
 
