@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ruleset name="MultilingualPress 2.x Standard" namespace="Inpsyde\MultilingualPress\Standard\v2">
+
+	<description>Coding standard for MultilingualPress version 2.x.</description>
+
+	<file>./src/inc</file>
+	<file>./src/multilingual-press.php</file>
+	<file>./src/uninstall.php</file>
+
+	<arg value="sp"/>
+
+	<rule ref="PHPCompatibility"/>
+
+	<rule ref="WordPress">
+		<exclude name="Generic.Commenting"/>
+		<exclude name="Squiz.Commenting"/>
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
+		<exclude name="WordPress.Files.FileName"/>
+		<exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
+		<exclude name="WordPress.VIP"/>
+		<exclude name="WordPress.WP.I18n"/>
+	</rule>
+
+</ruleset>
