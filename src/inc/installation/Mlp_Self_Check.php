@@ -191,7 +191,7 @@ class Mlp_Self_Check {
 		?>
 		<div class="notice notice-warning">
 			<p>
-				<strong><?php _e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
+				<strong><?php esc_html_e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
 				<?php
 				/* translators: %s: current PHP version */
 				$message = __(
@@ -218,7 +218,7 @@ class Mlp_Self_Check {
 		?>
 		<div class="notice notice-warning">
 			<p>
-				<strong><?php _e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
+				<strong><?php esc_html_e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
 				<?php $this->render_mlp_3_message(); ?>
 			</p>
 		</div>

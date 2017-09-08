@@ -433,7 +433,7 @@ LIMIT 2";
 			</th>
 			<td>
 				<select id="mlp-base-site-id" name="blog[basedon]" autocomplete="off">
-					<option value="0"><?php _e( 'Choose site', 'multilingual-press' ); ?></option>
+					<option value="0"><?php esc_html_e( 'Choose site', 'multilingual-press' ); ?></option>
 					<?php foreach ( (array) $this->get_all_sites() as $blog ) : ?>
 						<?php
 						if ( '/' === $blog['path'] ) {

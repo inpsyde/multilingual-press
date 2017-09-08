@@ -74,7 +74,9 @@ class Mlp_Trasher {
 			<label for="trash_the_other_posts">
 				<input type="checkbox" id="trash_the_other_posts" name="_trash_the_other_posts"
 					<?php checked( 1, $trash_the_other_posts ); ?>>
-				<?php _e( 'Send all the translations to trash when this post is trashed.', 'multilingual-press' ); ?>
+				<?php
+				esc_html_e( 'Send all the translations to trash when this post is trashed.', 'multilingual-press' );
+				?>
 			</label>
 		</div>
 		<?php

@@ -94,7 +94,9 @@ class Mlp_Widget extends WP_Widget {
 
 			$name = $this->get_field_name( 'mlp_widget_title' );
 			?>
-			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Title', 'multilingual-press' ); ?></label><br>
+			<label for="<?php echo esc_attr( $id ); ?>">
+				<?php esc_html_e( 'Title', 'multilingual-press' ); ?>
+			</label><br>
 			<input type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $title ); ?>"
 				class="widefat" id="<?php echo esc_attr( $id ); ?>">
 		</p>
@@ -113,7 +115,9 @@ class Mlp_Widget extends WP_Widget {
 				'none'           => __( 'None', 'multilingual-press' ),
 			);
 			?>
-			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Link text', 'multilingual-press' ); ?></label>
+			<label for="<?php echo esc_attr( $id ); ?>">
+				<?php esc_html_e( 'Link text', 'multilingual-press' ); ?>
+			</label>
 			<select name="<?php echo esc_attr( $name ); ?>" class="widefat" id="<?php echo esc_attr( $id ); ?>"
 				autocomplete="off">
 				<?php foreach ( $options as $value => $text ) : ?>
@@ -132,7 +136,7 @@ class Mlp_Widget extends WP_Widget {
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>"<?php checked( $display_flag ); ?>>
-				<?php _e( 'Show flag', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Show flag', 'multilingual-press' ); ?>
 			</label>
 		</p>
 		<p>
@@ -144,7 +148,7 @@ class Mlp_Widget extends WP_Widget {
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>"<?php checked( $show_current_blog ); ?>>
-				<?php _e( 'Show current site', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Show current site', 'multilingual-press' ); ?>
 			</label>
 		</p>
 		<p>
@@ -156,19 +160,24 @@ class Mlp_Widget extends WP_Widget {
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>"<?php checked( $show_widget ); ?>>
-				<?php _e( 'Show links for translated content only.', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Show links for translated content only.', 'multilingual-press' ); ?>
 			</label>
 		</p>
 		<p>
 			<?php if ( current_user_can( 'manage_network_options' ) ) : ?>
 				<?php
-				printf(
+				$message = sprintf(
 					__( 'Languages are sorted by <a href="%s">priority</a>.', 'multilingual-press' ),
 					network_admin_url( 'settings.php?page=language-manager' )
 				);
+				echo wp_kses( $message, array(
+					'a' => array(
+						'href',
+					),
+				) );
 				?>
 			<?php else : ?>
-				<?php _e( 'Languages are sorted by priority.', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Languages are sorted by priority.', 'multilingual-press' ); ?>
 			<?php endif; ?>
 		</p>
 		<?php

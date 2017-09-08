@@ -82,7 +82,7 @@ class Mlp_Dashboard_Widget {
 			<label for="post_is_translated">
 				<input type="checkbox" name="_post_is_translated" value="1" id="post_is_translated"
 					<?php checked( $is_translated ); ?>>
-				<?php _e( 'Translation completed', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Translation completed', 'multilingual-press' ); ?>
 			</label>
 		</div>
 		<?php
@@ -119,7 +119,9 @@ class Mlp_Dashboard_Widget {
 		if ( ! $related_blogs ) {
 			?>
 			<p>
-				<?php _e( 'Sorry, there are no connected sites in the system for this site.', 'multilingual-press' ); ?>
+				<?php
+				esc_html_e( 'Sorry, there are no connected sites in the system for this site.', 'multilingual-press' );
+				?>
 			</p>
 			<?php
 			return;

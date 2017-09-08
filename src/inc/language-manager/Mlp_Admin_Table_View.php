@@ -99,7 +99,9 @@ class Mlp_Admin_Table_View {
 			<tr>
 				<td colspan="<?php echo count( $this->columns ); ?>">
 					<p>
-						<?php _e( 'No items found. We recommend to reinstall this plugin.', 'multilingual-press' ); ?>
+						<?php
+						esc_html_e( 'No items found. We recommend to reinstall this plugin.', 'multilingual-press' );
+						?>
 					</p>
 				</td>
 			</tr>

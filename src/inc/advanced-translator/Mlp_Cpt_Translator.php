@@ -270,7 +270,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 					checked( $translate );
 					?>
 				>
-				<?php _e( 'Translate this post', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Translate this post', 'multilingual-press' ); ?>
 			</label>
 		</p>
 		<?php

@@ -111,7 +111,7 @@ class Mlp_Advanced_Translator_View {
 		<div class="mlp-namediv">
 			<div>
 				<label for="<?php echo esc_attr( $id ); ?>">
-					<?php _e( 'Post Name:', 'multilingual-press' ); ?><br>
+					<?php esc_html_e( 'Post Name:', 'multilingual-press' ); ?><br>
 					<input type="text" name="<?php echo esc_attr( $name ); ?>"
 						value="<?php echo esc_attr( $value ); ?>"
 						placeholder="<?php echo esc_attr__( 'Enter name here', 'multilingual-press' ); ?>" size="30"
@@ -142,7 +142,7 @@ class Mlp_Advanced_Translator_View {
 		?>
 		<div class="mlp-excerptdiv">
 			<div>
-				<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Post Excerpt:', 'multilingual-press' ); ?></label>
+				<label for="<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Post Excerpt:', 'multilingual-press' ); ?></label>
 				<textarea name="<?php echo esc_attr( $name ); ?>"
 					placeholder="<?php echo esc_attr__( 'Enter excerpt here', 'multilingual-press' ); ?>"
 					class="mlp-excerpt"
@@ -200,9 +200,9 @@ class Mlp_Advanced_Translator_View {
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>">
-				<?php _e( 'Copy the featured image of the source post.', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Copy the featured image of the source post.', 'multilingual-press' ); ?>
 				<span class="description">
-					<?php _e( 'Overwrites an existing featured image in the target post.', 'multilingual-press' ); ?>
+					<?php esc_html_e( 'Overwrites an existing featured image in the target post.', 'multilingual-press' ); ?>
 				</span>
 			</label>
 		</p>
@@ -373,7 +373,7 @@ class Mlp_Advanced_Translator_View {
 		<div class="mlp-warning">
 			<p>
 			<?php
-			_e(
+			esc_html_e(
 				'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
 				'multilingual-press'
 			);

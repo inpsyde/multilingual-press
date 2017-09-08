@@ -361,7 +361,7 @@ WHERE ml_source_blogid = %2$d
 			<div class="error">
 				<p>
 					<?php
-					_e(
+					esc_html_e(
 						'You didn\'t setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships.',
 						'multilingual-press'
 					);
