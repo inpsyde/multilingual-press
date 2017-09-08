@@ -22,16 +22,16 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 	 * @var array
 	 */
 	private $fields = array(
-			'ID' => '%d',
-			'english_name' => '%s',
-			'native_name' =>  '%s',
-			'custom_name' => '%s',
-			'is_rtl' => '%d',
-			'iso_639_1' => '%s',
-			'iso_639_2' => '%s',
-			'wp_locale' => '%s',
-			'http_name' => '%s',
-			'priority' => '%d',
+		'ID' => '%d',
+		'english_name' => '%s',
+		'native_name' => '%s',
+		'custom_name' => '%s',
+		'is_rtl' => '%d',
+		'iso_639_1' => '%s',
+		'iso_639_2' => '%s',
+		'wp_locale' => '%s',
+		'http_name' => '%s',
+		'priority' => '%d',
 	);
 
 	/**
@@ -69,10 +69,14 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 
 		global $wpdb;
 
-		$all = $wpdb->get_results(
-			"SELECT COUNT(*) as amount FROM `{$this->table_name}`",
-			OBJECT_K // Makes the result the first and only key.
+		$query = sprintf(
+			'SELECT COUNT(*) as amount FROM `%s`',
+			$this->table_name
 		);
+
+		// @codingStandardsIgnoreLine
+		$all = $wpdb->get_results( $query, OBJECT_K );
+
 		return (int) key( $all );
 	}
 
@@ -149,10 +153,12 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 					continue;
 				}
 
+				// @codingStandardsIgnoreStart
 				$where .= $wpdb->prepare(
 					" AND $field {$search['compare']} {$this->fields[ $field ]}",
 					$search['search']
 				);
+				// @codingStandardsIgnoreEnd
 			}
 		}
 
@@ -188,6 +194,7 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 
 		$query = "$select $from $where $order $limit";
 
+		// @codingStandardsIgnoreLine
 		$result = $wpdb->get_results( $query, $type );
 
 		return null === $result ? array() : $result;
@@ -209,7 +216,9 @@ class Mlp_Language_Db_Access implements Mlp_Data_Access {
 			$wpdb->update(
 				$this->table_name,
 				(array) $values,
-				array( 'ID' => $id ),
+				array(
+					'ID' => $id,
+				),
 				$field_format,
 				$where_format
 			);

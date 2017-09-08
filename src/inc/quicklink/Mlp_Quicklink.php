@@ -174,18 +174,22 @@ class Mlp_Quicklink implements Mlp_Updatable {
 		/** @var wpdb $wpdb */
 		global $wpdb;
 
-		$query = "
+		$query = sprintf(
+			'
 SELECT domain
-FROM {$wpdb->blogs}
+FROM %s
 WHERE site_id = %d
-	AND public   = '1'
-	AND archived = '0'
-	AND mature   = '0'
-	AND spam     = '0'
-	AND deleted  = '0'
-ORDER BY domain DESC";
-		$query = $wpdb->prepare( $query, $wpdb->siteid );
+	AND public   = "1"
+	AND archived = "0"
+	AND mature   = "0"
+	AND spam     = "0"
+	AND deleted  = "0"
+ORDER BY domain DESC',
+			$wpdb->blogs,
+			$wpdb->siteid
+		);
 
+		// @codingStandardsIgnoreLine
 		$domains = $wpdb->get_col( $query );
 
 		$allowed_hosts = array_merge( $home_hosts, $domains );
@@ -266,7 +270,9 @@ ORDER BY domain DESC";
 			return $this->translations;
 		}
 
-		$this->translations = $this->language_api->get_translations( array( 'type' => 'post' ) );
+		$this->translations = $this->language_api->get_translations( array(
+			'type' => 'post',
+		) );
 
 		return $this->translations;
 	}

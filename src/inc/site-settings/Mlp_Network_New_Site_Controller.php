@@ -141,7 +141,7 @@ class Mlp_Network_New_Site_Controller {
 
 		// search for wp_locale where search = $http_name
 		$search = array(
-			'fields'=> array(
+			'fields' => array(
 				'wp_locale',
 			),
 			'where' => array(

@@ -55,7 +55,7 @@ class Mlp_Language_Manager_Page_View {
 		<div class="wrap">
 			<h1><?php echo esc_html( $title ); ?></h1>
 			<?php $this->watcher->update( 'before_form' ); ?>
-			<form action="<?php echo esc_attr( $action ) ?>" method="post">
+			<form action="<?php echo esc_attr( $action ); ?>" method="post">
 				<input type="hidden" name="action" value="<?php echo esc_attr( $action_name ); ?>">
 				<input type="hidden" name="paged" value="<?php echo esc_attr( $paged ); ?>">
 				<?php
@@ -72,7 +72,9 @@ class Mlp_Language_Manager_Page_View {
 						'primary',
 						'save',
 						false,
-						array( 'style' => 'float:left')
+						array(
+							'style' => 'float:left',
+						)
 					);
 
 					$this->watcher->update( 'after_form_submit_button' );

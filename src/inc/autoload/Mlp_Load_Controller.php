@@ -67,7 +67,7 @@ class Mlp_Load_Controller {
 			}
 		}
 
-		$this->loader = new Inpsyde_Autoload;
+		$this->loader = new Inpsyde_Autoload();
 		$this->load_defaults( $this->loader );
 	}
 

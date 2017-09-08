@@ -61,8 +61,8 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	public function set( $name, $value ) {
 		if ( $this->frozen ) {
 			return $this->stop(
-						'This object has been frozen.
-						You cannot set properties anymore.'
+				'This object has been frozen.
+				You cannot set properties anymore.'
 			);
 		}
 
@@ -171,8 +171,8 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 
 		if ( $this->frozen ) {
 			return $this->stop(
-						'This object has been frozen.
-						You cannot delete properties anymore.'
+				'This object has been frozen.
+				You cannot delete properties anymore.'
 			);
 		}
 
@@ -192,8 +192,8 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 
 		if ( $this->frozen ) {
 			return $this->stop(
-						'This object has been frozen.
-						You cannot change the parent anymore.'
+				'This object has been frozen.
+				You cannot change the parent anymore.'
 			);
 		}
 

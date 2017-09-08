@@ -124,7 +124,7 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 			unset( $columns[ $remove_key ] );
 		}
 
-		$keys = join( ",", array_keys( $columns ) );
+		$keys = join( ',', array_keys( $columns ) );
 		$sql = "INSERT INTO $table ($keys) VALUES $content;";
 
 		return $this->wpdb->query( $sql );

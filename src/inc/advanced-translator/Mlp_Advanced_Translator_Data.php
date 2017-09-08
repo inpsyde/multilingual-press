@@ -444,7 +444,9 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 				continue;
 			}
 
-			$terms = get_terms( $taxonomy, array( 'hide_empty' => false ) );
+			$terms = get_terms( $taxonomy, array(
+				'hide_empty' => false,
+			) );
 
 			// we do not allow creating new terms
 			if ( empty( $terms ) ) {

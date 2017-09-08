@@ -191,7 +191,7 @@ class Mlp_User_Backend_Language {
 
 		// Inherit site specific language
 		$output[] = '<option value=""' . selected( $current, '', false ) . '>'
-			. __( 'Site Language', 'multilingual-press' ) . "</option>";
+			. __( 'Site Language', 'multilingual-press' ) . '</option>';
 
 		foreach ( (array) $lang_files as $file_name ) {
 			$code_lang = basename( $file_name, '.mo' );

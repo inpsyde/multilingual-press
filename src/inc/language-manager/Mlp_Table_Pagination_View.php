@@ -99,7 +99,7 @@ class Mlp_Table_Pagination_View {
 		$page_class = 1 === $this->total_pages ? ' one-page' : '';
 		?>
 		<div class="tablenav-pages<?php echo esc_attr( $page_class ); ?>">
-			<?php echo $this->get_item_count() ?>
+			<?php echo $this->get_item_count(); ?>
 			<?php if ( 1 < $this->total_pages ) { ?>
 				<?php echo $this->get_pagination_links(); ?>
 			<?php } ?>
@@ -119,7 +119,7 @@ class Mlp_Table_Pagination_View {
 		$this->current_page = $this->data->get_current_page();
 		$this->current_url  = $this->get_current_url();
 
-		if ( $this->current_page === 1 ) {
+		if ( 1 === $this->current_page ) {
 			$this->disable_first = ' disabled';
 		}
 
@@ -136,10 +136,10 @@ class Mlp_Table_Pagination_View {
 	private function get_pagination_links() {
 
 		return "\n<span class='pagination-links'>"
-			. $this->get_first_page_link()      . ' '
-			. $this->get_previous_page_link()   . ' '
+			. $this->get_first_page_link() . ' '
+			. $this->get_previous_page_link() . ' '
 			. $this->get_current_page_display() . ' '
-			. $this->get_next_page_link()       . ' '
+			. $this->get_next_page_link() . ' '
 			. $this->get_last_page_link()
 			. '</span>';
 	}
@@ -205,7 +205,7 @@ class Mlp_Table_Pagination_View {
 	private function get_previous_page_link() {
 
 		return $this->get_anchor(
-			$this->get_paged_url( max( 1, $this->current_page -1 ) ),
+			$this->get_paged_url( max( 1, $this->current_page - 1 ) ),
 			__( 'Go to the previous page', 'multilingual-press' ),
 			'prev-page' . $this->disable_first,
 			'&lsaquo;'

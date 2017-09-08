@@ -47,13 +47,12 @@ class Mlp_Redirect_Site_Settings_Form {
 			<th scope="row"><?php esc_html_e( 'Redirection', 'multilingual-press' ); ?></th>
 			<td>
 				<label for="<?php echo esc_attr( $id ); ?>">
-					<input type="checkbox" <?php
-					checked( 1, $current );
-					?> id="<?php
-					echo esc_attr( $id );
-					?>" value="1" name="<?php
-					echo esc_attr( $name );
-					?>" />
+					<input type="checkbox"
+						<?php checked( 1, $current ); ?>
+						id="<?php echo esc_attr( $id ); ?>"
+						value="1"
+						name="<?php echo esc_attr( $name ); ?>"
+					>
 					<?php echo esc_attr( $label ); ?>
 				</label>
 			</td>

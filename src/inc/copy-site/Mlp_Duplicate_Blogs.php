@@ -135,8 +135,12 @@ class Mlp_Duplicate_Blogs {
 
 		$this->wpdb->update(
 			$this->wpdb->options,
-			array( 'option_name' => $this->wpdb->prefix . 'user_roles' ),
-			array( 'option_name' => $old_prefix . 'user_roles' )
+			array(
+				'option_name' => $this->wpdb->prefix . 'user_roles',
+			),
+			array(
+				'option_name' => $old_prefix . 'user_roles',
+			)
 		);
 
 		$this->insert_post_relations( $source_blog_id, $blog_id );
@@ -176,9 +180,13 @@ class Mlp_Duplicate_Blogs {
 	private function update_admin_email( $admin_email ) {
 
 		$this->wpdb->update(
-				   $this->wpdb->options,
-				   array( 'option_value' => $admin_email ),
-				   array( 'option_name'  => 'admin_email' )
+			$this->wpdb->options,
+			array(
+				'option_value' => $admin_email,
+			),
+			array(
+				'option_name' => 'admin_email',
+			)
 		);
 	}
 

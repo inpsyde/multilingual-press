@@ -97,7 +97,9 @@ class Mlp_General_Settingspage {
 		}
 
 		$msg = __( 'Settings saved.', 'multilingual-press' );
-		$notice = new Mlp_Admin_Notice( $msg, array( 'class' => 'updated' ) );
+		$notice = new Mlp_Admin_Notice( $msg, array(
+			'class' => 'updated',
+		) );
 		$notice->show();
 	}
 

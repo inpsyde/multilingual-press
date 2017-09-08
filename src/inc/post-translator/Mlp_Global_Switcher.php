@@ -99,7 +99,8 @@ class Mlp_Global_Switcher {
 	private function fill_get() {
 
 		foreach ( $this->storage as $name => $value ) {
-			$_REQUEST[ $name ] = $_GET[ $name ] = $value;
+			$_REQUEST[ $name ] = $value;
+			$_GET[ $name ]     = $value;
 		}
 	}
 
@@ -128,7 +129,8 @@ class Mlp_Global_Switcher {
 	private function fill_post() {
 
 		foreach ( $this->storage as $name => $value ) {
-			$_REQUEST[ $name ] = $_POST[ $name ] = $value;
+			$_REQUEST[ $name ] = $value;
+			$_POST[ $name ]    = $value;
 		}
 	}
 }

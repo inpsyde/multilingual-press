@@ -135,7 +135,14 @@ class Mlp_Language_Updater {
 		$this->db->update_items_by_id(
 			$diff,
 			array(
-				'%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d',
+				'%s',
+				'%s',
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
 			)
 		);
 

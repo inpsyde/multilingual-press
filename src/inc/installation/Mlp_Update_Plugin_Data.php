@@ -48,7 +48,6 @@ class Mlp_Update_Plugin_Data {
 	 * @param   wpdb                            $wpdb
 	 * @param   Mlp_Version_Number_Interface    $current_version
 	 * @param   Mlp_Version_Number_Interface    $last_version
-	 * @return  Mlp_Update_Plugin_Data
 	 */
 	public function __construct(
 		Inpsyde_Property_List_Interface $plugin_data,
@@ -106,7 +105,7 @@ class Mlp_Update_Plugin_Data {
 	 */
 	private function update_plugin_data( $last_version ) {
 
-		if ( $last_version === 1 ) {
+		if ( 1 === $last_version ) {
 			$this->import_active_languages( new Mlp_Db_Languages_Schema( $this->wpdb ) );
 		}
 
@@ -186,7 +185,7 @@ class Mlp_Update_Plugin_Data {
 		$sql   = 'SELECT ID FROM ' . $table . 'WHERE wp_locale = %s OR iso_639_1 = %s';
 
 		foreach ( $mlp_settings as $mlp_site ) {
-			$text    = $mlp_site['text'] != '' ? $mlp_site['text'] : $mlp_site['lang'];
+			$text    = '' !== $mlp_site['text'] ? $mlp_site['text'] : $mlp_site['lang'];
 			$query   = $this->wpdb->prepare( $sql, $mlp_site['lang'], $mlp_site['lang'] );
 			$lang_id = $this->wpdb->get_var( $query );
 
@@ -195,18 +194,22 @@ class Mlp_Update_Plugin_Data {
 				// @todo add custom name
 				$this->wpdb->insert(
 					$table,
-				   array(
-					   'english_name' => $text,
-					   'wp_locale'    => $mlp_site['lang'],
-					   'http_name'    => str_replace( '_', '-', $mlp_site['lang'] ),
-				   )
+					array(
+						'english_name' => $text,
+						'wp_locale'    => $mlp_site['lang'],
+						'http_name'    => str_replace( '_', '-', $mlp_site['lang'] ),
+					)
 				);
 			} // language found -> change priority
 			else {
 				$this->wpdb->update(
 					$table,
-					array( 'priority' => 10 ),
-					array( 'ID'       => $lang_id )
+					array(
+						'priority' => 10,
+					),
+					array(
+						'ID' => $lang_id,
+					)
 				);
 			}
 		}

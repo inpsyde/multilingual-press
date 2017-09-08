@@ -13,7 +13,7 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 	 *
 	 * @var string
 	 */
-	private $dir ='';
+	private $dir = '';
 
 	/**
 	 * List of found classes.

@@ -83,7 +83,7 @@ class Mlp_Content_Relations_Schema implements Mlp_Db_Schema_Interface {
 	public function get_index_sql() {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
-		return "KEY blog_element (ml_blogid,ml_elementid)";
+		return 'KEY blog_element (ml_blogid,ml_elementid)';
 	}
 
 	/**

@@ -135,7 +135,7 @@ class Mlp_Copy_Attachments {
 	 */
 	public function copy_attachments() {
 
-		if ( ! is_dir( $this->source_dir ) OR ! is_readable( $this->source_dir ) ) {
+		if ( ! is_dir( $this->source_dir ) || ! is_readable( $this->source_dir ) ) {
 			return false;
 		}
 

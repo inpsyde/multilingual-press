@@ -50,9 +50,9 @@ class Mlp_Advanced_Translator_View {
 		$id = $this->get_id( $remote_site_id, 'copied-post' );
 		?>
 		<a href="#" class="button mlp-copy-post-button dashicons-before dashicons-image-rotate-right"
-			data-site-id="<?php echo esc_attr( $matches[1] ); ?>"><?php
-			esc_html_e( 'Copy source post', 'multilingual-press' );
-			?></a>
+			data-site-id="<?php echo esc_attr( $matches[1] ); ?>">
+			<?php esc_html_e( 'Copy source post', 'multilingual-press' ); ?>
+		</a>
 		<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="" id="<?php echo esc_attr( $id ); ?>">
 		<?php
 	}
@@ -111,10 +111,10 @@ class Mlp_Advanced_Translator_View {
 		<div class="mlp-namediv">
 			<div>
 				<label for="<?php echo esc_attr( $id ); ?>">
-					<?php _e( 'Post Name:', 'multilingual-press' ) ?><br>
+					<?php _e( 'Post Name:', 'multilingual-press' ); ?><br>
 					<input type="text" name="<?php echo esc_attr( $name ); ?>"
 						value="<?php echo esc_attr( $value ); ?>"
-						placeholder="<?php echo esc_attr__( 'Enter name here', 'multilingual-press' ) ?>" size="30"
+						placeholder="<?php echo esc_attr__( 'Enter name here', 'multilingual-press' ); ?>" size="30"
 						class="mlp-name" id="<?php echo esc_attr( $id ); ?>">
 				</label>
 			</div>
@@ -142,9 +142,9 @@ class Mlp_Advanced_Translator_View {
 		?>
 		<div class="mlp-excerptdiv">
 			<div>
-				<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Post Excerpt:', 'multilingual-press' ) ?></label>
+				<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Post Excerpt:', 'multilingual-press' ); ?></label>
 				<textarea name="<?php echo esc_attr( $name ); ?>"
-					placeholder="<?php echo esc_attr__( 'Enter excerpt here', 'multilingual-press' ) ?>"
+					placeholder="<?php echo esc_attr__( 'Enter excerpt here', 'multilingual-press' ); ?>"
 					class="mlp-excerpt"
 					id="<?php echo esc_attr( $id ); ?>"><?php echo esc_textarea( $value ); ?></textarea>
 			</div>
@@ -201,8 +201,9 @@ class Mlp_Advanced_Translator_View {
 				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>">
 				<?php _e( 'Copy the featured image of the source post.', 'multilingual-press' ); ?>
-				<span class="description"><?php
-					_e( 'Overwrites an existing featured image in the target post.', 'multilingual-press' ); ?></span>
+				<span class="description">
+					<?php _e( 'Overwrites an existing featured image in the target post.', 'multilingual-press' ); ?>
+				</span>
 			</label>
 		</p>
 		<?php
@@ -370,10 +371,14 @@ class Mlp_Advanced_Translator_View {
 
 		?>
 		<div class="mlp-warning">
-			<p><?php _e(
-					'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
-					'multilingual-press'
-				); ?></p>
+			<p>
+			<?php
+			_e(
+				'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
+				'multilingual-press'
+			);
+			?>
+			</p>
 		</div>
 		<?php
 	}

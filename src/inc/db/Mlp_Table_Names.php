@@ -110,7 +110,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 			return $cache;
 		}
 
-		if ( $this->site_id !== get_current_blog_id() ) {
+		if ( get_current_blog_id() !== $this->site_id ) {
 			switch_to_blog( $this->site_id );
 		}
 
@@ -191,7 +191,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	private function extract_names_from_schema( $schema, $prefix = '' ) {
 
 		$matches = array();
-		$pattern = '~CREATE TABLE '. $prefix . '(.*) \(~';
+		$pattern = '~CREATE TABLE ' . $prefix . '(.*) \(~';
 
 		preg_match_all( $pattern, $schema, $matches );
 

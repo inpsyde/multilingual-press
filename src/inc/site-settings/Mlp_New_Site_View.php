@@ -61,7 +61,9 @@ class Mlp_New_Site_View {
 
 		$db = $this->language_api->get_db();
 
-		$languages = $db->get_items( array( 'page' => -1 ) );
+		$languages = $db->get_items( array(
+			'page' => -1,
+		) );
 		?>
 		<h2>
 			<?php esc_html_e( 'MultilingualPress', 'multilingual-press' ); ?>
@@ -189,7 +191,7 @@ class Mlp_New_Site_View {
 			?>
 			<p>
 				<label for="<?php echo esc_attr( $id ); ?>">
-					<input type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $site_id ) ?>"
+					<input type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $site_id ); ?>"
 						id="<?php echo esc_attr( $id ); ?>">
 					<?php echo esc_html( $blog_name ); ?>
 					-

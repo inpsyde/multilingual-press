@@ -225,10 +225,10 @@ if ( ! function_exists( 'blog_exists' ) ) {
 				return true;
 			}
 
-			$query = "SELECT `blog_id` FROM $wpdb->blogs
-					WHERE site_id = $site_id AND deleted = 0";
-
-			$result = $wpdb->get_col( $query );
+			$result = $wpdb->get_col( $wpdb->prepare(
+				"SELECT blog_id FROM $wpdb->blogs WHERE site_id = %d AND deleted = 0",
+				$site_id
+			) );
 
 			// Make sure the array is always filled with something.
 			if ( empty( $result ) ) {

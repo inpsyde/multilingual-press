@@ -95,7 +95,9 @@ class Mlp_Relationship_Control_Ajax_Search {
 
 		static $statuses = false;
 
-		! $statuses and $statuses = get_post_statuses();
+		if ( ! $statuses ) {
+			$statuses = get_post_statuses();
+		}
 
 		if ( isset( $statuses[ $status ] ) ) {
 			return $statuses[ $status ];
@@ -112,7 +114,9 @@ class Mlp_Relationship_Control_Ajax_Search {
 	 */
 	private function prepare_titles( array $posts ) {
 
-		$out = $titles = $duplicates = array();
+		$out        = array();
+		$titles     = array();
+		$duplicates = array();
 
 		/** @var WP_Post $post */
 		foreach ( $posts as $post ) {

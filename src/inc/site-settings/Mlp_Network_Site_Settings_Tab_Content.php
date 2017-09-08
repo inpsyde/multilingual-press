@@ -65,7 +65,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 		?>
 		<form action="<?php echo esc_attr( $action ); ?>" method="post">
 			<input type="hidden" name="action" value="<?php echo esc_attr( $name ); ?>" />
-			<input type="hidden" name="id" value="<?php echo esc_attr($this->blog_id); ?>" />
+			<input type="hidden" name="id" value="<?php echo esc_attr( $this->blog_id ); ?>" />
 			<?php
 			wp_nonce_field(
 				$this->page_data->get_nonce_action(),
@@ -73,7 +73,9 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			);
 
 			$siteoption = get_site_option( 'inpsyde_multilingual', array() );
-			$languages  = $this->language_api->get_db()->get_items( array( 'page' => -1 )  );
+			$languages  = $this->language_api->get_db()->get_items( array(
+				'page' => -1,
+			)  );
 
 			echo '<table class="form-table mlp-admin-settings-table">';
 			$this->show_language_options( $siteoption, $languages );
@@ -163,8 +165,12 @@ class Mlp_Network_Site_Settings_Tab_Content {
 				<input class="regular-text" type="text" id="inpsyde_multilingual_text" name="inpsyde_multilingual_text"
 					value="<?php echo esc_attr( $lang_title ); ?>" />
 				<p class="description">
-					<?php esc_html_e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
-									  'multilingual-press' ); ?>
+					<?php
+					esc_html_e(
+						'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
+						'multilingual-press'
+					);
+					?>
 				</p>
 			</td>
 		</tr>
@@ -248,7 +254,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 					<p>
 						<label for="<?php echo esc_attr( $id ); ?>">
 							<input id="<?php echo esc_attr( $id ); ?>" <?php echo esc_attr( $checked ); ?>
-								type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $blog_id ) ?>" />
+								type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $blog_id ); ?>" />
 							<?php echo esc_html( $blog_name ); ?>
 							-
 							<?php echo esc_html( Mlp_Helpers::get_blog_language( $blog_id, false ) ); ?>

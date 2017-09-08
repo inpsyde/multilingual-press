@@ -250,7 +250,7 @@ class Multilingual_Press {
 
 		$found = array();
 
-		$path = $this->plugin_data->get( 'plugin_dir_path' ) . "/inc";
+		$path = $this->plugin_data->get( 'plugin_dir_path' ) . '/inc';
 
 		if ( ! is_readable( $path ) ) {
 			return $found;
@@ -296,13 +296,18 @@ class Multilingual_Press {
 		}
 
 		// Clean up linked elements table
-		$sql = "
-			DELETE
-			FROM {$this->link_table}
-			WHERE ml_source_blogid = %d
-				OR ml_blogid = %d";
-		$sql = $wpdb->prepare( $sql, $blog_id, $blog_id );
-		$wpdb->query( $sql );
+		$query = sprintf(
+			'
+DELETE
+FROM %1$s
+WHERE ml_source_blogid = %2$d
+	OR ml_blogid = %2$d',
+			$this->link_table,
+			$blog_id
+		);
+
+		// @codingStandardsIgnoreLine
+		$wpdb->query( $query );
 	}
 
 	/**
@@ -352,7 +357,18 @@ class Multilingual_Press {
 	public function check_for_user_errors_admin_notice() {
 
 		if ( true == $this->check_for_errors() ) {
-			?><div class="error"><p><?php _e( 'You didn\'t setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships.' , 'multilingual-press' ); ?></p></div><?php
+			?>
+			<div class="error">
+				<p>
+					<?php
+					_e(
+						'You didn\'t setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships.',
+						'multilingual-press'
+					);
+					?>
+				</p>
+			</div>
+			<?php
 		}
 	}
 

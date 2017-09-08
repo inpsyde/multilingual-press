@@ -37,7 +37,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	public function __construct( Inpsyde_Property_List_Interface $plugin_data ) {
 
 		$this->plugin_data = $plugin_data;
-		$this->tab_page_data = new Mlp_Network_Site_Settings_Tab_Data;
+		$this->tab_page_data = new Mlp_Network_Site_Settings_Tab_Data();
 		$this->page_properties = new Mlp_Network_Site_Settings_Properties( $plugin_data );
 
 		new Mlp_Network_Site_Settings( $this->page_properties, $this );
@@ -81,11 +81,12 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	public function update_settings() {
 
-		if ( ! check_admin_referer(
-			$this->tab_page_data->get_nonce_action(),
-			$this->tab_page_data->get_nonce_name()
-			) ) {
-			wp_die( 'Invalid', 'Invalid', array( 'response' => 403 ) );
+		if (
+			! check_admin_referer( $this->tab_page_data->get_nonce_action(), $this->tab_page_data->get_nonce_name() )
+		) {
+			wp_die( 'Invalid', 'Invalid', array(
+				'response' => 403,
+			) );
 		}
 
 		$blog_id = $this->get_blog_id();
@@ -221,7 +222,9 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		}
 
 		$msg    = esc_html__( 'Settings saved.', 'multilingual-press' );
-		$notice = new Mlp_Admin_Notice( $msg, array( 'class' => 'updated' ) );
+		$notice = new Mlp_Admin_Notice( $msg, array(
+			'class' => 'updated',
+		) );
 		$notice->show();
 	}
 

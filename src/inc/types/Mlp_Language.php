@@ -83,11 +83,11 @@ class Mlp_Language implements Mlp_Language_Interface {
 			return strtok( $this->names['http_name'], '-' );
 		}
 
-		if ( $name === 'language_long' ) {
+		if ( 'language_long' === $name ) {
 			return $this->names['http_name'];
 		}
 
-		if ( $name === 'none' ) {
+		if ( 'none' === $name ) {
 			return '';
 		}
 

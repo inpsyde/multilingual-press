@@ -116,7 +116,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 */
 	public function get_site_languages( $base_site = 0 ) {
 
-		$related_blogs = $options = array();
+		$related_blogs = [];
+		$options       = [];
 		$languages     = get_site_option( 'inpsyde_multilingual' );
 
 		if ( 0 !== $base_site ) {
@@ -172,8 +173,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$query  = $this->wpdb->prepare(
 			"SELECT `{$field}`
 			FROM `{$this->table_name}`
-			WHERE `http_name` = " . "%s LIMIT 1",
-						   $iso
+			WHERE `http_name` = %s LIMIT 1",
+			$iso
 		);
 		$result = $this->wpdb->get_var( $query );
 
@@ -493,9 +494,9 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		foreach ( $languages as $site_id => $data ) {
 			if ( ! empty( $data['lang'] ) ) {
-				$tags[ $site_id ] = str_replace('_', '-', $data['lang'] );
+				$tags[ $site_id ] = str_replace( '_', '-', $data['lang'] );
 			} elseif ( ! empty( $data['text'] ) && preg_match( '~[a-zA-Z-]+~', $data['text'] ) ) {
-				$tags[ $site_id ] = str_replace('_', '-', $data['text'] );
+				$tags[ $site_id ] = str_replace( '_', '-', $data['text'] );
 			}
 
 			// a site might have just 'EN' as text and no other values
@@ -508,7 +509,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		}
 
 		$values = array_values( $tags );
-		$values = "'" .  join( "','", $values ) . "'";
+		$values = "'" . join( "','", $values ) . "'";
 
 		$sql = "
 SELECT `english_name`, `native_name`, `custom_name`, `is_rtl`, `http_name`, `priority`, `wp_locale`, `iso_639_1`
@@ -546,7 +547,8 @@ WHERE `http_name` IN( $values )";
 	 */
 	private function get_language_tag( $language_data ) {
 
-		$tag = $like = '';
+		$tag  = '';
+		$like = '';
 
 		if ( ! empty( $language_data['lang'] ) ) {
 			$tag = str_replace( '_', '-', $language_data['lang'] );

@@ -322,10 +322,10 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		if ( $post_type->query_var && ( isset( $post->post_status ) && ! $draft_or_pending ) ) {
 			$post_link = add_query_arg( $post_type->query_var, $post->post_name, '' );
 		} else {
-			$post_link = add_query_arg(
-				array( 'post_type' => $post->post_type, 'p' => $post->ID ),
-				''
-			);
+			$post_link = add_query_arg( array(
+				'post_type' => $post->post_type,
+				'p'         => $post->ID,
+			), '' );
 		}
 
 		return home_url( $post_link );

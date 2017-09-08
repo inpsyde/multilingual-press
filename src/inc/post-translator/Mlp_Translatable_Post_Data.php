@@ -124,7 +124,8 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 			return;
 		}
 
-		$file     = $path = '';
+		$file     = '';
+		$path     = '';
 		$fileinfo = array();
 
 		// Check for thumbnail
@@ -155,7 +156,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 
 		// Create a copy of the item for every related blog
 		foreach ( $this->post_request_data[ $this->name_base ] as $blog_id ) {
-			if ( $blog_id == get_current_blog_id() or ! blog_exists( $blog_id ) ) {
+			if ( get_current_blog_id() == $blog_id or ! blog_exists( $blog_id ) ) {
 				continue;
 			}
 

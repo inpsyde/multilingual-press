@@ -201,7 +201,7 @@ class Mlp_Helpers {
 	 */
 	public static function get_interlinked_permalinks( $element_id = 0, $type = '' ) {
 
-		if ( ! is_singular() && ! is_tag() && !is_category() && ! is_tax() ) {
+		if ( ! is_singular() && ! is_tag() && ! is_category() && ! is_tax() ) {
 			return array();
 		}
 

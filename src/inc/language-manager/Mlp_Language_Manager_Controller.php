@@ -78,7 +78,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			$this->page_data,
 			$this,
 			$this->pagination_data
-			);
+		);
 
 		$updater = new Mlp_Language_Updater(
 			$this->page_data,
@@ -337,9 +337,9 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	private function show_table() {
 
-		$view = new Mlp_Admin_Table_View (
+		$view = new Mlp_Admin_Table_View(
 			$this->db,
-			new Mlp_Html,
+			new Mlp_Html(),
 			$this->pagination_data,
 			$this->get_columns(),
 			'mlp-language-manager-table',

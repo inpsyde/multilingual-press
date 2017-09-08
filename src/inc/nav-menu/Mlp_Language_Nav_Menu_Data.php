@@ -227,7 +227,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 		// Replace the "Custom" in the management screen
 		$menu_item->type_label = esc_html__( 'Language', 'multilingual-press' );
 		$menu_item->classes[]  = "blog-id-$blog_id";
-		$menu_item->classes[]  = "mlp-language-nav-item";
+		$menu_item->classes[]  = 'mlp-language-nav-item';
 		$menu_item->url        = get_home_url( $blog_id, '/' );
 
 		update_post_meta( $menu_item->ID, $this->meta_key, $blog_id );

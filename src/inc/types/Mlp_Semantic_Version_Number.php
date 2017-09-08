@@ -67,7 +67,8 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 		}
 
 		$parts  = explode( '.', $version );
-		$new    = $append = array();
+		$new    = array();
+		$append = array();
 
 		foreach ( $parts as $part ) {
 			$this->sort_values( $part, $new, $append );

@@ -94,11 +94,11 @@ class Mlp_Relationship_Control_Meta_Box_View {
 						foreach ( $actions as $key => $label ) {
 							print '<p>'
 								. $this->get_radio(
-									   $key,
-										   $label,
-										   'stay',
-										   'mlp-rc-action[' . $this->remote_site_id . ']',
-										   'mlp-rc-input-id-' . $this->remote_site_id
+									$key,
+									$label,
+									'stay',
+									'mlp-rc-action[' . $this->remote_site_id . ']',
+									'mlp-rc-input-id-' . $this->remote_site_id
 								)
 								. '</p>';
 						}
@@ -113,7 +113,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 								class="mlp-state-toggler"
 								id="mlp-rc-input-id-<?php echo esc_attr( $this->remote_site_id ); ?>-search"
 								data-toggle-target="#<?php echo esc_attr( $search_selector_id ); ?>">
-							<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ) ?>
+							<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ); ?>
 						</label>
 					</p>
 				</div>
@@ -143,13 +143,13 @@ class Mlp_Relationship_Control_Meta_Box_View {
 					$data_attrs = $this->add_id_values( '' );
 					?>
 					<input type="button"
-						   class="button button-primary mlp-save-relationship-button"
-						   value="<?php
-						   esc_attr_e( 'Save and reload this page', 'multilingual-press' );
-						   ?>" <?php print $data_attrs; ?>>
-					<span class="description"><?php
-						esc_html_e( 'Please save other changes first separately.', 'multilingual-press' );
-						?></span>
+						class="button button-primary mlp-save-relationship-button"
+						value="<?php esc_attr_e( 'Save and reload this page', 'multilingual-press' ); ?>"
+						<?php print $data_attrs; ?>
+					>
+					<span class="description">
+						<?php esc_html_e( 'Please save other changes first separately.', 'multilingual-press' ); ?>
+					</span>
 				</p>
 			</div>
 		</div>

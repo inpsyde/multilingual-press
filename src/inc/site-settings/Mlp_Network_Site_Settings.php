@@ -49,7 +49,7 @@ class Mlp_Network_Site_Settings {
 
 		$this->config = $config;
 
-		$this->marker = "<!--" . $config->get_param_value() . "-->";
+		$this->marker = '<!--' . $config->get_param_value() . '-->';
 
 		$this->targets[] = $config->get_param_value();
 
