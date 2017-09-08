@@ -90,7 +90,7 @@ final class ServerURL implements URL {
 
 		$this->url = rtrim( "{$scheme}://$host", '/' );
 
-		if ( $port && $port !== 80 ) {
+		if ( $port && 80 !== $port ) {
 			$this->url .= ":{$port}";
 		}
 
@@ -116,7 +116,7 @@ final class ServerURL implements URL {
 			$port = 80;
 
 			if ( preg_match( '|\:(\d+)$|', $host, $matches ) ) {
-				$host = substr( $host, 0, - 1 * ( strlen( $matches[1] ) + 1 ) );
+				$host = substr( $host, 0, -1 * ( strlen( $matches[1] ) + 1 ) );
 				$port = (int) $matches[1];
 			}
 
@@ -157,7 +157,7 @@ final class ServerURL implements URL {
 		$url_path = $this->marshal_path();
 
 		$query_pos = strpos( $url_path, '?' );
-		if ( $query_pos !== false ) {
+		if ( false !== $query_pos ) {
 			$url_path = substr( $url_path, 0, $query_pos );
 		}
 
@@ -193,13 +193,13 @@ final class ServerURL implements URL {
 		$request_uri        = $this->server_data['REQUEST_URI'] ?? null;
 		$http_x_rewrite_url = $this->server_data['HTTP_X_REWRITE_URL'] ?? null;
 
-		if ( $http_x_rewrite_url !== null ) {
+		if ( null !== $http_x_rewrite_url ) {
 			$request_uri = $http_x_rewrite_url;
 		}
 
 		// Check for IIS 7.0 or later with ISAPI_Rewrite
 		$http_x_original_url = $this->server_data['HTTP_X_ORIGINAL_URL'] ?? null;
-		if ( $http_x_original_url !== null ) {
+		if ( null !== $http_x_original_url ) {
 			$request_uri = $http_x_original_url;
 		}
 

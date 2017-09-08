@@ -79,7 +79,7 @@ final class MultilingualPress {
 	 *
 	 * @return bool Whether or not MultilingualPress was bootstrapped successfully.
 	 *
-	 * @throws InstanceAlreadyBootstrapped if called on a MultilingualPress instance that has already been bootstrapped.
+	 * @throws InstanceAlreadyBootstrapped If called on a MultilingualPress instance that has already been bootstrapped.
 	 */
 	public function bootstrap(): bool {
 

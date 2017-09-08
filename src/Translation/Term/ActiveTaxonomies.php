@@ -76,7 +76,7 @@ class ActiveTaxonomies {
 	/**
 	 * Returns true if given taxonomy names are allowed.
 	 *
-	 * @param string[] $taxonomies
+	 * @param string[] ...$taxonomies Taxonomy names to check.
 	 *
 	 * @return bool
 	 */

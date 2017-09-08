@@ -263,14 +263,14 @@ final class PHPServerRequest implements ServerRequest {
 		$method = strtoupper( $this->server_value( 'REQUEST_METHOD' ) );
 
 		// For GET requests URL query data represent all the request values.
-		if ( $method === 'GET' ) {
+		if ( 'GET' === $method ) {
 			self::$values[ INPUT_REQUEST ] = $url_query_data;
 
 			return;
 		}
 
 		// For POST requests values are represented by URL query data merged with any kind of form data.
-		if ( $method === 'POST' ) {
+		if ( 'POST' === $method ) {
 
 			self::$values[ INPUT_POST ] = (array) filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
 
@@ -282,7 +282,7 @@ final class PHPServerRequest implements ServerRequest {
 		$content_type = $this->server_value( 'CONTENT_TYPE' );
 
 		// When content type is not URL-encoded, give up parsing body. Raw body can still be accessed and decoded.
-		if ( $content_type !== 'application/x-www-form-urlencoded' ) {
+		if ( 'application/x-www-form-urlencoded' !== $content_type ) {
 			self::$values[ INPUT_REQUEST ] = $url_query_data;
 
 			return;

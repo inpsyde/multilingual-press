@@ -101,7 +101,7 @@ class RelationshipPermission {
 		if ( $switched && ! taxonomy_exists( $term->taxonomy ) ) {
 			restore_current_blog();
 
-			return - 1;
+			return -1;
 		}
 
 		// This is just to be extra careful in case the term has been deleted via MySQL etc.

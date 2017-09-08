@@ -238,7 +238,7 @@ class SimpleTermTranslatorFields {
 
 		$operation_id = self::RELATED_TERM_OPERATION . "-{$remote_site_id}-{$operation}";
 
-		$create = $operation === self::RELATED_TERM_DO_CREATE;
+		$create = self::RELATED_TERM_DO_CREATE === $operation;
 
 		$checked = $create
 			? null === $remote_term

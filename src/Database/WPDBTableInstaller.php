@@ -53,7 +53,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return bool Whether or not the table was installed successfully.
 	 *
-	 * @throws InvalidTable if a table was neither passed, nor injected via the constructor.
+	 * @throws InvalidTable If a table was neither passed, nor injected via the constructor.
 	 */
 	public function install( Table $table = null ): bool {
 
@@ -97,7 +97,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return bool Whether or not the table was uninstalled successfully.
 	 *
-	 * @throws InvalidTable if a table was neither passed, nor injected via the constructor.
+	 * @throws InvalidTable If a table was neither passed, nor injected via the constructor.
 	 */
 	public function uninstall( Table $table = null ): bool {
 

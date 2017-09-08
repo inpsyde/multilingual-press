@@ -187,7 +187,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 
 		add_action( 'current_screen', function ( \WP_Screen $screen ) {
 
-			if ( ! $screen->taxonomy || $screen->id !== "edit-{$screen->taxonomy}" ) {
+			if ( ! $screen->taxonomy || "edit-{$screen->taxonomy}" !== $screen->id ) {
 				return;
 			}
 

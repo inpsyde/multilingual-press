@@ -53,7 +53,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return Module Module object.
 	 *
-	 * @throws InvalidModule if there is no module with the given ID.
+	 * @throws InvalidModule If there is no module with the given ID.
 	 */
 	public function activate_module( string $id ): Module {
 
@@ -75,7 +75,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return Module Module object.
 	 *
-	 * @throws InvalidModule if there is no module with the given ID.
+	 * @throws InvalidModule If there is no module with the given ID.
 	 */
 	public function deactivate_module( string $id ): Module {
 
@@ -97,7 +97,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return Module Module object.
 	 *
-	 * @throws InvalidModule if there is no module with the given ID.
+	 * @throws InvalidModule If there is no module with the given ID.
 	 */
 	public function get_module( string $id ): Module {
 
@@ -183,7 +183,7 @@ final class NetworkOptionModuleManager implements ModuleManager {
 	 *
 	 * @return bool Whether or not the module is active.
 	 *
-	 * @throws ModuleAlreadyRegistered if a module with the ID of the given module already has been registered.
+	 * @throws ModuleAlreadyRegistered If a module with the ID of the given module already has been registered.
 	 */
 	public function register_module( Module $module ): bool {
 

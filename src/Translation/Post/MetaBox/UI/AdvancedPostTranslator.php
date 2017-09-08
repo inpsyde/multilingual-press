@@ -229,7 +229,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	 */
 	private function is_remote_post_trashed( \WP_Post $remote_post = null ): bool {
 
-		return $remote_post && $remote_post->post_status === 'trash';
+		return $remote_post && 'trash' === $remote_post->post_status;
 	}
 
 	/**

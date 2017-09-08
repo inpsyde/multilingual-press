@@ -82,7 +82,7 @@ class SimpleTermTranslatorUpdater {
 		/* TODO: Check if ALL selected remote terms form a valid translation group. If not, BAIL! */
 
 		$term_id_to_relate = $this->term_to_relate( $remote_site_id, $remote_term->taxonomy, $relation_helper );
-		if ( $term_id_to_relate === - 1 ) {
+		if ( -1 === $term_id_to_relate ) {
 			$relation_helper->unlink_element( $remote_site_id );
 
 			return $this->create_empty_term();

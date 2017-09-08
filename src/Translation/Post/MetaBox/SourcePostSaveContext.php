@@ -296,7 +296,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		}
 
 		$thumb_post = get_post( $thumb_id );
-		if ( ! $thumb_post || $thumb_post->post_type !== 'attachment' ) {
+		if ( ! $thumb_post || 'attachment' !== $thumb_post->post_type ) {
 			return '';
 		}
 

@@ -219,7 +219,7 @@ class AdvancedPostTranslatorUpdater {
 	private function remote_post_has_values( \WP_Post $remote_post ): bool {
 
 		return
-			$remote_post->post_status !== 'draft'
+			'draft' !== $remote_post->post_status
 			|| ( post_type_supports( $remote_post->post_type, 'title' ) && trim( $remote_post->post_title ) )
 			|| ( post_type_supports( $remote_post->post_type, 'editor' ) && trim( $remote_post->post_content ) )
 			|| ( post_type_supports( $remote_post->post_type, 'excerpt' ) && trim( $remote_post->post_excerpt ) );
@@ -251,7 +251,7 @@ class AdvancedPostTranslatorUpdater {
 			}
 		}
 
-		return $errors === 0;
+		return 0 === $errors;
 	}
 
 	/**

@@ -252,7 +252,7 @@ class PostRelationSaveHelper {
 			return $current_site;
 		}
 
-		return - 1;
+		return -1;
 
 	}
 

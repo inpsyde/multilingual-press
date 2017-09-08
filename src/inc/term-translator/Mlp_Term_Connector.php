@@ -63,7 +63,7 @@ class Mlp_Term_Connector {
 		foreach ( $this->post_data as $target_site_id => $target_term_taxonomy_id ) {
 			$target_term_taxonomy_id = (int) $target_term_taxonomy_id;
 
-			if ( - 1 === $target_term_taxonomy_id ) {
+			if ( -1 === $target_term_taxonomy_id ) {
 				continue;
 			}
 
@@ -181,7 +181,7 @@ class Mlp_Term_Connector {
 		$target_term_taxonomy_id
 	) {
 
-		if ( - 1 === $target_term_taxonomy_id ) {
+		if ( -1 === $target_term_taxonomy_id ) {
 			return true;
 		}
 

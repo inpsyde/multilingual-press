@@ -93,8 +93,8 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @return mixed The value or factory callback with the given name.
 	 *
-	 * @throws ValueNotFound                if there is no value or factory callback with the given name.
-	 * @throws LateAccessToNotSharedService if a not shared value or factory callback is to be accessed on a
+	 * @throws ValueNotFound                If there is no value or factory callback with the given name.
+	 * @throws LateAccessToNotSharedService If a not shared value or factory callback is to be accessed on a
 	 *                                      bootstrapped container.
 	 */
 	public function offsetGet( $name ) {
@@ -145,8 +145,8 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @return void
 	 *
-	 * @throws WriteAccessOnLockedContainer if the container is locked.
-	 * @throws InvalidValueWriteAccess      if there already is a value with the given name.
+	 * @throws WriteAccessOnLockedContainer If the container is locked.
+	 * @throws InvalidValueWriteAccess      If there already is a value with the given name.
 	 */
 	public function offsetSet( $name, $value ) {
 
@@ -218,9 +218,9 @@ final class AddOnlyContainer implements Container {
 	 *
 	 * @return Container Container instance.
 	 *
-	 * @throws WriteAccessOnLockedContainer if the container is locked.
-	 * @throws ValueNotFound if there is no factory callback with the given name.
-	 * @throws InvalidValueWriteAccess if there already is a value with the given name.
+	 * @throws WriteAccessOnLockedContainer If the container is locked.
+	 * @throws ValueNotFound If there is no factory callback with the given name.
+	 * @throws InvalidValueWriteAccess If there already is a value with the given name.
 	 */
 	public function extend( string $name, callable $new_factory ): Container {
 

@@ -82,7 +82,7 @@ class ActivePostTypes {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param \string[] $post_types Post type slugs to check.
+	 * @param string[] ...$post_types Post type slugs to check.
 	 *
 	 * @return bool Whether or not all given post type slugs are active.
 	 */

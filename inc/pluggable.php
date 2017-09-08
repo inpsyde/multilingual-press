@@ -36,7 +36,7 @@ namespace {
 
 namespace Inpsyde\MultilingualPress {
 
-	if ( ! function_exists( __NAMESPACE__ . '\\debug') ) :
+	if ( ! function_exists( __NAMESPACE__ . '\\debug' ) ) :
 		/**
 		 * Writes debug data to the error log.
 		 *

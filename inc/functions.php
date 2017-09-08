@@ -6,6 +6,7 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\API\Translations;
+use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
@@ -24,7 +25,7 @@ use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
  *
  * @return mixed The value with the given name.
  *
- * @throws \UnexpectedValueException if the value does not satisfy the expected types.
+ * @throws \UnexpectedValueException If the value does not satisfy the expected types.
  */
 function resolve( $name, string ...$expected_types ) {
 
@@ -661,13 +662,9 @@ function redirect_after_settings_update( $url = '', $setting = 'mlp-setting', $c
 	}
 
 	if ( ! $url ) {
-		if ( isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
-			$url = $_POST['_wp_http_referer'] ?? '';
-		}
+		$server_request = resolve( 'multilingualpress.server_request', ServerRequest::class );
 
-		if ( ! $url ) {
-			$url = $_REQUEST['_wp_http_referer'] ?? '';
-		}
+		$url = (string) $server_request->body_value( '_wp_http_referer' );
 	}
 
 	wp_safe_redirect( add_query_arg( 'settings-updated', true, $url ) );
