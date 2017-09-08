@@ -12,13 +12,26 @@
 	<rule ref="PHPCompatibility"/>
 
 	<rule ref="WordPress">
+
+		<!-- Exclude as we won't touch comments or documentation for 2.x anymore. -->
 		<exclude name="Generic.Commenting"/>
 		<exclude name="Squiz.Commenting"/>
-		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
+
+		<!-- Exclude to be able to use "@noinspection PhpUnusedParameterInspection" annotations. -->
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint"/>
+
+		<!-- Exclude as MultilingualPress adheres to the PSR-0 standard. -->
 		<exclude name="WordPress.Files.FileName"/>
+
+		<!-- Exclude to be able to use namespaced hooks such as "multilingualpress.active_taxonomies". -->
 		<exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
+
+		<!-- Exclude VIP-specific sniffs, for now. -->
 		<exclude name="WordPress.VIP"/>
+
+		<!-- Exclude as we won't touch translations for 2.x anymore. -->
 		<exclude name="WordPress.WP.I18n"/>
+
 	</rule>
 
 </ruleset>
