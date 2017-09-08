@@ -122,7 +122,7 @@ class Mlp_Relationship_Control_Ajax_Search {
 		foreach ( $posts as $post ) {
 
 			$post->post_title = esc_html( $post->post_title );
-			$existing         = array_search( $post->post_title, $titles );
+			$existing         = array_search( $post->post_title, $titles, true );
 
 			if ( $existing ) {
 				$duplicates[] = $post->ID;

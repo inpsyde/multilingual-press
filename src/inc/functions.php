@@ -219,7 +219,7 @@ if ( ! function_exists( 'blog_exists' ) ) {
 			$site_id = get_current_site()->id;
 		}
 
-		if ( empty( $cache ) or empty( $cache[ $site_id ] ) ) {
+		if ( empty( $cache ) || empty( $cache[ $site_id ] ) ) {
 
 			if ( wp_is_large_network() ) { // we do not test large sites.
 				return true;
@@ -234,10 +234,10 @@ if ( ! function_exists( 'blog_exists' ) ) {
 			if ( empty( $result ) ) {
 				$cache[ $site_id ] = array( 'do not check again' );
 			} else {
-				$cache[ $site_id ] = $result;
+				$cache[ $site_id ] = array_map( 'intval', $result );
 			}
 		}
 
-		return in_array( $blog_id, $cache[ $site_id ] );
+		return in_array( (int) $blog_id, $cache[ $site_id ], true );
 	}
 }

@@ -90,7 +90,7 @@ class Mlp_Language_Formatter {
 			return $this->get_rtl_checkbox( $content, $id );
 		}
 
-		return "<input type='text' name='languages[$id]" . "[$name]" . "' value='" . $content . "' $size />";
+		return "<input type='text' name='languages[$id][$name]' value='$content' $size />";
 	}
 
 	/**

@@ -31,14 +31,6 @@ class Mlp_Db_Table_Name implements Mlp_Db_Table_Name_Interface {
 
 		$this->table_name = $table_name;
 
-		// TODO: Most propbably completely remove is_valid() check, and thus remove this class...
-		if ( ! $this->is_valid() ) {
-			trigger_error(
-				'Invalid table name: ' . esc_html( $table_name ),
-				E_USER_ERROR
-			);
-		}
-
 		$this->all_table_names = $table_list->get_all_table_names();
 	}
 

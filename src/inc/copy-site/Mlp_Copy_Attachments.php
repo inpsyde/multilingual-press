@@ -122,10 +122,11 @@ class Mlp_Copy_Attachments {
 			return $base_url;
 		}
 
-		$b_host = parse_url( $base_url, PHP_URL_HOST );
-		$s_host = parse_url( $site_url, PHP_URL_HOST );
-
-		return str_replace( $b_host, $s_host, $base_url );
+		return str_replace(
+			wp_parse_url( $base_url, PHP_URL_HOST ),
+			wp_parse_url( $site_url, PHP_URL_HOST ),
+			$base_url
+		);
 	}
 
 	/**
@@ -167,7 +168,7 @@ class Mlp_Copy_Attachments {
 			return;
 		}
 
-		if ( ! is_dir( $dest_dir ) and ! wp_mkdir_p( $dest_dir ) ) {
+		if ( ! is_dir( $dest_dir ) && ! wp_mkdir_p( $dest_dir ) ) {
 			return;
 		}
 

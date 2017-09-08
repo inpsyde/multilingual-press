@@ -12,7 +12,7 @@
  * Network:     true
  */
 
-defined( 'ABSPATH' ) or die();
+defined( 'ABSPATH' ) || die();
 
 if ( ! class_exists( 'Multilingual_Press' ) ) {
 	require plugin_dir_path( __FILE__ ) . 'inc/Multilingual_Press.php';
@@ -154,6 +154,7 @@ function mlp_debug( $message ) {
 
 	$date = date( 'H:m:s' );
 
+	// @codingStandardsIgnoreLine as this is a function specifically used when debugging.
 	error_log( "MultilingualPress: $date $message" );
 }
 

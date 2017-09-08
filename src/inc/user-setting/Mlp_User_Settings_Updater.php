@@ -46,7 +46,7 @@ class Mlp_User_Settings_Updater implements Mlp_User_Settings_Updater_Interface {
 			return false;
 		}
 
-		if ( empty( $_POST[ $this->key ] ) or '' === trim( $_POST[ $this->key ] ) ) {
+		if ( empty( $_POST[ $this->key ] ) || '' === trim( $_POST[ $this->key ] ) ) {
 			return delete_user_meta( $user_id, $this->key );
 		}
 

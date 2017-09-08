@@ -190,6 +190,7 @@ class Mlp_Network_Site_Settings {
 			return;
 		}
 
+		// @codingStandardsIgnoreLine
 		$GLOBALS['pagenow'] = $value;
 	}
 }

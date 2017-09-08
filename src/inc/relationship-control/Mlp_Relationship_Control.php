@@ -82,16 +82,9 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 		$func = substr( $_REQUEST['action'], $start ) . '_post';
 
 		$reconnect = new Mlp_Relationship_Changer( $this->plugin );
-		$result = $reconnect->$func();
+		$reconnect->$func();
 
 		status_header( 200 );
-
-		// Never visible for the user, for debugging only.
-		if ( is_scalar( $result ) ) {
-			print $result;
-		} else {
-			print '<pre>' . print_r( $result, 1 ) . '</pre>';
-		}
 
 		mlp_exit();
 	}

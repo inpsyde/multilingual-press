@@ -91,10 +91,7 @@ class Mlp_Helpers {
 
 		// Do we need related blogs only?
 		if ( false === $not_related ) {
-			$related_blogs = $site_relations->get_related_sites(
-				get_current_blog_id(),
-				! is_user_logged_in()
-			);
+			$related_blogs = $site_relations->get_related_sites( get_current_blog_id() );
 
 			// No related blogs? Leave here.
 			if ( empty( $related_blogs ) ) {
@@ -112,8 +109,10 @@ class Mlp_Helpers {
 				continue;
 			}
 
+			$language_blogid = (int) $language_blogid;
+
 			// Filter out blogs that are not related
-			if ( ! $not_related && ! in_array( $language_blogid, $related_blogs ) ) {
+			if ( ! $not_related && ! in_array( $language_blogid, $related_blogs, true ) ) {
 				continue;
 			}
 
@@ -290,13 +289,13 @@ class Mlp_Helpers {
 		$languages    = mlp_get_available_languages();
 		$current_blog_id = get_current_blog_id();
 
-		if ( 0 == count( $languages ) ) {
+		if ( 0 === count( $languages ) ) {
 			return null;
 		}
 
 		foreach ( $languages as $language_id => $language_name ) {
 
-			if ( $current_blog_id == $language_id ) {
+			if ( (int) $current_blog_id === (int) $language_id ) {
 				continue;
 			}
 
@@ -350,7 +349,7 @@ class Mlp_Helpers {
 
 		static $languages;
 
-		if ( 0 == $site_id ) {
+		if ( 0 === (int) $site_id ) {
 			$site_id = get_current_blog_id();
 		}
 
@@ -358,10 +357,7 @@ class Mlp_Helpers {
 			$languages = get_site_option( 'inpsyde_multilingual' );
 		}
 
-		if ( empty( $languages )
-			or empty( $languages[ $site_id ] )
-			or empty( $languages[ $site_id ]['lang'] )
-		) {
+		if ( empty( $languages[ $site_id ]['lang'] ) ) {
 			return '';
 		}
 

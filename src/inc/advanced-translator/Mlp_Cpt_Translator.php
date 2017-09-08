@@ -172,7 +172,7 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		$options    = get_site_option( 'inpsyde_multilingual_cpt' );
 		$post_types = $this->get_custom_post_types();
 
-		if ( empty( $post_types ) or empty( $_POST[ $this->form_name ] ) ) {
+		if ( empty( $post_types ) || empty( $_POST[ $this->form_name ] ) ) {
 			$options['post_types'] = array();
 			return update_site_option( 'inpsyde_multilingual_cpt', $options );
 		}
@@ -236,12 +236,12 @@ class Mlp_Cpt_Translator implements Mlp_Updatable {
 		$options = get_site_option( 'inpsyde_multilingual_cpt' );
 		$out     = array();
 
-		if ( empty( $options ) or empty( $options['post_types'] ) ) {
+		if ( empty( $options['post_types'] ) ) {
 			return $out;
 		}
 
 		foreach ( $options['post_types'] as $post_type => $setting ) {
-			if ( 0 != $setting ) {
+			if ( 0 !== (int) $setting ) {
 				$out[] = $post_type;
 			}
 		}

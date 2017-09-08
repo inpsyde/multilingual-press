@@ -90,9 +90,7 @@ class Mlp_Relationship_Control_Data {
 	 */
 	public function get_search_results() {
 
-		if ( 0 === $this->ids['remote_site_id']
-			or 0 === $this->ids['source_site_id']
-		) {
+		if ( 0 === $this->ids['remote_site_id'] || 0 === $this->ids['source_site_id'] ) {
 			return array();
 		}
 

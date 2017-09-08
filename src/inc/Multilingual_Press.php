@@ -181,7 +181,7 @@ class Multilingual_Press {
 		$assets = $this->plugin_data->get( 'assets' );
 
 		$admin_url = admin_url();
-		$admin_url = parse_url( $admin_url, PHP_URL_PATH );
+		$admin_url = wp_parse_url( $admin_url, PHP_URL_PATH );
 		$admin_url = esc_url( $admin_url );
 
 		$assets->add( 'mlp-admin', 'admin.js', array( 'backbone' ), array(
@@ -356,7 +356,7 @@ WHERE ml_source_blogid = %2$d
 	 */
 	public function check_for_user_errors_admin_notice() {
 
-		if ( true == $this->check_for_errors() ) {
+		if ( true === $this->check_for_errors() ) {
 			?>
 			<div class="error">
 				<p>

@@ -53,7 +53,7 @@ class Mlp_Site_Relations implements Mlp_Site_Relations_Interface {
 
 		$sql = $this->get_related_sites_sql( $site_id );
 
-		$this->related_sites[ $site_id ] = $this->wpdb->get_col( $sql );
+		$this->related_sites[ $site_id ] = array_map( 'intval', $this->wpdb->get_col( $sql ) );
 
 		return $this->related_sites[ $site_id ];
 	}

@@ -136,7 +136,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		foreach ( $languages as $site_id => $language_data ) {
 
 			// Filter out blogs that are not related
-			if ( ! in_array( $site_id, $related_blogs ) && 0 !== $base_site ) {
+			if ( ! in_array( (int) $site_id, $related_blogs, true ) && 0 !== $base_site ) {
 				continue;
 			}
 
@@ -653,7 +653,7 @@ WHERE `http_name` IN( $values )";
 		}
 
 		if ( $include_base ) {
-			$sites[] = $site_id;
+			$sites[] = (int) $site_id;
 		}
 
 		return $sites;

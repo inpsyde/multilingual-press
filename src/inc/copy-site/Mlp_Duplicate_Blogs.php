@@ -123,7 +123,7 @@ class Mlp_Duplicate_Blogs {
 
 		// if an url was used in the old blog, we set it to this url to change all content elements
 		// change siteurl -> will start url rename plugin
-		if ( '' != $domain ) {
+		if ( '' !== $domain ) {
 			update_option( 'siteurl', $domain );
 		}
 

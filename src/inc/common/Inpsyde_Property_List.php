@@ -118,7 +118,7 @@ class Inpsyde_Property_List implements Inpsyde_Property_List_Interface {
 			);
 		}
 
-		if ( ! is_array( $var ) and ! is_object( $var ) ) {
+		if ( ! is_array( $var ) && ! is_object( $var ) ) {
 			return $this->stop(
 				'Cannot import this variable.
 				Use arrays and objects only, not a "' . gettype( $var ) . '".'

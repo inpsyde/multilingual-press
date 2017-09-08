@@ -116,8 +116,6 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	 */
 	private function show_language_options( $site_option, $languages ) {
 
-		// Custom names are now set in the Language Manager
-		//$lang_title = isset( $siteoption[ $this->blog_id ][ 'text' ] ) ? stripslashes( $siteoption[ $this->blog_id ][ 'text' ] ) : '';
 		$selected        = isset( $site_option[ $this->blog_id ]['lang'] ) ? $site_option[ $this->blog_id ]['lang'] : '';
 		$blogoption_flag = get_blog_option( $this->blog_id, 'inpsyde_multilingual_flag_url' );
 
@@ -248,7 +246,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 					// Get current settings
 					$related_blogs = $this->relations->get_related_sites( $this->blog_id );
-					$checked       = checked( true, in_array( $blog_id, $related_blogs ), false );
+					$checked       = checked( true, in_array( $blog_id, $related_blogs, true ), false );
 					$id            = 'related_blog_' . $blog_id;
 					?>
 					<p>

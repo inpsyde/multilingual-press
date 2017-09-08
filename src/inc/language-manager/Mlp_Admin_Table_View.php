@@ -277,8 +277,10 @@ class Mlp_Admin_Table_View {
 	 */
 	private function get_alternating_class() {
 
-		static $count = 0;
+		static $alternate = true;
 
-		return 0 === $count++ % 2 ? ' class="alternate"' : '' ;
+		$alternate = ! $alternate;
+
+		return $alternate ? ' class="alternate"' : '' ;
 	}
 }

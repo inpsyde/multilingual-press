@@ -133,7 +133,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 			$thumb_id = get_post_thumbnail_id( $post_id );
 			if ( 0 < $thumb_id ) {
 				$path     = wp_upload_dir();
-				$file     = get_post_meta( $thumb_id, '_wp_attached_file', true );
+				$file     = (string) get_post_meta( $thumb_id, '_wp_attached_file', true );
 				$fileinfo = pathinfo( $file );
 				include_once( ABSPATH . 'wp-admin/includes/image.php' ); //including the attachment function
 			}
@@ -156,7 +156,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 
 		// Create a copy of the item for every related blog
 		foreach ( $this->post_request_data[ $this->name_base ] as $blog_id ) {
-			if ( get_current_blog_id() == $blog_id or ! blog_exists( $blog_id ) ) {
+			if ( get_current_blog_id() === (int) $blog_id || ! blog_exists( $blog_id ) ) {
 				continue;
 			}
 
@@ -187,7 +187,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 				$this->update_remote_post_meta( $remote_post_id, $post_meta );
 			}
 
-			if ( '' != $file ) { // thumbfile exists
+			if ( '' !== $file ) { // thumbfile exists
 				if ( 0 < count( $fileinfo ) ) {
 					$filedir  = wp_upload_dir();
 					$filename = wp_unique_filename( $filedir['path'], $fileinfo['basename'] );

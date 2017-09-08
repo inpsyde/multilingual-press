@@ -144,7 +144,9 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		do_action( 'mlp_before_post_synchronization', $this->save_context );
 
 		foreach ( $this->post_request_data[ $this->name_base ] as $remote_blog_id => $post_data ) {
-			if ( ! blog_exists( $remote_blog_id ) || ! in_array( $remote_blog_id, $related_blogs ) ) {
+			$remote_blog_id = (int) $remote_blog_id;
+
+			if ( ! blog_exists( $remote_blog_id ) || ! in_array( $remote_blog_id, $related_blogs, true ) ) {
 				continue;
 			}
 
@@ -252,7 +254,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		// Prepare and Copy the image
 		$filedir = wp_upload_dir();
 
-		if ( ! is_dir( $filedir['path'] ) and ! wp_mkdir_p( $filedir['path'] ) ) {
+		if ( ! is_dir( $filedir['path'] ) && ! wp_mkdir_p( $filedir['path'] ) ) {
 			// failed to make the directory
 			return false;
 		}

@@ -119,9 +119,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 			$languages[ $blog_id ] = array();
 		}
 
-		if ( ! isset( $_POST['inpsyde_multilingual_lang'] )
-			or '-1' === $_POST['inpsyde_multilingual_lang']
-			) {
+		if ( ! isset( $_POST['inpsyde_multilingual_lang'] ) || '-1' === $_POST['inpsyde_multilingual_lang'] ) {
 			unset( $languages[ $blog_id ]['lang'] );
 		} else {
 			$languages[ $blog_id ]['lang'] = $_POST['inpsyde_multilingual_lang'];
@@ -160,7 +158,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		$relations   = $this->plugin_data->get( 'site_relations' );
 		$changed     = 0;
 		$new_related = $this->get_new_related_blogs();
-		$old_related = $relations->get_related_sites( $blog_id, false );
+		$old_related = $relations->get_related_sites( $blog_id );
 
 		// All relations removed.
 		if ( empty( $new_related ) && ! empty( $old_related ) ) {
@@ -217,7 +215,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function show_update_message() {
 
-		if ( empty( $_GET['msg'] ) or 'updated' !== $_GET['msg'] ) {
+		if ( empty( $_GET['msg'] ) || 'updated' !== $_GET['msg'] ) {
 			return;
 		}
 
@@ -257,7 +255,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 				continue;
 			}
 
-			if ( ! in_array( $new_blog_id, $old_related ) ) {
+			if ( ! in_array( $new_blog_id, $old_related, true ) ) {
 				$add_ids[] = $new_blog_id;
 			}
 		}
@@ -277,9 +275,9 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 
 		// Delete removed relations.
 		foreach ( $old_related as $old_blog_id ) {
-			if ( ! in_array( $old_blog_id, $new_related ) ) {
+			if ( ! in_array( $old_blog_id, $new_related, true ) ) {
 				$relations->delete_relation( $blog_id, $old_blog_id );
-				$changed += 1;
+				$changed++;
 			}
 		}
 
