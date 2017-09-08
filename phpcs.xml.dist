@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<ruleset name="MultilingualPress Coding Standard" namespace="Inpsyde\MultilingualPress\Standard">
+
+	<description>MultilingualPress coding standard.</description>
+
+	<file>./inc</file>
+	<file>./src</file>
+	<file>./multilingualpress.php</file>
+	<file>./uninstall.php</file>
+
+	<!-- TODO: Remove as soon as the "src/inc/" folder was deleted. -->
+	<exclude-pattern>./src/inc/*</exclude-pattern>
+
+	<arg value="sp"/>
+
+	<!-- Check for cross-version support for PHP 7.0 and higher. -->
+	<config name="testVersion" value="7.0-"/>
+	<rule ref="PHPCompatibility"/>
+
+	<rule ref="WordPress">
+
+		<!-- Exclude to not be forced to have something like "@var Container $container Container.". -->
+		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+
+		<!-- Exclude to be able to include an encoding cookie. -->
+		<exclude name="Squiz.Commenting.FileComment.WrongStyle"/>
+		<exclude name="Squiz.Commenting.InlineComment.WrongStyle"/>
+
+		<!-- Exclude to be able to use "@noinspection PhpUnusedParameterInspection" annotations. -->
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint"/>
+
+		<!-- Exclude as MultilingualPress adheres to the PSR-4 standard. -->
+		<exclude name="WordPress.Files.FileName"/>
+
+		<!-- Exclude to be able to use namespaced hooks such as "multilingualpress.active_taxonomies". -->
+		<exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
+
+		<!-- Exclude VIP-specific sniffs, for now. -->
+		<exclude name="WordPress.VIP"/>
+
+	</rule>
+
+</ruleset>
