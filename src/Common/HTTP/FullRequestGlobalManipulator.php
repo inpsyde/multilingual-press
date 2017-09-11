@@ -53,6 +53,7 @@ final class FullRequestGlobalManipulator implements RequestGlobalsManipulator {
 
 		$this->storage = $GLOBALS[ $name ];
 
+		// @codingStandardsIgnoreLine
 		$_REQUEST = array_diff_key( $_REQUEST, $this->storage );
 
 		$GLOBALS[ $name ] = [];
@@ -73,6 +74,7 @@ final class FullRequestGlobalManipulator implements RequestGlobalsManipulator {
 			return 0;
 		}
 
+		// @codingStandardsIgnoreLine
 		$_REQUEST = array_merge( $_REQUEST, $this->storage );
 
 		$name = "_{$this->request_method}";

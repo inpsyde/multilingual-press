@@ -42,9 +42,9 @@ final class ServerURL implements URL {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param array  $server_data Array of server data similar to $_SERVER
+	 * @param array  $server_data Array of server data similar to $_SERVER.
 	 * @param string $host        Optional. If given force host to be taken from this value instead from server data.
-	 *                            The string could just contain hostname or be in the format "hostname:port"
+	 *                            The string could just contain hostname or be in the format "hostname:port".
 	 */
 	public function __construct( array $server_data, string $host = '' ) {
 
@@ -141,7 +141,7 @@ final class ServerURL implements URL {
 			return [ $host, $port ];
 		}
 
-		// Misinterpreted IPv6-Address reported for Safari on Windows
+		// Misinterpreted IPv6-Address reported for Safari on Windows.
 		if ( "{$port}]" === substr( "[{$server_address}]", strrpos( "[{$server_address}]", ':' ) + 1 ) ) {
 			$port = 80;
 		}
@@ -182,7 +182,7 @@ final class ServerURL implements URL {
 	 */
 	private function marshal_path(): string {
 
-		// IIS7 with URL Rewrite: make sure we get the unencoded url
+		// IIS7 with URL Rewrite: make sure we get the unencoded url.
 		$iis_url_rewritten = $this->server_data['IIS_WasUrlRewritten'] ?? null;
 		$unencoded_url     = $this->server_data['UNENCODED_URL'] ?? null;
 
@@ -197,7 +197,7 @@ final class ServerURL implements URL {
 			$request_uri = $http_x_rewrite_url;
 		}
 
-		// Check for IIS 7.0 or later with ISAPI_Rewrite
+		// Check for IIS 7.0 or later with ISAPI_Rewrite.
 		$http_x_original_url = $this->server_data['HTTP_X_ORIGINAL_URL'] ?? null;
 		if ( null !== $http_x_original_url ) {
 			$request_uri = $http_x_original_url;

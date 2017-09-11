@@ -81,8 +81,8 @@ class TermRelationSaveHelper {
 	/**
 	 * Set the source id of the element.
 	 *
-	 * @param   int $remote_site_id          ID of remote site
-	 * @param   int $remote_term_taxonomy_id ID of remote term
+	 * @param   int $remote_site_id          ID of remote site.
+	 * @param   int $remote_term_taxonomy_id ID of remote term.
 	 *
 	 * @return  bool
 	 */
@@ -93,8 +93,8 @@ class TermRelationSaveHelper {
 			return true;
 		}
 
+		// @codingStandardsIgnoreStart
 		/* TODO: Revisit and correct the following! This is only a quick-fix to test the post translation. */
-
 		// return $this->content_relations->set_relation(
 		// $source_site_id,
 		// $remote_site_id,
@@ -102,6 +102,7 @@ class TermRelationSaveHelper {
 		// $remote_term_taxonomy_id,
 		// 'term'
 		// );
+		// @codingStandardsIgnoreEnd
 		return false;
 	}
 

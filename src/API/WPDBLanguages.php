@@ -472,7 +472,7 @@ final class WPDBLanguages implements Languages {
 	/**
 	 * Checks if the given element is an array that has a valid field element.
 	 *
-	 * @param mixed $maybe_array Maybe an array
+	 * @param mixed $maybe_array Maybe an array.
 	 *
 	 * @return bool Whether or not the given element is an array that has a valid field element.
 	 */

@@ -7,7 +7,7 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\User\UserSettingViewModel;
 
-use function Inpsyde\MultilingualPress\nonce_field;
+use function Inpsyde\MultilingualPress\get_nonce_field;
 
 /**
  * Redirect user setting.
@@ -66,7 +66,7 @@ final class RedirectUserSetting implements UserSettingViewModel {
 			esc_html__( 'Do not redirect me to the best matching language version.', 'multilingualpress' ),
 			esc_attr( $this->meta_key ),
 			checked( $this->repository->get_user_setting( (int) $user->ID ), true, false ),
-			nonce_field( $this->nonce )
+			get_nonce_field( $this->nonce )
 		);
 	}
 

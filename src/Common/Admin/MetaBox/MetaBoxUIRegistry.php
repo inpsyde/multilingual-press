@@ -102,6 +102,8 @@ class MetaBoxUIRegistry {
 	 * @param UIAwareMetaBoxRegistrar $registrar Meta box registrar object.
 	 *
 	 * @return MetaBoxUIRegistry
+	 *
+	 * @throws \InvalidArgumentException If a user interface with the given ID already exists for the given registrar.
 	 */
 	public function register_ui( MetaBoxUI $ui, UIAwareMetaBoxRegistrar $registrar ): MetaBoxUIRegistry {
 

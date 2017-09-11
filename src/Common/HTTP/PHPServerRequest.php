@@ -90,7 +90,7 @@ final class PHPServerRequest implements ServerRequest {
 	 * Return a value from request body, optionally filtered.
 	 *
 	 * @param string $name    Key to get value for.
-	 * @param int    $method  HTTP method constants, can be one of INPUT_REQUEST, INPUT_GET or INPUT_POST
+	 * @param int    $method  HTTP method constants, can be one of INPUT_REQUEST, INPUT_GET or INPUT_POST.
 	 * @param int    $filter  Optional. One of the FILTER_* constants. Defaults to FILTER_UNSAFE_RAW (value unchanged).
 	 * @param mixed  $options Optional. Options for filter. Defaults to FILTER_FLAG_NONE.
 	 *
@@ -196,7 +196,7 @@ final class PHPServerRequest implements ServerRequest {
 			return;
 		}
 
-		// This seems to be the only way to get the Authorization header on Apache
+		// This seems to be the only way to get the Authorization header on Apache.
 		$apache_request_headers = apache_request_headers();
 		if ( ! $apache_request_headers ) {
 			return;
@@ -224,10 +224,10 @@ final class PHPServerRequest implements ServerRequest {
 
 		$headers = [];
 		foreach ( self::$server as $key => $value ) {
-			// Apache prefixes environment variables with REDIRECT_ if they are added by rewrite rules
+			// Apache prefixes environment variables with REDIRECT_ if they are added by rewrite rules.
 			if ( strpos( $key, 'REDIRECT_' ) === 0 ) {
 				$key = substr( $key, 9 );
-				// We will not overwrite existing variables with the prefixed versions, though
+				// We will not overwrite existing variables with the prefixed versions, though.
 				if ( array_key_exists( $key, self::$server ) ) {
 					continue;
 				}

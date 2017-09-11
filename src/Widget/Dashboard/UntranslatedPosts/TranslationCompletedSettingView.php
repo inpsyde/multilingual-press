@@ -86,11 +86,11 @@ class TranslationCompletedSettingView {
 		$id = 'mlp-translation-completed';
 		?>
 		<div class="misc-pub-section misc-pub-mlp-translation-completed">
-			<?php echo nonce_field( $this->nonce ); ?>
+			<?php nonce_field( $this->nonce ); ?>
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( PostsRepository::META_KEY ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>" <?php checked( $translated ); ?>>
-				<?php _e( 'Translation completed', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Translation completed', 'multilingualpress' ); ?>
 			</label>
 		</div>
 		<?php

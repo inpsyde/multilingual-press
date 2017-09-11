@@ -70,17 +70,21 @@ class Mlp_Language_Manager_Page_View {
 			<form action="<?php echo esc_url( $this->setting->url() ); ?>" method="post">
 				<input type="hidden" name="action" value="<?php echo esc_attr( $this->setting->action() ); ?>">
 				<input type="hidden" name="paged" value="<?php echo esc_attr( $current_page ); ?>">
-				<?php echo nonce_field( $this->nonce ); ?>
+				<?php nonce_field( $this->nonce ); ?>
 				<?php $this->watcher->update( 'before_table' ); ?>
 				<?php $this->watcher->update( 'show_table' ); ?>
 				<?php $this->watcher->update( 'after_table' ); ?>
-				<?php submit_button(
+				<?php
+				submit_button(
 					esc_attr__( 'Save changes', 'multilingualpress' ),
 					'primary',
 					'save',
 					false,
-					[ 'style' => 'float:left' ]
-				); ?>
+					[
+						'style' => 'float:left',
+					]
+				);
+				?>
 				<?php $this->watcher->update( 'after_form_submit_button' ); ?>
 			</form>
 			<?php $this->watcher->update( 'after_form' ); ?>

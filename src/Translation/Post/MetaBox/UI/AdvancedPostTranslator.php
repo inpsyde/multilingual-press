@@ -243,7 +243,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 		<div class="mlp-warning">
 			<p>
 				<?php
-				_e(
+				esc_html_e(
 					'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
 					'multilingualpress'
 				);

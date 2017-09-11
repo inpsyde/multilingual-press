@@ -160,15 +160,17 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	 * @param MetaBoxUI $ui Meta box UI object.
 	 *
 	 * @return UIAwareMetaBoxRegistrar
+	 *
+	 * @throws \BadMethodCallException If there already has been set a user interface.
 	 */
 	public function set_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar {
 
-		// Don't allow overwrite
+		// Don't allow overwrite.
 		if ( $this->ui ) {
 			throw new \BadMethodCallException( sprintf( 'It is not possible to override UI for %s.', __CLASS__ ) );
 		}
 
-		// Don't do anything if called too early
+		// Don't do anything if called too early.
 		if ( did_action( self::ACTION_INIT_META_BOXES ) ) {
 			$this->ui = $ui;
 		}
@@ -294,7 +296,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			return;
 		}
 
-		echo nonce_field( $this->create_nonce_for_meta_box( $meta_box ) );
+		nonce_field( $this->create_nonce_for_meta_box( $meta_box ) );
 
 		echo $view->with_term( $term )->with_data( compact( 'meta_box', 'update' ) )->render();
 	}

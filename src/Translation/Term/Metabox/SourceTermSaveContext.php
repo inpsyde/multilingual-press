@@ -159,6 +159,8 @@ final class SourceTermSaveContext implements \ArrayAccess {
 	 *
 	 * @param mixed $offset
 	 * @param mixed $value
+	 *
+	 * @throws \BadMethodCallException
 	 */
 	public function offsetSet( $offset, $value ) {
 
@@ -169,6 +171,8 @@ final class SourceTermSaveContext implements \ArrayAccess {
 	 * Disabled.
 	 *
 	 * @param mixed $offset
+	 *
+	 * @throws \BadMethodCallException
 	 */
 	public function offsetUnset( $offset ) {
 

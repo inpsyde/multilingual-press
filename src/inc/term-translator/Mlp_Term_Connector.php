@@ -67,6 +67,7 @@ class Mlp_Term_Connector {
 				continue;
 			}
 
+			// @codingStandardsIgnoreStart
 			//$translation_ids = $this->content_relations->get_translation_ids(
 			//	$this->current_site_id,
 			//	$target_site_id,
@@ -75,6 +76,7 @@ class Mlp_Term_Connector {
 			//	'term'
 			//);
 			// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
+			// @codingStandardsIgnoreEnd
 			$translation_ids = [
 				'ml_source_blogid'    => 0,
 				'ml_source_elementid' => 0,
@@ -86,6 +88,7 @@ class Mlp_Term_Connector {
 				$target_term_taxonomy_id = $term_taxonomy_id;
 			}
 
+			// @codingStandardsIgnoreStart
 			// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
 			//if ( $this->content_relations->set_relation(
 			//	$translation_ids['ml_source_blogid'],
@@ -96,6 +99,7 @@ class Mlp_Term_Connector {
 			//) ) {
 			//	$success = true;
 			//}
+			// @codingStandardsIgnoreEnd
 		}
 
 		return $success;
@@ -107,6 +111,7 @@ class Mlp_Term_Connector {
 	 */
 	public function delete_term( $term_taxonomy_id ) {
 
+		// @codingStandardsIgnoreStart
 		//$translation_ids = $this->content_relations->get_translation_ids(
 		//	$this->current_site_id,
 		//	0,
@@ -115,6 +120,7 @@ class Mlp_Term_Connector {
 		//	'term'
 		//);
 		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
+		// @codingStandardsIgnoreEnd
 		$translation_ids = [
 			'ml_source_blogid'    => 0,
 			'ml_source_elementid' => 0,
@@ -128,6 +134,7 @@ class Mlp_Term_Connector {
 
 		$target_site_id = ( 2 < count( $relations ) ) ? $this->current_site_id : 0;
 
+		// @codingStandardsIgnoreStart
 		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
 		//return $this->content_relations->delete_relation(
 		//	$translation_ids['ml_source_blogid'],
@@ -136,6 +143,7 @@ class Mlp_Term_Connector {
 		//	0,
 		//	'term'
 		//);
+		// @codingStandardsIgnoreEnd
 		return false;
 	}
 
@@ -192,6 +200,7 @@ class Mlp_Term_Connector {
 			return true;
 		}
 
+		// @codingStandardsIgnoreStart
 		//$translation_ids = $this->content_relations->get_translation_ids(
 		//	$this->current_site_id,
 		//	$target_site_id,
@@ -200,6 +209,7 @@ class Mlp_Term_Connector {
 		//	'term'
 		//);
 		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
+		// @codingStandardsIgnoreEnd
 		$translation_ids = [
 			'ml_source_blogid'    => 0,
 			'ml_source_elementid' => 0,
@@ -214,6 +224,7 @@ class Mlp_Term_Connector {
 
 		// Delete a relation
 		if ( 0 === $target_term_taxonomy_id ) {
+			// @codingStandardsIgnoreStart
 			// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
 			//return $this->content_relations->delete_relation(
 			//	$translation_ids['ml_source_blogid'],
@@ -222,9 +233,11 @@ class Mlp_Term_Connector {
 			//	0,
 			//	'term'
 			//);
+			// @codingStandardsIgnoreEnd
 			return false;
 		}
 
+		// @codingStandardsIgnoreStart
 		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
 		//return $this->content_relations->set_relation(
 		//	$translation_ids['ml_source_blogid'],
@@ -233,6 +246,7 @@ class Mlp_Term_Connector {
 		//	$target_term_taxonomy_id,
 		//	'term'
 		//);
+		// @codingStandardsIgnoreEnd
 		return false;
 	}
 }

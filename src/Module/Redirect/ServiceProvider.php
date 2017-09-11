@@ -60,11 +60,13 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 		$container['multilingualpress.noredirect_storage'] = function () {
 
+			// @codingStandardsIgnoreStart
 			/*
-			 * @TODO for logged in user, when using external object cache, we used to return
+			 * TODO for logged in user, when using external object cache, we used to return
 			 * `NoredirectObjectCacheStorage` here.
 			 * Think about adding cached storage again, when cache handling will be refactored.
 			 */
+			// @codingStandardsIgnoreEnd
 
 			return new NoredirectSessionStorage();
 		};

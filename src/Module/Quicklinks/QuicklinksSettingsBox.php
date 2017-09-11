@@ -7,7 +7,7 @@ namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxViewModel;
 
-use function Inpsyde\MultilingualPress\nonce_field;
+use function Inpsyde\MultilingualPress\get_nonce_field;
 
 /**
  * Quicklinks settings box.
@@ -89,7 +89,7 @@ final class QuicklinksSettingsBox implements SettingsBoxViewModel {
 
 		$available_positions = $this->repository->get_available_positions();
 
-		$markup = nonce_field( $this->nonce ) . '<p id="mlp-quicklinks">';
+		$markup = get_nonce_field( $this->nonce ) . '<p id="mlp-quicklinks">';
 
 		ob_start();
 

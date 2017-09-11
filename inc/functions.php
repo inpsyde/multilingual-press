@@ -132,7 +132,7 @@ function attributes_array_to_string( array $attributes ): string {
  */
 function call_exit( $status = '' ) {
 
-	exit( $status );
+	exit( esc_html( $status ) );
 }
 
 /**
@@ -468,6 +468,92 @@ function get_linked_elements( array $args = [] ): string {
 }
 
 /**
+ * Returns the HTML string for the hidden nonce field according to the given nonce object.
+ *
+ * @since 3.0.0
+ *
+ * @param Nonce $nonce        Nonce object.
+ * @param bool  $with_referer Optional. Render a referer field as well? Defaults to true.
+ *
+ * @return string The HTML string for the hidden nonce field according to the given nonce object.
+ */
+function get_nonce_field( Nonce $nonce, $with_referer = true ): string {
+
+	ob_start();
+
+	nonce_field( $nonce, $with_referer );
+
+	return ob_get_clean();
+}
+
+
+
+/**
+ * Get all existing taxonomies for the given post, including all existing terms.
+ *
+ * @since 3.0.0
+ *
+ * @param \WP_Post $post Post object to get taxonomies for.
+ *
+ * @return \stdClass[] An array where keys are taxonomy slugs and values are plain object with 2 properties:
+ *                     - $object is the related WP_Taxonomy object;
+ *                     - $terms  is an array of plain objects with 2 properties:
+ *                       - $object   is the related WP_Term object;
+ *                       - $assigned is a boolean, true when the term is assigned to the given post.
+ */
+function get_post_taxonomies_with_terms( \WP_Post $post ) {
+
+	/** @var \WP_Taxonomy[] $taxonomies */
+	$taxonomies = get_object_taxonomies( $post, 'objects' );
+
+	if ( ! $taxonomies ) {
+		return [];
+	}
+
+	$taxonomies = array_filter( $taxonomies, function ( \WP_Taxonomy $taxonomy ) {
+
+		/** @noinspection PhpUndefinedFieldInspection */
+		return current_user_can( $taxonomy->cap->assign_terms, $taxonomy->name );
+	} );
+
+	if ( ! $taxonomies ) {
+		return [];
+	}
+
+	/** @var string[] $slugs */
+	$slugs = array_column( $taxonomies, 'name' );
+
+	/** @var \WP_Term[] $all_terms */
+	$all_terms = get_terms( [
+		'taxonomy'   => $slugs,
+		'hide_empty' => false,
+	] );
+
+	if ( ! $all_terms || is_wp_error( $all_terms ) ) {
+		return [];
+	}
+
+	$output = [];
+
+	foreach ( $all_terms as $term ) {
+
+		if ( ! array_key_exists( $term->taxonomy, $output ) ) {
+			$output[ $term->taxonomy ] = (object) [
+				'object' => $taxonomies[ $term->taxonomy ],
+				'terms'  => [],
+			];
+		}
+
+		$output[ $term->taxonomy ]->terms[] = (object) [
+			'assigned' => has_term( $term->term_id, $term->taxonomy, $post ),
+			'object'   => $term,
+		];
+	}
+
+	return $output;
+}
+
+/**
  * Returns the MultilingualPress language for the site with the given ID.
  *
  * @since 3.0.0
@@ -625,23 +711,24 @@ function is_wp_debug_mode(): bool {
 }
 
 /**
- * Returns the HTML string for the hidden nonce field according to the given nonce object.
+ * Renders the HTML string for the hidden nonce field according to the given nonce object.
  *
  * @since 3.0.0
  *
  * @param Nonce $nonce        Nonce object.
  * @param bool  $with_referer Optional. Render a referer field as well? Defaults to true.
  *
- * @return string The HTML string for the hidden nonce field according to the given nonce object.
+ * @return void
  */
-function nonce_field( Nonce $nonce, $with_referer = true ): string {
+function nonce_field( Nonce $nonce, $with_referer = true ) {
 
-	return sprintf(
-		'<input type="hidden" name="%s" value="%s">%s',
-		esc_attr( $nonce->action() ),
-		esc_attr( (string) $nonce ),
-		$with_referer ? wp_referer_field( false ) : ''
-	);
+	?>
+	<input type="hidden" name="<?php echo esc_attr( $nonce->action() ); ?>"
+		value="<?php echo esc_attr( (string) $nonce ); ?>">
+	<?php
+	if ( $with_referer ) {
+		wp_referer_field();
+	}
 }
 
 /**
@@ -728,67 +815,4 @@ function site_exists( $site_id, $network_id = 0 ): bool {
 	}
 
 	return in_array( (int) $site_id, $cache[ $network_id ], true );
-}
-
-/**
- * Get all existing taxonomies for the given post, including all existing terms.
- *
- * @param \WP_Post $post Post object to get taxonomies for.
- *
- * @return \stdClass[] An array where keys are taxonomy slugs and values are plain object with 2 properties:
- *                 - $object is the related WP_Taxonomy object
- *                 - $terms  is an array of plain objects with 2 properties:
- *                     - $object   is the related WP_Term object
- *                     - $assigned is a boolean, true when the term is assigned to the given post.
- */
-function get_post_taxonomies_with_terms( \WP_Post $post ) {
-
-	/** @var \WP_Taxonomy[] $taxonomies */
-	$taxonomies = get_object_taxonomies( $post, 'objects' );
-
-	if ( ! $taxonomies ) {
-		return [];
-	}
-
-	$taxonomies = array_filter( $taxonomies, function ( \WP_Taxonomy $taxonomy ) {
-
-		/** @noinspection PhpUndefinedFieldInspection */
-		return current_user_can( $taxonomy->cap->assign_terms, $taxonomy->name );
-	} );
-
-	if ( ! $taxonomies ) {
-		return [];
-	}
-
-	/** @var string[] $slugs */
-	$slugs = array_column( $taxonomies, 'name' );
-
-	/** @var \WP_Term[] $all_terms */
-	$all_terms = get_terms( [
-		'taxonomy'   => $slugs,
-		'hide_empty' => false,
-	] );
-
-	if ( ! $all_terms || is_wp_error( $all_terms ) ) {
-		return [];
-	}
-
-	$output = [];
-
-	foreach ( $all_terms as $term ) {
-
-		if ( ! array_key_exists( $term->taxonomy, $output ) ) {
-			$output[ $term->taxonomy ] = (object) [
-				'object' => $taxonomies[ $term->taxonomy ],
-				'terms'  => [],
-			];
-		}
-
-		$output[ $term->taxonomy ]->terms[] = (object) [
-			'assigned' => has_term( $term->term_id, $term->taxonomy, $post ),
-			'object'   => $term,
-		];
-	}
-
-	return $output;
 }

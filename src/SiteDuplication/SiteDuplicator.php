@@ -167,7 +167,7 @@ class SiteDuplicator {
 
 		$siteurl = (string) get_option( 'siteurl', '' );
 
-		// Important: FIRST, duplicate the tables, and THEN overwrite things. ;)
+		// Important: FIRST, duplicate the tables, and THEN overwrite things.
 		$this->duplicate_tables( $source_site_id, $table_prefix );
 
 		$this->set_urls( $siteurl, $mapped_domain );

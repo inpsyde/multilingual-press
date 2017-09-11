@@ -59,13 +59,19 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	 */
 	public function markup( int $site_id ): string {
 
-		return $this->get_relationships( $site_id ) . sprintf(
-				'<p class="description">%s</p>',
-				esc_html__(
-					'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
-					'multilingualpress'
-				)
+		ob_start();
+		?>
+		<p class="description">
+			<?php
+			esc_html_e(
+				'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
+				'multilingualpress'
 			);
+			?>
+		</p>
+		<?php
+
+		return $this->get_relationships( $site_id ) . ob_get_clean();
 	}
 
 	/**
@@ -108,19 +114,29 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 
 			$related_site_ids = $this->site_relations->get_related_site_ids( (int) $site_id );
 
-			return $relationships . sprintf(
-					'<p><label for="%3$s"><input type="checkbox" name="%4$s[]" value="%2$d" id="%3$s"%5$s>%1$s</label></p>',
-					sprintf(
-						// translators: 1 = site name, 2 = site language
-						esc_html_x( '%1$s - %2$s', 'Site relationships', 'multilingualpress' ),
-						$site_name,
-						get_site_language( $site_id, false )
-					),
-					esc_attr( $site_id ),
-					esc_attr( "{$this->id}-{$site_id}" ),
-					esc_attr( SiteSettingsRepository::NAME_RELATIONSHIPS ),
-					checked( in_array( $base_site_id, $related_site_ids, true ), true, false )
-				);
+			$id = "{$this->id}-{$site_id}";
+
+			// translators: 1 = site name, 2 = site language.
+			$message = _x( '%1$s - %2$s', 'Site relationships', 'multilingualpress' );
+			$message = sprintf(
+				$message,
+				$site_name,
+				get_site_language( $site_id, false )
+			);
+
+			ob_start();
+			?>
+			<p>
+				<label for="<?php echo esc_attr( $id ); ?>">
+					<input type="checkbox"
+						name="<?php echo esc_attr( SiteSettingsRepository::NAME_RELATIONSHIPS ); ?>[]"
+						value="<?php echo esc_attr( $site_id ); ?>" id="<?php echo esc_attr( $id ); ?>"
+						<?php checked( in_array( $base_site_id, $related_site_ids, true ) ); ?>>
+					<?php echo esc_html( $message ); ?>
+				</label>
+			</p>
+			<?php
+			return $relationships . ob_get_clean();
 		}, '' );
 
 		$network_state->restore();

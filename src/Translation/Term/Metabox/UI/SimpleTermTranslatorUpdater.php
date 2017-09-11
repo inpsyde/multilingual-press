@@ -116,7 +116,7 @@ class SimpleTermTranslatorUpdater {
 	 */
 	private function term_to_relate( int $remote_site_id, string $taxonomy, TermRelationSaveHelper $relations ): int {
 
-		// Let's see if for this remote site, we should create a new ter, relate an existing one or do nothing
+		// Let's see if for this remote site, we should create a new ter, relate an existing one or do nothing.
 		$operation_for_sites = (array) $this->server_request->body_value(
 			SimpleTermTranslatorFields::RELATED_TERM_OPERATION,
 			INPUT_POST,
@@ -143,7 +143,7 @@ class SimpleTermTranslatorUpdater {
 	 */
 	private function create_new_term( int $remote_site_id, string $taxonomy, TermRelationSaveHelper $relations ): int {
 
-		// Let's see if for this remote site, user want to create a new term
+		// Let's see if for this remote site, user want to create a new term.
 		$create_terms_for_sites = (array) $this->server_request->body_value(
 			SimpleTermTranslatorFields::RELATED_TERM_CREATE,
 			INPUT_POST,
@@ -153,23 +153,23 @@ class SimpleTermTranslatorUpdater {
 
 		$to_relate_name = trim( $create_terms_for_sites[ $remote_site_id ] ?? '' );
 
-		// User neither not provided a name for a new term, return 0
+		// User neither not provided a name for a new term, return 0.
 		if ( ! $to_relate_name ) {
 			return 0;
 		}
 
-		// Let's make sure provided term name doesn't exist already, to avoid duplicates, and return existing id if so
+		// Let's make sure provided term name doesn't exist already, to avoid duplicates, and return existing id if so.
 		$term_if_exists = get_term_by( 'name', $to_relate_name, $taxonomy );
 		if ( $term_if_exists instanceof \WP_Term ) {
 			return (int) $term_if_exists->term_id > 0 ? $term_if_exists->term_id : 0;
 		}
 
-		// Return 0 if get_term_by returned an error
+		// Return 0 if get_term_by returned an error.
 		if ( is_wp_error( $term_if_exists ) ) {
 			return 0;
 		}
 
-		// We are going to create a new term, let's see if we need to set a parent
+		// We are going to create a new term, let's see if we need to set a parent.
 		$parent = $relations->related_term_parent( $remote_site_id );
 
 		$insert = wp_insert_term( $to_relate_name, $taxonomy, compact( 'parent' ) );
@@ -187,7 +187,7 @@ class SimpleTermTranslatorUpdater {
 	 */
 	private function get_existing_term( int $remote_site_id, string $taxonomy ): int {
 
-		// Let's see if for this remote site, user want an existing term
+		// Let's see if for this remote site, user want an existing term.
 		$existing_terms_for_sites = (array) $this->server_request->body_value(
 			SimpleTermTranslatorFields::RELATED_TERM_SELECT,
 			INPUT_POST,
@@ -197,7 +197,7 @@ class SimpleTermTranslatorUpdater {
 
 		$to_relate_id = (int) ( $existing_terms_for_sites[ $remote_site_id ] ?? 0 );
 
-		// If an existing term is selected, but the term does not exists (e.g. deleted in meantime) return 0
+		// If an existing term is selected, but the term does not exists (e.g. deleted in meantime) return 0.
 		if ( $to_relate_id > 0 && ! term_exists( $to_relate_id, $taxonomy ) ) {
 			return 0;
 		}

@@ -46,7 +46,7 @@ interface Request {
 	/**
 	 * Returns header value as set in the request.
 	 *
-	 * @param string $name Header name
+	 * @param string $name Header name.
 	 *
 	 * @return string
 	 */

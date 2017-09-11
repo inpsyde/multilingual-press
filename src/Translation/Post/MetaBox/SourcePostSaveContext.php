@@ -133,7 +133,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			return $empty_context;
 		}
 
-		// Get type of post in case of revision
+		// Get type of post in case of revision.
 		$real_post_type = $this->real_post_type( $this->post );
 
 		if ( ! $this->post_types->includes( $real_post_type ) ) {
@@ -188,7 +188,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			return false;
 		}
 
-		// If context is filled, we only want to check that is not called twice for auto-draft
+		// If context is filled, we only want to check that is not called twice for auto-draft.
 		if ( array_key_exists( self::SITE_ID, $context ) ) {
 			return true;
 		}
@@ -345,6 +345,8 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 *
 	 * @param mixed $offset
 	 * @param mixed $value
+	 *
+	 * @throws \BadMethodCallException
 	 */
 	public function offsetSet( $offset, $value ) {
 
@@ -355,6 +357,8 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 * Disabled.
 	 *
 	 * @param mixed $offset
+	 *
+	 * @throws \BadMethodCallException
 	 */
 	public function offsetUnset( $offset ) {
 

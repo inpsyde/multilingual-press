@@ -184,7 +184,7 @@ class AdvancedPostTranslatorFields {
 		<div class="mlp-namediv">
 			<div>
 				<label for="<?php echo esc_attr( $id ); ?>">
-					<?php _e( 'Post Name:', 'multilingualpress' ); ?><br>
+					<?php esc_html_e( 'Post Name:', 'multilingualpress' ); ?><br>
 					<input
 						type="text"
 						name="<?php echo esc_attr( $this->field_name( $remote_site_id, self::POST_NAME ) ); ?>"

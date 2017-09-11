@@ -100,8 +100,8 @@ class PostRelationSaveHelper {
 	/**
 	 * Set the source id of the element.
 	 *
-	 * @param   int $remote_site_id ID of remote site
-	 * @param   int $remote_post_id ID of remote post
+	 * @param   int $remote_site_id ID of remote site.
+	 * @param   int $remote_post_id ID of remote post.
 	 *
 	 * @return  bool
 	 */
@@ -172,7 +172,7 @@ class PostRelationSaveHelper {
 
 		$source_thumb_path = $this->save_context[ SourcePostSaveContext::FEATURED_IMG_PATH ];
 
-		// There's no thumbnail on source post
+		// There's no thumbnail on source post.
 		if ( empty( $source_thumb_path ) ) {
 			return true;
 		}

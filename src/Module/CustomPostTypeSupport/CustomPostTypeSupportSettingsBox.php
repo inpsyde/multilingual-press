@@ -7,7 +7,7 @@ namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxViewModel;
 
-use function Inpsyde\MultilingualPress\nonce_field;
+use function Inpsyde\MultilingualPress\get_nonce_field;
 
 /**
  * Custom post type support settings box.
@@ -103,7 +103,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 			return '';
 		}
 
-		$markup = nonce_field( $this->nonce ) . '<table><tbody>';
+		$markup = get_nonce_field( $this->nonce ) . '<table><tbody>';
 
 		ob_start();
 

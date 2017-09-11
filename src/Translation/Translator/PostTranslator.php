@@ -66,7 +66,7 @@ final class PostTranslator implements Translator {
 	 *
 	 * @param int      $post_id     Post ID.
 	 * @param string[] $post_status Allowed post status.
-	 * @param bool     $strict      Only respect posts that have a translation?
+	 * @param bool     $strict      Whether or not to only respect posts that have a translation.
 	 *
 	 * @return array Translation data.
 	 */

@@ -101,10 +101,12 @@ final class CachingTranslations implements Translations {
 
 		$args = $this->normalize_arguments( $args );
 
+		// @codingStandardsIgnoreStart
 		/*
-		 * @TODO There was cache here, now removed. Think about adding it again.
+		 * TODO There was a cache here, now removed. Think about adding it again.
 		 * Cache key was calculated with `$key = md5( serialize( $args ) );` and cache group was 'mlp'
 		 */
+		// @codingStandardsIgnoreEnd
 
 		$translations = $this->build_translations( $args );
 
