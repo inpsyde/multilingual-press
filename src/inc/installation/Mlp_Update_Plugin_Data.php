@@ -67,6 +67,7 @@ class Mlp_Update_Plugin_Data {
 		/** @var string $wp_version */
 		$this->is_pre_4_6 = version_compare( $wp_version, '4.6-RC1', '<' );
 
+		// @codingStandardsIgnoreLine as the deprecated function is only used in old versions of WordPress.
 		$this->all_sites = $this->is_pre_4_6 ? wp_get_sites() : get_sites();
 	}
 
