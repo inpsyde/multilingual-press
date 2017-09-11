@@ -40,7 +40,7 @@ class Mlp_Term_Translation_Selector {
 	 */
 	public function print_fieldset_id() {
 
-		echo $this->get_fieldset_id();
+		echo esc_attr( $this->get_fieldset_id() );
 
 		return true;
 	}
@@ -58,7 +58,7 @@ class Mlp_Term_Translation_Selector {
 	 */
 	public function print_title() {
 
-		echo $this->get_title();
+		echo esc_html( $this->get_title() );
 
 		return true;
 	}
@@ -72,7 +72,7 @@ class Mlp_Term_Translation_Selector {
 			return false;
 		}
 
-		echo $this->presenter->get_nonce_field();
+		$this->presenter->print_nonce_field();
 
 		$this->print_style();
 		?>
@@ -91,7 +91,7 @@ class Mlp_Term_Translation_Selector {
 					</th>
 					<td>
 						<?php if ( empty( $terms ) ) : ?>
-							<?php echo $this->get_no_terms_found_message( $site_id ); ?>
+							<?php $this->print_no_terms_found_message( $site_id ); ?>
 						<?php else : ?>
 							<select
 								name="<?php echo esc_attr( $key ); ?>"
@@ -116,9 +116,9 @@ class Mlp_Term_Translation_Selector {
 	 *
 	 * @param int $site_id Blog ID.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_no_terms_found_message( $site_id ) {
+	private function print_no_terms_found_message( $site_id ) {
 
 		$taxonomy_name = $this->presenter->get_taxonomy();
 
@@ -128,14 +128,16 @@ class Mlp_Term_Translation_Selector {
 			$taxonomy_name,
 			$admin_url
 		);
-		$url = esc_url( $taxonomy_edit_url );
 
 		$taxonomy_object = get_taxonomy( $taxonomy_name );
 		$text = isset( $taxonomy_object->labels->not_found )
-			? esc_html( $taxonomy_object->labels->not_found )
-			: esc_html__( 'No terms found.', 'multilingual-press' );
-
-		return sprintf( '<p><a href="%1$s">%2$s</a></p>', $url, $text );
+			? $taxonomy_object->labels->not_found
+			: __( 'No terms found.', 'multilingual-press' );
+		?>
+		<p>
+			<a href="<?php echo esc_url( $taxonomy_edit_url ); ?>"><?php echo esc_html( $text ); ?></a>
+		</p>
+		<?php
 	}
 
 	/**
@@ -166,7 +168,7 @@ class Mlp_Term_Translation_Selector {
 	private function print_term_options( $terms, $current_term, $site_id ) {
 
 		foreach ( $terms as $term_taxonomy_id => $term_name ) {
-			echo $this->get_option_element(
+			$this->print_option_element(
 				$term_taxonomy_id,
 				$term_name,
 				$current_term,
@@ -210,19 +212,15 @@ class Mlp_Term_Translation_Selector {
 	 * @param int    $current_term     Currently saved term taxonomy ID.
 	 * @param string $relation_id      Relation ID.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_option_element( $term_taxonomy_id, $term_name, $current_term, $relation_id ) {
+	private function print_option_element( $term_taxonomy_id, $term_name, $current_term, $relation_id ) {
 
-		$is_current = $current_term === $term_taxonomy_id;
-
-		return sprintf(
-			'<option value="%1$d" data-relation="%4$s"%2$s>%3$s</option>',
-			$term_taxonomy_id,
-			$is_current ? ' selected="selected"' : '',
-			$term_name,
-			$relation_id
-		);
+		?>
+		<option value="<?php echo esc_attr( $term_taxonomy_id ); ?>"
+			data-relation="<?php echo esc_attr( $relation_id ); ?>"
+			<?php selected( $current_term, $term_taxonomy_id ); ?>><?php echo esc_html( $term_name ); ?></option>
+		<?php
 	}
 
 	/**
@@ -235,5 +233,4 @@ class Mlp_Term_Translation_Selector {
 
 		return str_replace( array( '[', ']' ), '', $key );
 	}
-
 }

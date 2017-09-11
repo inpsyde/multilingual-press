@@ -31,7 +31,17 @@ class Mlp_Table_Pagination_View {
 	 * @var array[]
 	 */
 	private $pagination_tags    = array(
-		'a',
+		'a'    => array(
+			'class' => true,
+			'href'  => true,
+			'title' => true,
+		),
+		'div'  => array(
+			'class' => true,
+		),
+		'span' => array(
+			'class' => true,
+		),
 	);
 
 	/**

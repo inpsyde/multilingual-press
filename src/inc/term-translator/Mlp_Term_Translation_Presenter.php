@@ -139,16 +139,11 @@ class Mlp_Term_Translation_Presenter {
 	/**
 	 * Return the nonce field.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	public function get_nonce_field() {
+	public function print_nonce_field() {
 
-		return wp_nonce_field(
-			$this->nonce->get_action(),
-			$this->nonce->get_name(),
-			true,
-			false
-		);
+		wp_nonce_field( $this->nonce->get_action(), $this->nonce->get_name() );
 	}
 
 	/**
@@ -158,7 +153,7 @@ class Mlp_Term_Translation_Presenter {
 	 */
 	public function get_group_title() {
 
-		return esc_html__( 'Translations', 'multilingual-press' );
+		return __( 'Translations', 'multilingual-press' );
 	}
 
 	/**
