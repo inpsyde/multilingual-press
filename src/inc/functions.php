@@ -11,7 +11,7 @@
  */
 function mlp_exit( $status = '' ) {
 
-	exit( $status );
+	exit( esc_html( $status ) );
 }
 
 /**
@@ -133,7 +133,7 @@ function mlp_show_linked_elements( $args_or_deprecated_text = 'text', $deprecate
 
 	$echo = isset( $params['echo'] ) ? $params['echo'] : $deprecated_echo;
 	if ( $echo ) {
-		echo $output;
+		echo wp_kses_post( $output );
 	}
 
 	return $output;

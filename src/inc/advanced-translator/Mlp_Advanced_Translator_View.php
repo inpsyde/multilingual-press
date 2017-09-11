@@ -353,10 +353,23 @@ class Mlp_Advanced_Translator_View {
 	 */
 	private function term_box( $title, $html ) {
 
+		$tags = array(
+			'br'    => array(),
+			'input' => array(
+				'checked' => true,
+				'id'      => true,
+				'name'    => true,
+				'type'    => true,
+				'value'   => true,
+			),
+			'label' => array(
+				'for' => true,
+			),
+		);
 		?>
 		<fieldset class="mlp-taxonomy-box">
 			<legend><?php echo esc_html( $title ); ?></legend>
-			<?php echo $html; ?>
+			<?php echo wp_kses( $html, $tags ); ?>
 		</fieldset>
 	<?php
 	}

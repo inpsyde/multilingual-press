@@ -68,18 +68,22 @@ class Mlp_Plugin_Deactivation {
 			<p>
 				<strong>
 					<?php
-					printf(
+					echo esc_html( sprintf(
 						__( 'The plugin %s has been deactivated.', 'multilingual-press' ),
-						esc_html( $this->plugin_name )
-					);
+						$this->plugin_name
+					) );
 					?>
 				</strong>
 			</p>
-			<?php foreach ( $this->errors as $error ) : ?>
-				<p>
-					<?php echo $error; ?>
-				</p>
-			<?php endforeach; ?>
+			<?php
+			if ( $this->errors ) {
+				$output = '';
+				foreach ( $this->errors as $error ) {
+					$output .= "<p>{$error}</p>";
+				}
+				echo wp_kses_post( $output );
+			}
+			?>
 		</div>
 		<?php
 	}

@@ -55,7 +55,8 @@ class Mlp_Admin_Notice {
 		$msg = wpautop( $this->msg );
 
 		$str = "<div $attrs>$msg</div>";
-		echo $str;
+
+		echo wp_kses_post( $str );
 
 		return $str;
 	}

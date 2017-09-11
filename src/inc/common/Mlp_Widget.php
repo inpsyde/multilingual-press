@@ -170,11 +170,12 @@ class Mlp_Widget extends WP_Widget {
 					__( 'Languages are sorted by <a href="%s">priority</a>.', 'multilingual-press' ),
 					network_admin_url( 'settings.php?page=language-manager' )
 				);
-				echo wp_kses( $message, array(
+				$tags    = array(
 					'a' => array(
-						'href',
+						'href' => true,
 					),
-				) );
+				);
+				echo wp_kses( $message, $tags );
 				?>
 			<?php else : ?>
 				<?php esc_html_e( 'Languages are sorted by priority.', 'multilingual-press' ); ?>
@@ -246,15 +247,17 @@ class Mlp_Widget extends WP_Widget {
 		/** This filter is documented in wp-includes/default-widgets.php */
 		$title = apply_filters( 'widget_title', $title );
 
-		echo $args['before_widget'];
+		$html = $args['before_widget'];
 
 		if ( ! empty( $instance['widget_title'] ) ) {
-			echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
+			$html .= $args['before_title'] . esc_html( $title ) . $args['after_title'];
 		}
 
-		echo $output;
+		$html .= $output;
 
-		echo $args['after_widget'];
+		$html .= $args['after_widget'];
+
+		echo wp_kses_post( $html );
 	}
 
 	/**

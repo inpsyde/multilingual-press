@@ -126,19 +126,16 @@ class Mlp_Dashboard_Widget {
 			<?php
 			return;
 		}
+
+		/* translators: %s: site name */
+		$message = __( 'Pending Translations for %s', 'multilingual-press' );
 		?>
 		<table class="widefat">
 			<?php foreach ( array_unique( $related_blogs ) as $blog_to_translate ) : ?>
 				<?php switch_to_blog( $blog_to_translate ); ?>
 				<tr>
 					<th colspan="3">
-						<strong>
-							<?php
-							/* translators: %s: site name */
-							$message = __( 'Pending Translations for %s', 'multilingual-press' );
-							printf( $message, get_bloginfo( 'name' ) );
-							?>
-						</strong>
+						<strong><?php echo esc_html( sprintf( $message, get_bloginfo( 'name' ) ) ); ?></strong>
 					</th>
 				</tr>
 				<?php

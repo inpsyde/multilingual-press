@@ -75,6 +75,14 @@ class Mlp_Hreflang_Header_Output {
 			return;
 		}
 
+		$tags = array(
+			'link' => array(
+				'href'     => true,
+				'hreflang' => true,
+				'rel'      => true,
+			),
+		);
+
 		foreach ( $translations as $lang => $url ) {
 			$html = sprintf(
 				'<link rel="alternate" hreflang="%1$s" href="%2$s">',
@@ -89,7 +97,9 @@ class Mlp_Hreflang_Header_Output {
 			 * @param string $lang Language code (e.g., 'en-US').
 			 * @param string $url  Target URL.
 			 */
-			echo apply_filters( 'mlp_hreflang_html', $html, $lang, $url );
+			$html = apply_filters( 'mlp_hreflang_html', $html, $lang, $url );
+
+			echo wp_kses( $html, $tags );
 		}
 	}
 
