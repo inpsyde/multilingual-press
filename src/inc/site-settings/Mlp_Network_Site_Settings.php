@@ -49,7 +49,7 @@ class Mlp_Network_Site_Settings {
 
 		$this->config = $config;
 
-		$this->marker = '<!--' . $config->get_param_value() . '-->';
+		$this->marker = '<!-- ' . esc_html( $config->get_param_value() ) . ' -->';
 
 		$this->targets[] = $config->get_param_value();
 
@@ -75,10 +75,12 @@ class Mlp_Network_Site_Settings {
 			return;
 		}
 
+		// @codingStandardsIgnoreLine as rendering an HTML comment is not possible with esc_html() or wp_kses_*().
 		echo $this->marker;
 
 		$this->watcher->update( 'create_tab_content' );
 
+		// @codingStandardsIgnoreLine as rendering an HTML comment is not possible with esc_html() or wp_kses_*().
 		echo $this->marker;
 	}
 

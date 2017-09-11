@@ -16,6 +16,22 @@ class Mlp_Relationship_Control_Ajax_Search {
 	private $data;
 
 	/**
+	 * @var array[]
+	 */
+	private $tags = array(
+		'input' => array(
+			'id'    => true,
+			'name'  => true,
+			'type'  => true,
+			'value' => true,
+		),
+		'label' => array(
+			'for' => true,
+		),
+		'li'    => array(),
+	);
+
+	/**
 	 * @param Mlp_Relationship_Control_Data $data
 	 */
 	public function __construct( Mlp_Relationship_Control_Data $data ) {
@@ -32,7 +48,7 @@ class Mlp_Relationship_Control_Ajax_Search {
 
 	public function render() {
 
-		echo $this->get_formatted_results();
+		echo wp_kses( $this->get_formatted_results(), $this->tags );
 	}
 
 	public function send_response() {
@@ -70,16 +86,13 @@ class Mlp_Relationship_Control_Ajax_Search {
 
 		/** @var WP_Post $result */
 		foreach ( $results as $result ) {
-
-			$id     = "id_{$site_id}_$result->ID";
-			$name   = 'mlp_add_post[' . $site_id . ']';
-			$status = $this->get_translated_status( $result->post_status );
-
-			$out .= "<li><label for='$id'>"
-				. "<input type='radio' name='$name' value='$result->ID' id='$id'>"
-				. $result->post_title
-				. " ($status)"
-				. '</label></li>';
+			$out .= sprintf(
+				'<li><label for="%4$s"><input type="radio" name="%2$s" value="%3$d" id="%4$s">%1$s</label></li>',
+				esc_html( "{$result->post_title} (" . $this->get_translated_status( $result->post_status ) . ')' ),
+				esc_attr( "mlp_add_post[{$site_id}]" ),
+				esc_attr( $result->ID ),
+				esc_attr( "id_{$site_id}_{$result->ID}" )
+			);
 		}
 
 		return $out;

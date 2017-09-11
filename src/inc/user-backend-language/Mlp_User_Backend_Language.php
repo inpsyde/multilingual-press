@@ -190,7 +190,7 @@ class Mlp_User_Backend_Language {
 		$output = array();
 
 		// Inherit site specific language
-		$output[] = '<option value=""' . selected( $current, '', false ) . '>'
+		$output[] = '<option value="" ' . selected( $current, '', false ) . '>'
 			. __( 'Site Language', 'multilingual-press' ) . '</option>';
 
 		foreach ( (array) $lang_files as $file_name ) {
@@ -211,13 +211,21 @@ class Mlp_User_Backend_Language {
 				$selected = ' ' . $selected;
 			}
 
-			$output[ $lang ] = '<option value="' . $code_lang . '"' . $selected . '>' . $lang . '</option>';
+			$output[ $lang ] = '<option value="' . $code_lang . '" ' . $selected . '>' . $lang . '</option>';
 		}
 
 		// Order by name
 		uksort( $output, 'strnatcasecmp' );
 
-		echo implode( "\n\t", $output );
+		$output = implode( "\n\t", $output );
+
+		$tags = array(
+			'option' => array(
+				'selected' => true,
+				'value'    => true,
+			),
+		);
+		echo wp_kses( $output, $tags );
 	}
 
 	/**

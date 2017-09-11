@@ -142,10 +142,12 @@ class Mlp_Network_Site_Settings_Tab_Content {
 						if ( empty( $language_code ) ) {
 							continue;
 						}
-
-						$language_name = esc_html( $this->get_language_name( $language ) );
-						$select        = selected( $selected, $language_code, false );
-						echo '<option value="' . esc_attr( $language_code ) . '" ' . $select . '>' . esc_html( $language_name ) . '</option>';
+						?>
+						<option value="<?php echo esc_attr( $language_code ); ?>"
+							<?php selected( $selected, $language_code ); ?>>
+							<?php echo esc_html( $this->get_language_name( $language ) ); ?>
+						</option>
+						<?php
 					}
 					?>
 				</select>

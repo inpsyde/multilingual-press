@@ -163,11 +163,10 @@ class Mlp_New_Site_View {
 		if ( empty( $language->http_name ) ) {
 			return;
 		}
-
-		$selected = selected( $this->default_language, $language->http_name, false );
 		?>
-		<option value="<?php echo esc_attr( $language->http_name ); ?>" <?php echo $selected; ?>>
-			<?php echo "{$language->english_name}/{$language->native_name}"; ?>
+		<option value="<?php echo esc_attr( $language->http_name ); ?>"
+			<?php selected( $this->default_language, $language->http_name ); ?>>
+			<?php echo esc_html( "{$language->english_name}/{$language->native_name}" ); ?>
 		</option>
 		<?php
 	}

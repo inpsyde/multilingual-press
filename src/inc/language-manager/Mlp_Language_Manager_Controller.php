@@ -223,17 +223,9 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	private function before_form() {
 
-		if ( ! empty( $_GET['msg'] ) ) {
-			echo $this->get_update_message();
+		if ( empty( $_GET['msg'] ) ) {
+			return;
 		}
-	}
-
-	/**
-	 * Get message text for success notice.
-	 *
-	 * @return string
-	 */
-	private function get_update_message() {
 
 		$type  = strtok( $_GET['msg'], '-' );
 		$num   = (int) strtok( '-' );
@@ -250,19 +242,19 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 				),
 				$num_f
 			);
-		}
-		if ( 'resettable' === $type ) {
-			$text = esc_html__(
-				'Table reset to default values.',
-				'multilingual-press'
-			);
+		} elseif ( 'resettable' === $type ) {
+			$text = __( 'Table reset to default values.', 'multilingual-press' );
 		}
 
-		if ( '' === $text ) {
-			return '';
+		if ( '' !== $text ) {
+			?>
+			<div class="updated">
+				<p>
+					<?php echo esc_html( $text ); ?>
+				</p>
+			</div>
+			<?php
 		}
-
-		return '<div class="updated"><p>' . esc_html( $text ) . '</p></div>';
 	}
 
 	/**
