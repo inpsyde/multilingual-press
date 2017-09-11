@@ -13,6 +13,9 @@
 
 	<arg value="sp"/>
 
+	<!-- Set textdomain. -->
+	<config name="text_domain" value="multilingualpress"/>
+
 	<!-- Check for cross-version support for PHP 7.0 and higher. -->
 	<config name="testVersion" value="7.0-"/>
 	<rule ref="PHPCompatibility"/>
@@ -26,6 +29,12 @@
 		<exclude name="Squiz.Commenting.FileComment.WrongStyle"/>
 		<exclude name="Squiz.Commenting.InlineComment.WrongStyle"/>
 
+		<!-- Exclude to not be forced to document methods always throwing (e.g., for not allowed methods). -->
+		<exclude name="Squiz.Commenting.FunctionComment.EmptyThrows"/>
+
+		<!-- Exclude to be able to use variadic arguments. https://github.com/squizlabs/PHP_CodeSniffer/issues/1652 -->
+		<exclude name="Squiz.Commenting.FunctionComment.IncorrectTypeHint"/>
+
 		<!-- Exclude to be able to use "@noinspection PhpUnusedParameterInspection" annotations. -->
 		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint"/>
 
@@ -37,6 +46,9 @@
 
 		<!-- Exclude VIP-specific sniffs, for now. -->
 		<exclude name="WordPress.VIP"/>
+
+		<!-- Exclude to not be forced to use a space before return type colons. https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/547. -->
+		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterCloseParenthesis"/>
 
 	</rule>
 
