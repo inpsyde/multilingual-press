@@ -34,4 +34,14 @@
 
 	</rule>
 
+	<rule ref="WordPress.CSRF.NonceVerification">
+
+		<properties>
+
+			<property name="customNonceVerificationFunctions" value="is_valid"/>
+
+		</properties>
+
+	</rule>
+
 </ruleset>
