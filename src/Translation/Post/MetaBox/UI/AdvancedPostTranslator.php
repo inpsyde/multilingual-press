@@ -183,7 +183,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 				return;
 			}
 
-			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
+			$fields->render_top_fields( $post, $remote_site_id, $remote_post );
 		}, TranslationMetaBoxView::POSITION_TOP );
 
 		/** @noinspection PhpUnusedParameterInspection */
@@ -196,7 +196,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 		) use ( $fields ) {
 
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
-				echo $fields->main_fields( $post, $remote_site_id, $remote_post );
+				$fields->render_main_fields( $post, $remote_site_id, $remote_post );
 			}
 		}, TranslationMetaBoxView::POSITION_MAIN );
 
@@ -217,7 +217,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 					RelationshipContext::KEY_SOURCE_SITE_ID => get_current_blog_id(),
 				] ) );
 
-				echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
+				$fields->render_bottom_fields( $post, $remote_site_id, $remote_post );
 			}
 		} );
 	}

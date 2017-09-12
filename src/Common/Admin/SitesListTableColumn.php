@@ -111,7 +111,7 @@ class SitesListTableColumn {
 		if ( $id === $this->id ) {
 			$callback = $this->render_callback;
 
-			echo $callback( $id, (int) $site_id );
+			echo wp_kses_post( $callback( $id, (int) $site_id ) );
 
 			return true;
 		}

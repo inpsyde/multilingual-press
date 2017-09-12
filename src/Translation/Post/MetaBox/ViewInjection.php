@@ -39,12 +39,11 @@ trait ViewInjection {
 
 			$contents = ob_get_clean();
 			if ( trim( $contents ) ) {
-				echo $contents;
-
-				return;
+				$return = $contents;
 			}
 
 			if ( is_string( $return ) ) {
+				// @codingStandardsIgnoreLine as we actually DO allow arbitrary markup here.
 				echo $return;
 			}
 		}, $priority, 5 );

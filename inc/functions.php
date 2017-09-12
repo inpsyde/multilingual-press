@@ -461,7 +461,7 @@ function get_linked_elements( array $args = [] ): string {
 	$output = (string) apply_filters( 'multilingualpress.linked_elements_html', $output, $translations, $args );
 
 	if ( ! empty( $args['echo'] ) ) {
-		echo $output;
+		echo wp_kses_post( $output );
 	}
 
 	return $output;

@@ -298,7 +298,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 
 		nonce_field( $this->create_nonce_for_meta_box( $meta_box ) );
 
-		echo $view->with_term( $term )->with_data( compact( 'meta_box', 'update' ) )->render();
+		$view->with_term( $term )->with_data( compact( 'meta_box', 'update' ) )->render();
 	}
 
 	/**

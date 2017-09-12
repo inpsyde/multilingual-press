@@ -55,10 +55,10 @@ class UserSettingView {
 		?>
 		<tr>
 			<th scope="row">
-				<?php echo $this->model->title(); ?>
+				<?php echo wp_kses_post( $this->model->title() ); ?>
 			</th>
 			<td>
-				<?php echo $this->model->markup( $user ); ?>
+				<?php echo wp_kses_post( $this->model->markup( $user ) ); ?>
 			</td>
 		</tr>
 		<?php

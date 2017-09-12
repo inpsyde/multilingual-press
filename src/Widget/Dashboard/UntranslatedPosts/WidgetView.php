@@ -69,7 +69,9 @@ final class WidgetView implements View {
 
 		$network_state = NetworkState::create();
 
-		ob_start();
+		$has_untranslated_posts = false;
+
+		echo '<table class="widefat">';
 
 		foreach ( $this->get_site_ids() as $site_id ) {
 			switch_to_blog( $site_id );
@@ -80,20 +82,19 @@ final class WidgetView implements View {
 				return current_user_can( 'edit_post', $post );
 			} );
 			if ( $untranslated_posts ) {
+				$has_untranslated_posts = true;
+
 				$this->render_posts( $untranslated_posts );
 			}
 		}
 
 		$network_state->restore();
 
-		$rows = ob_get_clean();
-		if ( ! $rows ) {
-			echo '<p>' . esc_html__( 'No untranslated posts found.', 'multilingualpress' ) . '</p>';
-
-			return;
+		if ( ! $has_untranslated_posts ) {
+			echo '<tr><td>' . esc_html__( 'No untranslated posts found.', 'multilingualpress' ) . '</td></tr>';
 		}
 
-		echo '<table class="widefat">' . $rows . '</table>';
+		echo '</table>';
 	}
 
 	/**
@@ -129,16 +130,13 @@ final class WidgetView implements View {
 	 */
 	private function render_posts( array $posts ) {
 
+		/* translators: %s: site name */
+		$message = __( 'Pending Translations for %s', 'multilingualpress' );
+		$message = sprintf( $message, get_bloginfo( 'name' ) );
 		?>
 		<tr>
 			<th colspan="2">
-				<strong>
-					<?php
-					/* translators: %s: site name */
-					$message = __( 'Pending Translations for %s', 'multilingualpress' );
-					printf( $message, get_bloginfo( 'name' ) );
-					?>
-				</strong>
+				<strong><?php echo esc_html( $message ); ?></strong>
 			</th>
 		</tr>
 		<?php foreach ( array_column( $posts, 'ID' ) as $post_id ) : ?>
@@ -173,7 +171,7 @@ final class WidgetView implements View {
 
 		$post_type = get_post_type_object( $post_type );
 		if ( $post_type ) {
-			echo " &mdash; {$post_type->labels->singular_name}";
+			echo esc_html( " &mdash; {$post_type->labels->singular_name}" );
 		}
 	}
 }

@@ -165,7 +165,7 @@ final class SimpleTermTranslator implements MetaBoxUI {
 
 			$fields->set_update( ! empty( $data['update'] ) );
 
-			echo $fields->main_fields( $term, $remote_site_id, $remote_term );
+			$fields->render_main_fields( $term, $remote_site_id, $remote_term );
 		}, TranslationMetaBoxView::POSITION_MAIN );
 	}
 }

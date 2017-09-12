@@ -112,35 +112,27 @@ class SimpleTermTranslatorFields {
 	 * @param int           $remote_site_id
 	 * @param \WP_Term|null $remote_term
 	 *
-	 * @return string
+	 * @return void
 	 */
-	public function main_fields( \WP_Term $source_term, int $remote_site_id, \WP_Term $remote_term = null ): string {
+	public function render_main_fields( \WP_Term $source_term, int $remote_site_id, \WP_Term $remote_term = null ) {
 
-		ob_start();
 		?>
-		<p><?php echo $this->create_term_inputs( $remote_site_id, $remote_term ); ?></p>
-		<p><?php echo $this->select_term_inputs( $remote_site_id, $source_term, $remote_term ); ?></p>
+		<p><?php $this->render_create_term_inputs( $remote_site_id, $remote_term ); ?></p>
+		<p><?php $this->render_select_term_inputs( $remote_site_id, $source_term, $remote_term ); ?></p>
 		<?php
-
-		return ob_get_clean();
 	}
 
 	/**
 	 * @param int           $remote_site_id
 	 * @param \WP_Term|null $remote_term
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function create_term_inputs(
-		int $remote_site_id,
-		\WP_Term $remote_term = null
-	): string {
+	private function render_create_term_inputs( int $remote_site_id, \WP_Term $remote_term = null ) {
 
-		$output = $this->operation_select_input( self::RELATED_TERM_DO_CREATE, $remote_site_id, $remote_term );
+		$this->render_operation_select_input( self::RELATED_TERM_DO_CREATE, $remote_site_id, $remote_term );
 
 		$create_id = self::RELATED_TERM_CREATE . "-{$remote_site_id}";
-
-		ob_start();
 		?>
 		<label for="<?php echo esc_attr( $create_id ); ?>" class="screen-reader-text">
 			<?php esc_html_e( 'Enter name here', 'multilingualpress' ); ?>
@@ -152,9 +144,6 @@ class SimpleTermTranslatorFields {
 			data-site="<?php echo esc_attr( $remote_site_id ); ?>"
 			class="regular-text mlp-term-input">
 		<?php
-		$output .= ob_get_clean();
-
-		return $output;
 	}
 
 	/**
@@ -162,23 +151,21 @@ class SimpleTermTranslatorFields {
 	 * @param \WP_Term      $source_term
 	 * @param \WP_Term|null $remote_term
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function select_term_inputs(
+	private function render_select_term_inputs(
 		int $remote_site_id,
 		\WP_Term $source_term,
 		\WP_Term $remote_term = null
-	): string {
+	) {
 
 		$taxonomy = $source_term->taxonomy;
 
 		$options = $this->repository->get_terms_for_site( $remote_site_id, $taxonomy );
 
-		$output = $this->operation_select_input( self::RELATED_TERM_DO_SELECT, $remote_site_id, $remote_term );
+		$this->render_operation_select_input( self::RELATED_TERM_DO_SELECT, $remote_site_id, $remote_term );
 
 		$select_id = self::RELATED_TERM_SELECT . "-{$remote_site_id}";
-
-		ob_start();
 		?>
 		<label for="<?php echo esc_attr( $select_id ); ?>"
 			class="screen-reader-text">
@@ -217,10 +204,6 @@ class SimpleTermTranslatorFields {
 				esc_url( $url )
 			);
 		}
-
-		$output .= ob_get_clean();
-
-		return $output;
 	}
 
 	/**
@@ -228,13 +211,13 @@ class SimpleTermTranslatorFields {
 	 * @param int           $remote_site_id
 	 * @param \WP_Term|null $remote_term
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function operation_select_input(
+	private function render_operation_select_input(
 		string $operation,
 		int $remote_site_id,
 		\WP_Term $remote_term = null
-	): string {
+	) {
 
 		$operation_id = self::RELATED_TERM_OPERATION . "-{$remote_site_id}-{$operation}";
 
@@ -243,8 +226,6 @@ class SimpleTermTranslatorFields {
 		$checked = $create
 			? null === $remote_term
 			: null !== $remote_term;
-
-		ob_start();
 		?>
 		<label for="<?php echo esc_attr( $operation_id ); ?>">
 			<input
@@ -259,12 +240,9 @@ class SimpleTermTranslatorFields {
 			?>
 		</label>
 		<?php
-		$input_markup = ob_get_clean();
 		if ( $this->update ) {
-			$input_markup .= '<br>';
+			echo '<br>';
 		}
-
-		return $input_markup;
 	}
 
 	/**
@@ -281,10 +259,10 @@ class SimpleTermTranslatorFields {
 		foreach ( $options as $term_taxonomy_id => $term_name ) {
 			printf(
 				'<option value="%2$d" data-relation="%4$s"%3$s>%1$s</option>',
-				$term_name,
-				$term_taxonomy_id,
+				esc_html( $term_name ),
+				esc_attr( $term_taxonomy_id ),
 				selected( $term_taxonomy_id, $current, false ),
-				$this->get_relation_id( $site_id, $term_taxonomy_id )
+				esc_attr( $this->get_relation_id( $site_id, $term_taxonomy_id ) )
 			);
 		}
 	}

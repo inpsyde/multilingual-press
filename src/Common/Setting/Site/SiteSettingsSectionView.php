@@ -58,7 +58,7 @@ final class SiteSettingsSectionView implements SiteSettingView {
 	 */
 	public function render( int $site_id ): bool {
 
-		echo $this->model->title();
+		echo wp_kses_post( $this->model->title() );
 		?>
 		<table class="form-table">
 			<?php

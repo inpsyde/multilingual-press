@@ -82,6 +82,14 @@ final class AlternateLanguageHTMLLinkTagRenderer implements AlternateLanguageRen
 			return;
 		}
 
+		$tags = [
+			'link' => [
+				'href'     => true,
+				'hreflang' => true,
+				'rel'      => true,
+			],
+		];
+
 		foreach ( $translations as $language => $url ) {
 			$html_link_tag = sprintf(
 				'<link rel="alternate" hreflang="%1$s" href="%2$s">',
@@ -98,7 +106,9 @@ final class AlternateLanguageHTMLLinkTagRenderer implements AlternateLanguageRen
 			 * @param string $language      HTTP language code (e.g., "en-US").
 			 * @param string $url           Target URL.
 			 */
-			echo apply_filters( self::FILTER_HREFLANG, $html_link_tag, $language, $url );
+			$html_link_tag = (string) apply_filters( self::FILTER_HREFLANG, $html_link_tag, $language, $url );
+
+			echo wp_kses( $html_link_tag, $tags );
 		}
 	}
 

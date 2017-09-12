@@ -38,12 +38,24 @@ class SettingsBoxView {
 	 */
 	public function render() {
 
+		static $tags;
+		if ( ! $tags ) {
+			$tags = wp_kses_allowed_html( 'post' );
+
+			$tags['input'] = [
+				'checked' => true,
+				'id'      => true,
+				'name'    => true,
+				'type'    => true,
+				'value'   => true,
+			];
+		}
 		?>
 		<div class="mlp-extra-settings-box" id="<?php echo esc_attr( $this->model->id() ); ?>">
 			<?php
 			$this->render_title();
 			$this->render_description();
-			echo $this->model->markup();
+			echo wp_kses( $this->model->markup(), $tags );
 			?>
 		</div>
 		<?php
@@ -72,7 +84,7 @@ class SettingsBoxView {
 	 */
 	private function render_description() {
 
-		$description = esc_html( $this->model->description() );
+		$description = $this->model->description();
 		if ( ! $description ) {
 			return;
 		}
@@ -86,6 +98,13 @@ class SettingsBoxView {
 			);
 		}
 
-		echo wpautop( $description );
+		$tags = [
+			'label' => [
+				'class' => true,
+				'for'   => true,
+			],
+		];
+
+		echo wp_kses( wpautop( $description ), $tags );
 	}
 }

@@ -138,16 +138,16 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 	}
 
 	/**
-	 * Returns the rendered HTML.
+	 * Reenders the HTML.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string Rendered HTML.
+	 * @return void
 	 */
-	public function render(): string {
+	public function render() {
 
 		if ( ! $this->source_post ) {
-			return '';
+			return;
 		}
 
 		$args = [
@@ -157,8 +157,6 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 			$this->remote_post,
 			$this->data,
 		];
-
-		ob_start();
 		?>
 		<div class="holder mlp-translation-meta-box">
 			<?php
@@ -203,7 +201,5 @@ final class TranslationMetaBoxView implements PostMetaBoxView {
 			?>
 		</div>
 		<?php
-
-		return ob_get_clean();
 	}
 }

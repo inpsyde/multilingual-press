@@ -276,7 +276,7 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			function ( \WP_Post $post ) use ( $meta_box, $view ) {
 
 				nonce_field( $this->create_nonce_for_meta_box( $meta_box ) );
-				echo $view->with_post( $post )->render();
+				$view->with_post( $post )->render();
 			},
 			$post_type,
 			$meta_box->context(),

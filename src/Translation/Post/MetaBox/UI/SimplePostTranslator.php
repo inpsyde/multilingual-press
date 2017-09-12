@@ -135,7 +135,7 @@ final class SimplePostTranslator implements MetaBoxUI {
 			array $data = []
 		) use ( $fields ) {
 
-			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
+			$fields->render_top_fields( $post, $remote_site_id, $remote_post );
 		}, TranslationMetaBoxView::POSITION_TOP );
 
 		/** @noinspection PhpUnusedParameterInspection */
@@ -147,7 +147,7 @@ final class SimplePostTranslator implements MetaBoxUI {
 			array $data = []
 		) use ( $fields ) {
 
-			echo $fields->main_fields( $post, $remote_site_id, $remote_post );
+			$fields->render_main_fields( $post, $remote_site_id, $remote_post );
 		}, TranslationMetaBoxView::POSITION_MAIN );
 
 		/** @noinspection PhpUnusedParameterInspection */
@@ -159,7 +159,7 @@ final class SimplePostTranslator implements MetaBoxUI {
 			array $data = []
 		) use ( $fields ) {
 
-			echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
+			$fields->render_bottom_fields( $post, $remote_site_id, $remote_post );
 		} );
 	}
 }

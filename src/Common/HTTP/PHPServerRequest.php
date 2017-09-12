@@ -177,6 +177,7 @@ final class PHPServerRequest implements ServerRequest {
 	private function ensure_body() {
 
 		if ( null === self::$body ) {
+			// @codingStandardsIgnoreLine as it is not possible to do the following via the WordPress file system(s).
 			self::$body = stream_get_contents( fopen( 'php://input', 'r' ) );
 		}
 	}

@@ -17,18 +17,15 @@ class SimplePostTranslatorFields {
 	 * @param int           $remote_site_id
 	 * @param \WP_Post|null $remote_post
 	 *
-	 * @return string
+	 * @return void
 	 */
-	public function top_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
+	public function render_top_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ) {
 
-		$output = '';
 		if ( $remote_post ) {
-			$output .= $this->title_input( $source_post, $remote_post );
+			$this->render_title_input( $source_post, $remote_post );
 		} else {
-			$output .= $this->translatable_input( $remote_site_id );
+			$this->render_translatable_input( $remote_site_id );
 		}
-
-		return $output;
 	}
 
 	/**
@@ -36,16 +33,13 @@ class SimplePostTranslatorFields {
 	 * @param int           $remote_site_id
 	 * @param \WP_Post|null $remote_post
 	 *
-	 * @return string
+	 * @return void
 	 */
-	public function main_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
+	public function render_main_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ) {
 
-		$output = '';
 		if ( $remote_post ) {
-			$output .= $this->editor_input( $source_post, $remote_post );
+			$this->render_editor_input( $source_post, $remote_post );
 		}
-
-		return $output;
 	}
 
 	/**
@@ -53,43 +47,40 @@ class SimplePostTranslatorFields {
 	 * @param int           $remote_site_id
 	 * @param \WP_Post|null $remote_post
 	 *
-	 * @return string
+	 * @return void
 	 */
-	public function bottom_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ): string {
+	public function render_bottom_fields( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ) {
 
-		return '';
 	}
 
 	/**
 	 * @param \WP_Post $source_post
 	 * @param \WP_Post $remote_post
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function title_input( \WP_Post $source_post, \WP_Post $remote_post ): string {
+	private function render_title_input( \WP_Post $source_post, \WP_Post $remote_post ) {
 
 		if ( ! post_type_supports( $source_post->post_type, 'title' ) ) {
-			return '';
+			return;
 		}
 
 		$title = trim( $remote_post->post_title );
 		if ( ! $title ) {
-			return '';
+			return;
 		}
 
-		return '<p><strong>' . esc_html( $title ) . '</strong></p>';
+		echo '<p><strong>' . esc_html( $title ) . '</strong></p>';
 	}
 
 	/**
 	 * @param int $remote_site_id
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function translatable_input( int $remote_site_id ): string {
+	private function render_translatable_input( int $remote_site_id ) {
 
 		$id = self::TRANSLATABLE_FIELD . "-{$remote_site_id}";
-
-		ob_start();
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $id ); ?>">
@@ -102,27 +93,25 @@ class SimplePostTranslatorFields {
 			</label>
 		</p>
 		<?php
-
-		return ob_get_clean();
 	}
 
 	/**
 	 * @param \WP_Post $source_post
 	 * @param \WP_Post $remote_post
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function editor_input( \WP_Post $source_post, \WP_Post $remote_post ): string {
+	private function render_editor_input( \WP_Post $source_post, \WP_Post $remote_post ) {
 
 		if ( ! post_type_supports( $source_post->post_type, 'editor' ) ) {
-			return '';
+			return;
 		}
 
 		$post_content = $remote_post->post_content;
 
-		return sprintf(
+		printf(
 			'<textarea class="large-text" cols="80" rows="%1$d" placeholder="%2$s" readonly>%3$s</textarea>',
-			min( substr_count( $post_content, "\n" ) + 1, 10 ),
+			esc_attr( min( substr_count( $post_content, "\n" ) + 1, 10 ) ),
 			esc_attr_x( 'No content yet.', 'placeholder for empty translation textarea', 'multilingualpress' ),
 			esc_textarea( $post_content )
 		);

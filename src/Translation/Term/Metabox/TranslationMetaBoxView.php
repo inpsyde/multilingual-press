@@ -139,21 +139,38 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 	}
 
 	/**
-	 * Returns the rendered HTML.
+	 * Reenders the HTML.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string Rendered HTML.
+	 * @return void
 	 */
-	public function render(): string {
+	public function render() {
 
 		if ( ! $this->source_term ) {
-			return '';
+			return;
 		}
 
 		$title = ( $this->data['meta_box'] ?? null ) instanceof MetaBox ? $this->data['meta_box']->title() : '';
 
 		list( $open, $close ) = $this->wrap_markup( ! empty( $this->data['update'] ), $title );
+
+		$tags = [
+			'div'    => [
+				'class' => true,
+				'style' => true,
+			],
+			'strong' => [],
+			'td'     => [],
+			'th'     => [
+				'scope' => true,
+			],
+			'tr'     => [
+				'class' => true,
+			],
+		];
+
+		echo wp_kses( $open, $tags );
 
 		$args = [
 			$this->source_term,
@@ -162,8 +179,6 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 			$this->remote_term,
 			$this->data,
 		];
-
-		ob_start();
 
 		/**
 		 * Fires right before the main content of the meta box.
@@ -204,9 +219,7 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 		 */
 		do_action( self::ACTION_RENDER_PREFIX . self::POSITION_BOTTOM, ...$args );
 
-		$markup = ob_get_clean();
-
-		return $open . $markup . $close;
+		echo wp_kses( $close, $tags );
 	}
 
 	/**
@@ -221,6 +234,7 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 			$opening = '<tr class="form-field"><th scope="row">%s</th><td>';
 			$closing = '</td></tr>';
 		} else {
+			// TODO: Get rid of style attribute, and use HTML class instead.
 			$opening = '<div class="form-field" style="margin-top: 2em;"><strong>%s</strong>';
 			$closing = '</div>';
 		}
