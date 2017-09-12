@@ -18,6 +18,9 @@ vendor
 node_modules
 npm-debug.log*
 
+# PHP_CodeSniffer
+phpcs-report-*.txt
+
 # PhpStorm
 .idea
 
