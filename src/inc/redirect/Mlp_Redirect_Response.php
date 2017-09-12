@@ -27,7 +27,9 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 	 */
 	public function redirect() {
 
+		// @codingStandardsIgnoreLine
 		if ( ! empty( $_GET['noredirect'] ) ) {
+			// @codingStandardsIgnoreLine
 			$this->save_session( $_GET['noredirect'] );
 
 			return false;
