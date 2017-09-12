@@ -3,9 +3,11 @@
 
 	<description>Coding standard with pre-configured reports for MultilingualPress version 2.x.</description>
 
-	<arg name="report-full" value="phpcs-report-full.txt"/>
-	<arg name="report-source" value="phpcs-report-source.txt"/>
-	<arg name="report-summary" value="phpcs-report-summary.txt"/>
+	<arg name="report-full" value="report-full.txt"/>
+	<arg name="report-source" value="report-source.txt"/>
+	<arg name="report-summary" value="report-summary.txt"/>
+
+	<arg name="cache"/>
 
 	<rule ref="./phpcs.xml.dist"/>
 

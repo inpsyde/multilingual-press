@@ -19,7 +19,7 @@ node_modules
 
 # PHP_CodeSniffer
 phpcs.xml
-phpcs-report-*.txt
+report-*.txt
 
 # PhpStorm
 .idea
