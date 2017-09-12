@@ -20,7 +20,7 @@ npm-debug.log*
 
 # PHP_CodeSniffer
 phpcs.xml
-phpcs-report-*.txt
+report-*.txt
 
 # PhpStorm
 .idea
