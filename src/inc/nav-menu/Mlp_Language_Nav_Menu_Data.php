@@ -157,6 +157,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 
 		$menu_items = array();
 
+		// @codingStandardsIgnoreLine as nonce verification has already been done in is_allowed.
 		foreach ( array_values( $_GET['mlp_sites'] ) as $blog_id ) {
 			if ( ! $this->is_valid_blog_id( $titles, $blog_id ) ) {
 				continue;
@@ -196,6 +197,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 	 */
 	private function create_menu_item( $titles, $blog_id ) {
 
+		// @codingStandardsIgnoreLine as the menu is WordPress core data.
 		$item_id = wp_update_nav_menu_item( $_GET['menu'], 0, array(
 			'menu-item-title'      => esc_attr( $titles[ $blog_id ] ),
 			'menu-item-type'       => 'language',

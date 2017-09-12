@@ -17,6 +17,11 @@ class Mlp_User_Backend_Language {
 	private $module_manager;
 
 	/**
+	 * @var Inpsyde_Nonce_Validator
+	 */
+	private $nonce_validator;
+
+	/**
 	 * Internal identifier.
 	 *
 	 * @var string
@@ -31,6 +36,8 @@ class Mlp_User_Backend_Language {
 	public function __construct( Mlp_Module_Manager_Interface $module_manager ) {
 
 		$this->module_manager = $module_manager;
+
+		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'update_user_language' );
 	}
 
 	/**
@@ -114,6 +121,7 @@ class Mlp_User_Backend_Language {
 				</label>
 			</th>
 			<td>
+				<?php wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name() ); ?>
 				<select name="<?php echo esc_attr( $this->key ); ?>" id="<?php echo esc_attr( $this->key ); ?>"
 					autocomplete="off">
 					<?php $this->dropdown_languages( $languages, $user_language ); ?>
@@ -133,6 +141,10 @@ class Mlp_User_Backend_Language {
 	 * @return bool
 	 */
 	public function profile_update( $user_id ) {
+
+		if ( ! $this->nonce_validator->is_valid() ) {
+			return false;
+		}
 
 		// Empty means, that the site language is used
 		if ( empty( $_POST[ $this->key ] ) || '' === trim( $_POST[ $this->key ] ) ) {

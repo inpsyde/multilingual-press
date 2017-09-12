@@ -5,6 +5,7 @@
 
 	<arg name="report-full" value="phpcs-report-full.txt"/>
 	<arg name="report-source" value="phpcs-report-source.txt"/>
+	<arg name="report-summary" value="phpcs-report-summary.txt"/>
 
 	<rule ref="./phpcs.xml.dist"/>
 
