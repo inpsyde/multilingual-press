@@ -11,6 +11,11 @@ class Mlp_Trasher {
 	private $module_manager;
 
 	/**
+	 * @var Inpsyde_Nonce_Validator
+	 */
+	private $nonce_validator;
+
+	/**
 	 * @var bool
 	 */
 	private $saved_post = false;
@@ -23,6 +28,8 @@ class Mlp_Trasher {
 	public function __construct( Mlp_Module_Manager_Interface $module_manager ) {
 
 		$this->module_manager = $module_manager;
+
+		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_trasher_setting' );
 	}
 
 	/**
@@ -58,6 +65,7 @@ class Mlp_Trasher {
 	 */
 	public function post_submitbox_misc_actions() {
 
+		// @codingStandardsIgnoreStart
 		if ( isset( $_GET['post'] ) ) {
 			// old key
 			$trash_the_other_posts = (int) get_post_meta( $_GET['post'], 'trash_the_other_posts', true );
@@ -68,8 +76,10 @@ class Mlp_Trasher {
 		} else {
 			$trash_the_other_posts = false;
 		}
+		// @codingStandardsIgnoreEnd
 		?>
 		<div class="misc-pub-section curtime misc-pub-section-last">
+			<?php wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name() ); ?>
 			<input type="hidden" name="trasher_box" value="1">
 			<label for="trash_the_other_posts">
 				<input type="checkbox" id="trash_the_other_posts" name="_trash_the_other_posts"
@@ -128,6 +138,10 @@ class Mlp_Trasher {
 
 		// leave function if box was not available
 		if ( ! isset( $_POST['trasher_box'] ) ) {
+			return;
+		}
+
+		if ( ! $this->nonce_validator->is_valid() ) {
 			return;
 		}
 

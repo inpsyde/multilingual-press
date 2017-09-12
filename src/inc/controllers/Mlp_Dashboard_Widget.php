@@ -6,6 +6,11 @@
 class Mlp_Dashboard_Widget {
 
 	/**
+	 * @var Inpsyde_Nonce_Validator
+	 */
+	private $nonce_validator;
+
+	/**
 	 * @var Mlp_Site_Relations_Interface
 	 */
 	private $site_relations;
@@ -18,6 +23,8 @@ class Mlp_Dashboard_Widget {
 	public function __construct( Mlp_Site_Relations_Interface $site_relations ) {
 
 		$this->site_relations = $site_relations;
+
+		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_translation_completed_setting' );
 	}
 
 	/**
@@ -77,6 +84,7 @@ class Mlp_Dashboard_Widget {
 		}
 		?>
 		<div class="misc-pub-section">
+			<?php wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name() ); ?>
 			<input type="hidden" name="post_is_translated_blogid"
 				value="<?php echo get_current_blog_id(); ?>">
 			<label for="post_is_translated">
@@ -194,6 +202,10 @@ class Mlp_Dashboard_Widget {
 			return;
 		}
 
+		if ( ! $this->nonce_validator->is_valid() ) {
+			return;
+		}
+
 		// We're only interested in published posts at this time.
 		$post_status = get_post_status( $post_id );
 		if ( ! in_array( $post_status, array( 'publish', 'draft' ), true ) ) {
@@ -222,6 +234,7 @@ class Mlp_Dashboard_Widget {
 	 */
 	private function get_post_id() {
 
+		// @codingStandardsIgnoreLine
 		if ( empty( $_GET['post'] ) ) {
 			return 0;
 		}
@@ -242,7 +255,7 @@ class Mlp_Dashboard_Widget {
 			return false;
 		}
 
-		if ( get_post_meta( $_GET['post'], '_post_is_translated', true ) ) {
+		if ( get_post_meta( $this->get_post_id(), '_post_is_translated', true ) ) {
 			return true;
 		}
 
