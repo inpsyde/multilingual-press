@@ -39,8 +39,9 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 
 		$this->data = new Mlp_Relationship_Control_Data();
 
-		if ( $this->is_ajax() ) {
-			$this->set_up_ajax();
+		$action = $this->get_ajax_action();
+		if ( $action ) {
+			$this->set_up_ajax( $action );
 		} else {
 			add_action( 'mlp_translation_meta_box_bottom', array( $this, 'set_up_meta_box_handlers' ), 200, 3 );
 		}
@@ -49,13 +50,15 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	/**
 	 * Register AJAX callbacks.
 	 *
+	 * @param string $action AJAX action.
+	 *
 	 * @return void
 	 */
-	public function set_up_ajax() {
+	public function set_up_ajax( $action ) {
 
-		$callback_type = "{$this->prefix}_remote_post_search" === $_REQUEST['action'] ? 'search' : 'reconnect';
+		$callback_type = "{$this->prefix}_remote_post_search" === $action ? 'search' : 'reconnect';
 
-		add_action( "wp_ajax_{$_REQUEST['action']}", array( $this, "ajax_{$callback_type}_callback" ) );
+		add_action( "wp_ajax_{$action}", array( $this, "ajax_{$callback_type}_callback" ) );
 	}
 
 	/**
@@ -78,8 +81,9 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	 */
 	public function ajax_reconnect_callback() {
 
+		$action = (string) filter_input( INPUT_POST, 'action' );
 		$start = strlen( $this->prefix ) + 1;
-		$func = substr( $_REQUEST['action'], $start ) . '_post';
+		$func = substr( $action, $start ) . '_post';
 
 		$reconnect = new Mlp_Relationship_Changer( $this->plugin );
 		$reconnect->$func();
@@ -135,20 +139,21 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	}
 
 	/**
-	 * Check if this is our AJAX request.
+	 * Check if this is our AJAX request and returns the action.
 	 *
-	 * @return bool
+	 * @return string
 	 */
-	private function is_ajax() {
+	private function get_ajax_action() {
 
 		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
-			return false;
+			return '';
 		}
 
-		if ( empty( $_REQUEST['action'] ) ) {
-			return false;
+		$action = (string) filter_input( INPUT_POST, 'action' );
+		if ( '' === $action ) {
+			return '';
 		}
 
-		return 0 === strpos( $_REQUEST['action'], $this->prefix );
+		return 0 === strpos( $action, $this->prefix ) ? $action : '';
 	}
 }

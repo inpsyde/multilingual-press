@@ -31,6 +31,11 @@ class Mlp_Duplicate_Blogs {
 	private $table_names;
 
 	/**
+	 * @var Inpsyde_Nonce_Validator_Interface
+	 */
+	private $nonce_validator;
+
+	/**
 	 * Constructor
 	 *
 	 * @param string                         $link_table
@@ -49,6 +54,8 @@ class Mlp_Duplicate_Blogs {
 		$this->wpdb        = $wpdb;
 		$this->duplicator  = $duplicator;
 		$this->table_names = $table_names;
+
+		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'duplicate_site', (int) get_network()->site_id );
 	}
 
 	/**
@@ -70,6 +77,10 @@ class Mlp_Duplicate_Blogs {
 	 * @return  void
 	 */
 	public function wpmu_new_blog( $blog_id ) {
+
+		if ( ! $this->nonce_validator->is_valid() ) {
+			return;
+		}
 
 		// Return if we don't have a blog
 		if ( ! isset( $_POST['blog']['basedon'] ) || 1 > $_POST['blog']['basedon'] ) {
@@ -432,6 +443,7 @@ LIMIT 2";
 				</label>
 			</th>
 			<td>
+				<?php wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name() ); ?>
 				<select id="mlp-base-site-id" name="blog[basedon]" autocomplete="off">
 					<option value="0"><?php esc_html_e( 'Choose site', 'multilingual-press' ); ?></option>
 					<?php foreach ( (array) $this->get_all_sites() as $blog ) : ?>

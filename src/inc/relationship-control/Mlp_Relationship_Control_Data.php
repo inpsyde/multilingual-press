@@ -34,14 +34,16 @@ class Mlp_Relationship_Control_Data {
 			return;
 		}
 
-		foreach ( $this->ids as $id => $value ) {
-			if ( isset( $_REQUEST[ $id ] ) ) {
-				$this->ids[ $id ] = (int) $_REQUEST[ $id ];
+		foreach ( array_keys( $this->ids ) as $key ) {
+			$value = filter_input( INPUT_POST, $key );
+			if ( null !== $value ) {
+				$this->ids[ $key ] = (int) $value;
 			}
 		}
 
-		if ( isset( $_REQUEST['s'] ) ) {
-			$this->search = $_REQUEST['s'];
+		$search = (string) filter_input( INPUT_POST, 's' );
+		if ( '' !== $search ) {
+			$this->search = $search;
 		}
 	}
 

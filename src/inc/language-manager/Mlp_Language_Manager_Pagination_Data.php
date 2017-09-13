@@ -63,9 +63,15 @@ class Mlp_Language_Manager_Pagination_Data implements Mlp_Browsable {
 	 */
 	public function get_current_page() {
 
+		$paged = null;
+
 		// can be sent per GET or POST
-		// TODO: Refactor access to $_REQUEST.
-		$paged = isset( $_REQUEST['paged'] ) ? (int) $_REQUEST['paged'] : 0;
+		if ( 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+			$paged = filter_input( INPUT_POST, 'paged' );
+		}
+		if ( null === $paged ) {
+			$paged = filter_input( INPUT_GET, 'paged' );
+		}
 		if ( 2 > $paged ) {
 			return 1;
 		}

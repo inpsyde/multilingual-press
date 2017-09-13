@@ -62,7 +62,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		$this->relations = $relations;
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-			$this->post_request_data = $_POST;
+			$this->post_request_data = filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
 		}
 	}
 

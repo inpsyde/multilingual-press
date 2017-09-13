@@ -157,7 +157,7 @@ class Mlp_Language_Updater {
 	 */
 	private function get_url( $amount ) {
 
-		$url = $_POST['_wp_http_referer'];
+		$url = filter_input( INPUT_POST, '_wp_http_referer' );
 
 		if ( 0 === $amount ) {
 			return remove_query_arg( 'msg', $url );

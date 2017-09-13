@@ -140,16 +140,18 @@ class Mlp_Relationship_Changer {
 			return $post->post_type;
 		}
 
-		if ( empty( $_POST['post_type'] ) ) {
+		$post_type = filter_input( INPUT_POST, 'post_type' );
+
+		if ( null === $post_type ) {
 			return $post->post_type;
 		}
 
-		if ( 'revision' === $_POST['post_type'] ) {
+		if ( 'revision' === $post_type ) {
 			return $post->post_type;
 		}
 
-		if ( is_string( $_POST['post_type'] ) ) {
-			return $_POST['post_type']; // auto-draft
+		if ( is_string( $post_type ) ) {
+			return $post_type; // auto-draft
 		}
 
 		return $post->post_type;
@@ -166,11 +168,12 @@ class Mlp_Relationship_Changer {
 	 */
 	public function get_real_post_id( $post_id ) {
 
-		if ( ! empty( $_POST['post_ID'] ) ) {
-			return (int) $_POST['post_ID'];
+		$real_post_id = filter_input( INPUT_POST, 'post_ID' );
+		if ( null === $real_post_id ) {
+			return $post_id;
 		}
 
-		return $post_id;
+		return (int) $real_post_id;
 	}
 
 	/**
@@ -277,15 +280,16 @@ class Mlp_Relationship_Changer {
 			'new_post_title',
 		);
 
-		foreach ( $find as $value ) {
-			// TODO: Refactor access to $_REQUEST.
-			if ( ! empty( $_REQUEST[ $value ] ) ) {
+		foreach ( $find as $name ) {
+			$value = filter_input( INPUT_POST, $name );
+			if ( null === $value ) {
+				continue;
+			}
 
-				if ( 'new_post_title' === $value ) {
-					$this->$value = (string) $_REQUEST[ $value ];
-				} else {
-					$this->$value = (int) $_REQUEST[ $value ];
-				}
+			if ( 'new_post_title' === $name ) {
+				$this->$name = (string) $value;
+			} else {
+				$this->$name = (int) $value;
 			}
 		}
 	}

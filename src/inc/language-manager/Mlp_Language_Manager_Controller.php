@@ -224,11 +224,12 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	private function before_form() {
 
-		if ( empty( $_GET['msg'] ) ) {
+		$msg = (string) filter_input( INPUT_GET, 'msg' );
+		if ( '' === $msg ) {
 			return;
 		}
 
-		$type  = strtok( $_GET['msg'], '-' );
+		$type  = strtok( $msg, '-' );
 		$num   = (int) strtok( '-' );
 		$num_f = number_format_i18n( $num );
 		$text  = '';
@@ -282,7 +283,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			?>
 		</p>
 		<?php
-		if ( isset( $_GET['msg'] ) && 'resettable' === $_GET['msg'] ) {
+		if ( 'resettable' === filter_input( INPUT_GET, 'msg' ) ) {
 			return;
 		}
 

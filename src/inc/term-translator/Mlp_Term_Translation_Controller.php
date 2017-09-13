@@ -59,10 +59,9 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	 */
 	private function get_nonce_action() {
 
-		// TODO: Refactor access to $_REQUEST.
-		$taxonomy = empty( $_REQUEST['taxonomy'] ) ? '' : (string) $_REQUEST['taxonomy'];
+		$taxonomy = (string) filter_input( INPUT_GET, 'taxonomy' );
 
-		$term_taxonomy_id = empty( $_REQUEST['tag_ID'] ) ? 0 : (int) $_REQUEST['tag_ID'];
+		$term_taxonomy_id = (int) filter_input( INPUT_GET, 'tag_ID' );
 
 		$action = "save_{$taxonomy}_translations_$term_taxonomy_id";
 
@@ -86,7 +85,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 
 		$post_data = $this->get_post_data();
 
-		$delete = isset( $_POST['action'] ) && 'delete-tag' === $_POST['action'];
+		$delete = 'delete-tag' === filter_input( INPUT_POST, 'action' );
 
 		if ( $post_data ) {
 			$this->activate_switcher();
@@ -110,11 +109,12 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 			return array();
 		}
 
-		if ( empty( $_POST['mlp']['term_translation'] ) ) {
+		$data = filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
+		if ( empty( $data['mlp']['term_translation'] ) ) {
 			return array();
 		}
 
-		return (array) $_POST['mlp']['term_translation'];
+		return (array) $data['mlp']['term_translation'];
 	}
 
 	/**
