@@ -65,7 +65,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		$this->content_relations = $content_relations;
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-			$this->post_request_data = filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
+			$this->post_request_data = (array) filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
 		}
 
 		$this->source_site_id = get_current_blog_id();
