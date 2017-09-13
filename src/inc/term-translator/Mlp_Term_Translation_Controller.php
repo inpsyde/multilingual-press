@@ -59,6 +59,7 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	 */
 	private function get_nonce_action() {
 
+		// TODO: Refactor access to $_REQUEST.
 		$taxonomy = empty( $_REQUEST['taxonomy'] ) ? '' : (string) $_REQUEST['taxonomy'];
 
 		$term_taxonomy_id = empty( $_REQUEST['tag_ID'] ) ? 0 : (int) $_REQUEST['tag_ID'];

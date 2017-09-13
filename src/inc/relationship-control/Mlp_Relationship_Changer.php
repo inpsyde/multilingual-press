@@ -278,6 +278,7 @@ class Mlp_Relationship_Changer {
 		);
 
 		foreach ( $find as $value ) {
+			// TODO: Refactor access to $_REQUEST.
 			if ( ! empty( $_REQUEST[ $value ] ) ) {
 
 				if ( 'new_post_title' === $value ) {

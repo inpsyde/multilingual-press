@@ -64,12 +64,14 @@ class Mlp_Language_Manager_Pagination_Data implements Mlp_Browsable {
 	public function get_current_page() {
 
 		// can be sent per GET or POST
-		if ( empty( $_REQUEST['paged'] ) || 2 > $_REQUEST['paged'] ) {
+		// TODO: Refactor access to $_REQUEST.
+		$paged = isset( $_REQUEST['paged'] ) ? (int) $_REQUEST['paged'] : 0;
+		if ( 2 > $paged ) {
 			return 1;
 		}
 
 		// fix calls to page 99 when there are just 10 possible pages
-		$page = min( $_REQUEST['paged'], $this->get_total_pages() );
+		$page = min( $paged, $this->get_total_pages() );
 
 		return absint( $page );
 	}

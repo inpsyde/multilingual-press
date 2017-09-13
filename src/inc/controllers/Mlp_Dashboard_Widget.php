@@ -234,12 +234,7 @@ class Mlp_Dashboard_Widget {
 	 */
 	private function get_post_id() {
 
-		// @codingStandardsIgnoreLine
-		if ( empty( $_GET['post'] ) ) {
-			return 0;
-		}
-
-		return absint( $_GET['post'] );
+		return absint( filter_input( INPUT_GET, 'post' ) );
 	}
 
 	/**

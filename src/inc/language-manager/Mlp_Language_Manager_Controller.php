@@ -213,6 +213,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		 */
 		do_action( 'mlp_reset_table_done', $table_schema );
 
+		// TODO: Refactor access to $_REQUEST.
 		$url = add_query_arg( 'msg', 'resettable', $_REQUEST['_wp_http_referer'] );
 		wp_safe_redirect( $url );
 		mlp_exit();

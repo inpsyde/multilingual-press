@@ -182,17 +182,17 @@ class Mlp_Network_Site_Settings {
 
 		$name = $this->config->get_param_name();
 
-		if ( ! isset( $_GET[ $name ] ) ) {
+		$pagenow = (string) filter_input( INPUT_GET, $name );
+		if ( '' === $pagenow ) {
 			return;
 		}
 
 		$value = $this->config->get_param_value();
-
-		if ( $value !== $_GET[ $name ] ) {
+		if ( $value !== $pagenow ) {
 			return;
 		}
 
-		// @codingStandardsIgnoreLine
+		// @codingStandardsIgnoreLine as we really DO want to override the global.
 		$GLOBALS['pagenow'] = $value;
 	}
 }

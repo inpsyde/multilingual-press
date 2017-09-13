@@ -92,7 +92,7 @@ class Mlp_General_Settingspage {
 			return;
 		}
 
-		// @codingStandardsIgnoreLine message is not being used itself, but just as a flag.
+		// @codingStandardsIgnoreLine as message is not being used itself, but just as a flag.
 		if ( ! isset( $_GET['message'] ) ) {
 			return;
 		}

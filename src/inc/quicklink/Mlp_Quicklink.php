@@ -70,11 +70,10 @@ class Mlp_Quicklink implements Mlp_Updatable {
 			// Use this hook to handle the user input of your modules' options page form fields
 			add_filter( 'mlp_modules_save_fields', array( $this, 'save_options_page_form_fields' ) );
 		} else {
-			// @codingStandardsIgnoreStart
-			if ( ! empty( $_POST['mlp_quicklink_select'] ) ) {
-				$this->redirect_quick_link( (string) $_POST['mlp_quicklink_select'] );
+			$url = (string) filter_input( INPUT_POST, 'mlp_quicklink_select' );
+			if ( '' !== $url ) {
+				$this->redirect_quick_link( $url );
 			}
-			// @codingStandardsIgnoreEnd
 
 			add_action( 'wp_head', array( $this, 'load_style' ), 0 );
 

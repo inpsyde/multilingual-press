@@ -197,7 +197,7 @@ class Mlp_Language_Nav_Menu_Data implements Mlp_Nav_Menu_Selector_Data_Interface
 	 */
 	private function create_menu_item( $titles, $blog_id ) {
 
-		// @codingStandardsIgnoreLine as the menu is WordPress core data.
+		// @codingStandardsIgnoreLine as menu is WordPress core data.
 		$item_id = wp_update_nav_menu_item( $_GET['menu'], 0, array(
 			'menu-item-title'      => esc_attr( $titles[ $blog_id ] ),
 			'menu-item-type'       => 'language',

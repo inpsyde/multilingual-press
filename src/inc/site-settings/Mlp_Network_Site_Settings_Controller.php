@@ -201,11 +201,9 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function get_blog_id() {
 
-		if ( empty( $_REQUEST['id'] ) ) {
-			return get_current_blog_id();
-		}
+		$blog_id = absint( filter_input( INPUT_GET, 'id' ) );
 
-		return (int) $_REQUEST['id'];
+		return $blog_id ? $blog_id : get_current_blog_id();
 	}
 
 	/**
@@ -215,11 +213,11 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function show_update_message() {
 
-		if ( empty( $_GET['msg'] ) || 'updated' !== $_GET['msg'] ) {
+		if ( 'updated' !== filter_input( INPUT_GET, 'msg' ) ) {
 			return;
 		}
 
-		$msg    = esc_html__( 'Settings saved.', 'multilingual-press' );
+		$msg = esc_html__( 'Settings saved.', 'multilingual-press' );
 		$notice = new Mlp_Admin_Notice( $msg, array(
 			'class' => 'updated',
 		) );

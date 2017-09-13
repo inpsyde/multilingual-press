@@ -65,18 +65,17 @@ class Mlp_Trasher {
 	 */
 	public function post_submitbox_misc_actions() {
 
-		// @codingStandardsIgnoreStart
-		if ( isset( $_GET['post'] ) ) {
+		$post_id = absint( filter_input( INPUT_GET, 'post' ) );
+		if ( $post_id ) {
 			// old key
-			$trash_the_other_posts = (int) get_post_meta( $_GET['post'], 'trash_the_other_posts', true );
+			$trash_the_other_posts = (int) get_post_meta( $post_id, 'trash_the_other_posts', true );
 
 			if ( 1 !== $trash_the_other_posts ) {
-				$trash_the_other_posts = (int) get_post_meta( $_GET['post'], '_trash_the_other_posts', true );
+				$trash_the_other_posts = (int) get_post_meta( $post_id, '_trash_the_other_posts', true );
 			}
 		} else {
 			$trash_the_other_posts = false;
 		}
-		// @codingStandardsIgnoreEnd
 		?>
 		<div class="misc-pub-section curtime misc-pub-section-last">
 			<?php wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name() ); ?>

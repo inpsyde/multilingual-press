@@ -68,7 +68,7 @@ class Mlp_Redirect_Settings_Data implements Mlp_Redirect_Settings_Data_Interface
 	 */
 	public function get_current_option_value() {
 
-		$data = filter_input_array( INPUT_REQUEST, FILTER_DEFAULT, false );
+		$data = filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
 
 		$id = $this->get_current_blog_id( $data );
 
