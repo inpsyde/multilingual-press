@@ -131,13 +131,10 @@ class Mlp_Relationship_Control_Meta_Box_View {
 					</div>
 				</div>
 				<p>
-					<?php
-					$data_attrs = $this->add_id_values( '' );
-					?>
 					<input type="button"
 						class="button button-primary mlp-save-relationship-button"
 						value="<?php esc_attr_e( 'Save and reload this page', 'multilingual-press' ); ?>"
-						<?php echo esc_attr( $data_attrs ); ?>
+						<?php $this->render_id_values(); ?>
 					>
 					<span class="description">
 						<?php esc_html_e( 'Please save other changes first separately.', 'multilingual-press' ); ?>
@@ -186,17 +183,16 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 		?>
 		<input type="search" class="mlp-search-field" id="<?php echo esc_attr( $id ); ?>"
-			<?php echo esc_attr( $this->add_id_values( '' ) ); ?>>
+			<?php $this->render_id_values(); ?>>
 		<?php
 	}
 
 	/**
-	 * Add data attributes to a string.
+	 * Renders data attributes.
 	 *
-	 * @param $str
-	 * @return string
+	 * @return void
 	 */
-	private function add_id_values( $str ) {
+	private function render_id_values() {
 
 		$data = array(
 			'results-container-id' => "mlp-search-results-{$this->remote_site_id}",
@@ -207,10 +203,8 @@ class Mlp_Relationship_Control_Meta_Box_View {
 		);
 
 		foreach ( $data as $key => $value ) {
-			$str .= " data-$key='$value'";
+			echo ' ' . esc_attr( "data-{$key}" ) . '="' . esc_attr( $value ) . '"';
 		}
-
-		return $str;
 	}
 
 	/**
