@@ -119,14 +119,16 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 			$languages[ $blog_id ] = array();
 		}
 
-		if ( ! isset( $_POST['inpsyde_multilingual_lang'] ) || '-1' === $_POST['inpsyde_multilingual_lang'] ) {
+		$language = (string) filter_input( INPUT_POST, 'inpsyde_multilingual_lang' );
+		if ( '' === $language || '-1' === $language ) {
 			unset( $languages[ $blog_id ]['lang'] );
 		} else {
-			$languages[ $blog_id ]['lang'] = $_POST['inpsyde_multilingual_lang'];
+			$languages[ $blog_id ]['lang'] = $language;
 
 			// Set alternate title
-			if ( isset( $_POST['inpsyde_multilingual_text'] ) ) {
-				$languages[ $blog_id ]['text'] = $_POST['inpsyde_multilingual_text'];
+			$text = filter_input( INPUT_POST, 'inpsyde_multilingual_text' );
+			if ( null !== $text ) {
+				$languages[ $blog_id ]['text'] = (string) $text;
 			}
 		}
 
@@ -139,11 +141,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function update_flag( $blog_id ) {
 
-		$flag_url = '';
-
-		if ( isset( $_POST['inpsyde_multilingual_flag_url'] ) ) {
-			$flag_url = esc_url( $_POST['inpsyde_multilingual_flag_url'] );
-		}
+		$flag_url = esc_url( filter_input( INPUT_POST, 'inpsyde_multilingual_flag_url' ) );
 
 		return update_blog_option( $blog_id, 'inpsyde_multilingual_flag_url', $flag_url );
 	}
@@ -229,12 +227,12 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function get_new_related_blogs() {
 
-		if ( ! isset( $_POST['related_blogs'] ) ) {
+		$related_blogs = filter_input( INPUT_POST, 'related_blogs', FILTER_FORCE_ARRAY );
+		if ( ! $related_blogs ) {
 			return array();
 		}
 
-		$new_related = (array) $_POST['related_blogs'];
-		return array_map( 'intval', $new_related );
+		return array_map( 'intval', $related_blogs );
 	}
 
 	/**

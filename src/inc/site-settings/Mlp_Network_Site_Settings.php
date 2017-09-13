@@ -154,7 +154,10 @@ class Mlp_Network_Site_Settings {
 	 */
 	private function get_nav_link() {
 
-		$site_id = empty( $_GET['id'] ) ? SITE_ID_CURRENT_SITE : (int) $_GET['id'];
+		$site_id = absint( filter_input( INPUT_GET, 'id' ) );
+		if ( ! $site_id ) {
+			$site_id = SITE_ID_CURRENT_SITE;
+		}
 
 		$name = $this->config->get_param_name();
 

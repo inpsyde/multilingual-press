@@ -100,8 +100,9 @@ class Mlp_Network_New_Site_Controller {
 		$languages[ $blog_id ]['lang'] = str_replace( '-', '_', $posted );
 
 		// Set alternative title
-		if ( isset( $_POST['inpsyde_multilingual_text'] ) ) {
-			$languages[ $blog_id ]['text'] = $_POST['inpsyde_multilingual_text'];
+		$text = filter_input( INPUT_POST, 'inpsyde_multilingual_text' );
+		if ( null !== $text ) {
+			$languages[ $blog_id ]['text'] = (string) $text;
 		}
 
 		update_site_option( 'inpsyde_multilingual', $languages );
@@ -114,15 +115,16 @@ class Mlp_Network_New_Site_Controller {
 	 */
 	private function get_posted_language() {
 
-		if ( ! isset( $_POST['inpsyde_multilingual_lang'] ) ) {
+		$language = (string) filter_input( INPUT_POST, 'inpsyde_multilingual_lang' );
+		if ( '' === $language ) {
 			return false;
 		}
 
-		if ( '-1' === $_POST['inpsyde_multilingual_lang'] ) {
+		if ( '-1' === $language ) {
 			return false;
 		}
 
-		return $_POST['inpsyde_multilingual_lang'];
+		return $language;
 	}
 
 	/**
@@ -179,14 +181,14 @@ class Mlp_Network_New_Site_Controller {
 	 */
 	private function update_relation( $blog_id ) {
 
-		if ( empty( $_POST['related_blogs'] ) ) {
+		$related_blogs = filter_input( INPUT_POST, 'related_blogs', FILTER_FORCE_ARRAY );
+		if ( ! $related_blogs ) {
 			return 0;
 		}
 
-		$new_related = (array) $_POST['related_blogs'];
-		$related     = array_map( 'intval', $new_related );
+		$related_blogs = array_map( 'intval', $related_blogs );
 
-		return $this->site_relation->set_relation( $blog_id, $related );
+		return $this->site_relation->set_relation( $blog_id, $related_blogs );
 	}
 
 	/**
