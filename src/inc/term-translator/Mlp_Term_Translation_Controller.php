@@ -59,9 +59,20 @@ class Mlp_Term_Translation_Controller implements Mlp_Updatable {
 	 */
 	private function get_nonce_action() {
 
-		$taxonomy = (string) filter_input( INPUT_GET, 'taxonomy' );
+		$is_post_request = 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] );
+		if ( $is_post_request ) {
+			$taxonomy = filter_input( INPUT_POST, 'taxonomy' );
 
-		$term_taxonomy_id = (int) filter_input( INPUT_GET, 'tag_ID' );
+			$term_taxonomy_id = filter_input( INPUT_POST, 'tag_ID' );
+		}
+
+		if ( ! isset( $taxonomy ) ) {
+			$taxonomy = (string) filter_input( INPUT_GET, 'taxonomy' );
+		}
+
+		if ( ! isset( $term_taxonomy_id ) ) {
+			$term_taxonomy_id = (int) filter_input( INPUT_GET, 'tag_ID' );
+		}
 
 		$action = "save_{$taxonomy}_translations_$term_taxonomy_id";
 
