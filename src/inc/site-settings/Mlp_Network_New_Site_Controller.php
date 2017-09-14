@@ -181,7 +181,7 @@ class Mlp_Network_New_Site_Controller {
 	 */
 	private function update_relation( $blog_id ) {
 
-		$related_blogs = filter_input( INPUT_POST, 'related_blogs', FILTER_FORCE_ARRAY );
+		$related_blogs = filter_input( INPUT_POST, 'related_blogs', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		if ( ! $related_blogs ) {
 			return 0;
 		}

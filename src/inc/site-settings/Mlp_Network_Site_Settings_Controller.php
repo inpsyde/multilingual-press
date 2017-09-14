@@ -227,7 +227,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function get_new_related_blogs() {
 
-		$related_blogs = filter_input( INPUT_POST, 'related_blogs', FILTER_FORCE_ARRAY );
+		$related_blogs = filter_input( INPUT_POST, 'related_blogs', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		if ( ! $related_blogs ) {
 			return array();
 		}
