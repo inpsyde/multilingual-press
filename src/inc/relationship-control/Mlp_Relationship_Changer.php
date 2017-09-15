@@ -142,7 +142,7 @@ class Mlp_Relationship_Changer {
 
 		$post_type = filter_input( INPUT_POST, 'post_type' );
 
-		if ( null === $post_type ) {
+		if ( null === $post_type || '' === $post_type ) {
 			return $post->post_type;
 		}
 
@@ -169,7 +169,7 @@ class Mlp_Relationship_Changer {
 	public function get_real_post_id( $post_id ) {
 
 		$real_post_id = filter_input( INPUT_POST, 'post_ID' );
-		if ( null === $real_post_id ) {
+		if ( null === $real_post_id || '0' === $real_post_id ) {
 			return $post_id;
 		}
 

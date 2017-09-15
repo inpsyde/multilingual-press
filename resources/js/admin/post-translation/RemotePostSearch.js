@@ -113,7 +113,8 @@ class RemotePostSearch extends Backbone.View {
 						source_post_id: $input.data( 'source-post-id' ),
 						s: value
 					},
-					processData: true
+					processData: true,
+					type: 'POST'
 				} );
 			}, 400 );
 		}
