@@ -36,10 +36,10 @@ class Mlp_Redirect_Registration {
 			'multilingual-press'
 		);
 
-		$settings = array (
-			'display_name'	=> __( 'HTTP Redirect', 'multilingual-press' ),
-			'slug'			=> 'class-' . __CLASS__,
-			'description'   => $desc
+		$settings = array(
+			'display_name'  => __( 'HTTP Redirect', 'multilingual-press' ),
+			'slug'          => 'class-' . __CLASS__,
+			'description'   => $desc,
 		);
 
 		return $this->modules->register( $settings );

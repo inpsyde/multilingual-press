@@ -4,9 +4,9 @@
  *
  * Adds a column to a WP_List_Table view
  *
- * @author		fb, rw, ms, th, toscho
- * @package		MultilingualPress
- * @subpackage	backend
+ * @author      fb, rw, ms, th, toscho
+ * @package     MultilingualPress
+ * @subpackage  backend
  */
 class Mlp_Custom_Columns {
 
@@ -15,7 +15,7 @@ class Mlp_Custom_Columns {
 	 *
 	 * @type array
 	 */
-	protected $settings = array ();
+	protected $settings = array();
 
 	/**
 	 * Constructor
@@ -23,11 +23,11 @@ class Mlp_Custom_Columns {
 	 *
 	 * @wp-hook inpsyde_mlp_loaded
 	 * @param   array $settings
-	 * 				id               = column id
-	 * 				header           = header text
-	 * 				content_callback = render column content
+	 *              id               = column id
+	 *              header           = header text
+	 *              content_callback = render column content
 	 */
-	public function __construct( Array $settings ) {
+	public function __construct( array $settings ) {
 		$this->settings = $settings;
 	}
 
@@ -35,15 +35,16 @@ class Mlp_Custom_Columns {
 	 * Render column content.
 	 *
 	 * @wp-hook manage_sites_custom_column
-	 * @since	0.1
-	 * @param	string $name Column ID
-	 * @param	int $id      ID of the current element
-	 * @return	void
+	 * @since   0.1
+	 * @param   string $name Column ID
+	 * @param   int $id      ID of the current element
+	 * @return  void
 	 */
 	public function render_column( $name, $id ) {
 
-		if ( $this->settings[ 'id' ] === $name )
-			echo call_user_func( $this->settings[ 'content_callback' ], $name, $id );
+		if ( $this->settings['id'] === $name ) {
+			echo wp_kses_post( call_user_func( $this->settings['content_callback'], $name, $id ) );
+		}
 	}
 
 	/**
@@ -54,9 +55,9 @@ class Mlp_Custom_Columns {
 	 * @param   array $columns Existing columns
 	 * @return  array
 	 */
-	public function add_header( Array $columns ) {
+	public function add_header( array $columns ) {
 
-		$columns[ $this->settings[ 'id' ] ] = $this->settings[ 'header' ];
+		$columns[ $this->settings['id'] ] = $this->settings['header'];
 
 		return $columns;
 	}

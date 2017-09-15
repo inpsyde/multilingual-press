@@ -35,8 +35,9 @@ class Mlp_Global_Switcher {
 	 */
 	public function __construct( $type ) {
 
-		if ( self::TYPE_GET === $type )
+		if ( self::TYPE_GET === $type ) {
 			$this->type = $type;
+		}
 
 		$this->type = self::TYPE_POST;
 	}
@@ -46,8 +47,9 @@ class Mlp_Global_Switcher {
 	 */
 	public function strip() {
 
-		if ( self::TYPE_GET === $this->type )
+		if ( self::TYPE_GET === $this->type ) {
 			return $this->strip_get();
+		}
 
 		return $this->strip_post();
 	}
@@ -57,15 +59,17 @@ class Mlp_Global_Switcher {
 	 */
 	public function fill() {
 
-		if ( empty ( $this->storage ) )
+		if ( empty( $this->storage ) ) {
 			return 0;
+		}
 
 		$amount = count( $this->storage );
 
-		if ( self::TYPE_GET === $this->type )
+		if ( self::TYPE_GET === $this->type ) {
 			$this->fill_get();
-		else
+		} else {
 			$this->fill_post();
+		}
 
 		return $amount;
 	}
@@ -75,14 +79,18 @@ class Mlp_Global_Switcher {
 	 */
 	private function strip_get() {
 
-		if ( empty ( $_GET ) )
+		// @codingStandardsIgnoreLine
+		if ( empty( $_GET ) ) {
 			return 0;
+		}
 
-		$amount = count( $_GET );
+		$amount = 0;
 
+		// @codingStandardsIgnoreLine
 		foreach ( $_GET as $name => $value ) {
 			$this->storage[ $name ] = $value;
-			unset ( $_REQUEST[ $name ], $_GET[ $name ] );
+			unset( $_REQUEST[ $name ], $_GET[ $name ] );
+			$amount++;
 		}
 
 		return $amount;
@@ -93,8 +101,10 @@ class Mlp_Global_Switcher {
 	 */
 	private function fill_get() {
 
-		foreach ( $this->storage as $name => $value )
-			$_REQUEST[ $name ] = $_GET[ $name ] = $value;
+		foreach ( $this->storage as $name => $value ) {
+			$_REQUEST[ $name ] = $value;
+			$_GET[ $name ]     = $value;
+		}
 	}
 
 	/**
@@ -102,14 +112,18 @@ class Mlp_Global_Switcher {
 	 */
 	private function strip_post() {
 
-		if ( empty ( $_POST ) )
+		// @codingStandardsIgnoreLine
+		if ( empty( $_POST ) ) {
 			return 0;
+		}
 
-		$amount = count( $_POST );
+		$amount = 0;
 
+		// @codingStandardsIgnoreLine
 		foreach ( $_POST as $name => $value ) {
 			$this->storage[ $name ] = $value;
-			unset ( $_REQUEST[ $name ], $_POST[ $name ] );
+			unset( $_REQUEST[ $name ], $_POST[ $name ] );
+			$amount++;
 		}
 
 		return $amount;
@@ -120,7 +134,9 @@ class Mlp_Global_Switcher {
 	 */
 	private function fill_post() {
 
-		foreach ( $this->storage as $name => $value )
-			$_REQUEST[ $name ] = $_POST[ $name ] = $value;
+		foreach ( $this->storage as $name => $value ) {
+			$_REQUEST[ $name ] = $value;
+			$_POST[ $name ]    = $value;
+		}
 	}
 }

@@ -24,5 +24,5 @@ interface Mlp_Table_Duplicator_Interface {
 	 * @param  bool   $create Create the new table if it doesn't exists
 	 * @return int Number of inserted rows
 	 */
-	public function replace_content( $new_table, $old_table, $create = FALSE );
+	public function replace_content( $new_table, $old_table, $create = false );
 }

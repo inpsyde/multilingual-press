@@ -61,7 +61,9 @@ class Mlp_New_Site_View {
 
 		$db = $this->language_api->get_db();
 
-		$languages = $db->get_items( array( 'page' => -1 ) );
+		$languages = $db->get_items( array(
+			'page' => -1,
+		) );
 		?>
 		<h2>
 			<?php esc_html_e( 'MultilingualPress', 'multilingual-press' ); ?>
@@ -161,11 +163,10 @@ class Mlp_New_Site_View {
 		if ( empty( $language->http_name ) ) {
 			return;
 		}
-
-		$selected = selected( $this->default_language, $language->http_name, false );
 		?>
-		<option value="<?php echo esc_attr( $language->http_name ); ?>" <?php echo $selected; ?>>
-			<?php echo "{$language->english_name}/{$language->native_name}"; ?>
+		<option value="<?php echo esc_attr( $language->http_name ); ?>"
+			<?php selected( $this->default_language, $language->http_name ); ?>>
+			<?php echo esc_html( "{$language->english_name}/{$language->native_name}" ); ?>
 		</option>
 		<?php
 	}
@@ -189,7 +190,7 @@ class Mlp_New_Site_View {
 			?>
 			<p>
 				<label for="<?php echo esc_attr( $id ); ?>">
-					<input type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $site_id ) ?>"
+					<input type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $site_id ); ?>"
 						id="<?php echo esc_attr( $id ); ?>">
 					<?php echo esc_html( $blog_name ); ?>
 					-

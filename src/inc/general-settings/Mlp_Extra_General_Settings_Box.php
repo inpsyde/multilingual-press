@@ -37,13 +37,25 @@ class Mlp_Extra_General_Settings_Box {
 		$id = $this->data->get_box_id();
 
 		$title = $this->data->get_title();
+
+		$content = '';
+		$content .= $this->get_main_description();
+		$content .= $this->data->update( 'general.settings.extra.box' );
+
+		$tags          = wp_kses_allowed_html( 'post' );
+		$tags['input'] = array(
+			'checked' => true,
+			'id'      => true,
+			'name'    => true,
+			'type'    => true,
+			'value'   => true,
+		);
 		?>
 		<div class="mlp-extra-settings-box" id="<?php echo esc_attr( $id ); ?>">
 			<?php if ( $title ) : ?>
 				<h4><?php echo esc_html( $title ); ?></h4>
 			<?php endif; ?>
-			<?php echo $this->get_main_description(); ?>
-			<?php echo $this->data->update( 'general.settings.extra.box' ); ?>
+			<?php echo wp_kses( $content, $tags ); ?>
 		</div>
 		<?php
 	}
@@ -57,13 +69,15 @@ class Mlp_Extra_General_Settings_Box {
 
 		$desc = $this->data->get_main_description();
 
-		if ( ! $desc )
+		if ( ! $desc ) {
 			return '';
+		}
 
 		$label_id = $this->data->get_main_label_id();
 
-		if ( ! empty ( $label_id ) )
+		if ( ! empty( $label_id ) ) {
 			$desc = "<label for='$label_id' class='mlp-block-label'>$desc</label>";
+		}
 
 		return "<p>$desc</p>";
 	}

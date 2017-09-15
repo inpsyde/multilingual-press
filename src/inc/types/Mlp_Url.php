@@ -22,13 +22,11 @@ class Mlp_Url implements Mlp_Url_Interface {
 
 		if ( is_scalar( $url ) ) {
 			$this->url = esc_url( (string) $url );
-		}
-		// method_exists() and is_callable() are not reliable
+		} // method_exists() and is_callable() are not reliable
 		// see the comments for http://php.net/manual/en/function.method-exists.php
 		elseif ( is_object( $url ) && in_array( '__toString', get_class_methods( $url ), true ) ) {
 			$this->url = esc_url( (string) $url );
-		}
-		// Might be a WP_Error.
+		} // Might be a WP_Error.
 		else {
 			$this->url = '';
 		}

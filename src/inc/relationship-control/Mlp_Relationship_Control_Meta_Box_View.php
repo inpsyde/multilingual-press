@@ -47,7 +47,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	 */
 	public function __construct(
 		Mlp_Relationship_Control_Data $data,
-		Mlp_Updatable                 $updater
+		Mlp_Updatable $updater
 	) {
 
 		$this->post            = $data->get_source_post();
@@ -68,38 +68,34 @@ class Mlp_Relationship_Control_Meta_Box_View {
 		?>
 		<div class="mlp-relationship-control-box"
 			 style="margin: .5em 0 .5em auto ">
-			<?php
-			printf(
-				'<button type="button" class="button secondary mlp-rsc-button mlp-click-toggler" name="mlp_rsc_%2$d"
-					data-toggle-target="#%3$s" data-search_box_id="%4$s">%1$s</button>',
-				esc_html__( 'Change relationship', 'multilingual-press' ),
-				$this->remote_site_id,
-				$action_selector_id,
-				$search_selector_id
-			);
-			?>
+			<button type="button" class="button secondary mlp-rsc-button mlp-click-toggler"
+				name="mlp_rsc_<?php echo esc_attr( $this->remote_site_id ); ?>"
+				data-toggle-target="#<?php echo esc_attr( $action_selector_id ); ?>"
+				data-search_box_id="<?php echo esc_attr( $search_selector_id ); ?>">
+				<?php esc_html_e( 'Change relationship', 'multilingual-press' ); ?>
+			</button>
 			<div id="<?php echo esc_attr( $action_selector_id ); ?>" class='hidden'>
 				<div class="mlp-rc-settings">
 					<div class="mlp-rc-actions" style="float: left; width: 20em;">
 						<?php
-						$actions = array (
+						$actions = array(
 							'stay' => esc_html__( 'Leave as is', 'multilingual-press' ),
 							'new'  => esc_html__( 'Create new post', 'multilingual-press' ),
 						);
 
-						if ( $this->remote_post_id )
-							$actions[ 'disconnect' ] = esc_html__( 'Remove relationship', 'multilingual-press' );
+						if ( $this->remote_post_id ) {
+							$actions['disconnect'] = esc_html__( 'Remove relationship', 'multilingual-press' );
+						}
 
-						foreach ( $actions as $key => $label )
-							print '<p>'
-								. $this->get_radio(
-									   $key,
-										   $label,
-										   'stay',
-										   'mlp-rc-action[' . $this->remote_site_id . ']',
-										   'mlp-rc-input-id-' . $this->remote_site_id
-								)
-								. '</p>';
+						foreach ( $actions as $key => $label ) {
+							$this->render_radio(
+								$key,
+								$label,
+								'stay',
+								"mlp-rc-action[{$this->remote_site_id}]",
+								"mlp-rc-input-id-{$this->remote_site_id}"
+							);
+						}
 
 					?>
 					<p>
@@ -111,7 +107,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 								class="mlp-state-toggler"
 								id="mlp-rc-input-id-<?php echo esc_attr( $this->remote_site_id ); ?>-search"
 								data-toggle-target="#<?php echo esc_attr( $search_selector_id ); ?>">
-							<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ) ?>
+							<?php esc_html_e( 'Select existing post &hellip;', 'multilingual-press' ); ?>
 						</label>
 					</p>
 				</div>
@@ -124,9 +120,7 @@ class Mlp_Relationship_Control_Meta_Box_View {
 							esc_html_e( 'Live search', 'multilingual-press' );
 							?>
 						</label>
-						<?php
-						print $this->get_search_input( $this->search_input_id );
-						?>
+						<?php $this->render_search_input( $this->search_input_id ); ?>
 
 						<ul class="mlp-search-results"
 							id="mlp-search-results-<?php echo esc_attr( $this->remote_site_id ); ?>">
@@ -137,17 +131,14 @@ class Mlp_Relationship_Control_Meta_Box_View {
 					</div>
 				</div>
 				<p>
-					<?php
-					$data_attrs = $this->add_id_values( '' );
-					?>
 					<input type="button"
-						   class="button button-primary mlp-save-relationship-button"
-						   value="<?php
-						   esc_attr_e( 'Save and reload this page', 'multilingual-press' );
-						   ?>" <?php print $data_attrs; ?>>
-					<span class="description"><?php
-						esc_html_e( 'Please save other changes first separately.', 'multilingual-press' );
-						?></span>
+						class="button button-primary mlp-save-relationship-button"
+						value="<?php esc_attr_e( 'Save and reload this page', 'multilingual-press' ); ?>"
+						<?php $this->render_id_values(); ?>
+					>
+					<span class="description">
+						<?php esc_html_e( 'Please save other changes first separately.', 'multilingual-press' ); ?>
+					</span>
 				</p>
 			</div>
 		</div>
@@ -186,25 +177,24 @@ class Mlp_Relationship_Control_Meta_Box_View {
 
 	/**
 	 * @param string $id
-	 * @return string
+	 * @return void
 	 */
-	private function get_search_input( $id ) {
+	private function render_search_input( $id ) {
 
-		$input = '<input type="search" class="mlp-search-field" id="' . $id . '"';
-		$input = $this->add_id_values( $input );
-
-		return $input . '>';
+		?>
+		<input type="search" class="mlp-search-field" id="<?php echo esc_attr( $id ); ?>"
+			<?php $this->render_id_values(); ?>>
+		<?php
 	}
 
 	/**
-	 * Add data attributes to a string.
+	 * Renders data attributes.
 	 *
-	 * @param $str
-	 * @return string
+	 * @return void
 	 */
-	private function add_id_values( $str ) {
+	private function render_id_values() {
 
-		$data = array (
+		$data = array(
 			'results-container-id' => "mlp-search-results-{$this->remote_site_id}",
 			'source-site-id'       => $this->site_id,
 			'source-post-id'       => $this->post->ID,
@@ -212,10 +202,9 @@ class Mlp_Relationship_Control_Meta_Box_View {
 			'remote-post-id'       => $this->remote_post_id,
 		);
 
-		foreach ( $data as $key => $value )
-			$str .= " data-$key='$value'";
-
-		return $str;
+		foreach ( $data as $key => $value ) {
+			echo ' ' . esc_attr( "data-{$key}" ) . '="' . esc_attr( $value ) . '"';
+		}
 	}
 
 	/**
@@ -224,20 +213,19 @@ class Mlp_Relationship_Control_Meta_Box_View {
 	 * @param string $selected
 	 * @param string $name
 	 * @param string $id_base
-	 * @return string
+	 * @return void
 	 */
-	private function get_radio( $key, $label, $selected, $name, $id_base ) {
+	private function render_radio( $key, $label, $selected, $name, $id_base ) {
 
-		return sprintf(
-			'<label for="%5$s-%1$s">
-				<input type="radio" name="%4$s" id="%5$s-%1$s" value="%1$s"%3$s>
-				%2$s
-			</label>',
-			$key,
-			$label,
-			selected( $name, $selected, FALSE ),
-			$name,
-			$id_base
-		);
+		$id = "{$id_base}-{$key}";
+		?>
+		<p>
+			<label for="<?php echo esc_attr( $id ); ?>">
+				<input type="radio" name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>"
+					value="<?php echo esc_attr( $key ); ?>" <?php selected( $name, $selected ); ?>>
+				<?php echo esc_html( $label ); ?>
+			</label>
+		</p>
+		<?php
 	}
 }

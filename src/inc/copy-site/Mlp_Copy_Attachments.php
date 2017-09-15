@@ -6,8 +6,8 @@
  * @version 2014.04.16
  * @author  Inpsyde GmbH, toscho
  */
-class Mlp_Copy_Attachments
-{
+class Mlp_Copy_Attachments {
+
 	/**
 	 * ID of base blog.
 	 *
@@ -48,7 +48,7 @@ class Mlp_Copy_Attachments
 	 *
 	 * @type bool
 	 */
-	private $found_files = FALSE;
+	private $found_files = false;
 
 	/**
 	 * Upload base URL for source blog.
@@ -99,8 +99,8 @@ class Mlp_Copy_Attachments
 
 		$uploads  = wp_upload_dir();
 		$site_url = get_option( 'siteurl' );
-		$dir = $uploads[ 'basedir' ];
-		$url = $this->real_upload_base_url( $uploads[ 'baseurl' ], $site_url );
+		$dir = $uploads['basedir'];
+		$url = $this->real_upload_base_url( $uploads['baseurl'], $site_url );
 	}
 
 	/**
@@ -114,16 +114,19 @@ class Mlp_Copy_Attachments
 	 */
 	private function real_upload_base_url( $base_url, $site_url ) {
 
-		if ( ! is_subdomain_install() )
+		if ( ! is_subdomain_install() ) {
 			return $base_url;
+		}
 
-		if ( 0 === strpos( $base_url, $site_url ) )
+		if ( 0 === strpos( $base_url, $site_url ) ) {
 			return $base_url;
+		}
 
-		$b_host = parse_url( $base_url, PHP_URL_HOST );
-		$s_host = parse_url( $site_url, PHP_URL_HOST );
-
-		return str_replace( $b_host, $s_host, $base_url );
+		return str_replace(
+			wp_parse_url( $base_url, PHP_URL_HOST ),
+			wp_parse_url( $site_url, PHP_URL_HOST ),
+			$base_url
+		);
 	}
 
 	/**
@@ -133,17 +136,20 @@ class Mlp_Copy_Attachments
 	 */
 	public function copy_attachments() {
 
-		if ( ! is_dir( $this->source_dir ) OR ! is_readable( $this->source_dir ) )
-			return FALSE;
+		if ( ! is_dir( $this->source_dir ) || ! is_readable( $this->source_dir ) ) {
+			return false;
+		}
 
 		$source_paths = $this->get_attachment_paths();
 
-		if ( empty ( $source_paths ) )
-			return FALSE;
+		if ( empty( $source_paths ) ) {
+			return false;
+		}
 
 		// $dir is a path relative to upload dir, $paths an array of paths relative to $dir
-		foreach ( $source_paths as $dir => $paths )
+		foreach ( $source_paths as $dir => $paths ) {
 			$this->copy_dir( $paths, "$this->source_dir/$dir", "$this->dest_dir/$dir" );
+		}
 
 		return $this->found_files;
 	}
@@ -156,16 +162,19 @@ class Mlp_Copy_Attachments
 	 * @param  string $dest_dir   Full target directory path
 	 * @return void
 	 */
-	private function copy_dir( Array $paths, $source_dir, $dest_dir ) {
+	private function copy_dir( array $paths, $source_dir, $dest_dir ) {
 
-		if ( ! is_dir( $source_dir ) )
+		if ( ! is_dir( $source_dir ) ) {
 			return;
+		}
 
-		if ( ! is_dir( $dest_dir ) and ! wp_mkdir_p( $dest_dir ) )
+		if ( ! is_dir( $dest_dir ) && ! wp_mkdir_p( $dest_dir ) ) {
 			return;
+		}
 
-		foreach ( $paths as $path )
+		foreach ( $paths as $path ) {
 			$this->copy_file( "$source_dir/$path", "$dest_dir/$path" );
+		}
 	}
 
 	/**
@@ -177,14 +186,16 @@ class Mlp_Copy_Attachments
 	 */
 	private function copy_file( $source, $dest ) {
 
-		if ( ! file_exists( $source ) )
+		if ( ! file_exists( $source ) ) {
 			return;
+		}
 
 		if ( ! file_exists( $dest ) ) {
 			$copied = copy( $source, $dest );
 
-			if ( $copied )
-				$this->found_files = TRUE;
+			if ( $copied ) {
+				$this->found_files = true;
+			}
 		}
 	}
 
@@ -203,15 +214,16 @@ class Mlp_Copy_Attachments
 
 		global $wpdb;
 
-		$out = array ();
+		$out = array();
 
 		$meta = $wpdb->get_results( "SELECT `meta_value`
 			FROM `$wpdb->postmeta`
 			WHERE `meta_key` = '_wp_attachment_metadata'"
 		);
 
-		foreach ( $meta as $data )
+		foreach ( $meta as $data ) {
 			$this->add_paths_for_file( $out, $data->meta_value );
+		}
 
 		restore_current_blog();
 
@@ -225,20 +237,23 @@ class Mlp_Copy_Attachments
 	 * @param  string $meta Data from SQL query against postmeta table.
 	 * @return void
 	 */
-	private function add_paths_for_file( Array &$list, $meta ) {
+	private function add_paths_for_file( array &$list, $meta ) {
 
 		$meta           = maybe_unserialize( $meta );
 
-		if ( empty ( $meta[ 'file' ] ) )
+		if ( empty( $meta['file'] ) ) {
 			return;
+		}
 
-		$dir             = dirname( $meta[ 'file' ] );
-		$list[ $dir ][ ] = basename( $meta[ 'file' ] );
+		$dir             = dirname( $meta['file'] );
+		$list[ $dir ][] = basename( $meta['file'] );
 
-		if ( empty ( $meta[ 'sizes' ] ) )
+		if ( empty( $meta['sizes'] ) ) {
 			return;
+		}
 
-		foreach ( $meta[ 'sizes' ] as $data )
-			$list[ $dir ][ ] = $data[ 'file' ];
+		foreach ( $meta['sizes'] as $data ) {
+			$list[ $dir ][] = $data['file'];
+		}
 	}
 }

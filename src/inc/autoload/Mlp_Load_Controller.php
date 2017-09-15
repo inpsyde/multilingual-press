@@ -57,15 +57,17 @@ class Mlp_Load_Controller {
 		$dir = dirname( __FILE__ );
 
 		// We need these classes in exactly this order
-		if ( ! interface_exists( 'Inpsyde_Autoload_Rule_Interface' ) )
+		if ( ! interface_exists( 'Inpsyde_Autoload_Rule_Interface' ) ) {
 			require "$dir/Inpsyde_Autoload_Rule_Interface.php";
-
-		foreach ( array ( 'Directory_Load', 'Autoload' ) as $class ) {
-			if ( ! class_exists( "Inpsyde_$class" ) )
-				require "$dir/Inpsyde_$class.php";
 		}
 
-		$this->loader = new Inpsyde_Autoload;
+		foreach ( array( 'Directory_Load', 'Autoload' ) as $class ) {
+			if ( ! class_exists( "Inpsyde_$class" ) ) {
+				require "$dir/Inpsyde_$class.php";
+			}
+		}
+
+		$this->loader = new Inpsyde_Autoload();
 		$this->load_defaults( $this->loader );
 	}
 
@@ -84,7 +86,8 @@ class Mlp_Load_Controller {
 
 		$dirs = glob( "$this->plugin_dir/*", GLOB_ONLYDIR );
 
-		foreach ( $dirs as $dir )
+		foreach ( $dirs as $dir ) {
 			$loader->add_rule( new Inpsyde_Directory_Load( $dir ) );
+		}
 	}
 }

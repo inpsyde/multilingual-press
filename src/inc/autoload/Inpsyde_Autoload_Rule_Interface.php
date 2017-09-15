@@ -15,8 +15,8 @@
  * @package    Inpsyde
  * @subpackage Autoload
  */
-interface Inpsyde_Autoload_Rule_Interface
-{
+interface Inpsyde_Autoload_Rule_Interface {
+
 	/**
 	 * Parse class/trait/interface name and load file.
 	 *

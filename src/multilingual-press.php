@@ -12,7 +12,7 @@
  * Network:     true
  */
 
-defined( 'ABSPATH' ) or die();
+defined( 'ABSPATH' ) || die();
 
 if ( ! class_exists( 'Multilingual_Press' ) ) {
 	require plugin_dir_path( __FILE__ ) . 'inc/Multilingual_Press.php';
@@ -73,7 +73,7 @@ function mlp_init() {
 			'text_domain_path' => 'Domain Path',
 			'plugin_uri'       => 'Plugin URI',
 			'plugin_name'      => 'Plugin Name',
-			'version'          => 'Version'
+			'version'          => 'Version',
 		)
 	);
 	foreach ( $headers as $name => $value ) {
@@ -108,7 +108,7 @@ function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_
 	);
 
 	if ( Mlp_Self_Check::PLUGIN_DEACTIVATED === $requirements_check ) {
-		return FALSE;
+		return false;
 	}
 
 	$data->set( 'site_relations', new Mlp_Site_Relations( $wpdb, 'mlp_site_relations' ) );
@@ -132,7 +132,7 @@ function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 /**
@@ -140,7 +140,7 @@ function mlp_pre_run_test( $pagenow, Inpsyde_Property_List_Interface $data, $wp_
  *
  * Add the following linge to your `wp-config.php` to enable this function:
  *
- *     const MULTILINGUALPRESS_DEBUG = TRUE;
+ *     const MULTILINGUALPRESS_DEBUG = true;
  *
  * @param string $message
  *
@@ -154,6 +154,7 @@ function mlp_debug( $message ) {
 
 	$date = date( 'H:m:s' );
 
+	// @codingStandardsIgnoreLine as this is a function specifically used when debugging.
 	error_log( "MultilingualPress: $date $message" );
 }
 

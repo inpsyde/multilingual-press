@@ -21,14 +21,14 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 *
 	 * @type array
 	 */
-	private $modules = array ();
+	private $modules = array();
 
 	/**
 	 * Activation status. Saved in option.
 	 *
 	 * @type array
 	 */
-	private $states = array ();
+	private $states = array();
 
 	/**
 	 * Constructor.
@@ -38,18 +38,18 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	public function __construct( $option_name ) {
 
 		$this->option_name = $option_name;
-		$this->states      = get_site_option( $option_name, array () );
+		$this->states      = get_site_option( $option_name, array() );
 	}
 
 	/**
 	 * Save option to database.
 	 *
-	 * @return bool TRUE if saving was successful, FALSE if not.
+	 * @return bool true if saving was successful, false if not.
 	 */
 	public function save() {
 
 		$return       = update_site_option( $this->option_name, $this->states );
-		$this->states = get_site_option( $this->option_name, array () );
+		$this->states = get_site_option( $this->option_name, array() );
 
 		return $return;
 	}
@@ -58,11 +58,11 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 * Register a module.
 	 *
 	 * @param  array $module Required: slug, description and display_name
-	 * @return bool TRUE if the module is active, FALSE if it isn't.
+	 * @return bool true if the module is active, false if it isn't.
 	 */
-	public function register( Array $module ) {
+	public function register( array $module ) {
 
-		$slug = $module[ 'slug' ];
+		$slug = $module['slug'];
 
 		if ( ! isset( $this->states[ $slug ] ) ) {
 			$state = 'off';
@@ -73,7 +73,7 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 			$this->save();
 		}
 
-		$module[ 'state' ] = $this->states[ $slug ];
+		$module['state'] = $this->states[ $slug ];
 
 		$this->modules[ $slug ] = $module;
 
@@ -88,12 +88,13 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function unregister( $slug ) {
 
-		if ( ! isset ( $this->modules[ $slug ] ) )
-			return FALSE;
+		if ( ! isset( $this->modules[ $slug ] ) ) {
+			return false;
+		}
 
-		unset ( $this->modules[ $slug ] );
+		unset( $this->modules[ $slug ] );
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -104,8 +105,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function is_active( $slug ) {
 
-		if ( ! isset ( $this->states[ $slug ] ) )
-			return FALSE;
+		if ( ! isset( $this->states[ $slug ] ) ) {
+			return false;
+		}
 
 		return 'on' === $this->states[ $slug ];
 	}
@@ -144,8 +146,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 
 		$this->modules[ $slug ][ $key ] = $value;
 
-		if ( 'state' === $key )
+		if ( 'state' === $key ) {
 			$this->states[ $slug ] = $value;
+		}
 
 		return $this->modules[ $slug ];
 	}
@@ -158,8 +161,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function get_modules( $status = 'all' ) {
 
-		if ( 'all' === $status )
+		if ( 'all' === $status ) {
 			return $this->modules;
+		}
 
 		// Filter modules by state
 		$find = 'active' === $status ? 'on' : 'off';
@@ -173,11 +177,12 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	private function get_modules_by_status( $status ) {
 
-		$out  = array ();
+		$out  = array();
 
 		foreach ( $this->modules as $slug => $module ) {
-			if ( $this->states[ $slug ] === $status )
+			if ( $this->states[ $slug ] === $status ) {
 				$out[ $slug ] = $module;
+			}
 		}
 
 		return $out;
@@ -191,8 +196,9 @@ class Mlp_Module_Manager implements Mlp_Module_Manager_Interface {
 	 */
 	public function get_module( $slug ) {
 
-		if ( ! isset ( $this->modules[ $slug ] ) )
-			return array ();
+		if ( ! isset( $this->modules[ $slug ] ) ) {
+			return array();
+		}
 
 		return $this->modules[ $slug ];
 	}

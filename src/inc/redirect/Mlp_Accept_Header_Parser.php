@@ -20,7 +20,7 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 	/**
 	 * @param Mlp_Accept_Header_Validator_Interface $validator
 	 */
-	public function __construct( Mlp_Accept_Header_Validator_Interface $validator = NULL ) {
+	public function __construct( Mlp_Accept_Header_Validator_Interface $validator = null ) {
 
 		$this->validator = $validator;
 	}
@@ -33,18 +33,20 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 
 		$accept_header = $this->remove_comment( $accept_header );
 
-		if ( '' === $accept_header )
+		if ( '' === $accept_header ) {
 			return array();
+		}
 
-		$out   = array ();
+		$out   = array();
 		$parts = $this->separate_values( $accept_header );
 
 		foreach ( $parts as $part ) {
 
 			$separated = $this->separate_priority( $part );
 
-			if ( empty ( $separated ) )
+			if ( empty( $separated ) ) {
 				continue;
+			}
 
 			list ( $key, $priority ) = $separated;
 
@@ -60,26 +62,28 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 	 */
 	private function separate_priority( $part ) {
 
-		if ( FALSE === strpos( $part, ';' ) ) {
+		if ( false === strpos( $part, ';' ) ) {
 
-			if ( ! $this->validator->is_valid( $part ) )
+			if ( ! $this->validator->is_valid( $part ) ) {
 				return array();
+			}
 
-			return array ( $part, 1 );
+			return array( $part, 1 );
 		}
 
 		// string with quality value like 'en;q=0.8'
 		$key = strtok( $part, ';' );
 
-		if ( ! $this->validator->is_valid( $key ) )
-			return array ();
+		if ( ! $this->validator->is_valid( $key ) ) {
+			return array();
+		}
 
 		strtok( '=' );
 
 		$priority = strtok( ';' );
 		$priority = $this->sanitize_priority( $priority );
 
-		return array ( $key, $priority );
+		return array( $key, $priority );
 	}
 
 	/**
@@ -120,12 +124,12 @@ class Mlp_Accept_Header_Parser implements Mlp_Accept_Header_Parser_Interface {
 	 */
 	private function remove_comment( $header ) {
 
-		$unescape_delimiter = FALSE;
+		$unescape_delimiter = false;
 
-		if ( FALSE !== strpos( $header, '~' ) ) {
+		if ( false !== strpos( $header, '~' ) ) {
 
 			$header      = str_replace( '~', '\~', $header );
-			$unescape_delimiter = TRUE;
+			$unescape_delimiter = true;
 		}
 
 		$no_comment = preg_replace( '~\([^)]*\)~', '', $header );

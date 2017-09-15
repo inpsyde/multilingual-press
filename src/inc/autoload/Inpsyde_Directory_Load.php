@@ -13,14 +13,14 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 	 *
 	 * @var string
 	 */
-	private $dir ='';
+	private $dir = '';
 
 	/**
 	 * List of found classes.
 	 *
 	 * @var array
 	 */
-	private $found = array ();
+	private $found = array();
 
 	/**
 	 * Constructor.
@@ -39,15 +39,17 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 	 */
 	public function load( $name ) {
 
-		if ( empty ( $this->found ) )
+		if ( empty( $this->found ) ) {
 			$this->found = $this->read_files();
+		}
 
-		if ( ! isset ( $this->found[ $name ] ) )
-			return FALSE;
+		if ( ! isset( $this->found[ $name ] ) ) {
+			return false;
+		}
 
 		require $this->dir . "/$name.php";
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -61,14 +63,17 @@ class Inpsyde_Directory_Load implements Inpsyde_Autoload_Rule_Interface {
 		$files  = glob( $this->dir . '/*.php' );
 
 		// Catch empty values to prevent multiple attempts to read the directory.
-		if ( FALSE === $files )
-			return array ( 'error' );
+		if ( false === $files ) {
+			return array( 'error' );
+		}
 
-		if ( array () === $files )
-			return array ( 'empty' );
+		if ( array() === $files ) {
+			return array( 'empty' );
+		}
 
-		foreach ( $files as $file )
+		foreach ( $files as $file ) {
 			$return[ basename( $file, '.php' ) ] = 1;
+		}
 
 		return $return;
 	}

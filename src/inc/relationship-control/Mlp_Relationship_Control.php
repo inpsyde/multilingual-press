@@ -39,23 +39,26 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 
 		$this->data = new Mlp_Relationship_Control_Data();
 
-		if ( $this->is_ajax() ) {
-			$this->set_up_ajax();
+		$action = $this->get_ajax_action();
+		if ( $action ) {
+			$this->set_up_ajax( $action );
 		} else {
-			add_action( 'mlp_translation_meta_box_bottom', array ( $this, 'set_up_meta_box_handlers' ), 200, 3 );
+			add_action( 'mlp_translation_meta_box_bottom', array( $this, 'set_up_meta_box_handlers' ), 200, 3 );
 		}
 	}
 
 	/**
 	 * Register AJAX callbacks.
 	 *
+	 * @param string $action AJAX action.
+	 *
 	 * @return void
 	 */
-	public function set_up_ajax() {
+	public function set_up_ajax( $action ) {
 
-		$callback_type = "{$this->prefix}_remote_post_search" === $_REQUEST['action'] ? 'search' : 'reconnect';
+		$callback_type = "{$this->prefix}_remote_post_search" === $action ? 'search' : 'reconnect';
 
-		add_action( "wp_ajax_{$_REQUEST['action']}", array( $this, "ajax_{$callback_type}_callback" ) );
+		add_action( "wp_ajax_{$action}", array( $this, "ajax_{$callback_type}_callback" ) );
 	}
 
 	/**
@@ -78,19 +81,14 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	 */
 	public function ajax_reconnect_callback() {
 
+		$action = (string) filter_input( INPUT_POST, 'action' );
 		$start = strlen( $this->prefix ) + 1;
-		$func = substr( $_REQUEST['action'], $start ) . '_post';
+		$func = substr( $action, $start ) . '_post';
 
 		$reconnect = new Mlp_Relationship_Changer( $this->plugin );
-		$result = $reconnect->$func();
+		$reconnect->$func();
 
 		status_header( 200 );
-
-		// Never visible for the user, for debugging only.
-		if ( is_scalar( $result ) )
-			print $result;
-		else
-			print '<pre>' . print_r( $result, 1 ) . '</pre>';
 
 		mlp_exit();
 	}
@@ -107,23 +105,22 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	 */
 	public function set_up_meta_box_handlers(
 		WP_Post $post,
-		        $remote_site_id,
+				$remote_site_id,
 		WP_Post $remote_post
 	) {
 
 		global $pagenow;
 
-		if ( 'post-new.php' === $pagenow )
+		if ( 'post-new.php' === $pagenow ) {
 			return; // maybe later, for now, we work on existing posts only
+		}
 
-		$this->data->set_ids(
-		   array (
-			   'source_post_id' => $post->ID,
-			   'source_site_id' => get_current_blog_id(),
-			   'remote_site_id' => $remote_site_id,
-			   'remote_post_id' => $remote_post->ID
-		   )
-		);
+		$this->data->set_ids( array(
+			'source_post_id' => $post->ID,
+			'source_site_id' => get_current_blog_id(),
+			'remote_site_id' => $remote_site_id,
+			'remote_post_id' => $remote_post->ID,
+		) );
 		$view = new Mlp_Relationship_Control_Meta_Box_View( $this->data, $this );
 		$view->render();
 	}
@@ -142,20 +139,21 @@ class Mlp_Relationship_Control implements Mlp_Updatable {
 	}
 
 	/**
-	 * Check if this is our AJAX request.
+	 * Check if this is our AJAX request and returns the action.
 	 *
-	 * @return bool
+	 * @return string
 	 */
-	private function is_ajax() {
+	private function get_ajax_action() {
 
 		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
-			return false;
+			return '';
 		}
 
-		if ( empty( $_REQUEST['action'] ) ) {
-			return false;
+		$action = (string) filter_input( INPUT_POST, 'action' );
+		if ( '' === $action ) {
+			return '';
 		}
 
-		return 0 === strpos( $_REQUEST['action'], $this->prefix );
+		return 0 === strpos( $action, $this->prefix ) ? $action : '';
 	}
 }

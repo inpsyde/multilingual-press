@@ -191,14 +191,17 @@ class Mlp_Self_Check {
 		?>
 		<div class="notice notice-warning">
 			<p>
-				<strong><?php _e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
+				<strong><?php esc_html_e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
 				<?php
 				/* translators: %s: current PHP version */
 				$message = __(
 					'With the upcoming major release, MultilingualPress will be requiring <strong>PHP version 5.4.0</strong> or higher. Currently, you are running <strong>PHP version %s</strong>. Please contact your hoster and update PHP to version 5.4.0 or higher.',
 					'multilingual-press'
 				);
-				printf( $message, PHP_VERSION );
+				$tags    = array(
+					'strong' => array(),
+				);
+				echo wp_kses( sprintf( $message, PHP_VERSION ), $tags );
 				?>
 			</p>
 		</div>
@@ -218,7 +221,7 @@ class Mlp_Self_Check {
 		?>
 		<div class="notice notice-warning">
 			<p>
-				<strong><?php _e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
+				<strong><?php esc_html_e( 'MultilingualPress Information', 'multilingual-pres' ); ?></strong><br>
 				<?php $this->render_mlp_3_message(); ?>
 			</p>
 		</div>
@@ -268,7 +271,10 @@ class Mlp_Self_Check {
 			'There is a new version of MultilingualPress available. This version, however, requires <strong>PHP version 5.4.0</strong> or higher. Currently, you are running <strong>PHP version %s</strong>. Please contact your hoster and update PHP to version 5.4.0 or higher.',
 			'multilingual-press'
 		);
-		printf( $message, PHP_VERSION );
+		$tags    = array(
+			'strong' => array(),
+		);
+		echo wp_kses( sprintf( $message, PHP_VERSION ), $tags );
 	}
 
 	/**
@@ -287,7 +293,7 @@ class Mlp_Self_Check {
 
 		$mlp_settings = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty ( $mlp_settings ) ) {
+		if ( empty( $mlp_settings ) ) {
 			return self::NEEDS_INSTALLATION;
 		}
 
@@ -302,11 +308,11 @@ class Mlp_Self_Check {
 	private function is_context_valid() {
 
 		if ( ! is_admin() ) {
-			return FALSE;
+			return false;
 		}
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			return FALSE;
+			return false;
 		}
 
 		return 'plugins.php' === $this->pagenow;

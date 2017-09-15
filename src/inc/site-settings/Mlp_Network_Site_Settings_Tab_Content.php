@@ -65,7 +65,7 @@ class Mlp_Network_Site_Settings_Tab_Content {
 		?>
 		<form action="<?php echo esc_attr( $action ); ?>" method="post">
 			<input type="hidden" name="action" value="<?php echo esc_attr( $name ); ?>" />
-			<input type="hidden" name="id" value="<?php echo esc_attr($this->blog_id); ?>" />
+			<input type="hidden" name="id" value="<?php echo esc_attr( $this->blog_id ); ?>" />
 			<?php
 			wp_nonce_field(
 				$this->page_data->get_nonce_action(),
@@ -73,7 +73,9 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			);
 
 			$siteoption = get_site_option( 'inpsyde_multilingual', array() );
-			$languages  = $this->language_api->get_db()->get_items( array( 'page' => -1 )  );
+			$languages  = $this->language_api->get_db()->get_items( array(
+				'page' => -1,
+			)  );
 
 			echo '<table class="form-table mlp-admin-settings-table">';
 			$this->show_language_options( $siteoption, $languages );
@@ -114,13 +116,11 @@ class Mlp_Network_Site_Settings_Tab_Content {
 	 */
 	private function show_language_options( $site_option, $languages ) {
 
-		// Custom names are now set in the Language Manager
-		//$lang_title = isset( $siteoption[ $this->blog_id ][ 'text' ] ) ? stripslashes( $siteoption[ $this->blog_id ][ 'text' ] ) : '';
-		$selected        = isset( $site_option[ $this->blog_id ][ 'lang' ] ) ? $site_option[ $this->blog_id ][ 'lang' ]	: '';
+		$selected        = isset( $site_option[ $this->blog_id ]['lang'] ) ? $site_option[ $this->blog_id ]['lang'] : '';
 		$blogoption_flag = get_blog_option( $this->blog_id, 'inpsyde_multilingual_flag_url' );
 
 		// Sanitize lang title
-		$lang_title = isset( $site_option[ $this->blog_id ][ 'text' ] ) ? stripslashes( $site_option[ $this->blog_id ][ 'text' ] ) : '';
+		$lang_title = isset( $site_option[ $this->blog_id ]['text'] ) ? stripslashes( $site_option[ $this->blog_id ]['text'] ) : '';
 		?>
 		<tr class="form-field">
 			<th scope="row">
@@ -139,13 +139,15 @@ class Mlp_Network_Site_Settings_Tab_Content {
 						$language_code = str_replace( '-', '_', $language->http_name );
 
 						// missing HTTP code
-						if ( empty ( $language_code ) ) {
+						if ( empty( $language_code ) ) {
 							continue;
 						}
-
-						$language_name = esc_html( $this->get_language_name( $language ) );
-						$select        = selected( $selected, $language_code, FALSE );
-						echo '<option value="' . esc_attr( $language_code ) . '" ' . $select . '>' . esc_html( $language_name ) . '</option>';
+						?>
+						<option value="<?php echo esc_attr( $language_code ); ?>"
+							<?php selected( $selected, $language_code ); ?>>
+							<?php echo esc_html( $this->get_language_name( $language ) ); ?>
+						</option>
+						<?php
 					}
 					?>
 				</select>
@@ -163,8 +165,12 @@ class Mlp_Network_Site_Settings_Tab_Content {
 				<input class="regular-text" type="text" id="inpsyde_multilingual_text" name="inpsyde_multilingual_text"
 					value="<?php echo esc_attr( $lang_title ); ?>" />
 				<p class="description">
-					<?php esc_html_e( 'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
-					                  'multilingual-press' ); ?>
+					<?php
+					esc_html_e(
+						'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
+						'multilingual-press'
+					);
+					?>
 				</p>
 			</td>
 		</tr>
@@ -198,11 +204,13 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 		$parts = array();
 
-		if ( ! empty ( $language->english_name ) )
+		if ( ! empty( $language->english_name ) ) {
 			$parts[] = $language->english_name;
+		}
 
-		if ( ! empty ( $language->native_name ) )
+		if ( ! empty( $language->native_name ) ) {
 			$parts[] = $language->native_name;
+		}
 
 		$parts = array_unique( $parts );
 
@@ -219,9 +227,9 @@ class Mlp_Network_Site_Settings_Tab_Content {
 			return;
 		}
 
-		unset ( $site_option[ $this->blog_id ] );
+		unset( $site_option[ $this->blog_id ] );
 
-		if ( empty ( $site_option ) ) {
+		if ( empty( $site_option ) ) {
 			return;
 		}
 
@@ -240,13 +248,13 @@ class Mlp_Network_Site_Settings_Tab_Content {
 
 					// Get current settings
 					$related_blogs = $this->relations->get_related_sites( $this->blog_id );
-					$checked       = checked( TRUE, in_array( $blog_id, $related_blogs ), FALSE );
+					$checked       = checked( true, in_array( $blog_id, $related_blogs, true ), false );
 					$id            = 'related_blog_' . $blog_id;
 					?>
 					<p>
 						<label for="<?php echo esc_attr( $id ); ?>">
 							<input id="<?php echo esc_attr( $id ); ?>" <?php echo esc_attr( $checked ); ?>
-								type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $blog_id ) ?>" />
+								type="checkbox" name="related_blogs[]" value="<?php echo esc_attr( $blog_id ); ?>" />
 							<?php echo esc_html( $blog_name ); ?>
 							-
 							<?php echo esc_html( Mlp_Helpers::get_blog_language( $blog_id, false ) ); ?>

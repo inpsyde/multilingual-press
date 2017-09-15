@@ -29,7 +29,7 @@ class Mlp_Translation_Metabox_View {
 	 * @param array   $meta_box
 	 * @return void
 	 */
-	public function render( WP_Post $post, Array $meta_box ) {
+	public function render( WP_Post $post, array $meta_box ) {
 
 		wp_nonce_field( $this->nonce->get_action(), $this->nonce->get_name() );
 		?>

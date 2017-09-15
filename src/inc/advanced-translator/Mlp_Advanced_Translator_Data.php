@@ -62,7 +62,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		$this->relations = $relations;
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-			$this->post_request_data = $_POST;
+			$this->post_request_data = (array) filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
 		}
 	}
 
@@ -144,7 +144,9 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 		do_action( 'mlp_before_post_synchronization', $this->save_context );
 
 		foreach ( $this->post_request_data[ $this->name_base ] as $remote_blog_id => $post_data ) {
-			if ( ! blog_exists( $remote_blog_id ) || ! in_array( $remote_blog_id, $related_blogs ) ) {
+			$remote_blog_id = (int) $remote_blog_id;
+
+			if ( ! blog_exists( $remote_blog_id ) || ! in_array( $remote_blog_id, $related_blogs, true ) ) {
 				continue;
 			}
 
@@ -245,14 +247,14 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 * @param  int      $new_id
 	 * @param  stdClass $thumb_data
 	 *
-	 * @return bool     TRUE on success, FALSE when the image could not be copied.
+	 * @return bool     true on success, false when the image could not be copied.
 	 */
 	private function copy_thumb( $new_id, stdClass $thumb_data ) {
 
 		// Prepare and Copy the image
 		$filedir = wp_upload_dir();
 
-		if ( ! is_dir( $filedir['path'] ) and ! wp_mkdir_p( $filedir['path'] ) ) {
+		if ( ! is_dir( $filedir['path'] ) && ! wp_mkdir_p( $filedir['path'] ) ) {
 			// failed to make the directory
 			return false;
 		}
@@ -444,7 +446,9 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 				continue;
 			}
 
-			$terms = get_terms( $taxonomy, array( 'hide_empty' => false ) );
+			$terms = get_terms( $taxonomy, array(
+				'hide_empty' => false,
+			) );
 
 			// we do not allow creating new terms
 			if ( empty( $terms ) ) {
@@ -477,7 +481,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 * @param  int   $new_id
 	 * @param  array $tax_data
 	 *
-	 * @return bool TRUE on complete success, FALSE when there were errors.
+	 * @return bool true on complete success, false when there were errors.
 	 */
 	private function set_remote_tax_terms( $new_id, array $tax_data ) {
 
@@ -519,11 +523,11 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function get_remote_post_title( array $data ) {
 
-		if ( isset ( $data['title'] ) ) {
+		if ( isset( $data['title'] ) ) {
 			return $data['title'];
 		}
 
-		if ( isset ( $this->post_request_data['post_title'] ) ) {
+		if ( isset( $this->post_request_data['post_title'] ) ) {
 			return (string) $this->post_request_data['post_title'];
 		}
 
@@ -539,11 +543,11 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function get_remote_post_name( array $data ) {
 
-		if ( isset ( $data['name'] ) ) {
+		if ( isset( $data['name'] ) ) {
 			return $data['name'];
 		}
 
-		if ( isset ( $this->post_request_data['post_name'] ) ) {
+		if ( isset( $this->post_request_data['post_name'] ) ) {
 			return (string) $this->post_request_data['post_name'];
 		}
 
@@ -559,11 +563,11 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 	 */
 	private function get_remote_post_content( array $data ) {
 
-		if ( isset ( $data['content'] ) ) {
+		if ( isset( $data['content'] ) ) {
 			return $data['content'];
 		}
 
-		if ( isset ( $this->post_request_data['post_content'] ) ) {
+		if ( isset( $this->post_request_data['post_content'] ) ) {
 			return (string) $this->post_request_data['post_content'];
 		}
 

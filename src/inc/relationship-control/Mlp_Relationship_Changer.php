@@ -71,8 +71,9 @@ class Mlp_Relationship_Changer {
 
 		restore_current_blog();
 
-		if ( ! $source_post )
+		if ( ! $source_post ) {
 			return 'source not found';
+		}
 
 		$save_context = array(
 			'source_blog'    => $this->source_site_id,
@@ -87,23 +88,24 @@ class Mlp_Relationship_Changer {
 		switch_to_blog( $this->remote_site_id );
 
 		$post_id = wp_insert_post(
-			array (
+			array(
 				'post_type'   => $source_post->post_type,
 				'post_status' => 'draft',
-				'post_title'  => $this->new_post_title
+				'post_title'  => $this->new_post_title,
 			),
-			TRUE
+			true
 		);
 
 		restore_current_blog();
 
-		$save_context[ 'target_blog_id' ] = $this->remote_site_id;
+		$save_context['target_blog_id'] = $this->remote_site_id;
 
 		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
 		do_action( 'mlp_after_post_synchronization', $save_context );
 
-		if ( is_wp_error( $post_id ) )
+		if ( is_wp_error( $post_id ) ) {
 			return $post_id->get_error_message();
+		}
 
 		$this->remote_post_id = $post_id;
 
@@ -134,17 +136,23 @@ class Mlp_Relationship_Changer {
 	 */
 	public function get_real_post_type( WP_Post $post ) {
 
-		if ( 'revision' !== $post->post_type )
+		if ( 'revision' !== $post->post_type ) {
 			return $post->post_type;
+		}
 
-		if ( empty ( $_POST[ 'post_type' ] ) )
+		$post_type = filter_input( INPUT_POST, 'post_type' );
+
+		if ( null === $post_type || '' === $post_type ) {
 			return $post->post_type;
+		}
 
-		if ( 'revision' === $_POST[ 'post_type' ] )
+		if ( 'revision' === $post_type ) {
 			return $post->post_type;
+		}
 
-		if ( is_string( $_POST[ 'post_type' ] ) )
-			return $_POST[ 'post_type' ]; // auto-draft
+		if ( is_string( $post_type ) ) {
+			return $post_type; // auto-draft
+		}
 
 		return $post->post_type;
 	}
@@ -160,11 +168,12 @@ class Mlp_Relationship_Changer {
 	 */
 	public function get_real_post_id( $post_id ) {
 
-		if ( ! empty( $_POST[ 'post_ID' ] ) ) {
-			return (int) $_POST[ 'post_ID' ];
+		$real_post_id = filter_input( INPUT_POST, 'post_ID' );
+		if ( null === $real_post_id || '0' === $real_post_id ) {
+			return $post_id;
 		}
 
-		return $post_id;
+		return (int) $real_post_id;
 	}
 
 	/**
@@ -263,7 +272,7 @@ class Mlp_Relationship_Changer {
 	 */
 	private function prepare_values() {
 
-		$find = array (
+		$find = array(
 			'source_post_id',
 			'source_site_id',
 			'remote_post_id',
@@ -271,13 +280,16 @@ class Mlp_Relationship_Changer {
 			'new_post_title',
 		);
 
-		foreach ( $find as $value ) {
-			if ( ! empty ( $_REQUEST[ $value ] ) ) {
+		foreach ( $find as $name ) {
+			$value = filter_input( INPUT_POST, $name );
+			if ( null === $value ) {
+				continue;
+			}
 
-				if ( 'new_post_title' === $value )
-					$this->$value = (string) $_REQUEST[ $value ];
-				else
-					$this->$value = (int) $_REQUEST[ $value ];
+			if ( 'new_post_title' === $name ) {
+				$this->$name = (string) $value;
+			} else {
+				$this->$name = (int) $value;
 			}
 		}
 	}

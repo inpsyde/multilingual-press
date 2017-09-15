@@ -15,23 +15,23 @@ interface Mlp_Data_Access {
 
 	/**
 	 *
-	 * @param   Array $params array(
+	 * @param   array $params array(
 	 *                          'page'      => Integer      // -1 to load all
-	 *                          'fields'    => Array,       // Array with fields. Empty to load all
-	 *                          'where'     => Array(
-	 *                              Array(
+	 *                          'fields'    => array,       // Array with fields. Empty to load all
+	 *                          'where'     => array(
+	 *                              array(
 	 *                                  'field'     => String
 	 *                                  'search'    => String
 	 *                                  'compare'   => String       //  '!=', '>', '>=', '<', or '<='. Default value is '='.
 	 *                          ),
 	 *                          'order_by'  => array(
-	 *                              Array(
+	 *                              array(
 	 *                                  'field' => String,
 	 *                                  'order' => String           // ASC|DESC
 	 *                              ),
 	 *                        )
 	 * @param   String $type
-	 * @return  Array $results
+	 * @return  array $results
 	 */
 	public function get_items( array $params = array(), $type = OBJECT_K );
 
@@ -41,13 +41,13 @@ interface Mlp_Data_Access {
 	 * @param string $where_format
 	 * @return array
 	 */
-	public function update_items_by_id( Array $items, $field_format = '%s', $where_format = '%d' );
+	public function update_items_by_id( array $items, $field_format = '%s', $where_format = '%d' );
 
 	/**
 	 * @param array $params
 	 * @return mixed
 	 */
-	public function insert_item( Array $params );
+	public function insert_item( array $params );
 
 	/**
 	 * @return int

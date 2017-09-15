@@ -49,7 +49,7 @@ class Mlp_Network_Site_Settings {
 
 		$this->config = $config;
 
-		$this->marker = "<!--" . $config->get_param_value() . "-->";
+		$this->marker = '<!-- ' . esc_html( $config->get_param_value() ) . ' -->';
 
 		$this->targets[] = $config->get_param_value();
 
@@ -75,10 +75,12 @@ class Mlp_Network_Site_Settings {
 			return;
 		}
 
+		// @codingStandardsIgnoreLine as rendering an HTML comment is not possible with esc_html() or wp_kses_*().
 		echo $this->marker;
 
 		$this->watcher->update( 'create_tab_content' );
 
+		// @codingStandardsIgnoreLine as rendering an HTML comment is not possible with esc_html() or wp_kses_*().
 		echo $this->marker;
 	}
 
@@ -152,7 +154,10 @@ class Mlp_Network_Site_Settings {
 	 */
 	private function get_nav_link() {
 
-		$site_id = empty( $_GET['id'] ) ? SITE_ID_CURRENT_SITE : (int) $_GET['id'];
+		$site_id = absint( filter_input( INPUT_GET, 'id' ) );
+		if ( ! $site_id ) {
+			$site_id = SITE_ID_CURRENT_SITE;
+		}
 
 		$name = $this->config->get_param_name();
 
@@ -180,16 +185,17 @@ class Mlp_Network_Site_Settings {
 
 		$name = $this->config->get_param_name();
 
-		if ( ! isset( $_GET[ $name ] ) ) {
+		$pagenow = (string) filter_input( INPUT_GET, $name );
+		if ( '' === $pagenow ) {
 			return;
 		}
 
 		$value = $this->config->get_param_value();
-
-		if ( $value !== $_GET[ $name ] ) {
+		if ( $value !== $pagenow ) {
 			return;
 		}
 
+		// @codingStandardsIgnoreLine as we really DO want to override the global.
 		$GLOBALS['pagenow'] = $value;
 	}
 }

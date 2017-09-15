@@ -37,8 +37,9 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 		$this->wpdb    = $wpdb;
 		$this->site_id = $this->prepare_site_id( $site_id );
 
-		if ( ! function_exists( 'wp_get_db_schema' ) )
+		if ( ! function_exists( 'wp_get_db_schema' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/schema.php';
+		}
 	}
 
 	/**
@@ -51,8 +52,9 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 		$cache_key = 'network-core';
 		$cache     = wp_cache_get( $cache_key, $this->cache_group );
 
-		if ( $cache )
+		if ( $cache ) {
 			return $cache;
+		}
 
 		$schema = wp_get_db_schema( 'global' );
 		$tables = $this->extract_names_from_schema( $schema, $this->wpdb->base_prefix );
@@ -77,11 +79,13 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 		$cache     = wp_cache_get( $cache_key, $this->cache_group );
 		$exclude   = array();
 
-		if ( $cache )
+		if ( $cache ) {
 			return $cache;
+		}
 
-		if ( $this->wpdb->base_prefix === $this->wpdb->prefix )
+		if ( $this->wpdb->base_prefix === $this->wpdb->prefix ) {
 			$exclude = $this->get_core_network_tables();
+		}
 
 		$tables = $this->query_information_schema( $exclude );
 
@@ -96,23 +100,26 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 * @param  bool $do_prefix Should the table names be prefixed?
 	 * @return array
 	 */
-	public function get_core_site_tables( $do_prefix = TRUE ) {
+	public function get_core_site_tables( $do_prefix = true ) {
 
 		$cache_key = "site-core-{$this->site_id}-"
 			. ( $do_prefix ? 1 : 0 );
 		$cache     = wp_cache_get( $cache_key, $this->cache_group );
 
-		if ( $cache )
+		if ( $cache ) {
 			return $cache;
+		}
 
-		if ( $this->site_id !== get_current_blog_id() )
+		if ( get_current_blog_id() !== $this->site_id ) {
 			switch_to_blog( $this->site_id );
+		}
 
 		$schema = wp_get_db_schema( 'blog', $this->site_id );
 		$tables = $this->extract_names_from_schema( $schema, $this->wpdb->prefix );
 
-		if ( $do_prefix )
+		if ( $do_prefix ) {
 			$tables = $this->prefix_table_names( $tables, $this->wpdb->prefix );
+		}
 
 		restore_current_blog();
 
@@ -131,14 +138,16 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 		$cache_key = "site-custom-{$this->site_id}";
 		$cache     = wp_cache_get( $cache_key, $this->cache_group );
 
-		if ( $cache )
+		if ( $cache ) {
 			return $cache;
+		}
 
 		$exclude = $this->get_core_site_tables();
 		$tables  = $this->query_information_schema( $exclude );
 
-		if ( $this->wpdb->base_prefix === $this->wpdb->prefix )
+		if ( $this->wpdb->base_prefix === $this->wpdb->prefix ) {
 			$tables = array_diff( $tables, $this->get_core_network_tables() );
+		}
 
 		wp_cache_set( $cache_key, $tables, $this->cache_group );
 
@@ -153,8 +162,9 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 */
 	private function prepare_site_id( $site_id ) {
 
-		if ( 0 === $site_id )
+		if ( 0 === $site_id ) {
 			return get_current_blog_id();
+		}
 
 		return $site_id;
 	}
@@ -163,7 +173,7 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 * @param array $exclude
 	 * @return array
 	 */
-	private function query_information_schema( Array $exclude = array() ) {
+	private function query_information_schema( array $exclude = array() ) {
 
 		$sql = $this->get_information_schema_sql( $exclude );
 
@@ -181,21 +191,22 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	private function extract_names_from_schema( $schema, $prefix = '' ) {
 
 		$matches = array();
-		$pattern = '~CREATE TABLE '. $prefix . '(.*) \(~';
+		$pattern = '~CREATE TABLE ' . $prefix . '(.*) \(~';
 
 		preg_match_all( $pattern, $schema, $matches );
 
-		if ( empty ( $matches[ 1 ] ) )
+		if ( empty( $matches[1] ) ) {
 			return array();
+		}
 
-		return $matches[ 1 ];
+		return $matches[1];
 	}
 
 	/**
 	 * @param array $tables
 	 * @return string
 	 */
-	private function get_exclude_sql( Array $tables ) {
+	private function get_exclude_sql( array $tables ) {
 
 		$joined = join( "','", $tables );
 
@@ -209,10 +220,11 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 * @param  string $prefix
 	 * @return array
 	 */
-	private function prefix_table_names( Array $tables, $prefix ) {
+	private function prefix_table_names( array $tables, $prefix ) {
 
-		foreach ( $tables as $key => $name )
+		foreach ( $tables as $key => $name ) {
 			$tables[ $key ] = $prefix . $name;
+		}
 
 		return $tables;
 	}
@@ -221,14 +233,15 @@ class Mlp_Table_Names implements Mlp_Table_Names_Interface {
 	 * @param array $exclude
 	 * @return string
 	 */
-	private function get_information_schema_sql( Array $exclude = array() ) {
+	private function get_information_schema_sql( array $exclude = array() ) {
 		$sql = "
 			SELECT TABLE_NAME
 			FROM information_schema.tables
 			WHERE TABLE_NAME REGEXP '{$this->wpdb->prefix}[^0-9]'";
 
-		if ( ! empty ( $exclude ) )
+		if ( ! empty( $exclude ) ) {
 			$sql .= $this->get_exclude_sql( $exclude );
+		}
 
 		return $sql;
 	}

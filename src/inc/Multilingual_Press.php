@@ -44,15 +44,16 @@ class Multilingual_Press {
 	 * @param Inpsyde_Property_List_Interface $data
 	 * @param wpdb $wpdb
 	 */
-	public function __construct( Inpsyde_Property_List_Interface $data, wpdb $wpdb = NULL ) {
+	public function __construct( Inpsyde_Property_List_Interface $data, wpdb $wpdb = null ) {
 
 		/* Someone has an old Free version active and activates the new Pro on
 		 * top of that. The old Free version tries now to create an instance of
 		 * this new version of the class, and the second parameter is missing.
 		 * This is where we stop.
 		 */
-		if ( NULL === $wpdb )
+		if ( null === $wpdb ) {
 			return;
+		}
 
 		$this->plugin_data = $data;
 		$this->wpdb        = $wpdb;
@@ -61,8 +62,8 @@ class Multilingual_Press {
 	/**
 	 * Initial setup handler.
 	 *
-	 * @global	$wpdb wpdb WordPress Database Wrapper
-	 * @global	$pagenow string Current Page Wrapper
+	 * @global  $wpdb wpdb WordPress Database Wrapper
+	 * @global  $pagenow string Current Page Wrapper
 	 * @return void
 	 */
 	public function setup() {
@@ -74,11 +75,12 @@ class Multilingual_Press {
 
 		require 'functions.php';
 
-		if ( ! $this->is_active_site() )
+		if ( ! $this->is_active_site() ) {
 			return;
+		}
 
 		// Hooks and filters
-		add_action( 'inpsyde_mlp_loaded', array ( $this, 'load_plugin_textdomain' ), 1 );
+		add_action( 'inpsyde_mlp_loaded', array( $this, 'load_plugin_textdomain' ), 1 );
 
 		// Load modules
 		$this->load_features();
@@ -92,12 +94,12 @@ class Multilingual_Press {
 		do_action( 'inpsyde_mlp_init', $this->plugin_data, $this->wpdb );
 
 		// Cleanup upon blog delete
-		add_filter( 'delete_blog', array ( $this, 'delete_blog' ), 10, 2 );
+		add_filter( 'delete_blog', array( $this, 'delete_blog' ), 10, 2 );
 
 		// Check for errors
-		add_filter( 'all_admin_notices', array ( $this, 'check_for_user_errors_admin_notice' ) );
+		add_filter( 'all_admin_notices', array( $this, 'check_for_user_errors_admin_notice' ) );
 
-		add_action( 'wp_loaded', array ( $this, 'late_load' ), 0 );
+		add_action( 'wp_loaded', array( $this, 'late_load' ), 0 );
 
 		/**
 		 * Runs after internal actions have been registered.
@@ -107,10 +109,11 @@ class Multilingual_Press {
 		 */
 		do_action( 'inpsyde_mlp_loaded', $this->plugin_data, $this->wpdb );
 
-		if ( is_admin() )
+		if ( is_admin() ) {
 			$this->run_admin_actions();
-		else
+		} else {
 			$this->run_frontend_actions();
+		}
 	}
 
 	/**
@@ -126,15 +129,17 @@ class Multilingual_Press {
 			return true;
 		}
 
-		if ( is_network_admin() )
-			return TRUE;
+		if ( is_network_admin() ) {
+			return true;
+		}
 
-		$relations = get_site_option( 'inpsyde_multilingual', array () );
+		$relations = get_site_option( 'inpsyde_multilingual', array() );
 
-		if ( array_key_exists( get_current_blog_id(), $relations ) )
-			return TRUE;
+		if ( array_key_exists( get_current_blog_id(), $relations ) ) {
+			return true;
+		}
 
-		return FALSE;
+		return false;
 	}
 	/**
 	 * @return void
@@ -162,7 +167,7 @@ class Multilingual_Press {
 		$rel_path = dirname( plugin_basename( $this->plugin_file_path ) )
 				. $this->plugin_data->get( 'text_domain_path' );
 
-		load_plugin_textdomain( 'multilingual-press', FALSE, $rel_path );
+		load_plugin_textdomain( 'multilingual-press', false, $rel_path );
 	}
 
 	/**
@@ -176,7 +181,7 @@ class Multilingual_Press {
 		$assets = $this->plugin_data->get( 'assets' );
 
 		$admin_url = admin_url();
-		$admin_url = parse_url( $admin_url, PHP_URL_PATH );
+		$admin_url = wp_parse_url( $admin_url, PHP_URL_PATH );
 		$admin_url = esc_url( $admin_url );
 
 		$assets->add( 'mlp-admin', 'admin.js', array( 'backbone' ), array(
@@ -237,23 +242,25 @@ class Multilingual_Press {
 	/**
 	 * Find and load core and pro features.
 	 *
-	 * @access	public
-	 * @since	0.1
-	 * @return	array Files to include
+	 * @access  public
+	 * @since   0.1
+	 * @return  array Files to include
 	 */
 	protected function load_features() {
 
-		$found = array ();
+		$found = array();
 
-		$path = $this->plugin_data->get( 'plugin_dir_path' ) . "/inc";
+		$path = $this->plugin_data->get( 'plugin_dir_path' ) . '/inc';
 
-		if ( ! is_readable( $path ) )
+		if ( ! is_readable( $path ) ) {
 			return $found;
+		}
 
 		$files = glob( "$path/feature.*.php" );
 
-		if ( empty ( $files ) )
+		if ( empty( $files ) ) {
 			return $found;
+		}
 
 		foreach ( $files as $file ) {
 			$found[] = $file;
@@ -289,13 +296,18 @@ class Multilingual_Press {
 		}
 
 		// Clean up linked elements table
-		$sql = "
-			DELETE
-			FROM {$this->link_table}
-			WHERE ml_source_blogid = %d
-				OR ml_blogid = %d";
-		$sql = $wpdb->prepare( $sql, $blog_id, $blog_id );
-		$wpdb->query( $sql );
+		$query = sprintf(
+			'
+DELETE
+FROM %1$s
+WHERE ml_source_blogid = %2$d
+	OR ml_blogid = %2$d',
+			$this->link_table,
+			$blog_id
+		);
+
+		// @codingStandardsIgnoreLine
+		$wpdb->query( $query );
 	}
 
 	/**
@@ -324,10 +336,10 @@ class Multilingual_Press {
 	/**
 	 * Checks for errors
 	 *
-	 * @access	public
-	 * @since	0.8
+	 * @access  public
+	 * @since   0.8
 	 * @uses
-	 * @return	boolean
+	 * @return  boolean
 	 */
 	public function check_for_user_errors() {
 
@@ -337,38 +349,52 @@ class Multilingual_Press {
 	/**
 	 * Checks for errors
 	 *
-	 * @access	public
-	 * @since	0.9
+	 * @access  public
+	 * @since   0.9
 	 * @uses
-	 * @return	void
+	 * @return  void
 	 */
 	public function check_for_user_errors_admin_notice() {
 
-		if ( TRUE == $this->check_for_errors() ) {
-			?><div class="error"><p><?php _e( 'You didn\'t setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships.' , 'multilingual-press' ); ?></p></div><?php
+		if ( true === $this->check_for_errors() ) {
+			?>
+			<div class="error">
+				<p>
+					<?php
+					esc_html_e(
+						'You didn\'t setup any site relationships. You have to setup these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships.',
+						'multilingual-press'
+					);
+					?>
+				</p>
+			</div>
+			<?php
 		}
 	}
 
 	/**
 	 * Checks for errors
 	 *
-	 * @return	boolean
+	 * @return  boolean
 	 */
 	public function check_for_errors() {
 
-		if ( defined( 'DOING_AJAX' ) )
-			return FALSE;
+		if ( defined( 'DOING_AJAX' ) ) {
+			return false;
+		}
 
-		if ( is_network_admin() )
-			return FALSE;
+		if ( is_network_admin() ) {
+			return false;
+		}
 
 		// Get blogs related to the current blog
-		$all_blogs = get_site_option( 'inpsyde_multilingual', array () );
+		$all_blogs = get_site_option( 'inpsyde_multilingual', array() );
 
-		if ( 1 > count( $all_blogs ) && is_super_admin() )
-			return TRUE;
+		if ( 1 > count( $all_blogs ) && is_super_admin() ) {
+			return true;
+		}
 
-		return FALSE;
+		return false;
 	}
 
 	/**

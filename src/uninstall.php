@@ -10,8 +10,9 @@
 defined( 'WP_UNINSTALL_PLUGIN' ) || die();
 
 // We don't do anything on single sites anyway.
-if ( ! is_multisite() )
+if ( ! is_multisite() ) {
 	return;
+}
 
 
 // check if the "pro"-version is available and activated
@@ -31,13 +32,14 @@ $check   = '';
 
 if ( WP_UNINSTALL_PLUGIN === 'multilingual-press/multilingual-press.php' ) {
 	// checking if the pro is available (not active) when the free is uninstalled
-	if ( array_key_exists( 'multilingual-press-pro/multilingual-press.php', $plugins ) )
+	if ( array_key_exists( 'multilingual-press-pro/multilingual-press.php', $plugins ) ) {
 		return;
-}
-else if ( WP_UNINSTALL_PLUGIN === 'multilingual-press-pro/multilingual-press.php' ) {
+	}
+} elseif ( WP_UNINSTALL_PLUGIN === 'multilingual-press-pro/multilingual-press.php' ) {
 	// checking if the free is available (not active) when the pro is uninstalled
-	if ( array_key_exists( 'multilingual-press/multilingual-press.php', $plugins ) )
+	if ( array_key_exists( 'multilingual-press/multilingual-press.php', $plugins ) ) {
 		return;
+	}
 }
 
 
@@ -47,8 +49,10 @@ else if ( WP_UNINSTALL_PLUGIN === 'multilingual-press-pro/multilingual-press.php
  */
 global $wpdb;
 
-foreach ( array ( 'mlp_languages', 'multilingual_linked', 'mlp_site_relations' ) as $table )
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->base_prefix . $table );
+foreach ( array( 'mlp_languages', 'multilingual_linked', 'mlp_site_relations' ) as $table ) {
+	// @codingStandardsIgnoreLine
+	$wpdb->query( sprintf( 'DROP TABLE IF EXISTS %s', "{$wpdb->base_prefix}{$table}" ) );
+}
 
 
 // ------ Site options ------
@@ -69,6 +73,7 @@ require ABSPATH . WPINC . '/version.php';
 /** @var string $wp_version */
 $is_pre_4_6 = version_compare( $wp_version, '4.6-RC1', '<' );
 
+// @codingStandardsIgnoreLine as the deprecated function is only used in old versions of WordPress.
 $sites = $is_pre_4_6 ? wp_get_sites() : get_sites();
 foreach ( $sites as $site ) {
 	switch_to_blog( $is_pre_4_6 ? $site['blog_id'] : $site->id );

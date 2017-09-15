@@ -64,8 +64,8 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	public function __construct(
 		Inpsyde_Property_List_Interface $data,
-		Mlp_Data_Access                 $database,
-		wpdb                            $wpdb
+		Mlp_Data_Access $database,
+		wpdb $wpdb
 		) {
 
 		$this->plugin_data     = $data;
@@ -78,7 +78,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			$this->page_data,
 			$this,
 			$this->pagination_data
-			);
+		);
 
 		$updater = new Mlp_Language_Updater(
 			$this->page_data,
@@ -89,7 +89,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 
 		add_action(
 			'admin_post_mlp_update_languages',
-			array ( $updater, 'update_languages' )
+			array( $updater, 'update_languages' )
 		);
 		add_action(
 			'network_admin_menu',
@@ -97,7 +97,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		);
 		add_action(
 			"admin_post_{$this->reset_action}",
-			array ( $this, 'reset_table' )
+			array( $this, 'reset_table' )
 		);
 	}
 
@@ -115,7 +115,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			array( $this->view, 'render' )
 		);
 
-		add_action( "load-$page_id", array ( $this, 'enqueue_style' ) );
+		add_action( "load-$page_id", array( $this, 'enqueue_style' ) );
 	}
 
 	/**
@@ -175,10 +175,10 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		$request = remove_query_arg( 'msg', wp_unslash( $_SERVER['REQUEST_URI'] ) );
 		$nonce   = wp_create_nonce( $this->page_data->get_nonce_action() );
 		$url     = add_query_arg(
-			array (
+			array(
 				'action'                           => $this->reset_action,
 				$this->page_data->get_nonce_name() => $nonce,
-				'_wp_http_referer'                 => esc_attr( $request )
+				'_wp_http_referer'                 => esc_attr( $request ),
 			),
 			$this->page_data->get_form_action()
 		);
@@ -213,7 +213,8 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 		 */
 		do_action( 'mlp_reset_table_done', $table_schema );
 
-		$url = add_query_arg( 'msg', 'resettable', $_REQUEST[ '_wp_http_referer' ] );
+		// Even though this is handled via admin-post.php, the referer is part of the query arguments, and thus $_GET.
+		$url = add_query_arg( 'msg', 'resettable', $_GET['_wp_http_referer'] );
 		wp_safe_redirect( $url );
 		mlp_exit();
 	}
@@ -223,19 +224,12 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	private function before_form() {
 
-		if ( ! empty( $_GET['msg'] ) ) {
-			echo $this->get_update_message();
+		$msg = (string) filter_input( INPUT_GET, 'msg' );
+		if ( '' === $msg ) {
+			return;
 		}
-	}
 
-	/**
-	 * Get message text for success notice.
-	 *
-	 * @return string
-	 */
-	private function get_update_message() {
-
-		$type  = strtok( $_GET[ 'msg' ], '-' );
+		$type  = strtok( $msg, '-' );
 		$num   = (int) strtok( '-' );
 		$num_f = number_format_i18n( $num );
 		$text  = '';
@@ -250,18 +244,19 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 				),
 				$num_f
 			);
-		}
-		if ( 'resettable' === $type ) {
-			$text = esc_html__(
-				'Table reset to default values.',
-				'multilingual-press'
-			);
+		} elseif ( 'resettable' === $type ) {
+			$text = __( 'Table reset to default values.', 'multilingual-press' );
 		}
 
-		if ( '' === $text )
-			return '';
-
-		return '<div class="updated"><p>' . esc_html( $text ) . '</p></div>';
+		if ( '' !== $text ) {
+			?>
+			<div class="updated">
+				<p>
+					<?php echo esc_html( $text ); ?>
+				</p>
+			</div>
+			<?php
+		}
 	}
 
 	/**
@@ -288,7 +283,7 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 			?>
 		</p>
 		<?php
-		if ( isset( $_GET['msg'] ) && 'resettable' === $_GET['msg'] ) {
+		if ( 'resettable' === filter_input( INPUT_GET, 'msg' ) ) {
 			return;
 		}
 
@@ -324,8 +319,9 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	private function get_pagination_object() {
 
-		if ( ! is_a( $this->pagination_view, 'Mlp_Table_Pagination_View' ) )
+		if ( ! is_a( $this->pagination_view, 'Mlp_Table_Pagination_View' ) ) {
 			$this->pagination_view = new Mlp_Table_Pagination_View( $this->pagination_data );
+		}
 
 		return $this->pagination_view;
 	}
@@ -335,9 +331,9 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 */
 	private function show_table() {
 
-		$view = new Mlp_Admin_Table_View (
+		$view = new Mlp_Admin_Table_View(
 			$this->db,
-			new Mlp_Html,
+			new Mlp_Html(),
 			$this->pagination_data,
 			$this->get_columns(),
 			'mlp-language-manager-table',
@@ -350,64 +346,64 @@ class Mlp_Language_Manager_Controller implements Mlp_Updatable {
 	 * @return array
 	 */
 	private function get_columns() {
-		return array (
-			'native_name' => array (
+		return array(
+			'native_name' => array(
 				'header'     => __( 'Native name', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 20
-				)
+				'attributes' => array(
+					'size' => 20,
+				),
 			),
-			'english_name' => array (
+			'english_name' => array(
 				'header'     => __( 'English name', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 20
-				)
+				'attributes' => array(
+					'size' => 20,
+				),
 			),
-			'is_rtl' => array (
+			'is_rtl' => array(
 				'header'     => __( 'RTL', 'multilingual-press' ),
 				'type'       => 'input_checkbox',
-				'attributes' => array (
-					'size' => 20
-				)
+				'attributes' => array(
+					'size' => 20,
+				),
 			),
-			'http_name' => array (
+			'http_name' => array(
 				'header'     => __( 'HTTP', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 5
-				)
+				'attributes' => array(
+					'size' => 5,
+				),
 			),
-			'iso_639_1' => array (
+			'iso_639_1' => array(
 				'header'     => __( 'ISO&#160;639-1', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 5
-				)
+				'attributes' => array(
+					'size' => 5,
+				),
 			),
-			'iso_639_2' => array (
+			'iso_639_2' => array(
 				'header'     => __( 'ISO&#160;639-2', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 5
-				)
+				'attributes' => array(
+					'size' => 5,
+				),
 			),
-			'wp_locale' => array (
+			'wp_locale' => array(
 				'header'     => __( 'wp_locale', 'multilingual-press' ),
 				'type'       => 'input_text',
-				'attributes' => array (
-					'size' => 5
-				)
+				'attributes' => array(
+					'size' => 5,
+				),
 			),
-			'priority' => array (
+			'priority' => array(
 				'header'     => __( 'Priority', 'multilingual-press' ),
 				'type'       => 'input_number',
-				'attributes' => array (
+				'attributes' => array(
 					'min'  => 1,
 					'max'  => 10,
-					'size' => 3
-				)
+					'size' => 3,
+				),
 			),
 		);
 	}

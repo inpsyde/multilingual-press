@@ -17,7 +17,7 @@ class Mlp_Language implements Mlp_Language_Interface {
 	/**
 	 * @var bool
 	 */
-	private $is_rtl = FALSE;
+	private $is_rtl = false;
 
 	/**
 	 * @var array
@@ -29,15 +29,15 @@ class Mlp_Language implements Mlp_Language_Interface {
 	 *
 	 * @param array $raw_data
 	 */
-	public function __construct( Array $raw_data ) {
+	public function __construct( array $raw_data ) {
 
 		$data = $this->prepare_raw_data( $raw_data );
 
-		$this->priority = (int) $data[ 'priority' ];
-		unset ( $data[ 'priority' ] );
+		$this->priority = (int) $data['priority'];
+		unset( $data['priority'] );
 
-		$this->is_rtl = empty ( $data[ 'is_rtl' ] );
-		unset ( $data[ 'is_rtl' ] );
+		$this->is_rtl = empty( $data['is_rtl'] );
+		unset( $data['is_rtl'] );
 
 		$this->names = $data;
 	}
@@ -83,11 +83,11 @@ class Mlp_Language implements Mlp_Language_Interface {
 			return strtok( $this->names['http_name'], '-' );
 		}
 
-		if ( $name === 'language_long' ) {
-			return $this->names[ 'http_name' ];
+		if ( 'language_long' === $name ) {
+			return $this->names['http_name'];
 		}
 
-		if ( $name === 'none' ) {
+		if ( 'none' === $name ) {
 			return '';
 		}
 
@@ -124,15 +124,15 @@ class Mlp_Language implements Mlp_Language_Interface {
 			'english_name' => '',
 			'native_name'  => '',
 			'custom_name'  => '',
-			'is_rtl'       => FALSE,
+			'is_rtl'       => false,
 			'http_name'    => '',
 			'priority'     => 1,
 			'wp_locale'    => '',
 			'text'         => '',
 		);
 
-		if ( isset( $raw_data[ 'text' ] ) ) {
-			$default[ 'custom_name' ] = $raw_data[ 'text' ];
+		if ( isset( $raw_data['text'] ) ) {
+			$default['custom_name'] = $raw_data['text'];
 		}
 
 		return wp_parse_args( $raw_data, $default );

@@ -13,5 +13,5 @@ interface Mlp_Request_Validator_Interface {
 	 * @param  mixed $context
 	 * @return bool
 	 */
-	public function is_valid( $context = NULL );
+	public function is_valid( $context = null );
 }

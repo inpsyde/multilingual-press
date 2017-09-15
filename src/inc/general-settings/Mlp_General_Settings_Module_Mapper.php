@@ -40,7 +40,18 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 			wp_die( 'FU' );
 		}
 
-		$this->set_module_activation_status();
+		$modules = $this->modules->get_modules();
+		$slugs = array_keys( $modules );
+
+		foreach ( $slugs as $slug ) {
+			if ( isset( $_POST[ "mlp_state_$slug" ] ) && '1' === $_POST[ "mlp_state_$slug" ] ) {
+				$this->modules->activate( $slug );
+			} else {
+				$this->modules->deactivate( $slug );
+			}
+		}
+
+		$this->modules->save();
 
 		/**
 		 * Runs before the redirect.
@@ -68,26 +79,6 @@ class Mlp_General_Settings_Module_Mapper implements Mlp_Module_Mapper_Interface 
 
 		wp_safe_redirect( network_admin_url( 'settings.php?page=mlp&message=updated' ) );
 		mlp_exit();
-	}
-
-	/**
-	 *
-	 * @return void
-	 */
-	private function set_module_activation_status() {
-
-		$modules = $this->modules->get_modules();
-		$slugs = array_keys( $modules );
-
-		foreach ( $slugs as $slug ) {
-			if ( isset( $_POST[ "mlp_state_$slug" ] ) && '1' === $_POST[ "mlp_state_$slug" ] ) {
-				$this->modules->activate( $slug );
-			} else {
-				$this->modules->deactivate( $slug );
-			}
-		}
-
-		$this->modules->save();
 	}
 
 	/**

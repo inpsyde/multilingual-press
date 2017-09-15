@@ -103,7 +103,7 @@ class Mlp_Advanced_Translator {
 
 		// get the current remote post status
 		$remote_post = $this->basic_data->get_remote_post( $post, $blog_id );
-		$is_trashed  = isset( $remote_post->post_status ) && $remote_post->post_status == 'trash';
+		$is_trashed  = isset( $remote_post->post_status ) && 'trash' === $remote_post->post_status;
 
 		// set the base
 		$base = 'mlp_translation_meta_box_';

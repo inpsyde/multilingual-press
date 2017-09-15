@@ -53,10 +53,10 @@ class Mlp_Admin_Table_View {
 	 * @param string             $name
 	 */
 	public function __construct(
-		Mlp_Data_Access    $data,
+		Mlp_Data_Access $data,
 		Mlp_Html_Interface $html,
-		Mlp_Browsable      $pagination_data,
-		Array              $columns,
+		Mlp_Browsable $pagination_data,
+		array $columns,
 		$id,
 		$name
 	) {
@@ -90,7 +90,7 @@ class Mlp_Admin_Table_View {
 	private function print_tbody() {
 
 		$params = array(
-			'page' => $this->pagination_data->get_current_page()
+			'page' => $this->pagination_data->get_current_page(),
 		);
 		$rows = $this->data->get_items( $params );
 
@@ -99,7 +99,9 @@ class Mlp_Admin_Table_View {
 			<tr>
 				<td colspan="<?php echo count( $this->columns ); ?>">
 					<p>
-						<?php _e( 'No items found. We recommend to reinstall this plugin.', 'multilingual-press' ); ?>
+						<?php
+						esc_html_e( 'No items found. We recommend to reinstall this plugin.', 'multilingual-press' );
+						?>
 					</p>
 				</td>
 			</tr>
@@ -120,8 +122,13 @@ class Mlp_Admin_Table_View {
 	 */
 	private function print_row( $id, $row ) {
 
+		static $alternate = true;
+
+		$alternate = ! $alternate;
+
+		$class = $alternate ? 'alternate' : '';
 		?>
-		<tr<?php echo $this->get_alternating_class(); ?>>
+		<tr class="<?php echo esc_attr( $class ); ?>">
 			<?php foreach ( $this->columns as $col => $data ) : ?>
 				<td>
 					<?php
@@ -135,19 +142,19 @@ class Mlp_Admin_Table_View {
 
 					switch ( $data['type'] ) {
 						case 'input_text':
-							echo $this->get_text_input( $id, $col, $content, $attrs );
+							$this->print_text_input( $id, $col, $content, $attrs );
 							break;
 
 						case 'input_checkbox':
-							echo $this->get_checkbox_input( $id, $col, $content, $attrs );
+							$this->print_checkbox_input( $id, $col, $content, $attrs );
 							break;
 
 						case 'input_number':
-							echo $this->get_number_input( $id, $col, $content, $attrs );
+							$this->print_number_input( $id, $col, $content, $attrs );
 							break;
 
 						default:
-							echo $content;
+							echo wp_kses_post( $content );
 					}
 					?>
 				</td>
@@ -161,18 +168,15 @@ class Mlp_Admin_Table_View {
 	 * @param       $col
 	 * @param       $value
 	 * @param array $attributes
-	 * @return string
+	 * @return void
 	 */
-	private function get_checkbox_input( $id, $col, $value, Array $attributes = array() ) {
+	private function print_checkbox_input( $id, $col, $value, array $attributes = array() ) {
 
 		list( $name, $attrs ) = $this->prepare_input_data( $id, $col, $value, $attributes );
-
-		return sprintf(
-			'<input type="checkbox" name="%s" value="1"%s%s>',
-			esc_attr( $name ),
-			$attrs,
-			checked( 1, $value, false )
-		);
+		?>
+		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1" <?php echo esc_attr( $attrs ); ?>
+			<?php checked( 1, $value ); ?>>
+		<?php
 	}
 
 	/**
@@ -180,18 +184,15 @@ class Mlp_Admin_Table_View {
 	 * @param       $col
 	 * @param       $value
 	 * @param array $attributes
-	 * @return string
+	 * @return void
 	 */
-	private function get_number_input( $id, $col, $value, Array $attributes = array() ) {
+	private function print_number_input( $id, $col, $value, array $attributes = array() ) {
 
 		list( $name, $attrs, $value ) = $this->prepare_input_data( $id, $col, $value, $attributes );
-
-		return sprintf(
-			'<input type="number" name="%s" value="%d"%s>',
-			esc_attr( $name ),
-			$value,
-			$attrs
-		);
+		?>
+		<input type="number" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>"
+			<?php echo esc_attr( $attrs ); ?>>
+		<?php
 	}
 
 	/**
@@ -199,18 +200,15 @@ class Mlp_Admin_Table_View {
 	 * @param       $col
 	 * @param       $value
 	 * @param array $attributes
-	 * @return string
+	 * @return void
 	 */
-	private function get_text_input( $id, $col, $value, Array $attributes = array() ) {
+	private function print_text_input( $id, $col, $value, array $attributes = array() ) {
 
 		list( $name, $attrs, $value ) = $this->prepare_input_data( $id, $col, $value, $attributes );
-
-		return sprintf(
-			'<input type="text" name="%s" value="%s"%s>',
-			esc_attr( $name ),
-			esc_attr( $value ),
-			$attrs
-		);
+		?>
+		<input type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>"
+			<?php echo esc_attr( $attrs ); ?>>
+		<?php
 	}
 
 	/**
@@ -222,10 +220,10 @@ class Mlp_Admin_Table_View {
 	 */
 	private function prepare_input_data( $id, $col, $value, $attributes ) {
 
-		return array (
+		return array(
 			$this->get_input_name( $id, $col ),
 			$this->html->array_to_attrs( $attributes ),
-			$value
+			$value,
 		);
 	}
 
@@ -244,39 +242,31 @@ class Mlp_Admin_Table_View {
 	 */
 	private  function print_headers() {
 
-		printf(
-			'<thead><tr>%1$s</tr></thead><tfoot><tr>%1$s</tr></tfoot>',
-			$this->get_header()
-		);
+		?>
+		<thead>
+		<tr><?php $this->print_header(); ?></tr>
+		</thead>
+		<tfoot>
+		<tr><?php $this->print_header(); ?></tr>
+		</tfoot>
+		<?php
 	}
 
 	/**
-	 * @return string
+	 * @return void
 	 */
-	private function get_header() {
-
-		$row = '';
+	private function print_header() {
 
 		foreach ( $this->columns as $params ) {
-			$row .= '<th scope="col">';
-
-			if ( ! empty( $params['header'] ) ) {
-				$row .= esc_html( $params['header'] );
-			}
-
-			$row .= '</th>';
+			?>
+			<th scope="col">
+				<?php
+				if ( ! empty( $params['header'] ) ) {
+					echo esc_html( $params['header'] );
+				}
+				?>
+			</th>
+			<?php
 		}
-
-		return $row;
-	}
-
-	/**
-	 * @return string
-	 */
-	private function get_alternating_class() {
-
-		static $count = 0;
-
-		return 0 === $count++ % 2 ? ' class="alternate"' : '' ;
 	}
 }

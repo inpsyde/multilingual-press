@@ -25,7 +25,7 @@ class Mlp_Network_Plugin_Action_Link {
 
 		$this->link = $link;
 
-		$this->prepend = $position !== 'last';
+		$this->prepend = 'last' !== $position;
 	}
 
 	/**

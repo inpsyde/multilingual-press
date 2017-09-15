@@ -56,7 +56,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 		$ext = $this->get_extension( $file );
 
 		if ( ! $this->locations->has_dir( $ext ) ) {
-			return FALSE;
+			return false;
 		}
 
 		$url = new Mlp_Asset_Url(
@@ -75,7 +75,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 			$this->l10n[ $handle ] = $l10n;
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -93,28 +93,28 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 			}
 
 			/** @var Mlp_Asset_Url_Interface $url_object */
-			$url_object = $properties[ 'url' ];
+			$url_object = $properties['url'];
 			$url = $url_object->__toString();
 			$version = $url_object->get_version();
 
-			if ( 'js' === $properties[ 'ext' ] ) {
+			if ( 'js' === $properties['ext'] ) {
 				wp_register_script(
 					$handle,
 					$url,
-					$properties[ 'dependencies' ],
+					$properties['dependencies'],
 					$version,
-					TRUE
+					true
 				);
-			} elseif ( 'css' === $properties[ 'ext' ] ) {
+			} elseif ( 'css' === $properties['ext'] ) {
 				wp_register_style(
 					$handle,
 					$url,
-					$properties[ 'dependencies' ],
+					$properties['dependencies'],
 					$version
 				);
 			}
 
-			$this->registered[ $handle ] = $properties[ 'ext' ];
+			$this->registered[ $handle ] = $properties['ext'];
 		}
 	}
 
@@ -129,21 +129,21 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 
 		$to_load = $this->get_valid_handles( (array) $handles );
 
-		if ( empty ( $to_load ) ) {
-			return FALSE;
+		if ( empty( $to_load ) ) {
+			return false;
 		}
 
 		$action = $this->get_enqueue_action();
 
 		if ( '' === $action ) {
-			return FALSE;
+			return false;
 		}
 
 		$loader = new Mlp_Asset_Loader( $to_load, $this->l10n );
 
 		add_action( $action, array( $loader, 'enqueue' ) );
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -151,12 +151,12 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	 *
 	 * @return array
 	 */
-	private function get_valid_handles( Array $handles ) {
+	private function get_valid_handles( array $handles ) {
 
 		$to_load = array();
 
 		foreach ( $handles as $handle ) {
-			if ( ! empty ( $this->registered[ $handle ] ) ) {
+			if ( ! empty( $this->registered[ $handle ] ) ) {
 				$to_load[ $handle ] = $this->registered[ $handle ];
 			}
 		}
@@ -171,7 +171,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 
 		if ( $this->is_login_page() ) {
 
-			if ( empty ( $GLOBALS[ 'interim_login' ] ) ) {
+			if ( empty( $GLOBALS['interim_login'] ) ) {
 				return 'login_enqueue_scripts';
 			}
 
@@ -194,7 +194,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 	 */
 	private function is_login_page() {
 
-		return 0 === strpos( $_SERVER[ 'REQUEST_URI' ], '/wp-login.php' );
+		return 0 === strpos( $_SERVER['REQUEST_URI'], '/wp-login.php' );
 	}
 
 	/**
@@ -208,7 +208,7 @@ class Mlp_Assets implements Mlp_Assets_Interface {
 
 		$last_dot = strrchr( $file_name, '.' );
 
-		if ( FALSE === $last_dot ) {
+		if ( false === $last_dot ) {
 			return '_invalid_';
 		}
 

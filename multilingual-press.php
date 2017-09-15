@@ -12,7 +12,7 @@
  * Network:     true
  */
 
-defined( 'ABSPATH' ) or die();
+defined( 'ABSPATH' ) || die();
 
 define( 'MLP_PLUGIN_FILE', __FILE__ );
 

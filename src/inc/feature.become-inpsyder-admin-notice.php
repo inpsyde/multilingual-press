@@ -94,11 +94,15 @@ class Mlp_Become_Inpsyder_Admin_Notice {
 				<br>
 				<?php
 				/* translators: 1: opening <strong> tag, 2: closing </strong> tag */
-				$message = esc_html__(
+				$message = __(
 					'%sThis is why we are looking for a talented developer who can work remotely and support us in anything MultilingualPress%s, and other exciting WordPress projects at our VIP partner agency.',
 					'multilingual-press'
 				);
-				printf( $message, '<strong>', '</strong>' );
+
+				$tags = array(
+					'strong' => array(),
+				);
+				echo wp_kses( sprintf( $message, '<strong>', '</strong>' ), $tags );
 				?>
 			</p>
 			<p>

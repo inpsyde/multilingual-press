@@ -6,7 +6,7 @@
  * @version 2015-06-11
  */
 
-if ( is_admin() && ! empty( $GLOBALS[ 'pagenow' ] ) && 'sites.php' === $GLOBALS[ 'pagenow' ] ) {
+if ( is_admin() && ! empty( $GLOBALS['pagenow'] ) && 'sites.php' === $GLOBALS['pagenow'] ) {
 	add_action( 'inpsyde_mlp_loaded', 'mlp_feature_language_column' );
 }
 

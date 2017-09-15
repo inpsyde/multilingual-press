@@ -18,7 +18,7 @@ interface Mlp_Module_Mapper_Interface {
 	/**
 	 * Save module options.
 	 *
-	 * @return	void
+	 * @return  void
 	 */
 	public function update_modules();
 

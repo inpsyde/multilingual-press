@@ -39,9 +39,9 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	 *
 	 * @param Mlp_Db_Schema_Interface $schema Table information.
 	 *
-	 * @return int|bool Number of rows affected/selected or FALSE on error.
+	 * @return int|bool Number of rows affected/selected or false on error.
 	 */
-	public function uninstall( Mlp_Db_Schema_Interface $schema = NULL ) {
+	public function uninstall( Mlp_Db_Schema_Interface $schema = null ) {
 
 		$schema = $this->get_schema( $schema );
 
@@ -57,7 +57,7 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	 *
 	 * @return int Number of table operations run during installation.
 	 */
-	public function install( Mlp_Db_Schema_Interface $schema = NULL ) {
+	public function install( Mlp_Db_Schema_Interface $schema = null ) {
 
 		// make dbDelta() available
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -121,10 +121,10 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 
 		$to_remove = $db_info->get_autofilled_keys();
 		foreach ( $to_remove as $remove_key ) {
-			unset ( $columns[ $remove_key ] );
+			unset( $columns[ $remove_key ] );
 		}
 
-		$keys = join( ",", array_keys( $columns ) );
+		$keys = join( ',', array_keys( $columns ) );
 		$sql = "INSERT INTO $table ($keys) VALUES $content;";
 
 		return $this->wpdb->query( $sql );
@@ -160,7 +160,7 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 		// we need multibyte encoding for native names
 		if (
 			! empty( $this->wpdb->charset )
-			&& FALSE !== stripos( $this->wpdb->charset, 'utf' )
+			&& false !== stripos( $this->wpdb->charset, 'utf' )
 		) {
 			$charset_collate .= $this->wpdb->charset;
 		} else {
@@ -177,15 +177,15 @@ class Mlp_Db_Installer implements Mlp_Db_Installer_Interface {
 	/**
 	 * Helper function for install() and uninstall().
 	 *
-	 * Basically a check for NULL values.
+	 * Basically a check for null values.
 	 *
 	 * @param Mlp_Db_Schema_Interface $schema Table information.
 	 *
 	 * @return Mlp_Db_Schema_Interface
 	 */
-	private function get_schema( Mlp_Db_Schema_Interface $schema = NULL ) {
+	private function get_schema( Mlp_Db_Schema_Interface $schema = null ) {
 
-		if ( NULL === $schema ) {
+		if ( null === $schema ) {
 			return $this->db_info;
 		}
 

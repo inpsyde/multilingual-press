@@ -22,11 +22,12 @@ class Mlp_Internal_Locations implements Mlp_Locations_Interface {
 	 */
 	public function add_dir( $path, $url, $identifier = '' ) {
 
-		if ( '' === $identifier )
+		if ( '' === $identifier ) {
 			$identifier = basename( $path ); // is without slashes already
+		}
 
-		$this->directories[ $identifier ][ 'path' ] = rtrim( $path, '/' );
-		$this->directories[ $identifier ][ 'url' ]  = rtrim( $url, '/' ) . '/';
+		$this->directories[ $identifier ]['path'] = rtrim( $path, '/' );
+		$this->directories[ $identifier ]['url']  = rtrim( $url, '/' ) . '/';
 	}
 
 	/**
@@ -36,8 +37,9 @@ class Mlp_Internal_Locations implements Mlp_Locations_Interface {
 	 */
 	public function get_dir( $identifier, $type ) {
 
-		if ( isset ( $this->directories[ $identifier ][ $type ] ) )
+		if ( isset( $this->directories[ $identifier ][ $type ] ) ) {
 			return $this->directories[ $identifier ][ $type ];
+		}
 
 		return '';
 	}
@@ -50,6 +52,6 @@ class Mlp_Internal_Locations implements Mlp_Locations_Interface {
 	 */
 	public function has_dir( $identifier ) {
 
-		return ! empty ( $this->directories[ $identifier ] );
+		return ! empty( $this->directories[ $identifier ] );
 	}
 }

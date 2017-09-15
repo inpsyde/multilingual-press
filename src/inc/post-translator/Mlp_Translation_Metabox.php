@@ -182,7 +182,7 @@ class Mlp_Translation_Metabox {
 		$blog_id = absint( $blog_id );
 
 		$remote_post = $this->data->get_remote_post( $post, $blog_id );
-		if ( isset( $remote_post->dummy ) && $remote_post->dummy === true ) {
+		if ( isset( $remote_post->dummy ) && true === $remote_post->dummy ) {
 			return current_user_can_for_blog( $blog_id, 'edit_posts' );
 		}
 

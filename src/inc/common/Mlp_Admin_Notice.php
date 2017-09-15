@@ -30,10 +30,13 @@ class Mlp_Admin_Notice {
 
 		$this->msg   = $msg;
 
-		if ( empty ( $attrs ) )
-			$attrs = array( 'class' => 'error' );
-		elseif ( empty ( $attrs[ 'class' ] ) )
-			$attrs[ 'class' ] = 'error';
+		if ( empty( $attrs ) ) {
+			$attrs = array(
+				'class' => 'error',
+			);
+		} elseif ( empty( $attrs['class'] ) ) {
+			$attrs['class'] = 'error';
+		}
 
 		$this->attrs = $attrs;
 	}
@@ -52,7 +55,8 @@ class Mlp_Admin_Notice {
 		$msg = wpautop( $this->msg );
 
 		$str = "<div $attrs>$msg</div>";
-		echo $str;
+
+		echo wp_kses_post( $str );
 
 		return $str;
 	}

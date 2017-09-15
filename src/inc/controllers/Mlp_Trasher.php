@@ -11,6 +11,11 @@ class Mlp_Trasher {
 	private $module_manager;
 
 	/**
+	 * @var Inpsyde_Nonce_Validator
+	 */
+	private $nonce_validator;
+
+	/**
 	 * @var bool
 	 */
 	private $saved_post = false;
@@ -23,6 +28,8 @@ class Mlp_Trasher {
 	public function __construct( Mlp_Module_Manager_Interface $module_manager ) {
 
 		$this->module_manager = $module_manager;
+
+		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_trasher_setting' );
 	}
 
 	/**
@@ -58,23 +65,26 @@ class Mlp_Trasher {
 	 */
 	public function post_submitbox_misc_actions() {
 
-		if ( isset( $_GET['post'] ) ) {
+		$post_id = absint( filter_input( INPUT_GET, 'post' ) );
+		if ( $post_id ) {
 			// old key
-			$trash_the_other_posts = (int) get_post_meta( $_GET['post'], 'trash_the_other_posts', true );
+			$trash_the_other_posts = (int) get_post_meta( $post_id, 'trash_the_other_posts', true );
 
 			if ( 1 !== $trash_the_other_posts ) {
-				$trash_the_other_posts = (int) get_post_meta( $_GET['post'], '_trash_the_other_posts', true );
+				$trash_the_other_posts = (int) get_post_meta( $post_id, '_trash_the_other_posts', true );
 			}
 		} else {
 			$trash_the_other_posts = false;
 		}
 		?>
 		<div class="misc-pub-section curtime misc-pub-section-last">
-			<input type="hidden" name="trasher_box" value="1">
+			<?php wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name() ); ?>
 			<label for="trash_the_other_posts">
 				<input type="checkbox" id="trash_the_other_posts" name="_trash_the_other_posts"
 					<?php checked( 1, $trash_the_other_posts ); ?>>
-				<?php _e( 'Send all the translations to trash when this post is trashed.', 'multilingual-press' ); ?>
+				<?php
+				esc_html_e( 'Send all the translations to trash when this post is trashed.', 'multilingual-press' );
+				?>
 			</label>
 		</div>
 		<?php
@@ -124,8 +134,7 @@ class Mlp_Trasher {
 	 */
 	public function save_post( $post_id ) {
 
-		// leave function if box was not available
-		if ( ! isset ( $_POST['trasher_box'] ) ) {
+		if ( ! $this->nonce_validator->is_valid() ) {
 			return;
 		}
 
@@ -145,12 +154,10 @@ class Mlp_Trasher {
 		// old key
 		delete_post_meta( $post_id, 'trash_the_other_posts' );
 
-		$trash_the_other_posts = false;
+		$trash_the_other_posts = 'on' === filter_input( INPUT_POST, '_trash_the_other_posts' );
 
 		// Should the other post also been trashed?
-		if ( ! empty( $_POST['_trash_the_other_posts'] ) && 'on' === $_POST['_trash_the_other_posts'] ) {
-			$trash_the_other_posts = true;
-
+		if ( $trash_the_other_posts ) {
 			update_post_meta( $post_id, '_trash_the_other_posts', '1' );
 		} else {
 			update_post_meta( $post_id, '_trash_the_other_posts', '0' );

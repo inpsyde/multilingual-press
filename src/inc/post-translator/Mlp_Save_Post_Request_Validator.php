@@ -18,8 +18,8 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 	 *
 	 * @param Inpsyde_Nonce_Validator_Interface $nonce
 	 */
-	function __construct( Inpsyde_Nonce_Validator_Interface $nonce )
-	{
+	public function __construct( Inpsyde_Nonce_Validator_Interface $nonce ) {
+
 		$this->nonce = $nonce;
 	}
 
@@ -29,16 +29,19 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 	 * @param  int $context Post id
 	 * @return bool
 	 */
-	public function is_valid( $context = NULL )
-	{
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-			return FALSE;
+	public function is_valid( $context = null ) {
 
-		if ( $this->is_real_revision( $context ) )
-			return FALSE;
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return false;
+		}
 
-		if ( ! current_user_can( 'edit_post', $context ) )
-			return FALSE;
+		if ( $this->is_real_revision( $context ) ) {
+			return false;
+		}
+
+		if ( ! current_user_can( 'edit_post', $context ) ) {
+			return false;
+		}
 
 		return $this->nonce->is_valid();
 	}
@@ -53,8 +56,9 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 	 */
 	private function is_real_revision( $post_id ) {
 
-		if ( ! wp_is_post_revision( $post_id ) )
-			FALSE;
+		if ( ! wp_is_post_revision( $post_id ) ) {
+			false;
+		}
 
 		$post = get_post( $post_id );
 
@@ -67,11 +71,13 @@ class Mlp_Save_Post_Request_Validator implements Mlp_Request_Validator_Interface
 		 * revisions and attachments (which have the same status)
 		 */
 
-		if ( 'inherit' !== $post->post_status )
-			return FALSE;
+		if ( 'inherit' !== $post->post_status ) {
+			return false;
+		}
 
-		if ( 'revision' !== $post->post_type )
-			return FALSE;
+		if ( 'revision' !== $post->post_type ) {
+			return false;
+		}
 
 		return 'auto-draft' !== filter_input( INPUT_POST, 'original_post_status' );
 	}

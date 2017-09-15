@@ -51,9 +51,9 @@ class Mlp_Language_Updater {
 	 */
 	public function __construct(
 		Mlp_Options_Page_Data $page_data,
-		Mlp_Browsable         $pagination_data,
-		Mlp_Array_Diff        $array_diff,
-		Mlp_Data_Access       $db
+		Mlp_Browsable $pagination_data,
+		Mlp_Array_Diff $array_diff,
+		Mlp_Data_Access $db
 	) {
 
 		$this->page_data       = $page_data;
@@ -90,10 +90,11 @@ class Mlp_Language_Updater {
 			$this->page_data->get_nonce_name()
 		);
 
-		if ( empty ( $_POST[ 'languages' ] ) )
+		if ( empty( $_POST['languages'] ) ) {
 			mlp_exit( 'invalid request' );
+		}
 
-		return (array) $_POST[ 'languages' ];
+		return (array) $_POST['languages'];
 	}
 
 	/**
@@ -105,13 +106,14 @@ class Mlp_Language_Updater {
 
 		$page   = $this->pagination_data->get_current_page();
 		$params = array(
-			'page' => $page
+			'page' => $page,
 		);
 		$before = $this->db->get_items( $params );
 		$return = array();
 
-		foreach ( $before as $id => $data )
+		foreach ( $before as $id => $data ) {
 			$return[ $id ] = (array) $data;
+		}
 
 		return $return;
 	}
@@ -122,17 +124,25 @@ class Mlp_Language_Updater {
 	 * @param  array   $diff
 	 * @return integer Number of changed items.
 	 */
-	private function update_changed_items( Array $diff ) {
+	private function update_changed_items( array $diff ) {
 
 		$amount = count( $diff );
 
-		if ( 0 === $amount )
+		if ( 0 === $amount ) {
 			return 0;
+		}
 
 		$this->db->update_items_by_id(
 			$diff,
-			array (
-				'%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d'
+			array(
+				'%s',
+				'%s',
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
+				'%d',
 			)
 		);
 
@@ -147,10 +157,11 @@ class Mlp_Language_Updater {
 	 */
 	private function get_url( $amount ) {
 
-		$url = $_POST[ '_wp_http_referer' ];
+		$url = filter_input( INPUT_POST, '_wp_http_referer' );
 
-		if ( 0 === $amount )
+		if ( 0 === $amount ) {
 			return remove_query_arg( 'msg', $url );
+		}
 
 		return add_query_arg( 'msg', "updated-$amount", $url );
 	}

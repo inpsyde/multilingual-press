@@ -12,12 +12,12 @@ class Mlp_Search_Form_View {
 	 * @param array $attributes
 	 * @return string
 	 */
-	public function get_search_field( Array $attributes = array() ) {
+	public function get_search_field( array $attributes = array() ) {
 
-		$default = array (
+		$default = array(
 			'type'  => 'search',
 			'name'  => 's',
-			'value' => ''
+			'value' => '',
 		);
 
 		$attributes = array_merge( $default, $attributes );
@@ -31,19 +31,20 @@ class Mlp_Search_Form_View {
 	 */
 	public function get_search_button( $text ) {
 
-		return get_submit_button( $text, 'secondary', 'submit', FALSE );
+		return get_submit_button( $text, 'secondary', 'submit', false );
 	}
 
 	/**
 	 * @param  array $attributes
 	 * @return string
 	 */
-	private function html_attributes( Array $attributes ) {
+	private function html_attributes( array $attributes ) {
 
 		$return = '';
 
-		foreach ( $attributes as $key => $value )
+		foreach ( $attributes as $key => $value ) {
 			$return .= " $key='" . esc_attr( $value ) . "'";
+		}
 
 		return $return;
 	}

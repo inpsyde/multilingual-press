@@ -18,10 +18,11 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 	 */
 	public function __construct( $version ) {
 
-		if ( ! is_scalar( $version ) )
+		if ( ! is_scalar( $version ) ) {
 			$this->version = self::FALLBACK_VERSION;
-		else
+		} else {
 			$this->version = $this->sanitize( $version );
+		}
 	}
 
 	/**
@@ -45,8 +46,9 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 
 		$version = $this->replace_chars( $version );
 
-		if ( '' === $version )
+		if ( '' === $version ) {
 			return self::FALLBACK_VERSION;
+		}
 
 		return $this->fill_numbers( $version );
 	}
@@ -60,14 +62,17 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 	 */
 	private function fill_numbers( $version ) {
 
-		if ( preg_match( '~^\d+\.\d+\.\d+~', $version ) )
+		if ( preg_match( '~^\d+\.\d+\.\d+~', $version ) ) {
 			return $version;
+		}
 
 		$parts  = explode( '.', $version );
-		$new    = $append = array();
+		$new    = array();
+		$append = array();
 
-		foreach ( $parts as $part )
+		foreach ( $parts as $part ) {
 			$this->sort_values( $part, $new, $append );
+		}
 
 		$new = $this->pad_with_zero( $new );
 		$new = array_merge( $new, $append );
@@ -83,15 +88,13 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 	 * @param  array  $append
 	 * @return void
 	 */
-	private function sort_values( $part, Array &$new, Array &$append ) {
+	private function sort_values( $part, array &$new, array &$append ) {
 
 		if ( 3 <= count( $new ) ) {
 			$append[] = $part;
-		}
-		elseif ( is_numeric( $part ) ) {
+		} elseif ( is_numeric( $part ) ) {
 			$new[] = $part;
-		}
-		else {
+		} else {
 			$append[] = $part;
 			$new      = $this->pad_with_zero( $new );
 		}
@@ -103,7 +106,7 @@ class Mlp_Semantic_Version_Number implements Mlp_Version_Number_Interface {
 	 * @param  array $numbers
 	 * @return array
 	 */
-	private function pad_with_zero( Array $numbers ) {
+	private function pad_with_zero( array $numbers ) {
 
 		return array_pad( $numbers, 3, 0 );
 	}

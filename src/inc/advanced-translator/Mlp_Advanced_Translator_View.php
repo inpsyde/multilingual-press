@@ -50,9 +50,9 @@ class Mlp_Advanced_Translator_View {
 		$id = $this->get_id( $remote_site_id, 'copied-post' );
 		?>
 		<a href="#" class="button mlp-copy-post-button dashicons-before dashicons-image-rotate-right"
-			data-site-id="<?php echo esc_attr( $matches[1] ); ?>"><?php
-			esc_html_e( 'Copy source post', 'multilingual-press' );
-			?></a>
+			data-site-id="<?php echo esc_attr( $matches[1] ); ?>">
+			<?php esc_html_e( 'Copy source post', 'multilingual-press' ); ?>
+		</a>
 		<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="" id="<?php echo esc_attr( $id ); ?>">
 		<?php
 	}
@@ -111,10 +111,10 @@ class Mlp_Advanced_Translator_View {
 		<div class="mlp-namediv">
 			<div>
 				<label for="<?php echo esc_attr( $id ); ?>">
-					<?php _e( 'Post Name:', 'multilingual-press' ) ?><br>
+					<?php esc_html_e( 'Post Name:', 'multilingual-press' ); ?><br>
 					<input type="text" name="<?php echo esc_attr( $name ); ?>"
 						value="<?php echo esc_attr( $value ); ?>"
-						placeholder="<?php echo esc_attr__( 'Enter name here', 'multilingual-press' ) ?>" size="30"
+						placeholder="<?php echo esc_attr__( 'Enter name here', 'multilingual-press' ); ?>" size="30"
 						class="mlp-name" id="<?php echo esc_attr( $id ); ?>">
 				</label>
 			</div>
@@ -142,9 +142,9 @@ class Mlp_Advanced_Translator_View {
 		?>
 		<div class="mlp-excerptdiv">
 			<div>
-				<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Post Excerpt:', 'multilingual-press' ) ?></label>
+				<label for="<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Post Excerpt:', 'multilingual-press' ); ?></label>
 				<textarea name="<?php echo esc_attr( $name ); ?>"
-					placeholder="<?php echo esc_attr__( 'Enter excerpt here', 'multilingual-press' ) ?>"
+					placeholder="<?php echo esc_attr__( 'Enter excerpt here', 'multilingual-press' ); ?>"
 					class="mlp-excerpt"
 					id="<?php echo esc_attr( $id ); ?>"><?php echo esc_textarea( $value ); ?></textarea>
 			</div>
@@ -200,9 +200,10 @@ class Mlp_Advanced_Translator_View {
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>">
-				<?php _e( 'Copy the featured image of the source post.', 'multilingual-press' ); ?>
-				<span class="description"><?php
-					_e( 'Overwrites an existing featured image in the target post.', 'multilingual-press' ); ?></span>
+				<?php esc_html_e( 'Copy the featured image of the source post.', 'multilingual-press' ); ?>
+				<span class="description">
+					<?php esc_html_e( 'Overwrites an existing featured image in the target post.', 'multilingual-press' ); ?>
+				</span>
 			</label>
 		</p>
 		<?php
@@ -321,7 +322,7 @@ class Mlp_Advanced_Translator_View {
 	 *
 	 * @return void
 	 */
-	private function list_terms( $taxonomy, Array $data, $remote_blog_id, $input_type ) {
+	private function list_terms( $taxonomy, array $data, $remote_blog_id, $input_type ) {
 
 		$name = $this->get_name( $remote_blog_id, 'tax' ) . '[' . $taxonomy . ']';
 
@@ -352,10 +353,23 @@ class Mlp_Advanced_Translator_View {
 	 */
 	private function term_box( $title, $html ) {
 
+		$tags = array(
+			'br'    => array(),
+			'input' => array(
+				'checked' => true,
+				'id'      => true,
+				'name'    => true,
+				'type'    => true,
+				'value'   => true,
+			),
+			'label' => array(
+				'for' => true,
+			),
+		);
 		?>
 		<fieldset class="mlp-taxonomy-box">
 			<legend><?php echo esc_html( $title ); ?></legend>
-			<?php echo $html; ?>
+			<?php echo wp_kses( $html, $tags ); ?>
 		</fieldset>
 	<?php
 	}
@@ -370,10 +384,14 @@ class Mlp_Advanced_Translator_View {
 
 		?>
 		<div class="mlp-warning">
-			<p><?php _e(
-					'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
-					'multilingual-press'
-				); ?></p>
+			<p>
+			<?php
+			esc_html_e(
+				'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
+				'multilingual-press'
+			);
+			?>
+			</p>
 		</div>
 		<?php
 	}

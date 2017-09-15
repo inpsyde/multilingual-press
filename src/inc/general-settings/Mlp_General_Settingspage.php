@@ -92,12 +92,15 @@ class Mlp_General_Settingspage {
 			return;
 		}
 
-		if ( ! isset( $_GET[ 'message' ] ) ) {
+		// @codingStandardsIgnoreLine as message is not being used itself, but just as a flag.
+		if ( ! isset( $_GET['message'] ) ) {
 			return;
 		}
 
 		$msg = __( 'Settings saved.', 'multilingual-press' );
-		$notice = new Mlp_Admin_Notice( $msg, array( 'class' => 'updated' ) );
+		$notice = new Mlp_Admin_Notice( $msg, array(
+			'class' => 'updated',
+		) );
 		$notice->show();
 	}
 

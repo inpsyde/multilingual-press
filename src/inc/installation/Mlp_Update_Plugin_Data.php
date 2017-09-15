@@ -48,13 +48,12 @@ class Mlp_Update_Plugin_Data {
 	 * @param   wpdb                            $wpdb
 	 * @param   Mlp_Version_Number_Interface    $current_version
 	 * @param   Mlp_Version_Number_Interface    $last_version
-	 * @return  Mlp_Update_Plugin_Data
 	 */
 	public function __construct(
 		Inpsyde_Property_List_Interface $plugin_data,
-		wpdb                            $wpdb,
-		Mlp_Version_Number_Interface    $current_version,
-		Mlp_Version_Number_Interface    $last_version
+		wpdb $wpdb,
+		Mlp_Version_Number_Interface $current_version,
+		Mlp_Version_Number_Interface $last_version
 	) {
 
 		$this->plugin_data     = $plugin_data;
@@ -68,6 +67,7 @@ class Mlp_Update_Plugin_Data {
 		/** @var string $wp_version */
 		$this->is_pre_4_6 = version_compare( $wp_version, '4.6-RC1', '<' );
 
+		// @codingStandardsIgnoreLine as the deprecated function is only used in old versions of WordPress.
 		$this->all_sites = $this->is_pre_4_6 ? wp_get_sites() : get_sites();
 	}
 
@@ -80,20 +80,21 @@ class Mlp_Update_Plugin_Data {
 	public function update( Mlp_Network_Plugin_Deactivation_Interface $deactivator ) {
 
 		$deactivator->deactivate(
-			array (
+			array(
 				'disable-acf.php',
-				'mlp-wp-seo-compat.php'
+				'mlp-wp-seo-compat.php',
 			)
 		);
 		// add hook to import active languages when reset is done
-		add_action( 'mlp_reset_table_done', array ( $this, 'import_active_languages' ) );
+		add_action( 'mlp_reset_table_done', array( $this, 'import_active_languages' ) );
 
 		// The site option with the version number exists since 2.0. If the last
 		// version is a fallback, it is a version below 2.0.
-		if ( Mlp_Version_Number_Interface::FALLBACK_VERSION === $this->last_version )
+		if ( Mlp_Version_Number_Interface::FALLBACK_VERSION === $this->last_version ) {
 			$this->update_plugin_data( 1 );
-		else
+		} else {
 			$this->update_plugin_data( $this->last_version );
+		}
 	}
 
 	/**
@@ -105,7 +106,7 @@ class Mlp_Update_Plugin_Data {
 	 */
 	private function update_plugin_data( $last_version ) {
 
-		if ( $last_version === 1 ) {
+		if ( 1 === $last_version ) {
 			$this->import_active_languages( new Mlp_Db_Languages_Schema( $this->wpdb ) );
 		}
 
@@ -177,35 +178,39 @@ class Mlp_Update_Plugin_Data {
 		// get active languages
 		$mlp_settings = get_site_option( 'inpsyde_multilingual' );
 
-		if ( empty ( $mlp_settings ) )
+		if ( empty( $mlp_settings ) ) {
 			return;
+		}
 
 		$table = $languages->get_table_name();
 		$sql   = 'SELECT ID FROM ' . $table . 'WHERE wp_locale = %s OR iso_639_1 = %s';
 
 		foreach ( $mlp_settings as $mlp_site ) {
-			$text    = $mlp_site[ 'text' ] != '' ? $mlp_site[ 'text' ] : $mlp_site[ 'lang' ];
-			$query   = $this->wpdb->prepare( $sql, $mlp_site[ 'lang' ], $mlp_site[ 'lang' ] );
+			$text    = '' !== $mlp_site['text'] ? $mlp_site['text'] : $mlp_site['lang'];
+			$query   = $this->wpdb->prepare( $sql, $mlp_site['lang'], $mlp_site['lang'] );
 			$lang_id = $this->wpdb->get_var( $query );
 
 			// language not found -> insert
-			if ( empty ( $lang_id ) ) {
+			if ( empty( $lang_id ) ) {
 				// @todo add custom name
 				$this->wpdb->insert(
 					$table,
-				   array (
-					   'english_name' => $text,
-					   'wp_locale'    => $mlp_site[ 'lang' ],
-					   'http_name'    => str_replace( '_', '-', $mlp_site[ 'lang' ] )
-				   )
+					array(
+						'english_name' => $text,
+						'wp_locale'    => $mlp_site['lang'],
+						'http_name'    => str_replace( '_', '-', $mlp_site['lang'] ),
+					)
 				);
-			}
-			// language found -> change priority
+			} // language found -> change priority
 			else {
 				$this->wpdb->update(
 					$table,
-					array ( 'priority' => 10 ),
-					array ( 'ID'       => $lang_id )
+					array(
+						'priority' => 10,
+					),
+					array(
+						'ID' => $lang_id,
+					)
 				);
 			}
 		}

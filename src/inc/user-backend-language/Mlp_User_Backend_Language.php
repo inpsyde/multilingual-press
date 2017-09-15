@@ -17,6 +17,11 @@ class Mlp_User_Backend_Language {
 	private $module_manager;
 
 	/**
+	 * @var Inpsyde_Nonce_Validator
+	 */
+	private $nonce_validator;
+
+	/**
 	 * Internal identifier.
 	 *
 	 * @var string
@@ -31,6 +36,8 @@ class Mlp_User_Backend_Language {
 	public function __construct( Mlp_Module_Manager_Interface $module_manager ) {
 
 		$this->module_manager = $module_manager;
+
+		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'update_user_language' );
 	}
 
 	/**
@@ -114,6 +121,7 @@ class Mlp_User_Backend_Language {
 				</label>
 			</th>
 			<td>
+				<?php wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name() ); ?>
 				<select name="<?php echo esc_attr( $this->key ); ?>" id="<?php echo esc_attr( $this->key ); ?>"
 					autocomplete="off">
 					<?php $this->dropdown_languages( $languages, $user_language ); ?>
@@ -134,6 +142,10 @@ class Mlp_User_Backend_Language {
 	 */
 	public function profile_update( $user_id ) {
 
+		if ( ! $this->nonce_validator->is_valid() ) {
+			return false;
+		}
+
 		// Empty means, that the site language is used
 		if ( empty( $_POST[ $this->key ] ) || '' === trim( $_POST[ $this->key ] ) ) {
 			return delete_user_meta( $user_id, $this->key );
@@ -152,7 +164,7 @@ class Mlp_User_Backend_Language {
 	 */
 	public function get_user_language( $user_id, $default = '' ) {
 
-		$setting = get_user_meta( $user_id, $this->key, TRUE );
+		$setting = get_user_meta( $user_id, $this->key, true );
 
 		if ( empty( $setting ) ) {
 			return $default;
@@ -190,8 +202,8 @@ class Mlp_User_Backend_Language {
 		$output = array();
 
 		// Inherit site specific language
-		$output[ ] = '<option value=""' . selected( $current, '', FALSE ) . '>'
-			. __( 'Site Language', 'multilingual-press' ) . "</option>";
+		$output[] = '<option value="" ' . selected( $current, '', false ) . '>'
+			. __( 'Site Language', 'multilingual-press' ) . '</option>';
 
 		foreach ( (array) $lang_files as $file_name ) {
 			$code_lang = basename( $file_name, '.mo' );
@@ -206,18 +218,26 @@ class Mlp_User_Backend_Language {
 
 			$lang = esc_html( $lang );
 
-			$selected = selected( $code_lang, $current, FALSE );
+			$selected = selected( $code_lang, $current, false );
 			if ( '' !== $selected ) {
 				$selected = ' ' . $selected;
 			}
 
-			$output[ $lang ] = '<option value="' . $code_lang . '"' . $selected . '>' . $lang . '</option>';
+			$output[ $lang ] = '<option value="' . $code_lang . '" ' . $selected . '>' . $lang . '</option>';
 		}
 
 		// Order by name
 		uksort( $output, 'strnatcasecmp' );
 
-		echo implode( "\n\t", $output );
+		$output = implode( "\n\t", $output );
+
+		$tags = array(
+			'option' => array(
+				'selected' => true,
+				'value'    => true,
+			),
+		);
+		echo wp_kses( $output, $tags );
 	}
 
 	/**

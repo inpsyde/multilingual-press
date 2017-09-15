@@ -99,7 +99,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 
 		$items = $this->data->get_list();
 
-		if ( empty ( $items ) ) {
+		if ( empty( $items ) ) {
 			esc_html_e( 'No languages found', 'multilingual-press' );
 			return;
 		}
@@ -107,8 +107,9 @@ class Mlp_Simple_Nav_Menu_Selectors {
 		?>
 		<ul id="<?php echo esc_attr( $list_id ); ?>" class="tabs-panel-active">
 			<?php
-			foreach ( $items as $value => $text )
+			foreach ( $items as $value => $text ) {
 				$this->print_item( $value, $text );
+			}
 			?>
 		</ul>
 	<?php
@@ -137,12 +138,13 @@ class Mlp_Simple_Nav_Menu_Selectors {
 	private function print_add_button() {
 
 		$button_id         = $this->data->get_button_id();
-		$button_attributes = array (
-			'id' => "submit-$button_id"
+		$button_attributes = array(
+			'id' => "submit-$button_id",
 		);
 
-		if ( ! $this->data->has_menu() )
-			$button_attributes[ 'disabled' ] = 'disabled';
+		if ( ! $this->data->has_menu() ) {
+			$button_attributes['disabled'] = 'disabled';
+		}
 		?>
 
 		<span class="add-to-menu">
@@ -151,7 +153,7 @@ class Mlp_Simple_Nav_Menu_Selectors {
 					esc_attr__( 'Add to Menu', 'multilingual-press' ),
 					'button-secondary submit-add-to-menu right',
 					"add-$button_id-item",
-					FALSE,
+					false,
 					$button_attributes
 				);
 				?>

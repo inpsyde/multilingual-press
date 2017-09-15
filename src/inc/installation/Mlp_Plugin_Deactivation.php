@@ -11,7 +11,7 @@
 class Mlp_Plugin_Deactivation {
 
 	/**
-	 * @var Array
+	 * @var array
 	 */
 	private $errors;
 
@@ -26,14 +26,14 @@ class Mlp_Plugin_Deactivation {
 	private $plugin_base_name;
 
 	/**
-	 * @param Array  $errors
+	 * @param array  $errors
 	 * @param string $plugin_name
 	 * @param string $plugin_base_name
 	 */
 	public function __construct(
-		Array $errors,
-		      $plugin_name,
-		      $plugin_base_name
+		array $errors,
+			  $plugin_name,
+			  $plugin_base_name
 	) {
 
 		$this->errors           = $errors;
@@ -51,11 +51,11 @@ class Mlp_Plugin_Deactivation {
 		$this->print_errors();
 
 		// Suppress "Plugin activated" notice.
-		unset( $_GET[ 'activate' ] );
+		unset( $_GET['activate'] );
 
 		deactivate_plugins( $this->plugin_base_name );
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -68,18 +68,22 @@ class Mlp_Plugin_Deactivation {
 			<p>
 				<strong>
 					<?php
-					printf(
+					echo esc_html( sprintf(
 						__( 'The plugin %s has been deactivated.', 'multilingual-press' ),
-						esc_html( $this->plugin_name )
-					);
+						$this->plugin_name
+					) );
 					?>
 				</strong>
 			</p>
-			<?php foreach ( $this->errors as $error ) : ?>
-				<p>
-					<?php echo $error; ?>
-				</p>
-			<?php endforeach; ?>
+			<?php
+			if ( $this->errors ) {
+				$output = '';
+				foreach ( $this->errors as $error ) {
+					$output .= "<p>{$error}</p>";
+				}
+				echo wp_kses_post( $output );
+			}
+			?>
 		</div>
 		<?php
 	}

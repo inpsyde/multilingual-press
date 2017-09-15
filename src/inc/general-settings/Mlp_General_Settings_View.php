@@ -38,19 +38,20 @@ class Mlp_General_Settings_View {
 	/**
 	 * Modules Manager
 	 *
-	 * @since	0.1
-	 * @uses	get_site_option, _e, admin_url, wp_nonce_field,
-	 * 			do_action, submit_button
-	 * @return	void
+	 * @since   0.1
+	 * @uses    get_site_option, _e, admin_url, wp_nonce_field,
+	 *          do_action, submit_button
+	 * @return  void
 	 */
 	public function modules_form() {
 
 		$modules = $this->module_mapper->get_modules();
 
+		$action = admin_url( 'admin-post.php?action=mlp_update_modules' );
+
 		// Draw the form
 		?>
-		<form action="<?php echo admin_url( 'admin-post.php?action=mlp_update_modules' ); ?>" method="post"
-			id="mlp_modules">
+		<form action="<?php echo esc_url( $action ); ?>" method="post" id="mlp_modules">
 			<?php wp_nonce_field( $this->module_mapper->get_nonce_action() ); ?>
 			<table class="mlp-admin-feature-table">
 				<?php
@@ -64,7 +65,7 @@ class Mlp_General_Settings_View {
 						continue;
 					}
 
-					echo $this->module_row( $slug, $module );
+					$this->module_row( $slug, $module );
 				}
 
 				/**
@@ -89,7 +90,7 @@ class Mlp_General_Settings_View {
 	 *
 	 * @param  string $slug
 	 * @param  array  $module
-	 * @return string
+	 * @return void
 	 */
 	protected function module_row( $slug, $module ) {
 
@@ -103,7 +104,6 @@ class Mlp_General_Settings_View {
 		$title = $this->get_module_title( $module );
 		$desc  = $this->get_module_description( $module );
 
-		ob_start();
 		?>
 		<tr class="<?php echo esc_attr( $class ); ?>">
 			<td class="check-column">
@@ -122,9 +122,7 @@ class Mlp_General_Settings_View {
 				?>
 			</td>
 		</tr>
-
 		<?php
-		return ob_get_clean();
 	}
 
 	/**
@@ -133,12 +131,13 @@ class Mlp_General_Settings_View {
 	 * @param $module
 	 * @return string
 	 */
-	private function get_module_title( Array $module ) {
+	private function get_module_title( array $module ) {
 
-		if ( isset ( $module[ 'display_name_callback' ] ) )
-			return call_user_func( $module[ 'display_name_callback' ] );
+		if ( isset( $module['display_name_callback'] ) ) {
+			return call_user_func( $module['display_name_callback'] );
+		}
 
-		return $module[ 'display_name' ];
+		return $module['display_name'];
 	}
 
 	/**
@@ -147,11 +146,12 @@ class Mlp_General_Settings_View {
 	 * @param array $module
 	 * @return string
 	 */
-	private function get_module_description( Array $module ) {
+	private function get_module_description( array $module ) {
 
-		if ( isset ( $module[ 'description_callback' ] ) )
-			return call_user_func( $module[ 'description_callback' ] );
+		if ( isset( $module['description_callback'] ) ) {
+			return call_user_func( $module['description_callback'] );
+		}
 
-		return $module[ 'description' ];
+		return $module['description'];
 	}
 }

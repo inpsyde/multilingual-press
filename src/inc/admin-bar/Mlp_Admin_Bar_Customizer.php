@@ -77,8 +77,11 @@ class Mlp_Admin_Bar_Customizer {
 	 */
 	public function update_cache() {
 
-		$site_id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : get_current_blog_id();
-		if ( 1 > $site_id ) {
+		$site_id = absint( filter_input( INPUT_POST, 'id' ) );
+		if ( ! $site_id ) {
+			$site_id = get_current_blog_id();
+		}
+		if ( ! $site_id ) {
 			return;
 		}
 

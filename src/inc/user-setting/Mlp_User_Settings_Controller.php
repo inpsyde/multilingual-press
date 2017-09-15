@@ -23,7 +23,7 @@ class Mlp_User_Settings_Controller {
 	 * @param Mlp_User_Settings_Updater_Interface $updater
 	 */
 	public function __construct(
-		Mlp_User_Settings_View_Interface    $view,
+		Mlp_User_Settings_View_Interface $view,
 		Mlp_User_Settings_Updater_Interface $updater
 	) {
 
@@ -40,7 +40,7 @@ class Mlp_User_Settings_Controller {
 
 		$container = new Mlp_User_Settings_Container_Html( $this->view );
 
-		add_action( 'personal_options', array ( $container,     'render' ) );
-		add_action( 'profile_update',   array ( $this->updater, 'save' ) );
+		add_action( 'personal_options', array( $container, 'render' ) );
+		add_action( 'profile_update',   array( $this->updater, 'save' ) );
 	}
 }

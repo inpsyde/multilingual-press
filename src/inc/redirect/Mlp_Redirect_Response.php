@@ -27,8 +27,9 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 	 */
 	public function redirect() {
 
-		if ( ! empty( $_GET['noredirect'] ) ) {
-			$this->save_session( $_GET['noredirect'] );
+		$language = (string) filter_input( INPUT_GET, 'noredirect' );
+		if ( '' !== $language ) {
+			$this->save_session( $language );
 
 			return false;
 		}

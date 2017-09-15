@@ -15,7 +15,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 *
 	 * @type array
 	 */
-	private $properties = array ();
+	private $properties = array();
 
 	/**
 	 * Parent object.
@@ -24,7 +24,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 *
 	 * @type Inpsyde_Property_List
 	 */
-	private $parent = NULL;
+	private $parent = null;
 
 	/**
 	 * Record of deleted properties.
@@ -35,7 +35,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 * @see  get()
 	 * @type array
 	 */
-	private $deleted = array ();
+	private $deleted = array();
 
 	/**
 	 * Write and delete protection.
@@ -44,7 +44,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 * @see  is_frozen()
 	 * @type bool
 	 */
-	private $frozen = FALSE;
+	private $frozen = false;
 
 	/**
 	 * @type Mlp_Internal_Locations
@@ -59,18 +59,20 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 * @return void|Mlp_Plugin_Properties
 	 */
 	public function set( $name, $value ) {
-		if ( $this->frozen )
+		if ( $this->frozen ) {
 			return $this->stop(
-						'This object has been frozen.
-						You cannot set properties anymore.'
+				'This object has been frozen.
+				You cannot set properties anymore.'
 			);
+		}
 
-		if ( 'locations' === $name )
+		if ( 'locations' === $name ) {
 			$this->locations = $value;
-		else
+		} else {
 			$this->properties[ $name ] = $value;
+		}
 
-		unset ( $this->deleted[ $name ] );
+		unset( $this->deleted[ $name ] );
 
 		return $this;
 	}
@@ -85,38 +87,49 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	public function get( $name ) {
 
-		if ( 'locations' === $name )
+		if ( 'locations' === $name ) {
 			return $this->locations;
+		}
 
-		if ( 'css_url' === $name )
+		if ( 'css_url' === $name ) {
 			return $this->locations->get_dir( 'css', 'url' );
+		}
 
-		if ( 'js_url' === $name )
+		if ( 'js_url' === $name ) {
 			return $this->locations->get_dir( 'js', 'url' );
+		}
 
-		if ( 'flag_url' === $name )
+		if ( 'flag_url' === $name ) {
 			return $this->locations->get_dir( 'flags', 'url' );
+		}
 
-		if ( 'flag_path' === $name )
+		if ( 'flag_path' === $name ) {
 			return $this->locations->get_dir( 'flags', 'path' );
+		}
 
-		if ( 'image_url' === $name )
+		if ( 'image_url' === $name ) {
 			return $this->locations->get_dir( 'images', 'url' );
+		}
 
-		if ( 'plugin_dir_path' === $name )
+		if ( 'plugin_dir_path' === $name ) {
 			return $this->locations->get_dir( 'plugin', 'path' );
+		}
 
-		if ( 'plugin_url' === $name )
+		if ( 'plugin_url' === $name ) {
 			return $this->locations->get_dir( 'plugin', 'url' );
+		}
 
-		if ( isset ( $this->properties[ $name ] ) )
+		if ( isset( $this->properties[ $name ] ) ) {
 			return $this->properties[ $name ];
+		}
 
-		if ( isset ( $this->deleted[ $name ] ) )
-			return NULL;
+		if ( isset( $this->deleted[ $name ] ) ) {
+			return null;
+		}
 
-		if ( NULL === $this->parent )
-			return NULL;
+		if ( null === $this->parent ) {
+			return null;
+		}
 
 		return $this->parent->get( $name );
 	}
@@ -131,14 +144,17 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	public function has( $name ) {
 
-		if ( isset ( $this->properties[ $name ] ) )
-			return TRUE;
+		if ( isset( $this->properties[ $name ] ) ) {
+			return true;
+		}
 
-		if ( isset ( $this->deleted[ $name ] ) )
-			return FALSE;
+		if ( isset( $this->deleted[ $name ] ) ) {
+			return false;
+		}
 
-		if ( NULL === $this->parent )
-			return FALSE;
+		if ( null === $this->parent ) {
+			return false;
+		}
 
 		return $this->parent->has( $name );
 	}
@@ -153,14 +169,15 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	public function delete( $name ) {
 
-		if ( $this->frozen )
+		if ( $this->frozen ) {
 			return $this->stop(
-						'This object has been frozen.
-						You cannot delete properties anymore.'
+				'This object has been frozen.
+				You cannot delete properties anymore.'
 			);
+		}
 
-		$this->deleted[ $name ] = TRUE;
-		unset ( $this->properties[ $name ] );
+		$this->deleted[ $name ] = true;
+		unset( $this->properties[ $name ] );
 
 		return $this;
 	}
@@ -173,11 +190,12 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	public function set_parent( Inpsyde_Property_List_Interface $object ) {
 
-		if ( $this->frozen )
+		if ( $this->frozen ) {
 			return $this->stop(
-						'This object has been frozen.
-						You cannot change the parent anymore.'
+				'This object has been frozen.
+				You cannot change the parent anymore.'
 			);
+		}
 
 		$this->parent = $object;
 
@@ -191,7 +209,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	public function has_parent() {
 
-		return NULL !== $this->parent;
+		return null !== $this->parent;
 	}
 
 	/**
@@ -201,7 +219,7 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	public function freeze() {
 
-		$this->frozen = TRUE;
+		$this->frozen = true;
 
 		return $this;
 	}
@@ -265,11 +283,13 @@ class Mlp_Plugin_Properties implements Inpsyde_Property_List_Interface {
 	 */
 	private function stop( $msg, $code = '' ) {
 
-		if ( '' === $code )
+		if ( '' === $code ) {
 			$code = __CLASS__;
+		}
 
-		if ( class_exists( 'WP_Error' ) )
+		if ( class_exists( 'WP_Error' ) ) {
 			return Mlp_WP_Error_Factory::create( $code, $msg );
+		}
 
 		throw new Exception( $msg, $code );
 	}

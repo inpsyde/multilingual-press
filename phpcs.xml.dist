@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<ruleset name="MultilingualPress 2.x Standard" namespace="Inpsyde\MultilingualPress\Standard\v2">
+
+	<description>Coding standard for MultilingualPress version 2.x.</description>
+
+	<file>./src/inc</file>
+	<file>./src/multilingual-press.php</file>
+	<file>./src/uninstall.php</file>
+
+	<arg value="sp"/>
+
+	<rule ref="PHPCompatibility"/>
+
+	<rule ref="WordPress">
+
+		<!-- Exclude as we won't touch comments or documentation for 2.x anymore. -->
+		<exclude name="Generic.Commenting"/>
+		<exclude name="Squiz.Commenting"/>
+
+		<!-- Exclude to be able to use "@noinspection PhpUnusedParameterInspection" annotations. -->
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint"/>
+
+		<!-- Exclude as MultilingualPress adheres to the PSR-0 standard. -->
+		<exclude name="WordPress.Files.FileName"/>
+
+		<!-- Exclude to be able to use namespaced hooks such as "multilingualpress.active_taxonomies". -->
+		<exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
+
+		<!-- Exclude VIP-specific sniffs, for now. -->
+		<exclude name="WordPress.VIP"/>
+
+		<!-- Exclude as we won't touch translations for 2.x anymore. -->
+		<exclude name="WordPress.WP.I18n"/>
+
+	</rule>
+
+	<rule ref="WordPress.CSRF.NonceVerification">
+
+		<properties>
+
+			<property name="customNonceVerificationFunctions" value="is_valid"/>
+
+		</properties>
+
+	</rule>
+
+</ruleset>

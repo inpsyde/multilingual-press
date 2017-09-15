@@ -31,6 +31,11 @@ class Mlp_Duplicate_Blogs {
 	private $table_names;
 
 	/**
+	 * @var Inpsyde_Nonce_Validator_Interface
+	 */
+	private $nonce_validator;
+
+	/**
 	 * Constructor
 	 *
 	 * @param string                         $link_table
@@ -39,16 +44,18 @@ class Mlp_Duplicate_Blogs {
 	 * @param Mlp_Db_Table_List_Interface    $table_names
 	 */
 	public function __construct(
-		                               $link_table,
-		wpdb                           $wpdb,
+									   $link_table,
+		wpdb $wpdb,
 		Mlp_Table_Duplicator_Interface $duplicator,
-		Mlp_Db_Table_List_Interface    $table_names
+		Mlp_Db_Table_List_Interface $table_names
 	) {
 
 		$this->link_table  = $link_table;
 		$this->wpdb        = $wpdb;
 		$this->duplicator  = $duplicator;
 		$this->table_names = $table_names;
+
+		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'duplicate_site', (int) get_network()->site_id );
 	}
 
 	/**
@@ -58,27 +65,32 @@ class Mlp_Duplicate_Blogs {
 	 */
 	public function setup() {
 
-		add_filter( 'wpmu_new_blog', array ( $this, 'wpmu_new_blog' ), 10, 2 );
-		add_filter( 'mlp_after_new_blog_fields', array ( $this, 'display_fields' ) );
+		add_filter( 'wpmu_new_blog', array( $this, 'wpmu_new_blog' ), 10, 2 );
+		add_filter( 'mlp_after_new_blog_fields', array( $this, 'display_fields' ) );
 	}
 
 	/**
 	 * Duplicates the old blog to the new blog
 	 *
 	 * @global    wpdb $wpdb WordPress Database Wrapper
-	 * @param	int $blog_id the new blog id
-	 * @return	void
+	 * @param   int $blog_id the new blog id
+	 * @return  void
 	 */
 	public function wpmu_new_blog( $blog_id ) {
 
-		// Return if we don't have a blog
-		if ( ! isset ( $_POST[ 'blog' ][ 'basedon' ] ) || 1 > $_POST[ 'blog' ][ 'basedon' ] )
+		if ( ! $this->nonce_validator->is_valid() ) {
 			return;
+		}
 
-		$source_blog_id = (int) $_POST[ 'blog' ][ 'basedon' ];
+		// Return if we don't have a blog
+		if ( ! isset( $_POST['blog']['basedon'] ) || 1 > $_POST['blog']['basedon'] ) {
+			return;
+		}
+
+		$source_blog_id = (int) $_POST['blog']['basedon'];
 
 		// Hook information
-		$context = array (
+		$context = array(
 			'source_blog_id' => $source_blog_id,
 			'new_blog_id'    => $blog_id,
 		);
@@ -108,7 +120,7 @@ class Mlp_Duplicate_Blogs {
 			$this->duplicator->replace_content(
 				$new_name,
 				$table_name,
-				TRUE
+				true
 			);
 		}
 
@@ -122,10 +134,11 @@ class Mlp_Duplicate_Blogs {
 
 		// if an url was used in the old blog, we set it to this url to change all content elements
 		// change siteurl -> will start url rename plugin
-		if ( '' != $domain )
+		if ( '' !== $domain ) {
 			update_option( 'siteurl', $domain );
+		}
 
-		update_option( 'blogname', stripslashes( $_POST [ 'blog' ][ 'title' ] ) );
+		update_option( 'blogname', stripslashes( $_POST ['blog']['title'] ) );
 		update_option( 'home', $url );
 
 		// change siteurl -> will start url rename plugin
@@ -133,16 +146,20 @@ class Mlp_Duplicate_Blogs {
 
 		$this->wpdb->update(
 			$this->wpdb->options,
-			array( 'option_name' => $this->wpdb->prefix . 'user_roles' ),
-			array( 'option_name' => $old_prefix . 'user_roles' )
+			array(
+				'option_name' => $this->wpdb->prefix . 'user_roles',
+			),
+			array(
+				'option_name' => $old_prefix . 'user_roles',
+			)
 		);
 
 		$this->insert_post_relations( $source_blog_id, $blog_id );
 		$this->copy_attachments( $source_blog_id, $blog_id, $blog_id );
 
 		// Set the search engine visibility
-		if ( isset( $_POST[ 'blog' ][ 'visibility' ] ) ) {
-			update_option( 'blog_public', (bool) $_POST[ 'blog' ][ 'visibility' ] );
+		if ( isset( $_POST['blog']['visibility'] ) ) {
+			update_option( 'blog_public', (bool) $_POST['blog']['visibility'] );
 		}
 
 		$theme = wp_get_theme();
@@ -174,9 +191,13 @@ class Mlp_Duplicate_Blogs {
 	private function update_admin_email( $admin_email ) {
 
 		$this->wpdb->update(
-				   $this->wpdb->options,
-				   array( 'option_value' => $admin_email ),
-				   array( 'option_name'  => 'admin_email' )
+			$this->wpdb->options,
+			array(
+				'option_value' => $admin_email,
+			),
+			array(
+				'option_name' => 'admin_email',
+			)
 		);
 	}
 
@@ -187,15 +208,17 @@ class Mlp_Duplicate_Blogs {
 	 */
 	private function get_mapped_domain() {
 
-		if ( empty ( $this->wpdb->dmtable ) )
+		if ( empty( $this->wpdb->dmtable ) ) {
 			return '';
+		}
 
 		$sql    = 'SELECT domain FROM ' . $this->wpdb->dmtable . ' WHERE active = 1 AND blog_id = %s LIMIT 1';
 		$sql    = $this->wpdb->prepare( $sql, get_current_blog_id() );
 		$domain = $this->wpdb->get_var( $sql );
 
-		if ( '' === $domain )
+		if ( '' === $domain ) {
 			return '';
+		}
 
 		return ( is_ssl() ? 'https://' : 'http://' ) . $domain;
 	}
@@ -206,10 +229,10 @@ class Mlp_Duplicate_Blogs {
 	 * @param array $context
 	 * @return array
 	 */
-	private function get_table_names( Array $context ) {
+	private function get_table_names( array $context ) {
 
 		$tables = $this->table_names->get_site_core_tables(
-			$context[ 'source_blog_id' ]
+			$context['source_blog_id']
 		);
 
 		/**
@@ -235,8 +258,9 @@ class Mlp_Duplicate_Blogs {
 	 */
 	private function insert_post_relations( $source_blog_id, $target_blog_id ) {
 
-		if ( $this->has_related_blogs( $source_blog_id ) )
+		if ( $this->has_related_blogs( $source_blog_id ) ) {
 			return $this->copy_post_relationships( $source_blog_id, $target_blog_id );
+		}
 
 		return $this->create_post_relationships( $source_blog_id, $target_blog_id );
 	}
@@ -292,7 +316,7 @@ SELECT %d, ID, %d, ID, 'post'
 FROM {$this->wpdb->posts}
 WHERE post_status IN ( 'publish', 'future', 'draft', 'pending', 'private' )";
 
-		foreach( array( $source_site_id, $target_site_id ) as $site_id ) {
+		foreach ( array( $source_site_id, $target_site_id ) as $site_id ) {
 			$result += (int) $this->wpdb->query( $this->wpdb->prepare( $query, $source_site_id, $site_id ) );
 		}
 
@@ -330,8 +354,9 @@ LIMIT 2";
 
 		$copy_files = new Mlp_Copy_Attachments( $from_id, $to_id, $final_id );
 
-		if ( $copy_files->copy_attachments() )
+		if ( $copy_files->copy_attachments() ) {
 			$this->update_file_urls( $copy_files );
+		}
 	}
 
 	/**
@@ -372,19 +397,19 @@ LIMIT 2";
 	 */
 	private function update_file_urls( $copy_files ) {
 
-		$tables = array (
-			$this->wpdb->posts         => array (
+		$tables = array(
+			$this->wpdb->posts         => array(
 				'guid',
 				'post_content',
 				'post_excerpt',
 				'post_content_filtered',
 			),
-			$this->wpdb->term_taxonomy => array (
-				'description'
+			$this->wpdb->term_taxonomy => array(
+				'description',
 			),
-			$this->wpdb->comments      => array (
-				'comment_content'
-			)
+			$this->wpdb->comments      => array(
+				'comment_content',
+			),
 		);
 
 		$db_replace    = new Mlp_Db_Replace( $this->wpdb );
@@ -406,7 +431,7 @@ LIMIT 2";
 	/**
 	 * Add copy field at "Add new site" screen
 	 *
-	 * @return	void
+	 * @return  void
 	 */
 	public function display_fields() {
 
@@ -418,8 +443,9 @@ LIMIT 2";
 				</label>
 			</th>
 			<td>
+				<?php wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name() ); ?>
 				<select id="mlp-base-site-id" name="blog[basedon]" autocomplete="off">
-					<option value="0"><?php _e( 'Choose site', 'multilingual-press' ); ?></option>
+					<option value="0"><?php esc_html_e( 'Choose site', 'multilingual-press' ); ?></option>
 					<?php foreach ( (array) $this->get_all_sites() as $blog ) : ?>
 						<?php
 						if ( '/' === $blog['path'] ) {

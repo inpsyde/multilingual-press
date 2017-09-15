@@ -28,6 +28,23 @@ class Mlp_Table_Pagination_View {
 	private $pagination    = '';
 
 	/**
+	 * @var array[]
+	 */
+	private $pagination_tags    = array(
+		'a'    => array(
+			'class' => true,
+			'href'  => true,
+			'title' => true,
+		),
+		'div'  => array(
+			'class' => true,
+		),
+		'span' => array(
+			'class' => true,
+		),
+	);
+
+	/**
 	 * Complete, sanitized current request URL.
 	 *
 	 * @type string
@@ -85,26 +102,22 @@ class Mlp_Table_Pagination_View {
 	 */
 	public function print_pagination() {
 
-		// Do not work twice.
-		if ( '' !== $this->pagination ) {
-			echo $this->pagination;
+		if ( '' === $this->pagination ) {
+			$this->set_context_vars();
 
-			return;
+			$page_class = 1 === $this->total_pages ? ' one-page' : '';
+
+			ob_start();
+			?>
+			<div class="tablenav-pages<?php echo esc_attr( $page_class ); ?>">
+				<?php $this->print_item_count(); ?>
+				<?php $this->print_pagination_links(); ?>
+			</div>
+			<?php
+			$this->pagination = ob_get_clean();
 		}
 
-		$this->set_context_vars();
-
-		echo $this->pagination;
-
-		$page_class = 1 === $this->total_pages ? ' one-page' : '';
-		?>
-		<div class="tablenav-pages<?php echo esc_attr( $page_class ); ?>">
-			<?php echo $this->get_item_count() ?>
-			<?php if ( 1 < $this->total_pages ) { ?>
-				<?php echo $this->get_pagination_links(); ?>
-			<?php } ?>
-		</div>
-		<?php
+		echo wp_kses( $this->pagination, $this->pagination_tags );
 	}
 
 	/**
@@ -119,7 +132,7 @@ class Mlp_Table_Pagination_View {
 		$this->current_page = $this->data->get_current_page();
 		$this->current_url  = $this->get_current_url();
 
-		if ( $this->current_page === 1 ) {
+		if ( 1 === $this->current_page ) {
 			$this->disable_first = ' disabled';
 		}
 
@@ -131,28 +144,34 @@ class Mlp_Table_Pagination_View {
 	/**
 	 * Get the link markup.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_pagination_links() {
+	private function print_pagination_links() {
 
-		return "\n<span class='pagination-links'>"
-			. $this->get_first_page_link()      . ' '
-			. $this->get_previous_page_link()   . ' '
-			. $this->get_current_page_display() . ' '
-			. $this->get_next_page_link()       . ' '
-			. $this->get_last_page_link()
-			. '</span>';
+		if ( 1 < $this->total_pages ) {
+			?>
+			<span class="pagination-links">
+				<?php
+				$this->print_first_page_link();
+				$this->print_previous_page_link();
+				$this->print_current_page_display();
+				$this->print_next_page_link();
+				$this->print_last_page_link();
+				?>
+			</span>
+			<?php
+		}
 	}
 
 	/**
 	 * Get text for "page number of total pages".
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_current_page_display() {
+	private function print_current_page_display() {
 
 		$total = sprintf(
-			"<span class='total-pages'>%s</span>",
+			'<span class="total-pages">%s</span>',
 			number_format_i18n( $this->total_pages )
 		);
 
@@ -162,17 +181,24 @@ class Mlp_Table_Pagination_View {
 			$total
 		);
 
-		return '<span class="paging-input">' . $paging . '</span>';
+		$tags = array(
+			'span' => array(
+				'class' => true,
+			),
+		);
+		?>
+		<span class="paging-input"><?php echo wp_kses( $paging, $tags ); ?></span>
+		<?php
 	}
 
 	/**
 	 * Get markup for last page link.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_last_page_link() {
+	private function print_last_page_link() {
 
-		return $this->get_anchor(
+		$this->print_anchor(
 			$this->get_paged_url( $this->total_pages ),
 			__( 'Go to the last page', 'multilingual-press' ),
 			'last-page' . $this->disable_last,
@@ -183,14 +209,12 @@ class Mlp_Table_Pagination_View {
 	/**
 	 * Get markup for next page link.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_next_page_link() {
+	private function print_next_page_link() {
 
-		$page = min( $this->total_pages, $this->current_page + 1 );
-
-		return $this->get_anchor(
-			$this->get_paged_url( $page ),
+		$this->print_anchor(
+			$this->get_paged_url( min( $this->total_pages, $this->current_page + 1 ) ),
 			__( 'Go to the next page', 'multilingual-press' ),
 			'next-page' . $this->disable_last,
 			'&rsaquo;'
@@ -200,12 +224,12 @@ class Mlp_Table_Pagination_View {
 	/**
 	 * Get markup for previous page link.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_previous_page_link() {
+	private function print_previous_page_link() {
 
-		return $this->get_anchor(
-			$this->get_paged_url( max( 1, $this->current_page -1 ) ),
+		$this->print_anchor(
+			$this->get_paged_url( max( 1, $this->current_page - 1 ) ),
 			__( 'Go to the previous page', 'multilingual-press' ),
 			'prev-page' . $this->disable_first,
 			'&lsaquo;'
@@ -215,11 +239,11 @@ class Mlp_Table_Pagination_View {
 	/**
 	 * Get markup for last page link.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_first_page_link() {
+	private function print_first_page_link() {
 
-		return $this->get_anchor(
+		$this->print_anchor(
 			$this->get_paged_url( 1 ),
 			__( 'Go to the first page', 'multilingual-press' ),
 			'first-page' . $this->disable_first,
@@ -234,32 +258,30 @@ class Mlp_Table_Pagination_View {
 	 * @param  string $title Title attribute.
 	 * @param  string $class CSS class.
 	 * @param  string $text  Visible anchor text.
-	 * @return string
+	 * @return void
 	 */
-	private function get_anchor( $url, $title, $class, $text ) {
+	private function print_anchor( $url, $title, $class, $text ) {
 
-		return sprintf(
-			'<a href="%2$s" class="%3$s" title="%4$s">%1$s</a>',
-			esc_html( $text ),
-			esc_url( $url ),
-			esc_attr( $class ),
-			esc_attr( $title )
-		);
+		?>
+		<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $class ); ?>"
+			title="<?php echo esc_attr( $title ); ?>"><?php echo esc_html( $text ); ?></a>
+		<?php
 	}
 
 	/**
 	 * Get markup for all item display.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function get_item_count() {
+	private function print_item_count() {
 
 		$num = sprintf(
 			_n( '1 item', '%s items', (int) $this->total_items, 'multilingual-press' ),
 			number_format_i18n( $this->total_items )
 		);
-
-		return '<span class="displaying-num">' . esc_html( $num ) . '</span>';
+		?>
+		<span class="displaying-num"><?php echo esc_html( $num ); ?></span>
+		<?php
 	}
 
 	/**

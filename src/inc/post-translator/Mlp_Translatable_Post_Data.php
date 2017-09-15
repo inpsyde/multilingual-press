@@ -51,7 +51,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 * @param string                          $link_table
 	 * @param Mlp_Content_Relations_Interface $content_relations
 	 */
-	function __construct(
+	public function __construct(
 		$deprecated,
 		array $allowed_post_types,
 		$link_table,
@@ -65,7 +65,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 		$this->content_relations = $content_relations;
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-			$this->post_request_data = $_POST;
+			$this->post_request_data = (array) filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
 		}
 
 		$this->source_site_id = get_current_blog_id();
@@ -124,7 +124,8 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 			return;
 		}
 
-		$file     = $path = '';
+		$file     = '';
+		$path     = '';
 		$fileinfo = array();
 
 		// Check for thumbnail
@@ -132,7 +133,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 			$thumb_id = get_post_thumbnail_id( $post_id );
 			if ( 0 < $thumb_id ) {
 				$path     = wp_upload_dir();
-				$file     = get_post_meta( $thumb_id, '_wp_attached_file', true );
+				$file     = (string) get_post_meta( $thumb_id, '_wp_attached_file', true );
 				$fileinfo = pathinfo( $file );
 				include_once( ABSPATH . 'wp-admin/includes/image.php' ); //including the attachment function
 			}
@@ -155,7 +156,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 
 		// Create a copy of the item for every related blog
 		foreach ( $this->post_request_data[ $this->name_base ] as $blog_id ) {
-			if ( $blog_id == get_current_blog_id() or ! blog_exists( $blog_id ) ) {
+			if ( get_current_blog_id() === (int) $blog_id || ! blog_exists( $blog_id ) ) {
 				continue;
 			}
 
@@ -186,7 +187,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 				$this->update_remote_post_meta( $remote_post_id, $post_meta );
 			}
 
-			if ( '' != $file ) { // thumbfile exists
+			if ( '' !== $file ) { // thumbfile exists
 				if ( 0 < count( $fileinfo ) ) {
 					$filedir  = wp_upload_dir();
 					$filename = wp_unique_filename( $filedir['path'], $fileinfo['basename'] );
@@ -513,7 +514,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 * Check for hidden auto-draft
 	 *
 	 * Auto-drafts are sent as revision with a status 'inherit'.
-	 * We have to inspect the $_POST array ($request) to distinguish them from
+	 * We have to inspect the $_POST array($request) to distinguish them from
 	 * real revisions and attachments (which have the same status)
 	 *
 	 * @param  WP_Post $post

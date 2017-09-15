@@ -6,6 +6,11 @@
 class Mlp_Dashboard_Widget {
 
 	/**
+	 * @var Inpsyde_Nonce_Validator
+	 */
+	private $nonce_validator;
+
+	/**
 	 * @var Mlp_Site_Relations_Interface
 	 */
 	private $site_relations;
@@ -18,6 +23,8 @@ class Mlp_Dashboard_Widget {
 	public function __construct( Mlp_Site_Relations_Interface $site_relations ) {
 
 		$this->site_relations = $site_relations;
+
+		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_translation_completed_setting' );
 	}
 
 	/**
@@ -77,12 +84,13 @@ class Mlp_Dashboard_Widget {
 		}
 		?>
 		<div class="misc-pub-section">
+			<?php wp_nonce_field( $this->nonce_validator->get_action(), $this->nonce_validator->get_name() ); ?>
 			<input type="hidden" name="post_is_translated_blogid"
 				value="<?php echo get_current_blog_id(); ?>">
 			<label for="post_is_translated">
 				<input type="checkbox" name="_post_is_translated" value="1" id="post_is_translated"
 					<?php checked( $is_translated ); ?>>
-				<?php _e( 'Translation completed', 'multilingual-press' ); ?>
+				<?php esc_html_e( 'Translation completed', 'multilingual-press' ); ?>
 			</label>
 		</div>
 		<?php
@@ -119,24 +127,23 @@ class Mlp_Dashboard_Widget {
 		if ( ! $related_blogs ) {
 			?>
 			<p>
-				<?php _e( 'Sorry, there are no connected sites in the system for this site.', 'multilingual-press' ); ?>
+				<?php
+				esc_html_e( 'Sorry, there are no connected sites in the system for this site.', 'multilingual-press' );
+				?>
 			</p>
 			<?php
 			return;
 		}
+
+		/* translators: %s: site name */
+		$message = __( 'Pending Translations for %s', 'multilingual-press' );
 		?>
 		<table class="widefat">
 			<?php foreach ( array_unique( $related_blogs ) as $blog_to_translate ) : ?>
 				<?php switch_to_blog( $blog_to_translate ); ?>
 				<tr>
 					<th colspan="3">
-						<strong>
-							<?php
-							/* translators: %s: site name */
-							$message = __( 'Pending Translations for %s', 'multilingual-press' );
-							printf( $message, get_bloginfo( 'name' ) );
-							?>
-						</strong>
+						<strong><?php echo esc_html( sprintf( $message, get_bloginfo( 'name' ) ) ); ?></strong>
 					</th>
 				</tr>
 				<?php
@@ -195,6 +202,10 @@ class Mlp_Dashboard_Widget {
 			return;
 		}
 
+		if ( ! $this->nonce_validator->is_valid() ) {
+			return;
+		}
+
 		// We're only interested in published posts at this time.
 		$post_status = get_post_status( $post_id );
 		if ( ! in_array( $post_status, array( 'publish', 'draft' ), true ) ) {
@@ -223,11 +234,7 @@ class Mlp_Dashboard_Widget {
 	 */
 	private function get_post_id() {
 
-		if ( empty( $_GET['post'] ) ) {
-			return 0;
-		}
-
-		return absint( $_GET['post'] );
+		return absint( filter_input( INPUT_GET, 'post' ) );
 	}
 
 	/**
@@ -243,7 +250,7 @@ class Mlp_Dashboard_Widget {
 			return false;
 		}
 
-		if ( get_post_meta( $_GET['post'], '_post_is_translated', true ) ) {
+		if ( get_post_meta( $this->get_post_id(), '_post_is_translated', true ) ) {
 			return true;
 		}
 
