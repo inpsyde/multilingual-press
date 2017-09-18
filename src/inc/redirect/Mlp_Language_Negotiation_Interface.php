@@ -13,7 +13,7 @@ interface Mlp_Language_Negotiation_Interface {
 	/**
 	 * @param array $args
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function get_redirect_match( array $args = array() );
 }
