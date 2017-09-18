@@ -90,15 +90,18 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	 */
 	private function render_options( int $site_id ) {
 
+		$default = '-1';
+
+		$current_site_language = $this->repository->get_site_language( $site_id ) ?: $default;
 		?>
-		<option value="-1"><?php esc_html_e( 'Choose language', 'multilingualpress' ); ?></option>
+		<option value="<?php echo esc_attr( $default ); ?>" <?php selected( $current_site_language, $default ); ?>>
+			<?php esc_html_e( 'Choose language', 'multilingualpress' ); ?>
+		</option>
 		<?php
 		$languages = $this->get_languages();
 		if ( ! $languages ) {
 			return;
 		}
-
-		$current_site_language = $this->repository->get_site_language( $site_id ) ?: 'en_US';
 
 		foreach ( $languages as $language ) {
 			$site_language = str_replace( '-', '_', $language['http_code'] );

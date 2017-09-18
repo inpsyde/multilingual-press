@@ -96,15 +96,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 
-		if ( ! empty( $settings[ $site_id ]['lang'] ) ) {
-			return (string) $settings[ $site_id ]['lang'];
-		}
-
-		$site_language = (string) get_network_option( null, 'WPLANG', '' );
-
-		return in_array( $site_language, get_available_languages(), true )
-			? $site_language
-			: '';
+		return (string) ( $settings[ $site_id ]['lang'] ?? '' );
 	}
 
 	/**
