@@ -90,11 +90,10 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	 */
 	private function render_options( int $site_id ) {
 
-		$default = '-1';
-
-		$current_site_language = $this->repository->get_site_language( $site_id ) ?: $default;
+		$current_site_language = $this->get_current_site_language( $site_id );
 		?>
-		<option value="<?php echo esc_attr( $default ); ?>" <?php selected( $current_site_language, $default ); ?>>
+		<option value="<?php echo esc_attr( SiteSettingsUpdater::VALUE_LANGUAGE_NONE ); ?>"
+			<?php selected( $current_site_language, SiteSettingsUpdater::VALUE_LANGUAGE_NONE ); ?>>
 			<?php esc_html_e( 'Choose language', 'multilingualpress' ); ?>
 		</option>
 		<?php
@@ -153,5 +152,30 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 				isset( $language['http_code'] )
 				&& ( isset( $language['english_name'] ) || isset( $language['native_name'] ) );
 		} );
+	}
+
+	/**
+	 * Returns the current MultilingualPress or WordPress language for the site with the given ID.
+	 *
+	 * @param int $site_id Site ID.
+	 *
+	 * @return string The site language of the site with the given ID.
+	 */
+	private function get_current_site_language( int $site_id ): string {
+
+		$site_language = $this->repository->get_site_language( $site_id );
+		if ( '' === $site_language ) {
+			$site_language = get_blog_option( $site_id, 'WPLANG' );
+			// For English (US), WordPress stores an empty string.
+			if ( '' === $site_language ) {
+				return 'en_US';
+			}
+
+			if ( ! in_array( $site_language, get_available_languages(), true ) ) {
+				return '';
+			}
+		}
+
+		return $site_language;
 	}
 }

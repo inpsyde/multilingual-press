@@ -34,6 +34,15 @@ class SiteSettingsUpdater {
 	const ACTION_UPDATE_SETTINGS = 'multilingualpress.update_site_settings';
 
 	/**
+	 * Settings value.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const VALUE_LANGUAGE_NONE = '-1';
+
+	/**
 	 * @var Languages
 	 */
 	private $languages;
@@ -135,7 +144,7 @@ class SiteSettingsUpdater {
 			INPUT_POST,
 			FILTER_SANITIZE_STRING
 		);
-		if ( ! is_string( $language ) || '-1' === $language ) {
+		if ( ! is_string( $language ) || self::VALUE_LANGUAGE_NONE === $language ) {
 			$language = '';
 		}
 
