@@ -116,8 +116,8 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 */
 	public function get_site_languages( $base_site = 0 ) {
 
-		$related_blogs = [];
-		$options       = [];
+		$related_blogs = array();
+		$options       = array();
 		$languages     = get_site_option( 'inpsyde_multilingual' );
 
 		if ( 0 !== $base_site ) {
