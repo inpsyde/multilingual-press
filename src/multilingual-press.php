@@ -168,6 +168,8 @@ if ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG ) {
  * @since   2.9.0
  * @wp-hook activated_plugin
  *
+ * @param string $plugin Plugin file path.
+ *
  * @return void
  */
 function mlp_init_on_activation( $plugin ) {
