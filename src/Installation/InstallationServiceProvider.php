@@ -109,6 +109,7 @@ final class InstallationServiceProvider implements IntegrationServiceProvider {
 					$container['multilingualpress.installer']->install_tables(
 						$container['multilingualpress.content_relations_table'],
 						$container['multilingualpress.languages_table'],
+						$container['multilingualpress.relationships_table'],
 						$container['multilingualpress.site_relations_table']
 					);
 					break;
