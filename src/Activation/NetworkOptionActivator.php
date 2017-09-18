@@ -35,13 +35,15 @@ final class NetworkOptionActivator implements Activator {
 	 */
 	public function handle_pending_activation(): bool {
 
-		if ( get_network_option( null, self::OPTION ) ) {
+		if ( ! get_network_option( null, self::OPTION ) ) {
 			return false;
 		}
 
 		foreach ( $this->callbacks as $callback ) {
 			$callback();
 		}
+
+		delete_network_option( null, self::OPTION );
 
 		return true;
 	}
