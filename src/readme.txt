@@ -115,7 +115,7 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 == Changelog ==
 
 = 2.10.0 =
-- PHP Codesniffer: Add PHP_CodeSniffer configs, and adapt code accordingly, see [#283](https://github.com/inpsyde/MultilingualPress/pull/283).
+- Add PHP_CodeSniffer configs, and adapt code accordingly, see [#283](https://github.com/inpsyde/MultilingualPress/pull/283).
 
 = 2.9.0 =
 - Activation: Initialize the plugin upon activation, see [issue #281](https://github.com/inpsyde/MultilingualPress/issues/281).
