@@ -80,7 +80,6 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 
 		$container['multilingualpress.site_duplicator'] = function ( Container $container ) {
 
-			// TODO: Inject nonce.
 			return new SiteDuplicator(
 				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.table_list'],
@@ -89,7 +88,8 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 				$container['multilingualpress.active_plugins'],
 				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.attachment_copier'],
-				$container['multilingualpress.server_request']
+				$container['multilingualpress.server_request'],
+				$container['multilingualpress.site_duplication_nonce']
 			);
 		};
 	}
