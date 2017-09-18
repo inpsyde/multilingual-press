@@ -81,7 +81,7 @@ class MetaBoxFactory {
 
 		$relations = $this->content_relations->get_relations(
 			$current_site_id,
-			$post->ID,
+			(int) $post->ID,
 			ContentRelations::CONTENT_TYPE_POST
 		);
 
