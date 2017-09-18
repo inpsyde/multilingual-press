@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
+use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingMultiView;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
 use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
@@ -51,9 +52,17 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 		$container['multilingualpress.site_duplication_based_on_site_setting'] = function ( Container $container ) {
 
 			return new BasedOnSiteSetting(
-				$container['multilingualpress.wpdb']
+				$container['multilingualpress.wpdb'],
+				$container['multilingualpress.site_duplication_nonce']
 			);
 		};
+
+		$container['multilingualpress.site_duplication_nonce'] = function () {
+
+			// When creating a new site, its ID is not yet known, so create a nonce for a fixed site ID 0.
+			return ( new WPNonce( 'duplicate_site' ) )->with_site( 0 );
+		};
+
 
 		$container['multilingualpress.site_duplication_search_engine_visibility_setting'] = function () {
 
@@ -71,6 +80,7 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 
 		$container['multilingualpress.site_duplicator'] = function ( Container $container ) {
 
+			// TODO: Inject nonce.
 			return new SiteDuplicator(
 				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.table_list'],

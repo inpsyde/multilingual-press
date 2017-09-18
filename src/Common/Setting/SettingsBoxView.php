@@ -38,24 +38,12 @@ class SettingsBoxView {
 	 */
 	public function render() {
 
-		static $tags;
-		if ( ! $tags ) {
-			$tags = wp_kses_allowed_html( 'post' );
-
-			$tags['input'] = [
-				'checked' => true,
-				'id'      => true,
-				'name'    => true,
-				'type'    => true,
-				'value'   => true,
-			];
-		}
 		?>
 		<div class="mlp-extra-settings-box" id="<?php echo esc_attr( $this->model->id() ); ?>">
 			<?php
 			$this->render_title();
 			$this->render_description();
-			echo wp_kses( $this->model->markup(), $tags );
+			$this->model->render();
 			?>
 		</div>
 		<?php

@@ -49,17 +49,16 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	}
 
 	/**
-	 * Returns the markup for the site setting.
+	 * Renders the markup for the site setting.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return string The markup for the site setting.
+	 * @return void
 	 */
-	public function markup( int $site_id ): string {
+	public function render( int $site_id ) {
 
-		ob_start();
 		?>
 		<p class="description">
 			<?php
@@ -70,8 +69,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 			?>
 		</p>
 		<?php
-
-		return $this->get_relationships( $site_id ) . ob_get_clean();
+		$this->render_relationships( $site_id );
 	}
 
 	/**
@@ -91,23 +89,25 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 	}
 
 	/**
-	 * Returns the markup for all relationships.
+	 * Renders the relationships.
 	 *
 	 * @param int $base_site_id Current site ID.
 	 *
-	 * @return string The markup for all relationships.
+	 * @return void
 	 */
-	private function get_relationships( int $base_site_id ): string {
+	private function render_relationships( int $base_site_id ) {
 
 		$site_ids = $this->repository->get_site_ids( [ $base_site_id ] );
 		if ( ! $site_ids ) {
-			return '';
+			return;
 		}
+
+		// translators: 1 = site name, 2 = site language.
+		$message = _x( '%1$s - %2$s', 'Site relationships', 'multilingualpress' );
 
 		$network_state = NetworkState::create();
 
-		$relationships = array_reduce( $site_ids, function ( $relationships, $site_id ) use ( $base_site_id ) {
-
+		foreach ( $site_ids as $site_id ) {
 			switch_to_blog( $site_id );
 
 			$site_name = get_bloginfo( 'name' );
@@ -115,16 +115,6 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 			$related_site_ids = $this->site_relations->get_related_site_ids( (int) $site_id );
 
 			$id = "{$this->id}-{$site_id}";
-
-			// translators: 1 = site name, 2 = site language.
-			$message = _x( '%1$s - %2$s', 'Site relationships', 'multilingualpress' );
-			$message = sprintf(
-				$message,
-				$site_name,
-				get_site_language( $site_id, false )
-			);
-
-			ob_start();
 			?>
 			<p>
 				<label for="<?php echo esc_attr( $id ); ?>">
@@ -132,15 +122,18 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 						name="<?php echo esc_attr( SiteSettingsRepository::NAME_RELATIONSHIPS ); ?>[]"
 						value="<?php echo esc_attr( $site_id ); ?>" id="<?php echo esc_attr( $id ); ?>"
 						<?php checked( in_array( $base_site_id, $related_site_ids, true ) ); ?>>
-					<?php echo esc_html( $message ); ?>
+					<?php
+					echo esc_html( sprintf(
+						$message,
+						$site_name,
+						get_site_language( $site_id, false )
+					) );
+					?>
 				</label>
 			</p>
 			<?php
-			return $relationships . ob_get_clean();
-		}, '' );
+		}
 
 		$network_state->restore();
-
-		return $relationships;
 	}
 }

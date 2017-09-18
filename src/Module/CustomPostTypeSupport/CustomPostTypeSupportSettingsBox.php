@@ -7,7 +7,7 @@ namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxViewModel;
 
-use function Inpsyde\MultilingualPress\get_nonce_field;
+use function Inpsyde\MultilingualPress\nonce_field;
 
 /**
  * Custom post type support settings box.
@@ -87,31 +87,32 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	}
 
 	/**
-	 * Returns the markup for the settings box.
+	 * Renders the markup for the settings box.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string The markup for the settings box.
+	 * @return void
 	 */
-	public function markup(): string {
+	public function render() {
 
 		if ( ! isset( $this->post_types ) ) {
 			$this->post_types = $this->repository->get_custom_post_types();
 		}
 
 		if ( ! $this->post_types ) {
-			return '';
+			return;
 		}
 
-		$markup = get_nonce_field( $this->nonce ) . '<table><tbody>';
+		$supported_post_types = $this->repository->get_supported_post_types();
 
-		ob_start();
-
-		array_walk( $this->post_types, [ $this, 'render_table_row' ], $this->repository->get_supported_post_types() );
-
-		$markup .= ob_get_clean() . '</tbody></table>';
-
-		return $markup;
+		nonce_field( $this->nonce );
+		?>
+		<table>
+			<tbody>
+			<?php array_walk( $this->post_types, [ $this, 'render_table_row' ], $supported_post_types ); ?>
+			</tbody>
+		</table>
+		<?php
 	}
 
 	/**

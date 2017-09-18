@@ -37,7 +37,7 @@ interface AlternateLanguageRenderer {
 	 *
 	 * @param array ...$args Optional arguments.
 	 *
-	 * @return void|mixed
+	 * @return void
 	 */
 	public function render( ...$args );
 

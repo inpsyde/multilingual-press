@@ -57,7 +57,7 @@ final class SiteSettingSingleView implements SiteSettingView {
 				<?php echo wp_kses_post( $this->model->title() ); ?>
 			</th>
 			<td>
-				<?php echo wp_kses_post( $this->model->markup( (int) $site_id ) ); ?>
+				<?php $this->model->render( (int) $site_id ); ?>
 			</td>
 		</tr>
 		<?php

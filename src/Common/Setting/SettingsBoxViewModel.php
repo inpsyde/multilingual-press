@@ -38,13 +38,13 @@ interface SettingsBoxViewModel {
 	public function label_id(): string;
 
 	/**
-	 * Returns the markup for the settings box.
+	 * Renders the markup for the settings box.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string The markup for the settings box.
+	 * @return void
 	 */
-	public function markup(): string;
+	public function render();
 
 	/**
 	 * Returns the title of the settings box.
