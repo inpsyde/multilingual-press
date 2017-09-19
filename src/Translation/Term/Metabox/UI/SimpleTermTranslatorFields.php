@@ -256,6 +256,7 @@ class SimpleTermTranslatorFields {
 	 */
 	private function render_term_options( array $options, int $current, int $site_id ) {
 
+		// TODO: Consider disabling options refering to IDs on remote sites different from the currently related ones.
 		foreach ( $options as $term_taxonomy_id => $term_name ) {
 			printf(
 				'<option value="%2$d" data-relationship-id="%4$s"%3$s>%1$s</option>',
@@ -271,34 +272,12 @@ class SimpleTermTranslatorFields {
 	 * @param int $site_id
 	 * @param int $term_taxonomy_id
 	 *
-	 * @return string
+	 * @return int
 	 */
-	private function get_relationship_id( $site_id, $term_taxonomy_id ) {
+	private function get_relationship_id( int $site_id, int $term_taxonomy_id ): int {
 
-		// @codingStandardsIgnoreStart
-		// $translation_ids = $this->content_relations->get_existing_translation_ids(
-		// $site_id,
-		// 0,
-		// $term_taxonomy_id,
-		// 0,
-		// 'term'
-		// );
-		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
-		// @codingStandardsIgnoreEnd
-		$translation_ids = [
-			'ml_source_blogid'    => 0,
-			'ml_source_elementid' => 0,
-		];
-		if ( ! $translation_ids ) {
-			return 0;
-		}
-
-		// @codingStandardsIgnoreStart
-		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
-		//$relation = reset( $translation_ids );
-		//
-		//return "{$relation['ml_source_blogid']}-{$relation['ml_source_elementid']}";
-		// @codingStandardsIgnoreEnd
-		return 0;
+		return $this->content_relations->get_relationship_id( [
+			$site_id => $term_taxonomy_id,
+		], ContentRelations::CONTENT_TYPE_TERM );
 	}
 }
