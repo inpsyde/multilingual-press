@@ -52,7 +52,7 @@ test( 'propagateSelectedTerm (propagating) ...', ( assert ) => {
 	testee.setTermOperation = sinon.spy();
 
 	// Turn method into spy.
-	testee.getSelectedRelation = sinon.spy();
+	testee.getSelectedRelationshipId = sinon.spy();
 
 	// Turn method into spy.
 	testee.selectTerm = sinon.spy();
@@ -66,9 +66,9 @@ test( 'propagateSelectedTerm (propagating) ...', ( assert ) => {
 	);
 
 	assert.equal(
-		testee.getSelectedRelation.callCount,
+		testee.getSelectedRelationshipId.callCount,
 		0,
-		'... SHOULD NOT call getSelectedRelation().'
+		'... SHOULD NOT call getSelectedRelationshipId().'
 	);
 
 	assert.equal(
@@ -80,14 +80,14 @@ test( 'propagateSelectedTerm (propagating) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'propagateSelectedTerm (not propagating, invalid relation) ...', ( assert ) => {
+test( 'propagateSelectedTerm (not propagating, invalid relationship ID) ...', ( assert ) => {
 	const testee = createTestee();
 
 	// Turn method into spy.
 	testee.setTermOperation = sinon.spy();
 
 	// Turn method into stub.
-	testee.getSelectedRelation = sinon.stub().returns( '' );
+	testee.getSelectedRelationshipId = sinon.stub().returns( 0 );
 
 	// Turn method into spy.
 	testee.selectTerm = sinon.spy();
@@ -101,9 +101,9 @@ test( 'propagateSelectedTerm (not propagating, invalid relation) ...', ( assert 
 	);
 
 	assert.equal(
-		testee.getSelectedRelation.callCount,
+		testee.getSelectedRelationshipId.callCount,
 		1,
-		'... SHOULD call getSelectedRelation().'
+		'... SHOULD call getSelectedRelationshipId().'
 	);
 
 	assert.equal(
@@ -115,9 +115,8 @@ test( 'propagateSelectedTerm (not propagating, invalid relation) ...', ( assert 
 	assert.end();
 } );
 
-// TODO: See why this is not working as expected - skipping for now.
-test.skip( 'propagateSelectedTerm (not propagating, valid relation) ...', ( assert ) => {
-	const _elements = F.getRandomArray();
+test( 'propagateSelectedTerm (not propagating, valid relationship ID) ...', ( assert ) => {
+	const _elements = F.getRandomBoolArray();
 
 	const $selects = new JqueryObject( { _elements } );
 	$selects.not.returnsThis();
@@ -131,20 +130,18 @@ test.skip( 'propagateSelectedTerm (not propagating, valid relation) ...', ( asse
 	testee.setTermOperation = sinon.spy();
 
 	// Turn method into stub.
-	testee.getSelectedRelation = sinon.stub().returns( F.getRandomString() );
+	testee.getSelectedRelationshipId = sinon.stub().returns( F.getRandomInteger() );
 
-	const selectTermResults = [ false, ...F.getRandomBoolArray() ];
-
-	// Turn method into spy.
+	// Turn method into spy. The array elements are being used to set expectations on the setTermOperation() method.
 	testee.selectTerm = sinon.stub();
-	selectTermResults.forEach( ( index, value ) => testee.selectTerm.onCall( index ).returns( value ) );
+	_elements.forEach( ( value, index ) => testee.selectTerm.onCall( index ).returns( value ) );
 
 	testee.propagateSelectedTerm( { target: 'target' } );
 
 	assert.equal(
-		testee.getSelectedRelation.callCount,
+		testee.getSelectedRelationshipId.callCount,
 		1,
-		'... SHOULD call getSelectedRelation().'
+		'... SHOULD call getSelectedRelationshipId().'
 	);
 
 	assert.equal(
@@ -155,14 +152,14 @@ test.skip( 'propagateSelectedTerm (not propagating, valid relation) ...', ( asse
 
 	assert.equal(
 		testee.setTermOperation.callCount,
-		selectTermResults.filter( ( v ) => v ).length,
+		_elements.filter( Boolean ).length + 1,
 		'... SHOULD call setTermOperation() for every successful term selection (including the current term).'
 	);
 
 	assert.end();
 } );
 
-test( 'getSelectedRelation (relation missing) ...', ( assert ) => {
+test( 'getSelectedRelationshipId (relationship ID missing) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const $option = new JqueryObject();
@@ -172,35 +169,35 @@ test( 'getSelectedRelation (relation missing) ...', ( assert ) => {
 	$select.find.returns( $option );
 
 	assert.equal(
-		testee.getSelectedRelation( $select ),
-		'',
-		'... SHOULD return an empty string.'
+		testee.getSelectedRelationshipId( $select ),
+		0,
+		'... SHOULD return 0.'
 	);
 
 	assert.end();
 } );
 
-test( 'getSelectedRelation (relation specified) ...', ( assert ) => {
+test( 'getSelectedRelationshipId (relationship ID specified) ...', ( assert ) => {
 	const testee = createTestee();
 
-	const relation = F.getRandomString();
+	const relationshipId = F.getRandomInteger();
 
 	const $option = new JqueryObject();
-	$option.data.returns( relation );
+	$option.data.returns( relationshipId );
 
 	const $select = new JqueryObject();
 	$select.find.returns( $option );
 
 	assert.equal(
-		testee.getSelectedRelation( $select ),
-		relation,
-		'... SHOULD return the expected relation.'
+		testee.getSelectedRelationshipId( $select ),
+		relationshipId,
+		'... SHOULD return the expected relationship ID.'
 	);
 
 	assert.end();
 } );
 
-test( 'selectTerm (matching relation) ...', ( assert ) => {
+test( 'selectTerm (matching relationship ID) ...', ( assert ) => {
 	const testee = createTestee();
 
 	const termID = F.getRandomInteger();
@@ -213,8 +210,10 @@ test( 'selectTerm (matching relation) ...', ( assert ) => {
 	const $select = new JqueryObject();
 	$select.find.returns( $option );
 
+	const relationshipId = F.getRandomInteger();
+
 	assert.equal(
-		testee.selectTerm( $select, 'relation' ),
+		testee.selectTerm( $select, relationshipId ),
 		true,
 		'... SHOULD return the expected result.'
 	);
@@ -228,12 +227,12 @@ test( 'selectTerm (matching relation) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'selectTerm (no matching relation) ...', ( assert ) => {
+test( 'selectTerm (no matching relationship ID) ...', ( assert ) => {
 	const testee = createTestee();
 
-	// Make method return a random string (i.e., relation found).
+	// Make method return a random integer (i.e., relation found).
 	// Due to incompatible arguments, this has to stay an arrow function (i.e., not just a function reference).
-	testee.getSelectedRelation = () => F.getRandomString();
+	testee.getSelectedRelationshipId = () => F.getRandomInteger();
 
 	const termID = F.getRandomInteger();
 
@@ -246,8 +245,10 @@ test( 'selectTerm (no matching relation) ...', ( assert ) => {
 	const $select = new JqueryObject();
 	$select.find.returns( $options );
 
+	const relationshipId = F.getRandomInteger();
+
 	assert.equal(
-		testee.selectTerm( $select, 'relation' ),
+		testee.selectTerm( $select, relationshipId ),
 		true,
 		'... SHOULD return the expected result.'
 	);
@@ -261,17 +262,19 @@ test( 'selectTerm (no matching relation) ...', ( assert ) => {
 	assert.end();
 } );
 
-test( 'selectTerm (relation missing) ...', ( assert ) => {
+test( 'selectTerm (relationship ID missing) ...', ( assert ) => {
 	const testee = createTestee();
 
-	// Make method return an empty string (i.e., no relation found).
-	testee.getSelectedRelation = F.returnEmptyString;
+	// Make method return 0 (i.e., no relationship ID found).
+	testee.getSelectedRelationshipId = () => 0;
 
 	const $select = new JqueryObject();
 	$select.find.returns( new JqueryObject() );
 
+	const relationshipId = F.getRandomInteger();
+
 	assert.equal(
-		testee.selectTerm( $select, 'relation' ),
+		testee.selectTerm( $select, relationshipId ),
 		false,
 		'... SHOULD return the expected result.'
 	);
