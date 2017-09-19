@@ -258,11 +258,11 @@ class SimpleTermTranslatorFields {
 
 		foreach ( $options as $term_taxonomy_id => $term_name ) {
 			printf(
-				'<option value="%2$d" data-relation="%4$s"%3$s>%1$s</option>',
+				'<option value="%2$d" data-relationship-id="%4$s"%3$s>%1$s</option>',
 				esc_html( $term_name ),
 				esc_attr( $term_taxonomy_id ),
 				selected( $term_taxonomy_id, $current, false ),
-				esc_attr( $this->get_relation_id( $site_id, $term_taxonomy_id ) )
+				esc_attr( $this->get_relationship_id( $site_id, $term_taxonomy_id ) )
 			);
 		}
 	}
@@ -273,7 +273,7 @@ class SimpleTermTranslatorFields {
 	 *
 	 * @return string
 	 */
-	private function get_relation_id( $site_id, $term_taxonomy_id ) {
+	private function get_relationship_id( $site_id, $term_taxonomy_id ) {
 
 		// @codingStandardsIgnoreStart
 		// $translation_ids = $this->content_relations->get_existing_translation_ids(
@@ -290,11 +290,15 @@ class SimpleTermTranslatorFields {
 			'ml_source_elementid' => 0,
 		];
 		if ( ! $translation_ids ) {
-			return '';
+			return 0;
 		}
 
-		$relation = reset( $translation_ids );
-
-		return "{$relation['ml_source_blogid']}-{$relation['ml_source_elementid']}";
+		// @codingStandardsIgnoreStart
+		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
+		//$relation = reset( $translation_ids );
+		//
+		//return "{$relation['ml_source_blogid']}-{$relation['ml_source_elementid']}";
+		// @codingStandardsIgnoreEnd
+		return 0;
 	}
 }

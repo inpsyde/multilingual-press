@@ -47,15 +47,15 @@ class TermTranslator extends Backbone.View {
 
 		_this.isPropagating = true;
 
-		const $select = $( event.target );
+		const $target = $( event.target );
 
-		this.setTermOperation( Number( $select.data( 'site' ) ), 'select' );
+		this.setTermOperation( Number( $target.data( 'site' ) ), 'select' );
 
-		const relation = this.getSelectedRelation( $select );
-		if ( '' !== relation ) {
-			this.$selects.not( $select ).each( ( index, element ) => {
+		const relationshipId = this.getSelectedRelationshipId( $target );
+		if ( 0 !== relationshipId ) {
+			this.$selects.not( $target ).each( ( index, element ) => {
 				const $select = $( element );
-				if ( this.selectTerm( $select, relation ) ) {
+				if ( this.selectTerm( $select, relationshipId ) ) {
 					this.setTermOperation( Number( $select.data( 'site' ) ), 'select' );
 				}
 			} );
@@ -65,27 +65,27 @@ class TermTranslator extends Backbone.View {
 	}
 
 	/**
-	 * Returns the relation of the given select element (i.e., its currently selected option).
+	 * Returns the relationship ID of the given select element (i.e., its currently selected option).
 	 * @param {jQuery} $select - A select element.
-	 * @returns {String} The relation of the selected term.
+	 * @returns {Number} The relationship ID of the selected term.
 	 */
-	getSelectedRelation( $select ) {
-		return $select.find( 'option:selected' ).data( 'relation' ) || '';
+	getSelectedRelationshipId( $select ) {
+		return Number( $select.find( 'option:selected' ).data( 'relationship-id' ) || 0 );
 	}
 
 	/**
-	 * Sets the given select element's value to that of the option with the given relation, or the first option.
+	 * Sets the given select element's value to that of the option with the given relationship ID, or the first option.
 	 * @param {jQuery} $select - A select element.
-	 * @param {String} relation - The relation of a term.
+	 * @param {Number} relationshipId - The relationship ID of a term.
 	 * @returns {Boolean} Whether or not a term was selected.
 	 */
-	selectTerm( $select, relation ) {
-		const $option = $select.find( `option[data-relation="${relation}"]` );
+	selectTerm( $select, relationshipId ) {
+		const $option = $select.find( `option[data-relationship-id="${relationshipId}"]` );
 		if ( $option.length ) {
 			$select.val( $option.val() );
 
 			return true;
-		} else if ( this.getSelectedRelation( $select ) ) {
+		} else if ( this.getSelectedRelationshipId( $select ) ) {
 			$select.val( $select.find( 'option' ).first().val() );
 
 			return true;
