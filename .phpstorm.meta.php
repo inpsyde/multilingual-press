@@ -156,6 +156,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.table_string_replacer'                                  => \Inpsyde\MultilingualPress\Database\TableStringReplacer::class,
 		'multilingualpress.term_meta_box_factory'                                  => \Inpsyde\MultilingualPress\Translation\Term\MetaBoxFactory::class,
 		'multilingualpress.term_meta_box_registrar'                                => \Inpsyde\MultilingualPress\Common\Admin\MetaBox\UIAwareMetaBoxRegistrar::class,
+		'multilingualpress.term_relationship_controller'                           => \Inpsyde\MultilingualPress\Translation\Term\RelationshipController::class,
 		'multilingualpress.term_relationship_permission'                           => \Inpsyde\MultilingualPress\Translation\Term\RelationshipPermission::class,
 		'multilingualpress.term_translation_options_repository'                    => \Inpsyde\MultilingualPress\Translation\Term\TermOptionsRepository::class,
 		'multilingualpress.term_translation_simple_ui'                             => \Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI::class,

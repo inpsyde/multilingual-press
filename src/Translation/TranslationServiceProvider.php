@@ -184,6 +184,13 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			);
 		};
 
+		$container['multilingualpress.term_relationship_controller'] = function ( Container $container ) {
+
+			return new Term\RelationshipController(
+				$container['multilingualpress.content_relations']
+			);
+		};
+
 		$container['multilingualpress.term_relationship_permission'] = function ( Container $container ) {
 
 			return new Term\RelationshipPermission(
@@ -355,6 +362,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 * @return void
 	 */
 	private function bootstrap_term_translation( Container $container ) {
+
+		$term_relationship_controller = $container['multilingualpress.term_relationship_controller'];
+
+		add_action( 'delete_term', [ $term_relationship_controller, 'handle_deleted_term' ], 10, 2 );
 
 		if ( ! is_admin() ) {
 			return;
