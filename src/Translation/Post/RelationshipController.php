@@ -88,9 +88,13 @@ class RelationshipController {
 	 */
 	public function initialize() {
 
-		$callback = $this->get_callback();
+		$action = (string) $this->request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
+		if ( '' === $action ) {
+			return;
+		}
+
+		$callback = $this->get_callback( $action );
 		if ( $callback ) {
-			$action = $this->request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
 			add_action( "wp_ajax_{$action}", $callback );
 		}
 	}
@@ -271,24 +275,23 @@ class RelationshipController {
 	}
 
 	/**
-	 * Returns the appropriate callback for the current action.
+	 * Returns the appropriate callback for the given action.
+	 *
+	 * @param string $action Action.
 	 *
 	 * @return callable Callback, of null on failure.
 	 */
-	private function get_callback() {
+	private function get_callback( string $action ) {
 
-		$action = $this->request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
-		if ( is_string( $action ) ) {
-			switch ( $action ) {
-				case static::ACTION_CONNECT_EXISTING:
-					return [ $this, 'handle_connect_existing_post' ];
+		switch ( $action ) {
+			case static::ACTION_CONNECT_EXISTING:
+				return [ $this, 'handle_connect_existing_post' ];
 
-				case static::ACTION_CONNECT_NEW:
-					return [ $this, 'handle_connect_new_post' ];
+			case static::ACTION_CONNECT_NEW:
+				return [ $this, 'handle_connect_new_post' ];
 
-				case static::ACTION_DISCONNECT:
-					return [ $this, 'handle_disconnect_post' ];
-			}
+			case static::ACTION_DISCONNECT:
+				return [ $this, 'handle_disconnect_post' ];
 		}
 
 		return null;
