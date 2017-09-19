@@ -145,7 +145,7 @@ class RelationshipController {
 	 */
 	public function handle_deleted_post( $post_id ): bool {
 
-		return $this->delete_relation( (int) get_current_blog_id(), (int) $post_id );
+		return $this->delete_relation( get_current_blog_id(), (int) $post_id );
 	}
 
 	/**

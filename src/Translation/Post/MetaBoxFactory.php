@@ -72,7 +72,7 @@ class MetaBoxFactory {
 			return [];
 		}
 
-		$current_site_id = (int) get_current_blog_id();
+		$current_site_id = get_current_blog_id();
 
 		$related_site_ids = $this->site_relations->get_related_site_ids( $current_site_id, false );
 		if ( ! $related_site_ids ) {

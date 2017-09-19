@@ -105,7 +105,7 @@ final class WidgetView implements View {
 	private function get_site_ids(): array {
 
 		$site_ids = [
-			(int) get_current_blog_id(),
+			get_current_blog_id(),
 		];
 
 		if ( $this->configurator->is_displaying_remote_sites() ) {

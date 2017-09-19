@@ -244,9 +244,8 @@ class PostRelationSaveHelper {
 	 */
 	private function maybe_switch_site( int $remote_site_id ): int {
 
-		$current_site = (int) get_current_blog_id();
-
-		if ( $remote_site_id !== $current_site ) {
+		$current_site = get_current_blog_id();
+		if ( $current_site !== $remote_site_id ) {
 			switch_to_blog( $remote_site_id );
 
 			return $current_site;
@@ -269,7 +268,7 @@ class PostRelationSaveHelper {
 
 		restore_current_blog();
 
-		$current_site = (int) get_current_blog_id();
+		$current_site = get_current_blog_id();
 		if ( $current_site !== $original_site_id ) {
 			switch_to_blog( $original_site_id );
 		}

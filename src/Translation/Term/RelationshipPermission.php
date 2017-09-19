@@ -92,7 +92,7 @@ class RelationshipPermission {
 		}
 
 		$switched = false;
-		if ( (int) get_current_blog_id() !== $related_site_id ) {
+		if ( get_current_blog_id() !== $related_site_id ) {
 			$switched = true;
 			switch_to_blog( $related_site_id );
 		}

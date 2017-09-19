@@ -124,7 +124,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			}
 		}
 
-		$source_site_id = (int) get_current_blog_id();
+		$source_site_id = get_current_blog_id();
 
 		$related_blogs = $this->site_relations->get_related_site_ids( $source_site_id );
 		if ( empty( $related_blogs ) ) {
