@@ -207,8 +207,12 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			} );
 		} );
 
-		/** @noinspection PhpUnusedParameterInspection */
-		add_action( 'edit_term', function ( $term_id, $tt_id, $taxonomy ) {
+		add_action( 'edit_term', function (
+			/** @noinspection PhpUnusedParameterInspection */
+			$term_id,
+			$tt_id,
+			$taxonomy
+		) {
 
 			$term = get_term_by( 'term_taxonomy_id', $tt_id );
 			if ( $term instanceof \WP_Term && $term->taxonomy === $taxonomy ) {
@@ -216,8 +220,12 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			}
 		}, 10, 3 );
 
-		/** @noinspection PhpUnusedParameterInspection */
-		add_action( 'created_term', function ( $term_id, $tt_id, $taxonomy ) {
+		add_action( 'created_term', function (
+			/** @noinspection PhpUnusedParameterInspection */
+			$term_id,
+			$tt_id,
+			$taxonomy
+		) {
 
 			$term = get_term_by( 'term_taxonomy_id', $tt_id );
 			if ( $term instanceof \WP_Term && $term->taxonomy === $taxonomy ) {

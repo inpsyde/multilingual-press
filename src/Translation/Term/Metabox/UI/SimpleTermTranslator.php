@@ -154,8 +154,8 @@ final class SimpleTermTranslator implements MetaBoxUI {
 			$this->asset_manager
 		);
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Term $term,
 			int $remote_site_id,
 			string $remote_language,

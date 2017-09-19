@@ -167,8 +167,8 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 
 		$fields = new AdvancedPostTranslatorFields( $this->asset_manager );
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
@@ -186,8 +186,8 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 			$fields->render_top_fields( $post, $remote_site_id, $remote_post );
 		}, TranslationMetaBoxView::POSITION_TOP );
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
@@ -200,8 +200,8 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 			}
 		}, TranslationMetaBoxView::POSITION_MAIN );
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,

@@ -193,8 +193,12 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			$this->add_meta_boxes( $post, (string) $post_type );
 		}, 10, 2 );
 
-		/** @noinspection PhpUnusedParameterInspection */
-		add_action( 'save_post', function ( $post_id, \WP_Post $post, $update ) {
+		add_action( 'save_post', function (
+			/** @noinspection PhpUnusedParameterInspection */
+			$post_id,
+			\WP_Post $post,
+			$update
+		) {
 
 			$this->save_metadata_for_post( $post, (bool) $update );
 		}, 10, 3 );
