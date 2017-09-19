@@ -48,21 +48,8 @@ class RelationshipController {
 		$term_taxonomy_id
 	): bool {
 
-		return $this->delete_relation( (int) get_current_blog_id(), (int) $term_taxonomy_id );
-	}
-
-	/**
-	 * Deletes the relation for the given arguments.
-	 *
-	 * @param int $site_id          Site ID.
-	 * @param int $term_taxonomy_id Term taxonomy ID.
-	 *
-	 * @return bool Whether or not the post was handled successfully.
-	 */
-	private function delete_relation( int $site_id, int $term_taxonomy_id ): bool {
-
 		return $this->content_relations->delete_relation( [
-			$site_id => $term_taxonomy_id,
+			get_current_blog_id() => (int) $term_taxonomy_id,
 		], ContentRelations::CONTENT_TYPE_TERM );
 	}
 }
