@@ -127,11 +127,12 @@ class SimpleTermTranslatorUpdater {
 		switch ( $operation_for_sites[ $remote_site_id ] ?? '' ) {
 			case SimpleTermTranslatorFields::RELATED_TERM_DO_CREATE:
 				return $this->create_new_term( $remote_site_id, $taxonomy, $relations );
+
 			case SimpleTermTranslatorFields::RELATED_TERM_DO_SELECT:
 				return $this->get_existing_term( $remote_site_id, $taxonomy );
-			default:
-				return 0;
 		}
+
+		return 0;
 	}
 
 	/**
