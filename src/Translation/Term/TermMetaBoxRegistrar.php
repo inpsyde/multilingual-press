@@ -207,7 +207,7 @@ final class TermMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			} );
 		} );
 
-		add_action( 'edit_term', function (
+		add_action( 'edited_term', function (
 			/** @noinspection PhpUnusedParameterInspection */
 			$term_id,
 			$tt_id,
