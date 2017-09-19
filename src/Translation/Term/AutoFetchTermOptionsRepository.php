@@ -76,12 +76,12 @@ final class AutoFetchTermOptionsRepository implements TermOptionsRepository {
 					foreach ( (array) get_ancestors( $term->term_id, $taxonomy ) as $ancestor ) {
 						$ancestor_term = get_term( $ancestor, $taxonomy );
 						if ( $ancestor_term ) {
-							$option = $ancestor_term->name . "/{$option}";
+							$option = "{$ancestor_term->name}/{$option}";
 						}
 					}
 				}
 
-				$options[ $term->term_taxonomy_id ] = $option;
+				$options[ (int) $term->term_taxonomy_id ] = $option;
 
 				return $options;
 			}, [] );
