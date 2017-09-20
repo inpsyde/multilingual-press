@@ -566,7 +566,7 @@ WHERE t.%6$s = %%d
 	 *
 	 * @param int $relationship_id Relationship ID.
 	 *
-	 * @return int[] Content IDs.
+	 * @return int[] Array with site IDs as keys and content IDs as values.
 	 */
 	private function get_content_ids( int $relationship_id ): array {
 
@@ -587,9 +587,9 @@ WHERE %4$s = %%d',
 
 		return array_reduce( $rows, function ( array $content_ids, array $row ) {
 
-			return array_merge( $content_ids, [
-				(int) $row['site_id'] => (int) $row['content_id'],
-			] );
+			$content_ids[ (int) $row['site_id'] ] = (int) $row['content_id'];
+
+			return $content_ids;
 		}, [] );
 	}
 
