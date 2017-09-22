@@ -587,7 +587,9 @@ WHERE %4$s = %%d',
 
 		return array_reduce( $rows, function ( array $content_ids, array $row ) {
 
-			$content_ids[ (int) $row['site_id'] ] = (int) $row['content_id'];
+			$content_id = (int) $row[ Table\ContentRelationsTable::COLUMN_CONTENT_ID ];
+
+			$content_ids[ (int) $row[ Table\ContentRelationsTable::COLUMN_SITE_ID ] ] = $content_id;
 
 			return $content_ids;
 		}, [] );
@@ -621,7 +623,7 @@ WHERE %4$s = %%d',
 				return [];
 		}
 
-		return array_map( 'inval', $content_ids );
+		return array_map( 'intval', $content_ids );
 	}
 
 	/**
