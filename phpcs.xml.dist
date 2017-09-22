@@ -38,11 +38,8 @@
 		<!-- Exclude to be able to use "@noinspection PhpUnusedParameterInspection" annotations. -->
 		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint"/>
 
-		<!-- Exclude as MultilingualPress adheres to the PSR-4 standard. -->
+		<!-- Exclude to be able to adhere to PSR-4. -->
 		<exclude name="WordPress.Files.FileName"/>
-
-		<!-- Exclude to be able to use namespaced hooks such as "multilingualpress.active_taxonomies". -->
-		<exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
 
 		<!-- Exclude VIP-specific sniffs, for now. -->
 		<exclude name="WordPress.VIP"/>
@@ -50,6 +47,13 @@
 		<!-- Exclude to not be forced to use a space before return type colons. https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/547. -->
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterCloseParenthesis"/>
 
+	</rule>
+
+	<!-- Adapt to be able to use namespaced hooks in dot notation such as "multilingualpress.active_taxonomies". -->
+	<rule ref="WordPress.NamingConventions.ValidHookName">
+		<properties>
+			<property name="additionalWordDelimiters" value="."/>
+		</properties>
 	</rule>
 
 </ruleset>
