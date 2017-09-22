@@ -364,6 +364,10 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 
 		$return = array ();
 
+		if ( ! $this->is_post_type_active( $post_type ) ) {
+			return $return;
+		}
+
 		$url                    = get_post_type_archive_link( $post_type );
 		$return[ 'target_url' ] = Mlp_Url_Factory::create( $url );
 		$obj                    = get_post_type_object( $post_type );
@@ -770,5 +774,23 @@ WHERE `http_name` IN( $values )";
 			$content_id,
 			$type
 		);
+	}
+
+	/**
+	 * Checks if the given post type is active for MultilingualPress.
+	 *
+	 * @param string $post_type Post type name.
+	 *
+	 * @return bool Whether or not the given post type is active for MultilingualPress.
+	 */
+	private function is_post_type_active( $post_type ) {
+
+		static $post_types;
+		if ( ! isset( $post_types ) ) {
+			/** This filter is documented in inc/post-translator/Mlp_Translation_Metabox.php */
+			$post_types = (array) apply_filters( 'mlp_allowed_post_types', array( 'post', 'page' ) );
+		}
+
+		return in_array( $post_type, $post_types, true );
 	}
 }
