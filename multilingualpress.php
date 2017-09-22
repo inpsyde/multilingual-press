@@ -23,6 +23,7 @@ use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Factory\FactoryProvider;
 use Inpsyde\MultilingualPress\Installation\InstallationServiceProvider;
 use Inpsyde\MultilingualPress\Integration\IntegrationProvider;
+use Inpsyde\MultilingualPress\LanguageManager\LanguageManagerServiceProvider;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\NavMenu\NavMenuServiceProvider;
 use Inpsyde\MultilingualPress\Relations\RelationsServiceProvider;
@@ -92,7 +93,9 @@ function bootstrap(): bool {
 		->add_service_provider( new RelationsServiceProvider() )
 		->add_service_provider( new SiteDuplicationServiceProvider() )
 		->add_service_provider( new TranslationServiceProvider() )
-		->add_service_provider( new WidgetServiceProvider() );
+		->add_service_provider( new WidgetServiceProvider()	)
+		->add_service_provider( new LanguageManagerServiceProvider() );
+
 
 	$multilingualpress = new MultilingualPress( $container, $providers );
 
@@ -161,12 +164,4 @@ add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
 			) )->setup();
 		}, 0 );
 	}
-
-	add_action( 'wp_loaded', function () {
-
-		new \Mlp_Language_Manager_Controller(
-			new \Mlp_Language_Db_Access( resolve( 'multilingualpress.languages_table', Table::class )->name() ),
-			resolve( 'multilingualpress.wpdb', \wpdb::class )
-		);
-	} );
 } );
