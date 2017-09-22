@@ -242,7 +242,8 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 		$container['multilingualpress.post_type_translator'] = function ( Container $container ) {
 
 			return new Translator\PostTypeTranslator(
-				$container['multilingualpress.type_factory']
+				$container['multilingualpress.type_factory'],
+				$container['multilingualpress.active_post_types']
 			);
 		};
 

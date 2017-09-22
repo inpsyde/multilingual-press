@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Post;
 
 /**
- * Simple read-only storage for post types activ for MultilingualPress.
+ * Simple read-only storage for post types active for MultilingualPress.
  *
  * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
