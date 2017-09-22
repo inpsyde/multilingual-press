@@ -63,7 +63,6 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 			return ( new WPNonce( 'duplicate_site' ) )->with_site( 0 );
 		};
 
-
 		$container['multilingualpress.site_duplication_search_engine_visibility_setting'] = function () {
 
 			return new SearchEngineVisibilitySetting();
