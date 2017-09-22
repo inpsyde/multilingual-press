@@ -41,5 +41,10 @@
   "require-dev": {
     "php": ">=5.3.3",
     "phpunit/phpunit": "~4.8|~5.1"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-2.9": "2.9.x-dev"
+    }
   }
 }
