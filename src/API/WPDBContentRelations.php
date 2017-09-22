@@ -453,7 +453,7 @@ LIMIT 1',
 			$current_relationship_id = $this->get_relationship_id_single( $site_id, $content_id, $type );
 			if ( $current_relationship_id && $current_relationship_id !== $relationship_id ) {
 				// Delete different relation of the given content element.
-				$this->delete_relation_for_site( $current_relationship_id, $site_id, false );
+				$this->delete_relation_for_site( $current_relationship_id, $site_id );
 			}
 		}
 

@@ -243,7 +243,6 @@ class RelationshipController {
 
 		$content_ids = [
 			$this->context->source_site_id() => $this->context->source_post_id(),
-			$this->context->remote_site_id() => $this->context->remote_post_id(),
 		];
 
 		$relationship_id = $this->content_relations->get_relationship_id(
@@ -254,6 +253,8 @@ class RelationshipController {
 		if ( ! $relationship_id ) {
 			return false;
 		}
+
+		$content_ids[ $this->context->remote_site_id() ] = $this->context->remote_post_id();
 
 		foreach ( $content_ids as $site_id => $post_id ) {
 			if ( ! $this->content_relations->set_relation( $relationship_id, $site_id, $post_id ) ) {
