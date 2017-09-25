@@ -44,5 +44,10 @@
     "wimg/php-compatibility": "^8.0",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.4.2",
     "wp-coding-standards/wpcs": "^0.13.1"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-2.10": "2.10.x-dev"
+    }
   }
 }
