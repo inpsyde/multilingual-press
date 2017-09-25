@@ -105,7 +105,7 @@ class Mlp_Relationship_Control_Data {
 		$args = array(
 			'numberposts' => 10,
 			'post_type'   => $source_post->post_type,
-			'post_status' => array( 'draft', 'publish', 'private' ),
+			'post_status' => array( 'draft', 'future', 'publish', 'private' ),
 		);
 
 		if ( ! empty( $this->ids['remote_post_id'] ) ) {
@@ -118,6 +118,14 @@ class Mlp_Relationship_Control_Data {
 		}
 
 		switch_to_blog( $this->ids['remote_site_id'] );
+		/**
+		 * Filters the query arguments for the remote post search.
+		 *
+		 * @since 2.10.0
+		 *
+		 * @param array $args Query arguments.
+		 */
+		$args = (array) apply_filters( 'multilingualpress.remote_post_search_arguments', $args );
 		$posts = get_posts( $args );
 		restore_current_blog();
 

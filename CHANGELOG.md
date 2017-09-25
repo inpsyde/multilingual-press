@@ -2,6 +2,8 @@
 
 ## 2.10.0
 - Add PHP_CodeSniffer configs, and adapt code accordingly, see [#283](https://github.com/inpsyde/MultilingualPress/pull/283).
+- Include scheduled posts in the remote post search, see [#284](https://github.com/inpsyde/MultilingualPress/issues/284).
+- Introduce a new filter, `multilingualpress.remote_post_search_arguments`, to manipulate the query arguments for the remote post search.
 
 ## 2.9.0
 - Activation: Initialize the plugin upon activation, see [issue #281](https://github.com/inpsyde/MultilingualPress/issues/281).
