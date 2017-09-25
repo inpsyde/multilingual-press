@@ -119,6 +119,9 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 - Include scheduled posts in the remote post search, see [#284](https://github.com/inpsyde/MultilingualPress/issues/284).
 - Introduce a new filter, `multilingualpress.remote_post_search_arguments`, to manipulate the query arguments for the remote post search.
 
+= 2.9.1 =
+- Translations: Restrict post type archive translations to active post types only.
+
 = 2.9.0 =
 - Activation: Initialize the plugin upon activation, see [issue #281](https://github.com/inpsyde/MultilingualPress/issues/281).
 - Translations: Introduce a new filter, `multilingualpress.active_taxonomies`, to modify the allowed taxonomies, see [issue #282](https://github.com/inpsyde/MultilingualPress/issues/282).
