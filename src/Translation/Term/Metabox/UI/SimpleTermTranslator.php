@@ -147,12 +147,7 @@ final class SimpleTermTranslator implements MetaBoxUI {
 	 */
 	public function register_view() {
 
-		$fields = new SimpleTermTranslatorFields(
-			$this->server_request,
-			$this->repository,
-			$this->content_relations,
-			$this->asset_manager
-		);
+		$fields = new SimpleTermTranslatorFields( $this->server_request, $this->repository, $this->asset_manager );
 
 		$this->inject_into_view( function (
 			/** @noinspection PhpUnusedParameterInspection */

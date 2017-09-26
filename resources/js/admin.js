@@ -118,8 +118,8 @@ controller.registerModule( [ 'post.php', 'post-new.php' ], RelationshipControl, 
 controller.registerModule( [ 'edit-tags.php', 'term.php' ], TermTranslator, {
 	el: '#wpbody-content',
 	events: {
-		'change .mlp-term-select': 'propagateSelectedTerm',
-		'input .mlp-term-input': 'selectCreateTermOperation'
+		'change .mlp-term-select': 'handleTermSelection',
+		'input .mlp-term-input': 'handleTermInput'
 	}
 } );
 

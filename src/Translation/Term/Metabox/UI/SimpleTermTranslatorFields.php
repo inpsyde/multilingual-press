@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI;
 
-use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Translation\Term\TermOptionsRepository;
@@ -56,11 +55,6 @@ class SimpleTermTranslatorFields {
 	private $asset_manager;
 
 	/**
-	 * @var ContentRelations
-	 */
-	private $content_relations;
-
-	/**
 	 * @var TermOptionsRepository
 	 */
 	private $repository;
@@ -80,21 +74,17 @@ class SimpleTermTranslatorFields {
 	 *
 	 * @param ServerRequest         $server_request
 	 * @param TermOptionsRepository $repository
-	 * @param ContentRelations      $content_relations
 	 * @param AssetManager          $asset_manager
 	 */
 	public function __construct(
 		ServerRequest $server_request,
 		TermOptionsRepository $repository,
-		ContentRelations $content_relations,
 		AssetManager $asset_manager
 	) {
 
 		$this->server_request = $server_request;
 
 		$this->repository = $repository;
-
-		$this->content_relations = $content_relations;
 
 		$this->asset_manager = $asset_manager;
 	}
@@ -175,6 +165,7 @@ class SimpleTermTranslatorFields {
 		if ( $options ) {
 			$this->asset_manager->enqueue_script( 'multilingualpress-admin' );
 
+			// TODO: Revisit, as the CR refactor branch always has 0 as value here.
 			$option_none_value = $remote_term ? '-1' : '';
 
 			$option_none_text = $remote_term ? __( 'Remove relationship', 'multilingualpress' ) : '';
@@ -190,7 +181,7 @@ class SimpleTermTranslatorFields {
 				<option value="<?php echo esc_attr( $option_none_value ); ?>" class="option-none">
 					<?php echo esc_html( $option_none_text ); ?>
 				</option>
-				<?php $this->render_term_options( $options, $current_term_taxonomy_id, $remote_site_id ); ?>
+				<?php $this->render_term_options( $options, $current_term_taxonomy_id ); ?>
 			</select>
 			<?php
 		} else {
@@ -250,34 +241,18 @@ class SimpleTermTranslatorFields {
 	 *
 	 * @param string[] $options Term options.
 	 * @param int      $current Currently selected term taxonomy ID.
-	 * @param int      $site_id Site ID.
 	 *
 	 * @return void
 	 */
-	private function render_term_options( array $options, int $current, int $site_id ) {
+	private function render_term_options( array $options, int $current ) {
 
-		// TODO: Consider disabling options refering to IDs on remote sites different from the currently related ones.
 		foreach ( $options as $term_taxonomy_id => $term_name ) {
 			printf(
-				'<option value="%2$d" data-relationship-id="%4$s"%3$s>%1$s</option>',
+				'<option value="%2$d"%3$s>%1$s</option>',
 				esc_html( $term_name ),
 				esc_attr( $term_taxonomy_id ),
-				selected( $term_taxonomy_id, $current, false ),
-				esc_attr( $this->get_relationship_id( $site_id, $term_taxonomy_id ) )
+				selected( $term_taxonomy_id, $current, false )
 			);
 		}
-	}
-
-	/**
-	 * @param int $site_id
-	 * @param int $term_taxonomy_id
-	 *
-	 * @return int
-	 */
-	private function get_relationship_id( int $site_id, int $term_taxonomy_id ): int {
-
-		return $this->content_relations->get_relationship_id( [
-			$site_id => $term_taxonomy_id,
-		], ContentRelations::CONTENT_TYPE_TERM );
 	}
 }
