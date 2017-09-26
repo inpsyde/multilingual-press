@@ -247,9 +247,17 @@ class RelationshipController {
 
 		$relationship_id = $this->content_relations->get_relationship_id(
 			$content_ids,
-			ContentRelations::CONTENT_TYPE_POST,
-			true
+			ContentRelations::CONTENT_TYPE_POST
 		);
+		if ( ! $relationship_id ) {
+			$relationship_id = $this->content_relations->get_relationship_id(
+				[
+					$this->context->remote_site_id() => $this->context->remote_post_id(),
+				],
+				ContentRelations::CONTENT_TYPE_POST,
+				true
+			);
+		}
 		if ( ! $relationship_id ) {
 			return false;
 		}
