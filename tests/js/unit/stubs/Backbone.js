@@ -16,7 +16,7 @@ const Backbone = {
 	},
 	Router() {
 	},
-	View( { $el = new JqueryObject(), model = new Backbone.Model() } ) {
+	View( { $el: $el = new JqueryObject(), model: model = new Backbone.Model() } = {} ) {
 		this.$el = $el;
 		this.model = model;
 	},
