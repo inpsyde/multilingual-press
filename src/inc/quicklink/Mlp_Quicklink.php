@@ -21,6 +21,11 @@ class Mlp_Quicklink implements Mlp_Updatable {
 	private $module_manager;
 
 	/**
+	 * @var bool
+	 */
+	private $nofollow;
+
+	/**
 	 * @var Inpsyde_Nonce_Validator
 	 */
 	private $nonce_validator;
@@ -50,6 +55,15 @@ class Mlp_Quicklink implements Mlp_Updatable {
 		$this->assets = $assets;
 
 		$this->nonce_validator = Mlp_Nonce_Validator_Factory::create( 'save_quicklink_position' );
+
+		/**
+		 * Filters whether or not to use nofollow quicklinks.
+		 *
+		 * @since 2.10.0
+		 *
+		 * @param bool $nofollow Whether or not to use nofollow quicklinks.
+		 */
+		$this->nofollow = (bool) apply_filters( 'multilingualpress.quicklinks_nofollow', false );
 	}
 
 	/**
@@ -302,12 +316,17 @@ ORDER BY domain DESC',
 
 		$elements = array();
 
+		$rel = 'alternate';
+		if ( $this->nofollow ) {
+			$rel .= ' nofollow';
+		}
+
 		foreach ( $translated as $url => $language ) {
 			if ( 'links' === $type ) {
 				$attributes = array(
 					'href'     => $url,
 					'hreflang' => $language->get_name( 'http' ),
-					'rel'      => 'alternate',
+					'rel'      => $rel,
 				);
 			} else {
 				$attributes = array(
