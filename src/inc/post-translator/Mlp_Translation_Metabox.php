@@ -179,14 +179,19 @@ class Mlp_Translation_Metabox {
 	 */
 	private function is_translatable_by_user( WP_Post $post, $blog_id ) {
 
+		$post_type = get_post_type_object( $post->post_type );
+		if ( ! $post_type instanceof WP_Post_Type ) {
+			return false;
+		}
+
 		$blog_id = absint( $blog_id );
 
 		$remote_post = $this->data->get_remote_post( $post, $blog_id );
 		if ( isset( $remote_post->dummy ) && true === $remote_post->dummy ) {
-			return current_user_can_for_blog( $blog_id, 'edit_posts' );
+			return current_user_can_for_blog( $blog_id, $post_type->cap->edit_others_posts );
 		}
 
-		return current_user_can_for_blog( $blog_id, 'edit_post', $remote_post->ID );
+		return current_user_can_for_blog( $blog_id, $post_type->cap->edit_post, $remote_post->ID );
 	}
 
 	/**
