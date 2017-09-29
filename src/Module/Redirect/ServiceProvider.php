@@ -75,8 +75,7 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 			return new NoredirectAwareRedirectRequestValidator(
 				$container['multilingualpress.redirect_settings_repository'],
-				$container['multilingualpress.noredirect_storage'],
-				$container['multilingualpress.server_request']
+				$container['multilingualpress.noredirect_storage']
 			);
 		};
 
@@ -123,11 +122,30 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 		$container['multilingualpress.redirector'] = function ( Container $container ) {
 
-			return new NoredirectAwareRedirector(
-				$container['multilingualpress.language_negotiator'],
-				$container['multilingualpress.noredirect_storage'],
-				$container['multilingualpress.server_request']
-			);
+			/**
+			 * Filters the redirector type.
+			 *
+			 * @sicne 3.0.0
+			 *
+			 * @param string $type Redirector type.
+			 */
+			$type = apply_filters( Redirector::FILTER_TYPE, Redirector::TYPE_PHP );
+			switch ( strtoupper( $type ) ) {
+				case Redirector::TYPE_JAVASCRIPT:
+					return new NoredirectAwareJavaScriptRedirector(
+						$container['multilingualpress.language_negotiator'],
+						$container['multilingualpress.noredirect_storage'],
+						$container['multilingualpress.server_request']
+					);
+
+				case Redirector::TYPE_PHP:
+				default:
+					return new NoredirectAwareRedirector(
+						$container['multilingualpress.language_negotiator'],
+						$container['multilingualpress.noredirect_storage'],
+						$container['multilingualpress.server_request']
+					);
+			}
 		};
 
 		$container['multilingualpress.save_redirect_site_setting_nonce'] = function () {
@@ -195,8 +213,6 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 		if ( is_network_admin() ) {
 			$this->activate_module_for_network_admin( $container );
-
-			return;
 		}
 
 		( new SiteSetting(
