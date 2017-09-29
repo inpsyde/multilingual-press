@@ -1,5 +1,5 @@
+import * as F from './common/functions';
 import * as Util from './common/utils';
-import * as F from './admin/core/functions';
 import { Toggler } from './admin/core/common';
 import Controller from './admin/core/Controller';
 import EventManager from './admin/core/EventManager';

@@ -1,6 +1,6 @@
 import test from 'tape';
 import * as F from '../../functions';
-import * as Functions from '../../../../../resources/js/admin/core/functions';
+import * as Functions from '../../../../../resources/js/common/functions';
 
 const window = {};
 
