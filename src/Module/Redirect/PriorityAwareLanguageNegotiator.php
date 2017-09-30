@@ -193,10 +193,25 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 		 */
 		$targets = (array) apply_filters( self::FILTER_REDIRECT_TARGETS, $targets, $translations );
 
-		return array_filter( $targets, function ( $target ) {
+		if ( ! $targets ) {
+			return [];
+		}
+
+		$targets = array_filter( $targets, function ( $target ) {
 
 			return $target instanceof RedirectTarget;
 		} );
+
+		if ( ! $targets ) {
+			return [];
+		}
+
+		uasort( $targets, function ( RedirectTarget $a, RedirectTarget $b ) {
+
+			return $b->priority() <=> $a->priority();
+		} );
+
+		return $targets;
 	}
 
 	/**
