@@ -8,6 +8,9 @@ use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Common\Type\Language;
+
+use function Inpsyde\MultilingualPress\get_available_languages;
 
 /**
  * Service provider for all language manager objects.
@@ -41,9 +44,41 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 			);
 		};
 
+		add_action( LanguageManagerSettingsPageView::CONTENT_DISPLAY, function() use ( $container ) {
+
+			$active = get_available_languages( false );
+			$active = array_map( function( $val ) {
+				return str_replace( '_', '-', $val );
+			}, $active );
+
+			// This is just a stub, needs to be moved to a separate class
+			$languages = array_filter(
+				$container['multilingualpress.languages']->get_all_languages(),
+				function( Language $language ) use ( $active ) {
+
+					if ( ! $language->offsetExists( 'http_code' ) ) {
+						return false;
+					}
+
+					return in_array( $language->offsetGet( 'http_code' ), $active );
+				}
+			);
+
+			$table = new LanguageListTable( $languages );
+			$table->prepare_items();
+			$table->display();
+			return;
+		});
+
+		$container['multilingualpress.languagelisttable'] = function ( Container $container ) {
+
+			return new LanguageListTable( $container['multilingualpress.languages'] );
+		};
+
 		$container['multilingualpress.language_manager_settings_page_view'] = function ( Container $container ) {
 
-			// TODO: This replaces \Mlp_Language_Manager_Page_View. Adapt to your needs, using $container.
+			// We cannot pass a WP_List_Table instance here, because the
+			// registration runs before the necessary admin files are included.
 			return new LanguageManagerSettingsPageView(
 				$container['multilingualpress.update_languages_nonce'],
 				$container['multilingualpress.asset_manager']
@@ -71,13 +106,5 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 	public function bootstrap( Container $container ) {
 
 		$container['multilingualpress.language_manager_settings_page']->register();
-
-		// TODO: Refactor the following!
-		new \Mlp_Language_Manager_Controller(
-			new \Mlp_Language_Db_Access(
-				$container['multilingualpress.languages_table']->name()
-			),
-			$container['multilingualpress.wpdb']
-		);
 	}
 }
