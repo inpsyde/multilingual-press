@@ -61,6 +61,12 @@ final class NoredirectAwareRedirectRequestValidator implements RequestValidator 
 	 */
 	public function is_valid( $context = null ): bool {
 
+		global $pagenow;
+
+		if ( 'wp-login.php' === $pagenow ) {
+			return false;
+		}
+
 		if ( ! $this->settings_repository->get_site_setting() ) {
 			return false;
 		}
