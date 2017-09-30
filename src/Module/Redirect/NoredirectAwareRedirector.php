@@ -77,8 +77,7 @@ final class NoredirectAwareRedirector implements Redirector {
 			return false;
 		}
 
-		$url = $target->url();
-		if ( ! $url ) {
+		if ( ! $target->url() ) {
 			return false;
 		}
 
