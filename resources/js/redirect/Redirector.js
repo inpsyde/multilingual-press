@@ -91,10 +91,10 @@ class Redirector {
 			const index = language.indexOf( '-' );
 			if ( 0 < index ) {
 				language = language.substr( 0, index );
-			}
 
-			if ( ! userLanguages.includes( language ) ) {
-				languages.push( language );
+				if ( ! userLanguages.includes( language ) ) {
+					languages.push( language );
+				}
 			}
 
 			return languages;
@@ -124,16 +124,14 @@ class Redirector {
 	/**
 	 * Returns the best-matching content language for the given user language.
 	 * @param {String} userLanguage - A language of the user.
-	 * @param {Boolean} [recursive=true] - Optional. Recursive redirection? Defaults to true.
 	 * @return {String} The best-matching content language.
 	 */
-	matchLanguage( userLanguage, recursive = true ) {
+	matchLanguage( userLanguage ) {
 		if ( _this.settings.urls[ userLanguage ] ) {
 			return userLanguage;
 		}
 
-		const index = userLanguage.indexOf( '-' );
-		if ( -1 === index ) {
+		if ( -1 === userLanguage.indexOf( '-' ) ) {
 			const start = `${userLanguage}-`;
 
 			for ( const contentLanguage of Object.keys( _this.settings.urls ) ) {
@@ -141,12 +139,6 @@ class Redirector {
 					return contentLanguage;
 				}
 			}
-
-			return '';
-		}
-
-		if ( recursive ) {
-			return this.matchLanguage( userLanguage.substr( 0, index ), false );
 		}
 
 		return '';
