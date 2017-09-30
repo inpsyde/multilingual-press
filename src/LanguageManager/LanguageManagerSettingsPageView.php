@@ -18,6 +18,8 @@ use function Inpsyde\MultilingualPress\nonce_field;
  */
 final class LanguageManagerSettingsPageView implements SettingsPageView {
 
+	const CONTENT_DISPLAY = 'display_language_manager';
+
 	/**
 	 * @var AssetManager
 	 */
@@ -29,17 +31,21 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 	private $nonce;
 
 	/**
+	 * @var LanguageListTable
+	 */
+	private $listTable;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Nonce        $nonce         Nonce object.
-	 * @param AssetManager $asset_manager Asset manager object.
+	 * @param Nonce             $nonce         Nonce object.
+	 * @param AssetManager      $asset_manager Asset manager object.
 	 */
-	public function __construct( Nonce $nonce, AssetManager $asset_manager ) {
-
-		$this->nonce = $nonce;
-
+	public function __construct( Nonce $nonce, AssetManager $asset_manager )
+	{
+		$this->nonce         = $nonce;
 		$this->asset_manager = $asset_manager;
 	}
 
@@ -63,12 +69,9 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<?php settings_errors(); ?>
 			<form method="post" action="<?php echo admin_url( "admin-post.php?action={$action}" ); ?>">
-				<?php echo nonce_field( $this->nonce ); ?>
-
 				<?php
-				/**
-				 * TODO: Put some nice new code here that does in the end what the following old code does. :)
-				 */
+				echo nonce_field( $this->nonce );
+				do_action( self::CONTENT_DISPLAY );
 				?>
 
 			</form>
