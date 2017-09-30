@@ -125,7 +125,7 @@ final class ServiceProvider implements ModuleServiceProvider {
 			/**
 			 * Filters the redirector type.
 			 *
-			 * @sicne 3.0.0
+			 * @since 3.0.0
 			 *
 			 * @param string $type Redirector type.
 			 */
@@ -134,8 +134,7 @@ final class ServiceProvider implements ModuleServiceProvider {
 				case Redirector::TYPE_JAVASCRIPT:
 					return new NoredirectAwareJavaScriptRedirector(
 						$container['multilingualpress.language_negotiator'],
-						$container['multilingualpress.noredirect_storage'],
-						$container['multilingualpress.server_request']
+						$container['multilingualpress.asset_manager']
 					);
 
 				case Redirector::TYPE_PHP:
@@ -272,12 +271,20 @@ final class ServiceProvider implements ModuleServiceProvider {
 	 */
 	private function activate_module_for_front_end( Container $container ) {
 
+		$container['multilingualpress.asset_manager']
+			->register_script(
+				$container['multilingualpress.asset_factory']->create_internal_script(
+					'multilingualpress-redirect',
+					'redirect.js'
+				)
+			);
+
 		$filter = $container['multilingualpress.noredirect_permalink_filter'];
 		$filter->enable();
 		add_action( AlternateLanguages::FILTER_URL, [ $filter, 'remove_noredirect_query_argument' ] );
 
 		if ( $container['multilingualpress.redirect_request_validator']->is_valid() ) {
-			add_action( 'template_redirect', [ $container['multilingualpress.redirector'], 'redirect' ], 1 );
+			add_action( 'wp_loaded', [ $container['multilingualpress.redirector'], 'redirect' ], 0 );
 		}
 	}
 }

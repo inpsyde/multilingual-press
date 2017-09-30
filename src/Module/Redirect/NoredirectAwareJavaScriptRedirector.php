@@ -4,8 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
-use Inpsyde\MultilingualPress\Common\HTTP\Request;
-
+use Inpsyde\MultilingualPress\Asset\AssetManager;
 use function Inpsyde\MultilingualPress\get_current_site_language;
 
 /**
@@ -17,40 +16,28 @@ use function Inpsyde\MultilingualPress\get_current_site_language;
 final class NoredirectAwareJavaScriptRedirector implements Redirector {
 
 	/**
+	 * @var AssetManager
+	 */
+	private $asset_manager;
+
+	/**
 	 * @var LanguageNegotiator
 	 */
 	private $negotiator;
-
-	/**
-	 * @var Request
-	 */
-	private $request;
-
-	/**
-	 * @var NoredirectStorage
-	 */
-	private $storage;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param LanguageNegotiator $negotiator Language negotiator object.
-	 * @param NoredirectStorage  $storage    Noredirect storage object.
-	 * @param Request            $request    HTTP request object.
+	 * @param LanguageNegotiator $negotiator    Language negotiator object.
+	 * @param AssetManager       $asset_manager Asset manager object.
 	 */
-	public function __construct(
-		LanguageNegotiator $negotiator,
-		NoredirectStorage $storage,
-		Request $request
-	) {
+	public function __construct( LanguageNegotiator $negotiator, AssetManager $asset_manager ) {
 
 		$this->negotiator = $negotiator;
 
-		$this->storage = $storage;
-
-		$this->request = $request;
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
@@ -67,17 +54,11 @@ final class NoredirectAwareJavaScriptRedirector implements Redirector {
 			return false;
 		}
 
-		// There is currently no way to render a registered/enqueued script RIGHT NOW, so include it like so.
-		?>
-		<script>
-			var mlpRedirectorSettings = {
-				currentLanguage: <?php echo wp_json_encode( str_replace( '_', '-', get_current_site_language() ) ); ?>,
-				noredirectKey: <?php echo wp_json_encode( NoredirectPermalinkFilter::QUERY_ARGUMENT ); ?>,
-				urls: <?php echo wp_json_encode( $urls ); ?>,
-			};
-		</script>
-		<script src="<?php echo WP_CONTENT_URL; ?>/plugins/multilingualpress/assets/js/redirect.js"></script>
-		<?php
+		$this->asset_manager->enqueue_script_with_data( 'multilingualpress-redirect', 'mlpRedirectorSettings', [
+			'currentLanguage' => str_replace( '_', '-', get_current_site_language() ),
+			'noredirectKey'   => NoredirectPermalinkFilter::QUERY_ARGUMENT,
+			'urls'            => $urls,
+		], false );
 
 		return true;
 	}

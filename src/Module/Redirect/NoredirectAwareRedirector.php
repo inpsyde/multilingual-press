@@ -82,10 +82,13 @@ final class NoredirectAwareRedirector implements Redirector {
 			return false;
 		}
 
-		$this->storage->add_language( $target->language() );
+		add_action( 'template_redirect', function () use ( $target ) {
 
-		wp_redirect( $url );
-		call_exit();
+			$this->storage->add_language( $target->language() );
+
+			wp_redirect( $target->url() );
+			call_exit();
+		}, 1 );
 
 		return true;
 	}
