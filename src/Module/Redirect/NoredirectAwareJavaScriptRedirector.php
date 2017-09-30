@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
+
 use function Inpsyde\MultilingualPress\get_current_site_language;
 
 /**
