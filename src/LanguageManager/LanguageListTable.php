@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\LanguageManager;
 
 use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage;
-use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 class LanguageListTable extends \WP_List_Table
@@ -35,16 +34,16 @@ class LanguageListTable extends \WP_List_Table
 	/**
 	 *
 	 *
-	 * @var \Inpsyde\MultilingualPress\API\Languages
+	 * @var Languages
 	 */
 	private $languages;
 
 	/**
 	 * LanguageListTable constructor.
 	 *
-	 * @param \Inpsyde\MultilingualPress\API\Languages $languages
+	 * @param Languages $languages
 	 */
-	public function __construct( array $languages )
+	public function __construct( $languages )
 	{
 		$this->_args = [
 			'plural' => '',
@@ -76,8 +75,6 @@ class LanguageListTable extends \WP_List_Table
 			$this->get_hidden_columns(),
 			$this->get_sortable_columns(),
 		);
-
-		//$this->items = $this->languages->get_all_languages();
 	}
 
 	public function get_hidden_columns()
@@ -89,9 +86,6 @@ class LanguageListTable extends \WP_List_Table
 	{
 		if ( $this->has_items() ) {
 			$this->display_rows();
-
-			//print '<pre>' . print_r( $this->items, true ) . '</pre>';
-
 		} else {
 			echo 'nothing found';
 		}
@@ -123,6 +117,7 @@ class LanguageListTable extends \WP_List_Table
 
 		return (string) $item[ $column_name ];
 	}
+
 	/**
 	 * Defines the columns to use in your listing table
 	 *
@@ -134,6 +129,10 @@ class LanguageListTable extends \WP_List_Table
 
 		return $this->columns;
 	}
+
+	/**
+	 * @return array
+	 */
 	public function get_sortable_columns() {
 
 		return [];
