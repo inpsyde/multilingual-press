@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Cache;
+namespace Inpsyde\MultilingualPress\Cache\Driver;
 
 /**
  * @package Inpsyde\MultilingualPress\Cache

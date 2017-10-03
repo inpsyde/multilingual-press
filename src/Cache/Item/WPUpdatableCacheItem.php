@@ -2,8 +2,9 @@
 
 declare( strict_types=1 );
 
-namespace Inpsyde\MultilingualPress\Cache;
+namespace Inpsyde\MultilingualPress\Cache\Item;
 
+use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
 use Inpsyde\MultilingualPress\Common\Event\Event;
 
 /**

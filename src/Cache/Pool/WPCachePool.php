@@ -2,7 +2,12 @@
 
 declare( strict_types=1 );
 
-namespace Inpsyde\MultilingualPress\Cache;
+namespace Inpsyde\MultilingualPress\Cache\Pool;
+
+use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
+use Inpsyde\MultilingualPress\Cache\Item\CacheItem;
+use Inpsyde\MultilingualPress\Cache\Item\NullUpdatableCacheItem;
+use Inpsyde\MultilingualPress\Cache\Item\WPUpdatableCacheItem;
 
 /**
  * @package Inpsyde\MultilingualPress\Cache

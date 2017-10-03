@@ -1,6 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Cache;
+namespace Inpsyde\MultilingualPress\Cache\Pool;
+
+use Inpsyde\MultilingualPress\Cache\Item\CacheItem;
 
 /**
  * Interface for all cache implementations.

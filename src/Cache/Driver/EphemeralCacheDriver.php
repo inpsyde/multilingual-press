@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Cache;
+namespace Inpsyde\MultilingualPress\Cache\Driver;
 
 /**
  * Cache driver implementation that vanish with request.

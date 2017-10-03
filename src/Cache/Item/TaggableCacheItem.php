@@ -1,9 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Cache;
+namespace Inpsyde\MultilingualPress\Cache\Item;
 
 interface TaggableCacheItem extends CacheItem {
-
 
 	/**
 	 * Return current item tags.
@@ -38,7 +37,6 @@ interface TaggableCacheItem extends CacheItem {
 	 * @return bool
 	 */
 	public function remove_tags( string ...$tags ): bool;
-
 
 	/**
 	 * Overwrite tags withe given tag(s).

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Cache;
+namespace Inpsyde\MultilingualPress\Cache\Driver;
 
 /**
  * A driver implementation that uses WordPress transient functions.

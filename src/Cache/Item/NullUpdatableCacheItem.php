@@ -1,8 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 
-declare( strict_types=1 );
+declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Cache;
+namespace Inpsyde\MultilingualPress\Cache\Item;
 
 use Inpsyde\MultilingualPress\Common\Event\Event;
 
@@ -20,6 +20,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return string
 	 */
 	public function key(): string {
+
 		return '';
 	}
 
@@ -29,6 +30,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return mixed Should be null when no value is stored in cache.
 	 */
 	public function value() {
+
 		return null;
 	}
 
@@ -38,6 +40,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return bool
 	 */
 	public function is_hit(): bool {
+
 		return false;
 	}
 
@@ -49,6 +52,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return bool
 	 */
 	public function set( $value ): bool {
+
 		return false;
 	}
 
@@ -58,6 +62,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return bool
 	 */
 	public function delete(): bool {
+
 		return false;
 	}
 
@@ -69,6 +74,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return ExpirableCacheItem
 	 */
 	public function expires_on( \DateTimeInterface $expire_date ): ExpirableCacheItem {
+
 		return $this;
 	}
 
@@ -80,6 +86,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return ExpirableCacheItem
 	 */
 	public function expires_after( int $time_to_live ): ExpirableCacheItem {
+
 		return $this;
 	}
 
@@ -89,6 +96,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return string[]
 	 */
 	public function tags(): array {
+
 		return [];
 	}
 
@@ -100,6 +108,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return bool
 	 */
 	public function has_tag( string ...$tags ): bool {
+
 		return false;
 	}
 
@@ -111,6 +120,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return bool
 	 */
 	public function add_tags( string ...$tags ): bool {
+
 		return false;
 	}
 
@@ -122,6 +132,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return bool
 	 */
 	public function remove_tags( string ...$tags ): bool {
+
 		return false;
 	}
 
@@ -133,6 +144,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return bool
 	 */
 	public function use_tags( string ...$tags ): bool {
+
 		return false;
 	}
 
@@ -146,6 +158,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return UpdatableCacheItem
 	 */
 	public function listen( Event $event, callable $callback ): UpdatableCacheItem {
+
 		return $this;
 	}
 
@@ -157,6 +170,7 @@ final class NullUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheI
 	 * @return UpdatableCacheItem
 	 */
 	public function listen_and_delete( Event $event ): UpdatableCacheItem {
+
 		return $this;
 	}
 }

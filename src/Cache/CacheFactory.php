@@ -4,6 +4,12 @@ declare( strict_types=1 );
 
 namespace Inpsyde\MultilingualPress\Cache;
 
+use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
+use Inpsyde\MultilingualPress\Cache\Driver\EphemeralCacheDriver;
+use Inpsyde\MultilingualPress\Cache\Driver\WPCacheDriver;
+use Inpsyde\MultilingualPress\Cache\Driver\WPObjectCacheDriver;
+use Inpsyde\MultilingualPress\Cache\Pool\CachePool;
+use Inpsyde\MultilingualPress\Cache\Pool\WPCachePool;
 use Inpsyde\MultilingualPress\Common\Factory\ClassResolver;
 
 /**
