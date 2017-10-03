@@ -65,7 +65,7 @@ final class WPCachePool implements DeferredCachePool {
 	public function exist_or_create( string $key, array $tags = [], int $ttl = null ): CacheItem {
 
 		$item = $this->item( $key, $tags );
-		if ( $item instanceof NullUpdatableCacheItem ) {
+		if ( ! $item->is_hit() ) {
 			$item = $this->set( $key, null, $tags, $ttl );
 		}
 
@@ -102,11 +102,12 @@ final class WPCachePool implements DeferredCachePool {
 	 */
 	public function get_many( array $keys, array $tags = [], $default = null ): array {
 
-		$get = function( string $key ) use( $tags, $default ) {
-			return $this->get( $key, $tags, $default );
-		};
+		$values = [];
+		foreach( $keys as $key ) {
+			$values[] = $this->get( $key, $tags, $default );
+		}
 
-		return array_map( $get, $keys );
+		return $values;
 	}
 
 	/**

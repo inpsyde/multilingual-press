@@ -42,6 +42,8 @@ final class WPTransientDriver implements WPCacheDriver {
 	 */
 	public function read( string $namespace, string $name ): array {
 
+		$key = $this->build_key( $namespace, $name );
+
 		/*
 		 * When using external object cache, WP uses it for transient anyway.
 		 * Using cache methods directly helps to disguise the $found value.
@@ -49,14 +51,13 @@ final class WPTransientDriver implements WPCacheDriver {
 		if ( wp_using_ext_object_cache() ) {
 
 			$group = $this->sitewide ? 'site-transient' : 'transient';
-			$value = wp_cache_get( $this->build_key( $namespace, $name ), $group, true, $found );
+			$found = false;
+			$value = wp_cache_get( $key, $group, true, $found );
 
 			return [ $value, $found ];
 		}
 
-		$value = $this->sitewide
-			? get_site_transient( $this->build_key( $namespace, $name ) )
-			: get_transient( $this->build_key( $namespace, $name ) );
+		$value = $this->sitewide ? get_site_transient( $key ) : get_transient( $key );
 
 		/*
 		 * Transient do not allow to lookup for "hit" or "miss", so there's not way to know if a `false` was returned

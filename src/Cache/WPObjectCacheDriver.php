@@ -39,6 +39,7 @@ final class WPObjectCacheDriver implements WPCacheDriver {
 	public function read( string $namespace, string $name ): array {
 
 		$this->maybe_global( $namespace );
+		$found = false;
 		$value = wp_cache_get( $name, $namespace, true, $found );
 
 		return [ $value, $found ];

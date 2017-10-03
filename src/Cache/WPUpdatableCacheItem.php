@@ -257,7 +257,7 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 	}
 
 	/**
-	 * Overwrite tags withe given tag(s).
+	 * Overwrite tags with the given tag(s).
 	 *
 	 * @param string[] ...$tags
 	 *
@@ -310,7 +310,7 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 
 		$delete_callback = function () {
 
-			$this->is_hit = 0;
+			$this->is_hit = false;
 			$this->driver->delete( $this->group, $this->key );
 		};
 
@@ -432,7 +432,7 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 		}
 
 		// If here, value is expired. Setting is_hit to false, on next value() access, value will be updated from cache
-		$this->is_hit = 0;
+		$this->is_hit = false;
 		// and by unsetting it, we ensure the value returned will be null (unless updated again)
 		$this->driver->delete( $this->group, $this->key );
 

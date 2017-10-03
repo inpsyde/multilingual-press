@@ -34,8 +34,6 @@ interface CacheItem {
 	 */
 	public function set( $value ): bool;
 
-
-
 	/**
 	 * Delete the cache item from its storage and ensure that next value() call return null.
 	 *
