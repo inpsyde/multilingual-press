@@ -16,6 +16,7 @@ namespace Inpsyde\MultilingualPress;
 use Inpsyde\MultilingualPress\API\APIServiceProvider;
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Asset\AssetServiceProvider;
+use Inpsyde\MultilingualPress\Cache\CacheServiceProvider;
 use Inpsyde\MultilingualPress\Core\CoreServiceProvider;
 use Inpsyde\MultilingualPress\Core\ImmutablePluginProperties;
 use Inpsyde\MultilingualPress\Database\DatabaseServiceProvider;
@@ -83,6 +84,7 @@ function bootstrap(): bool {
 		->add_service_provider( new FactoryProvider() )
 		->add_service_provider( new InstallationServiceProvider() )
 		->add_service_provider( new IntegrationProvider() )
+		->add_service_provider( new CacheServiceProvider() )
 		->add_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() )
 		->add_service_provider( new Module\CustomPostTypeSupport\ServiceProvider() )
 		->add_service_provider( new Module\Quicklinks\ServiceProvider() )
