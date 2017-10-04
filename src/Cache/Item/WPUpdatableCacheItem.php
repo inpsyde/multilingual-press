@@ -30,7 +30,7 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 	/**
 	 * @var string
 	 */
-	private $group;
+	private $group = '';
 
 	/**
 	 * @var mixed
