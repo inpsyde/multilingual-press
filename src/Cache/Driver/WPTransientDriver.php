@@ -76,7 +76,7 @@ final class WPTransientDriver implements CacheDriver {
 		 */
 		$found = $value !== false;
 
-		return [ $found, $found ? $value : null ];
+		return [ $found ? $value : null, $found ];
 	}
 
 	/**
