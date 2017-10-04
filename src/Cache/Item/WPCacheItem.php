@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace Inpsyde\MultilingualPress\Cache\Item;
 
 use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
-use Inpsyde\MultilingualPress\Common\Event\Event;
 
 /**
  * A complete multi-driver cache item.
@@ -13,7 +12,7 @@ use Inpsyde\MultilingualPress\Common\Event\Event;
  * @package Inpsyde\MultilingualPress\Cache
  * @since   3.0.0
  */
-final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheItem, ExpirableCacheItem {
+final class WPCacheItem implements ExpirableCacheItem {
 
 	const DEFAULT_TIME_TO_LIVE = 3600;
 
@@ -60,32 +59,20 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 	/**
 	 * @var bool
 	 */
-	private $locked = false;
-
-	/**
-	 * @var bool
-	 */
 	private $shallow_update = false;
-
-	/**
-	 * @var array
-	 */
-	private $tags;
 
 	/**
 	 * Constructor, sets the key.
 	 *
 	 * @param CacheDriver $driver
 	 * @param string      $key
-	 * @param array       $tags
 	 * @param int|null    $time_to_live
 	 */
-	public function __construct( CacheDriver $driver, string $key, array $tags = [], int $time_to_live = null ) {
+	public function __construct( CacheDriver $driver, string $key, int $time_to_live = null ) {
 
 		$this->driver       = $driver;
 		$this->key          = $key;
 		$this->time_to_live = $time_to_live;
-		$this->tags         = $tags;
 
 		$this->value();
 	}
@@ -141,16 +128,14 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 		$this->is_hit = $found && is_array( $cached ) && $cached;
 
 		$value = $ttl = $expire_date = $last_save = null;
-		$tags  = [];
 
 		if ( $this->is_hit ) {
-			list( $value, $ttl, $expire_date, $last_save, $tags ) = $this->prepare_value( $cached );
+			list( $value, $ttl, $expire_date, $last_save ) = $this->prepare_value( $cached );
 		}
 
 		$this->value       = $value;
 		$this->last_save   = $last_save;
 		$this->expire_date = $expire_date;
-		$this->tags        = array_unique( array_merge( $tags, $this->tags ) );
 
 		if ( $this->time_to_live === null ) {
 			$this->time_to_live = is_int( $ttl ) ? $ttl : self::DEFAULT_TIME_TO_LIVE;
@@ -164,7 +149,7 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 		}
 
 		// If something changed we need to update the storage
-		if ( ( $ttl && $ttl !== $this->time_to_live ) || ( $this->tags !== $tags ) ) {
+		if ( ( $ttl && $ttl !== $this->time_to_live ) ) {
 			// Shallow update means no change will be done on "last save" property, so we don't prolong the TTL
 			$this->shallow_update = true;
 			$this->update();
@@ -190,144 +175,11 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 	}
 
 	/**
-	 * Return current item tags.
-
-	 * @return string[]
-	 */
-	public function tags(): array  {
-
-		return $this->tags;
-	}
-
-	/**
-	 * Check if current cache item have one (or more) tags.
-	 *
-	 * @param string[] ...$tags
-	 *
-	 * @return bool
-	 */
-	public function has_tag( string ...$tags ): bool {
-
-		return (bool) ( array_intersect( $tags, $this->tags ) == $tags );
-	}
-
-	/**
-	 * Add one or more tags ot cache item.
-	 *
-	 * @param string[] ...$tags
-	 *
-	 * @return bool
-	 */
-	public function add_tags( string ...$tags ): bool {
-
-		$tags = array_unique( array_merge( $tags, $this->tags ) );
-
-		if ( $tags !== $this->tags ) {
-			$this->tags           = $tags;
-			$this->shallow_update = true;
-			$this->update();
-			$this->shallow_update = true;
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Add one or more tags ot cache item.
-	 *
-	 * @param string[] ...$tags
-	 *
-	 * @return bool
-	 */
-	public function remove_tags( string ...$tags ): bool {
-
-		$tags = array_unique( array_diff( $this->tags, $tags ) );
-
-		if ( $tags !== $this->tags ) {
-			$this->tags           = $tags;
-			$this->shallow_update = true;
-			$this->update();
-			$this->shallow_update = true;
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Overwrite tags with the given tag(s).
-	 *
-	 * @param string[] ...$tags
-	 *
-	 * @return bool
-	 */
-	public function use_tags( string ...$tags ): bool {
-
-		if ( $tags !== $this->tags ) {
-			$this->tags           = $tags;
-			$this->shallow_update = true;
-			$this->update();
-			$this->shallow_update = true;
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Subscribe given event with given callback.
-	 * Pass to callback the current cache item as first argument.
-	 *
-	 * @param Event    $event
-	 * @param callable $callback
-	 *
-	 * @return WPUpdatableCacheItem|UpdatableCacheItem
-	 */
-	public function listen( Event $event, callable $callback ): UpdatableCacheItem {
-
-		$this->assert_not_locked();
-
-		$this->locked = true;
-		$event->listen( $callback, $this );
-		$this->locked = false;
-
-		return $this;
-	}
-
-	/**
-	 * Subscribe given event to delete the cache item value when the event is fired.
-	 *
-	 * @param Event $event
-	 *
-	 * @return WPUpdatableCacheItem|UpdatableCacheItem
-	 */
-	public function listen_and_delete( Event $event ): UpdatableCacheItem {
-
-		$this->assert_not_locked();
-
-		$delete_callback = function () {
-
-			$this->is_hit = false;
-			$this->driver->delete( $this->group, $this->key );
-		};
-
-		$this->locked = true;
-		$event->listen( $delete_callback, $this );
-		$this->locked = false;
-
-		return $this;
-	}
-
-	/**
 	 * Sets a specific date of expiration of the item.
 	 *
 	 * @param \DateTimeInterface $expire_date
 	 *
-	 * @return WPUpdatableCacheItem|ExpirableCacheItem
+	 * @return WPCacheItem|ExpirableCacheItem
 	 */
 	public function expires_on( \DateTimeInterface $expire_date ): ExpirableCacheItem {
 
@@ -353,7 +205,7 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 	 *
 	 * @param int $time_to_live
 	 *
-	 * @return WPUpdatableCacheItem|ExpirableCacheItem
+	 * @return WPCacheItem|ExpirableCacheItem
 	 */
 	public function expires_after( int $time_to_live ): ExpirableCacheItem {
 
@@ -377,23 +229,6 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 		$this->delete();
 
 		return true;
-	}
-
-	/**
-	 * @throws \BadMethodCallException If currently locked
-	 */
-	private function assert_not_locked() {
-
-		if ( $this->locked ) {
-
-			$message = 'Error updating cache for key %s. ';
-			$message .= '%s can\'t be called from a update/delete callbacks. ';
-			$message .= 'Use delete() to prevent the cache to return any value and also flush cache storage, ';
-			$message .= 'or use expires_on() with no arguments to flush cache storage ';
-			$message .= 'but leaving cached value for current request';
-
-			throw new \BadMethodCallException( sprintf( $message, $this->key, __METHOD__ ) );
-		}
 	}
 
 	/**
@@ -471,7 +306,6 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 				'T' => (int) $this->time_to_live ?: self::DEFAULT_TIME_TO_LIVE,
 				'E' => $this->expire_date ? $this->serialize_date( $this->expire_date ) : '',
 				'S' => $this->serialize_date( $last_save ),
-				'A' => array_filter( $this->tags, 'is_string' ),
 			];
 		}
 
@@ -479,14 +313,12 @@ final class WPUpdatableCacheItem implements UpdatableCacheItem, TaggableCacheIte
 		$ttl         = $compact_value['T'] ?? null;
 		$expire_date = ( $compact_value['E'] ?? null );
 		$last_save   = ( $compact_value['S'] ?? null );
-		$tags        = ( $compact_value['A'] ?? [] );
 
 		return [
 			$value,
 			$ttl === null ? null : (int) $ttl,
 			$expire_date === null ? null : $this->unserialize_date( (string) $expire_date ),
 			$last_save === null ? null : $this->unserialize_date( (string) $last_save ),
-			(array) $tags,
 		];
 	}
 

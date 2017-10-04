@@ -6,7 +6,7 @@ namespace Inpsyde\MultilingualPress\Cache\Pool;
 
 use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
 use Inpsyde\MultilingualPress\Cache\Item\CacheItem;
-use Inpsyde\MultilingualPress\Cache\Item\WPUpdatableCacheItem;
+use Inpsyde\MultilingualPress\Cache\Item\WPCacheItem;
 
 /**
  * @package Inpsyde\MultilingualPress\Cache
@@ -42,28 +42,26 @@ final class WPCachePool implements DeferredCachePool {
 	/**
 	 * Fetches a value from the cache.
 	 *
-	 * @param string $key  The unique key of item in the cache.
-	 * @param mixed  $tags Optional. Tags the further identify a cache item. Defaults to empty array.
+	 * @param string $key The unique key of item in the cache.
 	 *
-	 * @return mixed The cache item identified by key and tags
+	 * @return CacheItem The cache item identified by given key.
 	 */
-	public function item( string $key, array $tags = [] ): CacheItem {
+	public function item( string $key ): CacheItem {
 
-		return new WPUpdatableCacheItem( $this->driver, $this->namespace . $key, $tags );
+		return new WPCacheItem( $this->driver, $this->namespace . $key );
 	}
 
 	/**
 	 * Fetches a value from the cache.
 	 *
 	 * @param string     $key     The unique key of item in the cache.
-	 * @param mixed      $tags    Optional. Tags the further identify a cache item. Defaults to empty array.
 	 * @param mixed|null $default Default value to return if the key does not exist.
 	 *
 	 * @return mixed The value of the item from the cache, or $default in case of cache miss.
 	 */
-	public function get( string $key, array $tags = [], $default = null ) {
+	public function get( string $key, $default = null ) {
 
-		$item = $this->item( $key, $tags );
+		$item = $this->item( $key );
 		if ( ! $item->is_hit() ) {
 			return $default;
 		}
@@ -75,16 +73,15 @@ final class WPCachePool implements DeferredCachePool {
 	 * Fetches a value from the cache.
 	 *
 	 * @param string[]   $keys    The unique keys of item in the cache.
-	 * @param mixed      $tags    Optional. Tags the further identify a cache items. Defaults to empty array.
 	 * @param mixed|null $default Default value to assign to each item if the key does not exist.
 	 *
-	 * @return mixed The value of the item from the cache, or $default in case of cache miss.
+	 * @return array The value of the item from the cache, or $default in case of cache miss.
 	 */
-	public function get_many( array $keys, array $tags = [], $default = null ): array {
+	public function get_many( array $keys, $default = null ): array {
 
 		$values = [];
 		foreach ( $keys as $key ) {
-			$values[] = $this->get( $key, $tags, $default );
+			$values[] = $this->get( $key, $default );
 		}
 
 		return $values;
@@ -95,14 +92,13 @@ final class WPCachePool implements DeferredCachePool {
 	 *
 	 * @param string   $key   The key of the item to store.
 	 * @param mixed    $value Optional. The value of the item to store, must be serializable. Defaults to null.
-	 * @param array    $tags  Optional. Tags the further identify a cache item.
 	 * @param null|int $ttl   Optional. The TTL value of item.
 	 *
 	 * @return CacheItem The cache item just wrote to
 	 */
-	public function set( string $key, $value = null, array $tags = [], int $ttl = null ): CacheItem {
+	public function set( string $key, $value = null, int $ttl = null ): CacheItem {
 
-		$item = new WPUpdatableCacheItem( $this->driver, $this->namespace . $key, $tags, $ttl );
+		$item = new WPCacheItem( $this->driver, $this->namespace . $key, $ttl );
 		$item->set( $value );
 
 		return $item;
@@ -111,14 +107,13 @@ final class WPCachePool implements DeferredCachePool {
 	/**
 	 * Delete an item from the cache by its unique key.
 	 *
-	 * @param string $key  The unique cache key of the item to delete.
-	 * @param array  $tags Optional. Tags the further identify a cache item. Defaults to empty array.
+	 * @param string $key The unique cache key of the item to delete.
 	 *
 	 * @return bool True if the item was successfully removed. False if there was an error.
 	 */
-	public function delete( string $key, array $tags = [] ): bool {
+	public function delete( string $key ): bool {
 
-		return $this->item( $key, $tags )->delete();
+		return $this->item( $key )->delete();
 	}
 
 	/**
@@ -126,32 +121,29 @@ final class WPCachePool implements DeferredCachePool {
 	 *
 	 * @param string $key The cache item key.
 	 *
-	 * @param array  $tags
-	 *
 	 * @return bool
 	 */
-	public function has( string $key, array $tags = [] ): bool {
+	public function has( string $key ): bool {
 
-		return $this->item( $key, $tags )->is_hit();
+		return $this->item( $key )->is_hit();
 	}
 
 	/**
 	 * Queue data to be stored in the cache, uniquely referenced by a key with an optional expiration TTL time.
 	 *
 	 * @param string    $key   The key of the item to store.
-	 * @param array     $tags  Tags to further identify the cache item
 	 * @param mixed     $value The value of the item to store, must be serializable.
 	 * @param null|int| $ttl   Optional. The TTL value of item.
 	 *
 	 * @return DeferredCachePool
 	 */
-	public function queue_for_set( string $key, array $tags = [], $value = null, int $ttl = null ): DeferredCachePool {
+	public function queue_for_set( string $key, $value = null, int $ttl = null ): DeferredCachePool {
 
 		$this->ensure_commit_scheduled();
 
-		$this->queue[ $this->queue_key( $key, $tags ) ] = function () use ( $key, $tags, $value, $ttl ) {
+		$this->queue[ $key ] = function () use ( $key, $value, $ttl ) {
 
-			$this->set( $key, $value, $tags, $ttl );
+			$this->set( $key, $value, $ttl );
 		};
 
 		return $this;
@@ -163,17 +155,15 @@ final class WPCachePool implements DeferredCachePool {
 	 *
 	 * @param string $key The key of the item to store.
 	 *
-	 * @param array  $tags
-	 *
 	 * @return DeferredCachePool
 	 */
-	public function queue_for_delete( string $key, array $tags = [] ): DeferredCachePool {
+	public function queue_for_delete( string $key ): DeferredCachePool {
 
 		$this->ensure_commit_scheduled();
 
-		$this->queue[ $this->queue_key( $key, $tags ) ] = function () use ( $key, $tags ) {
+		$this->queue[ $key ] = function () use ( $key ) {
 
-			$this->delete( $key, $tags );
+			$this->delete( $key );
 		};
 
 		return $this;
@@ -182,17 +172,14 @@ final class WPCachePool implements DeferredCachePool {
 	/**
 	 * Remove an item from queue.
 	 *
-	 * @param string $key  The key of the item to store.
-	 * @param array  $tags Tags to further identify the cache item
+	 * @param string $key The key of the item to store.
 	 *
 	 * @return bool True if item removed from queue
 	 */
-	public function dequeue( string $key, array $tags = [] ): bool {
+	public function dequeue( string $key ): bool {
 
-		$index = $this->queue_key( $key, $tags );
-
-		if ( array_key_exists( $index, $this->queue ) ) {
-			unset( $this->queue[ $index ] );
+		if ( array_key_exists( $key, $this->queue ) ) {
+			$this->queue = array_diff_key( $this->queue, [ $key => '' ] );
 
 			return true;
 		}
@@ -225,18 +212,5 @@ final class WPCachePool implements DeferredCachePool {
 		if ( ! has_action( 'shutdown', [ $this, 'commit' ] ) ) {
 			add_action( 'shutdown', [ $this, 'commit' ] );
 		}
-	}
-
-	/**
-	 * @param string $key
-	 * @param array  $tags
-	 *
-	 * @return string
-	 */
-	private function queue_key( string $key, array $tags = [] ): string {
-
-		array_unshift( $tags, $key );
-
-		return md5( serialize( $tags ) );
 	}
 }
