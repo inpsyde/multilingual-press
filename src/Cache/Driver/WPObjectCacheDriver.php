@@ -58,7 +58,7 @@ final class WPObjectCacheDriver implements CacheDriver {
 	 *
 	 * @param string $namespace
 	 * @param string $name
-	 * @param        $value
+	 * @param mixed $value
 	 *
 	 * @return bool
 	 */
@@ -88,8 +88,9 @@ final class WPObjectCacheDriver implements CacheDriver {
 	 * @param string $namespace
 	 */
 	private function maybe_global( string $namespace ) {
-		
+
 		if ( $this->sitewide && ! in_array( $namespace, self::$global_namespaces, true ) ) {
+			self::$global_namespaces[] = $namespace;
 			wp_cache_add_global_groups( $namespace );
 		}
 	}
