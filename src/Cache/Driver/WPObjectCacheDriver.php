@@ -49,6 +49,9 @@ final class WPObjectCacheDriver implements CacheDriver {
 		$this->maybe_global( $namespace );
 		$found = false;
 		$value = wp_cache_get( $name, $namespace, true, $found );
+		if ( $value === false && ! $found ) {
+			$value = null;
+		}
 
 		return [ $value, $found ];
 	}
@@ -58,7 +61,7 @@ final class WPObjectCacheDriver implements CacheDriver {
 	 *
 	 * @param string $namespace
 	 * @param string $name
-	 * @param mixed $value
+	 * @param mixed  $value
 	 *
 	 * @return bool
 	 */
