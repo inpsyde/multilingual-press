@@ -8,6 +8,13 @@ namespace Inpsyde\MultilingualPress\Cache\Driver;
  */
 interface CacheDriver {
 
+	const SITEWIDE = 32;
+
+	/**
+	 * @return bool
+	 */
+	public function is_sidewide(): bool;
+
 	/**
 	 * Reads a value from the cache.
 	 *

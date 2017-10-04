@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Cache\Driver;
  * @package Inpsyde\MultilingualPress\Cache
  * @since   3.0.0
  */
-final class WPObjectCacheDriver implements WPCacheDriver {
+final class WPObjectCacheDriver implements CacheDriver {
 
 	private static $global_namespaces = [];
 
@@ -25,6 +25,14 @@ final class WPObjectCacheDriver implements WPCacheDriver {
 	public function __construct( int $flags = 0 ) {
 
 		$this->sitewide = (bool) ( $flags & self::SITEWIDE );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_sidewide(): bool {
+
+		return $this->sitewide;
 	}
 
 	/**

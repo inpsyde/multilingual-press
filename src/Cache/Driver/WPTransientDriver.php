@@ -14,7 +14,7 @@ namespace Inpsyde\MultilingualPress\Cache\Driver;
  * @package Inpsyde\MultilingualPress\Cache
  * @since   3.0.0
  */
-final class WPTransientDriver implements WPCacheDriver {
+final class WPTransientDriver implements CacheDriver {
 
 	/**
 	 * @var bool
@@ -29,6 +29,14 @@ final class WPTransientDriver implements WPCacheDriver {
 	public function __construct( int $flags = 0 ) {
 
 		$this->sitewide = (bool) ( $flags & self::SITEWIDE );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_sidewide(): bool {
+
+		return $this->sitewide;
 	}
 
 	/**
