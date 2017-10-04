@@ -54,17 +54,6 @@ interface CachePool {
 	public function set( string $key, $value = null, array $tags = [], int $ttl = null ): CacheItem;
 
 	/**
-	 * Get an item from the pool, or create and empty item if not exist.
-	 *
-	 * @param string   $key  The key of the item to store.
-	 * @param array    $tags Optional. Tags the further identify a cache item.
-	 * @param null|int $ttl  Optional. The TTL value of item.
-	 *
-	 * @return CacheItem The cache item just wrote to
-	 */
-	public function exist_or_create( string $key, array $tags = [], int $ttl = null ): CacheItem;
-
-	/**
 	 * Delete an item from the cache by its unique key.
 	 *
 	 * @param string $key  The unique cache key of the item to delete.

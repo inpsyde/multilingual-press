@@ -1,12 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
-declare( strict_types=1 );
+declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Cache\Pool;
 
 use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
 use Inpsyde\MultilingualPress\Cache\Item\CacheItem;
-use Inpsyde\MultilingualPress\Cache\Item\NullUpdatableCacheItem;
 use Inpsyde\MultilingualPress\Cache\Item\WPUpdatableCacheItem;
 
 /**
@@ -50,31 +49,7 @@ final class WPCachePool implements DeferredCachePool {
 	 */
 	public function item( string $key, array $tags = [] ): CacheItem {
 
-		$item = new WPUpdatableCacheItem( $this->driver, $this->namespace . $key );
-		if ( ! $tags || $item->has_tag( ...$tags ) ) {
-			return $item;
-		}
-
-		return new NullUpdatableCacheItem();
-	}
-
-	/**
-	 * Get an item from the pool, or create and empty item if not exist.
-	 *
-	 * @param string   $key   The key of the item to store.
-	 * @param array    $tags  Optional. Tags the further identify a cache item.
-	 * @param null|int $ttl   Optional. The TTL value of item.
-	 *
-	 * @return CacheItem The cache item just wrote to
-	 */
-	public function exist_or_create( string $key, array $tags = [], int $ttl = null ): CacheItem {
-
-		$item = $this->item( $key, $tags );
-		if ( ! $item->is_hit() ) {
-			$item = $this->set( $key, null, $tags, $ttl );
-		}
-
-		return $item;
+		return new WPUpdatableCacheItem( $this->driver, $this->namespace . $key, $tags );
 	}
 
 	/**
@@ -108,7 +83,7 @@ final class WPCachePool implements DeferredCachePool {
 	public function get_many( array $keys, array $tags = [], $default = null ): array {
 
 		$values = [];
-		foreach( $keys as $key ) {
+		foreach ( $keys as $key ) {
 			$values[] = $this->get( $key, $tags, $default );
 		}
 
