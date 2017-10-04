@@ -14,6 +14,8 @@ namespace Inpsyde\MultilingualPress\Cache\Driver;
  */
 final class EphemeralCacheDriver implements CacheDriver {
 
+	const NOOP = 8192;
+
 	/**
 	 * @var array
 	 */
@@ -25,6 +27,11 @@ final class EphemeralCacheDriver implements CacheDriver {
 	private $sitewide;
 
 	/**
+	 * @var bool
+	 */
+	private $noop;
+
+	/**
 	 * Constructor. Sets properties.
 	 *
 	 * @param int $flags
@@ -32,6 +39,7 @@ final class EphemeralCacheDriver implements CacheDriver {
 	public function __construct( int $flags = 0 ) {
 
 		$this->sitewide = (bool) ( $flags & self::SITEWIDE );
+		$this->noop     = (bool) ( $flags & self::NOOP );
 	}
 
 	/**
@@ -53,10 +61,14 @@ final class EphemeralCacheDriver implements CacheDriver {
 	 */
 	public function read( string $namespace, string $name ): array {
 
+		if ( $this->noop ) {
+			return [ null, false ];
+		}
+
 		$key   = $this->build_key( $namespace, $name );
 		$found = array_key_exists( $key, self::$cache );
 
-		return [ $found, $found ? self::$cache[ $key ] : null ];
+		return [ $found ? self::$cache[ $key ] : null, $found ];
 	}
 
 	/**
@@ -69,6 +81,10 @@ final class EphemeralCacheDriver implements CacheDriver {
 	 * @return bool
 	 */
 	public function write( string $namespace, string $name, $value ): bool {
+
+		if ( $this->noop ) {
+			return false;
+		}
 
 		$key = $this->build_key( $namespace, $name );
 
@@ -86,6 +102,10 @@ final class EphemeralCacheDriver implements CacheDriver {
 	 * @return bool
 	 */
 	public function delete( string $namespace, string $name ): bool {
+
+		if ( $this->noop ) {
+			return false;
+		}
 
 		$key = $this->build_key( $namespace, $name );
 		unset( self::$cache[ $key ] );
