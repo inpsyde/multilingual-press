@@ -12,7 +12,7 @@ use Inpsyde\MultilingualPress\Cache\Item\WPCacheItem;
  * @package Inpsyde\MultilingualPress\Cache
  * @since   3.0.0
  */
-final class WPCachePool implements DeferredCachePool {
+final class WPCachePool implements CachePool {
 
 	/**
 	 * @var string
@@ -25,11 +25,6 @@ final class WPCachePool implements DeferredCachePool {
 	private $driver;
 
 	/**
-	 * @var array
-	 */
-	private $queue = [];
-
-	/**
 	 * @param string      $namespace
 	 * @param CacheDriver $driver
 	 */
@@ -37,6 +32,26 @@ final class WPCachePool implements DeferredCachePool {
 
 		$this->driver    = $driver;
 		$this->namespace = $namespace;
+	}
+
+	/**
+	 * Return poll namespace.
+	 *
+	 * @return string
+	 */
+	public function namespace(): string {
+
+		return $this->namespace;
+	}
+
+	/**
+	 * Check if the cache pool is sitewide.
+	 *
+	 * @return bool
+	 */
+	public function is_sitewide(): bool {
+
+		return $this->driver->is_sidewide();
 	}
 
 	/**
@@ -62,7 +77,7 @@ final class WPCachePool implements DeferredCachePool {
 	public function get( string $key, $default = null ) {
 
 		$item = $this->item( $key );
-		if ( ! $item->is_hit() ) {
+		if ( ! $item->is_hit() || $item->is_expired() ) {
 			return $default;
 		}
 
@@ -126,91 +141,5 @@ final class WPCachePool implements DeferredCachePool {
 	public function has( string $key ): bool {
 
 		return $this->item( $key )->is_hit();
-	}
-
-	/**
-	 * Queue data to be stored in the cache, uniquely referenced by a key with an optional expiration TTL time.
-	 *
-	 * @param string    $key   The key of the item to store.
-	 * @param mixed     $value The value of the item to store, must be serializable.
-	 * @param null|int| $ttl   Optional. The TTL value of item.
-	 *
-	 * @return DeferredCachePool
-	 */
-	public function queue_for_set( string $key, $value = null, int $ttl = null ): DeferredCachePool {
-
-		$this->ensure_commit_scheduled();
-
-		$this->queue[ $key ] = function () use ( $key, $value, $ttl ) {
-
-			$this->set( $key, $value, $ttl );
-		};
-
-		return $this;
-
-	}
-
-	/**
-	 * Queue data uniquely referenced by given key to be deleted from cache.
-	 *
-	 * @param string $key The key of the item to store.
-	 *
-	 * @return DeferredCachePool
-	 */
-	public function queue_for_delete( string $key ): DeferredCachePool {
-
-		$this->ensure_commit_scheduled();
-
-		$this->queue[ $key ] = function () use ( $key ) {
-
-			$this->delete( $key );
-		};
-
-		return $this;
-	}
-
-	/**
-	 * Remove an item from queue.
-	 *
-	 * @param string $key The key of the item to store.
-	 *
-	 * @return bool True if item removed from queue
-	 */
-	public function dequeue( string $key ): bool {
-
-		if ( array_key_exists( $key, $this->queue ) ) {
-			$this->queue = array_diff_key( $this->queue, [ $key => '' ] );
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Perform all queued operations.
-	 *
-	 * @return bool True on success and false on failure.
-	 */
-	public function commit(): bool {
-
-		array_walk( $this->queue, function ( callable $callable ) {
-
-			$callable();
-		} );
-
-		$this->queue = [];
-
-		return true;
-	}
-
-	/**
-	 * Add commit method to shutdown action if not already added.
-	 */
-	private function ensure_commit_scheduled() {
-
-		if ( ! has_action( 'shutdown', [ $this, 'commit' ] ) ) {
-			add_action( 'shutdown', [ $this, 'commit' ] );
-		}
 	}
 }

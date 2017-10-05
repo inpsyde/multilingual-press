@@ -10,6 +10,20 @@ use Inpsyde\MultilingualPress\Cache\Item\CacheItem;
 interface CachePool {
 
 	/**
+	 * Return poll namespace.
+	 *
+	 * @return string
+	 */
+	public function namespace(): string;
+
+	/**
+	 * Check if the cache pool is sitewide.
+	 *
+	 * @return bool
+	 */
+	public function is_sitewide(): bool;
+
+	/**
 	 * Fetches a value from the cache.
 	 *
 	 * @param string $key The unique key of this item in the cache.

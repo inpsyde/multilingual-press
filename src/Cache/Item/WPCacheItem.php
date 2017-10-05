@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 
-declare( strict_types=1 );
+declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Cache\Item;
 
@@ -12,9 +12,7 @@ use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
  * @package Inpsyde\MultilingualPress\Cache
  * @since   3.0.0
  */
-final class WPCacheItem implements ExpirableCacheItem {
-
-	const DEFAULT_TIME_TO_LIVE = 3600;
+final class WPCacheItem implements CacheItem {
 
 	/**
 	 * @var CacheDriver
@@ -40,6 +38,11 @@ final class WPCacheItem implements ExpirableCacheItem {
 	 * @var bool
 	 */
 	private $is_hit = false;
+
+	/**
+	 * @var bool
+	 */
+	private $is_expired = null;
 
 	/**
 	 * @var int
@@ -113,6 +116,52 @@ final class WPCacheItem implements ExpirableCacheItem {
 	}
 
 	/**
+	 * Check if the cache item is expired.
+	 *
+	 * @return bool
+	 */
+	public function is_expired(): bool {
+
+		if ( ! $this->is_hit() ) {
+			return false;
+		}
+
+		if ( isset( $this->is_expired ) ) {
+			return $this->is_expired;
+		}
+
+		// If the value has a fixed expire date, let's keep it as expire timestamp
+		$expiry_time_by_date = $this->expire_date ? $this->expire_date->getTimestamp() : null;
+
+		// If we have a last save and a time to live, calculate an expired timestamp based on that
+		$expiry_time_by_ttl = $this->last_save && is_int( $this->time_to_live )
+			? $this->last_save->getTimestamp() + $this->time_to_live
+			: null;
+
+		// If we don't have and expiration date, nor we were able to calculate a expiration by TTL, let's just return
+		if ( $expiry_time_by_date === null && $expiry_time_by_ttl === null ) {
+			return false;
+		}
+
+		// Expire time is which occur first between expire date end expiration calculated via TTL
+		switch ( true ) {
+			case ( $expiry_time_by_date === null ) :
+				$expiry = $expiry_time_by_ttl;
+				break;
+			case ( $expiry_time_by_ttl === null ) :
+				$expiry = $expiry_time_by_date;
+				break;
+			default :
+				$expiry = min( $expiry_time_by_date, $expiry_time_by_ttl );
+				break;
+		}
+
+		$this->is_expired = $expiry < (int) $this->now( 'U' );
+
+		return $this->is_expired;
+	}
+
+	/**
 	 * Cache item value.
 	 *
 	 * @return mixed Should be null when no value is stored in cache.
@@ -141,13 +190,6 @@ final class WPCacheItem implements ExpirableCacheItem {
 			$this->time_to_live = is_int( $ttl ) ? $ttl : self::DEFAULT_TIME_TO_LIVE;
 		}
 
-		// If value is expired we are going to return it anyway, but we delete it from cache
-		$deleted = $this->is_hit ? $this->maybe_delete() : true;
-
-		if ( $deleted ) {
-			return $this->value;
-		}
-
 		// If something changed we need to update the storage
 		if ( ( $ttl && $ttl !== $this->time_to_live ) ) {
 			// Shallow update means no change will be done on "last save" property, so we don't prolong the TTL
@@ -169,7 +211,8 @@ final class WPCacheItem implements ExpirableCacheItem {
 
 		unset( $this->value, $this->time_to_live, $this->last_save );
 
-		$this->is_hit = false;
+		$this->is_hit     = false;
+		$this->is_expired = null;
 
 		return $this->driver->delete( $this->group, $this->key );
 	}
@@ -179,9 +222,9 @@ final class WPCacheItem implements ExpirableCacheItem {
 	 *
 	 * @param \DateTimeInterface $expire_date
 	 *
-	 * @return WPCacheItem|ExpirableCacheItem
+	 * @return CacheItem
 	 */
-	public function expires_on( \DateTimeInterface $expire_date ): ExpirableCacheItem {
+	public function expires_on( \DateTimeInterface $expire_date ): CacheItem {
 
 		// Let's ensure expire_date is immutable and it is in the GMT timezone
 		$exp_offset  = $expire_date->getOffset();
@@ -190,12 +233,15 @@ final class WPCacheItem implements ExpirableCacheItem {
 
 		$this->expire_date = $expire_date;
 
-		// Shallow update means no change will be done on "last save" property
-		$this->shallow_update = true;
-		$this->update();
-		$this->shallow_update = false;
+		if ( $this->is_hit ) {
+			// Shallow update means no change will be done on "last save" property
+			$this->shallow_update = true;
+			$this->update();
+			$this->shallow_update = false;
+		}
 
-		$this->is_hit = false;
+		$this->is_hit     = false;
+		$this->is_expired = null;
 
 		return $this;
 	}
@@ -205,9 +251,9 @@ final class WPCacheItem implements ExpirableCacheItem {
 	 *
 	 * @param int $time_to_live
 	 *
-	 * @return WPCacheItem|ExpirableCacheItem
+	 * @return CacheItem
 	 */
-	public function expires_after( int $time_to_live ): ExpirableCacheItem {
+	public function expires_after( int $time_to_live ): CacheItem {
 
 		$now = $this->now();
 
@@ -222,55 +268,12 @@ final class WPCacheItem implements ExpirableCacheItem {
 		if ( $this->is_hit ) {
 
 			$this->driver->write( $this->group, $this->key, $this->prepare_value() );
+			$this->is_expired = null;
 
 			return true;
 		}
 
 		$this->delete();
-
-		return true;
-	}
-
-	/**
-	 * @return bool
-	 */
-	private function maybe_delete(): bool {
-
-		// If the value has a fixed expire date, let's keep it as expire timestamp
-		$expiry_time_by_date = $this->expire_date ? $this->expire_date->getTimestamp() : null;
-
-		// If we have a last save and a time to live, calculate an expired timestamp based on that
-		$expiry_time_by_ttl = $this->last_save && is_int( $this->time_to_live )
-			? $this->last_save->getTimestamp() + $this->time_to_live
-			: null;
-
-		// If we don't have and expiration date, nor we were able to calculate a expiration by TTL, let's just return
-		if ( $expiry_time_by_date === null && $expiry_time_by_ttl === null ) {
-			return false;
-		}
-
-		// Expire time is which occur first between expire date end expiration calculated via TTL
-		switch ( true ) {
-			case ( $expiry_time_by_date === null ) :
-				$expiry = $expiry_time_by_ttl;
-				break;
-			case ( $expiry_time_by_ttl === null ) :
-				$expiry = $expiry_time_by_date;
-				break;
-			default :
-				$expiry = min( $expiry_time_by_date, $expiry_time_by_ttl );
-				break;
-		}
-
-		// If not expired, we have nothing to do
-		if ( $expiry < (int) $this->now( 'U' ) ) {
-			return false;
-		}
-
-		// If here, value is expired. Setting is_hit to false, on next value() access, value will be updated from cache
-		$this->is_hit = false;
-		// and by unsetting it, we ensure the value returned will be null (unless updated again)
-		$this->driver->delete( $this->group, $this->key );
 
 		return true;
 	}
@@ -299,7 +302,7 @@ final class WPCacheItem implements ExpirableCacheItem {
 		if ( $compact_value === null ) {
 
 			// When doing a shallow update, we don't update last save time, unless value was never saved before
-			$last_save = ! $this->shallow_update || ! $this->last_save ? $this->now() : $this->last_save;
+			$last_save = ( ! $this->shallow_update || ! $this->last_save ) ? $this->now() : $this->last_save;
 
 			return [
 				'V' => $this->value,
@@ -347,5 +350,4 @@ final class WPCacheItem implements ExpirableCacheItem {
 
 		return $date ?: null;
 	}
-
 }
