@@ -14,6 +14,10 @@ use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
  */
 final class WPCacheItem implements CacheItem {
 
+	const DIRTY = 'dirty';
+	const DIRTY_SHALLOW = 'shallow';
+	const CLEAN = '';
+
 	/**
 	 * @var CacheDriver
 	 */
@@ -38,6 +42,11 @@ final class WPCacheItem implements CacheItem {
 	 * @var bool
 	 */
 	private $is_hit = false;
+
+	/**
+	 * @var string
+	 */
+	private $dirty_status = self::CLEAN;
 
 	/**
 	 * @var bool
@@ -81,6 +90,19 @@ final class WPCacheItem implements CacheItem {
 	}
 
 	/**
+	 * Before the object vanishes its storage its updated if needs to.
+	 */
+	public function __destruct() {
+
+		if ( $this->dirty_status !== self::CLEAN ) {
+			// Shallow update means no change will be done on "last save" property, so we don't prolong the TTL
+			$this->shallow_update = $this->dirty_status !== self::DIRTY_SHALLOW;
+			$this->update();
+			$this->shallow_update = false;
+		}
+	}
+
+	/**
 	 * Cache item key
 	 *
 	 * @return string
@@ -99,10 +121,12 @@ final class WPCacheItem implements CacheItem {
 	 */
 	public function set( $value ): bool {
 
-		$this->is_hit = true;
-		$this->value  = $value;
+		$this->is_hit       = true;
+		$this->value        = $value;
+		$this->is_expired   = null;
+		$this->dirty_status = self::DIRTY;
 
-		return $this->update();
+		return true;
 	}
 
 	/**
@@ -182,20 +206,30 @@ final class WPCacheItem implements CacheItem {
 			list( $value, $ttl, $expire_date, $last_save ) = $this->prepare_value( $cached );
 		}
 
-		$this->value       = $value;
-		$this->last_save   = $last_save;
-		$this->expire_date = $expire_date;
+		$this->last_save = $last_save;
+
+		if ( $this->value === null ) {
+			$this->value = $value;
+		}
 
 		if ( $this->time_to_live === null ) {
 			$this->time_to_live = is_int( $ttl ) ? $ttl : self::DEFAULT_TIME_TO_LIVE;
 		}
 
-		// If something changed we need to update the storage
-		if ( ( $ttl && $ttl !== $this->time_to_live ) ) {
-			// Shallow update means no change will be done on "last save" property, so we don't prolong the TTL
-			$this->shallow_update = true;
-			$this->update();
-			$this->shallow_update = false;
+		if ( $this->expire_date === null ) {
+			$this->expire_date = $expire_date;
+		}
+
+		$current_ttl = is_null( $ttl ) ? self::DEFAULT_TIME_TO_LIVE : $ttl;
+
+		$current_timestamp = $expire_date ? $expire_date->getTimestamp() : 0;
+		$new_timestamp     = $this->expire_date ? $this->expire_date->getTimestamp() : 0;
+
+		$this->dirty_status = self::CLEAN;
+		if ( $this->value !== $value ) {
+			$this->dirty_status = self::DIRTY;
+		} elseif ( ( $current_ttl !== $this->time_to_live ) || ( $current_timestamp !== $new_timestamp ) ) {
+			$this->dirty_status = self::DIRTY_SHALLOW;
 		}
 
 		return $this->value;
@@ -209,12 +243,11 @@ final class WPCacheItem implements CacheItem {
 	 */
 	public function delete(): bool {
 
-		unset( $this->value, $this->time_to_live, $this->last_save );
+		$this->value        = $this->time_to_live = $this->last_save = $this->is_expired = null;
+		$this->is_hit       = false;
+		$this->dirty_status = self::DIRTY;
 
-		$this->is_hit     = false;
-		$this->is_expired = null;
-
-		return $this->driver->delete( $this->group, $this->key );
+		return true;
 	}
 
 	/**
@@ -229,18 +262,17 @@ final class WPCacheItem implements CacheItem {
 		// Let's ensure expire_date is immutable and it is in the GMT timezone
 		$exp_offset  = $expire_date->getOffset();
 		$timestamp   = $exp_offset === 0 ? $expire_date->getTimestamp() : $expire_date->getTimestamp() + $exp_offset;
-		$expire_date = \DateTimeImmutable::createFromFormat( 'U', $timestamp, new \DateTimeZone( 'GMT' ) );
+		$expire_date = \DateTimeImmutable::createFromFormat( 'U', (string) $timestamp, new \DateTimeZone( 'GMT' ) );
 
 		$this->expire_date = $expire_date;
 
 		if ( $this->is_hit ) {
-			// Shallow update means no change will be done on "last save" property
-			$this->shallow_update = true;
-			$this->update();
-			$this->shallow_update = false;
+			// Temporarily mark as not hit and call value to update dirty status if necessary.
+			$this->is_hit = false;
+			$this->value();
+			$this->is_hit = true;
 		}
 
-		$this->is_hit     = false;
 		$this->is_expired = null;
 
 		return $this;
@@ -346,7 +378,7 @@ final class WPCacheItem implements CacheItem {
 			return null;
 		}
 
-		$date = \DateTimeImmutable::createFromFormat( 'c', $date );
+		$date = \DateTimeImmutable::createFromFormat( 'U', (string) strtotime( $date ) );
 
 		return $date ?: null;
 	}
