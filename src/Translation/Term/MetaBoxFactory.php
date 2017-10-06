@@ -79,7 +79,7 @@ class MetaBoxFactory {
 			return [];
 		}
 
-		$relations = $this->content_relations->get_relations( $current_site_id, $term->term_taxonomy_id, 'term' );
+		$relations = $this->content_relations->get_relations( $current_site_id, (int) $term->term_taxonomy_id, 'term' );
 
 		$controllers = [];
 
