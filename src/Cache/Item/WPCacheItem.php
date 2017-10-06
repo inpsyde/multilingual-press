@@ -115,6 +115,7 @@ final class WPCacheItem implements CacheItem {
 		$this->value        = $value;
 		$this->is_expired   = null;
 		$this->dirty_status = self::DIRTY;
+		$this->last_save    = $this->now();
 
 		return true;
 	}
@@ -180,7 +181,9 @@ final class WPCacheItem implements CacheItem {
 			list( $value, $ttl, $last_save ) = $this->prepare_value( $cached );
 		}
 
-		$this->last_save = $last_save;
+		if ( $this->is_hit || $this->last_save === null ) {
+			$this->last_save = $last_save;
+		}
 
 		if ( $this->value === null ) {
 			$this->value = $value;
@@ -338,7 +341,7 @@ final class WPCacheItem implements CacheItem {
 	 */
 	private function unserialize_date( string $date ) {
 
-		if ( ! $date || ! is_string( $date ) ) {
+		if ( ! $date ) {
 			return null;
 		}
 
