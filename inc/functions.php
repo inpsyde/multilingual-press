@@ -272,7 +272,7 @@ function get_available_languages( $related_sites_only = true ): array {
 		}
 
 		// Restrict ro related sites.
-		$languages = array_diff_key( $languages, array_flip( $related_site_ids ) );
+		$languages = array_intersect_key( $languages, array_flip( $related_site_ids ) );
 	}
 
 	$available_languages = [];
