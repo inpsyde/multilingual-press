@@ -41,6 +41,7 @@
   },
   "require-dev": {
     "brain/monkey": "^1.4",
+    "gmazzap/andrew": "~2.1",
     "mockery/mockery": "~0.9",
     "phpunit/phpunit": "^6.0"
   },

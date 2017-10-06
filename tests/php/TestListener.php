@@ -25,7 +25,7 @@ final class TestListener extends BaseTestListener {
 
 		switch ( $suite->getName() ) {
 			case 'Unit':
-				// TODO: Some unit testing preparations...
+				require_once __DIR__ . '/stubs.php';
 				break;
 
 			case 'Integration':
