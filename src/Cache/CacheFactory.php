@@ -17,12 +17,12 @@ use Inpsyde\MultilingualPress\Common\Factory\ClassResolver;
  * @package Inpsyde\MultilingualPress\Cache
  * @since   3.0.0
  */
-final class CacheFactory {
+class CacheFactory {
 
 	/**
 	 * @var string
 	 */
-	private $prefix;
+	private $prefix = '';
 
 	/**
 	 * @var ClassResolver
@@ -39,6 +39,14 @@ final class CacheFactory {
 
 		$this->pool_class_resolver = new ClassResolver( CachePool::class, $pool_default_class );
 		$this->prefix              = $prefix;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function prefix(): string {
+
+		return $this->prefix;
 	}
 
 	/**
