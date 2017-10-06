@@ -79,8 +79,6 @@ class SimpleTermTranslatorUpdater {
 
 		$relation_helper = new TermRelationSaveHelper( $this->content_relations, $this->save_context );
 
-		/* TODO: Check if ALL selected remote terms form a valid translation group. If not, BAIL! */
-
 		$term_id_to_relate = $this->term_to_relate( $remote_site_id, $remote_term->taxonomy, $relation_helper );
 		if ( -1 === $term_id_to_relate ) {
 			$relation_helper->unlink_element( $remote_site_id );
@@ -99,12 +97,11 @@ class SimpleTermTranslatorUpdater {
 			return $remote_term;
 		}
 
-		// TODO: Shouldn't this be negated?
 		if ( $relation_helper->link_element( $remote_site_id, (int) $new_remote_term->term_taxonomy_id ) ) {
-			return $this->create_empty_term();
+			return $new_remote_term;
 		}
 
-		return $new_remote_term;
+		return $this->create_empty_term();
 	}
 
 	/**

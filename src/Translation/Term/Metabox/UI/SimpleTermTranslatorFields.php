@@ -158,8 +158,7 @@ class SimpleTermTranslatorFields {
 		if ( $options ) {
 			$this->asset_manager->enqueue_script( 'multilingualpress-admin' );
 
-			// TODO: Revisit, as the CR refactor branch always has 0 as value here.
-			$option_none_value = $remote_term ? '-1' : '';
+			$option_none_value = $remote_term ? '-1' : '0';
 
 			$option_none_text = $remote_term ? __( 'Remove relationship', 'multilingualpress' ) : '';
 
