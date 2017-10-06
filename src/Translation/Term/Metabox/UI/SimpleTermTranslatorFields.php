@@ -124,15 +124,13 @@ class SimpleTermTranslatorFields {
 
 		$create_id = self::RELATED_TERM_CREATE . "-{$remote_site_id}";
 		?>
-		<label for="<?php echo esc_attr( $create_id ); ?>" class="screen-reader-text">
-			<?php esc_html_e( 'Enter name here', 'multilingualpress' ); ?>
-		</label>
 		<input
 			type="text"
 			id="<?php echo esc_attr( $create_id ); ?>"
 			name="<?php echo esc_attr( self::RELATED_TERM_CREATE . "[{$remote_site_id}]" ); ?>"
 			data-site="<?php echo esc_attr( $remote_site_id ); ?>"
-			class="regular-text mlp-term-input">
+			class="regular-text mlp-term-input"
+			aria-label="<?php esc_attr_e( 'Term name', 'multilingualpress' ); ?>">
 		<?php
 	}
 
@@ -156,12 +154,7 @@ class SimpleTermTranslatorFields {
 		$this->render_operation_select_input( self::RELATED_TERM_DO_SELECT, $remote_site_id, $remote_term );
 
 		$select_id = self::RELATED_TERM_SELECT . "-{$remote_site_id}";
-		?>
-		<label for="<?php echo esc_attr( $select_id ); ?>"
-			class="screen-reader-text">
-			<?php esc_html_e( 'Use the dropdown to select a term for translation', 'multilingualpress' ); ?>
-		</label>
-		<?php
+
 		if ( $options ) {
 			$this->asset_manager->enqueue_script( 'multilingualpress-admin' );
 
@@ -176,6 +169,7 @@ class SimpleTermTranslatorFields {
 				name="<?php echo esc_attr( self::RELATED_TERM_SELECT . "[{$remote_site_id}]" ); ?>"
 				id="<?php echo esc_attr( $select_id ); ?>"
 				class="regular-text mlp-term-select"
+				aria-label="<?php esc_attr_e( 'Term select', 'multilingualpress' ); ?>"
 				data-site="<?php echo esc_attr( $remote_site_id ); ?>"
 				autocomplete="off">
 				<option value="<?php echo esc_attr( $option_none_value ); ?>" class="option-none">
