@@ -25,6 +25,12 @@ class Redirector {
 		_this.storageName = 'mlpNoredirectStorage';
 
 		/**
+		 * The storage timestamp name.
+		 * @type {Object}
+		 */
+		_this.storageTimestampName = 'mlpNoredirectStorageTimestamp';
+
+		/**
 		 * The preferred languages of the user.
 		 * @type {String[]}
 		 */
@@ -41,6 +47,12 @@ class Redirector {
 	 * Initializes the module.
 	 */
 	initialize() {
+		this.startTimestampUpdate();
+
+		if ( this.isCurrentLanguageStored() ) {
+			return;
+		}
+
 		const noredirect = this.getNoredirectLanguage();
 		if ( noredirect ) {
 			this.storeLanguage( noredirect );
@@ -52,6 +64,16 @@ class Redirector {
 		if ( contentLanguage ) {
 			this.redirect( contentLanguage );
 		}
+	}
+
+	/**
+	 * Checks if the stored timestamp is valid.
+	 * @return {Boolean} Whether or not the stored timestamp is valid.
+	 */
+	checkTimestamp() {
+		const timestamp = Number( localStorage.getItem( _this.storageTimestampName ) );
+
+		return Date.now() <= ( timestamp + Number( _this.settings.storageLifetime ) );
 	}
 
 	/**
@@ -116,9 +138,23 @@ class Redirector {
 	 * @returns {String[]} The stored languages.
 	 */
 	getStoredLanguages() {
+		if ( ! this.checkTimestamp() ) {
+			localStorage.removeItem( _this.storageName );
+
+			return [];
+		}
+
 		const languages = localStorage.getItem( _this.storageName );
 
 		return languages ? languages.split( ' ' ) : [];
+	}
+
+	/**
+	 * Checks if the current site language is stored to not get redirected from.
+	 * @returns {Boolean} Whether or not the current site language is stored to not get redirected from.
+	 */
+	isCurrentLanguageStored() {
+		return this.getStoredLanguages().includes( this.normalizeLanguage( _this.settings.currentLanguage ) );
 	}
 
 	/**
@@ -167,6 +203,18 @@ class Redirector {
 		const url = _this.settings.urls[ language ].replace( /\?.*$/, '' );
 
 		_this.Util.setLocation( `${url}?${_this.settings.noredirectKey}=${this.normalizeLanguage( language )}` );
+	}
+
+	/**
+	 * Starts the continuously running timestamp update used to determine the age of stored languages.
+	 */
+	startTimestampUpdate() {
+		const timeout = Number( _this.settings.updateTimestampInterval );
+		if ( 0 < timeout ) {
+			const updateTimestamp = () => localStorage.setItem( _this.storageTimestampName, Date.now() );
+			updateTimestamp();
+			setInterval( updateTimestamp, timeout );
+		}
 	}
 
 	/**

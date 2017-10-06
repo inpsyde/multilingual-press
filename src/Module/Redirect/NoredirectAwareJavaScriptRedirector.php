@@ -17,6 +17,15 @@ use function Inpsyde\MultilingualPress\get_current_site_language;
 final class NoredirectAwareJavaScriptRedirector implements Redirector {
 
 	/**
+	 * Hook name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_UPDATE_INTERVAL = 'multilingualpress.noredirect_update_interval';
+
+	/**
 	 * @var AssetManager
 	 */
 	private $asset_manager;
@@ -55,10 +64,30 @@ final class NoredirectAwareJavaScriptRedirector implements Redirector {
 			return false;
 		}
 
+		/**
+		 * Filters the lifetime, in seconds, for data in the noredirect storage.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param int $lifetime The lifetime, in seconds, for data in the noredirect storage.
+		 */
+		$lifetime = (int) apply_filters( NoredirectStorage::FILTER_LIFETIME, NoredirectStorage::LIFETIME_IN_SECONDS );
+
+		/**
+		 * Filters the update interval, in seconds, for the timestamp of noredirect storage data.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param int $update_interval Update interval, in seconds, for the timestamp of noredirect storage data.
+		 */
+		$update_interval = (int) apply_filters( self::FILTER_UPDATE_INTERVAL, MINUTE_IN_SECONDS );
+
 		$this->asset_manager->enqueue_script_with_data( 'multilingualpress-redirect', 'mlpRedirectorSettings', [
-			'currentLanguage' => str_replace( '_', '-', get_current_site_language() ),
-			'noredirectKey'   => NoredirectPermalinkFilter::QUERY_ARGUMENT,
-			'urls'            => $urls,
+			'currentLanguage'         => str_replace( '_', '-', get_current_site_language() ),
+			'noredirectKey'           => NoredirectPermalinkFilter::QUERY_ARGUMENT,
+			'storageLifetime'         => absint( $lifetime * 1000 ),
+			'updateTimestampInterval' => absint( $update_interval * 1000 ),
+			'urls'                    => $urls,
 		], false );
 
 		return true;
