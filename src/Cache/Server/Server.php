@@ -4,7 +4,6 @@ namespace Inpsyde\MultilingualPress\Cache\Server;
 
 use Inpsyde\MultilingualPress\Cache\CacheFactory;
 use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
-use Inpsyde\MultilingualPress\Cache\Item\CacheItem;
 use Inpsyde\MultilingualPress\Cache\Pool\CachePool;
 
 /**
@@ -104,7 +103,7 @@ class Server {
 	 */
 	public function is_registered( string $namespace, string $key ): bool {
 
-		return ! empty( $this->registered[ $namespace . $key ] );
+		return ! empty( $this->registered[ $this->full_key( $namespace, $key ) ] );
 
 	}
 
@@ -121,7 +120,7 @@ class Server {
 		/**
 		 * @var bool $is_network
 		 */
-		list( $is_network ) = $this->registered[ $namespace . $key ];
+		list( $is_network ) = $this->registered[ $this->full_key( $namespace, $key ) ];
 
 		return $is_network
 			? $this->factory->create_for_network( $namespace, $this->network_driver )
@@ -144,18 +143,20 @@ class Server {
 
 		$this->bail_if_not_registered( $namespace, $key );
 
+		$registered_key = $this->full_key( $namespace, $key );
+
 		/**
 		 * @var bool      $is_network
 		 * @var ItemLogic $logic
 		 */
-		list( $is_network, $logic ) = $this->registered[ $namespace . $key ];
+		list( $is_network, $logic ) = $this->registered[ $registered_key ];
 
 		$pool = $this->registered_pool( $namespace, $key );
 
 		$item = $pool->item( $key );
 
-		if ( $item->is_expired() ) {
-			$this->queue_update( $key, $logic->time_to_live(), $is_network );
+		if ( $item->is_expired() && ! $this->is_queued_for_update( $namespace, $key ) ) {
+			$this->queue_update( $registered_key, $logic->time_to_live(), $is_network );
 		}
 
 		if ( $item->is_hit() ) {
@@ -180,26 +181,31 @@ class Server {
 	 */
 	public function flush( string $namespace, string $key = null ): int {
 
-		if ( $key ) {
-			$done = $this->is_registered( $namespace, $key )
-				? (int) $this->registered_pool( $namespace, $key )->delete( $key )
-				: 0;
+		if ( $key && $this->is_registered( $namespace, $key ) ) {
+			$pool = $this->registered_pool( $namespace, $key );
+
+			$done = $pool->delete( $key );
+			$done and $pool->item( $key )->sync_to_storage();
 
 			$this->spawn_queue = array_diff( $this->spawn_queue, [ $namespace . $key ] );
 
 			return $done;
+
+		} elseif ( $key !== null ) {
+
+			return 0;
 		}
 
 		$flushed = 0;
-		$dequeue = [];
-		foreach ( $this->registered as list( $is_network, $reg_namespace, $key ) ) {
-			if ( $reg_namespace === $namespace ) {
-				$flushed   += (int) $this->registered_pool( $namespace, $key )->delete( $key );
-				$dequeue[] = $namespace . $key;
+
+		/**
+		 * @var ItemLogic $logic
+		 */
+		foreach ( $this->registered as list( $is_network, $logic ) ) {
+			if ( $logic->namespace() === $namespace ) {
+				$flushed += $this->flush( $namespace, $logic->key() );
 			}
 		}
-
-		$this->spawn_queue = array_diff( $this->spawn_queue, $dequeue );
 
 		return $flushed;
 	}
@@ -215,7 +221,7 @@ class Server {
 
 		$registered_key = $this->update_request_key();
 
-		if ( ! $registered_key ) {
+		if ( ! $registered_key || empty( $this->registered[ $registered_key ] ) ) {
 			return;
 		}
 
@@ -228,7 +234,10 @@ class Server {
 		list( $is_network, $logic ) = $this->registered[ $registered_key ];
 
 		if ( $this->is_updating( $updating_key, $is_network ) ) {
+
 			$this->exit_on_update_end();
+
+			return;
 		}
 
 		$this->mark_updating( $updating_key, $is_network );
@@ -243,12 +252,13 @@ class Server {
 		$pool = $this->registered_pool( $item_namespace, $item_key );
 
 		$item = $pool->item( $item_key );
-		$item->sync_storage();
+		$item->sync_from_storage();
+
 		$current_value = $item->value();
 
 		$item = $item->live_for( $item_time_to_live );
 
-		list(, $success ) = $this->fetch_updated_value( $item_updater, $item_updater_args, $current_value );
+		list( $new_value, $success ) = $this->fetch_updated_value( $item_updater, $item_updater_args, $current_value );
 
 		if ( ! $success && $item_extension_on_failure && $item->is_hit() ) {
 			$item
@@ -258,11 +268,35 @@ class Server {
 			$item->delete();
 		}
 
-		$item->sync_storage();
+		$success and $item->set( $new_value );
+
+		$item->sync_to_storage();
 
 		$this->mark_not_updating( $updating_key, $is_network );
 
 		$this->exit_on_update_end();
+	}
+
+	/**
+	 * @param string $namespace
+	 * @param string $key
+	 *
+	 * @return bool
+	 */
+	public function is_queued_for_update( string $namespace, string $key ): bool {
+
+		return ! empty( $this->spawn_queue[ $this->full_key( $namespace, $key ) ] );
+	}
+
+	/**
+	 * @param string $namespace
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	private function full_key( string $namespace, string $key ) {
+
+		return $this->factory->prefix() . $namespace . $key;
 	}
 
 	/**
@@ -284,7 +318,7 @@ class Server {
 		$namespace = $logic->namespace();
 		$key       = $logic->key();
 
-		$this->registered[ $namespace . $key ] = [ $for_network, $logic ];
+		$this->registered[ $this->full_key( $namespace, $key ) ] = [ $for_network, $logic ];
 
 		$actions = $logic->deleting_actions();
 
@@ -309,7 +343,7 @@ class Server {
 		$method = $_SERVER['REQUEST_METHOD'] ?? '';
 		$key    = $_SERVER[ 'HTTP_' . self::HEADER_KEY ] ?? '';
 
-		return $key && ! empty( $this->registered[ $key ] ) && strtoupper( $method ) === 'HEAD' ? $key : '';
+		return $key && strtoupper( $method ) === 'HEAD' ? $key : '';
 	}
 
 	/**
@@ -397,19 +431,19 @@ class Server {
 			}, 50 );
 		}
 
-		$this->spawn_queue[] = [ $key, $time_to_live, $is_network ];
+		$this->spawn_queue[ $key ] = [ $key, $time_to_live, $is_network ];
 	}
 
 	/**
 	 * Send multiple HTTP request to refresh registered cache items.
 	 */
-	private function spawn_queue() {
+	private function spawn_queue(): array {
 
 		if ( ! $this->spawn_queue || ! $this->in_spawn_queue ) {
-			return;
+			return [];
 		}
 
-		$requests      = [];
+		$requests     = [];
 		$network_keys = $keys = [];
 
 		foreach ( $this->spawn_queue as list( $key, $time_to_live, $is_network ) ) {
@@ -427,7 +461,6 @@ class Server {
 					self::HEADER_TTL => $time_to_live,
 				],
 				'data'    => '',
-				'type'    => \Requests::HEAD,
 				'cookies' => [],
 			];
 		}
@@ -444,6 +477,8 @@ class Server {
 				'type'             => \Requests::HEAD,
 			]
 		);
+
+		return $requests;
 	}
 
 	/**
@@ -516,7 +551,7 @@ class Server {
 		 */
 		throw new \OutOfRangeException(
 			sprintf(
-				'The namespace/key pair "%s", "%s" does nto belong to any registered cache logic in %s.',
+				'The namespace/key pair "%s"/"%s" does not belong to any registered cache logic in %s.',
 				$namespace,
 				$key,
 				__CLASS__
