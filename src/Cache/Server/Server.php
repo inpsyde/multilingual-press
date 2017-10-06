@@ -31,7 +31,7 @@ class Server {
 	/**
 	 * @var CacheDriver
 	 */
-	private $sitewide_driver;
+	private $network_driver;
 
 	/**
 	 * @var array[]
@@ -53,13 +53,13 @@ class Server {
 	 *
 	 * @param CacheFactory $factory
 	 * @param CacheDriver  $driver
-	 * @param CacheDriver  $sitewide_driver
+	 * @param CacheDriver  $network_driver
 	 */
-	public function __construct( CacheFactory $factory, CacheDriver $driver, CacheDriver $sitewide_driver ) {
+	public function __construct( CacheFactory $factory, CacheDriver $driver, CacheDriver $network_driver ) {
 
-		$this->factory         = $factory;
-		$this->driver          = $driver;
-		$this->sitewide_driver = $sitewide_driver;
+		$this->factory        = $factory;
+		$this->driver         = $driver;
+		$this->network_driver = $network_driver;
 	}
 
 	/**
@@ -75,49 +75,23 @@ class Server {
 	 * It means that once cached for first time a value will be served always from cache (unless manually flushed) and
 	 * updated automatically on expiration without affecting user request time.
 	 *
-	 * @param string   $namespace
-	 * @param string   $key
-	 * @param callable $updater
-	 * @param int      $time_to_live
+	 * @param ItemLogic $item_logic
 	 *
 	 * @return Server
 	 */
-	public function register( string $namespace, string $key, callable $updater, int $time_to_live = 0 ): self {
+	public function register( ItemLogic $item_logic ): self {
 
-		if ( $this->update_request_key() || doing_action( 'shutdown' ) ) {
-			throw new \BadMethodCallException( __METHOD__ . ' is not available during cache update requests.' );
-		}
-
-		if ( $time_to_live < 30 ) {
-			$time_to_live = CacheItem::DEFAULT_TIME_TO_LIVE;
-		}
-
-		$this->registered[ $namespace . $key ] = [ false, $namespace, $key, $updater, $time_to_live ];
-
-		return $this;
+		return $this->do_register( $item_logic, false );
 	}
 
 	/**
-	 * @param string   $namespace
-	 * @param string   $key
-	 * @param callable $updater
-	 * @param int      $time_to_live
+	 * @param ItemLogic $item_logic
 	 *
 	 * @return Server
 	 */
-	public function register_sitewide( string $namespace, string $key, callable $updater, int $time_to_live = 0 ): self {
+	public function register_for_network( ItemLogic $item_logic ): self {
 
-		if ( $this->update_request_key() || doing_action( 'shutdown' ) ) {
-			throw new \BadMethodCallException( __METHOD__ . ' is not available during cache update requests.' );
-		}
-
-		if ( $time_to_live < 30 ) {
-			$time_to_live = CacheItem::DEFAULT_TIME_TO_LIVE;
-		}
-
-		$this->registered[ $namespace . $key ] = [ true, $namespace, $key, $updater, $time_to_live ];
-
-		return $this;
+		return $this->do_register( $item_logic, true );
 	}
 
 	/**
@@ -142,15 +116,15 @@ class Server {
 	 */
 	public function registered_pool( string $namespace, string $key ): CachePool {
 
-		/**
-		 * @var bool   $sitewide
-		 * @var string $namespace
-		 * @var string $key
-		 */
-		list( $sitewide, $namespace ) = $this->registered[ $namespace . $key ];
+		$this->bail_if_not_registered( $namespace, $key );
 
-		return $sitewide
-			? $this->factory->create_sitewide( $namespace, $this->sitewide_driver )
+		/**
+		 * @var bool $is_network
+		 */
+		list( $is_network ) = $this->registered[ $namespace . $key ];
+
+		return $is_network
+			? $this->factory->create_for_network( $namespace, $this->network_driver )
 			: $this->factory->create( $namespace, $this->driver );
 	}
 
@@ -168,37 +142,31 @@ class Server {
 	 */
 	public function claim( string $namespace, string $key ) {
 
-		if ( empty( $this->registered[ $namespace . $key ] ) ) {
-			throw new \BadMethodCallException( __CLASS__ . ' can only server registered keys.' );
-		}
+		$this->bail_if_not_registered( $namespace, $key );
 
 		/**
-		 * @var bool     $sitewide
-		 * @var string   $namespace
-		 * @var string   $key
-		 * @var callable $updater
-		 * @var int      $time_to_live
+		 * @var bool      $is_network
+		 * @var ItemLogic $logic
 		 */
-		list( $sitewide, $namespace, $key, $updater, $time_to_live ) = $this->registered[ $namespace . $key ];
+		list( $is_network, $logic ) = $this->registered[ $namespace . $key ];
 
-		$pool = $sitewide
-			? $this->factory->create_sitewide( $namespace, $this->sitewide_driver )
-			: $this->factory->create( $namespace, $this->driver );
+		$pool = $this->registered_pool( $namespace, $key );
 
 		$item = $pool->item( $key );
 
 		if ( $item->is_expired() ) {
-			$this->queue_update( $key, $time_to_live, $sitewide );
+			$this->queue_update( $key, $logic->time_to_live(), $is_network );
 		}
 
 		if ( $item->is_hit() ) {
 			return $item->value();
 		}
 
-		$value = $updater( $item );
-		$item->expires_after( $time_to_live )->set( $value );
+		list( $new_value, $success ) = $this->fetch_updated_value( $logic->updater(), $logic->updater_args() );
 
-		return $value;
+		$success and $item->live_for( $logic->time_to_live() )->set( $new_value );
+
+		return $new_value;
 	}
 
 	/**
@@ -224,9 +192,9 @@ class Server {
 
 		$flushed = 0;
 		$dequeue = [];
-		foreach ( $this->registered as list( $sitewide, $reg_namespace, $key ) ) {
+		foreach ( $this->registered as list( $is_network, $reg_namespace, $key ) ) {
 			if ( $reg_namespace === $namespace ) {
-				$flushed   += $this->registered_pool( $namespace, $key )->delete( $key );
+				$flushed   += (int) $this->registered_pool( $namespace, $key )->delete( $key );
 				$dequeue[] = $namespace . $key;
 			}
 		}
@@ -251,36 +219,83 @@ class Server {
 			return;
 		}
 
-		/**
-		 * @var bool     $sitewide
-		 * @var string   $namespace
-		 * @var string   $key
-		 * @var callable $updater
-		 * @var int      $time_to_live
-		 */
-		list( $sitewide, $namespace, $key, $updater, $time_to_live ) = $this->registered[ $registered_key ];
+		$updating_key = md5( $registered_key );
 
-		if ( $this->is_updating( $key, $sitewide ) ) {
-			return;
+		/**
+		 * @var bool      $is_network
+		 * @var ItemLogic $logic
+		 */
+		list( $is_network, $logic ) = $this->registered[ $registered_key ];
+
+		if ( $this->is_updating( $updating_key, $is_network ) ) {
+			$this->exit_on_update_end();
 		}
 
-		$pool = $sitewide
-			? $this->factory->create_sitewide( $namespace, $this->sitewide_driver )
-			: $this->factory->create( $namespace, $this->driver );
+		$this->mark_updating( $updating_key, $is_network );
 
-		$this->mark_updating( $key, $sitewide );
+		$item_key                  = $logic->key();
+		$item_namespace            = $logic->namespace();
+		$item_updater              = $logic->updater();
+		$item_updater_args         = $logic->updater_args();
+		$item_time_to_live         = $logic->time_to_live();
+		$item_extension_on_failure = $logic->extension_on_failure();
 
-		$item = $pool->item( $key );
-		$item->expires_after( $time_to_live )->set( $updater( $item ) );
+		$pool = $this->registered_pool( $item_namespace, $item_key );
 
-		$this->mark_not_updating( $key, $sitewide );
+		$item = $pool->item( $item_key );
+		$item->sync_storage();
+		$current_value = $item->value();
 
-		add_action( 'multilingualpress.after_server_update_value', function () {
+		$item = $item->live_for( $item_time_to_live );
 
-			exit();
-		}, 100 );
+		list(, $success ) = $this->fetch_updated_value( $item_updater, $item_updater_args, $current_value );
 
-		do_action( 'multilingualpress.after_server_update_value' );
+		if ( ! $success && $item_extension_on_failure && $item->is_hit() ) {
+			$item
+				->live_for( $item_extension_on_failure )
+				->set( $current_value );
+		} elseif ( ! $success ) {
+			$item->delete();
+		}
+
+		$item->sync_storage();
+
+		$this->mark_not_updating( $updating_key, $is_network );
+
+		$this->exit_on_update_end();
+	}
+
+	/**
+	 * Adds the actions that will cause item flushing.
+	 *
+	 * @param ItemLogic $logic
+	 * @param bool      $for_network
+	 *
+	 * @return Server
+	 */
+	private function do_register( ItemLogic $logic, bool $for_network ) {
+
+		if ( $this->update_request_key() || doing_action( 'shutdown' ) ) {
+			throw new \BadMethodCallException(
+				'Cache item logic registration is not possible during cache update requests.'
+			);
+		}
+
+		$namespace = $logic->namespace();
+		$key       = $logic->key();
+
+		$this->registered[ $namespace . $key ] = [ $for_network, $logic ];
+
+		$actions = $logic->deleting_actions();
+
+		foreach ( $actions as $action ) {
+			add_action( $action, function () use ( $logic ) {
+
+				$this->flush( $logic->namespace(), $logic->key() );
+			} );
+		}
+
+		return $this;
 	}
 
 	/**
@@ -302,13 +317,13 @@ class Server {
 	 * multiple concurrent updates.
 	 *
 	 * @param string $key
-	 * @param bool   $sitewide
+	 * @param bool   $is_network
 	 *
 	 * @return bool
 	 */
-	private function mark_updating( string $key, bool $sitewide ): bool {
+	private function mark_updating( string $key, bool $is_network ): bool {
 
-		$keys = $sitewide
+		$keys = $is_network
 			? get_site_transient( self::UPDATING_KEYS_TRANSIENT )
 			: get_transient( self::UPDATING_KEYS_TRANSIENT );
 
@@ -316,7 +331,7 @@ class Server {
 
 		$keys[] = $key;
 
-		return $sitewide
+		return $is_network
 			? set_site_transient( self::UPDATING_KEYS_TRANSIENT, $keys )
 			: set_transient( self::UPDATING_KEYS_TRANSIENT, $keys );
 	}
@@ -325,17 +340,17 @@ class Server {
 	 * Remove the given key from transient storage to mark given key again available for updates.
 	 *
 	 * @param string $key
-	 * @param bool   $sitewide
+	 * @param bool   $is_network
 	 *
 	 * @return bool
 	 */
-	private function mark_not_updating( string $key, bool $sitewide ): bool {
+	private function mark_not_updating( string $key, bool $is_network ): bool {
 
-		$keys = $sitewide
+		$keys = $is_network
 			? get_site_transient( self::UPDATING_KEYS_TRANSIENT )
 			: get_transient( self::UPDATING_KEYS_TRANSIENT );
 
-		return $sitewide
+		return $is_network
 			? set_site_transient( self::UPDATING_KEYS_TRANSIENT, array_diff( (array) $keys, [ $key ] ) )
 			: set_transient( self::UPDATING_KEYS_TRANSIENT, array_diff( (array) $keys, [ $key ] ) );
 	}
@@ -345,13 +360,13 @@ class Server {
 	 * multiple concurrent updates.
 	 *
 	 * @param string $key
-	 * @param bool   $sitewide
+	 * @param bool   $is_network
 	 *
 	 * @return bool
 	 */
-	private function is_updating( $key, bool $sitewide ): bool {
+	private function is_updating( $key, bool $is_network ): bool {
 
-		$keys = $sitewide
+		$keys = $is_network
 			? get_site_transient( self::UPDATING_KEYS_TRANSIENT )
 			: get_transient( self::UPDATING_KEYS_TRANSIENT );
 
@@ -365,9 +380,9 @@ class Server {
 	 *
 	 * @param string $key
 	 * @param int    $time_to_live
-	 * @param bool   $sitewide
+	 * @param bool   $is_network
 	 */
-	private function queue_update( string $key, int $time_to_live, bool $sitewide ) {
+	private function queue_update( string $key, int $time_to_live, bool $is_network ) {
 
 		if ( $this->in_spawn_queue ) {
 			return;
@@ -382,7 +397,7 @@ class Server {
 			}, 50 );
 		}
 
-		$this->spawn_queue[] = [ $key, $time_to_live, $sitewide ];
+		$this->spawn_queue[] = [ $key, $time_to_live, $is_network ];
 	}
 
 	/**
@@ -395,15 +410,15 @@ class Server {
 		}
 
 		$requests      = [];
-		$sitewide_keys = $keys = [];
+		$network_keys = $keys = [];
 
-		foreach ( $this->spawn_queue as list( $key, $time_to_live, $sitewide ) ) {
+		foreach ( $this->spawn_queue as list( $key, $time_to_live, $is_network ) ) {
 
-			if ( $this->is_spawning( $key, $sitewide ) ) {
+			if ( $this->is_spawning( $key, $is_network ) ) {
 				continue;
 			}
 
-			$sitewide ? $sitewide_keys[] = $key : $keys[] = $key;
+			$is_network ? $network_keys[] = $key : $keys[] = $key;
 
 			$requests[ $key ] = [
 				'url'     => home_url(),
@@ -417,7 +432,7 @@ class Server {
 			];
 		}
 
-		$this->mark_spawning( true, ...$sitewide_keys );
+		$this->mark_spawning( true, ...$network_keys );
 		$this->mark_spawning( false, ...$keys );
 
 		\Requests::request_multiple(
@@ -434,16 +449,16 @@ class Server {
 	/**
 	 * Use transients to mark the given key as currently being sent via an update request, to prevent
 	 * multiple concurrent request.
-	 * Transient will no be deleted manually, but are set with a very short expiration so they will expire and vanish
-	 * in few seconds when hopefully the updating requests finished.
+	 * Transients will not be deleted manually, but are set with a very short expiration so they will expire and vanish
+	 * in few seconds when (hopefully) all the parallel-executing updating requests finished.
 	 *
-	 * @param bool     $sitewide
+	 * @param bool     $is_network
 	 * @param string[] $keys
 	 */
-	private function mark_spawning( bool $sitewide, string ...$keys ) {
+	private function mark_spawning( bool $is_network, string ...$keys ) {
 
 		foreach ( $keys as $key ) {
-			$sitewide
+			$is_network
 				? set_site_transient( self::SPAWNING_KEYS_TRANSIENT . md5( $key ), 1, 10 )
 				: set_transient( self::SPAWNING_KEYS_TRANSIENT . md5( $key ), 1, 10 );
 		}
@@ -451,15 +466,76 @@ class Server {
 
 	/**
 	 * @param string $key
-	 * @param bool   $sitewide
+	 * @param bool   $is_network
 	 *
 	 * @return bool
 	 */
-	private function is_spawning( $key, bool $sitewide ): bool {
+	private function is_spawning( $key, bool $is_network ): bool {
 
-		return $sitewide
+		return $is_network
 			? (bool) get_site_transient( self::SPAWNING_KEYS_TRANSIENT . md5( $key ) )
 			: (bool) get_transient( self::SPAWNING_KEYS_TRANSIENT . md5( $key ) );
+	}
+
+	/**
+	 * @param callable $updater
+	 * @param array    $args
+	 * @param mixed    $current_value
+	 *
+	 * @return array
+	 */
+	private function fetch_updated_value( callable $updater, array $args, $current_value = null ) {
+
+		try {
+
+			array_unshift( $args, $current_value );
+			$value   = $updater( ...$args );
+			$success = true;
+
+		} catch ( \Throwable $throwable ) {
+
+			$value   = $current_value;
+			$success = false;
+		}
+
+		return [ $value, $success ];
+	}
+
+	/**
+	 * @param string $namespace
+	 * @param string $key
+	 */
+	private function bail_if_not_registered( string $namespace, string $key ) {
+
+		if ( $this->is_registered( $namespace, $key ) ) {
+			return;
+		}
+
+		/*
+		 * TODO: Custom exception class?
+		 */
+		throw new \OutOfRangeException(
+			sprintf(
+				'The namespace/key pair "%s", "%s" does nto belong to any registered cache logic in %s.',
+				$namespace,
+				$key,
+				__CLASS__
+			)
+		);
+
+	}
+
+	/**
+	 * Cancelable (via `remove_action`) plus test-friendly way to end the request.
+	 */
+	private function exit_on_update_end() {
+
+		add_action( 'multilingualpress.after_server_update_value', function () {
+
+			exit();
+		}, 100 );
+
+		do_action( 'multilingualpress.after_server_update_value' );
 	}
 
 }
