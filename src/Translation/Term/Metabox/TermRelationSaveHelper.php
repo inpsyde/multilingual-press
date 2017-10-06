@@ -89,21 +89,39 @@ class TermRelationSaveHelper {
 	public function link_element( int $remote_site_id, int $remote_term_taxonomy_id ): bool {
 
 		$source_site_id = $this->save_context[ SourceTermSaveContext::SITE_ID ];
-		if ( $source_site_id === $remote_site_id ) {
-			return true;
+
+		$source_term_taxonomy_id = $this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ];
+
+		$content_ids = [
+			$source_site_id => $source_term_taxonomy_id,
+		];
+
+		$relationship_id = $this->content_relations->get_relationship_id(
+			$content_ids,
+			ContentRelations::CONTENT_TYPE_TERM
+		);
+		if ( ! $relationship_id ) {
+			$relationship_id = $this->content_relations->get_relationship_id(
+				[
+					$remote_site_id => $remote_term_taxonomy_id,
+				],
+				ContentRelations::CONTENT_TYPE_TERM,
+				true
+			);
+		}
+		if ( ! $relationship_id ) {
+			return false;
 		}
 
-		// @codingStandardsIgnoreStart
-		/* TODO: Revisit and correct the following! This is only a quick-fix to test the post translation. */
-		// return $this->content_relations->set_relation(
-		// $source_site_id,
-		// $remote_site_id,
-		// $this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ],
-		// $remote_term_taxonomy_id,
-		// 'term'
-		// );
-		// @codingStandardsIgnoreEnd
-		return false;
+		$content_ids[ $remote_site_id ] = $remote_term_taxonomy_id;
+
+		foreach ( $content_ids as $site_id => $post_id ) {
+			if ( ! $this->content_relations->set_relation( $relationship_id, $site_id, $post_id ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -111,30 +129,28 @@ class TermRelationSaveHelper {
 	 *
 	 * @param int $remote_site_id
 	 *
-	 * @return int
+	 * @return bool
 	 */
-	public function unlink_element( int $remote_site_id ): int {
+	public function unlink_element( int $remote_site_id ): bool {
 
 		$source_site_id = $this->save_context[ SourceTermSaveContext::SITE_ID ];
 
 		$source_content_id = $this->save_context[ SourceTermSaveContext::TERM_TAXONOMY_ID ];
 
-		if ( ! is_array( $this->connected_ids ) ) {
+		if ( ! isset( $this->connected_ids ) ) {
 			$this->connected_ids = $this->content_relations->get_relations(
 				$source_site_id,
 				$source_content_id,
-				'term'
+				ContentRelations::CONTENT_TYPE_TERM
 			);
 		}
 
 		if ( ! array_key_exists( $remote_site_id, $this->connected_ids ) ) {
-			return 0;
+			return false;
 		}
 
-		// TODO: Revisit and correct the following! This is only a quick-fix to test the post translation.
-		return (int) $this->content_relations->delete_relation( [
-			$source_site_id => $source_content_id,
+		return $this->content_relations->delete_relation( [
 			$remote_site_id => $this->connected_ids[ $remote_site_id ],
-		], 'term' );
+		], ContentRelations::CONTENT_TYPE_TERM );
 	}
 }
