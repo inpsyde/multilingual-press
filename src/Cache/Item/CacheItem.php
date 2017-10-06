@@ -60,10 +60,17 @@ interface CacheItem {
 	public function live_for( int $ttl ): CacheItem;
 
 	/**
-	 * Ensure synchronization with storage driver.
+	 * Push values to storage driver.
 	 *
 	 * @return bool
 	 */
-	public function sync_storage(): bool;
+	public function sync_to_storage(): bool;
+
+	/**
+	 * Load values from storage driver.
+	 *
+	 * @return bool
+	 */
+	public function sync_from_storage(): bool;
 
 }

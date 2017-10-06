@@ -16,6 +16,7 @@ final class WPCacheItem implements CacheItem {
 
 	const DIRTY = 'dirty';
 	const DIRTY_SHALLOW = 'shallow';
+	const DELETED = 'deleted';
 	const CLEAN = '';
 
 	/**
@@ -89,7 +90,7 @@ final class WPCacheItem implements CacheItem {
 	 */
 	public function __destruct() {
 
-		$this->sync_storage();
+		$this->sync_to_storage();
 	}
 
 	/**
@@ -171,6 +172,10 @@ final class WPCacheItem implements CacheItem {
 			return $this->value;
 		}
 
+		if ( $this->dirty_status === self::DELETED ) {
+			return null;
+		}
+
 		list( $cached, $found ) = $this->driver->read( $this->group, $this->key );
 
 		$this->is_hit = $found && is_array( $cached ) && $cached;
@@ -214,7 +219,7 @@ final class WPCacheItem implements CacheItem {
 
 		$this->value        = $this->time_to_live = $this->last_save = $this->is_expired = null;
 		$this->is_hit       = false;
-		$this->dirty_status = self::DIRTY;
+		$this->dirty_status = self::DELETED;
 
 		return true;
 	}
@@ -247,7 +252,7 @@ final class WPCacheItem implements CacheItem {
 	 *
 	 * @return bool
 	 */
-	public function sync_storage(): bool {
+	public function sync_to_storage(): bool {
 
 		if ( $this->dirty_status !== self::CLEAN ) {
 			// Shallow update means no change will be done on "last save" property, so we don't prolong the TTL
@@ -258,6 +263,20 @@ final class WPCacheItem implements CacheItem {
 
 			return $updated;
 		}
+
+		return true;
+	}
+
+	/**
+	 * Ensure synchronization with storage driver.
+	 *
+	 * @return bool
+	 */
+	public function sync_from_storage(): bool {
+
+		$this->delete();
+		$this->dirty_status = self::CLEAN;
+		$this->value();
 
 		return true;
 	}
@@ -275,7 +294,7 @@ final class WPCacheItem implements CacheItem {
 			return true;
 		}
 
-		$this->delete();
+		$this->driver->delete( $this->group, $this->key );
 
 		return true;
 	}
