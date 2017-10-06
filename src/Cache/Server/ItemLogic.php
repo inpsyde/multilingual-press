@@ -123,7 +123,7 @@ class ItemLogic {
 	 *
 	 * @return ItemLogic
 	 */
-	public function update_with( callable $callback, array $args = [] ): ItemLogic {
+	public function update_with( callable $callback, ...$args ): ItemLogic {
 
 		$this->updater      = $callback;
 		$this->updater_args = $args;
