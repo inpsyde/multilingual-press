@@ -51,21 +51,19 @@ interface CacheItem {
 	public function delete(): bool;
 
 	/**
-	 * Sets a specific date of expiration of the item.
+	 * Sets a specific time to live for the item.
 	 *
-	 * @param \DateTimeInterface $expire_date
+	 * @param int $ttl
 	 *
 	 * @return CacheItem
 	 */
-	public function expires_on( \DateTimeInterface $expire_date ): CacheItem;
+	public function live_for( int $ttl ): CacheItem;
 
 	/**
-	 * Expiration the item after a given number of seconds.
+	 * Ensure synchronization with storage driver.
 	 *
-	 * @param int $time_to_live
-	 *
-	 * @return CacheItem
+	 * @return bool
 	 */
-	public function expires_after( int $time_to_live ): CacheItem;
+	public function sync_storage(): bool;
 
 }

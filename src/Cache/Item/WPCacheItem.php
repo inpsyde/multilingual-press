@@ -61,11 +61,6 @@ final class WPCacheItem implements CacheItem {
 	/**
 	 * @var \DateTimeImmutable
 	 */
-	private $expire_date = null;
-
-	/**
-	 * @var \DateTimeImmutable
-	 */
 	private $last_save = null;
 
 	/**
@@ -94,12 +89,7 @@ final class WPCacheItem implements CacheItem {
 	 */
 	public function __destruct() {
 
-		if ( $this->dirty_status !== self::CLEAN ) {
-			// Shallow update means no change will be done on "last save" property, so we don't prolong the TTL
-			$this->shallow_update = $this->dirty_status !== self::DIRTY_SHALLOW;
-			$this->update();
-			$this->shallow_update = false;
-		}
+		$this->sync_storage();
 	}
 
 	/**
@@ -154,33 +144,17 @@ final class WPCacheItem implements CacheItem {
 			return $this->is_expired;
 		}
 
-		// If the value has a fixed expire date, let's keep it as expire timestamp
-		$expiry_time_by_date = $this->expire_date ? $this->expire_date->getTimestamp() : null;
-
 		// If we have a last save and a time to live, calculate an expired timestamp based on that
-		$expiry_time_by_ttl = $this->last_save && is_int( $this->time_to_live )
+		$expiry_time = $this->last_save && is_int( $this->time_to_live )
 			? $this->last_save->getTimestamp() + $this->time_to_live
 			: null;
 
 		// If we don't have and expiration date, nor we were able to calculate a expiration by TTL, let's just return
-		if ( $expiry_time_by_date === null && $expiry_time_by_ttl === null ) {
+		if ( $expiry_time === null ) {
 			return false;
 		}
 
-		// Expire time is which occur first between expire date end expiration calculated via TTL
-		switch ( true ) {
-			case ( $expiry_time_by_date === null ) :
-				$expiry = $expiry_time_by_ttl;
-				break;
-			case ( $expiry_time_by_ttl === null ) :
-				$expiry = $expiry_time_by_date;
-				break;
-			default :
-				$expiry = min( $expiry_time_by_date, $expiry_time_by_ttl );
-				break;
-		}
-
-		$this->is_expired = $expiry < (int) $this->now( 'U' );
+		$this->is_expired = $expiry_time < (int) $this->now( 'U' );
 
 		return $this->is_expired;
 	}
@@ -200,10 +174,10 @@ final class WPCacheItem implements CacheItem {
 
 		$this->is_hit = $found && is_array( $cached ) && $cached;
 
-		$value = $ttl = $expire_date = $last_save = null;
+		$value = $ttl = $last_save = null;
 
 		if ( $this->is_hit ) {
-			list( $value, $ttl, $expire_date, $last_save ) = $this->prepare_value( $cached );
+			list( $value, $ttl, $last_save ) = $this->prepare_value( $cached );
 		}
 
 		$this->last_save = $last_save;
@@ -216,19 +190,12 @@ final class WPCacheItem implements CacheItem {
 			$this->time_to_live = is_int( $ttl ) ? $ttl : self::DEFAULT_TIME_TO_LIVE;
 		}
 
-		if ( $this->expire_date === null ) {
-			$this->expire_date = $expire_date;
-		}
-
 		$current_ttl = is_null( $ttl ) ? self::DEFAULT_TIME_TO_LIVE : $ttl;
-
-		$current_timestamp = $expire_date ? $expire_date->getTimestamp() : 0;
-		$new_timestamp     = $this->expire_date ? $this->expire_date->getTimestamp() : 0;
 
 		$this->dirty_status = self::CLEAN;
 		if ( $this->value !== $value ) {
 			$this->dirty_status = self::DIRTY;
-		} elseif ( ( $current_ttl !== $this->time_to_live ) || ( $current_timestamp !== $new_timestamp ) ) {
+		} elseif ( ( $current_ttl !== $this->time_to_live ) ) {
 			$this->dirty_status = self::DIRTY_SHALLOW;
 		}
 
@@ -236,8 +203,7 @@ final class WPCacheItem implements CacheItem {
 	}
 
 	/**
-	 * Delete the cache item from its storage and ensure that next value() call return null
-	 * (unless added again to storage).
+	 * Delete the cache value and ensure that next value() call returns null and is_hit() returns false.
 	 *
 	 * @return bool
 	 */
@@ -251,20 +217,16 @@ final class WPCacheItem implements CacheItem {
 	}
 
 	/**
-	 * Sets a specific date of expiration of the item.
+	 * Sets a specific time to live for the item.
 	 *
-	 * @param \DateTimeInterface $expire_date
+	 * @param int $ttl
 	 *
 	 * @return CacheItem
 	 */
-	public function expires_on( \DateTimeInterface $expire_date ): CacheItem {
+	public function live_for( int $ttl ): CacheItem {
 
-		// Let's ensure expire_date is immutable and it is in the GMT timezone
-		$exp_offset  = $expire_date->getOffset();
-		$timestamp   = $exp_offset === 0 ? $expire_date->getTimestamp() : $expire_date->getTimestamp() + $exp_offset;
-		$expire_date = \DateTimeImmutable::createFromFormat( 'U', (string) $timestamp, new \DateTimeZone( 'GMT' ) );
-
-		$this->expire_date = $expire_date;
+		$this->time_to_live = $ttl;
+		$this->is_expired   = null;
 
 		if ( $this->is_hit ) {
 			// Temporarily mark as not hit and call value to update dirty status if necessary.
@@ -273,23 +235,28 @@ final class WPCacheItem implements CacheItem {
 			$this->is_hit = true;
 		}
 
-		$this->is_expired = null;
-
 		return $this;
+
 	}
 
 	/**
-	 * Expiration the item after a given number of seconds.
+	 * Ensure synchronization with storage driver.
 	 *
-	 * @param int $time_to_live
-	 *
-	 * @return CacheItem
+	 * @return bool
 	 */
-	public function expires_after( int $time_to_live ): CacheItem {
+	public function sync_storage(): bool {
 
-		$now = $this->now();
+		if ( $this->dirty_status !== self::CLEAN ) {
+			// Shallow update means no change will be done on "last save" property, so we don't prolong the TTL
+			$this->shallow_update = $this->dirty_status === self::DIRTY_SHALLOW;
+			$updated              = $this->update();
+			$this->shallow_update = false;
+			$this->dirty_status   = self::CLEAN;
 
-		return $this->expires_on( $now->setTimestamp( $now->getTimestamp() + $time_to_live ) );
+			return $updated;
+		}
+
+		return true;
 	}
 
 	/**
@@ -339,20 +306,17 @@ final class WPCacheItem implements CacheItem {
 			return [
 				'V' => $this->value,
 				'T' => (int) $this->time_to_live ?: self::DEFAULT_TIME_TO_LIVE,
-				'E' => $this->expire_date ? $this->serialize_date( $this->expire_date ) : '',
 				'S' => $this->serialize_date( $last_save ),
 			];
 		}
 
-		$value       = $compact_value['V'] ?? null;
-		$ttl         = $compact_value['T'] ?? null;
-		$expire_date = ( $compact_value['E'] ?? null );
-		$last_save   = ( $compact_value['S'] ?? null );
+		$value     = $compact_value['V'] ?? null;
+		$ttl       = $compact_value['T'] ?? null;
+		$last_save = ( $compact_value['S'] ?? null );
 
 		return [
 			$value,
 			$ttl === null ? null : (int) $ttl,
-			$expire_date === null ? null : $this->unserialize_date( (string) $expire_date ),
 			$last_save === null ? null : $this->unserialize_date( (string) $last_save ),
 		];
 	}
