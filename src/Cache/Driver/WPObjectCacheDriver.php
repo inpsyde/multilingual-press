@@ -15,7 +15,7 @@ final class WPObjectCacheDriver implements CacheDriver {
 	/**
 	 * @var bool
 	 */
-	private $sitewide;
+	private $is_network;
 
 	/**
 	 * Constructor.
@@ -24,7 +24,7 @@ final class WPObjectCacheDriver implements CacheDriver {
 	 */
 	public function __construct( int $flags = 0 ) {
 
-		$this->sitewide = (bool) ( $flags & self::SITEWIDE );
+		$this->is_network = (bool) ( $flags & self::FOR_NETWORK );
 	}
 
 	/**
@@ -32,7 +32,7 @@ final class WPObjectCacheDriver implements CacheDriver {
 	 */
 	public function is_sidewide(): bool {
 
-		return $this->sitewide;
+		return $this->is_network;
 	}
 
 	/**
@@ -92,7 +92,7 @@ final class WPObjectCacheDriver implements CacheDriver {
 	 */
 	private function maybe_global( string $namespace ) {
 
-		if ( $this->sitewide && ! in_array( $namespace, self::$global_namespaces, true ) ) {
+		if ( $this->is_network && ! in_array( $namespace, self::$global_namespaces, true ) ) {
 			self::$global_namespaces[] = $namespace;
 			wp_cache_add_global_groups( $namespace );
 		}

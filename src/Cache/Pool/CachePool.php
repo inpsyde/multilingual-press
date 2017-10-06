@@ -17,11 +17,11 @@ interface CachePool {
 	public function namespace(): string;
 
 	/**
-	 * Check if the cache pool is sitewide.
+	 * Check if the cache pool is for network.
 	 *
 	 * @return bool
 	 */
-	public function is_sitewide(): bool;
+	public function is_for_network(): bool;
 
 	/**
 	 * Fetches a value from the cache.

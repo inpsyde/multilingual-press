@@ -44,11 +44,11 @@ final class CacheServiceProvider implements BootstrappableServiceProvider {
 			return $driver;
 		} );
 
-		$container->share( 'multilingualpress.cache_server_sitewide_driver', function () {
+		$container->share( 'multilingualpress.cache_server_network_driver', function () {
 
-			$driver = apply_filters( 'multilingualpress.cache_server_sitewide_driver', null );
+			$driver = apply_filters( 'multilingualpress.cache_server_network_driver', null );
 			if ( ! $driver instanceof CacheDriver || ! $driver->is_sidewide() ) {
-				$driver = new WPObjectCacheDriver( WPObjectCacheDriver::SITEWIDE );
+				$driver = new WPObjectCacheDriver( WPObjectCacheDriver::FOR_NETWORK );
 			}
 
 			return $driver;
@@ -59,7 +59,7 @@ final class CacheServiceProvider implements BootstrappableServiceProvider {
 			return new Server(
 				$container['multilingualpress.cache_factory'],
 				$container['multilingualpress.cache_server_driver'],
-				$container['multilingualpress.cache_server_sitewide_driver']
+				$container['multilingualpress.cache_server_network_driver']
 			);
 		} );
 	}

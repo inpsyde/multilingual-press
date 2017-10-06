@@ -19,7 +19,7 @@ final class WPTransientDriver implements CacheDriver {
 	/**
 	 * @var bool
 	 */
-	private $sitewide;
+	private $is_network;
 
 	/**
 	 * Constructor.
@@ -28,7 +28,7 @@ final class WPTransientDriver implements CacheDriver {
 	 */
 	public function __construct( int $flags = 0 ) {
 
-		$this->sitewide = (bool) ( $flags & self::SITEWIDE );
+		$this->is_network = (bool) ( $flags & self::FOR_NETWORK );
 	}
 
 	/**
@@ -36,7 +36,7 @@ final class WPTransientDriver implements CacheDriver {
 	 */
 	public function is_sidewide(): bool {
 
-		return $this->sitewide;
+		return $this->is_network;
 	}
 
 	/**
@@ -58,14 +58,14 @@ final class WPTransientDriver implements CacheDriver {
 		 */
 		if ( wp_using_ext_object_cache() ) {
 
-			$group = $this->sitewide ? 'site-transient' : 'transient';
+			$group = $this->is_network ? 'site-transient' : 'transient';
 			$found = false;
 			$value = wp_cache_get( $key, $group, true, $found );
 
 			return [ $value, $found ];
 		}
 
-		$value = $this->sitewide ? get_site_transient( $key ) : get_transient( $key );
+		$value = $this->is_network ? get_site_transient( $key ) : get_transient( $key );
 
 		/*
 		 * Transient do not allow to lookup for "hit" or "miss", so there's not way to know if a `false` was returned
@@ -90,7 +90,7 @@ final class WPTransientDriver implements CacheDriver {
 	 */
 	public function write( string $namespace, string $name, $value ): bool {
 
-		return $this->sitewide
+		return $this->is_network
 			? set_site_transient( $this->build_key( $namespace, $name ), $value, 0 )
 			: set_transient( $this->build_key( $namespace, $name ), $value, 0 );
 	}
@@ -105,7 +105,7 @@ final class WPTransientDriver implements CacheDriver {
 	 */
 	public function delete( string $namespace, string $name ): bool {
 
-		return $this->sitewide
+		return $this->is_network
 			? delete_site_transient( $this->build_key( $namespace, $name ) )
 			: delete_transient( $this->build_key( $namespace, $name ) );
 	}

@@ -60,20 +60,20 @@ final class CacheFactory {
 	 *
 	 * @return CachePool
 	 */
-	public function create_sitewide( string $namespace, CacheDriver $driver = null ): CachePool {
+	public function create_for_network( string $namespace, CacheDriver $driver = null ): CachePool {
 
 		$pool_class = $this->pool_class_resolver->resolve();
 
 		if ( $driver && ! $driver->is_sidewide() ) {
 			throw new \InvalidArgumentException(
 				sprintf(
-					'Cannot create a sidewide cache pool baked by the non-sitewide driver "%s".',
+					'Cannot create a network-wide cache pool baked by the site specific driver "%s".',
 					get_class( $driver )
 				)
 			);
 		}
 
-		$driver or $driver = new WPObjectCacheDriver( CacheDriver::SITEWIDE );
+		$driver or $driver = new WPObjectCacheDriver( CacheDriver::FOR_NETWORK );
 
 		return new $pool_class( $this->prefix . $namespace, $driver );
 	}
@@ -95,11 +95,11 @@ final class CacheFactory {
 	 *
 	 * @return CachePool
 	 */
-	public function create_ethereal_sitewide( string $namespace ): CachePool {
+	public function create_ethereal_for_network( string $namespace ): CachePool {
 
 		$pool_class = $this->pool_class_resolver->resolve();
 
-		return new $pool_class( $this->prefix . $namespace, new EphemeralCacheDriver( CacheDriver::SITEWIDE ) );
+		return new $pool_class( $this->prefix . $namespace, new EphemeralCacheDriver( CacheDriver::FOR_NETWORK ) );
 	}
 
 }

@@ -24,7 +24,7 @@ final class EphemeralCacheDriver implements CacheDriver {
 	/**
 	 * @var bool
 	 */
-	private $sitewide;
+	private $is_network;
 
 	/**
 	 * @var bool
@@ -38,8 +38,8 @@ final class EphemeralCacheDriver implements CacheDriver {
 	 */
 	public function __construct( int $flags = 0 ) {
 
-		$this->sitewide = (bool) ( $flags & self::SITEWIDE );
-		$this->noop     = (bool) ( $flags & self::NOOP );
+		$this->is_network = (bool) ( $flags & self::FOR_NETWORK );
+		$this->noop       = (bool) ( $flags & self::NOOP );
 	}
 
 	/**
@@ -47,7 +47,7 @@ final class EphemeralCacheDriver implements CacheDriver {
 	 */
 	public function is_sidewide(): bool {
 
-		return $this->sitewide;
+		return $this->is_network;
 	}
 
 	/**
@@ -123,6 +123,6 @@ final class EphemeralCacheDriver implements CacheDriver {
 
 		$key = $namespace . $name;
 
-		return $this->sitewide ? "W_{$key}_" : 'S_' . get_current_blog_id() . "_{$key}_";
+		return $this->is_network ? "W_{$key}_" : 'S_' . get_current_blog_id() . "_{$key}_";
 	}
 }

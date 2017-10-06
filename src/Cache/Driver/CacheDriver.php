@@ -8,7 +8,7 @@ namespace Inpsyde\MultilingualPress\Cache\Driver;
  */
 interface CacheDriver {
 
-	const SITEWIDE = 32;
+	const FOR_NETWORK = 32;
 
 	/**
 	 * @return bool

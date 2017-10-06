@@ -25,6 +25,11 @@ final class WPCachePool implements CachePool {
 	private $driver;
 
 	/**
+	 * @var CacheItem[]
+	 */
+	private $items = [];
+
+	/**
 	 * @param string      $namespace
 	 * @param CacheDriver $driver
 	 */
@@ -45,11 +50,11 @@ final class WPCachePool implements CachePool {
 	}
 
 	/**
-	 * Check if the cache pool is sitewide.
+	 * Check if the cache pool is for network.
 	 *
 	 * @return bool
 	 */
-	public function is_sitewide(): bool {
+	public function is_for_network(): bool {
 
 		return $this->driver->is_sidewide();
 	}
@@ -63,7 +68,11 @@ final class WPCachePool implements CachePool {
 	 */
 	public function item( string $key ): CacheItem {
 
-		return new WPCacheItem( $this->driver, $this->namespace . $key );
+		if ( ! array_key_exists( $key, $this->items ) ) {
+			$this->items[ $key ] = new WPCacheItem( $this->driver, $this->namespace . $key );
+		}
+
+		return $this->items[ $key ];
 	}
 
 	/**
@@ -81,6 +90,7 @@ final class WPCachePool implements CachePool {
 	public function get( string $key, $default = null ) {
 
 		$item = $this->item( $key );
+
 		if ( ! $item->is_hit() || $item->is_expired() ) {
 			return $default;
 		}
@@ -102,7 +112,7 @@ final class WPCachePool implements CachePool {
 
 		$values = [];
 		foreach ( $keys as $key ) {
-			$values[] = $this->get( $key, $default );
+			$values[ $key ] = $this->get( $key, $default );
 		}
 
 		return $values;
@@ -119,7 +129,8 @@ final class WPCachePool implements CachePool {
 	 */
 	public function set( string $key, $value = null, int $ttl = null ): CacheItem {
 
-		$item = new WPCacheItem( $this->driver, $this->namespace . $key, $ttl );
+		$item = $this->item( $key );
+		$ttl === null or $item->live_for( $ttl );
 		$item->set( $value );
 
 		return $item;
@@ -134,7 +145,13 @@ final class WPCachePool implements CachePool {
 	 */
 	public function delete( string $key ): bool {
 
-		return $this->item( $key )->delete();
+		if ( $this->item( $key )->delete() ) {
+			$this->items = array_diff_key( $this->items, [ $key => '' ] );
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
