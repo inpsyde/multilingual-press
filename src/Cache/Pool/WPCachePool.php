@@ -69,6 +69,10 @@ final class WPCachePool implements CachePool {
 	/**
 	 * Fetches a value from the cache.
 	 *
+	 * The difference between `$pool->get($key)` and `$pool->item($key)->value()` is that the latter could return
+	 * a cached value even if expired, and it is responsibility of the caller check for that if necessary.
+	 * Moreover, `get()` also has a default param that is returned in case cache is a miss or is expired.
+	 *
 	 * @param string     $key     The unique key of item in the cache.
 	 * @param mixed|null $default Default value to return if the key does not exist.
 	 *
@@ -86,6 +90,8 @@ final class WPCachePool implements CachePool {
 
 	/**
 	 * Fetches a value from the cache.
+	 *
+	 * The "bulk" version of `get()`.
 	 *
 	 * @param string[]   $keys    The unique keys of item in the cache.
 	 * @param mixed|null $default Default value to assign to each item if the key does not exist.
@@ -133,6 +139,8 @@ final class WPCachePool implements CachePool {
 
 	/**
 	 * Determines whether an item is present in the cache.
+	 *
+	 * A true outcome does not provide warranty the value is not expired.
 	 *
 	 * @param string $key The cache item key.
 	 *
