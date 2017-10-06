@@ -160,6 +160,7 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 				'class' => true,
 				'style' => true,
 			],
+			'label'  => [],
 			'strong' => [],
 			'td'     => [],
 			'th'     => [
@@ -234,8 +235,7 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 			$opening = '<tr class="form-field"><th scope="row">%s</th><td>';
 			$closing = '</td></tr>';
 		} else {
-			// TODO: Get rid of style attribute, and use HTML class instead.
-			$opening = '<div class="form-field" style="margin-top: 2em;"><strong>%s</strong>';
+			$opening = '<div class="form-field"><label>%s</label>';
 			$closing = '</div>';
 		}
 
