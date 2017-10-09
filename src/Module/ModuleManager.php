@@ -38,6 +38,15 @@ interface ModuleManager {
 	const MODULE_STATE_INACTIVE = 2;
 
 	/**
+	 * Option name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const OPTION = 'multilingualpress_modules';
+
+	/**
 	 * Activates the module with the given ID.
 	 *
 	 * @since 3.0.0

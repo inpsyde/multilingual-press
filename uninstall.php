@@ -56,19 +56,16 @@ $uninstaller->uninstall_tables( [
 	resolve( 'multilingualpress.site_relations_table', Table::class ),
 ] );
 
-// TODO: Use class constants instead of hard-coded strings.
 $uninstaller->delete_network_options( [
 	Activation\NetworkOptionActivator::OPTION,
 	Core\Admin\SiteSettingsRepository::OPTION_SETTINGS,
 	Installation\NetworkPluginDeactivator::OPTION,
 	Module\CustomPostTypeSupport\PostTypeRepository::OPTION,
 	Module\Quicklinks\SettingsRepository::OPTION,
+	Module\ModuleManager::OPTION,
 	MultilingualPress::OPTION_VERSION,
-	// Currently defined in ~\Core\CoreServiceProvider.
-	'multilingualpress_modules',
 ] );
 
-// TODO: Use class constants instead of hard-coded strings.
 $uninstaller->delete_site_options( [
 	Module\Redirect\SettingsRepository::OPTION_SITE
 ] );

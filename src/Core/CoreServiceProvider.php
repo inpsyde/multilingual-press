@@ -122,7 +122,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.module_manager'] = function () {
 
-			return new Module\NetworkOptionModuleManager( 'multilingualpress_modules' );
+			return new Module\NetworkOptionModuleManager( Module\ModuleManager::OPTION );
 		};
 
 		$container['multilingualpress.new_site_settings'] = function ( Container $container ) {
