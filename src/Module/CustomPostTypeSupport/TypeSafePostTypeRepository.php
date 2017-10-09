@@ -101,7 +101,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 
 		$settings[ PostTypeRepository::SETTINGS_KEY ] = $post_types;
 
-		return (bool) update_site_option( PostTypeRepository::OPTION, $settings );
+		return (bool) update_network_option( null, PostTypeRepository::OPTION, $settings );
 	}
 
 	/**
@@ -123,6 +123,6 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	 */
 	private function get_settings(): array {
 
-		return (array) get_site_option( PostTypeRepository::OPTION, [] );
+		return (array) get_network_option( null, PostTypeRepository::OPTION, [] );
 	}
 }

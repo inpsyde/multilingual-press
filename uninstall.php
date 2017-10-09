@@ -9,7 +9,6 @@
 
 namespace Inpsyde\MultilingualPress;
 
-use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Installation\Uninstaller;
 
@@ -59,24 +58,19 @@ $uninstaller->uninstall_tables( [
 
 // TODO: Use class constants instead of hard-coded strings.
 $uninstaller->delete_network_options( [
-	SiteSettingsRepository::OPTION_SETTINGS,
-	'inpsyde_multilingual_cpt',
-	'inpsyde_multilingual_quicklink_options',
-	// Currently defined in a private property on ~\MultilingualPress.
-	'mlp_version',
+	Activation\NetworkOptionActivator::OPTION,
+	Core\Admin\SiteSettingsRepository::OPTION_SETTINGS,
+	Installation\NetworkPluginDeactivator::OPTION,
+	Module\CustomPostTypeSupport\PostTypeRepository::OPTION,
+	Module\Quicklinks\SettingsRepository::OPTION,
+	MultilingualPress::OPTION_VERSION,
 	// Currently defined in ~\Core\CoreServiceProvider.
 	'multilingualpress_modules',
-	'multilingual_press_check_db',
-	// Old option, replaced by 'multilingualpress_modules'.
-	'state_modules',
 ] );
 
 // TODO: Use class constants instead of hard-coded strings.
 $uninstaller->delete_site_options( [
-	'inpsyde_license_status_MultilingualPress Pro',
-	'inpsyde_multilingual_blog_relationship',
-	'inpsyde_multilingual_default_actions',
-	'inpsyde_multilingual_redirect',
+	Module\Redirect\SettingsRepository::OPTION_SITE
 ] );
 
 unset( $uninstaller );
