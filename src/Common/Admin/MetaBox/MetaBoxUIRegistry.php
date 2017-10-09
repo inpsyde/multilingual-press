@@ -102,6 +102,8 @@ class MetaBoxUIRegistry {
 	 * @param UIAwareMetaBoxRegistrar $registrar Meta box registrar object.
 	 *
 	 * @return MetaBoxUIRegistry
+	 *
+	 * @throws \InvalidArgumentException If a user interface with the given ID already exists for the given registrar.
 	 */
 	public function register_ui( MetaBoxUI $ui, UIAwareMetaBoxRegistrar $registrar ): MetaBoxUIRegistry {
 
@@ -173,7 +175,7 @@ class MetaBoxUIRegistry {
 			return $this->selected_ui[ $registrar_id ];
 		}
 
-		// Let's ensure that the selected UI is one of the available UI objects: filter can only pick one, not override
+		// Let's ensure that the selected UI is one of the available UI objects: filter can only pick one, not override.
 		$ui_selected = ( $ui_objects[ $user_ui->id() ] ?? null ) === $user_ui;
 
 		$this->selected_ui[ $registrar_id ] = $ui_selected ? $user_ui : new NullMetaBoxUI();

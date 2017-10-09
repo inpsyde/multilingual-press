@@ -18,7 +18,9 @@ final class SourceTermSaveContext implements \ArrayAccess {
 
 	const TAXONOMY = 'taxonomy';
 
-	const TERM_ID = 'term_id';
+	const TERM_TAXONOMY_ID = 'term_taxonomy_id';
+
+	const TERM = 'term';
 
 	const TERM_PARENT = 'term_parent';
 
@@ -82,20 +84,20 @@ final class SourceTermSaveContext implements \ArrayAccess {
 	 */
 	public function to_array(): array {
 
-		$empty_context = [
-			self::SITE_ID       => 0,
-			self::TAXONOMY      => '',
-			self::TERM_ID       => 0,
-			self::TERM_PARENT   => 0,
-			self::RELATED_BLOGS => [],
-		];
-
 		if ( self::$contexts->contains( $this->term ) ) {
-
 			return self::$contexts->offsetGet( $this->term );
 		}
 
-		$source_site_id = (int) get_current_blog_id();
+		$empty_context = [
+			self::SITE_ID          => 0,
+			self::TAXONOMY         => '',
+			self::TERM_TAXONOMY_ID => 0,
+			self::TERM_PARENT      => 0,
+			self::TERM             => new \WP_Term( new \stdClass() ),
+			self::RELATED_BLOGS    => [],
+		];
+
+		$source_site_id = get_current_blog_id();
 
 		$related_blogs = $this->site_relations->get_related_site_ids( $source_site_id );
 		if ( empty( $related_blogs ) ) {
@@ -112,17 +114,22 @@ final class SourceTermSaveContext implements \ArrayAccess {
 			return $empty_context;
 		}
 
-		$request_term_id = (int) $this->request->body_value( 'tag_ID', INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
+		$request_term = get_term_by(
+			'id',
+			(int) $this->request->body_value( 'tag_ID', INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT ),
+			$taxonomy
+		);
 
 		$context = [
-			self::SITE_ID       => $source_site_id,
-			self::TAXONOMY      => $taxonomy,
-			self::TERM_ID       => $request_term_id ?: (int) $this->term->term_id,
-			self::TERM_PARENT   => (int) $this->term->parent,
-			self::RELATED_BLOGS => $related_blogs,
+			self::SITE_ID          => $source_site_id,
+			self::TAXONOMY         => $taxonomy,
+			self::TERM_TAXONOMY_ID => (int) ( $request_term->term_taxonomy_id ?? $this->term->term_taxonomy_id ),
+			self::TERM_PARENT      => (int) $this->term->parent,
+			self::TERM             => $this->term,
+			self::RELATED_BLOGS    => $related_blogs,
 		];
 
-		self::$contexts->attach( self::$contexts, $context );
+		self::$contexts->attach( $this->term, $context );
 
 		return $context;
 	}
@@ -144,9 +151,7 @@ final class SourceTermSaveContext implements \ArrayAccess {
 	 */
 	public function offsetGet( $offset ) {
 
-		$array = $this->to_array();
-
-		return $array[ $offset ] ?? null;
+		return $this->to_array()[ $offset ] ?? null;
 	}
 
 	/**
@@ -154,6 +159,8 @@ final class SourceTermSaveContext implements \ArrayAccess {
 	 *
 	 * @param mixed $offset
 	 * @param mixed $value
+	 *
+	 * @throws \BadMethodCallException
 	 */
 	public function offsetSet( $offset, $value ) {
 
@@ -164,6 +171,8 @@ final class SourceTermSaveContext implements \ArrayAccess {
 	 * Disabled.
 	 *
 	 * @param mixed $offset
+	 *
+	 * @throws \BadMethodCallException
 	 */
 	public function offsetUnset( $offset ) {
 

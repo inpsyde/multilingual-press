@@ -45,15 +45,18 @@ final class FullRequestGlobalManipulator implements RequestGlobalsManipulator {
 	 */
 	public function clear_data(): int {
 
-		if ( empty( $GLOBALS["_{$this->request_method}"] ) ) {
+		$name = "_{$this->request_method}";
+
+		if ( empty( $GLOBALS[ $name ] ) ) {
 			return 0;
 		}
 
-		$this->storage = $GLOBALS["_{$this->request_method}"];
+		$this->storage = $GLOBALS[ $name ];
 
+		// @codingStandardsIgnoreLine
 		$_REQUEST = array_diff_key( $_REQUEST, $this->storage );
 
-		$GLOBALS["_{$this->request_method}"] = [];
+		$GLOBALS[ $name ] = [];
 
 		return count( $this->storage );
 	}
@@ -71,12 +74,15 @@ final class FullRequestGlobalManipulator implements RequestGlobalsManipulator {
 			return 0;
 		}
 
+		// @codingStandardsIgnoreLine
 		$_REQUEST = array_merge( $_REQUEST, $this->storage );
 
-		$GLOBALS["_{$this->request_method}"] = $this->storage;
+		$name = "_{$this->request_method}";
+
+		$GLOBALS[ $name ] = $this->storage;
 
 		$this->storage = [];
 
-		return count( $GLOBALS["_{$this->request_method}"] );
+		return count( $GLOBALS[ $name ] );
 	}
 }

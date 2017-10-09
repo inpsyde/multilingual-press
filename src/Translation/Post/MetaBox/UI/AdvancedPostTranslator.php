@@ -8,10 +8,12 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
+use Inpsyde\MultilingualPress\Translation\Post\MetaBox\RelationshipControlView;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxView;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetadataUpdater;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\ViewInjection;
+use Inpsyde\MultilingualPress\Translation\Post\RelationshipContext;
 
 /**
  * Advanced post translation user interface implementation.
@@ -43,6 +45,11 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	private $content_relations;
 
 	/**
+	 * @var RelationshipControlView
+	 */
+	private $relationship_control_view;
+
+	/**
 	 * @var ServerRequest
 	 */
 	private $server_request;
@@ -50,19 +57,23 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param ContentRelations $content_relations
-	 * @param ServerRequest    $server_request
-	 * @param AssetManager     $asset_manager
+	 * @param ContentRelations        $content_relations
+	 * @param ServerRequest           $server_request
+	 * @param RelationshipControlView $relationship_control_view
+	 * @param AssetManager            $asset_manager
 	 */
 	public function __construct(
 		ContentRelations $content_relations,
 		ServerRequest $server_request,
+		RelationshipControlView $relationship_control_view,
 		AssetManager $asset_manager
 	) {
 
 		$this->content_relations = $content_relations;
 
 		$this->server_request = $server_request;
+
+		$this->relationship_control_view = $relationship_control_view;
 
 		$this->asset_manager = $asset_manager;
 	}
@@ -91,7 +102,11 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	public function initialize() {
 
 		static $done;
-		if ( ! $done && wp_doing_ajax() ) {
+		if ( $done ) {
+			return;
+		}
+
+		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_' . AdvancedPostTranslatorAJAXHandler::AJAX_ACTION, function () {
 
 				( new AdvancedPostTranslatorAJAXHandler( $this->server_request ) )->handle_request();
@@ -152,12 +167,13 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 
 		$fields = new AdvancedPostTranslatorFields( $this->asset_manager );
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
 			// If remote post is trashed show a notice and do nothing.
@@ -167,32 +183,41 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 				return;
 			}
 
-			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
+			$fields->render_top_fields( $post, $remote_site_id, $remote_post );
 		}, TranslationMetaBoxView::POSITION_TOP );
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
-				echo $fields->main_fields( $post, $remote_site_id, $remote_post );
+				$fields->render_main_fields( $post, $remote_site_id, $remote_post );
 			}
 		}, TranslationMetaBoxView::POSITION_MAIN );
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
 			if ( ! $this->is_remote_post_trashed( $remote_post ) ) {
-				echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
+				$this->relationship_control_view->render( new RelationshipContext( [
+					RelationshipContext::KEY_REMOTE_POST_ID => $remote_post->ID ?? 0,
+					RelationshipContext::KEY_REMOTE_SITE_ID => $remote_site_id,
+					RelationshipContext::KEY_SOURCE_POST_ID => $post->ID,
+					RelationshipContext::KEY_SOURCE_SITE_ID => get_current_blog_id(),
+				] ) );
+
+				$fields->render_bottom_fields( $post, $remote_site_id, $remote_post );
 			}
 		} );
 	}
@@ -204,7 +229,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 	 */
 	private function is_remote_post_trashed( \WP_Post $remote_post = null ): bool {
 
-		return $remote_post && $remote_post->post_status === 'trash';
+		return $remote_post && 'trash' === $remote_post->post_status;
 	}
 
 	/**
@@ -218,7 +243,7 @@ final class AdvancedPostTranslator implements MetaBoxUI {
 		<div class="mlp-warning">
 			<p>
 				<?php
-				_e(
+				esc_html_e(
 					'The remote post is trashed. You are not able to edit it here. If you want to, restore the remote post. Also mind the options below.',
 					'multilingualpress'
 				);

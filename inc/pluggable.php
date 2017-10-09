@@ -36,7 +36,7 @@ namespace {
 
 namespace Inpsyde\MultilingualPress {
 
-	if ( ! function_exists( __NAMESPACE__ . '\\debug') ) :
+	if ( ! function_exists( __NAMESPACE__ . '\\debug' ) ) :
 		/**
 		 * Writes debug data to the error log.
 		 *
@@ -53,6 +53,7 @@ namespace Inpsyde\MultilingualPress {
 		function debug( $message ) {
 
 			if ( defined( 'MULTILINGUALPRESS_DEBUG' ) && MULTILINGUALPRESS_DEBUG ) {
+				// @codingStandardsIgnoreLine as this is a function specifically intended to be used when debugging.
 				error_log( sprintf(
 					'MultilingualPress: %s %s',
 					date( 'H:m:s' ),

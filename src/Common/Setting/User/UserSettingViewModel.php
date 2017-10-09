@@ -11,15 +11,15 @@ namespace Inpsyde\MultilingualPress\Common\Setting\User;
 interface UserSettingViewModel {
 
 	/**
-	 * Returns the markup for the user setting.
+	 * Renders the user setting.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param \WP_User $user User object.
 	 *
-	 * @return string The markup for the user setting.
+	 * @return void
 	 */
-	public function markup( \WP_User $user ): string;
+	public function render( \WP_User $user );
 
 	/**
 	 * Returns the title of the user setting.

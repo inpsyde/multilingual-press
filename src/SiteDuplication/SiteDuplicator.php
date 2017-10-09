@@ -7,6 +7,7 @@ namespace Inpsyde\MultilingualPress\SiteDuplication;
 use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\NetworkState;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Database\TableDuplicator;
 use Inpsyde\MultilingualPress\Database\TableList;
 use Inpsyde\MultilingualPress\Database\TableReplacer;
@@ -67,6 +68,11 @@ class SiteDuplicator {
 	private $db;
 
 	/**
+	 * @var Nonce
+	 */
+	private $nonce;
+
+	/**
 	 * @var Request
 	 */
 	private $request;
@@ -99,6 +105,7 @@ class SiteDuplicator {
 	 * @param ContentRelations $content_relations Content relations APU object.
 	 * @param AttachmentCopier $attachment_copier Attachment copier object.
 	 * @param Request          $request           HTTP request object.
+	 * @param Nonce            $nonce             Nonce object.
 	 */
 	public function __construct(
 		\wpdb $db,
@@ -108,7 +115,8 @@ class SiteDuplicator {
 		ActivePlugins $active_plugins,
 		ContentRelations $content_relations,
 		AttachmentCopier $attachment_copier,
-		Request $request
+		Request $request,
+		Nonce $nonce
 	) {
 
 		$this->db = $db;
@@ -126,6 +134,8 @@ class SiteDuplicator {
 		$this->attachment_copier = $attachment_copier;
 
 		$this->request = $request;
+
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -138,6 +148,10 @@ class SiteDuplicator {
 	 * @return bool Whether or not a site was duplicated successfully.
 	 */
 	public function duplicate_site( $new_site_id ): bool {
+
+		if ( ! $this->nonce->is_valid() ) {
+			return false;
+		}
 
 		$source_site_id = (int) $this->request->body_value(
 			static::NAME_BASED_ON_SITE,
@@ -167,7 +181,7 @@ class SiteDuplicator {
 
 		$siteurl = (string) get_option( 'siteurl', '' );
 
-		// Important: FIRST, duplicate the tables, and THEN overwrite things. ;)
+		// Important: FIRST, duplicate the tables, and THEN overwrite things.
 		$this->duplicate_tables( $source_site_id, $table_prefix );
 
 		$this->set_urls( $siteurl, $mapped_domain );
@@ -301,8 +315,12 @@ class SiteDuplicator {
 
 		$this->db->update(
 			$this->db->options,
-			[ 'option_value' => $admin_email ],
-			[ 'option_name' => 'admin_email' ]
+			[
+				'option_value' => $admin_email,
+			],
+			[
+				'option_name' => 'admin_email',
+			]
 		);
 	}
 
@@ -317,8 +335,12 @@ class SiteDuplicator {
 
 		$this->db->update(
 			$this->db->options,
-			[ 'option_name' => "{$this->db->prefix}user_roles" ],
-			[ 'option_name' => "{$table_prefix}user_roles" ]
+			[
+				'option_name' => "{$this->db->prefix}user_roles",
+			],
+			[
+				'option_name' => "{$table_prefix}user_roles",
+			]
 		);
 	}
 

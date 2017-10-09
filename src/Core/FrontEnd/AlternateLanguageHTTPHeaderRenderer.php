@@ -57,7 +57,7 @@ final class AlternateLanguageHTTPHeaderRenderer implements AlternateLanguageRend
 	 *
 	 * @param array ...$args Optional arguments.
 	 *
-	 * @return void|mixed
+	 * @return void
 	 */
 	public function render( ...$args ) {
 

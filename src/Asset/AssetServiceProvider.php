@@ -69,7 +69,7 @@ final class AssetServiceProvider implements BootstrappableServiceProvider {
 				)->add_data(
 					'mlpSettings',
 					[
-						'urlRoot' => esc_url( parse_url( admin_url(), PHP_URL_PATH ) ),
+						'urlRoot' => esc_url( wp_parse_url( admin_url(), PHP_URL_PATH ) ),
 					]
 				)
 			)

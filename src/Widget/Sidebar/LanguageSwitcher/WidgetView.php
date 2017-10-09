@@ -58,20 +58,20 @@ final class WidgetView implements View {
 
 		$this->enqueue_style();
 
-		echo $args['before_widget'] ?? '';
+		$html = $args['before_widget'] ?? '';
 
 		if ( ! empty( $instance['widget_title'] ) ) {
 			/** This filter is documented in wp-includes/default-widgets.php */
 			$title = (string) apply_filters( 'widget_title', (string) $instance['widget_title'], $instance, $id_base );
 
-			echo $args['before_title'] ?? '';
-			echo esc_html( $title );
-			echo $args['after_title'] ?? '';
+			$html .= ( $args['before_title'] ?? '' ) . esc_html( $title ) . ( $args['after_title'] ?? '' );
 		}
 
-		echo $output;
+		$html .= $output;
 
-		echo $args['after_widget'] ?? '';
+		$html .= $args['after_widget'] ?? '';
+
+		echo wp_kses_post( $html );
 	}
 
 	/**

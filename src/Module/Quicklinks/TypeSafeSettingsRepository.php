@@ -47,7 +47,7 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 	 */
 	public function get_current_position(): string {
 
-		$settings = get_site_option( SettingsRepository::OPTION );
+		$settings = get_network_option( null, SettingsRepository::OPTION );
 
 		$valid_positions = array_keys( $this->get_available_positions() );
 
@@ -74,10 +74,10 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 	 */
 	public function set_position( string $position ): bool {
 
-		$settings = get_site_option( SettingsRepository::OPTION );
+		$settings = get_network_option( null, SettingsRepository::OPTION );
 
 		$settings['mlp_quicklink_position'] = $position;
 
-		return (bool) update_site_option( SettingsRepository::OPTION, $settings );
+		return (bool) update_network_option( null, SettingsRepository::OPTION, $settings );
 	}
 }

@@ -19,6 +19,15 @@ use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 class Quicklinks {
 
 	/**
+	 * Hook name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_NOFOLLOW = 'multilingualpress.quicklinks_nofollow';
+
+	/**
 	 * Name attribute value.
 	 *
 	 * @since 3.0.0
@@ -56,6 +65,11 @@ class Quicklinks {
 	private $description;
 
 	/**
+	 * @var bool
+	 */
+	private $nofollow;
+
+	/**
 	 * @var SettingsRepository
 	 */
 	private $repository;
@@ -87,6 +101,15 @@ class Quicklinks {
 		$this->asset_manager = $asset_manager;
 
 		$this->description = _x( 'Read in:', 'Quicklinks description', 'multilingualpress' );
+
+		/**
+		 * Filters whether or not to use nofollow quicklinks.
+		 *
+		 * @since 2.10.0
+		 *
+		 * @param bool $nofollow Whether or not to use nofollow quicklinks.
+		 */
+		$this->nofollow = (bool) apply_filters( self::FILTER_NOFOLLOW, false );
 	}
 
 	/**
@@ -111,7 +134,9 @@ class Quicklinks {
 
 		$languages = array_reduce( $translations, function ( $languages, Translation $translation ) {
 
-			return array_merge( $languages, [ $translation->remote_url() => $translation->language() ] );
+			return array_merge( $languages, [
+				$translation->remote_url() => $translation->language(),
+			] );
 		}, [] );
 
 		$current_position = $this->repository->get_current_position();
@@ -125,7 +150,7 @@ class Quicklinks {
 		 *
 		 * @param string[] $positions Position values for the quicklinks HTML to be prepended.
 		 */
-		$positions_to_prepend = apply_filters( 'multilingualpress.quicklinks_positions_to_prepend', [
+		$positions_to_prepend = (array) apply_filters( 'multilingualpress.quicklinks_positions_to_prepend', [
 			SettingsRepository::POSITION_TOP_LEFT,
 			SettingsRepository::POSITION_TOP_RIGHT,
 		] );
@@ -168,6 +193,7 @@ class Quicklinks {
 	 */
 	private function quicklinks( array $languages, string $current_position ): string {
 
+		$type = 3 < count( $languages ) ? static::TYPE_LINKS : static::TYPE_SELECT;
 		/**
 		 * Filters the type of the quicklinks output (i.e., a single select element, or individual links).
 		 *
@@ -177,12 +203,7 @@ class Quicklinks {
 		 * @param Language[] $languages        Language objects.
 		 * @param string     $current_position Current quicklinks position.
 		 */
-		$type = apply_filters(
-			'multilingualpress.quicklinks_type',
-			3 < count( $languages ) ? static::TYPE_LINKS : static::TYPE_SELECT,
-			$languages,
-			$current_position
-		);
+		$type = apply_filters( 'multilingualpress.quicklinks_type', $type, $languages, $current_position );
 
 		$quicklinks = '<div class="mlp-quicklinks mlp-quicklinks-position-' . esc_attr( $current_position ) . '">';
 
@@ -226,10 +247,15 @@ class Quicklinks {
 
 		echo esc_html( $this->description );
 
-		array_walk( $languages, function ( Language $language, $url ) {
+		$rel = 'alternate';
+		if ( $this->nofollow ) {
+			$rel .= ' nofollow';
+		}
+
+		array_walk( $languages, function ( Language $language, $url ) use ( $rel ) {
 
 			?>
-			<a href="<?php echo esc_url( $url ); ?>" rel="alternate"
+			<a href="<?php echo esc_url( $url ); ?>" rel="<?php echo esc_attr( $rel ); ?>"
 				hreflang="<?php echo esc_attr( $language->name( 'http' ) ); ?>">
 				<?php echo esc_html( $language->name( 'native' ) ); ?>
 			</a><br>

@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Translator;
 
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 use Inpsyde\MultilingualPress\Translation\Translator;
 
 /**
@@ -16,6 +17,11 @@ use Inpsyde\MultilingualPress\Translation\Translator;
 final class PostTypeTranslator implements Translator {
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * @var TypeFactory
 	 */
 	private $type_factory;
@@ -25,11 +31,14 @@ final class PostTypeTranslator implements Translator {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param TypeFactory $type_factory Type factory object.
+	 * @param TypeFactory     $type_factory      Type factory object.
+	 * @param ActivePostTypes $active_post_types Active post types storage object.
 	 */
-	public function __construct( TypeFactory $type_factory ) {
+	public function __construct( TypeFactory $type_factory, ActivePostTypes $active_post_types ) {
 
 		$this->type_factory = $type_factory;
+
+		$this->active_post_types = $active_post_types;
 	}
 
 	/**
@@ -48,9 +57,13 @@ final class PostTypeTranslator implements Translator {
 			return [];
 		}
 
-		switch_to_blog( $site_id );
+		$post_type = (string) $args['post_type'];
 
-		$post_type = $args['post_type'];
+		if ( ! $this->active_post_types->includes( $post_type ) ) {
+			return [];
+		}
+
+		switch_to_blog( $site_id );
 
 		$data = [
 			'remote_url' => $this->type_factory->create_url( [

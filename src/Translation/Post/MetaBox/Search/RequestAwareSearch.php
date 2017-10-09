@@ -2,15 +2,15 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Relations\Post\Search;
+namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search;
 
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
+use Inpsyde\MultilingualPress\Translation\Post\RelationshipContext;
 
 /**
  * Request-aware search implementation.
  *
- * @package Inpsyde\MultilingualPress\Relations\Post\Search
+ * @package Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search
  * @since   3.0.0
  */
 final class RequestAwareSearch implements Search {
@@ -78,7 +78,18 @@ final class RequestAwareSearch implements Search {
 		}
 
 		switch_to_blog( $remote_site_id );
+
+		/**
+		 * Filters the query arguments for the remote post search.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param array $args Query arguments.
+		 */
+		$args = (array) apply_filters( Search::FILTER_ARGUMENTS, $args );
+
 		$posts = (array) get_posts( $args );
+
 		restore_current_blog();
 
 		return $posts;

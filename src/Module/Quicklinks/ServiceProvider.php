@@ -149,14 +149,14 @@ final class ServiceProvider implements ModuleServiceProvider {
 	 */
 	private function activate_module_for_front_end( Container $container ) {
 
-		$name = $container['multilingualpress.server_request']->body_value(
+		$url = $container['multilingualpress.server_request']->body_value(
 			Quicklinks::NAME,
 			INPUT_POST,
 			FILTER_SANITIZE_STRING
 		);
 
-		if ( is_string( $name ) ) {
-			$container['multilingualpress.quicklinks_redirector']->maybe_redirect( $name );
+		if ( is_string( $url ) ) {
+			$container['multilingualpress.quicklinks_redirector']->maybe_redirect( $url );
 		}
 
 		add_filter(

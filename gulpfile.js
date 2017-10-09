@@ -3,6 +3,7 @@
 
 const gulp = require( 'gulp' );
 
+const argv = require( 'yargs' ).argv;
 const autoprefixer = require( 'autoprefixer' );
 const babelify = require( 'babelify' );
 const browserify = require( 'browserify' );
@@ -237,7 +238,7 @@ gulp.task( 'tape', [
 	'lint-scripts',
 ], () => {
 	return gulp
-		.src( `${config.tests.js}**/*Test.js`, {
+		.src( argv.src || `${config.tests.js}**/*Test.js`, {
 			read: false
 		} )
 		.pipe( exec(
@@ -249,16 +250,18 @@ gulp.task( 'tape', [
 gulp.task( 'zip', () => {
 	return gulp
 		.src( [
-			'*.{php,txt}',
 			`${config.images.dest}**/*.{gif,jpeg,jpg,png}`,
 			`${config.scripts.dest}*.js`,
 			`${config.styles.dest}*.css`,
 			`${config.src}**/*.php`,
+			'*.{php,txt}',
+			'LICENSE',
+			'!report-*.txt',
 		], {
 			base: '.'
 		} )
 		.pipe( rename( ( path ) => {
-			path.dirname = `${path.slug}/${path.dirname}`;
+			path.dirname = `${config.slug}/${path.dirname}`;
 		} ) )
 		.pipe( zip( `${config.name}.zip` ) )
 		.pipe( gulp.dest( '.' ) );

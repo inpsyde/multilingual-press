@@ -1,4 +1,5 @@
 <?php # -*- coding: utf-8 -*-
+
 /*
  * Plugin Name: MultilingualPress
  * Plugin URI:  https://wordpress.org/plugins/multilingualpress/
@@ -13,8 +14,8 @@
 
 namespace Inpsyde\MultilingualPress;
 
+use Inpsyde\MultilingualPress\Activation\ActivationServiceProvider;
 use Inpsyde\MultilingualPress\API\APIServiceProvider;
-use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\Asset\AssetServiceProvider;
 use Inpsyde\MultilingualPress\Cache\CacheServiceProvider;
 use Inpsyde\MultilingualPress\Core\CoreServiceProvider;
@@ -26,7 +27,6 @@ use Inpsyde\MultilingualPress\Installation\InstallationServiceProvider;
 use Inpsyde\MultilingualPress\Integration\IntegrationProvider;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\NavMenu\NavMenuServiceProvider;
-use Inpsyde\MultilingualPress\Relations\RelationsServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\DistinctServiceProviderCollection;
 use Inpsyde\MultilingualPress\Service\ServiceProviderCollection;
@@ -34,7 +34,7 @@ use Inpsyde\MultilingualPress\SiteDuplication\SiteDuplicationServiceProvider;
 use Inpsyde\MultilingualPress\Translation\TranslationServiceProvider;
 use Inpsyde\MultilingualPress\Widget\WidgetServiceProvider;
 
-defined( 'ABSPATH' ) or die();
+defined( 'ABSPATH' ) || die();
 
 /**
  * Action name.
@@ -78,6 +78,7 @@ function bootstrap(): bool {
 	$providers = new DistinctServiceProviderCollection();
 	$providers
 		->add_service_provider( new CoreServiceProvider() )
+		->add_service_provider( new ActivationServiceProvider() )
 		->add_service_provider( new APIServiceProvider() )
 		->add_service_provider( new AssetServiceProvider() )
 		->add_service_provider( new DatabaseServiceProvider() )
@@ -91,7 +92,6 @@ function bootstrap(): bool {
 		->add_service_provider( new Module\Redirect\ServiceProvider() )
 		->add_service_provider( new Module\Trasher\ServiceProvider() )
 		->add_service_provider( new NavMenuServiceProvider() )
-		->add_service_provider( new RelationsServiceProvider() )
 		->add_service_provider( new SiteDuplicationServiceProvider() )
 		->add_service_provider( new TranslationServiceProvider() )
 		->add_service_provider( new WidgetServiceProvider() );
@@ -148,21 +148,6 @@ register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
 
 // TODO: Eventually remove/refactor according to new architecture as soon as the old controller got replaced.
 add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
-
-	if ( is_admin() ) {
-		// Term Translator
-		add_action( 'wp_loaded', function () {
-
-			$taxonomy = empty( $_REQUEST['taxonomy'] ) ? '' : (string) $_REQUEST['taxonomy'];
-
-			$term_taxonomy_id = empty( $_REQUEST['tag_ID'] ) ? 0 : (int) $_REQUEST['tag_ID'];
-
-			( new \Mlp_Term_Translation_Controller(
-				resolve( 'multilingualpress.content_relations', ContentRelations::class ),
-				new Common\Nonce\WPNonce( "save_{$taxonomy}_translations_$term_taxonomy_id" )
-			) )->setup();
-		}, 0 );
-	}
 
 	add_action( 'wp_loaded', function () {
 

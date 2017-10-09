@@ -47,22 +47,22 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	}
 
 	/**
-	 * Returns the markup for the site setting.
+	 * Renders the markup for the site setting.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return string The markup for the site setting.
+	 * @return void
 	 */
-	public function markup( int $site_id ): string {
+	public function render( int $site_id ) {
 
-		return sprintf(
-			'<select id="%2$s" name="%3$s" autocomplete="off">%1$s</select>',
-			$this->get_options( $site_id ),
-			esc_attr( $this->id ),
-			esc_attr( SiteSettingsRepository::NAME_LANGUAGE )
-		);
+		?>
+		<select id="<?php echo esc_attr( $this->id ); ?>"
+			name="<?php echo esc_attr( SiteSettingsRepository::NAME_LANGUAGE ); ?>" autocomplete="off">
+			<?php $this->render_options( $site_id ); ?>
+		</select>
+		<?php
 	}
 
 	/**
@@ -82,47 +82,35 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	}
 
 	/**
-	 * Returns the markup for all option tags.
+	 * Renders the option tags.
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return string The markup for all option tags.
+	 * @return void
 	 */
-	private function get_options( int $site_id ): string {
+	private function render_options( int $site_id ) {
 
-		$options = '<option value="-1">' . esc_html__( 'Choose language', 'multilingualpress' ) . '</option>';
-
-		$languages = $this->languages->get_languages( [
-			'fields' => [
-				'english_name',
-				'http_code',
-				'native_name',
-			],
-		] );
-		if ( $languages ) {
-			$current_site_language = $this->repository->get_site_language( $site_id ) ?: 'en_US';
-
-			$options = array_reduce( $languages, function ( $options, $language ) use ( $current_site_language ) {
-
-				if (
-					! empty( $language['http_code'] )
-					&& ! ( empty( $language['english_name'] ) && empty( $language['native_name'] ) )
-				) {
-					$site_language = str_replace( '-', '_', $language['http_code'] );
-
-					$options .= sprintf(
-						'<option value="%2$s"%3$s>%1$s</option>',
-						esc_html( $this->get_language_name( $language ) ),
-						esc_attr( $site_language ),
-						selected( $site_language, $current_site_language, false )
-					);
-				}
-
-				return $options;
-			}, $options );
+		$current_site_language = $this->get_current_site_language( $site_id );
+		?>
+		<option value="<?php echo esc_attr( SiteSettingsUpdater::VALUE_LANGUAGE_NONE ); ?>"
+			<?php selected( $current_site_language, SiteSettingsUpdater::VALUE_LANGUAGE_NONE ); ?>>
+			<?php esc_html_e( 'Choose language', 'multilingualpress' ); ?>
+		</option>
+		<?php
+		$languages = $this->get_languages();
+		if ( ! $languages ) {
+			return;
 		}
 
-		return $options;
+		foreach ( $languages as $language ) {
+			$site_language = str_replace( '-', '_', $language['http_code'] );
+			?>
+			<option value="<?php echo esc_attr( $site_language ); ?>"
+				<?php selected( $site_language, $current_site_language ); ?>>
+				<?php echo esc_html( $this->get_language_name( $language ) ); ?>
+			</option>
+			<?php
+		}
 	}
 
 	/**
@@ -138,5 +126,56 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 			$language['english_name'] ?? '',
 			$language['native_name'] ?? '',
 		] ) ) );
+	}
+
+	/**
+	 * Returns the languages.
+	 *
+	 * @return Language[] The array with objects of all languages according to the given arguments.
+	 */
+	private function get_languages(): array {
+
+		$languages = $this->languages->get_languages( [
+			'fields' => [
+				'english_name',
+				'http_code',
+				'native_name',
+			],
+		] );
+		if ( ! $languages ) {
+			return [];
+		}
+
+		return array_filter( $languages, function ( Language $language ) {
+
+			return
+				isset( $language['http_code'] )
+				&& ( isset( $language['english_name'] ) || isset( $language['native_name'] ) );
+		} );
+	}
+
+	/**
+	 * Returns the current MultilingualPress or WordPress language for the site with the given ID.
+	 *
+	 * @param int $site_id Site ID.
+	 *
+	 * @return string The site language of the site with the given ID.
+	 */
+	private function get_current_site_language( int $site_id ): string {
+
+		$site_language = $this->repository->get_site_language( $site_id );
+		if ( '' === $site_language ) {
+			$site_language = get_blog_option( $site_id, 'WPLANG' );
+			// For English (US), WordPress stores an empty string.
+			if ( '' === $site_language ) {
+				return 'en_US';
+			}
+
+			if ( ! in_array( $site_language, get_available_languages(), true ) ) {
+				return '';
+			}
+		}
+
+		return $site_language;
 	}
 }

@@ -88,6 +88,11 @@ final class DatabaseServiceProvider implements ServiceProvider {
 			return new Table\LanguagesTable( $container['multilingualpress.wpdb']->base_prefix );
 		} );
 
+		$container->share( 'multilingualpress.relationships_table', function ( Container $container ) {
+
+			return new Table\RelationshipsTable( $container['multilingualpress.wpdb']->base_prefix );
+		} );
+
 		$container->share( 'multilingualpress.site_relations_table', function ( Container $container ) {
 
 			return new Table\SiteRelationsTable( $container['multilingualpress.wpdb']->base_prefix );

@@ -14,7 +14,7 @@ use Inpsyde\MultilingualPress\Translation\Translator;
 interface Translations {
 
 	/**
-	 * Returns all translation according to the given arguments.
+	 * Returns all translations according to the given arguments.
 	 *
 	 * @since 3.0.0
 	 *

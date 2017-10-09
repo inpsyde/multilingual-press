@@ -31,11 +31,6 @@ class PostRelationSaveHelper {
 	const FILTER_SYNC_METADATA = 'multilingualpress.sync_post_metadata';
 
 	/**
-	 * @var array
-	 */
-	private static $parent_ids = [];
-
-	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -59,7 +54,8 @@ class PostRelationSaveHelper {
 	public function __construct( ContentRelations $content_relations, SourcePostSaveContext $save_context ) {
 
 		$this->content_relations = $content_relations;
-		$this->save_context      = $save_context;
+
+		$this->save_context = $save_context;
 	}
 
 	/**
@@ -69,43 +65,43 @@ class PostRelationSaveHelper {
 	 */
 	public function get_related_post_parent( int $remote_site_id ): int {
 
-		if ( is_array( self::$parent_ids ) ) {
-			return (int) ( self::$parent_ids[ $remote_site_id ] ?? 0 );
+		static $parent_ids;
+		if ( isset( $parent_ids ) ) {
+			return (int) ( $parent_ids[ $remote_site_id ] ?? 0 );
 		}
 
-		$source_post_id = $this->save_context[ SourcePostSaveContext::POST_ID ];
-		$source_site_id = $this->save_context[ SourcePostSaveContext::SITE_ID ];
-
-		$source_post = $source_site_id === (int) get_current_blog_id()
-			? get_post( $source_post_id )
-			: get_blog_post( $source_site_id, $source_post_id );
-
-		$source_parent = $source_post ? (int) $source_post->post_parent : 0;
-
-		if ( ! $source_parent ) {
-			self::$parent_ids = [];
+		if ( ! is_post_type_hierarchical( SourcePostSaveContext::POST_TYPE ) ) {
+			$parent_ids = [];
 
 			return 0;
 		}
 
-		if ( $source_site_id === $remote_site_id ) {
-			return $source_parent;
+		$parent = (int) $this->save_context[ SourcePostSaveContext::POST_PARENT ];
+		if ( ! $parent ) {
+			$parent_ids = [];
+
+			return 0;
 		}
 
-		self::$parent_ids = $this->content_relations->get_relations(
-			$this->save_context[ SourcePostSaveContext::SITE_ID ],
-			$source_parent,
-			'post'
+		$source_site_id = (int) $this->save_context[ SourcePostSaveContext::SITE_ID ];
+		if ( $source_site_id === $remote_site_id ) {
+			return $parent;
+		}
+
+		$parent_ids = $this->content_relations->get_relations(
+			$source_site_id,
+			$parent,
+			ContentRelations::CONTENT_TYPE_POST
 		);
 
-		return (int) self::$parent_ids[ $remote_site_id ] ?? 0;
+		return (int) $parent_ids[ $remote_site_id ] ?? 0;
 	}
 
 	/**
 	 * Set the source id of the element.
 	 *
-	 * @param   int $remote_site_id ID of remote site
-	 * @param   int $remote_post_id ID of remote post
+	 * @param   int $remote_site_id ID of remote site.
+	 * @param   int $remote_post_id ID of remote post.
 	 *
 	 * @return  bool
 	 */
@@ -116,13 +112,27 @@ class PostRelationSaveHelper {
 			return true;
 		}
 
-		return $this->content_relations->set_relation(
-			$source_site_id,
-			$remote_site_id,
-			$this->save_context[ SourcePostSaveContext::POST_ID ],
-			$remote_post_id,
-			'post'
+		$post_ids = [
+			$source_site_id => $this->save_context[ SourcePostSaveContext::POST_ID ],
+			$remote_site_id => $remote_post_id,
+		];
+
+		$relationship_id = $this->content_relations->get_relationship_id(
+			$post_ids,
+			ContentRelations::CONTENT_TYPE_POST,
+			true
 		);
+		if ( ! $relationship_id ) {
+			return false;
+		}
+
+		foreach ( $post_ids as $site_id => $post_id ) {
+			if ( ! $this->content_relations->set_relation( $relationship_id, $site_id, $post_id ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -162,7 +172,7 @@ class PostRelationSaveHelper {
 
 		$source_thumb_path = $this->save_context[ SourcePostSaveContext::FEATURED_IMG_PATH ];
 
-		// There's no thumbnail on source post
+		// There's no thumbnail on source post.
 		if ( empty( $source_thumb_path ) ) {
 			return true;
 		}
@@ -234,15 +244,14 @@ class PostRelationSaveHelper {
 	 */
 	private function maybe_switch_site( int $remote_site_id ): int {
 
-		$current_site = (int) get_current_blog_id();
-
-		if ( $remote_site_id !== $current_site ) {
+		$current_site = get_current_blog_id();
+		if ( $current_site !== $remote_site_id ) {
 			switch_to_blog( $remote_site_id );
 
 			return $current_site;
 		}
 
-		return - 1;
+		return -1;
 
 	}
 
@@ -259,7 +268,7 @@ class PostRelationSaveHelper {
 
 		restore_current_blog();
 
-		$current_site = (int) get_current_blog_id();
+		$current_site = get_current_blog_id();
 		if ( $current_site !== $original_site_id ) {
 			switch_to_blog( $original_site_id );
 		}

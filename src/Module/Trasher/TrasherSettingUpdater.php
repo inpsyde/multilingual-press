@@ -110,9 +110,9 @@ class TrasherSettingUpdater {
 			return 0;
 		}
 
-		$current_site_id = (int) get_current_blog_id();
+		$current_site_id = get_current_blog_id();
 
-		$related_posts = $this->content_relations->get_relations( (int) $current_site_id, $post_id, 'post' );
+		$related_posts = $this->content_relations->get_relations( $current_site_id, $post_id, 'post' );
 
 		unset( $related_posts[ $current_site_id ] );
 

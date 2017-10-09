@@ -36,7 +36,7 @@ final class AliasAwareLanguage implements Language {
 	 */
 	public function __construct( array $data ) {
 
-		// TODO: Introduce method/trait for normalizing language data (i.e., handle both types of constants as keys).
+		/* TODO: Introduce method/trait for normalizing language data (i.e., handle both types of constants as keys). */
 
 		$this->is_rtl = (bool) ( $data['is_rtl'] ?? false );
 
@@ -58,18 +58,21 @@ final class AliasAwareLanguage implements Language {
 	 */
 	public function offsetExists( $name ) {
 
-		static $names = [
-			'custom_name',
-			'english_name',
-			'http_code',
-			'iso_639_1',
-			'iso_639_2',
-			'is_rtl',
-			'locale',
-			'native_name',
-			'priority',
-			'text',
-		];
+		static $names;
+		if ( ! $names ) {
+			$names = [
+				'custom_name',
+				'english_name',
+				'http_code',
+				'iso_639_1',
+				'iso_639_2',
+				'is_rtl',
+				'locale',
+				'native_name',
+				'priority',
+				'text',
+			];
+		}
 
 		return in_array( (string) $name, $names, true );
 	}
@@ -166,8 +169,9 @@ final class AliasAwareLanguage implements Language {
 			return (string) $this->names[ $output ];
 		}
 
-		if ( ! empty( $this->names["{$output}_name"] ) ) {
-			return (string) $this->names["{$output}_name"];
+		$name = "{$output}_name";
+		if ( ! empty( $this->names[ $name ] ) ) {
+			return (string) $this->names[ $name ];
 		}
 
 		if ( in_array( $output, [ 'language_short', 'lang' ], true ) ) {
@@ -236,7 +240,7 @@ final class AliasAwareLanguage implements Language {
 			'iso_639_2'    => '',
 			'native_name'  => '',
 			'text'         => '',
-			'wp_locale'    => '',
+			'locale'       => '',
 		];
 
 		$names = array_replace( $names, array_intersect_key( $data, $names ) );

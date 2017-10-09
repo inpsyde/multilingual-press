@@ -97,13 +97,13 @@ final class SemanticVersionNumber implements VersionNumber {
 
 		$numbers = explode( '.', trim( $matches['numbers'], '.' ) );
 
-		// if less than 3 numbers, we ensure at least 3 numbers are there, filling with zeroes
+		// if less than 3 numbers, we ensure at least 3 numbers are there, filling with zeroes.
 		$numeric = implode( '.', array_replace( [ '0', '0', '0' ], array_slice( $numbers, 0, 3 ) ) );
 
-		// if more than 3 numbers are there, we store additional numbers as build
+		// if more than 3 numbers are there, we store additional numbers as build.
 		$build = implode( '.', array_slice( $numbers, 3 ) );
 
-		// if there's no anything else, we already know what to return
+		// if there's no anything else, we already know what to return.
 		if ( ! $matches['anything'] ) {
 			return [ $numeric, $build, '' ];
 		}
@@ -111,12 +111,12 @@ final class SemanticVersionNumber implements VersionNumber {
 		$pre  = ltrim( $matches['anything'], '-' );
 		$meta = '';
 
-		// seems we have some metadata
+		// seems we have some metadata.
 		if ( substr_count( $matches['anything'], '+' ) > 0 ) {
 			$parts = explode( '+', $pre );
-			// pre is what's before the first +, which could actually be empty when version has meta but not pre-release
+			// pre is what's before the first +, which could actually be empty when version has meta but not pre-release.
 			$pre = array_shift( $parts );
-			// everything comes after first + is meta. If there were more +, we replace them with dots
+			// everything comes after first + is meta. If there were more +, we replace them with dots.
 			$meta = $this->sanitize_identifier( trim( implode( '.', $parts ), '-' ) );
 		}
 
@@ -136,7 +136,7 @@ final class SemanticVersionNumber implements VersionNumber {
 	 */
 	private function sanitize_identifier( string $identifier ): string {
 
-		// the condition will be false for both "" and "0", which are both valid so don't need any replace
+		// the condition will be false for both "" and "0", which are both valid so don't need any replace.
 		if ( $identifier ) {
 			$identifier = preg_replace( '~[^a-zA-Z0-9\-\.]~', '', str_replace( '_', '-', $identifier ) );
 		}

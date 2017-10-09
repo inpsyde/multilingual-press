@@ -1,253 +1,95 @@
-import '../../stubs/global';
+import globalStub from '../../stubs/global';
 import test from 'tape';
 import sinon from 'sinon';
-import * as _ from 'lodash';
 import * as F from '../../functions';
 import JqueryObject from '../../stubs/JqueryObject';
 import TermTranslator from '../../../../../resources/js/admin/term-translation/TermTranslator';
 
-/**
- * Returns a new instance of the class under test.
- * @param {Object} [options] - Optional. The constructor options.
- * @returns {TermTranslator} The instance of the class under test.
- */
-const createTestee = ( options ) => {
-	// Rewire internal data.
-	TermTranslator.__Rewire__( '_this', {
-		isPropagating: false
-	} );
+const { $ } = global;
 
-	return new TermTranslator( _.extend( { settings: {} }, options ) );
-};
+test( 'handleTermInput ...', ( assert ) => {
+	const testee = new TermTranslator();
 
-test( '$selects ...', ( assert ) => {
-	const $selects = F.getRandomString();
+	// Turn method into spy.
+	testee.setTermOperation = sinon.spy();
 
-	const options = {
-		$el: new JqueryObject( {
-			find: () => $selects
-		} )
+	const event = {
+		target: F.getRandomString()
 	};
 
-	const testee = createTestee( options );
+	const siteId = F.getRandomInteger();
+
+	const $input = new JqueryObject();
+	$input.data.withArgs( 'site' ).returns( siteId );
+
+	$.withArgs( event.target ).returns( $input );
+
+	testee.handleTermInput( event );
 
 	assert.equal(
-		testee.$selects,
-		$selects,
-		'... SHOULD have the expected value.'
+		testee.setTermOperation.calledWith( siteId, 'create' ),
+		true,
+		'... SHOULD set the create term operation for the expected site.'
 	);
+
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
 
-test( 'propagateSelectedTerm (propagating) ...', ( assert ) => {
-	const testee = createTestee();
-
-	// Rewire internal data.
-	TermTranslator.__Rewire__( '_this', { isPropagating: true } );
+test( 'handleTermSelection ...', ( assert ) => {
+	const testee = new TermTranslator();
 
 	// Turn method into spy.
-	testee.getSelectedRelation = sinon.spy();
+	testee.setTermOperation = sinon.spy();
 
-	// Turn method into spy.
-	testee.selectTerm = sinon.spy();
+	const event = {
+		target: F.getRandomString()
+	};
 
-	testee.propagateSelectedTerm( 'event' );
+	const siteId = F.getRandomInteger();
 
-	assert.equal(
-		testee.getSelectedRelation.callCount,
-		0,
-		'... SHOULD NOT call getSelectedRelation().'
-	);
+	const $input = new JqueryObject();
+	$input.data.withArgs( 'site' ).returns( siteId );
 
-	assert.equal(
-		testee.selectTerm.callCount,
-		0,
-		'... SHOULD NOT call selectTerm().'
-	);
+	$.withArgs( event.target ).returns( $input );
 
-	assert.end();
-} );
-
-test( 'propagateSelectedTerm (not propagating, invalid relation) ...', ( assert ) => {
-	const testee = createTestee();
-
-	// Turn method into stub.
-	testee.getSelectedRelation = sinon.stub().returns( '' );
-
-	// Turn method into spy.
-	testee.selectTerm = sinon.spy();
-
-	testee.propagateSelectedTerm( { target: 'target' } );
+	testee.handleTermSelection( event );
 
 	assert.equal(
-		testee.getSelectedRelation.callCount,
-		1,
-		'... SHOULD call getSelectedRelation().'
-	);
-
-	assert.equal(
-		testee.selectTerm.callCount,
-		0,
-		'... SHOULD NOT call selectTerm().'
-	);
-
-	assert.end();
-} );
-
-test( 'propagateSelectedTerm (not propagating, valid relation) ...', ( assert ) => {
-	const _elements = F.getRandomArray();
-
-	const $selects = new JqueryObject( { _elements } );
-	$selects.not.returnsThis();
-
-	const $el = new JqueryObject();
-	$el.find.returns( $selects );
-
-	const testee = createTestee( { $el } );
-
-	// Turn method into stub.
-	testee.getSelectedRelation = sinon.stub().returns( F.getRandomString() );
-
-	// Turn method into spy.
-	testee.selectTerm = sinon.spy();
-
-	testee.propagateSelectedTerm( { target: 'target' } );
-
-	assert.equal(
-		testee.getSelectedRelation.callCount,
-		1,
-		'... SHOULD call getSelectedRelation().'
-	);
-
-	assert.equal(
-		testee.selectTerm.callCount,
-		_elements.length,
-		'... SHOULD call selectTerm() for each select element.'
-	);
-
-	assert.end();
-} );
-
-test( 'getSelectedRelation (relation missing) ...', ( assert ) => {
-	const testee = createTestee();
-
-	const $option = new JqueryObject();
-	$option.data.returns( undefined );
-
-	const $select = new JqueryObject();
-	$select.find.returns( $option );
-
-	assert.equal(
-		testee.getSelectedRelation( $select ),
-		'',
-		'... SHOULD return an empty string.'
-	);
-
-	assert.end();
-} );
-
-test( 'getSelectedRelation (relation specified) ...', ( assert ) => {
-	const testee = createTestee();
-
-	const relation = F.getRandomString();
-
-	const $option = new JqueryObject();
-	$option.data.returns( relation );
-
-	const $select = new JqueryObject();
-	$select.find.returns( $option );
-
-	assert.equal(
-		testee.getSelectedRelation( $select ),
-		relation,
-		'... SHOULD return the expected relation.'
-	);
-
-	assert.end();
-} );
-
-test( 'selectTerm (matching relation) ...', ( assert ) => {
-	const testee = createTestee();
-
-	const termID = F.getRandomInteger();
-
-	const $option = new JqueryObject( {
-		_elements: [ 'element' ]
-	} );
-	$option.val.returns( termID );
-
-	const $select = new JqueryObject();
-	$select.find.returns( $option );
-
-	assert.equal(
-		testee.selectTerm( $select, 'relation' ),
+		testee.setTermOperation.calledWith( siteId, 'select' ),
 		true,
-		'... SHOULD return the expected result.'
+		'... SHOULD set the select term operation for the expected site.'
 	);
 
-	assert.equal(
-		$select.val.calledWith( termID ),
-		true,
-		'... SHOULD set the expected value.'
-	);
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );
 
-test( 'selectTerm (no matching relation) ...', ( assert ) => {
-	const testee = createTestee();
+test( 'setTermOperation ...', ( assert ) => {
+	const testee = new TermTranslator();
 
-	// Make method return a random string (i.e., relation found).
-	// Due to incompatible arguments, this has to stay an arrow function (i..e, not just a function reference).
-	testee.getSelectedRelation = () => F.getRandomString();
+	const siteId = F.getRandomInteger();
 
-	const termID = F.getRandomInteger();
+	const operation = F.getRandomString();
 
-	const $option = new JqueryObject();
-	$option.val.returns( termID );
+	const $radio = new JqueryObject();
 
-	const $options = new JqueryObject();
-	$options.first.returns( $option );
+	$.withArgs( `#mlp_related_term_op-${siteId}-${operation}` ).returns( $radio );
 
-	const $select = new JqueryObject();
-	$select.find.returns( $options );
+	testee.setTermOperation( siteId, operation );
 
 	assert.equal(
-		testee.selectTerm( $select, 'relation' ),
+		$radio.prop.calledWith( 'checked', true ),
 		true,
-		'... SHOULD return the expected result.'
+		'... SHOULD select the expected radio input.'
 	);
 
-	assert.equal(
-		$select.val.calledWith( termID ),
-		true,
-		'... SHOULD set the expected value.'
-	);
-
-	assert.end();
-} );
-
-test( 'selectTerm (relation missing) ...', ( assert ) => {
-	const testee = createTestee();
-
-	// Make method return an empty string (i.e., no relation found).
-	testee.getSelectedRelation = F.returnEmptyString;
-
-	const $select = new JqueryObject();
-	$select.find.returns( new JqueryObject() );
-
-	assert.equal(
-		testee.selectTerm( $select, 'relation' ),
-		false,
-		'... SHOULD return the expected result.'
-	);
-
-	assert.equal(
-		$select.val.callCount,
-		0,
-		'... SHOULD NOT set a term value.'
-	);
+	// Restore global scope.
+	globalStub.restore();
 
 	assert.end();
 } );

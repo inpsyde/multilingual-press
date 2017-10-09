@@ -73,7 +73,7 @@ final class ImmutablePluginProperties implements PluginProperties {
 	 *
 	 * @return mixed The value of the property with the given name.
 	 *
-	 * @throws PropertyNotSet if there is no property with the given name.
+	 * @throws PropertyNotSet If there is no property with the given name.
 	 */
 	public function offsetGet( $name ) {
 

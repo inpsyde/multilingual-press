@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Relations\Post\Search;
+namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search;
 
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
+use Inpsyde\MultilingualPress\Translation\Post\RelationshipContext;
 
 /**
  * Relationship control search results view implementation displaying the post status of unpublished posts.
  *
- * @package Inpsyde\MultilingualPress\Relations\Post\Search
+ * @package Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search
  * @since   3.0.0
  */
 final class StatusAwareSearchResultsView implements SearchResultsView {
@@ -55,7 +55,7 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 
 			printf(
 				'<li><label for="%4$s"><input type="radio" name="%2$s" value="%3$d" id="%4$s"> %1$s</label></li>',
-				$this->get_post_title( $post ),
+				esc_html( $this->get_post_title( $post ) ),
 				esc_attr( "mlp_add_post[{$site_id}]" ),
 				esc_attr( $post->ID ),
 				esc_attr( "mlp-rc-search-result-{$site_id}-{$post->ID}" )
@@ -73,11 +73,11 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 	private function get_post_title( \WP_Post $post ): string {
 
 		if ( 'publish' === $post->post_status ) {
-			return (string) esc_html( $post->post_title );
+			return (string) $post->post_title;
 		}
 
 		/* translators: 1: post title, 2: post status */
-		$format = esc_html__( '%1$s &mdash; %2$s', 'multilingualpress' );
+		$format = __( '%1$s &mdash; %2$s', 'multilingualpress' );
 
 		return sprintf(
 			$format,
@@ -100,6 +100,6 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 			$cache = get_post_statuses();
 		}
 
-		return (string) ( $cache[ $status ] ?? esc_html( $status ) );
+		return (string) ( $cache[ $status ] ?? $status );
 	}
 }

@@ -76,6 +76,8 @@ class ActionLink {
 			return (array) $callback( $links, $this->id, $this->html );
 		}
 
-		return array_merge( $links, [ $this->id => $this->html ] );
+		return array_merge( $links, [
+			$this->id => $this->html,
+		] );
 	}
 }

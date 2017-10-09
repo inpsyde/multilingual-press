@@ -11,13 +11,31 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
 interface Redirector {
 
 	/**
-	 * Filter hook.
+	 * Hook name.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @var string
 	 */
-	const FILTER_URL = 'multilingualpress.redirect_url';
+	const FILTER_TYPE = 'multilingualpress.redirector_type';
+
+	/**
+	 * Redirector type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const TYPE_JAVASCRIPT = 'JAVASCRIPT';
+
+	/**
+	 * Redirector type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const TYPE_PHP = 'PHP';
 
 	/**
 	 * Redirects the user to the best-matching language version, if any.

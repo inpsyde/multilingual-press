@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Relations\Term;
+namespace Inpsyde\MultilingualPress\Translation\Term;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
 
@@ -11,12 +11,10 @@ use function Inpsyde\MultilingualPress\site_exists;
 /**
  * Permission checker to be used to either permit or prevent access to terms.
  *
- * @package Inpsyde\MultilingualPress\Relations\Term
+ * @package Inpsyde\MultilingualPress\Translation\Term
  * @since   3.0.0
  */
 class RelationshipPermission {
-
-	// TODO: Discuss usage of term ID (instead of term taxonomy ID)! Content relations work with TTID, so why use TID?
 
 	/**
 	 * @var ContentRelations
@@ -94,7 +92,7 @@ class RelationshipPermission {
 		}
 
 		$switched = false;
-		if ( (int) get_current_blog_id() !== $related_site_id ) {
+		if ( get_current_blog_id() !== $related_site_id ) {
 			$switched = true;
 			switch_to_blog( $related_site_id );
 		}
@@ -103,7 +101,7 @@ class RelationshipPermission {
 		if ( $switched && ! taxonomy_exists( $term->taxonomy ) ) {
 			restore_current_blog();
 
-			return - 1;
+			return -1;
 		}
 
 		// This is just to be extra careful in case the term has been deleted via MySQL etc.

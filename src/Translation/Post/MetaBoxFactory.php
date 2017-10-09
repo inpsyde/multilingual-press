@@ -8,6 +8,7 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\API\SiteRelations;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\SiteAwareMetaBoxController;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\TranslationMetaBoxController;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 
@@ -71,23 +72,40 @@ class MetaBoxFactory {
 			return [];
 		}
 
-		$current_site_id = (int) get_current_blog_id();
+		$current_site_id = get_current_blog_id();
 
 		$related_site_ids = $this->site_relations->get_related_site_ids( $current_site_id, false );
 		if ( ! $related_site_ids ) {
 			return [];
 		}
 
-		$related_post_ids = $this->content_relations->get_relations( $current_site_id, $post->ID, 'post' );
+		$relations = $this->content_relations->get_relations(
+			$current_site_id,
+			(int) $post->ID,
+			ContentRelations::CONTENT_TYPE_POST
+		);
 
-		return array_map( function ( int $site_id ) use ( $related_post_ids ) {
+		$controllers = [];
 
-			$related_post = empty( $related_post_ids[ $site_id ] )
+		$state = NetworkState::create();
+
+		foreach ( $related_site_ids as $site_id ) {
+			switch_to_blog( $site_id );
+
+			if ( ! post_type_exists( $post->post_type ) ) {
+				continue;
+			}
+
+			$related_post = empty( $relations[ $site_id ] )
 				? null
-				: get_blog_post( $site_id, $related_post_ids[ $site_id ] );
+				: get_post( $relations[ $site_id ] );
 
-			return $this->create_meta_box_for_site( $site_id, $related_post );
-		}, $related_site_ids );
+			$controllers[] = $this->create_meta_box_for_site( $site_id, $related_post );
+		}
+
+		$state->restore();
+
+		return $controllers;
 	}
 
 	/**

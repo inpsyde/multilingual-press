@@ -15,7 +15,7 @@ interface ServiceProviderCollection extends \Countable {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param ServiceProvider $provider The provider to be registered
+	 * @param ServiceProvider $provider The provider to be registered.
 	 *
 	 * @return ServiceProviderCollection The instance that also contains the given provider.
 	 */
@@ -26,7 +26,7 @@ interface ServiceProviderCollection extends \Countable {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param ServiceProvider $provider The provider to be registered
+	 * @param ServiceProvider $provider The provider to be registered.
 	 *
 	 * @return ServiceProviderCollection The instance that does not contain the given provider.
 	 */

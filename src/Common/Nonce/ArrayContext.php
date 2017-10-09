@@ -57,7 +57,7 @@ final class ArrayContext implements Context {
 	 *
 	 * @return mixed The value with the given name.
 	 *
-	 * @throws ContextValueNotSet if there is no value with the given name.
+	 * @throws ContextValueNotSet If there is no value with the given name.
 	 */
 	public function offsetGet( $name ) {
 

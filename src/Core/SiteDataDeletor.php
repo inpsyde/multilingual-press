@@ -67,7 +67,7 @@ class SiteDataDeletor {
 
 		$site_id = (int) $site_id;
 
-		$this->content_relations->delete_relations_for_site( $site_id );
+		$this->content_relations->delete_all_relations_for_site( $site_id );
 
 		$this->site_relations->delete_relation( $site_id );
 

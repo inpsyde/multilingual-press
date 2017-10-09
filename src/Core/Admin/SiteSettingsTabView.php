@@ -77,21 +77,21 @@ final class SiteSettingsTabView implements SettingsPageView {
 
 		$site_id = (int) $this->request->body_value( 'id', INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
 		if ( ! $site_id ) {
-			wp_die( __( 'Invalid site ID.', 'multilingualpress' ) );
+			wp_die( esc_html__( 'Invalid site ID.', 'multilingualpress' ) );
 		}
 
 		$site = get_site( $site_id );
 		if ( ! $site ) {
-			wp_die( __( 'The requested site does not exist.', 'multilingualpress' ) );
+			wp_die( esc_html__( 'The requested site does not exist.', 'multilingualpress' ) );
 		}
 		?>
 		<div class="wrap">
 			<?php $this->render_head( $site ); ?>
-			<form action="<?php echo admin_url( 'admin-post.php' ); ?>" method="post">
+			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
 				<input type="hidden" name="action"
 					value="<?php echo esc_attr( SiteSettingsUpdateRequestHandler::ACTION ); ?>">
 				<input type="hidden" name="id" value="<?php echo esc_attr( $site_id ); ?>">
-				<?php echo nonce_field( $this->nonce ); ?>
+				<?php nonce_field( $this->nonce ); ?>
 				<table class="form-table mlp-admin-settings-table">
 					<?php $this->view->render( $site_id ); ?>
 				</table>
@@ -119,11 +119,11 @@ final class SiteSettingsTabView implements SettingsPageView {
 		<?php settings_errors(); ?>
 		<p class="edit-site-actions">
 			<a href="<?php echo esc_url( get_home_url( $site_id, '/' ) ); ?>">
-				<?php _e( 'Visit', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Visit', 'multilingualpress' ); ?>
 			</a>
 			|
 			<a href="<?php echo esc_url( get_admin_url( $site_id ) ); ?>">
-				<?php _e( 'Dashboard', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Dashboard', 'multilingualpress' ); ?>
 			</a>
 		</p>
 		<?php

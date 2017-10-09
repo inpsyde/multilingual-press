@@ -1,13 +1,13 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Relations\Post\Search;
+namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search;
 
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
+use Inpsyde\MultilingualPress\Translation\Post\RelationshipContext;
 
 /**
  * Interface for all search implementations.
  *
- * @package Inpsyde\MultilingualPress\Relations\Post\Search
+ * @package Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search
  * @since   3.0.0
  */
 interface Search {
@@ -20,6 +20,15 @@ interface Search {
 	 * @var string
 	 */
 	const ARG_NAME = 's';
+
+	/**
+	 * Hook name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_ARGUMENTS = 'multilingualpress.remote_post_search_arguments';
 
 	/**
 	 * Returns the latest/best-matching posts with respect to the given context.

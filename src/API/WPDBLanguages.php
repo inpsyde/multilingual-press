@@ -115,10 +115,13 @@ final class WPDBLanguages implements Languages {
 		$iso_codes = [];
 
 		foreach ( $languages as $site_id => $language ) {
-			if ( ! empty( $language['lang'] ) ) {
-				$names[ $site_id ] = str_replace( '_', '-', $language['lang'] );
-			} elseif ( ! empty( $language['text'] ) && preg_match( '~[a-zA-Z-]+~', $language['text'] ) ) {
-				$names[ $site_id ] = str_replace( '_', '-', $language['text'] );
+			if ( ! empty( $language[ SiteSettingsRepository::KEY_LANGUAGE ] ) ) {
+				$names[ $site_id ] = str_replace( '_', '-', $language[ SiteSettingsRepository::KEY_LANGUAGE ] );
+			} elseif ( ! empty( $language[ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ] ) ) {
+				$alternative_language_title = $language[ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ];
+				if ( preg_match( '~[a-zA-Z-]+~', $alternative_language_title ) ) {
+					$names[ $site_id ] = str_replace( '_', '-', $alternative_language_title );
+				}
 			}
 
 			if ( isset( $names[ $site_id ] ) && false === strpos( $names[ $site_id ], '-' ) ) {
@@ -127,7 +130,7 @@ final class WPDBLanguages implements Languages {
 				$iso_codes[ $site_id ] = $names[ $site_id ];
 			}
 
-			unset( $languages[ $site_id ]['lang'] );
+			unset( $languages[ $site_id ][ SiteSettingsRepository::KEY_LANGUAGE ] );
 		}
 
 		$names_string = "'" . implode( "','", array_map( 'esc_sql', $names ) ) . "'";
@@ -260,7 +263,9 @@ final class WPDBLanguages implements Languages {
 			$updated += (int) $this->db->update(
 				$this->table,
 				(array) $language,
-				[ LanguagesTable::COLUMN_ID => $id ],
+				[
+					LanguagesTable::COLUMN_ID => $id,
+				],
 				$this->get_field_specifications( $language ),
 				'%d'
 			);
@@ -470,7 +475,7 @@ final class WPDBLanguages implements Languages {
 	/**
 	 * Checks if the given element is an array that has a valid field element.
 	 *
-	 * @param mixed $maybe_array Maybe an array
+	 * @param mixed $maybe_array Maybe an array.
 	 *
 	 * @return bool Whether or not the given element is an array that has a valid field element.
 	 */

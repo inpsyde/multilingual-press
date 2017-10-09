@@ -106,6 +106,123 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 */
 	public function get_redirect_target( array $args = [] ): RedirectTarget {
 
+		$targets = $this->get_redirect_targets( $args );
+		if ( ! $targets ) {
+			return new RedirectTarget();
+		}
+
+		$targets = array_filter( $targets, function ( RedirectTarget $target ) {
+
+			return 0 < $target->user_priority();
+		} );
+
+		if ( ! $targets ) {
+			return new RedirectTarget();
+		}
+
+		uasort( $targets, function ( RedirectTarget $a, RedirectTarget $b ) {
+
+			return ( $b->priority() * $b->user_priority() ) <=> ( $a->priority() * $a->user_priority() );
+		} );
+
+		return reset( $targets );
+	}
+
+	/**
+	 * Returns the redirect target data objects for all available language versions.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $args Optional. Arguments required to determine the redirect targets. Defaults to empty array.
+	 *
+	 * @return RedirectTarget[] Array of redirect target objects.
+	 */
+	public function get_redirect_targets( array $args = [] ): array {
+
+		$current_site_id = get_current_blog_id();
+
+		$translations = $this->get_translations( $args );
+
+		$targets = [];
+
+		array_walk( $translations, function (
+			Translation $translation,
+			$site_id,
+			$user_languages
+		) use ( &$targets, $current_site_id ) {
+
+			$language = $translation->language();
+
+			$user_priority = $this->get_language_priority( $language, $user_languages );
+
+			/**
+			 * Filters the redirect URL.
+			 *
+			 * @since 3.0.0
+			 *
+			 * @param string      $url             Redirect URL.
+			 * @param Language    $language        Language object.
+			 * @param Translation $translation     Translation object.
+			 * @param int         $current_site_id Current site ID.
+			 */
+			$url = (string) apply_filters(
+				LanguageNegotiator::FILTER_URL,
+				$translation->remote_url(),
+				$language,
+				$translation,
+				$current_site_id
+			);
+
+			$targets[] = new RedirectTarget( [
+				RedirectTarget::KEY_CONTENT_ID    => $translation->target_content_id(),
+				RedirectTarget::KEY_LANGUAGE      => $language->name( 'http_code' ),
+				RedirectTarget::KEY_PRIORITY      => $language->priority(),
+				RedirectTarget::KEY_SITE_ID       => $site_id,
+				RedirectTarget::KEY_URL           => $url,
+				RedirectTarget::KEY_USER_PRIORITY => $user_priority,
+			] );
+		}, $this->get_user_languages() );
+
+		/**
+		 * Filters the possible redirect target objects.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param RedirectTarget[] $targets      Possible redirect target objects.
+		 * @param Translation[]    $translations Translation objects.
+		 */
+		$targets = (array) apply_filters( self::FILTER_REDIRECT_TARGETS, $targets, $translations );
+
+		if ( ! $targets ) {
+			return [];
+		}
+
+		$targets = array_filter( $targets, function ( $target ) {
+
+			return $target instanceof RedirectTarget;
+		} );
+
+		if ( ! $targets ) {
+			return [];
+		}
+
+		uasort( $targets, function ( RedirectTarget $a, RedirectTarget $b ) {
+
+			return $b->priority() <=> $a->priority();
+		} );
+
+		return $targets;
+	}
+
+	/**
+	 * Returns all translations according to the given arguments.
+	 *
+	 * @param array $args Arguments required to fetch the translations.
+	 *
+	 * @return Translation[] An array with site IDs as keys and Translation objects as values.
+	 */
+	private function get_translations( array $args = [] ): array {
+
 		/**
 		 * Filters the allowed status for posts to be included as possible redirect targets.
 		 *
@@ -121,76 +238,10 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 			'include_base' => true,
 			'post_status'  => $post_status,
 		], $args ) );
-		if ( ! $translations ) {
-			return new RedirectTarget();
-		}
 
-		$targets = $this->get_redirect_targets( $translations );
-		if ( ! $targets ) {
-			return new RedirectTarget();
-		}
-
-		uasort( $targets, function ( RedirectTarget $a, RedirectTarget $b ) {
-
-			return $b->priority() <=> $a->priority();
-		} );
-
-		return reset( $targets );
-	}
-
-	/**
-	 * Returns all possible redirect target objects for the given translations.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param Translation[] $translations Translation objects.
-	 *
-	 * @return RedirectTarget[] An array of redirect target objects.
-	 */
-	private function get_redirect_targets( array $translations ): array {
-
-		$user_languages = $this->get_user_languages();
-		if ( ! $user_languages ) {
-			return [];
-		}
-
-		$translations = array_filter( $translations, function ( Translation $translation ) {
+		return array_filter( $translations, function ( Translation $translation ) {
 
 			return $translation->remote_url();
-		} );
-
-		$targets = [];
-
-		array_walk( $translations, function ( Translation $translation, $site_id, $user_languages ) use ( &$targets ) {
-
-			$language = $translation->language();
-
-			$user_priority = $this->get_language_priority( $language, $user_languages );
-
-			if ( 0 < $user_priority ) {
-				$targets[] = new RedirectTarget( [
-					RedirectTarget::KEY_CONTENT_ID => $translation->target_content_id(),
-					RedirectTarget::KEY_LANGUAGE   => $language->name( 'http' ),
-					RedirectTarget::KEY_PRIORITY   => $language->priority() * $user_priority,
-					RedirectTarget::KEY_SITE_ID    => $site_id,
-					RedirectTarget::KEY_URL        => $translation->remote_url(),
-				] );
-			}
-		}, $user_languages );
-
-		/**
-		 * Filters the possible redirect target objects.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param RedirectTarget[] $targets      Possible redirect target objects.
-		 * @param Translation[]    $translations Translation objects.
-		 */
-		$targets = (array) apply_filters( self::FILTER_REDIRECT_TARGETS, $targets, $translations );
-
-		return array_filter( $targets, function ( $target ) {
-
-			return $target instanceof RedirectTarget;
 		} );
 	}
 
@@ -201,7 +252,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 */
 	private function get_user_languages(): array {
 
-		$fields = $this->request->parsed_header( 'ACCEPT_LANGUAGE', $this->parser );
+		$fields = $this->request->parsed_header( 'HTTP_ACCEPT_LANGUAGE', $this->parser );
 		if ( ! $fields ) {
 			return [];
 		}

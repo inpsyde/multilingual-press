@@ -76,7 +76,9 @@ final class ContextAwareSiteRelationsChecker implements SiteRelationsChecker {
 				'multilingualpress'
 			);
 
-			( new AdminNotice( "<p>{$message}</p>", [ 'type' => 'error' ] ) )->render();
+			( new AdminNotice( "<p>{$message}</p>", [
+				'type' => 'error',
+			] ) )->render();
 		} );
 	}
 }

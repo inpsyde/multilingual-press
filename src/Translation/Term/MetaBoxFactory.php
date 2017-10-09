@@ -21,6 +21,11 @@ use Inpsyde\MultilingualPress\Translation\Term\MetaBox\TranslationMetaBoxControl
 class MetaBoxFactory {
 
 	/**
+	 * @var ActiveTaxonomies
+	 */
+	private $active_taxonomies;
+
+	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -31,18 +36,13 @@ class MetaBoxFactory {
 	private $site_relations;
 
 	/**
-	 * @var ActiveTaxonomies
-	 */
-	private $active_taxonomies;
-
-	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param SiteRelations    $site_relations    Site relations API object.
 	 * @param ContentRelations $content_relations Content relations API object.
-	 * @param ActiveTaxonomies  $active_taxonomies Active taxonomies object.
+	 * @param ActiveTaxonomies $active_taxonomies Active taxonomies object.
 	 */
 	public function __construct(
 		SiteRelations $site_relations,
@@ -68,30 +68,33 @@ class MetaBoxFactory {
 	 */
 	public function create_meta_boxes( \WP_Term $term ): array {
 
-		$current_site_id = (int) get_current_blog_id();
+		if ( ! $this->active_taxonomies->includes( $term->taxonomy ) ) {
+			return [];
+		}
+
+		$current_site_id = get_current_blog_id();
 
 		$related_site_ids = $this->site_relations->get_related_site_ids( $current_site_id, false );
 		if ( ! $related_site_ids ) {
 			return [];
 		}
 
-		$related_post_ids = $this->content_relations->get_relations( $current_site_id, $term->term_id, 'term' );
+		$relations = $this->content_relations->get_relations( $current_site_id, (int) $term->term_taxonomy_id, 'term' );
 
 		$controllers = [];
 
 		$state = NetworkState::create();
 
-		foreach ( $related_post_ids as $site_id ) {
-
+		foreach ( $related_site_ids as $site_id ) {
 			switch_to_blog( $site_id );
 
 			if ( ! taxonomy_exists( $term->taxonomy ) ) {
 				continue;
 			}
 
-			$related_term = empty( $related_post_ids[ $site_id ] )
+			$related_term = empty( $relations[ $site_id ] )
 				? null
-				: get_term( $related_post_ids[ $site_id ], $term->taxonomy );
+				: get_term( $relations[ $site_id ], $term->taxonomy );
 
 			$controllers[] = $this->create_meta_box_for_site( $site_id, $related_term );
 		}
@@ -120,7 +123,10 @@ class MetaBoxFactory {
 	 *
 	 * @return SiteAwareMetaBoxController Post translation meta box controller.
 	 */
-	private function create_meta_box_for_site( int $site_id, \WP_Term $related_term = null ): SiteAwareMetaBoxController {
+	private function create_meta_box_for_site(
+		int $site_id,
+		\WP_Term $related_term = null
+	): SiteAwareMetaBoxController {
 
 		return new TranslationMetaBoxController(
 			$site_id,

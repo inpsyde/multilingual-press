@@ -1,13 +1,13 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Relations\Post\Search;
+namespace Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search;
 
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipContext;
+use Inpsyde\MultilingualPress\Translation\Post\RelationshipContext;
 
 /**
  * Interface for all relationship control search results view implementations.
  *
- * @package Inpsyde\MultilingualPress\Relations\Post\Search
+ * @package Inpsyde\MultilingualPress\Translation\Post\MetaBox\Search
  * @since   3.0.0
  */
 interface SearchResultsView {

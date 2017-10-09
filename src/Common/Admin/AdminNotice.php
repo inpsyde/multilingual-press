@@ -61,7 +61,7 @@ class AdminNotice {
 
 		?>
 		<div class="<?php echo esc_attr( $this->classes ); ?>">
-			<?php echo $this->content; ?>
+			<?php echo wp_kses_post( $this->content ); ?>
 		</div>
 		<?php
 	}

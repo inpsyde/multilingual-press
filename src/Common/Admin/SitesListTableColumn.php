@@ -90,7 +90,9 @@ class SitesListTableColumn {
 			return (array) $callback( $columns, $this->id, $this->name );
 		}
 
-		return array_merge( $columns, [ $this->id => $this->name ] );
+		return array_merge( $columns, [
+			$this->id => $this->name,
+		] );
 	}
 
 	/**
@@ -109,7 +111,7 @@ class SitesListTableColumn {
 		if ( $id === $this->id ) {
 			$callback = $this->render_callback;
 
-			echo $callback( $id, (int) $site_id );
+			echo wp_kses_post( $callback( $id, (int) $site_id ) );
 
 			return true;
 		}

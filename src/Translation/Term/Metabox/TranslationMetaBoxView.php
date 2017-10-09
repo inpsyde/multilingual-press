@@ -139,31 +139,47 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 	}
 
 	/**
-	 * Returns the rendered HTML.
+	 * Reenders the HTML.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string Rendered HTML.
+	 * @return void
 	 */
-	public function render(): string {
+	public function render() {
 
 		if ( ! $this->source_term ) {
-			return '';
+			return;
 		}
 
 		$title = ( $this->data['meta_box'] ?? null ) instanceof MetaBox ? $this->data['meta_box']->title() : '';
 
-		list( $open, $close ) = $this->wrap_markup( ! empty( $this->data ), $title );
+		list( $open, $close ) = $this->wrap_markup( ! empty( $this->data['update'] ), $title );
+
+		$tags = [
+			'div'    => [
+				'class' => true,
+				'style' => true,
+			],
+			'label'  => [],
+			'strong' => [],
+			'td'     => [],
+			'th'     => [
+				'scope' => true,
+			],
+			'tr'     => [
+				'class' => true,
+			],
+		];
+
+		echo wp_kses( $open, $tags );
 
 		$args = [
 			$this->source_term,
 			$this->remote_site_id,
 			get_site_language( $this->remote_site_id ),
-			$this->data,
 			$this->remote_term,
+			$this->data,
 		];
-
-		ob_start();
 
 		/**
 		 * Fires right before the main content of the meta box.
@@ -173,8 +189,8 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 		 * @param \WP_Term      $term                 Source term object.
 		 * @param int           $remote_site_id       Remote site ID.
 		 * @param string        $remote_site_language Remote site language.
-		 * @param array         $data                 View data.
 		 * @param \WP_Term|null $remote_term          Remote term object.
+		 * @param array         $data                 Data to be used by the view.
 		 */
 		do_action( self::ACTION_RENDER_PREFIX . self::POSITION_TOP, ...$args );
 
@@ -186,8 +202,8 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 		 * @param \WP_Term      $term                 Source term object.
 		 * @param int           $remote_site_id       Remote site ID.
 		 * @param string        $remote_site_language Remote site language.
-		 * @param array         $data                 View data.
 		 * @param \WP_Term|null $remote_term          Remote term object.
+		 * @param array         $data                 Data to be used by the view.
 		 */
 		do_action( self::ACTION_RENDER_PREFIX . self::POSITION_MAIN, ...$args );
 
@@ -199,14 +215,12 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 		 * @param \WP_Term      $term                 Source term object.
 		 * @param int           $remote_site_id       Remote site ID.
 		 * @param string        $remote_site_language Remote site language.
-		 * @param array         $data                 View data.
 		 * @param \WP_Term|null $remote_term          Remote term object.
+		 * @param array         $data                 Data to be used by the view.
 		 */
 		do_action( self::ACTION_RENDER_PREFIX . self::POSITION_BOTTOM, ...$args );
 
-		$markup = ob_get_clean();
-
-		return $open . $markup . $close;
+		echo wp_kses( $close, $tags );
 	}
 
 	/**
@@ -217,11 +231,17 @@ final class TranslationMetaBoxView implements TermMetaBoxView {
 	 */
 	private function wrap_markup( bool $update, string $title ): array {
 
-		$format = $update
-			? '<tr class="form-field"><th scope="row">%s</th><td>'
-			: '<div class="form-field" style="padding: 2em 0;"><strong>%s</strong>';
+		if ( $update ) {
+			$opening = '<tr class="form-field"><th scope="row">%s</th><td>';
+			$closing = '</td></tr>';
+		} else {
+			$opening = '<div class="form-field"><label>%s</label>';
+			$closing = '</div>';
+		}
 
-		return [ sprintf( $format, $title ), $update ? '</td></tr>' : '</div>' ];
-
+		return [
+			sprintf( $opening, $title ),
+			$closing,
+		];
 	}
 }

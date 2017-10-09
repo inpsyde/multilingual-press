@@ -79,25 +79,24 @@ final class QuicklinksSettingsBox implements SettingsBoxViewModel {
 	}
 
 	/**
-	 * Returns the markup for the settings box.
+	 * Renders the markup for the settings box.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string The markup for the settings box.
+	 * @return void
 	 */
-	public function markup(): string {
+	public function render() {
 
 		$available_positions = $this->repository->get_available_positions();
 
-		$markup = nonce_field( $this->nonce ) . '<p id="mlp-quicklinks">';
+		$current_position = $this->repository->get_current_position();
 
-		ob_start();
-
-		array_walk( $available_positions, [ $this, 'render_position' ], $this->repository->get_current_position() );
-
-		$markup .= ob_get_clean() . '</p>';
-
-		return $markup;
+		nonce_field( $this->nonce );
+		?>
+		<p id="mlp-quicklinks">
+			<?php array_walk( $available_positions, [ $this, 'render_position' ], $current_position ); ?>
+		</p>
+		<?php
 	}
 
 	/**

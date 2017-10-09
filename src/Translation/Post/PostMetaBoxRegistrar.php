@@ -17,7 +17,6 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Post\PostMetaBoxView;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\Post\PostMetaUpdater;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\PriorityAwareMetaBox;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\SiteAwareMetaBoxController;
-use Inpsyde\MultilingualPress\Relations\Post\RelationshipPermission;
 use Inpsyde\MultilingualPress\Translation\Post\MetaBox\SourcePostSaveContext;
 
 use function Inpsyde\MultilingualPress\nonce_field;
@@ -162,15 +161,17 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 	 * @param MetaBoxUI $ui Meta box UI object.
 	 *
 	 * @return UIAwareMetaBoxRegistrar
+	 *
+	 * @throws \BadMethodCallException If there already has been set a user interface.
 	 */
 	public function set_ui( MetaBoxUI $ui ): UIAwareMetaBoxRegistrar {
 
-		// Don't allow overwrite
+		// Don't allow overwrite.
 		if ( $this->ui ) {
 			throw new \BadMethodCallException( sprintf( 'It is not possible to override UI for %s.', __CLASS__ ) );
 		}
 
-		// Don't do anything if called too early
+		// Don't do anything if called too early.
 		if ( did_action( self::ACTION_INIT_META_BOXES ) ) {
 			$this->ui = $ui;
 		}
@@ -192,8 +193,12 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			$this->add_meta_boxes( $post, (string) $post_type );
 		}, 10, 2 );
 
-		/** @noinspection PhpUnusedParameterInspection */
-		add_action( 'save_post', function ( $post_id, \WP_Post $post, $update ) {
+		add_action( 'save_post', function (
+			/** @noinspection PhpUnusedParameterInspection */
+			$post_id,
+			\WP_Post $post,
+			$update
+		) {
 
 			$this->save_metadata_for_post( $post, (bool) $update );
 		}, 10, 3 );
@@ -274,8 +279,8 @@ final class PostMetaBoxRegistrar implements UIAwareMetaBoxRegistrar {
 			$meta_box->title(),
 			function ( \WP_Post $post ) use ( $meta_box, $view ) {
 
-				echo nonce_field( $this->create_nonce_for_meta_box( $meta_box ) );
-				echo $view->with_post( $post )->render();
+				nonce_field( $this->create_nonce_for_meta_box( $meta_box ) );
+				$view->with_post( $post )->render();
 			},
 			$post_type,
 			$meta_box->context(),
