@@ -11,6 +11,8 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
  *
  * @package Inpsyde\MultilingualPress\Module\Redirect
  * @since   3.0.0
+ *
+ * @TODO This is currently not used anywhere, think about this again when refactoring cache.
  */
 final class NoredirectObjectCacheStorage implements NoredirectStorage {
 

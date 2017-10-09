@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 use function Inpsyde\MultilingualPress\nonce_field;
 
@@ -17,28 +18,36 @@ use function Inpsyde\MultilingualPress\nonce_field;
 class TranslationCompletedSettingView {
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * @var Nonce
 	 */
 	private $nonce;
 
 	/**
-	 * @var PostRepository
+	 * @var PostsRepository
 	 */
-	private $post_repository;
+	private $posts_repository;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param PostRepository $post_repository Untranslated posts repository object.
-	 * @param Nonce          $nonce           Nonce object.
+	 * @param PostsRepository $posts_repository  Untranslated posts repository object.
+	 * @param Nonce           $nonce             Nonce object.
+	 * @param ActivePostTypes $active_post_types Active post types storage object.
 	 */
-	public function __construct( PostRepository $post_repository, Nonce $nonce ) {
+	public function __construct( PostsRepository $posts_repository, Nonce $nonce, ActivePostTypes $active_post_types ) {
 
-		$this->post_repository = $post_repository;
+		$this->posts_repository = $posts_repository;
 
 		$this->nonce = $nonce;
+
+		$this->active_post_types = $active_post_types;
 	}
 
 	/**
@@ -53,9 +62,13 @@ class TranslationCompletedSettingView {
 	 */
 	public function render( \WP_Post $post ) {
 
+		if ( ! $this->active_post_types->includes( (string) $post->post_type ) ) {
+			return;
+		}
+
 		$post_id = (int) $post->ID;
 
-		$translated = $this->post_repository->is_post_translated( $post_id );
+		$translated = $this->posts_repository->is_post_translated( $post_id );
 
 		/**
 		 * Filters whether or not the checkbox for the current post should be rendered.
@@ -75,9 +88,9 @@ class TranslationCompletedSettingView {
 		<div class="misc-pub-section misc-pub-mlp-translation-completed">
 			<?php echo nonce_field( $this->nonce ); ?>
 			<label for="<?php echo esc_attr( $id ); ?>">
-				<input type="checkbox" name="<?php echo esc_attr( PostRepository::META_KEY ); ?>"
+				<input type="checkbox" name="<?php echo esc_attr( PostsRepository::META_KEY ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>" <?php checked( $translated ); ?>>
-				<?php _e( 'Translation completed', 'multilingual-press' ); ?>
+				<?php _e( 'Translation completed', 'multilingualpress' ); ?>
 			</label>
 		</div>
 		<?php

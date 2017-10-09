@@ -15,7 +15,9 @@ interface LanguageNegotiator {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param array $args Optional. Arguments required to determine the redirect targets. Defaults to empty array.
+	 *
 	 * @return RedirectTarget Redirect target object.
 	 */
-	public function get_redirect_target(): RedirectTarget;
+	public function get_redirect_target( array $args = [] ): RedirectTarget;
 }

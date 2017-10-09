@@ -29,6 +29,11 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.active_plugins'] = function () {
+
+			return new ActivePlugins();
+		};
+
 		$container['multilingualpress.attachment_copier'] = function ( Container $container ) {
 
 			return new WPDBAttachmentCopier(
@@ -36,11 +41,6 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 				$container['multilingualpress.base_path_adapter'],
 				$container['multilingualpress.table_string_replacer']
 			);
-		};
-
-		$container['multilingualpress.active_plugins'] = function () {
-
-			return new ActivePlugins();
 		};
 
 		$container['multilingualpress.site_duplication_activate_plugins_setting'] = function () {
@@ -78,7 +78,8 @@ final class SiteDuplicationServiceProvider implements BootstrappableServiceProvi
 				$container['multilingualpress.table_replacer'],
 				$container['multilingualpress.active_plugins'],
 				$container['multilingualpress.content_relations'],
-				$container['multilingualpress.attachment_copier']
+				$container['multilingualpress.attachment_copier'],
+				$container['multilingualpress.server_request']
 			);
 		};
 	}

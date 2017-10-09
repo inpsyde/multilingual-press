@@ -5,6 +5,8 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\NetworkState;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Post trasher.
@@ -13,6 +15,11 @@ use Inpsyde\MultilingualPress\API\ContentRelations;
  * @since   3.0.0
  */
 class Trasher {
+
+	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
 
 	/**
 	 * @var ContentRelations
@@ -36,12 +43,19 @@ class Trasher {
 	 *
 	 * @param TrasherSettingRepository $setting_repository Trasher setting repository object.
 	 * @param ContentRelations         $content_relations  Content relations API object.
+	 * @param ActivePostTypes          $active_post_types  Active post types storage object.
 	 */
-	public function __construct( TrasherSettingRepository $setting_repository, ContentRelations $content_relations ) {
+	public function __construct(
+		TrasherSettingRepository $setting_repository,
+		ContentRelations $content_relations,
+		ActivePostTypes $active_post_types
+	) {
 
 		$this->setting_repository = $setting_repository;
 
 		$this->content_relations = $content_relations;
+
+		$this->active_post_types = $active_post_types;
 	}
 
 	/**
@@ -55,6 +69,10 @@ class Trasher {
 	 * @return int The number of related posts trashed.
 	 */
 	public function trash_related_posts( $post_id ): int {
+
+		if ( ! $this->active_post_types->includes( (string) get_post_type( $post_id ) ) ) {
+			return 0;
+		}
 
 		if ( self::$trashing_related_posts || ! $this->setting_repository->get_setting( (int) $post_id ) ) {
 			return 0;
@@ -75,16 +93,20 @@ class Trasher {
 
 		$trashed_posts = 0;
 
+		$network_state = NetworkState::create();
+
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$trashed_posts ) {
 
 			switch_to_blog( $site_id );
+
 			$trashed = wp_trash_post( $post_id );
-			restore_current_blog();
 
 			if ( false !== $trashed && ! is_wp_error( $trashed ) ) {
 				$trashed_posts ++;
 			}
 		} );
+
+		$network_state->restore();
 
 		// Reset static flag.
 		self::$trashing_related_posts = false;

@@ -60,7 +60,7 @@ interface Table {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string[] An array with fields as keys and the according SQL definitions as values.
+	 * @return string[] An array with column names as keys and the according SQL definitions as values.
 	 */
 	public function schema(): array;
 }

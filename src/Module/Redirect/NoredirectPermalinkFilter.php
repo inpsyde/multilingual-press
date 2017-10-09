@@ -30,6 +30,21 @@ final class NoredirectPermalinkFilter implements Filter {
 	const QUERY_ARGUMENT = 'noredirect';
 
 	/**
+	 * @var int
+	 */
+	private $accepted_args;
+
+	/**
+	 * @var callable
+	 */
+	private $callback;
+
+	/**
+	 * @var string
+	 */
+	private $hook;
+
+	/**
 	 * @var string[]
 	 */
 	private $languages;
@@ -72,6 +87,25 @@ final class NoredirectPermalinkFilter implements Filter {
 		}
 
 		$url = (string) add_query_arg( static::QUERY_ARGUMENT, $languages[ $site_id ], $url );
+
+		return $url;
+	}
+
+	/**
+	 * Removes the noredirect query argument from the given URL, if present.
+	 *
+	 * @since   3.0.0
+	 * @wp-hook AlternateLanguages::FILTER_URL
+	 *
+	 * @param string $url URL.
+	 *
+	 * @return string The (filtered) URL.
+	 */
+	public function remove_noredirect_query_argument( string $url ): string {
+
+		if ( $url && preg_match( '/(\?|&)' . self::QUERY_ARGUMENT . '=/', $url ) ) {
+			$url = remove_query_arg( self::QUERY_ARGUMENT, $url );
+		}
 
 		return $url;
 	}

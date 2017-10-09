@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 
@@ -39,6 +40,11 @@ class PluginSettingsUpdater {
 	private $nonce;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * @var SettingsPage
 	 */
 	private $settings_page;
@@ -51,14 +57,22 @@ class PluginSettingsUpdater {
 	 * @param ModuleManager $module_manager Module manager object.
 	 * @param Nonce         $nonce          Nonce object.
 	 * @param SettingsPage  $settings_page  Settings page object.
+	 * @param Request       $request        HTTP request object.
 	 */
-	public function __construct( ModuleManager $module_manager, Nonce $nonce, SettingsPage $settings_page ) {
+	public function __construct(
+		ModuleManager $module_manager,
+		Nonce $nonce,
+		SettingsPage $settings_page,
+		Request $request
+	) {
 
 		$this->module_manager = $module_manager;
 
 		$this->nonce = $nonce;
 
 		$this->settings_page = $settings_page;
+
+		$this->request = $request;
 	}
 
 	/**
@@ -81,9 +95,9 @@ class PluginSettingsUpdater {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param array $_POST Request data.
+		 * @param Request $request HTTP request object.
 		 */
-		do_action( 'multilingualpress.save_modules', $_POST );
+		do_action( 'multilingualpress.save_modules', $this->request );
 
 		redirect_after_settings_update( $this->settings_page->url() );
 	}
@@ -97,7 +111,9 @@ class PluginSettingsUpdater {
 	 */
 	private function update_module( string $id ) {
 
-		if ( empty( $_POST['multilingualpress_modules'][ $id ] ) ) {
+		$modules = $this->request->body_value( 'multilingualpress_modules' );
+
+		if ( empty( $modules[ $id ] ) ) {
 			$this->module_manager->deactivate_module( $id );
 		} else {
 			$this->module_manager->activate_module( $id );

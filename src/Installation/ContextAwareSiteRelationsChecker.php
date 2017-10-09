@@ -73,7 +73,7 @@ final class ContextAwareSiteRelationsChecker implements SiteRelationsChecker {
 
 			$message = __(
 				"You didn't set up any site relationships. You have to set up these first to use MultilingualPress. Please go to Network Admin &raquo; Sites &raquo; and choose a site to edit. Then go to the tab MultilingualPress and set up the relationships.",
-				'multilingual-press'
+				'multilingualpress'
 			);
 
 			( new AdminNotice( "<p>{$message}</p>", [ 'type' => 'error' ] ) )->render();

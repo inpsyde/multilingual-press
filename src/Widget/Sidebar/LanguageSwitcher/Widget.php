@@ -32,9 +32,9 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 	 */
 	public function __construct( View $view ) {
 
-		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingual-press' ), [
+		parent::__construct( 'Mlp_Widget', __( 'Language Switcher', 'multilingualpress' ), [
 			'classname'                   => 'mlp_widget',
-			'description'                 => __( 'MultilingualPress Translations', 'multilingual-press' ),
+			'description'                 => __( 'MultilingualPress Translations', 'multilingualpress' ),
 			'customize_selective_refresh' => true,
 		] );
 
@@ -58,7 +58,7 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 			<?php
 			$id = $this->get_field_id( 'mlp_widget_title' );
 			?>
-			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Title', 'multilingual-press' ); ?></label><br>
+			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Title', 'multilingualpress' ); ?></label><br>
 			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_title' ) ); ?>"
 				value="<?php echo esc_attr( $instance['widget_title'] ?? '' ); ?>"
 				class="widefat" id="<?php echo esc_attr( $id ); ?>">
@@ -68,17 +68,17 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 			$id = $this->get_field_id( 'mlp_widget_link_type' );
 
 			$options = [
-				'none'           => __( 'None', 'multilingual-press' ),
-				'native'         => __( 'Native name', 'multilingual-press' ),
-				'text'           => __( 'Custom name', 'multilingual-press' ),
-				'english'        => __( 'English name', 'multilingual-press' ),
-				'http'           => __( 'Language code', 'multilingual-press' ),
-				'language_short' => __( 'Language code (short)', 'multilingual-press' ),
+				'native'         => __( 'Native name', 'multilingualpress' ),
+				'text'           => __( 'Custom name', 'multilingualpress' ),
+				'english'        => __( 'English name', 'multilingualpress' ),
+				'http'           => __( 'Language code', 'multilingualpress' ),
+				'language_short' => __( 'Language code (short)', 'multilingualpress' ),
+				'none'           => __( 'None', 'multilingualpress' ),
 			];
 
 			$link_type = $instance['widget_link_type'] ?? '';
 			?>
-			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Link text', 'multilingual-press' ); ?></label>
+			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Link text', 'multilingualpress' ); ?></label>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_link_type' ) ); ?>" class="widefat"
 				id="<?php echo esc_attr( $id ); ?>" autocomplete="off">
 				<?php foreach ( $options as $value => $text ) : ?>
@@ -90,18 +90,6 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 		</p>
 		<p>
 			<?php
-			$id = $this->get_field_id( 'mlp_widget_display_flag' );
-			?>
-			<label for="<?php echo esc_attr( $id ); ?>">
-				<input type="checkbox"
-					name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_display_flag' ) ); ?>" value="1"
-					id="<?php echo esc_attr( $id ); ?>"
-					<?php checked( ! empty( $instance['widget_display_flag'] ) ); ?>>
-				<?php _e( 'Show flag', 'multilingual-press' ); ?>
-			</label>
-		</p>
-		<p>
-			<?php
 			$id = $this->get_field_id( 'mlp_widget_show_current_blog' );
 			?>
 			<label for="<?php echo esc_attr( $id ); ?>">
@@ -109,7 +97,7 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 					name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_show_current_blog' ) ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>"
 					<?php checked( ! empty( $instance['widget_show_current_blog'] ) ); ?>>
-				<?php _e( 'Show current site', 'multilingual-press' ); ?>
+				<?php _e( 'Show current site', 'multilingualpress' ); ?>
 			</label>
 		</p>
 		<p>
@@ -121,7 +109,7 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 					name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_toggle_view_on_translated_posts' ) ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>"
 					<?php checked( ! empty( $instance['widget_toggle_view_on_translated_posts'] ) ); ?>>
-				<?php _e( 'Show links for translated content only.', 'multilingual-press' ); ?>
+				<?php _e( 'Show links for translated content only.', 'multilingualpress' ); ?>
 			</label>
 		</p>
 		<p>
@@ -129,12 +117,12 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 			// TODO: Don't hard-code settings page capability.
 			if ( current_user_can( 'manage_network_options' ) ) {
 				printf(
-					__( 'Languages are sorted by <a href="%s">priority</a>.', 'multilingual-press' ),
+					__( 'Languages are sorted by <a href="%s">priority</a>.', 'multilingualpress' ),
 					// TODO: Don't hard-code settings page URL/slug.
 					network_admin_url( 'settings.php?page=language-manager' )
 				);
 			} else {
-				_e( 'Languages are sorted by priority.', 'multilingual-press' );
+				_e( 'Languages are sorted by priority.', 'multilingualpress' );
 			}
 			?>
 		</p>
@@ -160,11 +148,6 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 		$instance['widget_title'] = esc_html( $new_instance['mlp_widget_title'] ?? '' );
 
 		$instance['widget_link_type'] = esc_attr( $new_instance['mlp_widget_link_type'] ?? '' );
-
-		$instance['widget_display_flag'] = (int) (
-			isset( $new_instance['mlp_widget_display_flag'] )
-			&& 1 === (int) $new_instance['mlp_widget_display_flag']
-		);
 
 		$instance['widget_show_current_blog'] = (int) (
 			isset( $new_instance['mlp_widget_show_current_blog'] )

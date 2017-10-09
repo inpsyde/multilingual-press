@@ -4,7 +4,9 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Widget\Dashboard\UntranslatedPosts;
 
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Translation completed setting updater.
@@ -15,28 +17,49 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 class TranslationCompletedSettingUpdater {
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * @var Nonce
 	 */
 	private $nonce;
 
 	/**
-	 * @var PostRepository
+	 * @var PostsRepository
 	 */
-	private $post_repository;
+	private $posts_repository;
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param PostRepository $post_repository Untranslated posts repository object.
-	 * @param Nonce          $nonce           Nonce object.
+	 * @param PostsRepository $posts_repository  Untranslated posts repository object.
+	 * @param Request         $request           HTTP request object.
+	 * @param Nonce           $nonce             Nonce object.
+	 * @param ActivePostTypes $active_post_types Active post types storage object.
 	 */
-	public function __construct( PostRepository $post_repository, Nonce $nonce ) {
+	public function __construct(
+		PostsRepository $posts_repository,
+		Request $request,
+		Nonce $nonce,
+		ActivePostTypes $active_post_types
+	) {
 
-		$this->post_repository = $post_repository;
+		$this->posts_repository = $posts_repository;
+
+		$this->request = $request;
 
 		$this->nonce = $nonce;
+
+		$this->active_post_types = $active_post_types;
 	}
 
 	/**
@@ -52,7 +75,11 @@ class TranslationCompletedSettingUpdater {
 	 */
 	public function update_setting( $post_id, \WP_Post $post ) {
 
-		if ( ! $this->nonce->is_valid() )  {
+		if ( ! $this->active_post_types->includes( (string) $post->post_type ) ) {
+			return false;
+		}
+
+		if ( ! $this->nonce->is_valid() ) {
 			return false;
 		}
 
@@ -60,8 +87,8 @@ class TranslationCompletedSettingUpdater {
 			return false;
 		}
 
-		$value = ! empty( $_POST[ PostRepository::META_KEY ] );
+		$value = (bool) $this->request->body_value( PostsRepository::META_KEY, INPUT_POST, FILTER_VALIDATE_BOOLEAN );
 
-		return $this->post_repository->update_post( (int) $post_id, $value );
+		return $this->posts_repository->update_post( (int) $post_id, $value );
 	}
 }

@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\NavMenu;
 
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
+
 use function Inpsyde\MultilingualPress\get_available_language_names;
 use function Inpsyde\MultilingualPress\site_exists;
 
@@ -14,6 +16,23 @@ use function Inpsyde\MultilingualPress\site_exists;
  * @since   3.0.0
  */
 final class ValidatingItemRepository implements ItemRepository {
+
+	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
+	 * Constructor. Sets up the properties.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Request $request HTTP request object.
+	 */
+	public function __construct( Request $request ) {
+
+		$this->request = $request;
+	}
 
 	/**
 	 * Returns the according items for the sites with the given IDs.
@@ -30,13 +49,12 @@ final class ValidatingItemRepository implements ItemRepository {
 			return [];
 		}
 
-		if ( ! isset( $_GET['menu'] ) ) {
+		$menu_id = (int) $this->request->body_value( 'menu', INPUT_GET, FILTER_SANITIZE_NUMBER_INT );
+		if ( ! $menu_id ) {
 			return [];
 		}
 
 		$language_names = get_available_language_names();
-
-		$menu_id = (int) $_GET['menu'];
 
 		$items = [];
 
@@ -73,7 +91,7 @@ final class ValidatingItemRepository implements ItemRepository {
 			'menu-item-type'       => 'language',
 			'menu-item-object'     => 'custom',
 			'menu-item-url'        => get_home_url( $site_id, '/' ),
-			'menu_item-type-label' => esc_html__( 'Language', 'multilingual-press' ),
+			'menu_item-type-label' => esc_html__( 'Language', 'multilingualpress' ),
 		] ) );
 	}
 
@@ -97,7 +115,7 @@ final class ValidatingItemRepository implements ItemRepository {
 
 		$item->label = $item->title;
 
-		$item->type_label = esc_html__( 'Language', 'multilingual-press' );
+		$item->type_label = esc_html__( 'Language', 'multilingualpress' );
 
 		$item->classes[] = "blog-id-{$site_id}";
 		$item->classes[] = 'mlp-language-nav-item';

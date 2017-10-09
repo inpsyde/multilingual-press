@@ -262,7 +262,7 @@ class AssetManager {
 	 */
 	private function get_enqueue_action(): string {
 
-		if ( 0 === strpos( ltrim( add_query_arg( [] ) , '/' ), 'wp-login.php' ) ) {
+		if ( 0 === strpos( ltrim( add_query_arg( [] ), '/' ), 'wp-login.php' ) ) {
 			return empty( $GLOBALS['interim_login'] )
 				? 'login_enqueue_scripts'
 				: '';

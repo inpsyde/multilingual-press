@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\API;
 
 use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Database\Table\SiteRelationsTable;
 
 /**
  * Site relations API implementation using the WordPress database object.
@@ -53,11 +54,22 @@ final class WPDBSiteRelations implements SiteRelations {
 
 		$query = "DELETE FROM {$this->table}";
 
+		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
 		if ( ! $site_2 ) {
-			$query .= ' WHERE site_1 = %d OR site_2 = %d';
+			$query .= sprintf(
+				' WHERE %1$s = %%d OR %2$s = %%d',
+				SiteRelationsTable::COLUMN_SITE_1,
+				SiteRelationsTable::COLUMN_SITE_2
+			);
+
 			$args = [ $site_1, $site_1 ];
 		} else {
-			$query .= ' WHERE (site_1 = %d AND site_2 = %d) OR (site_1 = %d AND site_2 = %d)';
+			$query .= sprintf(
+				' WHERE (%1$s = %%d AND %2$s = %%d) OR (%1$s = %%d AND %2$s = %%d)',
+				SiteRelationsTable::COLUMN_SITE_1,
+				SiteRelationsTable::COLUMN_SITE_2
+			);
+
 			$args = [ $site_1, $site_2, $site_2, $site_1 ];
 		}
 
@@ -75,7 +87,12 @@ final class WPDBSiteRelations implements SiteRelations {
 	 */
 	public function get_all_relations(): array {
 
-		$query = "SELECT site_1, site_2 FROM {$this->table} ORDER BY site_1 ASC, site_2 ASC";
+		$query = sprintf(
+			'SELECT %2$s, %3$s FROM %1$s ORDER BY %2$s ASC, %3$s ASC',
+			$this->table,
+			SiteRelationsTable::COLUMN_SITE_1,
+			SiteRelationsTable::COLUMN_SITE_2
+		);
 
 		$rows = $this->db->get_results( $query, ARRAY_A );
 
@@ -101,19 +118,25 @@ final class WPDBSiteRelations implements SiteRelations {
 			return [];
 		}
 
-		$query = "
+		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
+		$query = sprintf(
+			'
 (
-	SELECT DISTINCT site_1 as site_id
-	FROM {$this->table}
-	WHERE site_2 = %d
+	SELECT DISTINCT %2$s as site_id
+	FROM %1$s
+	WHERE %3$s = %%d
 )
 UNION
 (
-	SELECT DISTINCT site_2
-	FROM {$this->table}
-	WHERE site_1 = %d
+	SELECT DISTINCT %3$s
+	FROM %1$s
+	WHERE %2$s = %%d
 )
-ORDER BY site_id ASC";
+ORDER BY site_id ASC',
+			$this->table,
+			SiteRelationsTable::COLUMN_SITE_1,
+			SiteRelationsTable::COLUMN_SITE_2
+		);
 		$query = $this->db->prepare( $query, $site_id, $site_id );
 
 		$rows = $this->db->get_col( $query );
@@ -154,9 +177,15 @@ ORDER BY site_id ASC";
 			return 0;
 		}
 
-		$values = implode( ',', $values );
+		$query = sprintf(
+			'INSERT IGNORE INTO %1$s (%2$s, %3$s) VALUES %4$s',
+			$this->table,
+			SiteRelationsTable::COLUMN_SITE_1,
+			SiteRelationsTable::COLUMN_SITE_2,
+			implode( ',', $values )
+		);
 
-		return (int) $this->db->query( "INSERT IGNORE INTO {$this->table} (site_1, site_2) VALUES {$values}" );
+		return (int) $this->db->query( $query );
 	}
 
 	/**
@@ -223,9 +252,9 @@ ORDER BY site_id ASC";
 
 		$relations = array_reduce( $rows, function ( array $relations, array $row ) {
 
-			$site_1 = (int) $row['site_1'];
+			$site_1 = (int) $row[ SiteRelationsTable::COLUMN_SITE_1 ];
 
-			$site_2 = (int) $row['site_2'];
+			$site_2 = (int) $row[ SiteRelationsTable::COLUMN_SITE_2 ];
 
 			$relations[ $site_1 ][ $site_2 ] = $site_2;
 

@@ -6,8 +6,7 @@ namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxView;
-use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
-use Inpsyde\MultilingualPress\Module\ActivationAwareness;
+use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -18,9 +17,7 @@ use Inpsyde\MultilingualPress\Service\Container;
  * @package Inpsyde\MultilingualPress\Module\Quicklinks
  * @since   3.0.0
  */
-final class ServiceProvider implements ActivationAwareModuleServiceProvider {
-
-	use ActivationAwareness;
+final class ServiceProvider implements ModuleServiceProvider {
 
 	/**
 	 * Registers the provided services on the given container.
@@ -60,13 +57,8 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 			return new QuicklinksSettingsBox(
 				$container['multilingualpress.quicklinks_settings_repository'],
-				$container['multilingualpress.quicklinks_settings_nonce']
+				$container['multilingualpress.update_quicklinks_settings_nonce']
 			);
-		};
-
-		$container['multilingualpress.quicklinks_settings_nonce'] = function () {
-
-			return new WPNonce( 'update_quicklinks_settings' );
 		};
 
 		$container->share( 'multilingualpress.quicklinks_settings_repository', function () {
@@ -78,50 +70,14 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 
 			return new SettingsUpdater(
 				$container['multilingualpress.quicklinks_settings_repository'],
-				$container['multilingualpress.quicklinks_settings_nonce']
+				$container['multilingualpress.update_quicklinks_settings_nonce']
 			);
 		};
-	}
 
-	/**
-	 * Bootstraps the registered services.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param Container $container Container object.
-	 *
-	 * @return void
-	 */
-	public function bootstrap( Container $container ) {
+		$container['multilingualpress.update_quicklinks_settings_nonce'] = function () {
 
-		$this->on_activation( function () use ( $container ) {
-
-			if ( is_admin() ) {
-				$settings_box = $container['multilingualpress.quicklinks_settings_box'];
-
-				add_action( 'multilingualpress.after_module_list', function () use ( $settings_box ) {
-
-					( new SettingsBoxView( $settings_box ) )->render();
-				} );
-
-				add_action(
-					'multilingualpress.save_modules',
-					[ $container['multilingualpress.quicklinks_settings_updater'], 'update_settings' ]
-				);
-			} else {
-				if ( ! empty( $_POST[ Quicklinks::NAME ] ) && is_string( $_POST[ Quicklinks::NAME ] ) ) {
-					$container['multilingualpress.quicklinks_redirector']->maybe_redirect(
-						$_POST[ Quicklinks::NAME ]
-					);
-				}
-
-				add_filter(
-					'the_content',
-					[ $container['multilingualpress.quicklinks'], 'add_to_content' ],
-					PHP_INT_MAX
-				);
-			}
-		} );
+			return new WPNonce( 'update_quicklinks_settings' );
+		};
 	}
 
 	/**
@@ -136,9 +92,77 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	public function register_module( ModuleManager $module_manager ): bool {
 
 		return $module_manager->register_module( new Module( 'quicklinks', [
-			'description' => __( 'Show link to translations in post content.', 'multilingual-press' ),
-			'name'        => __( 'Quicklinks', 'multilingual-press' ),
+			'description' => __( 'Show link to translations in post content.', 'multilingualpress' ),
+			'name'        => __( 'Quicklinks', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
+	}
+
+	/**
+	 * Performs various tasks on module activation.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	public function activate_module( Container $container ) {
+
+		if ( is_admin() ) {
+			$this->activate_module_for_admin( $container );
+
+			return;
+		}
+
+		$this->activate_module_for_front_end( $container );
+	}
+
+	/**
+	 * Performs various admin-specific tasks on module activation.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function activate_module_for_admin( Container $container ) {
+
+		$settings_box = $container['multilingualpress.quicklinks_settings_box'];
+
+		add_action( 'multilingualpress.after_module_list', function () use ( $settings_box ) {
+
+			( new SettingsBoxView( $settings_box ) )->render();
+		} );
+
+		add_action(
+			'multilingualpress.save_modules',
+			[ $container['multilingualpress.quicklinks_settings_updater'], 'update_settings' ]
+		);
+	}
+
+	/**
+	 * Performs various admin-specific tasks on module activation.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function activate_module_for_front_end( Container $container ) {
+
+		$name = $container['multilingualpress.server_request']->body_value(
+			Quicklinks::NAME,
+			INPUT_POST,
+			FILTER_SANITIZE_STRING
+		);
+
+		if ( is_string( $name ) ) {
+			$container['multilingualpress.quicklinks_redirector']->maybe_redirect( $name );
+		}
+
+		add_filter(
+			'the_content',
+			[ $container['multilingualpress.quicklinks'], 'add_to_content' ],
+			PHP_INT_MAX
+		);
 	}
 }

@@ -27,7 +27,7 @@ if ( ! is_multisite() ) {
 	return;
 }
 
-$main_plugin_file = __DIR__ . '/multilingual-press.php';
+$main_plugin_file = __DIR__ . '/multilingualpress.php';
 
 if (
 	plugin_basename( $main_plugin_file ) !== WP_UNINSTALL_PLUGIN
@@ -76,7 +76,6 @@ $uninstaller->delete_site_options( [
 	'inpsyde_license_status_MultilingualPress Pro',
 	'inpsyde_multilingual_blog_relationship',
 	'inpsyde_multilingual_default_actions',
-	'inpsyde_multilingual_flag_url',
 	'inpsyde_multilingual_redirect',
 ] );
 

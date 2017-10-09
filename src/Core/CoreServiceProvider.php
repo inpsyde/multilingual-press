@@ -7,14 +7,18 @@ namespace Inpsyde\MultilingualPress\Core;
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTab;
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
+use Inpsyde\MultilingualPress\Common\AlternateLanguages;
+use Inpsyde\MultilingualPress\Common\HTTP\FullRequestGlobalManipulator;
+use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
+use Inpsyde\MultilingualPress\Common\HTTP\RequestGlobalsManipulator;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
-use Inpsyde\MultilingualPress\Common\ConditionalAwareRequest;
+use Inpsyde\MultilingualPress\Common\ConditionalAwareWordPressRequestContext;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingMultiView;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
 use Inpsyde\MultilingualPress\Core\Admin\AlternativeLanguageTitleSiteSetting;
-use Inpsyde\MultilingualPress\Core\Admin\FlagImageURLSiteSetting;
 use Inpsyde\MultilingualPress\Core\Admin\LanguageSiteSetting;
 use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
@@ -25,6 +29,9 @@ use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsTabView;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdateRequestHandler;
 use Inpsyde\MultilingualPress\Core\Admin\TypeSafeSiteSettingsRepository;
+use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageController;
+use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTMLLinkTagRenderer;
+use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTTPHeaderRenderer;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -52,6 +59,32 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
+		$container['multilingualpress.alternate_language_controller'] = function () {
+
+			return new AlternateLanguageController();
+		};
+
+		$container['multilingualpress.alternate_language_html_link_tag_renderer'] = function ( Container $container ) {
+
+			return new AlternateLanguageHTMLLinkTagRenderer(
+				$container['multilingualpress.alternate_languages']
+			);
+		};
+
+		$container['multilingualpress.alternate_language_http_header_renderer'] = function ( Container $container ) {
+
+			return new AlternateLanguageHTTPHeaderRenderer(
+				$container['multilingualpress.alternate_languages']
+			);
+		};
+
+		$container->share( 'multilingualpress.alternate_languages', function ( Container $container ) {
+
+			return new AlternateLanguages(
+				$container['multilingualpress.translations']
+			);
+		} );
+
 		$container['multilingualpress.alternative_language_title_site_setting'] = function ( Container $container ) {
 
 			return new AlternativeLanguageTitleSiteSetting(
@@ -64,12 +97,10 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new CachingBasePathAdapter();
 		};
 
-		$container['multilingualpress.flag_image_url_site_setting'] = function ( Container $container ) {
+		$container->share( 'multilingualpress.http_post_request_globals_manipulator', function () {
 
-			return new FlagImageURLSiteSetting(
-				$container['multilingualpress.site_settings_repository']
-			);
-		};
+			return new FullRequestGlobalManipulator( RequestGlobalsManipulator::METHOD_POST );
+		} );
 
 		$container->share( 'multilingualpress.internal_locations', function () {
 
@@ -84,18 +115,23 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
+		$container->share( 'multilingualpress.meta_box_ui_registry', function () {
+
+			return new MetaBoxUIRegistry();
+		} );
+
 		// TODO: Make a regular not shared service as soon as everything else has been adapted.
 		$container->share( 'multilingualpress.module_manager', function () {
 
 			// TODO: Maybe store the option name somewhere? But then again, who else really needs to know it?
-			// TODO: Migration: The old option name was "state_modules", and it stored "on" and "off" values, no bools.
 			return new Module\NetworkOptionModuleManager( 'multilingualpress_modules' );
 		} );
 
 		$container['multilingualpress.new_site_settings'] = function ( Container $container ) {
 
 			return new NewSiteSettings(
-				$container['multilingualpress.site_settings_view']
+				$container['multilingualpress.site_settings_view'],
+				$container['multilingualpress.asset_manager']
 			);
 		};
 
@@ -104,8 +140,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return SettingsPage::with_parent(
 				SettingsPage::ADMIN_NETWORK,
 				SettingsPage::PARENT_NETWORK_SETTINGS,
-				__( 'MultilingualPress', 'multilingual-press' ),
-				__( 'MultilingualPress', 'multilingual-press' ),
+				__( 'MultilingualPress', 'multilingualpress' ),
+				__( 'MultilingualPress', 'multilingualpress' ),
 				'manage_network_options',
 				'multilingualpress',
 				$container['multilingualpress.plugin_settings_page_view']
@@ -126,7 +162,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new PluginSettingsUpdater(
 				$container['multilingualpress.module_manager'],
 				$container['multilingualpress.save_plugin_settings_nonce'],
-				$container['multilingualpress.plugin_settings_page']
+				$container['multilingualpress.plugin_settings_page'],
+				$container['multilingualpress.server_request']
 			);
 		};
 
@@ -138,11 +175,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
-		$container->share( 'multilingualpress.request', function () {
-
-			return new ConditionalAwareRequest();
-		} );
-
 		$container['multilingualpress.save_plugin_settings_nonce'] = function () {
 
 			return new WPNonce( 'save_plugin_settings' );
@@ -152,6 +184,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new WPNonce( 'save_site_settings' );
 		};
+
+		$container->share( 'multilingualpress.server_request', function () {
+
+			return new PHPServerRequest();
+		} );
 
 		$container['multilingualpress.site_data_deletor'] = function ( Container $container ) {
 
@@ -188,7 +225,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new EditSiteTabData(
 				'multilingualpress',
-				__( 'MultilingualPress', 'multilingual-press' ),
+				__( 'MultilingualPress', 'multilingualpress' ),
 				'multilingualpress'
 			);
 		};
@@ -198,6 +235,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new SiteSettingsTabView(
 				$container['multilingualpress.site_settings_tab_data'],
 				new SiteSettingsSectionView( $container['multilingualpress.site_settings'] ),
+				$container['multilingualpress.server_request'],
 				$container['multilingualpress.save_site_settings_nonce']
 			);
 		};
@@ -206,6 +244,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new SiteSettingsUpdateRequestHandler(
 				$container['multilingualpress.site_settings_updater'],
+				$container['multilingualpress.server_request'],
 				$container['multilingualpress.save_site_settings_nonce']
 			);
 		};
@@ -214,7 +253,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new SiteSettingsUpdater(
 				$container['multilingualpress.site_settings_repository'],
-				$container['multilingualpress.languages']
+				$container['multilingualpress.languages'],
+				$container['multilingualpress.server_request']
 			);
 		};
 
@@ -223,10 +263,14 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return SiteSettingMultiView::from_view_models( [
 				$container['multilingualpress.language_site_setting'],
 				$container['multilingualpress.alternative_language_title_site_setting'],
-				$container['multilingualpress.flag_image_url_site_setting'],
 				$container['multilingualpress.relationships_site_setting'],
 			] );
 		};
+
+		$container->share( 'multilingualpress.wordpress_request_context', function () {
+
+			return new ConditionalAwareWordPressRequestContext();
+		} );
 	}
 
 	/**
@@ -266,14 +310,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				'images',
 				"{$plugin_dir_path}/assets/images",
 				"{$plugin_dir_url}/assets/images"
-			)
-			->add(
-				'flags',
-				"{$plugin_dir_path}/assets/images/flags",
-				"{$plugin_dir_url}/assets/images/flags"
 			);
 
-		load_plugin_textdomain( 'multilingual-press' );
+		load_plugin_textdomain( 'multilingualpress' );
 
 		$setting_page = $container['multilingualpress.plugin_settings_page'];
 
@@ -286,7 +325,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		( new ActionLink(
 			'settings',
-			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingual-press' ) . '</a>'
+			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingualpress' ) . '</a>'
 		) )->register( 'network_admin_plugin_action_links_' . $properties->plugin_base_name() );
 
 		add_action( 'delete_blog', [ $container['multilingualpress.site_data_deletor'], 'delete_site_data' ] );
@@ -302,7 +341,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			if ( 'sites.php' === $pagenow ) {
 				( new SitesListTableColumn(
 					'multilingualpress.relationships',
-					__( 'Relationships', 'multilingual-press' ),
+					__( 'Relationships', 'multilingualpress' ),
 					function ( $id, $site_id ) {
 
 						switch_to_blog( $site_id );
@@ -315,19 +354,19 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 								'<div class="mlp-site-relations">%s</div>',
 								implode( '<br>', array_map( 'esc_html', $sites ) )
 							)
-							: __( 'none', 'multilingual-press' );
+							: __( 'none', 'multilingualpress' );
 					}
 				) )->register();
 
 				( new SitesListTableColumn(
 					'multilingualpress.site_language',
-					__( 'Site Language', 'multilingual-press' ),
+					__( 'Site Language', 'multilingualpress' ),
 					function ( $id, $site_id ) {
 
 						$language = get_site_language( $site_id );
 
 						return '' === $language
-							? __( 'none', 'multilingual-press' )
+							? __( 'none', 'multilingualpress' )
 							: sprintf(
 								'<div class="mlp-site-language">%s</div>',
 								esc_html( get_language_field_by_http_code(
@@ -345,7 +384,7 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 				add_action( 'network_site_new_form', function ( $site_id ) use ( $new_site_settings ) {
 
-					( new SiteSettingsSectionView( $new_site_settings ) )->render( $site_id );
+					( new SiteSettingsSectionView( $new_site_settings ) )->render( (int) $site_id );
 				} );
 
 				add_action(
@@ -354,20 +393,16 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				);
 			}
 		} else {
-			$translations = $container['multilingualpress.translations'];
-
-			add_action( 'template_redirect', function () use ( $translations ) {
-
-				if ( ! is_paged() ) {
-					( new FrontEnd\AlternateLanguageHTTPHeaders( $translations ) )->send();
-				}
-			} );
-			add_action( 'wp_head', function () use ( $translations ) {
-
-				if ( ! is_paged() ) {
-					( new FrontEnd\AlternateLanguageHTMLLinkTags( $translations ) )->render();
-				}
-			} );
+			$alternate_language_controller = $container['multilingualpress.alternate_language_controller'];
+			$alternate_language_controller->register_renderer(
+				$container['multilingualpress.alternate_language_html_link_tag_renderer'],
+				'wp_head'
+			);
+			$alternate_language_controller->register_renderer(
+				$container['multilingualpress.alternate_language_http_header_renderer'],
+				'template_redirect',
+				11
+			);
 
 			add_filter( 'language_attributes', 'Inpsyde\\MultilingualPress\\replace_language_in_language_attributes' );
 		}

@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Installation;
 
 use Inpsyde\MultilingualPress\Common\Type\VersionNumber;
-use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
+use Inpsyde\MultilingualPress\Service\IntegrationServiceProvider;
 
 /**
  * Service provider for all Installation objects.
@@ -14,7 +14,7 @@ use Inpsyde\MultilingualPress\Service\Container;
  * @package Inpsyde\MultilingualPress\Installation
  * @since   3.0.0
  */
-final class InstallationServiceProvider implements BootstrappableServiceProvider {
+final class InstallationServiceProvider implements IntegrationServiceProvider {
 
 	/**
 	 * Registers the provided services on the given container.
@@ -39,10 +39,7 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 		$container['multilingualpress.installer'] = function ( Container $container ) {
 
 			return new Installer(
-				$container['multilingualpress.table_installer'],
-				$container['multilingualpress.content_relations_table'],
-				$container['multilingualpress.languages_table'],
-				$container['multilingualpress.site_relations_table']
+				$container['multilingualpress.table_installer']
 			);
 		};
 
@@ -80,17 +77,13 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 			return new Updater(
 				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.site_settings_repository'],
-				$container['multilingualpress.table_installer'],
-				$container['multilingualpress.content_relations_table'],
-				$container['multilingualpress.languages_table'],
-				$container['multilingualpress.site_relations_table'],
-				$container['multilingualpress.site_relations']
+				$container['multilingualpress.languages_table']
 			);
 		};
 	}
 
 	/**
-	 * Bootstraps the registered services.
+	 * Integrates the registered services with MultilingualPress.
 	 *
 	 * @since 3.0.0
 	 *
@@ -98,7 +91,7 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 	 *
 	 * @return void
 	 */
-	public function bootstrap( Container $container ) {
+	public function integrate( Container $container ) {
 
 		add_action( SystemChecker::ACTION_CHECKED_VERSION, function (
 			int $version_check,
@@ -113,7 +106,11 @@ final class InstallationServiceProvider implements BootstrappableServiceProvider
 
 			switch ( $version_check ) {
 				case SystemChecker::NEEDS_INSTALLATION:
-					$container['multilingualpress.installer']->install();
+					$container['multilingualpress.installer']->install_tables(
+						$container['multilingualpress.content_relations_table'],
+						$container['multilingualpress.languages_table'],
+						$container['multilingualpress.site_relations_table']
+					);
 					break;
 
 				case SystemChecker::NEEDS_UPGRADE:

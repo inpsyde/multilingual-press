@@ -100,11 +100,11 @@ final class AddOnlyContainer implements Container {
 	public function offsetGet( $name ) {
 
 		if ( ! $this->offsetExists( $name ) ) {
-			throw ValueNotFound::for_name( $name, 'read' );
+			throw ValueNotFound::for_value( $name, 'read' );
 		}
 
 		if ( $this->is_bootstrapped && ! array_key_exists( $name, $this->shared ) ) {
-			throw LateAccessToNotSharedService::for_name( $name, 'read' );
+			throw LateAccessToNotSharedService::for_value( $name, 'read' );
 		}
 
 		if ( ! array_key_exists( $name, $this->values ) ) {
@@ -151,7 +151,7 @@ final class AddOnlyContainer implements Container {
 	public function offsetSet( $name, $value ) {
 
 		if ( $this->is_locked ) {
-			throw WriteAccessOnLockedContainer::for_name( $name, 'set' );
+			throw WriteAccessOnLockedContainer::for_value( $name, 'set' );
 		}
 
 		if ( array_key_exists( $name, $this->values ) ) {
@@ -219,17 +219,17 @@ final class AddOnlyContainer implements Container {
 	 * @return Container Container instance.
 	 *
 	 * @throws WriteAccessOnLockedContainer if the container is locked.
-	 * @throws ValueNotFound                if there is no value or factory callback with the given name.
-	 * @throws InvalidValueWriteAccess      if there already is a value with the given name.
+	 * @throws ValueNotFound if there is no factory callback with the given name.
+	 * @throws InvalidValueWriteAccess if there already is a value with the given name.
 	 */
 	public function extend( string $name, callable $new_factory ): Container {
 
 		if ( $this->is_locked ) {
-			throw WriteAccessOnLockedContainer::for_name( $name, 'extend' );
+			throw WriteAccessOnLockedContainer::for_value( $name, 'extend' );
 		}
 
 		if ( ! array_key_exists( $name, $this->factories ) ) {
-			throw ValueNotFound::for_name( $name, 'extend' );
+			throw ValueNotFound::for_factory( $name, 'extend' );
 		}
 
 		if ( array_key_exists( $name, $this->values ) ) {

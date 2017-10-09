@@ -5,7 +5,10 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Module\Trasher;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Trasher setting updater.
@@ -16,6 +19,11 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 class TrasherSettingUpdater {
 
 	/**
+	 * @var ActivePostTypes
+	 */
+	private $active_post_types;
+
+	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
@@ -24,6 +32,11 @@ class TrasherSettingUpdater {
 	 * @var Nonce
 	 */
 	private $nonce;
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * @var TrasherSettingRepository
@@ -37,19 +50,27 @@ class TrasherSettingUpdater {
 	 *
 	 * @param TrasherSettingRepository $setting_repository Trasher setting repository object.
 	 * @param ContentRelations         $content_relations  Content relations API object.
+	 * @param Request                  $request            HTTP request object.
 	 * @param Nonce                    $nonce              Nonce object.
+	 * @param ActivePostTypes          $active_post_types  Active post types storage object.
 	 */
 	public function __construct(
 		TrasherSettingRepository $setting_repository,
 		ContentRelations $content_relations,
-		Nonce $nonce
+		Request $request,
+		Nonce $nonce,
+		ActivePostTypes $active_post_types
 	) {
 
 		$this->setting_repository = $setting_repository;
 
 		$this->content_relations = $content_relations;
 
+		$this->request = $request;
+
 		$this->nonce = $nonce;
+
+		$this->active_post_types = $active_post_types;
 	}
 
 	/**
@@ -65,7 +86,11 @@ class TrasherSettingUpdater {
 	 */
 	public function update_settings( $post_id, \WP_Post $post ): int {
 
-		if ( ! $this->nonce->is_valid() )  {
+		if ( ! $this->active_post_types->includes( (string) $post->post_type ) ) {
+			return 0;
+		}
+
+		if ( ! $this->nonce->is_valid() ) {
 			return 0;
 		}
 
@@ -73,9 +98,11 @@ class TrasherSettingUpdater {
 			return 0;
 		}
 
-		$value = array_key_exists( TrasherSettingRepository::META_KEY, $_POST )
-			? (bool) $_POST[ TrasherSettingRepository::META_KEY ]
-			: false;
+		$value = (bool) $this->request->body_value(
+			TrasherSettingRepository::META_KEY,
+			INPUT_POST,
+			FILTER_VALIDATE_BOOLEAN
+		);
 
 		$post_id = (int) $post_id;
 
@@ -95,12 +122,16 @@ class TrasherSettingUpdater {
 
 		$updated_posts = 1;
 
+		$network_state = NetworkState::create();
+
 		array_walk( $related_posts, function ( $post_id, $site_id ) use ( &$updated_posts, $value ) {
 
 			switch_to_blog( $site_id );
+
 			$updated_posts += $this->setting_repository->update_setting( (int) $post_id, $value );
-			restore_current_blog();
 		} );
+
+		$network_state->restore();
 
 		return $updated_posts;
 	}

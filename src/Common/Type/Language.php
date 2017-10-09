@@ -10,6 +10,8 @@ namespace Inpsyde\MultilingualPress\Common\Type;
  */
 interface Language extends \ArrayAccess {
 
+	// TODO: Add constants for all properties (referencing the according ~\Database\Table\LanguagesTable constants).
+
 	/**
 	 * Checks if the language is written right-to-left (RTL).
 	 *

@@ -12,7 +12,6 @@ import CopyPost from './admin/post-translation/CopyPost';
 import LiveSearch from './admin/post-translation/LiveSearch';
 import RelationshipControl from './admin/post-translation/RelationshipControl';
 import TermTranslator from './admin/term-translation/TermTranslator';
-import UserBackEndLanguage from './admin/user-settings/UserBackEndLanguage';
 
 const { ajaxurl: ajaxUrl, jQuery: $ } = window;
 
@@ -124,12 +123,6 @@ controller.registerModule( [ 'edit-tags.php', 'term.php' ], TermTranslator, {
 		'change select': 'propagateSelectedTerm'
 	}
 } );
-
-// Register the UserBackEndLanguage module for the General Settings admin page.
-controller.registerModule( 'options-general.php', UserBackEndLanguage, {
-	el: '#WPLANG',
-	settings: F.getSettings( 'UserBackEndLanguage' )
-}, ( module ) => module.updateSiteLanguage() );
 
 // Initialize the admin controller, and thus all modules registered for the current admin page.
 $( () => {

@@ -27,37 +27,59 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$container['multilingualpress.language_switcher_widget'] = function ( Container $container ) {
+		$this->register_dashboard_widgets( $container );
 
-			return new Sidebar\LanguageSwitcher\Widget(
-				$container['multilingualpress.language_switcher_widget_view']
-			);
-		};
+		$this->register_sidebar_widgets( $container );
+	}
 
-		$container['multilingualpress.language_switcher_widget_view'] = function ( Container $container ) {
+	/**
+	 * Bootstraps the registered services.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	public function bootstrap( Container $container ) {
 
-			return new Sidebar\LanguageSwitcher\WidgetView(
-				$container['multilingualpress.asset_manager']
-			);
-		};
+		$this->bootstrap_dashboard_widgets( $container );
+
+		$this->bootstrap_sidebar_widgets( $container );
+	}
+
+	/**
+	 * Registers the dashboard widget services.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function register_dashboard_widgets( Container $container ) {
 
 		$container['multilingualpress.translation_completed_setting_nonce'] = function () {
 
 			return new WPNonce( 'save_translation_completed_setting' );
 		};
 
+		$container['multilingualpress.translation_completed_setting_updater'] = function ( Container $container ) {
+
+			return new Dashboard\UntranslatedPosts\TranslationCompletedSettingUpdater(
+				$container['multilingualpress.untranslated_posts_repository'],
+				$container['multilingualpress.server_request'],
+				$container['multilingualpress.translation_completed_setting_nonce'],
+				$container['multilingualpress.active_post_types']
+			);
+		};
+
 		$container['multilingualpress.translation_completed_setting_view'] = function ( Container $container ) {
 
 			return new Dashboard\UntranslatedPosts\TranslationCompletedSettingView(
 				$container['multilingualpress.untranslated_posts_repository'],
-				$container['multilingualpress.translation_completed_setting_nonce']
+				$container['multilingualpress.translation_completed_setting_nonce'],
+				$container['multilingualpress.active_post_types']
 			);
 		};
-
-		$container->share( 'multilingualpress.untranslated_posts_repository', function () {
-
-			return new Dashboard\UntranslatedPosts\TypeSafePostRepository();
-		} );
 
 		$container['multilingualpress.untranslated_posts_dashboard_widget'] = function ( Container $container ) {
 
@@ -75,9 +97,25 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 
 			return new Dashboard\DashboardWidget(
 				'multilingualpress-untranslated-posts-dashboard-widget',
-				__( 'Untranslated Posts', 'multilingual-press' ),
+				__( 'Untranslated Posts', 'multilingualpress' ),
 				$container['multilingualpress.untranslated_posts_dashboard_widget_view'],
-				$capability
+				$capability,
+				[],
+				[ $container['multilingualpress.untranslated_posts_dashboard_widget_configuration_view'], 'render' ]
+			);
+		};
+
+		$container['multilingualpress.untranslated_posts_dashboard_widget_configuration_view'] = function ( Container $container ) {
+
+			return new Dashboard\UntranslatedPosts\WidgetConfigurationView(
+				$container['multilingualpress.untranslated_posts_dashboard_widget_configurator']
+			);
+		};
+
+		$container['multilingualpress.untranslated_posts_dashboard_widget_configurator'] = function ( Container $container ) {
+
+			return new Dashboard\UntranslatedPosts\WidgetConfigurator(
+				$container['multilingualpress.server_request']
 			);
 		};
 
@@ -85,44 +123,80 @@ final class WidgetServiceProvider implements BootstrappableServiceProvider {
 
 			return new Dashboard\UntranslatedPosts\WidgetView(
 				$container['multilingualpress.site_relations'],
-				$container['multilingualpress.untranslated_posts_repository']
-			);
-		};
-
-		$container['multilingualpress.translation_completed_setting_updater'] = function ( Container $container ) {
-
-			return new Dashboard\UntranslatedPosts\TranslationCompletedSettingUpdater(
 				$container['multilingualpress.untranslated_posts_repository'],
-				$container['multilingualpress.translation_completed_setting_nonce']
+				$container['multilingualpress.untranslated_posts_dashboard_widget_configurator']
 			);
 		};
+
+		$container->share( 'multilingualpress.untranslated_posts_repository', function ( Container $container ) {
+
+			return new Dashboard\UntranslatedPosts\TypeSafePostsRepository(
+				$container['multilingualpress.active_post_types']
+			);
+		} );
 	}
 
 	/**
-	 * Bootstraps the registered services.
-	 *
-	 * @since 3.0.0
+	 * Registers the sidebar widget services.
 	 *
 	 * @param Container $container Container object.
 	 *
 	 * @return void
 	 */
-	public function bootstrap( Container $container ) {
+	private function register_sidebar_widgets( Container $container ) {
+
+		$container['multilingualpress.language_switcher_widget'] = function ( Container $container ) {
+
+			return new Sidebar\LanguageSwitcher\Widget(
+				$container['multilingualpress.language_switcher_widget_view']
+			);
+		};
+
+		$container['multilingualpress.language_switcher_widget_view'] = function ( Container $container ) {
+
+			return new Sidebar\LanguageSwitcher\WidgetView(
+				$container['multilingualpress.asset_manager']
+			);
+		};
+	}
+
+	/**
+	 * Bootstraps the dashboard widget services.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_dashboard_widgets( Container $container ) {
 
 		$container['multilingualpress.untranslated_posts_dashboard_widget']->register();
 
+		global $pagenow;
+
+		if ( 'post-new.php' !== $pagenow ) {
+			add_action(
+				'post_submitbox_misc_actions',
+				[ $container['multilingualpress.translation_completed_setting_view'], 'render' ]
+			);
+
+			add_action(
+				'save_post',
+				[ $container['multilingualpress.translation_completed_setting_updater'], 'update_setting' ],
+				10,
+				2
+			);
+		}
+	}
+
+	/**
+	 * Bootstraps the sidebar widget services.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_sidebar_widgets( Container $container ) {
+
 		$container['multilingualpress.language_switcher_widget']->register();
-
-		add_action(
-			'post_submitbox_misc_actions',
-			[ $container['multilingualpress.translation_completed_setting_view'], 'render' ]
-		);
-
-		add_action(
-			'save_post',
-			[ $container['multilingualpress.translation_completed_setting_updater'], 'update_setting' ],
-			10,
-			2
-		);
 	}
 }

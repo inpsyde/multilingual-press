@@ -4,7 +4,6 @@ namespace Inpsyde\MultilingualPress;
 
 use Inpsyde\MultilingualPress\Core\Exception\InstanceAlreadyBootstrapped;
 use Inpsyde\MultilingualPress\Installation\SystemChecker;
-use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -88,33 +87,27 @@ final class MultilingualPress {
 			throw new InstanceAlreadyBootstrapped();
 		}
 
-		// Register all service providers.
 		$this->service_providers->apply_method( 'register', $this->container );
 
 		// Lock the container. Nothing can be registered after that.
 		$this->container->lock();
 
-		// Integrate integration providers.
 		$this->service_providers->filter( function ( ServiceProvider $provider ) {
 
 			return $provider instanceof IntegrationServiceProvider;
 		} )->apply_method( 'integrate', $this->container );
 
-		// If installation check failed, do nothing else.
 		if ( ! $this->check_installation() ) {
 			return false;
 		}
 
-		// Bootstrap all bootstrappable providers.
 		$this->service_providers->filter( function ( ServiceProvider $provider ) {
 
 			return $provider instanceof BootstrappableServiceProvider;
 		} )->apply_method( 'bootstrap', $this->container );
 
-		// Register all modules.
 		$this->register_modules();
 
-		// Bootstrap the container.
 		$this->container->bootstrap();
 
 		/**
@@ -168,16 +161,6 @@ final class MultilingualPress {
 			return;
 		}
 
-		$activation = function ( ModuleServiceProvider $module, ModuleManager $module_manager ) {
-
-			if (
-				$module->register_module( $module_manager )
-				&& $module instanceof ActivationAwareModuleServiceProvider
-			) {
-				$module->activate();
-			}
-		};
-
 		/**
 		 * Fires right before MultilingualPress registers any modules.
 		 *
@@ -185,9 +168,16 @@ final class MultilingualPress {
 		 */
 		do_action( static::ACTION_REGISTER_MODULES );
 
+		$activation = function ( ModuleServiceProvider $module, ModuleManager $module_manager, Container $container ) {
+
+			if ( $module->register_module( $module_manager ) ) {
+				$module->activate_module( $container );
+			}
+		};
+
 		$this->service_providers->filter( function ( ServiceProvider $provider ) {
 
 			return $provider instanceof ModuleServiceProvider;
-		} )->apply_callback( $activation, $this->container['multilingualpress.module_manager'] );
+		} )->apply_callback( $activation, $this->container['multilingualpress.module_manager'], $this->container );
 	}
 }

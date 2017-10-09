@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Relations\Post;
 
+use Inpsyde\MultilingualPress\Common\HTTP\PHPServerRequest;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
+
 /**
  * Relationship context data object.
  *
@@ -11,15 +14,6 @@ namespace Inpsyde\MultilingualPress\Relations\Post;
  * @since   3.0.0
  */
 class RelationshipContext {
-
-	/**
-	 * Data key.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string
-	 */
-	const KEY_NEW_POST_ID = 'new_post_id';
 
 	/**
 	 * Data key.
@@ -87,7 +81,6 @@ class RelationshipContext {
 
 		if ( ! isset( static::$default_data ) ) {
 			static::$default_data = [
-				static::KEY_NEW_POST_ID    => 0,
 				static::KEY_NEW_POST_TITLE => '',
 				static::KEY_REMOTE_POST_ID => 0,
 				static::KEY_REMOTE_SITE_ID => 0,
@@ -130,23 +123,31 @@ class RelationshipContext {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @param Request|null $request
+	 *
 	 * @return RelationshipContext Context object.
 	 */
-	public static function from_request(): RelationshipContext {
+	public static function from_request( Request $request = null ): RelationshipContext {
 
-		return new static( $_REQUEST );
-	}
+		if ( ! $request ) {
+			$request = new PHPServerRequest();
+		}
 
-	/**
-	 * Returns the new post ID.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return int New post ID.
-	 */
-	public function new_post_id(): int {
+		$keys = [
+			static::KEY_REMOTE_POST_ID,
+			static::KEY_REMOTE_SITE_ID,
+			static::KEY_SOURCE_POST_ID,
+			static::KEY_SOURCE_SITE_ID,
+		];
 
-		return (int) $this->data[ static::KEY_NEW_POST_ID ];
+		$data = array_combine( $keys, array_map( function ( $key ) use ( $request ) {
+
+			return (int) $request->body_value( $key, INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
+		}, $keys ) );
+
+		$data[ static::KEY_NEW_POST_TITLE ] = (string) $request->body_value( static::KEY_NEW_POST_TITLE );
+
+		return new static( $data );
 	}
 
 	/**

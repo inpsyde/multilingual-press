@@ -59,7 +59,7 @@ final class APIServiceProvider implements ServiceProvider {
 				$container['multilingualpress.site_relations'],
 				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.languages'],
-				$container['multilingualpress.request'],
+				$container['multilingualpress.wordpress_request_context'],
 				$container['multilingualpress.type_factory']
 			);
 		} );

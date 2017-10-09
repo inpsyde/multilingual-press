@@ -4,8 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\AlternativeLanguageTitleInAdminBar;
 
-use Inpsyde\MultilingualPress\Module\ActivationAwareModuleServiceProvider;
-use Inpsyde\MultilingualPress\Module\ActivationAwareness;
+use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
 use Inpsyde\MultilingualPress\Service\Container;
@@ -16,9 +15,7 @@ use Inpsyde\MultilingualPress\Service\Container;
  * @package Inpsyde\MultilingualPress\Module\AlternativeLanguageTitleInAdminBar
  * @since   3.0.0
  */
-final class ServiceProvider implements ActivationAwareModuleServiceProvider {
-
-	use ActivationAwareness;
+final class ServiceProvider implements ModuleServiceProvider {
 
 	/**
 	 * Registers the provided services on the given container.
@@ -47,34 +44,6 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 	}
 
 	/**
-	 * Bootstraps the registered services.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param Container $container Container object.
-	 *
-	 * @return void
-	 */
-	public function bootstrap( Container $container ) {
-
-		add_action(
-			'mlp_blogs_save_fields',
-			[ $container['multilingualpress.alternative_language_titles'], 'update' ]
-		);
-
-		$this->on_activation( function () use ( $container ) {
-
-			$customizer = $container['multilingualpress.alternative_language_title_customizer'];
-
-			add_filter( 'admin_bar_menu', [ $customizer, 'replace_site_nodes' ], 11 );
-
-			if ( ! is_network_admin() ) {
-				add_filter( 'admin_bar_menu', [ $customizer, 'replace_site_name' ], 31 );
-			}
-		} );
-	}
-
-	/**
 	 * Registers the module at the module manager.
 	 *
 	 * @since 3.0.0
@@ -88,10 +57,30 @@ final class ServiceProvider implements ActivationAwareModuleServiceProvider {
 		return $module_manager->register_module( new Module( 'alternative_language_title', [
 			'description' => __(
 				'Show sites with their alternative language title in the admin bar.',
-				'multilingual-press'
+				'multilingualpress'
 			),
-			'name'        => __( 'Alternative Language Title', 'multilingual-press' ),
+			'name'        => __( 'Alternative Language Title', 'multilingualpress' ),
 			'active'      => false,
 		] ) );
+	}
+
+	/**
+	 * Performs various tasks on module activation.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	public function activate_module( Container $container ) {
+
+		$customizer = $container['multilingualpress.alternative_language_title_customizer'];
+
+		add_filter( 'admin_bar_menu', [ $customizer, 'replace_site_nodes' ], 11 );
+
+		if ( ! is_network_admin() ) {
+			add_filter( 'admin_bar_menu', [ $customizer, 'replace_site_name' ], 31 );
+		}
 	}
 }

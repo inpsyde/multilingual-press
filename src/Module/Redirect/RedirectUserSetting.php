@@ -63,7 +63,7 @@ final class RedirectUserSetting implements UserSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s"><input type="checkbox" name="%2$s" value="1" id="%2$s"%3$s>%1$s</label>%4$s',
-			esc_html__( 'Do not redirect me to the best matching language version.', 'multilingual-press' ),
+			esc_html__( 'Do not redirect me to the best matching language version.', 'multilingualpress' ),
 			esc_attr( $this->meta_key ),
 			checked( $this->repository->get_user_setting( (int) $user->ID ), true, false ),
 			nonce_field( $this->nonce )
@@ -81,7 +81,7 @@ final class RedirectUserSetting implements UserSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
-			esc_html__( 'Redirect', 'multilingual-press' ),
+			esc_html__( 'Redirect', 'multilingualpress' ),
 			esc_attr( $this->meta_key )
 		);
 	}

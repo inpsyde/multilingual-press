@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\Setting\User;
 
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 /**
@@ -25,18 +26,26 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 	private $nonce;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $meta_key User meta key.
-	 * @param Nonce  $nonce    Optional. Nonce object. Defaults to null.
+	 * @param string  $meta_key User meta key.
+	 * @param Request $request  HTTP request object.
+	 * @param Nonce   $nonce    Optional. Nonce object. Defaults to null.
 	 */
-	public function __construct( string $meta_key, Nonce $nonce = null ) {
+	public function __construct( string $meta_key, Request $request, Nonce $nonce = null ) {
 
 		$this->meta_key = (string) $meta_key;
 
 		$this->nonce = $nonce;
+
+		$this->request = $request;
 	}
 
 	/**
@@ -59,27 +68,13 @@ final class SecureUserSettingUpdater implements UserSettingUpdater {
 			return false;
 		}
 
-		$value = $this->get_value();
+		$value = $this->request->body_value( $this->meta_key, INPUT_REQUEST, FILTER_SANITIZE_STRING );
+		if ( ! is_string( $value ) ) {
+			$value = '';
+		}
 
 		return $value
 			? (bool) update_user_meta( $user_id, $this->meta_key, $value )
 			: (bool) delete_user_meta( $user_id, $this->meta_key );
-	}
-
-	/**
-	 * Returns the value included in the request.
-	 *
-	 * @return string The value included in the request.
-	 */
-	private function get_value(): string {
-
-		$value = is_string( $_GET[ $this->meta_key ] ?? null ) ? $_GET[ $this->meta_key ] : '';
-
-		$request_method = $_SERVER['REQUEST_METHOD'] ?? '';
-		if ( ! $request_method || 'POST' !== strtoupper( $request_method ) ) {
-			return $value;
-		}
-
-		return is_string( $_POST[ $this->meta_key ] ?? null ) ? $_POST[ $this->meta_key ] : '';
 	}
 }

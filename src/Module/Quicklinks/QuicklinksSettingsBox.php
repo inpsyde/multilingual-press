@@ -109,7 +109,7 @@ final class QuicklinksSettingsBox implements SettingsBoxViewModel {
 	 */
 	public function title(): string {
 
-		return __( 'Quicklinks', 'multilingual-press' );
+		return __( 'Quicklinks', 'multilingualpress' );
 	}
 
 	/**

@@ -70,10 +70,10 @@ final class TermTranslator implements Translator {
 
 		$term_taxonomy_id = (int) $args['content_id'];
 
-		$translations = wp_cache_get( 'mlp_term_translations', 'mlp' );
-		if ( isset( $translations[ $site_id ][ $term_taxonomy_id ] ) ) {
-			return $translations[ $site_id ][ $term_taxonomy_id ];
-		}
+		/*
+		 * @TODO There was cache here, now removed. Think about adding it again.
+		 * Cache key was 'mlp_term_translations' and cache group 'mlp'.
+		 */
 
 		switch_to_blog( $site_id );
 
@@ -82,8 +82,6 @@ final class TermTranslator implements Translator {
 		restore_current_blog();
 
 		$translations[ $site_id ][ $term_taxonomy_id ] = $data;
-
-		wp_cache_set( 'mlp_term_translations', $translations, 'mlp' );
 
 		return $data;
 	}
@@ -130,12 +128,10 @@ final class TermTranslator implements Translator {
 	 */
 	private function get_term_by_term_taxonomy_id( int $term_taxonomy_id ): array {
 
-		$cache_key = "term_with_ttid_{$term_taxonomy_id}";
-
-		$term = wp_cache_get( $cache_key, 'mlp' );
-		if ( is_array( $term ) ) {
-			return $term;
-		}
+		/*
+		 * @TODO There was cache here, now removed. Think about adding it again.
+		 * cache key was "term_with_ttid_{$term_taxonomy_id}" and cache group 'mlp'
+		 */
 
 		$query = "
 SELECT t.term_id, t.name, tt.taxonomy
@@ -148,8 +144,6 @@ LIMIT 1";
 		if ( ! $term ) {
 			$term = [];
 		}
-
-		wp_cache_set( $cache_key, $term, 'mlp' );
 
 		return $term;
 	}

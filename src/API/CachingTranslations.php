@@ -7,10 +7,8 @@ namespace Inpsyde\MultilingualPress\API;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Translation\Translator;
 use Inpsyde\MultilingualPress\Translation\Translator\NullTranslator;
-use Inpsyde\MultilingualPress\Common\Request;
+use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
-
-use function Inpsyde\MultilingualPress\get_flag_url_for_site;
 
 /**
  * Caching translations API implementation.
@@ -36,7 +34,7 @@ final class CachingTranslations implements Translations {
 	private $null_translator;
 
 	/**
-	 * @var Request
+	 * @var WordPressRequestContext
 	 */
 	private $request;
 
@@ -65,17 +63,17 @@ final class CachingTranslations implements Translations {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param SiteRelations    $site_relations    Site relations API object.
-	 * @param ContentRelations $content_relations Content relations API object.
-	 * @param Languages        $languages         Languages API object.
-	 * @param Request          $request           Request object.
-	 * @param TypeFactory      $type_factory      Type factory object.
+	 * @param SiteRelations           $site_relations    Site relations API object.
+	 * @param ContentRelations        $content_relations Content relations API object.
+	 * @param Languages               $languages         Languages API object.
+	 * @param WordPressRequestContext $request           Request object.
+	 * @param TypeFactory             $type_factory      Type factory object.
 	 */
 	public function __construct(
 		SiteRelations $site_relations,
 		ContentRelations $content_relations,
 		Languages $languages,
-		Request $request,
+		WordPressRequestContext $request,
 		TypeFactory $type_factory
 	) {
 
@@ -103,12 +101,10 @@ final class CachingTranslations implements Translations {
 
 		$args = $this->normalize_arguments( $args );
 
-		$key = md5( serialize( $args ) );
-
-		$translations = wp_cache_get( $key, 'mlp' );
-		if ( is_array( $translations ) ) {
-			return $translations;
-		}
+		/*
+		 * @TODO There was cache here, now removed. Think about adding it again.
+		 * Cache key was calculated with `$key = md5( serialize( $args ) );` and cache group was 'mlp'
+		 */
 
 		$translations = $this->build_translations( $args );
 
@@ -119,8 +115,6 @@ final class CachingTranslations implements Translations {
 		 * @param array         $args         Translation args.
 		 */
 		$translations = (array) apply_filters( 'mlp_translations', $translations, $args );
-
-		wp_cache_set( $key, $translations, 'mlp' );
 
 		return $translations;
 	}
@@ -176,11 +170,16 @@ final class CachingTranslations implements Translations {
 
 			if ( empty( $content_relations[ $site_id ] ) ) {
 				$translation = $this->get_translation_for_no_related_content( $site_id, $args );
-				if ( ! $translation['remote_url'] ) {
+				if ( empty( $translation['remote_url'] ) ) {
 					continue;
 				}
 			} else {
-				if ( in_array( $type, [ Request::TYPE_SINGULAR, Request::TYPE_TERM_ARCHIVE ], true ) ) {
+				$content_types = [
+					WordPressRequestContext::TYPE_SINGULAR,
+					WordPressRequestContext::TYPE_TERM_ARCHIVE,
+				];
+
+				if ( in_array( $type, $content_types, true ) ) {
 					$content_id = (int) $content_relations[ $site_id ];
 
 					$translation = $this->get_translation_for_related_content( $site_id, $content_id, $args );
@@ -195,11 +194,9 @@ final class CachingTranslations implements Translations {
 			$translation = array_merge( $default_translation, [ 'target_site_id' => $site_id ], $translation );
 
 			$language = $languages[ $site_id ];
-			if ( empty( $language['http_name'] ) ) {
-				$language['http_name'] = $language['lang'] ?? '';
+			if ( empty( $language['http_code'] ) ) {
+				$language['http_code'] = $language['lang'] ?? '';
 			}
-
-			$translation['icon_url'] = $language['http_name'] ? get_flag_url_for_site( $site_id ) : '';
 
 			$translations[ $site_id ] = $this->type_factory->create_translation( [
 				$translation,
@@ -228,14 +225,15 @@ final class CachingTranslations implements Translations {
 		$translation = [];
 
 		switch ( $type ) {
-			case Request::TYPE_SINGULAR:
+			case WordPressRequestContext::TYPE_SINGULAR:
 				$translation = $translator->get_translation( $site_id, [
-					'content_id' => $content_id,
-					'strict'     => (bool) $args['strict'],
+					'content_id'  => $content_id,
+					'post_status' => (array) $args['post_status'],
+					'strict'      => (bool) $args['strict'],
 				] );
 				break;
 
-			case Request::TYPE_TERM_ARCHIVE:
+			case WordPressRequestContext::TYPE_TERM_ARCHIVE:
 				$translation = $translator->get_translation( $site_id, [
 					'content_id' => $content_id,
 				] );
@@ -262,13 +260,13 @@ final class CachingTranslations implements Translations {
 		$translation = [];
 
 		switch ( $type ) {
-			case Request::TYPE_POST_TYPE_ARCHIVE:
+			case WordPressRequestContext::TYPE_POST_TYPE_ARCHIVE:
 				$translation = $translator->get_translation( $site_id, [
 					'post_type' => (string) $args['post_type'],
 				] );
 				break;
 
-			case Request::TYPE_SEARCH:
+			case WordPressRequestContext::TYPE_SEARCH:
 				$translation = $translator->get_translation( $site_id, [
 					'query' => (string) $args['search_term'],
 				] );
@@ -276,12 +274,12 @@ final class CachingTranslations implements Translations {
 		}
 
 		if (
-			Request::TYPE_FRONT_PAGE === $type
+			WordPressRequestContext::TYPE_FRONT_PAGE === $type
 			|| ( empty( $translation['remote_url'] ) && ! $args['strict'] )
 		) {
 			$translation = array_merge(
 				$translation,
-				$this->translator( Request::TYPE_FRONT_PAGE )->get_translation( $site_id )
+				$this->translator( WordPressRequestContext::TYPE_FRONT_PAGE )->get_translation( $site_id )
 			);
 		}
 
@@ -355,6 +353,7 @@ final class CachingTranslations implements Translations {
 		$args = array_merge( [
 			'content_id'       => $this->request->queried_object_id(),
 			'include_base'     => false,
+			'post_status'      => [],
 			'post_type'        => $this->request->post_type(),
 			'search_term'      => get_search_query(),
 			'site_id'          => get_current_blog_id(),

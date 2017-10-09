@@ -45,11 +45,11 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	}
 
 	/**
-	 * Returns the slugs of all currently supported post types.
+	 * Returns all currently supported post types.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string[] The slugs of all currently supported post types.
+	 * @return int[] An array with post type slugs as keys and their individual settings as values.
 	 */
 	public function get_supported_post_types(): array {
 
@@ -64,7 +64,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 			return PostTypeRepository::CPT_INACTIVE !== $setting;
 		} );
 
-		return array_keys( $post_types );
+		return $post_types;
 	}
 
 	/**

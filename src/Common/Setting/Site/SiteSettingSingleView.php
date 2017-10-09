@@ -10,7 +10,7 @@ namespace Inpsyde\MultilingualPress\Common\Setting\Site;
  * @package Inpsyde\MultilingualPress\Common\Setting\Site
  * @since   3.0.0
  */
-final class SiteSettingSingleView implements SiteSettingView  {
+final class SiteSettingSingleView implements SiteSettingView {
 
 	/**
 	 * @var bool

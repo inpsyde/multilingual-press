@@ -76,7 +76,7 @@ class AdminBarCustomizer {
 			}
 
 			$title = $this->titles->get( (int) $site->userblog_id );
-			if ( ! $title ) {
+			if ( '' === $title ) {
 				continue;
 			}
 

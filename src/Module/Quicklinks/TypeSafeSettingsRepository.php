@@ -28,10 +28,10 @@ final class TypeSafeSettingsRepository implements SettingsRepository {
 
 		if ( ! $this->available_positions ) {
 			$this->available_positions = [
-				SettingsRepository::POSITION_TOP_LEFT     => __( 'Top left', 'multilingual-press' ),
-				SettingsRepository::POSITION_TOP_RIGHT    => __( 'Top right', 'multilingual-press' ),
-				SettingsRepository::POSITION_BOTTOM_LEFT  => __( 'Bottom left', 'multilingual-press' ),
-				SettingsRepository::POSITION_BOTTOM_RIGHT => __( 'Bottom right', 'multilingual-press' ),
+				SettingsRepository::POSITION_TOP_LEFT     => __( 'Top left', 'multilingualpress' ),
+				SettingsRepository::POSITION_TOP_RIGHT    => __( 'Top right', 'multilingualpress' ),
+				SettingsRepository::POSITION_BOTTOM_LEFT  => __( 'Bottom left', 'multilingualpress' ),
+				SettingsRepository::POSITION_BOTTOM_RIGHT => __( 'Bottom right', 'multilingualpress' ),
 			];
 		}
 

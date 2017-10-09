@@ -44,7 +44,7 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 
 		$posts = $this->search->get_posts( $context );
 		if ( ! $posts ) {
-			echo '<li>' . esc_html__( 'Nothing found.', 'multilingual-press' ) . '</li>';
+			echo '<li>' . esc_html__( 'Nothing found.', 'multilingualpress' ) . '</li>';
 
 			return;
 		}
@@ -77,7 +77,7 @@ final class StatusAwareSearchResultsView implements SearchResultsView {
 		}
 
 		/* translators: 1: post title, 2: post status */
-		$format = esc_html__( '%1$s &mdash; %2$s', 'multilingual-press' );
+		$format = esc_html__( '%1$s &mdash; %2$s', 'multilingualpress' );
 
 		return sprintf(
 			$format,

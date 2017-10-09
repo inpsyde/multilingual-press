@@ -63,7 +63,7 @@ class RedirectSiteSetting implements SiteSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s"><input type="checkbox" name="%2$s" value="1" id="%2$s"%3$s>%1$s</label>%4$s',
-			esc_html__( 'Enable automatic redirect', 'multilingual-press' ),
+			esc_html__( 'Enable automatic redirect', 'multilingualpress' ),
 			esc_attr( $this->option ),
 			checked( $this->repository->get_site_setting( $site_id ), true, false ),
 			nonce_field( $this->nonce )
@@ -81,7 +81,7 @@ class RedirectSiteSetting implements SiteSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
-			esc_html__( 'Redirect', 'multilingual-press' ),
+			esc_html__( 'Redirect', 'multilingualpress' ),
 			esc_attr( $this->option )
 		);
 	}

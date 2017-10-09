@@ -15,11 +15,6 @@ use Inpsyde\MultilingualPress\API\SiteRelations;
 final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 	/**
-	 * @var string
-	 */
-	private $default_site_language = 'en_US';
-
-	/**
 	 * @var SiteRelations
 	 */
 	private $site_relations;
@@ -52,22 +47,6 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 
 		return empty( $settings[ $site_id ]['text'] ) ? '' : stripslashes( $settings[ $site_id ]['text'] );
-	}
-
-	/**
-	 * Returns the flag image URL of the site with the given ID, or the current site.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param int $site_id Optional. Site ID. Defaults to 0.
-	 *
-	 * @return string The flag image URL of the site with the given ID, or the current site.
-	 */
-	public function get_flag_image_url( int $site_id = 0 ): string {
-
-		$site_id =  $site_id ?: get_current_blog_id();
-
-		return (string) get_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, '' );
 	}
 
 	/**
@@ -115,7 +94,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_site_language( int $site_id = 0 ): string {
 
-		$site_id =  $site_id ?: get_current_blog_id();
+		$site_id = $site_id ?: get_current_blog_id();
 
 		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
 
@@ -123,11 +102,11 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 			return (string) $settings[ $site_id ]['lang'];
 		}
 
-		$site_language = (string) get_network_option( null, 'WPLANG', $this->default_site_language );
+		$site_language = (string) get_network_option( null, 'WPLANG', '' );
 
 		return in_array( $site_language, get_available_languages(), true )
 			? $site_language
-			: $this->default_site_language;
+			: '';
 	}
 
 	/**
@@ -143,23 +122,6 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	public function set_alternative_language_title( string $title, int $site_id = 0 ): bool {
 
 		return $this->update_setting( SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE, $title, $site_id );
-	}
-
-	/**
-	 * Sets the flag image URL for the site with the given ID, or the current site.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @param string $url     Flag image URL.
-	 * @param int    $site_id Optional. Site ID. Defaults to 0.
-	 *
-	 * @return bool Whether or not the flag image URL was set successfully.
-	 */
-	public function set_flag_image_url( string $url, int $site_id = 0 ): bool {
-
-		$site_id = $site_id ?: get_current_blog_id();
-
-		return (bool) update_blog_option( $site_id, SiteSettingsRepository::OPTION_FLAG_IMAGE_URL, esc_url( $url ) );
 	}
 
 	/**

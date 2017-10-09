@@ -117,14 +117,14 @@ final class NullLanguage implements Language {
 		return [
 			'custom_name'  => '',
 			'english_name' => '',
-			'http_name'    => '',
+			'http_code'    => '',
 			'is_rtl'       => false,
 			'iso_639_1'    => '',
 			'iso_639_2'    => '',
+			'locale'       => '',
 			'native_name'  => '',
-			'priority'     => 10,
+			'priority'     => 1,
 			'text'         => '',
-			'wp_locale'    => '',
 		];
 	}
 }

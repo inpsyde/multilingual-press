@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 use function Inpsyde\MultilingualPress\check_admin_referer;
@@ -32,6 +33,11 @@ class SiteSettingsUpdateRequestHandler {
 	private $nonce;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * @var SiteSettingsUpdater
 	 */
 	private $updater;
@@ -42,11 +48,14 @@ class SiteSettingsUpdateRequestHandler {
 	 * @since 3.0.0
 	 *
 	 * @param SiteSettingsUpdater $updater Updater object.
+	 * @param Request             $request HTTP request object.
 	 * @param Nonce               $nonce   Nonce object.
 	 */
-	public function __construct( SiteSettingsUpdater $updater, Nonce $nonce ) {
+	public function __construct( SiteSettingsUpdater $updater, Request $request, Nonce $nonce ) {
 
 		$this->updater = $updater;
+
+		$this->request = $request;
 
 		$this->nonce = $nonce;
 	}
@@ -65,11 +74,12 @@ class SiteSettingsUpdateRequestHandler {
 			wp_die( 'Invalid', 'Invalid', 403 );
 		}
 
-		if ( empty( $_REQUEST['id'] ) || ! is_numeric( $_REQUEST['id'] ) ) {
+		$site_id = (int) $this->request->body_value( 'id', INPUT_REQUEST, FILTER_SANITIZE_NUMBER_INT );
+		if ( ! $site_id ) {
 			wp_die( 'Invalid site', 'Invalid site', 403 );
 		}
 
-		$this->updater->update_settings( (int) $_REQUEST['id'] );
+		$this->updater->update_settings( $site_id );
 
 		redirect_after_settings_update();
 	}

@@ -8,6 +8,7 @@ use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\NullLanguage;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 use Inpsyde\MultilingualPress\Database\Table;
+use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 use Inpsyde\MultilingualPress\Factory\TypeFactory;
 
 /**
@@ -80,7 +81,12 @@ final class WPDBLanguages implements Languages {
 	 */
 	public function get_all_languages(): array {
 
-		$query = "SELECT * FROM {$this->table} ORDER BY priority DESC, english_name ASC";
+		$query = sprintf(
+			'SELECT * FROM %1$s ORDER BY %2$s DESC, %3$s ASC',
+			$this->table,
+			LanguagesTable::COLUMN_PRIORITY,
+			LanguagesTable::COLUMN_ENGLISH_NAME
+		);
 
 		$results = $this->db->get_results( $query, ARRAY_A );
 		if ( ! $results || ! is_array( $results ) ) {
@@ -130,17 +136,29 @@ final class WPDBLanguages implements Languages {
 			? "'" . implode( "','", array_map( 'esc_sql', $iso_codes ) ) . "'"
 			: '';
 
-		$query = "SELECT * FROM {$this->table} WHERE http_name IN ({$names_string})";
+		$query = sprintf(
+			'SELECT * FROM %1$s WHERE %2$s IN (%3$s)',
+			$this->table,
+			LanguagesTable::COLUMN_HTTP_CODE,
+			$names_string
+		);
 
 		if ( $iso_codes ) {
-			$query .= "\n\tOR iso_639_1 IN ($iso_codes_string)";
+			$query .= sprintf(
+				'OR %1$s IN (%2$s)',
+				LanguagesTable::COLUMN_ISO_639_1_CODE,
+				$iso_codes_string
+			);
 		}
 
 		foreach ( (array) $this->db->get_results( $query, ARRAY_A ) as $language ) {
 			foreach ( $names as $site_id => $name ) {
 				if (
 					in_array( $name, $language, true )
-					|| ( isset( $iso_codes[ $site_id ] ) && $language['iso_639_1'] === $iso_codes[ $site_id ] )
+					|| (
+						isset( $iso_codes[ $site_id ] )
+						&& $language[ LanguagesTable::COLUMN_ISO_639_1_CODE ] === $iso_codes[ $site_id ]
+					)
 				) {
 					$languages[ $site_id ] += $language;
 				}
@@ -161,7 +179,13 @@ final class WPDBLanguages implements Languages {
 	 */
 	public function get_language_by_http_code( string $http_code ): Language {
 
-		$query = $this->db->prepare( "SELECT * FROM {$this->table} WHERE http_name = %s LIMIT 1", $http_code );
+		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
+		$query = sprintf(
+			'SELECT * FROM %1$s WHERE %2$s = %%s LIMIT 1',
+			$this->table,
+			LanguagesTable::COLUMN_HTTP_CODE
+		);
+		$query = $this->db->prepare( $query, $http_code );
 
 		$language = $this->db->get_row( $query, ARRAY_A );
 		if ( ! $language || ! is_array( $language ) ) {
@@ -182,17 +206,18 @@ final class WPDBLanguages implements Languages {
 	 */
 	public function get_languages( array $args = [] ): array {
 
+		// TODO: Think about what to do with this. Pass Language constants, or LanguagesTable constants, or allow both?
 		$args = array_merge( [
 			'conditions' => [],
 			'fields'     => [],
 			'number'     => 0,
 			'order_by'   => [
 				[
-					'field' => 'priority',
+					'field' => LanguagesTable::COLUMN_PRIORITY,
 					'order' => 'DESC',
 				],
 				[
-					'field' => 'english_name',
+					'field' => LanguagesTable::COLUMN_ENGLISH_NAME,
 					'order' => 'ASC',
 				],
 			],
@@ -230,11 +255,12 @@ final class WPDBLanguages implements Languages {
 
 		$updated = 0;
 
+		// TODO: Think about what to do with this. Allow Language constants, or LanguagesTable constants, or both?
 		foreach ( $languages as $id => $language ) {
 			$updated += (int) $this->db->update(
 				$this->table,
 				(array) $language,
-				[ 'ID' => $id ],
+				[ LanguagesTable::COLUMN_ID => $id ],
 				$this->get_field_specifications( $language ),
 				'%d'
 			);
@@ -390,8 +416,10 @@ final class WPDBLanguages implements Languages {
 
 		$conditions = array_map( function ( array $condition ) {
 
+			$compare = $condition['compare'] ?? '=';
+
 			return $this->db->prepare(
-				"{$condition['field']} {$condition['compare']} {$this->fields[ $condition['field'] ]}",
+				"{$condition['field']} {$compare} {$this->fields[ $condition['field'] ]}",
 				$condition['value']
 			);
 		}, $conditions );

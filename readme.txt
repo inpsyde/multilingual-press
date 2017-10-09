@@ -2,8 +2,8 @@
 Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont, ChriCo, dnaber-de, paddelboot
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.7
-Tested up to: 4.7
-Stable tag: 2.5.1
+Tested up to: 4.8
+Stable tag: 3.0.0
 
 The multisite-based free open source plugin for your multilingual WordPress websites.
 
@@ -113,6 +113,52 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.9.0 =
+- Activation: Initialize the plugin upon activation, see [issue #281](https://github.com/inpsyde/MultilingualPress/issues/281).
+- Translations: Introduce a new filter, `multilingualpress.active_taxonomies`, to modify the allowed taxonomies, see [issue #282](https://github.com/inpsyde/MultilingualPress/issues/282).
+
+= 2.8.1 =
+- Content Relations: Fix always disconnecting the source post.
+
+= 2.8.0 =
+- Content Relations: Fix various (edge case) issue around adding a new post to an existing relationship, see [issue #280](https://github.com/inpsyde/MultilingualPress/issues/280).
+- DB: Always (try to) delete a table before creating it anew, see [issue #240](https://github.com/inpsyde/MultilingualPress/issues/240).
+- hreflang: Introduce a new filter, `multilingualpress.render_hreflang`, to force or prevent rendering.
+- hreflang: Introduce a new filter, `multilingualpress.hreflang_post_status`, to restrict post translations, and only query published posts, see [issue #276](https://github.com/inpsyde/MultilingualPress/issues/276) and [issue #277](https://github.com/inpsyde/MultilingualPress/issues/277).
+- Language API: Introduce a new argument, `post_status`, to restrict post translations.
+- Redirect: Introduce a new filter, `multilingualpress.redirect_post_status`, to restrict post redirect targets, and only query published posts, see [pull request #278](https://github.com/inpsyde/MultilingualPress/pull/278), props @diedexx.
+
+= 2.7.1 =
+- Redirect: Add optional `$args` argument to `Mlp_Language_Negotiation::get_redirect_matches()` and pass it on to `Mlp_Language_Api::get_translations()`, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
+- Redirect: Add `content_id` to redirect matches, see [pull request #271](https://github.com/inpsyde/MultilingualPress/pull/271), props @diedexx.
+- Relations: Delete all relationship data with the last relationship, see [issue #273](https://github.com/inpsyde/MultilingualPress/issues/273).
+
+= 2.7.0 =
+- Redirect: Introduce a new filter, `multilingualpress.redirect_targets`, to manipulate the found redirect targets, see [pull request #265](https://github.com/inpsyde/MultilingualPress/pull/265), props @diedexx.
+- hreflang: Introduce new filters `multilingualpress.hreflang_type` and `multilingualpress.hreflang_translations`, see [pull request #267](https://github.com/inpsyde/MultilingualPress/pull/267), props @diedexx.
+- hreflang: Bump priority for `hreflang` HTTP headers to `11`.
+- Redirect: Bump default value for language-only priority factor.
+
+= 2.6.0 =
+- Types: Introduce null implementations for language and translation interfaces, `Mlp_Null_Language` and `Mlp_Null_Translation`.
+- Nav Menu: Use `Mlp_Null_Translation` in favor of `null`.
+- Language API: Don't cache translations anymore, see [issue #261](https://github.com/inpsyde/MultilingualPress/issues/261).
+- Term Translator: Don't cache translations anymore.
+- Table List: Don't cache table names anymore.
+- Language Switcher: Make _Native name_ the default _Link text_ option value, see [issue #262](https://github.com/inpsyde/MultilingualPress/issues/262).
+
+= 2.5.5 =
+- Translations: Fix issue with unfilterable URLs in the `hreflang` HTTP header and HTML element output.
+- Post Translator: Fix creation of (duplicate) draft translation posts on post preview, see
+[issue #260](https://github.com/inpsyde/MultilingualPress/issues/260).
+
+= 2.5.4 =
+- Post Translator: Fix creation of duplicate draft translation posts, see
+[issue #253](https://github.com/inpsyde/MultilingualPress/issues/253).
+
+= 2.5.3 =
+- Helpers: Fix `Mlp_Helpers::get_language_flag()` (and thus `mlp_get_language_flag()`) throwing a warning for non-custom flag images.
 
 = 2.5.2 =
 - Language Switcher: Fix widget not passing on the `strict` flag.

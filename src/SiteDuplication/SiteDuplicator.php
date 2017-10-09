@@ -5,6 +5,8 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Database\TableDuplicator;
 use Inpsyde\MultilingualPress\Database\TableList;
 use Inpsyde\MultilingualPress\Database\TableReplacer;
@@ -24,7 +26,7 @@ class SiteDuplicator {
 	 *
 	 * @var string
 	 */
-	const NAME_ACTIVATE_PLUGINS = 'activate_plugins';
+	const NAME_ACTIVATE_PLUGINS = 'mlp_activate_plugins';
 
 	/**
 	 * Input name.
@@ -33,7 +35,7 @@ class SiteDuplicator {
 	 *
 	 * @var string
 	 */
-	const NAME_BASED_ON_SITE = 'basedon';
+	const NAME_BASED_ON_SITE = 'mlp_based_on_site';
 
 	/**
 	 * Input name.
@@ -42,7 +44,7 @@ class SiteDuplicator {
 	 *
 	 * @var string
 	 */
-	const NAME_SEARCH_ENGINE_VISIBILITY = 'visibility';
+	const NAME_SEARCH_ENGINE_VISIBILITY = 'mlp_search_engine_visibility';
 
 	/**
 	 * @var ActivePlugins
@@ -63,6 +65,11 @@ class SiteDuplicator {
 	 * @var \wpdb
 	 */
 	private $db;
+
+	/**
+	 * @var Request
+	 */
+	private $request;
 
 	/**
 	 * @var TableDuplicator
@@ -91,6 +98,7 @@ class SiteDuplicator {
 	 * @param ActivePlugins    $active_plugins    Active plugin access object.
 	 * @param ContentRelations $content_relations Content relations APU object.
 	 * @param AttachmentCopier $attachment_copier Attachment copier object.
+	 * @param Request          $request           HTTP request object.
 	 */
 	public function __construct(
 		\wpdb $db,
@@ -99,7 +107,8 @@ class SiteDuplicator {
 		TableReplacer $table_replacer,
 		ActivePlugins $active_plugins,
 		ContentRelations $content_relations,
-		AttachmentCopier $attachment_copier
+		AttachmentCopier $attachment_copier,
+		Request $request
 	) {
 
 		$this->db = $db;
@@ -115,6 +124,8 @@ class SiteDuplicator {
 		$this->content_relations = $content_relations;
 
 		$this->attachment_copier = $attachment_copier;
+
+		$this->request = $request;
 	}
 
 	/**
@@ -128,16 +139,19 @@ class SiteDuplicator {
 	 */
 	public function duplicate_site( $new_site_id ): bool {
 
-		if (
-			empty( $_POST['blog'][ static::NAME_BASED_ON_SITE ] )
-			|| 1 > $_POST['blog'][ static::NAME_BASED_ON_SITE ]
-		) {
+		$source_site_id = (int) $this->request->body_value(
+			static::NAME_BASED_ON_SITE,
+			INPUT_POST,
+			FILTER_SANITIZE_NUMBER_INT
+		);
+
+		if ( 1 > $source_site_id ) {
 			return false;
 		}
 
 		$new_site_id = (int) $new_site_id;
 
-		$source_site_id = (int) $_POST['blog'][ static::NAME_BASED_ON_SITE ];
+		$network_state = NetworkState::create();
 
 		// Switch to the source site.
 		switch_to_blog( $source_site_id );
@@ -160,14 +174,18 @@ class SiteDuplicator {
 
 		$this->set_admin_email( $admin_email );
 
-		update_option( 'blogname', stripslashes( $_POST['blog']['title'] ) );
+		$blog_data = (array) $this->request->body_value(
+			'blog',
+			INPUT_POST,
+			FILTER_DEFAULT,
+			FILTER_FORCE_ARRAY
+		);
+
+		update_option( 'blogname', stripslashes( $blog_data['title'] ?? '' ) );
 
 		$this->rename_user_roles_option( $table_prefix );
 
-		// Set the search engine visibility.
-		if ( isset( $_POST['blog'][ static::NAME_SEARCH_ENGINE_VISIBILITY ] ) ) {
-			update_option( 'blog_public', (bool) $_POST['blog'][ static::NAME_SEARCH_ENGINE_VISIBILITY ] );
-		}
+		$this->handle_search_engine_visibility();
 
 		$this->handle_plugins();
 
@@ -177,9 +195,8 @@ class SiteDuplicator {
 
 		$this->attachment_copier->copy_attachments( $source_site_id );
 
-		// Switch all the way back to the original site.
-		restore_current_blog();
-		restore_current_blog();
+		// Switch back to the original site.
+		$network_state->restore();
 
 		/**
 		 * Fires after successful site duplication.
@@ -306,13 +323,33 @@ class SiteDuplicator {
 	}
 
 	/**
+	 * Adapts the search engine visibility according to the setting included in the request.
+	 *
+	 * @return void
+	 */
+	private function handle_search_engine_visibility() {
+
+		$is_site_visible = (bool) $this->request->body_value(
+			static::NAME_SEARCH_ENGINE_VISIBILITY,
+			INPUT_POST,
+			FILTER_SANITIZE_NUMBER_INT
+		);
+		update_option( 'blog_public', $is_site_visible );
+	}
+
+	/**
 	 * Adapts all active plugins according to the setting included in the request.
 	 *
 	 * @return void
 	 */
 	private function handle_plugins() {
 
-		if ( isset( $_POST['blog'][ static::NAME_ACTIVATE_PLUGINS ] ) ) {
+		$activate_plugins = (bool) $this->request->body_value(
+			static::NAME_ACTIVATE_PLUGINS,
+			INPUT_POST,
+			FILTER_SANITIZE_NUMBER_INT
+		);
+		if ( $activate_plugins ) {
 			$this->active_plugins->activate();
 		} else {
 			$this->active_plugins->deactivate();

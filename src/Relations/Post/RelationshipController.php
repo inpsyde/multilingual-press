@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Relations\Post;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Common\HTTP\Request;
 
 /**
  * Relationship controller.
@@ -57,17 +58,25 @@ class RelationshipController {
 	private $last_error = null;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param ContentRelations $content_relations Content relations API object.
+	 * @param Request          $request           HTTP request object.
 	 */
-	public function __construct( ContentRelations $content_relations ) {
+	public function __construct( ContentRelations $content_relations, Request $request ) {
 
 		$this->content_relations = $content_relations;
 
-		$this->context = RelationshipContext::from_request();
+		$this->request = $request;
+
+		$this->context = RelationshipContext::from_request( $request );
 	}
 
 	/**
@@ -81,7 +90,8 @@ class RelationshipController {
 
 		$callback = $this->get_callback();
 		if ( $callback ) {
-			add_action( "wp_ajax_{$_REQUEST['action']}", $callback );
+			$action = $this->request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
+			add_action( "wp_ajax_{$action}", $callback );
 		}
 	}
 
@@ -148,11 +158,13 @@ class RelationshipController {
 
 		$remote_site_id = $this->context->remote_site_id();
 
+		$post_id = (int) $this->request->body_value( 'post_ID', INPUT_POST, FILTER_SANITIZE_NUMBER_INT );
+
 		$save_context = [
 			'source_blog'    => $this->context->source_site_id(),
 			'source_post'    => $source_post,
 			'real_post_type' => $this->get_real_post_type( $source_post ),
-			'real_post_id'   => empty( $_POST['post_ID'] ) ? $this->context->source_post_id() : (int) $_POST['post_ID'],
+			'real_post_id'   => $post_id ?: $this->context->source_post_id(),
 		];
 
 		/** This action is documented in inc/advanced-translator/Mlp_Advanced_Translator_Data.php */
@@ -180,7 +192,7 @@ class RelationshipController {
 		}
 
 		$this->context = RelationshipContext::from_existing( $this->context, [
-			RelationshipContext::KEY_NEW_POST_ID => $new_post_id,
+			RelationshipContext::KEY_REMOTE_POST_ID => $new_post_id,
 		] );
 
 		return $this->connect_existing_post();
@@ -193,13 +205,11 @@ class RelationshipController {
 	 */
 	private function connect_existing_post(): bool {
 
-		$this->disconnect_post();
-
 		return $this->content_relations->set_relation(
 			$this->context->source_site_id(),
 			$this->context->remote_site_id(),
 			$this->context->source_post_id(),
-			$this->context->new_post_id(),
+			$this->context->remote_post_id(),
 			'post'
 		);
 	}
@@ -211,32 +221,42 @@ class RelationshipController {
 	 */
 	private function disconnect_post() {
 
-		$remote_site_id = $this->context->remote_site_id();
-
-		$remote_post_id = $this->context->remote_post_id();
-
 		$source_site_id = $this->context->source_site_id();
 
+		$remote_site_id = $this->context->remote_site_id();
+
 		$translation_ids = $this->content_relations->get_translation_ids(
-			$this->context->source_site_id(),
+			$source_site_id,
 			$remote_site_id,
 			$this->context->source_post_id(),
-			$remote_post_id,
+			$this->context->remote_post_id(),
 			'post'
 		);
 
-		if ( $translation_ids['ml_source_blogid'] !== $source_site_id ) {
-			$remote_site_id = $source_site_id;
-			if ( 0 !== $remote_post_id ) {
-				$remote_post_id = $this->context->source_post_id();
-			}
+		$relationship_site_id = $translation_ids['ml_source_blogid'];
+
+		$relationship_post_id = $translation_ids['ml_source_elementid'];
+
+		$relations = $this->content_relations->get_relations(
+			$relationship_site_id,
+			$relationship_post_id,
+			'post'
+		);
+
+		$target_site_id = $remote_site_id;
+		if ( $target_site_id === $relationship_site_id ) {
+			$target_site_id = $source_site_id;
+		}
+
+		if ( empty( $relations[ $target_site_id ] ) ) {
+			return;
 		}
 
 		$this->content_relations->delete_relation(
-			$translation_ids['ml_source_blogid'],
-			$remote_site_id,
-			$translation_ids['ml_source_elementid'],
-			$remote_post_id,
+			$relationship_site_id,
+			2 < count( $relations ) ? $target_site_id : 0,
+			$relationship_post_id,
+			0,
 			'post'
 		);
 	}
@@ -248,15 +268,18 @@ class RelationshipController {
 	 */
 	private function get_callback() {
 
-		switch ( $_REQUEST['action'] ) {
-			case static::ACTION_CONNECT_EXISTING:
-				return [ $this, 'handle_connect_existing_post' ];
+		$action = $this->request->body_value( 'action', INPUT_REQUEST, FILTER_SANITIZE_STRING );
+		if ( is_string( $action ) ) {
+			switch ( $action ) {
+				case static::ACTION_CONNECT_EXISTING:
+					return [ $this, 'handle_connect_existing_post' ];
 
-			case static::ACTION_CONNECT_NEW:
-				return [ $this, 'handle_connect_new_post' ];
+				case static::ACTION_CONNECT_NEW:
+					return [ $this, 'handle_connect_new_post' ];
 
-			case static::ACTION_DISCONNECT:
-				return [ $this, 'handle_disconnect_post' ];
+				case static::ACTION_DISCONNECT:
+					return [ $this, 'handle_disconnect_post' ];
+			}
 		}
 
 		return null;
@@ -277,12 +300,9 @@ class RelationshipController {
 			return $post->post_type;
 		}
 
-		if ( empty( $_POST['post_type'] ) || 'revision' === $_POST['post_type'] ) {
-			return $post->post_type;
-		}
-
-		if ( is_string( $_POST['post_type'] ) ) {
-			return $_POST['post_type'];
+		$post_type = $this->request->body_value( 'post_type', INPUT_POST, FILTER_SANITIZE_STRING );
+		if ( is_string( $post_type ) && '' !== $post_type && 'revision' !== $post_type ) {
+			return $post_type;
 		}
 
 		return $post->post_type;

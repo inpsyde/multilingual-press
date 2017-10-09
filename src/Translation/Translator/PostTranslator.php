@@ -50,7 +50,11 @@ final class PostTranslator implements Translator {
 
 		switch_to_blog( $site_id );
 
-		$data = $this->get_translation_data( (int) $args['content_id'], ! empty( $args['strict'] ) );
+		$data = $this->get_translation_data(
+			(int) $args['content_id'],
+			(array) ( $args['post_status'] ?? [] ),
+			! empty( $args['strict'] )
+		);
 
 		restore_current_blog();
 
@@ -60,15 +64,20 @@ final class PostTranslator implements Translator {
 	/**
 	 * Returns the translation data for the given post ID.
 	 *
-	 * @param int  $post_id Post ID.
-	 * @param bool $strict  Only respect posts that have a translation?
+	 * @param int      $post_id     Post ID.
+	 * @param string[] $post_status Allowed post status.
+	 * @param bool     $strict      Only respect posts that have a translation?
 	 *
 	 * @return array Translation data.
 	 */
-	private function get_translation_data( int $post_id, bool $strict ): array {
+	private function get_translation_data( int $post_id, array $post_status, bool $strict ): array {
 
 		$post = get_post( $post_id );
 		if ( ! $post ) {
+			return [];
+		}
+
+		if ( $post_status && ! in_array( $post->post_status, $post_status, true ) ) {
 			return [];
 		}
 

@@ -103,7 +103,7 @@ final class PluginSettingsPageView implements SettingsPageView {
 				 */
 				do_action( 'multilingualpress.after_module_list' );
 
-				submit_button( __( 'Save Changes', 'multilingual-press' ) );
+				submit_button( __( 'Save Changes', 'multilingualpress' ) );
 				?>
 			</form>
 		</div>

@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\SiteRelations;
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
 
 use function Inpsyde\MultilingualPress\get_site_language;
@@ -62,7 +63,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 				'<p class="description">%s</p>',
 				esc_html__(
 					'You can connect this site only to sites with an assigned language. Other sites will not show up here.',
-					'multilingual-press'
+					'multilingualpress'
 				)
 			);
 	}
@@ -78,7 +79,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
-			esc_html__( 'Relationships', 'multilingual-press' ),
+			esc_html__( 'Relationships', 'multilingualpress' ),
 			esc_attr( $this->id )
 		);
 	}
@@ -97,11 +98,13 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 			return '';
 		}
 
-		return array_reduce( $site_ids, function ( $relationships, $site_id ) use ( $base_site_id ) {
+		$network_state = NetworkState::create();
+
+		$relationships = array_reduce( $site_ids, function ( $relationships, $site_id ) use ( $base_site_id ) {
 
 			switch_to_blog( $site_id );
+
 			$site_name = get_bloginfo( 'name' );
-			restore_current_blog();
 
 			$related_site_ids = $this->site_relations->get_related_site_ids( (int) $site_id );
 
@@ -109,7 +112,7 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 					'<p><label for="%3$s"><input type="checkbox" name="%4$s[]" value="%2$d" id="%3$s"%5$s>%1$s</label></p>',
 					sprintf(
 						// translators: 1 = site name, 2 = site language
-						esc_html_x( '%1$s - %2$s', 'Site relationships', 'multilingual-press' ),
+						esc_html_x( '%1$s - %2$s', 'Site relationships', 'multilingualpress' ),
 						$site_name,
 						get_site_language( $site_id, false )
 					),
@@ -119,5 +122,9 @@ final class RelationshipsSiteSetting implements SiteSettingViewModel {
 					checked( in_array( $base_site_id, $related_site_ids, true ), true, false )
 				);
 		}, '' );
+
+		$network_state->restore();
+
+		return $relationships;
 	}
 }

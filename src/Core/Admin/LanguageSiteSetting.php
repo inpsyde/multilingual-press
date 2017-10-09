@@ -58,7 +58,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	public function markup( int $site_id ): string {
 
 		return sprintf(
-			'<select id="%2$s" name="blog[%3$s]" autocomplete="off">%1$s</select>',
+			'<select id="%2$s" name="%3$s" autocomplete="off">%1$s</select>',
 			$this->get_options( $site_id ),
 			esc_attr( $this->id ),
 			esc_attr( SiteSettingsRepository::NAME_LANGUAGE )
@@ -76,7 +76,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 
 		return sprintf(
 			'<label for="%2$s">%1$s</label>',
-			esc_html__( 'Language', 'multilingual-press' ),
+			esc_html__( 'Language', 'multilingualpress' ),
 			esc_attr( $this->id )
 		);
 	}
@@ -90,25 +90,25 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 	 */
 	private function get_options( int $site_id ): string {
 
-		$options = '<option value="-1">' . esc_html__( 'Choose language', 'multilingual-press' ) . '</option>';
+		$options = '<option value="-1">' . esc_html__( 'Choose language', 'multilingualpress' ) . '</option>';
 
 		$languages = $this->languages->get_languages( [
 			'fields' => [
 				'english_name',
-				'http_name',
+				'http_code',
 				'native_name',
 			],
 		] );
 		if ( $languages ) {
-			$current_site_language = $this->repository->get_site_language( $site_id );
+			$current_site_language = $this->repository->get_site_language( $site_id ) ?: 'en_US';
 
 			$options = array_reduce( $languages, function ( $options, $language ) use ( $current_site_language ) {
 
 				if (
-					! empty( $language['http_name'] )
+					! empty( $language['http_code'] )
 					&& ! ( empty( $language['english_name'] ) && empty( $language['native_name'] ) )
 				) {
-					$site_language = str_replace( '-', '_', $language['http_name'] );
+					$site_language = str_replace( '-', '_', $language['http_code'] );
 
 					$options .= sprintf(
 						'<option value="%2$s"%3$s>%1$s</option>',

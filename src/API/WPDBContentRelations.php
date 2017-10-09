@@ -19,11 +19,6 @@ use function Inpsyde\MultilingualPress\debug;
 final class WPDBContentRelations implements ContentRelations {
 
 	/**
-	 * @var string
-	 */
-	private $cache_group = 'mlp';
-
-	/**
 	 * @var \wpdb
 	 */
 	private $db;
@@ -97,9 +92,6 @@ final class WPDBContentRelations implements ContentRelations {
 		}
 
 		$result = (int) $this->db->delete( $this->table, $where, $where_format );
-
-		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
-		wp_cache_delete( $cache_key, $this->cache_group );
 
 		debug(
 			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->db->last_query}"
@@ -222,12 +214,11 @@ WHERE (
 	 */
 	public function get_relations( $source_site_id, $source_content_id, $type = 'post' ) {
 
-		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
-
-		$cache = wp_cache_get( $cache_key, $this->cache_group );
-		if ( is_array( $cache ) ) {
-			return $cache;
-		}
+		/*
+		 * @TODO There was cache here, now removed. Think about adding it again.
+		 * Cache key was: "mlp_{$type}_relations_{$source_site_id}_{$source_content_id}" and cache group was 'mlp'.
+		 * Cache was deleted in `set_relation()`, `delete_relation()` and , `delete_relations_for_site()` methods.
+		 */
 
 		$sql = "
 SELECT t.ml_blogid as site_id, t.ml_elementid as content_id
@@ -252,8 +243,6 @@ WHERE s.ml_blogid = %d
 		foreach ( $results as $set ) {
 			$output[ (int) $set['site_id'] ] = (int) $set['content_id'];
 		}
-
-		wp_cache_set( $cache_key, $output, $this->cache_group );
 
 		return $output;
 	}
@@ -324,20 +313,43 @@ WHERE s.ml_blogid = %d
 			$type
 		);
 
-		$existing = $this->get_relations( $source_site_id, $source_content_id, $type );
+		if ( $translation_ids['ml_source_blogid'] === $target_site_id ) {
+			$target_site_id = $source_site_id;
 
-		if ( isset( $existing[ $target_site_id ] ) ) {
-			if ( $existing[ $target_site_id ] === $target_content_id ) {
+			$target_content_id = $source_content_id;
+		}
+
+		$existing = $this->get_relations(
+			$translation_ids['ml_source_blogid'],
+			$translation_ids['ml_source_elementid'],
+			$type
+		);
+
+		if ( isset( $existing[ $source_site_id ], $existing[ $target_site_id ] ) ) {
+			if (
+				$existing[ $source_site_id ] === $source_content_id
+				&& $existing[ $target_site_id ] === $target_content_id
+			) {
 				return true;
+			}
+
+			if ( $existing[ $source_site_id ] !== $source_content_id ) {
+				$target_site_id = $source_site_id;
+
+				$target_content_id = $source_content_id;
 			}
 
 			$this->delete_relation(
 				$translation_ids['ml_source_blogid'],
 				$target_site_id,
 				$translation_ids['ml_source_elementid'],
-				0, // old content id
+				0,
 				$type
 			);
+		} elseif ( isset( $existing[ $target_site_id ] ) ) {
+			$target_site_id = $source_site_id;
+
+			$target_content_id = $source_content_id;
 		}
 
 		$result = (bool) $this->insert_row(
@@ -347,9 +359,6 @@ WHERE s.ml_blogid = %d
 			$target_content_id,
 			$type
 		);
-
-		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
-		wp_cache_delete( $cache_key, $this->cache_group );
 
 		debug(
 			current_filter() . '/' . __METHOD__ . '/' . __LINE__ . " - {$this->db->last_query}"
@@ -395,20 +404,6 @@ WHERE s.ml_blogid = %d
 		);
 
 		return $result;
-	}
-
-	/**
-	 * Return the cache key for the given arguments.
-	 *
-	 * @param int    $source_site_id    Blog ID.
-	 * @param int    $source_content_id Content ID.
-	 * @param string $type              Content type.
-	 *
-	 * @return string
-	 */
-	private function get_cache_key( $source_site_id, $source_content_id, $type ) {
-
-		return "mlp_{$type}_relations_{$source_site_id}_{$source_content_id}";
 	}
 
 	/**

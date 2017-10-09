@@ -96,7 +96,7 @@ test( 'getLanguage (English, United States) ...', ( assert ) => {
 
 	assert.equal(
 		testee.getLanguage( new JqueryObject() ),
-		'en-US',
+		'en_US',
 		'... SHOULD return the locale for English (United States).'
 	);
 
@@ -106,12 +106,14 @@ test( 'getLanguage (English, United States) ...', ( assert ) => {
 test( 'getLanguage (German, Germany) ...', ( assert ) => {
 	const testee = createTestee();
 
+	const language = 'de_DE';
+
 	const $select = new JqueryObject();
-	$select.val.returns( 'de_DE' );
+	$select.val.returns( language );
 
 	assert.equal(
 		testee.getLanguage( $select ),
-		'de-DE',
+		language,
 		'... SHOULD return the locale for German (Germany).'
 	);
 

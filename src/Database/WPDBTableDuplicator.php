@@ -41,6 +41,8 @@ final class WPDBTableDuplicator implements TableDuplicator {
 	 */
 	public function duplicate_table( string $existing_table, string $new_table ): bool {
 
-		return (bool) $this->db->query( "CREATE TABLE IF NOT EXISTS {$new_table} LIKE {$existing_table}" );
+		$this->db->query( "DROP TABLE IF EXISTS {$new_table}" );
+
+		return (bool) $this->db->query( "CREATE TABLE {$new_table} LIKE {$existing_table}" );
 	}
 }

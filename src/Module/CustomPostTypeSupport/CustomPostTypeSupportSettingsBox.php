@@ -58,7 +58,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 
 		return __(
 			'In some cases the correct pretty permalinks are not available across multiple sites. Test it, and activate dynamic permalinks for those post types to avoid 404 errors. This will not change the permalink settings, just the URLs in MultilingualPress.',
-			'multilingual-press'
+			'multilingualpress'
 		);
 	}
 
@@ -123,7 +123,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 	 */
 	public function title(): string {
 
-		return __( 'Custom Post Type Support', 'multilingual-press' );
+		return __( 'Custom Post Type Support', 'multilingualpress' );
 	}
 
 	/**
@@ -141,7 +141,9 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 
 		$id = "mlp-cpt-{$slug}";
 
-		$post_type_setting = empty( $supported_post_types[ $slug ] ) ? 0 : (int) $supported_post_types[ $slug ];
+		$post_type_setting = empty( $supported_post_types[ $slug ] )
+			? PostTypeRepository::CPT_INACTIVE
+			: (int) $supported_post_types[ $slug ];
 		?>
 		<tr>
 			<td>
@@ -165,7 +167,7 @@ final class CustomPostTypeSupportSettingsBox implements SettingsBoxViewModel {
 						PostTypeRepository::CPT_QUERY_BASED === $post_type_setting
 					);
 					?>
-					<?php esc_html_e( 'Use dynamic permalinks', 'multilingual-press' ); ?>
+					<?php esc_html_e( 'Use dynamic permalinks', 'multilingualpress' ); ?>
 				</label>
 			</td>
 		</tr>

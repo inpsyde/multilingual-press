@@ -43,20 +43,14 @@ final class WPDBTableList implements TableList {
 	 */
 	public function all_tables(): array {
 
-		$cache_key = 'all_tables';
-
-		$cache_group = 'multilingualpress';
-
-		$all_tables = wp_cache_get( $cache_key, $cache_group );
-		if ( is_array( $all_tables ) ) {
-			return $all_tables;
-		}
+		/*
+		 * @TODO There was cache here, now removed. Think about adding it again.
+		 * Cache key was 'all_tables' and cache group 'multilingualpress'.
+		 */
 
 		$query = $this->db->prepare( "SHOW TABLES LIKE '%s'", $this->db->esc_like( "{$this->db->base_prefix}%" ) );
 
 		$all_tables = (array) $this->db->get_col( $query );
-
-		wp_cache_set( $cache_key, $all_tables, $cache_group );
 
 		return $all_tables;
 	}

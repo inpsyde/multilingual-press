@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Installation;
 
+use Inpsyde\MultilingualPress\Common\NetworkState;
 use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Database\TableInstaller;
 
@@ -106,7 +107,9 @@ class Uninstaller {
 
 		$site_ids = $site_ids ?: $this->site_ids();
 
-		return array_reduce( $site_ids, function ( int $deleted, int $site_id ) use ( $options ) {
+		$network_state = NetworkState::create();
+
+		$deleted = array_reduce( $site_ids, function ( int $deleted, int $site_id ) use ( $options ) {
 
 			switch_to_blog( $site_id );
 
@@ -115,10 +118,12 @@ class Uninstaller {
 				return $deleted + (int) delete_option( $option );
 			}, $deleted );
 
-			restore_current_blog();
-
 			return $deleted;
 		}, 0 );
+
+		$network_state->restore();
+
+		return $deleted;
 	}
 
 	/**

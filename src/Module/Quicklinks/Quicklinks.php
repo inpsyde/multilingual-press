@@ -8,7 +8,7 @@ use Inpsyde\MultilingualPress\API\Translations;
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
-use Inpsyde\MultilingualPress\Common\Request;
+use Inpsyde\MultilingualPress\Common\WordPressRequestContext;
 
 /**
  * Quicklinks front-end view.
@@ -86,7 +86,7 @@ class Quicklinks {
 
 		$this->asset_manager = $asset_manager;
 
-		$this->description = _x( 'Read in:', 'Quicklinks description', 'multilingual-press' );
+		$this->description = _x( 'Read in:', 'Quicklinks description', 'multilingualpress' );
 	}
 
 	/**
@@ -149,7 +149,7 @@ class Quicklinks {
 		if ( is_singular() ) {
 			return array_diff_key(
 				$this->translations->get_translations( [
-					'type' => Request::TYPE_SINGULAR,
+					'type' => WordPressRequestContext::TYPE_SINGULAR,
 				] ),
 				array_flip( (array) $skip )
 			);
@@ -265,7 +265,7 @@ class Quicklinks {
 				</select>
 			</label>
 			<button type="submit">
-				<?php echo esc_html_x( 'Go', 'Quicklinks submit button', 'multilingual-press' ); ?>
+				<?php echo esc_html_x( 'Go', 'Quicklinks submit button', 'multilingualpress' ); ?>
 			</button>
 		</form>
 		<?php

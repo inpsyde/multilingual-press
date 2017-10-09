@@ -48,13 +48,7 @@ class AddNewSite extends Backbone.View {
 	 * @returns {String} The selected language.
 	 */
 	getLanguage( $select ) {
-		const language = $select.val();
-
-		if ( language ) {
-			return language.replace( '_', '-' );
-		}
-
-		return 'en-US';
+		return $select.val() || 'en_US';
 	}
 
 	/**

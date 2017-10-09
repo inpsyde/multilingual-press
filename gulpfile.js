@@ -1,3 +1,6 @@
+/* global process */
+/* eslint arrow-body-style: 0 */
+
 const gulp = require( 'gulp' );
 
 const autoprefixer = require( 'autoprefixer' );
@@ -19,6 +22,7 @@ const runSequence = require( 'run-sequence' );
 const sass = require( 'gulp-sass' );
 const tap = require( 'gulp-tap' );
 const uglify = require( 'gulp-uglify' );
+const util = require( 'gulp-util' );
 const zip = require( 'gulp-zip' );
 
 const config = {
@@ -39,7 +43,7 @@ const config = {
 		dest: 'assets/js/'
 	},
 
-	slug: 'multilingual-press',
+	slug: 'multilingualpress',
 
 	src: 'src/',
 
@@ -57,7 +61,8 @@ const config = {
 gulp.task( 'assets', () => {
 	const dest = config.assets.dest;
 
-	return gulp.src( `${config.assets.src}*.{gif,jpeg,jpg,png}` )
+	return gulp
+		.src( `${config.assets.src}*.{gif,jpeg,jpg,png}` )
 		.pipe( newer( dest ) )
 		.pipe( imagemin( {
 			optimizationLevel: 7
@@ -75,7 +80,8 @@ gulp.task( 'clean', () => {
 } );
 
 gulp.task( 'lint-configs', () => {
-	return gulp.src( [
+	return gulp
+		.src( [
 			'*.json',
 			'.*rc',
 		] )
@@ -92,7 +98,8 @@ gulp.task( 'lint-javascript-tests', [
 ], () => {
 	const src = `${config.tests.js}**/*.js`;
 
-	return gulp.src( src )
+	return gulp
+		.src( src )
 		.pipe( newer( {
 			dest: src,
 			extra: '.eslintrc'
@@ -114,7 +121,9 @@ gulp.task( 'lint-php', ( cb ) => {
 
 	phplint( src, { limit: 10 }, ( err ) => {
 		cb( err );
-		err && process.exit( 1 );
+		if ( err ) {
+			process.exit( 1 );
+		}
 	} );
 } );
 
@@ -123,7 +132,8 @@ gulp.task( 'lint-scripts', [
 ], () => {
 	const src = `${config.scripts.src}*.js`;
 
-	return gulp.src( src )
+	return gulp
+		.src( src )
 		.pipe( newer( {
 			dest: src,
 			extra: '.eslintrc'
@@ -135,7 +145,8 @@ gulp.task( 'lint-scripts', [
 gulp.task( 'images', () => {
 	const dest = config.images.dest;
 
-	return gulp.src( `${config.images.src}**/*.{gif,jpeg,jpg,png}` )
+	return gulp
+		.src( `${config.images.src}**/*.{gif,jpeg,jpg,png}` )
 		.pipe( newer( dest ) )
 		.pipe( imagemin( {
 			optimizationLevel: 7
@@ -147,8 +158,12 @@ gulp.task( 'phpunit', [
 	'lint-php',
 ], ( cb ) => {
 	childProcess.exec( '"./vendor/bin/phpunit"', ( err, stdout, sterr ) => {
-		stdout && console.log( stdout );
-		sterr && console.log( sterr );
+		if ( stdout ) {
+			util.log( stdout );
+		}
+		if ( sterr ) {
+			util.log( sterr );
+		}
 		cb( err );
 	} );
 } );
@@ -165,9 +180,10 @@ gulp.task( 'scripts', [
 		]
 	};
 
-	return gulp.src( `${config.scripts.src}*.js`, {
-		read: false
-	} )
+	return gulp
+		.src( `${config.scripts.src}*.js`, {
+			read: false
+		} )
 		.pipe( tap( ( file ) => {
 			file.contents = browserify( file.path, browserifyOptions ).bundle();
 		} ) )
@@ -187,7 +203,8 @@ gulp.task( 'scripts', [
 gulp.task( 'styles', () => {
 	const dest = config.styles.dest;
 
-	return gulp.src( `${config.styles.src}**/*.scss` )
+	return gulp
+		.src( `${config.styles.src}**/*.scss` )
 		.pipe( newer( {
 			dest,
 			ext: '.css'
@@ -207,7 +224,9 @@ gulp.task( 'styles', () => {
 			extname: '.min.css'
 		} ) )
 		.pipe( postcss( [
-			cssnano(),
+			cssnano( {
+				zindex: false
+			}),
 		] ) )
 		.pipe( gulp.dest( dest ) );
 } );
@@ -217,7 +236,8 @@ gulp.task( 'tape', [
 	'lint-javascript-tests',
 	'lint-scripts',
 ], () => {
-	return gulp.src( `${config.tests.js}**/*Test.js`, {
+	return gulp
+		.src( `${config.tests.js}**/*Test.js`, {
 			read: false
 		} )
 		.pipe( exec(
@@ -227,7 +247,8 @@ gulp.task( 'tape', [
 } );
 
 gulp.task( 'zip', () => {
-	return gulp.src( [
+	return gulp
+		.src( [
 			'*.{php,txt}',
 			`${config.images.dest}**/*.{gif,jpeg,jpg,png}`,
 			`${config.scripts.dest}*.js`,
@@ -237,7 +258,7 @@ gulp.task( 'zip', () => {
 			base: '.'
 		} )
 		.pipe( rename( ( path ) => {
-			path.dirname = `${path.slug}/${path.dirname}`
+			path.dirname = `${path.slug}/${path.dirname}`;
 		} ) )
 		.pipe( zip( `${config.name}.zip` ) )
 		.pipe( gulp.dest( '.' ) );
