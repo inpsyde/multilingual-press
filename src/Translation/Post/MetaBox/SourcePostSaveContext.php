@@ -113,7 +113,6 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			self::POST_STATUS => $original_post_status,
 		] );
 
-		// TODO: Make sure this is right! Think about remote posts being updated just now by MLP. Attach empty context?!
 		if ( ms_is_switched() ) {
 			if ( ! $this->is_valid_save_request( [
 				self::POST_STATUS => $original_post_status,
@@ -249,12 +248,12 @@ final class SourcePostSaveContext implements \ArrayAccess {
 
 		static $connectable_statuses;
 		if ( ! $connectable_statuses ) {
-			// TODO: Discuss post status "future"...
 			$connectable_statuses = [
-				'publish',
-				'draft',
-				'private',
 				'auto-draft',
+				'draft',
+				'future',
+				'private',
+				'publish',
 			];
 		}
 

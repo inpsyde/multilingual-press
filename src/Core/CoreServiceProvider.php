@@ -122,7 +122,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.module_manager'] = function () {
 
-			// TODO: Maybe store the option name somewhere? But then again, who else really needs to know it?
 			return new Module\NetworkOptionModuleManager( 'multilingualpress_modules' );
 		};
 

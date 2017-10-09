@@ -114,13 +114,13 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 		</p>
 		<p>
 			<?php
-			// TODO: Don't hard-code settings page capability.
+			// TODO: Inject language manager settings page, and reference the capability...
 			if ( current_user_can( 'manage_network_options' ) ) {
 				// translators: %s: settings page URL.
 				$message = __( 'Languages are sorted by <a href="%s">priority</a>.', 'multilingualpress' );
 				$message = sprintf(
 					$message,
-					// TODO: Don't hard-code settings page URL/slug.
+					// TODO: ... as well as the URL.
 					esc_url( network_admin_url( 'settings.php?page=language-manager' ) )
 				);
 

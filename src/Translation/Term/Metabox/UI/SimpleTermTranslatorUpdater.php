@@ -18,13 +18,6 @@ use function Inpsyde\MultilingualPress\site_exists;
 class SimpleTermTranslatorUpdater {
 
 	/**
-	 * TODO: Yeah, well, ehm, ... fix this.
-	 * Term translation is almost completely broken. It should use term TAXONOMY IDs (and not TERM IDs), creating new
-	 * terms on the fly has not really been discussed before, just like the according UI (and UX) for it, and term
-	 * deletion is not even taken care of so far.
-	 */
-
-	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
