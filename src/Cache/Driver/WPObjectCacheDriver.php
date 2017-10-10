@@ -4,12 +4,17 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Cache\Driver;
 
+use Inpsyde\MultilingualPress\Cache\Item\Value;
+
 /**
- * @package Inpsyde\MultilingualPress\Cache
+ * @package Inpsyde\MultilingualPress\Cache\Driver
  * @since   3.0.0
  */
 final class WPObjectCacheDriver implements CacheDriver {
 
+	/**
+	 * @var string[]
+	 */
 	private static $global_namespaces = [];
 
 	/**
@@ -20,7 +25,7 @@ final class WPObjectCacheDriver implements CacheDriver {
 	/**
 	 * Constructor.
 	 *
-	 * @param int $flags
+	 * @param int $flags Object flags.
 	 */
 	public function __construct( int $flags = 0 ) {
 
@@ -30,7 +35,7 @@ final class WPObjectCacheDriver implements CacheDriver {
 	/**
 	 * @return bool
 	 */
-	public function is_sidewide(): bool {
+	public function is_network(): bool {
 
 		return $this->is_network;
 	}
@@ -38,30 +43,29 @@ final class WPObjectCacheDriver implements CacheDriver {
 	/**
 	 * Reads a value from the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
 	 *
-	 * @return array Two item array where first item is the read value and the second is a boolean telling if the read
-	 *               was a cache it (to disguise cache null)
+	 * @return Value
 	 */
-	public function read( string $namespace, string $name ): array {
+	public function read( string $namespace, string $name ): Value {
 
 		$this->maybe_global( $namespace );
 		$found = false;
 		$value = wp_cache_get( $name, $namespace, true, $found );
-		if ( $value === false && ! $found ) {
+		if ( false === $value && ! $found ) {
 			$value = null;
 		}
 
-		return [ $value, $found ];
+		return new Value( $value, $found );
 	}
 
 	/**
 	 * Write a value to the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
-	 * @param mixed  $value
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
+	 * @param mixed  $value     Value to cache.
 	 *
 	 * @return bool
 	 */
@@ -75,8 +79,8 @@ final class WPObjectCacheDriver implements CacheDriver {
 	/**
 	 * Delete a value from the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
 	 *
 	 * @return bool
 	 */
@@ -88,7 +92,7 @@ final class WPObjectCacheDriver implements CacheDriver {
 	}
 
 	/**
-	 * @param string $namespace
+	 * @param string $namespace Cache item namespace.
 	 */
 	private function maybe_global( string $namespace ) {
 

@@ -47,7 +47,7 @@ class WPObjectCacheDriverTest extends TestCase {
 
 		$this->cache = [];
 
-		$proxy = new StaticProxy( WPObjectCacheDriver::class );
+		$proxy                    = new StaticProxy( WPObjectCacheDriver::class );
 		$proxy->global_namespaces = [];
 
 		parent::tearDown();
@@ -58,24 +58,24 @@ class WPObjectCacheDriverTest extends TestCase {
 		$sitewide    = new WPObjectCacheDriver( WPObjectCacheDriver::FOR_NETWORK );
 		$no_sitewide = new WPObjectCacheDriver();
 
-		static::assertTrue( $sitewide->is_sidewide() );
-		static::assertFalse( $no_sitewide->is_sidewide() );
+		static::assertTrue( $sitewide->is_network() );
+		static::assertFalse( $no_sitewide->is_network() );
 	}
 
 	public function test_simple_read_no_value() {
 
 		$driver = new WPObjectCacheDriver();
-		list( $value, $found ) = $driver->read( 'foo', 'bar' );
+		$value  = $driver->read( 'foo', 'bar' );
 
-		static::assertNull( $value );
-		static::assertFalse( $found );
+		static::assertNull( $value->value() );
+		static::assertFalse( $value->is_hit() );
 	}
 
 	public function test_read_and_write() {
 
 		$driver = new WPObjectCacheDriver();
 		$driver->write( 'foo', 'bar', 'Hello!' );
-		list( $value ) = $driver->read( 'foo', 'bar' );
+		$value = $driver->read( 'foo', 'bar' )->value();
 
 		static::assertSame( 'Hello!', $value );
 
@@ -85,9 +85,9 @@ class WPObjectCacheDriverTest extends TestCase {
 
 		$driver = new WPObjectCacheDriver();
 		$driver->write( 'foo', 'bar', 'Bye!' );
-		list( $value_before ) = $driver->read( 'foo', 'bar' );
+		$value_before = $driver->read( 'foo', 'bar' )->value();
 		$driver->delete( 'foo', 'bar' );
-		list( $value_after ) = $driver->read( 'foo', 'bar' );
+		$value_after = $driver->read( 'foo', 'bar' )->value();
 
 		static::assertSame( 'Bye!', $value_before );
 		static::assertNull( $value_after );
@@ -97,11 +97,11 @@ class WPObjectCacheDriverTest extends TestCase {
 
 		Functions::expect( 'wp_cache_add_global_groups' )
 			->once()
-			->with('x');
+			->with( 'x' );
 
 		Functions::expect( 'wp_cache_add_global_groups' )
 			->once()
-			->with('y');
+			->with( 'y' );
 
 		$driver = new WPObjectCacheDriver( WPObjectCacheDriver::FOR_NETWORK );
 		$driver->read( 'x', 'x' );

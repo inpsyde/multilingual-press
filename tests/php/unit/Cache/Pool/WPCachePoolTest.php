@@ -22,8 +22,8 @@ class WPCachePoolTest extends TestCase {
 		$sw_pool = new WPCachePool( 'foo', new TestDriver( TestDriver::NOOP | TestDriver::FOR_NETWORK ) );
 		$pool    = new WPCachePool( 'foo', new TestDriver( TestDriver::NOOP ) );
 
-		static::assertTrue( $sw_pool->is_for_network() );
-		static::assertFalse( $pool->is_for_network() );
+		static::assertTrue( $sw_pool->is_network() );
+		static::assertFalse( $pool->is_network() );
 	}
 
 	public function test_created_item_respect_namespace() {

@@ -2,9 +2,13 @@
 
 namespace Inpsyde\MultilingualPress\Cache\Item;
 
+/**
+ * @package Inpsyde\MultilingualPress\Cache\Item
+ * @since   3.0.0
+ */
 interface CacheItem {
 
-	const DEFAULT_TIME_TO_LIVE = 3600;
+	const LIFETIME_IN_SECONDS = HOUR_IN_SECONDS;
 
 	/**
 	 * Cache item key
@@ -37,7 +41,7 @@ interface CacheItem {
 	/**
 	 * Sets the value for the cache item.
 	 *
-	 * @param mixed $value
+	 * @param mixed $value Value to cache.
 	 *
 	 * @return bool
 	 */
@@ -53,7 +57,7 @@ interface CacheItem {
 	/**
 	 * Sets a specific time to live for the item.
 	 *
-	 * @param int $ttl
+	 * @param int $ttl How much time in seconds the cached value should be considered valid.
 	 *
 	 * @return CacheItem
 	 */

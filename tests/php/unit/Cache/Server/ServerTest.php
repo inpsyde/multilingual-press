@@ -9,6 +9,8 @@ use Brain\Monkey\Functions;
 use Brain\Monkey\WP\Actions;
 use Inpsyde\MultilingualPress\Cache\CacheFactory;
 use Inpsyde\MultilingualPress\Cache\Driver\EphemeralCacheDriver;
+use Inpsyde\MultilingualPress\Cache\Exception\BadCacheItemRegistration;
+use Inpsyde\MultilingualPress\Cache\Exception\NotRegisteredCacheItem;
 use Inpsyde\MultilingualPress\Cache\Server\ItemLogic;
 use Inpsyde\MultilingualPress\Cache\Server\Server;
 use Inpsyde\MultilingualPress\Tests\Unit\TestCase;
@@ -51,7 +53,7 @@ class ServerTest extends TestCase {
 
 		$server = new Server( $factory, $driver, $driver );
 
-		$this->expectException( \BadMethodCallException::class );
+		$this->expectException( BadCacheItemRegistration::class );
 
 		$server->register( new ItemLogic( 'foo', 'bar' ) );
 	}
@@ -67,7 +69,7 @@ class ServerTest extends TestCase {
 
 		$server = new Server( $factory, $driver, $driver );
 
-		$this->expectException( \BadMethodCallException::class );
+		$this->expectException( BadCacheItemRegistration::class );
 
 		$server->register( new ItemLogic( 'foo', 'bar' ) );
 	}
@@ -88,8 +90,8 @@ class ServerTest extends TestCase {
 		$pool     = $server->registered_pool( 'test', 'site' );
 		$net_pool = $server->registered_pool( 'test', 'network' );
 
-		static::assertFalse( $pool->is_for_network() );
-		static::assertTrue( $net_pool->is_for_network() );
+		static::assertFalse( $pool->is_network() );
+		static::assertTrue( $net_pool->is_network() );
 
 	}
 
@@ -127,7 +129,7 @@ class ServerTest extends TestCase {
 		$driver = new EphemeralCacheDriver( EphemeralCacheDriver::NOOP );
 		$server = new Server( new CacheFactory( 'tests_' ), $driver, $driver );
 
-		static::expectException( \OutOfRangeException::class );
+		static::expectException( NotRegisteredCacheItem::class );
 
 		$server->registered_pool( 'foo', 'bar' );
 	}
@@ -137,7 +139,7 @@ class ServerTest extends TestCase {
 		$driver = new EphemeralCacheDriver( EphemeralCacheDriver::NOOP );
 		$server = new Server( new CacheFactory( 'tests_' ), $driver, $driver );
 
-		static::expectException( \OutOfRangeException::class );
+		static::expectException( NotRegisteredCacheItem::class );
 
 		$server->claim( 'foo', 'bar' );
 	}

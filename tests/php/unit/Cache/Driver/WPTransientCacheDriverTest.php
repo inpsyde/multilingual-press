@@ -26,7 +26,7 @@ class WPTransientCacheDriverTest extends TestCase {
 		} );
 		Functions::when( 'get_site_transient' )->alias( function ( $key ) {
 
-			return array_key_exists( "_{$key}", $this->cache ) ? $this->cache[ "_{$key}" ] : false;
+			return array_key_exists( "_{$key}", $this->cache ) ? $this->cache["_{$key}"] : false;
 		} );
 		Functions::when( 'set_transient' )->alias( function ( $key, $value ) {
 
@@ -36,7 +36,7 @@ class WPTransientCacheDriverTest extends TestCase {
 		} );
 		Functions::when( 'set_site_transient' )->alias( function ( $key, $value ) {
 
-			$this->cache[ "_{$key}" ] = $value;
+			$this->cache["_{$key}"] = $value;
 
 			return true;
 		} );
@@ -63,13 +63,13 @@ class WPTransientCacheDriverTest extends TestCase {
 		parent::tearDown();
 	}
 
-	public function test_driver_can_be_sitewide_or_not() {
+	public function test_driver_can_be_network_or_not() {
 
-		$sitewide    = new WPTransientDriver( WPTransientDriver::FOR_NETWORK );
-		$no_sitewide = new WPTransientDriver();
+		$network    = new WPTransientDriver( WPTransientDriver::FOR_NETWORK );
+		$no_network = new WPTransientDriver();
 
-		static::assertTrue( $sitewide->is_sidewide() );
-		static::assertFalse( $no_sitewide->is_sidewide() );
+		static::assertTrue( $network->is_network() );
+		static::assertFalse( $no_network->is_network() );
 	}
 
 	public function test_simple_read_no_value() {
@@ -77,10 +77,10 @@ class WPTransientCacheDriverTest extends TestCase {
 		Functions::when( 'wp_using_ext_object_cache' )->justReturn( false );
 
 		$driver = new WPTransientDriver();
-		list( $value, $found ) = $driver->read( 'foo', 'bar' );
+		$value  = $driver->read( 'foo', 'bar' );
 
-		static::assertNull( $value );
-		static::assertFalse( $found );
+		static::assertNull( $value->value() );
+		static::assertFalse( $value->is_hit() );
 	}
 
 	public function test_read_uses_object_cache_when_external_cache() {
@@ -99,7 +99,7 @@ class WPTransientCacheDriverTest extends TestCase {
 
 		$driver = new WPTransientDriver();
 		$driver->write( 'foo', 'bar', 'Hello!' );
-		list( $value ) = $driver->read( 'foo', 'bar' );
+		$value = $driver->read( 'foo', 'bar' )->value();
 
 		static::assertSame( 'Hello!', $value );
 
@@ -111,23 +111,23 @@ class WPTransientCacheDriverTest extends TestCase {
 
 		$driver = new WPTransientDriver();
 		$driver->write( 'foo', 'bar', 'Bye!' );
-		list( $value_before ) = $driver->read( 'foo', 'bar' );
+		$value_before = $driver->read( 'foo', 'bar' )->value();
 		$driver->delete( 'foo', 'bar' );
-		list( $value_after ) = $driver->read( 'foo', 'bar' );
+		$value_after = $driver->read( 'foo', 'bar' )->value();
 
 		static::assertSame( 'Bye!', $value_before );
 		static::assertNull( $value_after );
 	}
 
-	public function test_sitewide_read_and_write_delete() {
+	public function test_network_read_and_write_delete() {
 
 		Functions::when( 'wp_using_ext_object_cache' )->justReturn( false );
 
 		$driver = new WPTransientDriver( WPTransientDriver::FOR_NETWORK );
 		$driver->write( 'foo', 'bar', 'Bye!' );
-		list( $value_before ) = $driver->read( 'foo', 'bar' );
+		$value_before = $driver->read( 'foo', 'bar' )->value();
 		$driver->delete( 'foo', 'bar' );
-		list( $value_after ) = $driver->read( 'foo', 'bar' );
+		$value_after = $driver->read( 'foo', 'bar' )->value();
 
 		static::assertSame( 'Bye!', $value_before );
 		static::assertNull( $value_after );
@@ -137,21 +137,21 @@ class WPTransientCacheDriverTest extends TestCase {
 
 		Functions::when( 'wp_using_ext_object_cache' )->justReturn( false );
 
-		$sitewide      = new WPTransientDriver( WPTransientDriver::FOR_NETWORK );
-		$sitewide_2    = new WPTransientDriver( WPTransientDriver::FOR_NETWORK );
-		$no_sitewide   = new WPTransientDriver();
-		$no_sitewide_2 = new WPTransientDriver();
+		$network      = new WPTransientDriver( WPTransientDriver::FOR_NETWORK );
+		$network_2    = new WPTransientDriver( WPTransientDriver::FOR_NETWORK );
+		$no_network   = new WPTransientDriver();
+		$no_network_2 = new WPTransientDriver();
 
-		$sitewide->write( 'foo', 'bar', 'All site!' );
-		$no_sitewide->write( 'foo', 'bar', '1 blog!' );
+		$network->write( 'foo', 'bar', 'All site!' );
+		$no_network->write( 'foo', 'bar', '1 blog!' );
 
-		list( $value_sitewide ) = $sitewide->read( 'foo', 'bar' );
-		list( $value_blog ) = $no_sitewide->read( 'foo', 'bar' );
-		list( $value_sitewide_2 ) = $sitewide_2->read( 'foo', 'bar' );
-		list( $value_blog_2 ) = $no_sitewide_2->read( 'foo', 'bar' );
+		$value_network   = $network->read( 'foo', 'bar' )->value();
+		$value_blog      = $no_network->read( 'foo', 'bar' )->value();
+		$value_network_2 = $network_2->read( 'foo', 'bar' )->value();
+		$value_blog_2    = $no_network_2->read( 'foo', 'bar' )->value();
 
-		static::assertSame( 'All site!', $value_sitewide );
-		static::assertSame( 'All site!', $value_sitewide_2 );
+		static::assertSame( 'All site!', $value_network );
+		static::assertSame( 'All site!', $value_network_2 );
 		static::assertSame( '1 blog!', $value_blog );
 		static::assertSame( '1 blog!', $value_blog_2 );
 	}

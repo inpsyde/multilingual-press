@@ -4,18 +4,19 @@ namespace Inpsyde\MultilingualPress\Cache\Server;
 
 use Inpsyde\MultilingualPress\Cache\CacheFactory;
 use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
+use Inpsyde\MultilingualPress\Cache\Exception;
 use Inpsyde\MultilingualPress\Cache\Pool\CachePool;
 
 /**
- * @package Inpsyde\MultilingualPress\Cache
+ * @package Inpsyde\MultilingualPress\Cache\Server
  * @since   3.0.0
  */
 class Server {
 
 	const UPDATING_KEYS_TRANSIENT = 'mlp_cache_server_updating_keys';
 	const SPAWNING_KEYS_TRANSIENT = 'mlp_cache_server_spawning_keys_';
-	const HEADER_KEY = 'X-MLP-Cache-Update-Key';
-	const HEADER_TTL = 'X-MLP-Cache-Update-TTL';
+	const HEADER_KEY = 'MLP-Cache-Update-Key';
+	const HEADER_TTL = 'MLP-Cache-Update-TTL';
 
 	/**
 	 * @var CacheFactory
@@ -50,9 +51,9 @@ class Server {
 	/**
 	 * Constructor.
 	 *
-	 * @param CacheFactory $factory
-	 * @param CacheDriver  $driver
-	 * @param CacheDriver  $network_driver
+	 * @param CacheFactory $factory        Server cache factory.
+	 * @param CacheDriver  $driver         Server cache driver.
+	 * @param CacheDriver  $network_driver Server cache driver for network values.
 	 */
 	public function __construct( CacheFactory $factory, CacheDriver $driver, CacheDriver $network_driver ) {
 
@@ -74,7 +75,7 @@ class Server {
 	 * It means that once cached for first time a value will be served always from cache (unless manually flushed) and
 	 * updated automatically on expiration without affecting user request time.
 	 *
-	 * @param ItemLogic $item_logic
+	 * @param ItemLogic $item_logic Item logic to register.
 	 *
 	 * @return Server
 	 */
@@ -84,7 +85,7 @@ class Server {
 	}
 
 	/**
-	 * @param ItemLogic $item_logic
+	 * @param ItemLogic $item_logic Item logic to register.
 	 *
 	 * @return Server
 	 */
@@ -96,20 +97,19 @@ class Server {
 	/**
 	 * Check whether the given pair of namespace and key is registered.
 	 *
-	 * @param string $namespace
-	 * @param string $key
+	 * @param string $namespace Cache item namespace.
+	 * @param string $key       Cache item key.
 	 *
 	 * @return bool
 	 */
 	public function is_registered( string $namespace, string $key ): bool {
 
-		return ! empty( $this->registered[ $this->full_key( $namespace, $key ) ] );
-
+		return array_key_exists( $this->full_key( $namespace, $key ), $this->registered );
 	}
 
 	/**
-	 * @param string $namespace
-	 * @param string $key
+	 * @param string $namespace Cache item namespace.
+	 * @param string $key       Cache item key.
 	 *
 	 * @return CachePool
 	 */
@@ -134,8 +134,8 @@ class Server {
 	 * in a separate HEAD request and the expired cached value will continue to be served until the value is
 	 * successfully updated.
 	 *
-	 * @param string $namespace
-	 * @param string $key
+	 * @param string $namespace Cache item namespace.
+	 * @param string $key       Cache item key.
 	 *
 	 * @return mixed
 	 */
@@ -164,8 +164,9 @@ class Server {
 		}
 
 		list( $new_value, $success ) = $this->fetch_updated_value( $logic->updater(), $logic->updater_args() );
-
-		$success and $item->live_for( $logic->time_to_live() )->set( $new_value );
+		if ( $success ) {
+			$item->live_for( $logic->time_to_live() )->set( $new_value );
+		}
 
 		return $new_value;
 	}
@@ -174,8 +175,8 @@ class Server {
 	 * Once cached for first time values continue to be served from cache (automatically updated on expiration)
 	 * unless this method is called to force flush of a specific namespace / key pair or of a whole namespace.
 	 *
-	 * @param string $namespace
-	 * @param string $key
+	 * @param string $namespace Cache item namespace.
+	 * @param string $key       Cache item key.
 	 *
 	 * @return int
 	 */
@@ -184,24 +185,24 @@ class Server {
 		if ( $key && $this->is_registered( $namespace, $key ) ) {
 			$pool = $this->registered_pool( $namespace, $key );
 
-			$done = $pool->delete( $key );
-			$done and $pool->item( $key )->sync_to_storage();
+			$deleted = $pool->delete( $key );
+			if ( $deleted ) {
+				$pool->item( $key )->sync_to_storage();
+			}
 
 			$this->spawn_queue = array_diff( $this->spawn_queue, [ $namespace . $key ] );
 
-			return $done;
+			return $deleted;
 
-		} elseif ( $key !== null ) {
+		} elseif ( null !== $key ) {
 
 			return 0;
 		}
 
 		$flushed = 0;
 
-		/**
-		 * @var ItemLogic $logic
-		 */
-		foreach ( $this->registered as list( $is_network, $logic ) ) {
+		/** @var ItemLogic $logic */
+		foreach ( $this->registered as list( , $logic ) ) {
 			if ( $logic->namespace() === $namespace ) {
 				$flushed += $this->flush( $namespace, $logic->key() );
 			}
@@ -261,14 +262,14 @@ class Server {
 		list( $new_value, $success ) = $this->fetch_updated_value( $item_updater, $item_updater_args, $current_value );
 
 		if ( ! $success && $item_extension_on_failure && $item->is_hit() ) {
-			$item
-				->live_for( $item_extension_on_failure )
-				->set( $current_value );
+			$item->live_for( $item_extension_on_failure )->set( $current_value );
 		} elseif ( ! $success ) {
 			$item->delete();
 		}
 
-		$success and $item->set( $new_value );
+		if ( $success ) {
+			$item->set( $new_value );
+		}
 
 		$item->sync_to_storage();
 
@@ -278,19 +279,19 @@ class Server {
 	}
 
 	/**
-	 * @param string $namespace
-	 * @param string $key
+	 * @param string $namespace Cache item namespace.
+	 * @param string $key       Cache item key.
 	 *
 	 * @return bool
 	 */
 	public function is_queued_for_update( string $namespace, string $key ): bool {
 
-		return ! empty( $this->spawn_queue[ $this->full_key( $namespace, $key ) ] );
+		return array_key_exists( $this->full_key( $namespace, $key ), $this->spawn_queue );
 	}
 
 	/**
-	 * @param string $namespace
-	 * @param string $key
+	 * @param string $namespace Cache item namespace.
+	 * @param string $key       Cache item key.
 	 *
 	 * @return string
 	 */
@@ -302,17 +303,17 @@ class Server {
 	/**
 	 * Adds the actions that will cause item flushing.
 	 *
-	 * @param ItemLogic $logic
-	 * @param bool      $for_network
+	 * @param ItemLogic $logic       Cache item logic to register.
+	 * @param bool      $for_network True if item is for network.
 	 *
 	 * @return Server
+	 *
+	 * @throws Exception\BadCacheItemRegistration If called during shutdown on in a update request.
 	 */
 	private function do_register( ItemLogic $logic, bool $for_network ) {
 
 		if ( $this->update_request_key() || doing_action( 'shutdown' ) ) {
-			throw new \BadMethodCallException(
-				'Cache item logic registration is not possible during cache update requests.'
-			);
+			throw new Exception\BadCacheItemRegistration();
 		}
 
 		$namespace = $logic->namespace();
@@ -350,8 +351,8 @@ class Server {
 	 * Use transients to mark the given key as currently being updated in a update request, to prevent
 	 * multiple concurrent updates.
 	 *
-	 * @param string $key
-	 * @param bool   $is_network
+	 * @param string $key        Cache item key.
+	 * @param bool   $is_network True if key refers to a network value.
 	 *
 	 * @return bool
 	 */
@@ -361,7 +362,9 @@ class Server {
 			? get_site_transient( self::UPDATING_KEYS_TRANSIENT )
 			: get_transient( self::UPDATING_KEYS_TRANSIENT );
 
-		is_array( $keys ) or $keys = [];
+		if ( ! is_array( $keys ) ) {
+			$keys = [];
+		}
 
 		$keys[] = $key;
 
@@ -373,8 +376,8 @@ class Server {
 	/**
 	 * Remove the given key from transient storage to mark given key again available for updates.
 	 *
-	 * @param string $key
-	 * @param bool   $is_network
+	 * @param string $key        Cache item key.
+	 * @param bool   $is_network True if key refers to a network value.
 	 *
 	 * @return bool
 	 */
@@ -384,17 +387,23 @@ class Server {
 			? get_site_transient( self::UPDATING_KEYS_TRANSIENT )
 			: get_transient( self::UPDATING_KEYS_TRANSIENT );
 
+		if ( ! is_array( $keys ) ) {
+			$keys = [];
+		}
+
+		unset( $keys[ $key ] );
+
 		return $is_network
-			? set_site_transient( self::UPDATING_KEYS_TRANSIENT, array_diff( (array) $keys, [ $key ] ) )
-			: set_transient( self::UPDATING_KEYS_TRANSIENT, array_diff( (array) $keys, [ $key ] ) );
+			? set_site_transient( self::UPDATING_KEYS_TRANSIENT, $keys )
+			: set_transient( self::UPDATING_KEYS_TRANSIENT, $keys );
 	}
 
 	/**
 	 * Use transients to check if the given key is currently being updated in a update request, to prevent
 	 * multiple concurrent updates.
 	 *
-	 * @param string $key
-	 * @param bool   $is_network
+	 * @param string $key        Cache item key.
+	 * @param bool   $is_network True if key refers to a network value.
 	 *
 	 * @return bool
 	 */
@@ -412,9 +421,9 @@ class Server {
 	 * The first time it is called adds an action on shutdown that will actually process the queue
 	 * and send updating HTTP requests.
 	 *
-	 * @param string $key
-	 * @param int    $time_to_live
-	 * @param bool   $is_network
+	 * @param string $key          Cache item key.
+	 * @param int    $time_to_live Time to live for the item.
+	 * @param bool   $is_network   True if key refers to a network value.
 	 */
 	private function queue_update( string $key, int $time_to_live, bool $is_network ) {
 
@@ -443,8 +452,12 @@ class Server {
 			return [];
 		}
 
-		$requests     = [];
-		$network_keys = $keys = [];
+		$requests = [];
+
+		$keys = [
+			'site'    => [],
+			'network' => [],
+		];
 
 		foreach ( $this->spawn_queue as list( $key, $time_to_live, $is_network ) ) {
 
@@ -452,7 +465,7 @@ class Server {
 				continue;
 			}
 
-			$is_network ? $network_keys[] = $key : $keys[] = $key;
+			$keys[ $is_network ? 'network' : 'site' ][] = $key;
 
 			$requests[ $key ] = [
 				'url'     => home_url(),
@@ -465,18 +478,15 @@ class Server {
 			];
 		}
 
-		$this->mark_spawning( true, ...$network_keys );
-		$this->mark_spawning( false, ...$keys );
+		$this->mark_spawning( true, ...$keys['network'] );
+		$this->mark_spawning( false, ...$keys['site'] );
 
-		\Requests::request_multiple(
-			$requests,
-			[
-				'timeout'          => 0.01,
-				'follow_redirects' => false,
-				'blocking'         => false,
-				'type'             => \Requests::HEAD,
-			]
-		);
+		\Requests::request_multiple( $requests, [
+			'timeout'          => 0.01,
+			'follow_redirects' => false,
+			'blocking'         => false,
+			'type'             => \Requests::HEAD,
+		] );
 
 		return $requests;
 	}
@@ -487,21 +497,23 @@ class Server {
 	 * Transients will not be deleted manually, but are set with a very short expiration so they will expire and vanish
 	 * in few seconds when (hopefully) all the parallel-executing updating requests finished.
 	 *
-	 * @param bool     $is_network
-	 * @param string[] $keys
+	 * @param bool     $is_network True if keys refers to a network value.
+	 * @param string[] ...$keys    Cache item keys.
 	 */
 	private function mark_spawning( bool $is_network, string ...$keys ) {
 
-		foreach ( $keys as $key ) {
-			$is_network
-				? set_site_transient( self::SPAWNING_KEYS_TRANSIENT . md5( $key ), 1, 10 )
-				: set_transient( self::SPAWNING_KEYS_TRANSIENT . md5( $key ), 1, 10 );
-		}
+		$callback = $is_network ? 'set_site_transient' : 'set_transient';
+
+		array_walk( $keys, function ( string $key, $i, callable $callback ) {
+
+			$callback( self::SPAWNING_KEYS_TRANSIENT . md5( $key ), 1, 10 );
+
+		}, $callback );
 	}
 
 	/**
-	 * @param string $key
-	 * @param bool   $is_network
+	 * @param string $key        Cache item key.
+	 * @param bool   $is_network True if keys refers to a network value.
 	 *
 	 * @return bool
 	 */
@@ -513,9 +525,9 @@ class Server {
 	}
 
 	/**
-	 * @param callable $updater
-	 * @param array    $args
-	 * @param mixed    $current_value
+	 * @param callable $updater       Cache item updater callback.
+	 * @param array    $args          Cache item updater args.
+	 * @param mixed    $current_value Currently cached item value.
 	 *
 	 * @return array
 	 */
@@ -537,27 +549,16 @@ class Server {
 	}
 
 	/**
-	 * @param string $namespace
-	 * @param string $key
+	 * @param string $namespace Cache item namespace.
+	 * @param string $key       Cache item key.
+	 *
+	 * @throws Exception\NotRegisteredCacheItem When required item is not registered.
 	 */
 	private function bail_if_not_registered( string $namespace, string $key ) {
 
-		if ( $this->is_registered( $namespace, $key ) ) {
-			return;
+		if ( ! $this->is_registered( $namespace, $key ) ) {
+			throw Exception\NotRegisteredCacheItem::for_namespace_and_key( $namespace, $key );
 		}
-
-		/*
-		 * TODO: Custom exception class?
-		 */
-		throw new \OutOfRangeException(
-			sprintf(
-				'The namespace/key pair "%s"/"%s" does not belong to any registered cache logic in %s.',
-				$namespace,
-				$key,
-				__CLASS__
-			)
-		);
-
 	}
 
 	/**

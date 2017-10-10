@@ -5,8 +5,8 @@ namespace Inpsyde\MultilingualPress\Cache\Server;
 use Inpsyde\MultilingualPress\Cache\Item\CacheItem;
 
 /**
- * @package MultilingualPress
- * @license http://opensource.org/licenses/MIT MIT
+ * @package Inpsyde\MultilingualPress\Cache\Server
+ * @since   3.0.0
  */
 class ItemLogic {
 
@@ -41,15 +41,15 @@ class ItemLogic {
 	private $extension_on_failure = 0;
 
 	/**
-	 * @var array
+	 * @var string[]
 	 */
 	private $delete_on = [];
 
 	/**
 	 * Constructor.
 	 *
-	 * @param string $namespace
-	 * @param string $key
+	 * @param string $namespace Cache item namespace.
+	 * @param string $key       Cache item key.
 	 */
 	public function __construct( string $namespace, string $key ) {
 
@@ -90,7 +90,7 @@ class ItemLogic {
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public function deleting_actions(): array {
 
@@ -102,7 +102,7 @@ class ItemLogic {
 	 */
 	public function time_to_live(): int {
 
-		return $this->time_to_live > 1 ? $this->time_to_live : CacheItem::DEFAULT_TIME_TO_LIVE;
+		return $this->time_to_live > 1 ? $this->time_to_live : CacheItem::LIFETIME_IN_SECONDS;
 	}
 
 	/**
@@ -118,8 +118,8 @@ class ItemLogic {
 	 *
 	 * The callback should throw an exception when the generation of the value fails.
 	 *
-	 * @param callable $callback
-	 * @param array    $args
+	 * @param callable $callback Callback that will generate the cached value.
+	 * @param array    ...$args  Optional, additional args to pass to updater callback, 1st arg is always current value.
 	 *
 	 * @return ItemLogic
 	 */
@@ -134,7 +134,7 @@ class ItemLogic {
 	/**
 	 * Set the action hook that will trigger the deletion of cached value.
 	 *
-	 * @param string[] ...$actions
+	 * @param string[] ...$actions WordPress hooks that will cause an item cache flush.
 	 *
 	 * @return ItemLogic
 	 */
@@ -148,7 +148,7 @@ class ItemLogic {
 	/**
 	 * Set the time to live for the cached value.
 	 *
-	 * @param int $time_to_live
+	 * @param int $time_to_live Time to live in seconds for the cache item.
 	 *
 	 * @return ItemLogic
 	 */
@@ -160,7 +160,7 @@ class ItemLogic {
 	}
 
 	/**
-	 * @param int $extension
+	 * @param int $extension Duration in seconds to be set as time to live for an expired item when its update fails.
 	 *
 	 * @return ItemLogic
 	 */

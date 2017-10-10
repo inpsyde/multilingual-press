@@ -9,7 +9,7 @@ use Inpsyde\MultilingualPress\Cache\Item\CacheItem;
 use Inpsyde\MultilingualPress\Cache\Item\WPCacheItem;
 
 /**
- * @package Inpsyde\MultilingualPress\Cache
+ * @package Inpsyde\MultilingualPress\Cache\Pool
  * @since   3.0.0
  */
 final class WPCachePool implements CachePool {
@@ -30,17 +30,18 @@ final class WPCachePool implements CachePool {
 	private $items = [];
 
 	/**
-	 * @param string      $namespace
-	 * @param CacheDriver $driver
+	 * @param string      $namespace Cache pool namespace.
+	 * @param CacheDriver $driver    Cache pool driver.
 	 */
 	public function __construct( string $namespace, CacheDriver $driver ) {
 
-		$this->driver    = $driver;
 		$this->namespace = $namespace;
+
+		$this->driver = $driver;
 	}
 
 	/**
-	 * Return poll namespace.
+	 * Return pool namespace.
 	 *
 	 * @return string
 	 */
@@ -54,9 +55,9 @@ final class WPCachePool implements CachePool {
 	 *
 	 * @return bool
 	 */
-	public function is_for_network(): bool {
+	public function is_network(): bool {
 
-		return $this->driver->is_sidewide();
+		return $this->driver->is_network();
 	}
 
 	/**
@@ -130,7 +131,9 @@ final class WPCachePool implements CachePool {
 	public function set( string $key, $value = null, int $ttl = null ): CacheItem {
 
 		$item = $this->item( $key );
-		$ttl === null or $item->live_for( $ttl );
+		if ( null !== $ttl ) {
+			$item->live_for( $ttl );
+		}
 		$item->set( $value );
 
 		return $item;
@@ -146,7 +149,7 @@ final class WPCachePool implements CachePool {
 	public function delete( string $key ): bool {
 
 		if ( $this->item( $key )->delete() ) {
-			$this->items = array_diff_key( $this->items, [ $key => '' ] );
+			unset( $this->items[ $key ] );
 
 			return true;
 		}

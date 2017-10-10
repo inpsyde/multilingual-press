@@ -16,7 +16,10 @@ if ( ! class_exists( Requests::class ) ) {
 
 		public static function __callStatic( $name, array $args = [] ) {
 
-			empty( self::$static_calls[ $name ] ) and self::$static_calls[ $name ] = [];
+			if ( empty( self::$static_calls[ $name ] ) ) {
+				self::$static_calls[ $name ] = [];
+			}
+
 			self::$static_calls[ $name ][] = $args;
 		}
 	}

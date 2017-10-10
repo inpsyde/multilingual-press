@@ -2,8 +2,10 @@
 
 namespace Inpsyde\MultilingualPress\Cache\Driver;
 
+use Inpsyde\MultilingualPress\Cache\Item\Value;
+
 /**
- * @package Inpsyde\MultilingualPress\Cache
+ * @package Inpsyde\MultilingualPress\Cache\Driver
  * @since   3.0.0
  */
 interface CacheDriver {
@@ -13,25 +15,24 @@ interface CacheDriver {
 	/**
 	 * @return bool
 	 */
-	public function is_sidewide(): bool;
+	public function is_network(): bool;
 
 	/**
 	 * Reads a value from the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
 	 *
-	 * @return array Two item array where first item is the read value and the second is a boolean telling if the read
-	 *               was a cache it (to disguise cache null)
+	 * @return Value
 	 */
-	public function read( string $namespace, string $name ): array;
+	public function read( string $namespace, string $name ): Value;
 
 	/**
 	 * Write a value to the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
-	 * @param        $value
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
+	 * @param mixed  $value     Cached value.
 	 *
 	 * @return bool
 	 */
@@ -40,8 +41,8 @@ interface CacheDriver {
 	/**
 	 * Delete a value from the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
 	 *
 	 * @return bool
 	 */

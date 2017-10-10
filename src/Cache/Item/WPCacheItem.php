@@ -9,7 +9,7 @@ use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
 /**
  * A complete multi-driver cache item.
  *
- * @package Inpsyde\MultilingualPress\Cache
+ * @package Inpsyde\MultilingualPress\Cache\Item
  * @since   3.0.0
  */
 final class WPCacheItem implements CacheItem {
@@ -72,9 +72,9 @@ final class WPCacheItem implements CacheItem {
 	/**
 	 * Constructor, sets the key.
 	 *
-	 * @param CacheDriver $driver
-	 * @param string      $key
-	 * @param int|null    $time_to_live
+	 * @param CacheDriver $driver       Cache item driver.
+	 * @param string      $key          Cache item key.
+	 * @param int|null    $time_to_live Cache item time to live.
 	 */
 	public function __construct( CacheDriver $driver, string $key, int $time_to_live = null ) {
 
@@ -82,7 +82,7 @@ final class WPCacheItem implements CacheItem {
 		$this->key          = $key;
 		$this->time_to_live = $time_to_live;
 
-		$this->value();
+		$this->calculate_status();
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class WPCacheItem implements CacheItem {
 	/**
 	 * Sets the value for the cache item.
 	 *
-	 * @param mixed $value
+	 * @param mixed $value Value to store in cache.
 	 *
 	 * @return bool
 	 */
@@ -146,13 +146,13 @@ final class WPCacheItem implements CacheItem {
 			return $this->is_expired;
 		}
 
-		// If we have a last save and a time to live, calculate an expired timestamp based on that
+		// If we have a last save and a time to live, calculate an expired timestamp based on that.
 		$expiry_time = $this->last_save && is_int( $this->time_to_live )
 			? $this->last_save->getTimestamp() + $this->time_to_live
 			: null;
 
-		// If we don't have and expiration date, nor we were able to calculate a expiration by TTL, let's just return
-		if ( $expiry_time === null ) {
+		// If we don't have and expiration date, nor we were able to calculate a expiration by TTL, let's just return.
+		if ( null === $expiry_time ) {
 			return false;
 		}
 
@@ -172,40 +172,11 @@ final class WPCacheItem implements CacheItem {
 			return $this->value;
 		}
 
-		if ( $this->dirty_status === self::DELETED ) {
+		if ( self::DELETED === $this->dirty_status ) {
 			return null;
 		}
 
-		list( $cached, $found ) = $this->driver->read( $this->group, $this->key );
-
-		$this->is_hit = $found && is_array( $cached ) && $cached;
-
-		$value = $ttl = $last_save = null;
-
-		if ( $this->is_hit ) {
-			list( $value, $ttl, $last_save ) = $this->prepare_value( $cached );
-		}
-
-		if ( $this->is_hit || $this->last_save === null ) {
-			$this->last_save = $last_save;
-		}
-
-		if ( $this->value === null ) {
-			$this->value = $value;
-		}
-
-		if ( $this->time_to_live === null ) {
-			$this->time_to_live = is_int( $ttl ) ? $ttl : self::DEFAULT_TIME_TO_LIVE;
-		}
-
-		$current_ttl = is_null( $ttl ) ? self::DEFAULT_TIME_TO_LIVE : $ttl;
-
-		$this->dirty_status = self::CLEAN;
-		if ( $this->value !== $value ) {
-			$this->dirty_status = self::DIRTY;
-		} elseif ( ( $current_ttl !== $this->time_to_live ) ) {
-			$this->dirty_status = self::DIRTY_SHALLOW;
-		}
+		$this->calculate_status();
 
 		return $this->value;
 	}
@@ -217,7 +188,10 @@ final class WPCacheItem implements CacheItem {
 	 */
 	public function delete(): bool {
 
-		$this->value        = $this->time_to_live = $this->last_save = $this->is_expired = null;
+		$this->value        = null;
+		$this->time_to_live = null;
+		$this->last_save    = null;
+		$this->is_expired   = null;
 		$this->is_hit       = false;
 		$this->dirty_status = self::DELETED;
 
@@ -227,7 +201,7 @@ final class WPCacheItem implements CacheItem {
 	/**
 	 * Sets a specific time to live for the item.
 	 *
-	 * @param int $ttl
+	 * @param int $ttl How much time in seconds the cached value should be considered valid.
 	 *
 	 * @return CacheItem
 	 */
@@ -236,11 +210,8 @@ final class WPCacheItem implements CacheItem {
 		$this->time_to_live = $ttl;
 		$this->is_expired   = null;
 
-		if ( $this->is_hit ) {
-			// Temporarily mark as not hit and call value to update dirty status if necessary.
-			$this->is_hit = false;
-			$this->value();
-			$this->is_hit = true;
+		if ( self::CLEAN === $this->dirty_status ) {
+			$this->dirty_status = self::DIRTY_SHALLOW;
 		}
 
 		return $this;
@@ -254,17 +225,26 @@ final class WPCacheItem implements CacheItem {
 	 */
 	public function sync_to_storage(): bool {
 
-		if ( $this->dirty_status !== self::CLEAN ) {
-			// Shallow update means no change will be done on "last save" property, so we don't prolong the TTL
-			$this->shallow_update = $this->dirty_status === self::DIRTY_SHALLOW;
-			$updated              = $this->update();
-			$this->shallow_update = false;
-			$this->dirty_status   = self::CLEAN;
-
-			return $updated;
+		if ( self::CLEAN === $this->dirty_status ) {
+			return true;
 		}
 
-		return true;
+		// Shallow update means no change will be done on "last save" property, so we don't prolong the TTL.
+		$this->shallow_update = self::DIRTY_SHALLOW === $this->dirty_status;
+		$updated              = $this->update();
+		$this->shallow_update = false;
+
+		// If the update is successful, the value is in sync with storage, so status is clean again.
+		if ( $updated ) {
+			$this->dirty_status = self::CLEAN;
+
+			return true;
+		}
+
+		// If update failed, the status of the item need to be re-calculated.
+		$this->calculate_status();
+
+		return false;
 	}
 
 	/**
@@ -276,9 +256,60 @@ final class WPCacheItem implements CacheItem {
 
 		$this->delete();
 		$this->dirty_status = self::CLEAN;
-		$this->value();
+		$this->calculate_status();
 
 		return true;
+	}
+
+	/**
+	 * Initialize (or update) the internal status of the item.
+	 */
+	private function calculate_status() {
+
+		// First, load cached value from storage and mark item as "hit" if the value was actually stored.
+		$value_object = $this->driver->read( $this->group, $this->key );
+
+		$cached_value = $value_object->value();
+		$this->is_hit = $value_object->is_hit() && is_array( $cached_value ) && $cached_value;
+
+		// Then initialize properties and override them with values from storage, only if those exists and validates.
+		$value     = null;
+		$ttl       = null;
+		$last_save = null;
+		if ( $this->is_hit ) {
+			list( $value, $ttl, $last_save ) = $this->prepare_value( $cached_value );
+		}
+
+		// Always override "last save" value from storage if there is something there.
+		if ( $this->is_hit ) {
+			$this->last_save = $last_save;
+		}
+
+		// If no value was already set on the item (via `set()`) use value from storage (or null, if no hit).
+		if ( null === $this->value ) {
+			$this->value = $value;
+		}
+
+		// If no TTL was already set on the item (via `live_for()`) use value from storage (or default, if no hit).
+		if ( null === $this->time_to_live ) {
+			$this->time_to_live = is_int( $ttl ) ? $ttl : self::LIFETIME_IN_SECONDS;
+		}
+
+		$current_ttl = is_null( $ttl ) ? self::LIFETIME_IN_SECONDS : $ttl;
+
+		/**
+		 * Calculate status:
+		 * - if object properties match storage, the status is "clean" (no update needed)
+		 * - if object "value" differs from storage, the status is "dirty" (full update needed)
+		 * - if object "value" matches storage, but TTL differs, the status is "dirty shallow" (partial update needed)
+		 */
+		$this->dirty_status = self::CLEAN;
+		if ( $this->value !== $value ) {
+			$this->dirty_status = self::DIRTY;
+		} elseif ( ( $current_ttl !== $this->time_to_live ) ) {
+			$this->dirty_status = self::DIRTY_SHALLOW;
+		}
+
 	}
 
 	/**
@@ -294,13 +325,11 @@ final class WPCacheItem implements CacheItem {
 			return true;
 		}
 
-		$this->driver->delete( $this->group, $this->key );
-
-		return true;
+		return $this->driver->delete( $this->group, $this->key );
 	}
 
 	/**
-	 * @param string|null $format
+	 * @param string|null $format Datetime format string.
 	 *
 	 * @return \DateTimeImmutable|string
 	 */
@@ -314,37 +343,37 @@ final class WPCacheItem implements CacheItem {
 	/**
 	 * Compact to and explode from storage a value
 	 *
-	 * @param array $compact_value
+	 * @param array $compact_value Value to be unserialized, or null to serialize status.
 	 *
 	 * @return array
 	 */
 	private function prepare_value( array $compact_value = null ): array {
 
-		if ( $compact_value === null ) {
+		if ( null === $compact_value ) {
 
-			// When doing a shallow update, we don't update last save time, unless value was never saved before
+			// When doing a shallow update, we don't update last save time, unless value was never saved before.
 			$last_save = ( ! $this->shallow_update || ! $this->last_save ) ? $this->now() : $this->last_save;
 
 			return [
 				'V' => $this->value,
-				'T' => (int) $this->time_to_live ?: self::DEFAULT_TIME_TO_LIVE,
+				'T' => (int) $this->time_to_live ?: self::LIFETIME_IN_SECONDS,
 				'S' => $this->serialize_date( $last_save ),
 			];
 		}
 
 		$value     = $compact_value['V'] ?? null;
-		$ttl       = $compact_value['T'] ?? null;
-		$last_save = ( $compact_value['S'] ?? null );
+		$ttl       = isset( $compact_value['T'] ) ? (int) $compact_value['T'] : null;
+		$last_save = isset( $compact_value['S'] ) ? $this->unserialize_date( (string) $compact_value['S'] ) : null;
 
 		return [
 			$value,
-			$ttl === null ? null : (int) $ttl,
-			$last_save === null ? null : $this->unserialize_date( (string) $last_save ),
+			$ttl,
+			$last_save,
 		];
 	}
 
 	/**
-	 * @param \DateTimeInterface $date
+	 * @param \DateTimeInterface $date Date to serialize.
 	 *
 	 * @return string
 	 */
@@ -354,7 +383,7 @@ final class WPCacheItem implements CacheItem {
 	}
 
 	/**
-	 * @param string $date
+	 * @param string $date Serialized date string.
 	 *
 	 * @return \DateTimeImmutable|null
 	 */

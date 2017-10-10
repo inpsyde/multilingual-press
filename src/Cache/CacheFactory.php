@@ -7,6 +7,7 @@ namespace Inpsyde\MultilingualPress\Cache;
 use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
 use Inpsyde\MultilingualPress\Cache\Driver\EphemeralCacheDriver;
 use Inpsyde\MultilingualPress\Cache\Driver\WPObjectCacheDriver;
+use Inpsyde\MultilingualPress\Cache\Exception\InvalidCacheDriver;
 use Inpsyde\MultilingualPress\Cache\Pool\CachePool;
 use Inpsyde\MultilingualPress\Cache\Pool\WPCachePool;
 use Inpsyde\MultilingualPress\Common\Factory\ClassResolver;
@@ -22,7 +23,7 @@ class CacheFactory {
 	/**
 	 * @var string
 	 */
-	private $prefix = '';
+	private $prefix;
 
 	/**
 	 * @var ClassResolver
@@ -32,13 +33,14 @@ class CacheFactory {
 	/**
 	 * Constructor. Sets the properties.
 	 *
-	 * @param string $prefix Prefix to prepend to all pull objects namespace.
-	 * @param string $pool_default_class
+	 * @param string $prefix             Prefix to prepend to all pull objects namespace.
+	 * @param string $pool_default_class Default class name.
 	 */
-	public function __construct( string $prefix, string $pool_default_class = WPCachePool::class ) {
+	public function __construct( string $prefix = '', string $pool_default_class = WPCachePool::class ) {
+
+		$this->prefix = $prefix;
 
 		$this->pool_class_resolver = new ClassResolver( CachePool::class, $pool_default_class );
-		$this->prefix              = $prefix;
 	}
 
 	/**
@@ -50,8 +52,8 @@ class CacheFactory {
 	}
 
 	/**
-	 * @param string           $namespace
-	 * @param CacheDriver|null $driver
+	 * @param string           $namespace Cache pool namespace.
+	 * @param CacheDriver|null $driver    Cache pool driver.
 	 *
 	 * @return CachePool
 	 */
@@ -59,35 +61,34 @@ class CacheFactory {
 
 		$pool_class = $this->pool_class_resolver->resolve();
 
-		return new $pool_class( $this->prefix . $namespace, $driver ?: new WPObjectCacheDriver() );
+		return new $pool_class( $this->pool_namespace( $namespace ), $driver ?? new WPObjectCacheDriver() );
 	}
 
 	/**
-	 * @param string           $namespace
-	 * @param CacheDriver|null $driver
+	 * @param string           $namespace Cache pool namespace.
+	 * @param CacheDriver|null $driver    Cache pool driver.
 	 *
 	 * @return CachePool
+	 *
+	 * @throws InvalidCacheDriver If a site-specific is used instead of a network one.
 	 */
 	public function create_for_network( string $namespace, CacheDriver $driver = null ): CachePool {
 
-		$pool_class = $this->pool_class_resolver->resolve();
-
-		if ( $driver && ! $driver->is_sidewide() ) {
-			throw new \InvalidArgumentException(
-				sprintf(
-					'Cannot create a network-wide cache pool baked by the site specific driver "%s".',
-					get_class( $driver )
-				)
-			);
+		if ( $driver && ! $driver->is_network() ) {
+			throw InvalidCacheDriver::for_site_driver_as_network( $driver );
 		}
 
-		$driver or $driver = new WPObjectCacheDriver( CacheDriver::FOR_NETWORK );
+		if ( ! $driver ) {
+			$driver = new WPObjectCacheDriver( CacheDriver::FOR_NETWORK );
+		}
 
-		return new $pool_class( $this->prefix . $namespace, $driver );
+		$pool_class = $this->pool_class_resolver->resolve();
+
+		return new $pool_class( $this->pool_namespace( $namespace ), $driver );
 	}
 
 	/**
-	 * @param string $namespace
+	 * @param string $namespace Ethereal cache pool namespace.
 	 *
 	 * @return WPCachePool
 	 */
@@ -95,11 +96,11 @@ class CacheFactory {
 
 		$pool_class = $this->pool_class_resolver->resolve();
 
-		return new $pool_class( $this->prefix . $namespace, new EphemeralCacheDriver() );
+		return new $pool_class( $this->pool_namespace( $namespace ), new EphemeralCacheDriver() );
 	}
 
 	/**
-	 * @param string $namespace
+	 * @param string $namespace Ethereal cache network pool namespace.
 	 *
 	 * @return CachePool
 	 */
@@ -107,7 +108,20 @@ class CacheFactory {
 
 		$pool_class = $this->pool_class_resolver->resolve();
 
-		return new $pool_class( $this->prefix . $namespace, new EphemeralCacheDriver( CacheDriver::FOR_NETWORK ) );
+		return new $pool_class(
+			$this->pool_namespace( $namespace ),
+			new EphemeralCacheDriver( CacheDriver::FOR_NETWORK )
+		);
+	}
+
+	/**
+	 * @param string $namespace Pool namespace provided by user.
+	 *
+	 * @return string
+	 */
+	private function pool_namespace( string $namespace ): string {
+
+		return $this->prefix() . $namespace;
 	}
 
 }

@@ -8,9 +8,9 @@ use Andrew\StaticProxy;
 use Brain\Monkey\Functions;
 use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
 use Inpsyde\MultilingualPress\Cache\Driver\EphemeralCacheDriver;
+use Inpsyde\MultilingualPress\Cache\Item\Value;
 use Inpsyde\MultilingualPress\Cache\Item\WPCacheItem;
 use Inpsyde\MultilingualPress\Tests\Unit\TestCase;
-use PHPUnit\Framework\AssertionFailedError;
 
 /**
  * Test case for the ephemeral cache driver class.
@@ -20,59 +20,11 @@ use PHPUnit\Framework\AssertionFailedError;
  */
 class WPCacheItemTest extends TestCase {
 
-	private $driver;
-	private $executing = true;
-	private $storage_sync = false;
-
 	public function setUp() {
 
 		parent::setUp();
 
 		Functions::when( 'get_current_blog_id' )->justReturn( 1 );
-
-		$this->executing    = true;
-		$this->storage_sync = false;
-
-		$real_driver  = new EphemeralCacheDriver();
-		$this->driver = \Mockery::mock( CacheDriver::class );
-
-		$this->driver->shouldReceive( 'read' )->andReturnUsing( [ $real_driver, 'read' ] );
-
-		$this->driver->shouldReceive( 'write' )
-			->atMost()
-			->once()
-			->andReturnUsing( function ( ...$args ) use ( $real_driver ) {
-
-				if ( $this->executing ) {
-					throw new AssertionFailedError( 'Driver write should happen once on item destruct.' );
-				}
-
-				if ( $this->storage_sync ) {
-					throw new AssertionFailedError( 'Only one storage sync operation should happen per object.' );
-				}
-
-				$this->storage_sync = true;
-
-				return $real_driver->write( ...$args );
-			} );
-
-		$this->driver->shouldReceive( 'delete' )
-			->atMost()
-			->once()
-			->andReturnUsing( function ( ...$args ) use ( $real_driver ) {
-
-				if ( $this->executing ) {
-					throw new AssertionFailedError( 'Driver delete should happen once on item destruct.' );
-				}
-
-				if ( $this->storage_sync ) {
-					throw new AssertionFailedError( 'Only one storage sync operation should happen per object.' );
-				}
-
-				$this->storage_sync = true;
-
-				return $real_driver->delete( ...$args );
-			} );
 	}
 
 	public function tearDown() {
@@ -80,40 +32,32 @@ class WPCacheItemTest extends TestCase {
 		$proxy        = new StaticProxy( EphemeralCacheDriver::class );
 		$proxy->cache = [];
 
-		$this->driver = null;
-
 		parent::tearDown();
 	}
 
 	public function test_empty_item() {
 
-		$item = new WPCacheItem( $this->driver, 'foo' );
+		$item = new WPCacheItem( new EphemeralCacheDriver(), 'foo' );
 
 		static::assertFalse( $item->is_hit() );
 		static::assertFalse( $item->is_expired() );
 		static::assertNull( $item->value() );
-
-		// This will allow the storage driver write/delete to happen on $item object destruction
-		$this->executing = false;
 	}
 
 	public function test_set_and_value() {
 
-		$item = new WPCacheItem( $this->driver, 'foo' );
+		$item = new WPCacheItem( new EphemeralCacheDriver(), 'foo' );
 
 		$item->set( 'Hi!' );
 
 		static::assertTrue( $item->is_hit() );
 		static::assertSame( 'Hi!', $item->value() );
 		static::assertFalse( $item->is_expired() );
-
-		// This will allow the storage driver write/delete to happen on $item object destruction
-		$this->executing = false;
 	}
 
 	public function test_item_state_cycle() {
 
-		$item = new WPCacheItem( $this->driver, 'foo' );
+		$item = new WPCacheItem( new EphemeralCacheDriver(), 'foo' );
 
 		static::assertFalse( $item->is_hit() );
 		static::assertNull( $item->value() );
@@ -134,39 +78,33 @@ class WPCacheItemTest extends TestCase {
 		static::assertSame( 'Y!', $item->value() );
 
 		$item->delete();
-
-		// This will allow the storage driver write/delete to happen on $item object destruction
-		$this->executing = false;
 	}
 
 	public function test_live_for() {
 
-		$item = new WPCacheItem( $this->driver, 'foo', 100 );
+		$item = new WPCacheItem( new EphemeralCacheDriver(), 'foo', 100 );
 
 		$item->set( 'X!' );
 
 		static::assertFalse( $item->is_expired() );
 		static::assertSame( 'X!', $item->value() );
+		static::assertTrue( $item->is_hit() );
 
-		$item->live_for( -1000 );
+		$item->live_for( - 1000 );
 
+		static::assertTrue( $item->is_hit() );
 		static::assertTrue( $item->is_expired() );
 		static::assertSame( 'X!', $item->value() );
-
-		$this->executing = false;
 	}
 
 	public function test_storage_sync() {
 
-		$this->executing = false;
-
-		$item = new WPCacheItem( $this->driver, 'foo', 100 );
+		$item = new WPCacheItem( new EphemeralCacheDriver(), 'foo', 100 );
 		$item->set( 'Cached!' );
 
 		$item->sync_to_storage();
-		$this->storage_sync = false;
 
-		$new_item = new WPCacheItem( $this->driver, 'foo', 100 );
+		$new_item = new WPCacheItem( new EphemeralCacheDriver(), 'foo', 100 );
 
 		static::assertSame( 'Cached!', $item->value() );
 		static::assertSame( 'Cached!', $new_item->value() );
@@ -179,10 +117,30 @@ class WPCacheItemTest extends TestCase {
 		$new_item->sync_to_storage();
 		$this->storage_sync = false;
 
-		$third_item = new WPCacheItem( $this->driver, 'foo', 100 );
+		$third_item = new WPCacheItem( new EphemeralCacheDriver(), 'foo', 100 );
 
 		static::assertSame( 'Cached!', $new_item->value() );
 		static::assertSame( 'Cached!', $third_item->value() );
+	}
+
+	public function test_storage_sync_happen_once_on_destruction() {
+
+		/** @var CacheDriver|\Mockery\MockInterface $driver */
+		$driver = \Mockery::mock( CacheDriver::class );
+		$driver->shouldReceive('read')->atLeast()->once()->andReturn( new Value() );
+		$driver->shouldReceive('write')->once();
+
+		$item = new WPCacheItem( $driver, 'foo' );
+
+		$item->set( 1 );
+		$item->set( 2 );
+		$item->set( 3 );
+
+		$value = $item->value();
+
+		unset( $item );
+
+		static::assertSame( 3, $value );
 	}
 
 }

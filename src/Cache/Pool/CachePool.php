@@ -5,12 +5,15 @@ namespace Inpsyde\MultilingualPress\Cache\Pool;
 use Inpsyde\MultilingualPress\Cache\Item\CacheItem;
 
 /**
- * Interface for all cache implementations.
+ * Interface for all cache pool implementations.
+ *
+ * @package Inpsyde\MultilingualPress\Cache\Pool
+ * @since   3.0.0
  */
 interface CachePool {
 
 	/**
-	 * Return poll namespace.
+	 * Return pool namespace.
 	 *
 	 * @return string
 	 */
@@ -21,7 +24,7 @@ interface CachePool {
 	 *
 	 * @return bool
 	 */
-	public function is_for_network(): bool;
+	public function is_network(): bool;
 
 	/**
 	 * Fetches a value from the cache.

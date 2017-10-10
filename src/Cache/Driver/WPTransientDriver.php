@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Cache\Driver;
 
+use Inpsyde\MultilingualPress\Cache\Item\Value;
+
 /**
  * A driver implementation that uses WordPress transient functions.
  *
@@ -11,7 +13,7 @@ namespace Inpsyde\MultilingualPress\Cache\Driver;
  *   1) when using external object cache, is better to use object cache driver, WordPress will use object cache anyway
  *   2) Avoid to use store `false` when using this driver because it can't be disguised from a cache miss.
  *
- * @package Inpsyde\MultilingualPress\Cache
+ * @package Inpsyde\MultilingualPress\Cache\Driver
  * @since   3.0.0
  */
 final class WPTransientDriver implements CacheDriver {
@@ -24,7 +26,7 @@ final class WPTransientDriver implements CacheDriver {
 	/**
 	 * Constructor.
 	 *
-	 * @param int $flags
+	 * @param int $flags Object flags.
 	 */
 	public function __construct( int $flags = 0 ) {
 
@@ -34,7 +36,7 @@ final class WPTransientDriver implements CacheDriver {
 	/**
 	 * @return bool
 	 */
-	public function is_sidewide(): bool {
+	public function is_network(): bool {
 
 		return $this->is_network;
 	}
@@ -42,13 +44,12 @@ final class WPTransientDriver implements CacheDriver {
 	/**
 	 * Reads a value from the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item.
 	 *
-	 * @return array Two item array where first item is the read value and the second is a boolean telling if the read
-	 *               was a cache it (to disguise cache null)
+	 * @return Value
 	 */
-	public function read( string $namespace, string $name ): array {
+	public function read( string $namespace, string $name ): Value {
 
 		$key = $this->build_key( $namespace, $name );
 
@@ -62,7 +63,7 @@ final class WPTransientDriver implements CacheDriver {
 			$found = false;
 			$value = wp_cache_get( $key, $group, true, $found );
 
-			return [ $value, $found ];
+			return new Value( $value, $found );
 		}
 
 		$value = $this->is_network ? get_site_transient( $key ) : get_transient( $key );
@@ -74,17 +75,17 @@ final class WPTransientDriver implements CacheDriver {
 		 * It means that a cached `null` value can be disguised, but not a cached `false`.
 		 * Avoid to use store `false` in cache when using this driver.
 		 */
-		$found = $value !== false;
+		$found = false !== $value;
 
-		return [ $found ? $value : null, $found ];
+		return new Value( $found ? $value : null, $found );
 	}
 
 	/**
 	 * Write a value to the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
-	 * @param        $value
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item namespace.
+	 * @param mixed  $value     Value to cache.
 	 *
 	 * @return bool
 	 */
@@ -98,8 +99,8 @@ final class WPTransientDriver implements CacheDriver {
 	/**
 	 * Delete a value from the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
 	 *
 	 * @return bool
 	 */
@@ -114,8 +115,8 @@ final class WPTransientDriver implements CacheDriver {
 	 * Site transients limits key to 40 characters or less.
 	 * This method builds a key that is unique per namespace and key and is 39 characters or less.
 	 *
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
 	 *
 	 * @return string
 	 */

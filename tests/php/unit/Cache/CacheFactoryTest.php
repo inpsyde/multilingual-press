@@ -6,6 +6,7 @@ namespace Inpsyde\MultilingualPress\Tests\Unit\Cache;
 
 use Inpsyde\MultilingualPress\Cache\CacheFactory;
 use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
+use Inpsyde\MultilingualPress\Cache\Exception\InvalidCacheDriver;
 use Inpsyde\MultilingualPress\Cache\Pool\CachePool;
 use Inpsyde\MultilingualPress\Tests\Unit\TestCase;
 
@@ -36,12 +37,11 @@ class CacheFactoryTest extends TestCase {
 	public function test_create_sitewide_requires_sitewide_driver() {
 
 		$driver = \Mockery::mock( CacheDriver::class );
-		$driver->shouldReceive( 'is_sidewide' )->andReturn( false );
+		$driver->shouldReceive( 'is_network' )->andReturn( false );
 
 		$factory = new CacheFactory( 'x' );
 
-		static::expectException( \InvalidArgumentException::class );
-		static::expectExceptionMessageRegExp( '/network-wide/i' );
+		static::expectException( InvalidCacheDriver::class );
 
 		$factory->create_for_network( 'y', $driver );
 	}
@@ -49,7 +49,7 @@ class CacheFactoryTest extends TestCase {
 	public function test_created_sitewide_driver_class_can_be_chosen() {
 
 		$driver = \Mockery::mock( CacheDriver::class );
-		$driver->shouldReceive( 'is_sidewide' )->andReturn( true );
+		$driver->shouldReceive( 'is_network' )->andReturn( true );
 
 		$factory = new CacheFactory( 'x' );
 

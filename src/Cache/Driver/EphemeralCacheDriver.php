@@ -4,12 +4,14 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Cache\Driver;
 
+use Inpsyde\MultilingualPress\Cache\Item\Value;
+
 /**
  * Cache driver implementation that vanish with request.
  * Useful in tests or to share things that should never survive a single request without polluting classes with
  * many static variables.
  *
- * @package Inpsyde\MultilingualPress\Cache
+ * @package Inpsyde\MultilingualPress\Cache\Driver
  * @since   3.0.0
  */
 final class EphemeralCacheDriver implements CacheDriver {
@@ -34,18 +36,19 @@ final class EphemeralCacheDriver implements CacheDriver {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param int $flags
+	 * @param int $flags Class flags.
 	 */
 	public function __construct( int $flags = 0 ) {
 
 		$this->is_network = (bool) ( $flags & self::FOR_NETWORK );
-		$this->noop       = (bool) ( $flags & self::NOOP );
+
+		$this->noop = (bool) ( $flags & self::NOOP );
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function is_sidewide(): bool {
+	public function is_network(): bool {
 
 		return $this->is_network;
 	}
@@ -53,30 +56,28 @@ final class EphemeralCacheDriver implements CacheDriver {
 	/**
 	 * Reads a value from the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
 	 *
-	 * @return array Two item array where first item is the read value and the second is a boolean telling if the read
-	 *               was a cache it (to disguise cache null)
+	 * @return Value
 	 */
-	public function read( string $namespace, string $name ): array {
+	public function read( string $namespace, string $name ): Value {
 
 		if ( $this->noop ) {
-			return [ null, false ];
+			return new Value();
 		}
 
-		$key   = $this->build_key( $namespace, $name );
-		$found = array_key_exists( $key, self::$cache );
+		$key = $this->build_key( $namespace, $name );
 
-		return [ $found ? self::$cache[ $key ] : null, $found ];
+		return new Value( self::$cache[ $key ] ?? null, array_key_exists( $key, self::$cache ) );
 	}
 
 	/**
 	 * Write a value to the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
-	 * @param        $value
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
+	 * @param mixed  $value     Cached value.
 	 *
 	 * @return bool
 	 */
@@ -96,8 +97,8 @@ final class EphemeralCacheDriver implements CacheDriver {
 	/**
 	 * Delete a value from the cache.
 	 *
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
 	 *
 	 * @return bool
 	 */
@@ -114,8 +115,8 @@ final class EphemeralCacheDriver implements CacheDriver {
 	}
 
 	/**
-	 * @param string $namespace
-	 * @param string $name
+	 * @param string $namespace Cache item namespace.
+	 * @param string $name      Cache item name.
 	 *
 	 * @return string
 	 */
@@ -123,6 +124,6 @@ final class EphemeralCacheDriver implements CacheDriver {
 
 		$key = $namespace . $name;
 
-		return $this->is_network ? "W_{$key}_" : 'S_' . get_current_blog_id() . "_{$key}_";
+		return $this->is_network ? "N_{$key}_" : 'S_' . get_current_blog_id() . "_{$key}_";
 	}
 }
