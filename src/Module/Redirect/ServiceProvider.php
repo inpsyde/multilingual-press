@@ -79,10 +79,12 @@ final class ServiceProvider implements ModuleServiceProvider {
 			);
 		};
 
-		$container->share( 'multilingualpress.redirect_settings_repository', function () {
+		$container->share(
+            'multilingualpress.redirect_settings_repository', function () {
 
 			return new TypeSafeSettingsRepository();
-		} );
+            }
+        );
 
 		$container['multilingualpress.redirect_site_setting'] = function ( Container $container ) {
 
@@ -169,11 +171,15 @@ final class ServiceProvider implements ModuleServiceProvider {
 	 */
 	public function register_module( ModuleManager $module_manager ): bool {
 
-		return $module_manager->register_module( new Module( 'redirect', [
-			'description' => __( 'Redirect visitors according to browser language settings.', 'multilingualpress' ),
-			'name'        => __( 'Redirect', 'multilingualpress' ),
-			'active'      => false,
-		] ) );
+		return $module_manager->register_module(
+            new Module(
+                'redirect', [
+                 'description' => __( 'Redirect visitors according to browser language settings.', 'multilingualpress' ),
+                 'name'        => __( 'Redirect', 'multilingualpress' ),
+                 'active'      => false,
+                ]
+            )
+        );
 	}
 
 	/**
@@ -210,10 +216,6 @@ final class ServiceProvider implements ModuleServiceProvider {
 	 */
 	private function activate_module_for_admin( Container $container ) {
 
-		if ( is_network_admin() ) {
-			$this->activate_module_for_network_admin( $container );
-		}
-
 		( new SiteSetting(
 			$container['multilingualpress.redirect_site_setting'],
 			$container['multilingualpress.redirect_site_setting_updater']
@@ -221,6 +223,10 @@ final class ServiceProvider implements ModuleServiceProvider {
 			SiteSettingsSectionView::ACTION_AFTER . '_' . SiteSettings::ID,
 			SiteSettingsUpdater::ACTION_UPDATE_SETTINGS
 		);
+
+		if ( is_network_admin() ) {
+			$this->activate_module_for_network_admin( $container );
+		}
 	}
 
 	/**
