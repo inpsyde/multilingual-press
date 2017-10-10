@@ -326,7 +326,7 @@ class AdvancedPostTranslatorFields {
 			<div class="mlp-taxonomy-fieldset-container">
 				<?php
 				foreach ( $taxonomies as $taxonomy => $taxonomy_data ) {
-					$this->show_terms_input(
+					$this->render_terms_input(
 						$taxonomy_data,
 						$remote_site_id,
 						in_array( $taxonomy, $exclusive_tax, true ) ? 'radio' : 'checkbox',
@@ -377,7 +377,7 @@ class AdvancedPostTranslatorFields {
 	 *
 	 * @return void
 	 */
-	private function show_terms_input(
+	private function render_terms_input(
 		\stdClass $taxonomy_data,
 		int $remote_site_id,
 		string $input_type,
