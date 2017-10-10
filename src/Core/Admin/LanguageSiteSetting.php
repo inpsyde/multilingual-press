@@ -165,7 +165,7 @@ final class LanguageSiteSetting implements SiteSettingViewModel {
 
 		$site_language = $this->repository->get_site_language( $site_id );
 		if ( '' === $site_language ) {
-			$site_language = get_blog_option( $site_id, 'WPLANG' );
+			$site_language = get_blog_option( $site_id, 'WPLANG', '' );
 			// For English (US), WordPress stores an empty string.
 			if ( '' === $site_language ) {
 				return 'en_US';
