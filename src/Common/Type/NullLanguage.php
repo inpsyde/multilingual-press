@@ -88,7 +88,7 @@ final class NullLanguage implements Language {
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
-	public function name( string $output = 'native' ): string {
+	public function name( string $output = Language::NATIVE_NAME ): string {
 
 		return '';
 	}
@@ -115,16 +115,15 @@ final class NullLanguage implements Language {
 	public function to_array(): array {
 
 		return [
-			'custom_name'  => '',
-			'english_name' => '',
-			'http_code'    => '',
-			'is_rtl'       => false,
-			'iso_639_1'    => '',
-			'iso_639_2'    => '',
-			'locale'       => '',
-			'native_name'  => '',
-			'priority'     => 1,
-			'text'         => '',
+			Language::CUSTOM_NAME    => '',
+			Language::ENGLISH_NAME   => '',
+			Language::HTTP_CODE      => '',
+			Language::IS_RTL         => false,
+			Language::ISO_639_1_CODE => '',
+			Language::ISO_639_2_CODE => '',
+			Language::LOCALE         => '',
+			Language::NATIVE_NAME    => '',
+			Language::PRIORITY       => 1,
 		];
 	}
 }

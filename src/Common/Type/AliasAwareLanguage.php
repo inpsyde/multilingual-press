@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Common\Type;
 
+use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
+
 /**
  * Language data type implementation aware of language name aliases (e.g., "lang" for "language_short").
  *
@@ -36,14 +38,12 @@ final class AliasAwareLanguage implements Language {
 	 */
 	public function __construct( array $data ) {
 
-		/* TODO: Introduce method/trait for normalizing language data (i.e., handle both types of constants as keys). */
-
-		$this->is_rtl = (bool) ( $data['is_rtl'] ?? false );
+		$this->is_rtl = (bool) ( $data[ Language::IS_RTL ] ?? false );
 
 		$this->names = $this->get_names( $data );
 
-		if ( isset( $data['priority'] ) && is_numeric( $data['priority'] ) ) {
-			$this->priority = (int) $data['priority'];
+		if ( isset( $data[ Language::PRIORITY ] ) && is_numeric( $data[ Language::PRIORITY ] ) ) {
+			$this->priority = (int) $data[ Language::PRIORITY ];
 		}
 	}
 
@@ -61,16 +61,15 @@ final class AliasAwareLanguage implements Language {
 		static $names;
 		if ( ! $names ) {
 			$names = [
-				'custom_name',
-				'english_name',
-				'http_code',
-				'iso_639_1',
-				'iso_639_2',
-				'is_rtl',
-				'locale',
-				'native_name',
-				'priority',
-				'text',
+				Language::CUSTOM_NAME,
+				Language::ENGLISH_NAME,
+				Language::HTTP_CODE,
+				Language::ISO_639_1_CODE,
+				Language::ISO_639_2_CODE,
+				Language::IS_RTL,
+				Language::LOCALE,
+				Language::NATIVE_NAME,
+				Language::PRIORITY,
 			];
 		}
 
@@ -90,11 +89,11 @@ final class AliasAwareLanguage implements Language {
 
 		$name = (string) $name;
 
-		if ( 'is_rtl' === $name ) {
+		if ( Language::IS_RTL === $name ) {
 			return $this->is_rtl;
 		}
 
-		if ( 'priority' === $name ) {
+		if ( Language::PRIORITY === $name ) {
 			return $this->priority;
 		}
 
@@ -150,7 +149,6 @@ final class AliasAwareLanguage implements Language {
 	 *                       - native:         Native name of the language (default, e.g., "Deutsch" for German).
 	 *                       - english:        English name of the language.
 	 *                       - custom:         Language name as defined in the site settings.
-	 *                       - text:           Alias for "custom".
 	 *                       - http:           HTTP code of the language (e.g., "de-DE").
 	 *                       - language_long:  Alias for "http".
 	 *                       - language_short: First part of "http" (e.g., "de" for "de-DE").
@@ -160,33 +158,31 @@ final class AliasAwareLanguage implements Language {
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
-	public function name( string $output = 'native' ): string {
+	public function name( string $output = Language::NATIVE_NAME ): string {
 
-		if ( ! empty( $this->names[ $output ] ) ) {
-			return (string) $this->names[ $output ];
+		switch ( $output ) {
+			case Language::CODE_SHORT:
+			case SiteSettingsRepository::KEY_LANGUAGE:
+				return strtok( $this->names[ Language::HTTP_CODE ], '-' );
+
+			case 'http':
+			case Language::CODE_LONG:
+				return $this->names[ Language::HTTP_CODE ];
+
+			case Language::NONE:
+				return '';
 		}
 
-		$name = "{$output}_name";
-		if ( ! empty( $this->names[ $name ] ) ) {
-			return (string) $this->names[ $name ];
-		}
+		$keys = array_unique( [
+			$output,
+			"{$output}_name",
+			Language::NATIVE_NAME,
+			Language::ENGLISH_NAME,
+		] );
 
-		if ( in_array( $output, [ 'language_short', 'lang' ], true ) ) {
-			return strtok( $this->names['http_code'], '-' );
-		}
-
-		if ( 'language_long' === $output ) {
-			return (string) $this->names['http_code'];
-		}
-
-		if ( 'none' === $output ) {
-			return '';
-		}
-
-		// Since the given output type is either empty or invalid, return the native or English language name, if set.
-		foreach ( [ 'native_name', 'english_name' ] as $key ) {
+		foreach ( $keys as $key ) {
 			if ( ! empty( $this->names[ $key ] ) ) {
-				return (string) $this->names[ $key ];
+				return $this->names[ $key ];
 			}
 		}
 
@@ -215,8 +211,8 @@ final class AliasAwareLanguage implements Language {
 	public function to_array(): array {
 
 		return array_merge( $this->names, [
-			'is_rtl'   => $this->is_rtl,
-			'priority' => $this->priority,
+			Language::IS_RTL   => $this->is_rtl,
+			Language::PRIORITY => $this->priority,
 		] );
 	}
 
@@ -230,14 +226,13 @@ final class AliasAwareLanguage implements Language {
 	private function get_names( array $data ): array {
 
 		$names = [
-			'custom_name'  => $data['text'] ?? '',
-			'english_name' => '',
-			'http_code'    => '',
-			'iso_639_1'    => '',
-			'iso_639_2'    => '',
-			'native_name'  => '',
-			'text'         => '',
-			'locale'       => '',
+			Language::CUSTOM_NAME    => $data[ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ] ?? '',
+			Language::ENGLISH_NAME   => '',
+			Language::HTTP_CODE      => '',
+			Language::ISO_639_1_CODE => '',
+			Language::ISO_639_2_CODE => '',
+			Language::LOCALE         => '',
+			Language::NATIVE_NAME    => '',
 		];
 
 		$names = array_replace( $names, array_intersect_key( $data, $names ) );

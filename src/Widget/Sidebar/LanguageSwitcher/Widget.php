@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher;
 
+use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Widget\Sidebar\RegistrableWidget;
 use Inpsyde\MultilingualPress\Widget\Sidebar\SelfRegisteringWidget;
 use Inpsyde\MultilingualPress\Widget\Sidebar\View;
@@ -68,12 +69,12 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 			$id = $this->get_field_id( 'mlp_widget_link_type' );
 
 			$options = [
-				'native'         => __( 'Native name', 'multilingualpress' ),
-				'text'           => __( 'Custom name', 'multilingualpress' ),
-				'english'        => __( 'English name', 'multilingualpress' ),
-				'http'           => __( 'Language code', 'multilingualpress' ),
-				'language_short' => __( 'Language code (short)', 'multilingualpress' ),
-				'none'           => __( 'None', 'multilingualpress' ),
+				Language::NATIVE_NAME  => __( 'Native name', 'multilingualpress' ),
+				Language::CUSTOM_NAME  => __( 'Custom name', 'multilingualpress' ),
+				Language::ENGLISH_NAME => __( 'English name', 'multilingualpress' ),
+				Language::HTTP_CODE    => __( 'Language code', 'multilingualpress' ),
+				Language::CODE_SHORT   => __( 'Language code (short)', 'multilingualpress' ),
+				Language::NONE         => __( 'None', 'multilingualpress' ),
 			];
 
 			$link_type = $instance['widget_link_type'] ?? '';

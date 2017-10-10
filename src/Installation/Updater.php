@@ -85,14 +85,15 @@ class Updater {
 
 		$languages = array_map( function ( array $language ) {
 
-			if ( ! array_key_exists( 'lang', $language ) ) {
-				$language['lang'] = '';
-			}
+			$locale = (string) ( $language[ SiteSettingsRepository::KEY_LANGUAGE ] ?? '' );
+
+			// TODO: Check why the English name (!) is set to the custom name or the locale!
+			$name = (string) ( $language[ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ] ?? $locale );
 
 			return [
-				LanguagesTable::COLUMN_ENGLISH_NAME => (string) ( $language['text'] ?? $language['lang'] ),
-				LanguagesTable::COLUMN_LOCALE       => (string) $language['lang'],
-				LanguagesTable::COLUMN_HTTP_CODE    => str_replace( '_', '-', $language['lang'] ),
+				LanguagesTable::COLUMN_ENGLISH_NAME => $name,
+				LanguagesTable::COLUMN_LOCALE       => $locale,
+				LanguagesTable::COLUMN_HTTP_CODE    => str_replace( '_', '-', $locale ),
 			];
 		}, $languages );
 

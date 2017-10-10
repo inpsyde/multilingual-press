@@ -375,7 +375,7 @@ function get_language_field_by_http_code(
 function get_linked_elements( array $args = [] ): string {
 
 	$args = array_merge( [
-		'link_text'         => 'native',
+		'link_text'         => Language::NATIVE_NAME,
 		'sort'              => 'priority',
 		'show_current_blog' => false,
 		'strict'            => false,

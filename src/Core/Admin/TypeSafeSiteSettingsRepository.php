@@ -44,7 +44,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 		$settings = $this->get_settings();
 
-		return empty( $settings[ $site_id ]['text'] ) ? '' : stripslashes( $settings[ $site_id ]['text'] );
+		return stripslashes( $settings[ $site_id ][ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ] ?? '' );
 	}
 
 	/**
@@ -96,7 +96,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 		$settings = $this->get_settings();
 
-		return (string) ( $settings[ $site_id ]['lang'] ?? '' );
+		return stripslashes( $settings[ $site_id ][ SiteSettingsRepository::KEY_LANGUAGE ] ?? '' );
 	}
 
 	/**
