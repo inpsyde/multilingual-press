@@ -209,7 +209,6 @@ final class WPDBLanguages implements Languages {
 	 */
 	public function get_languages( array $args = [] ): array {
 
-		// TODO: Think about what to do with this. Pass Language constants, or LanguagesTable constants, or allow both?
 		$args = array_merge( [
 			'conditions' => [],
 			'fields'     => [],
@@ -300,7 +299,6 @@ final class WPDBLanguages implements Languages {
 
 		$updated = 0;
 
-		// TODO: Think about what to do with this. Allow Language constants, or LanguagesTable constants, or both?
 		foreach ( $languages as $id => $language ) {
 			$updated += (int) $this->db->update(
 				$this->table,
