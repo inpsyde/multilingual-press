@@ -246,6 +246,48 @@ final class WPDBLanguages implements Languages {
 	}
 
 	/**
+	 * Imports the given language. An existing language with the same code will be overwritten.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $language Language data.
+	 *
+	 * @return bool Whether or not the language has been imported successfully.
+	 */
+	public function import_language( array $language ): bool {
+
+		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
+		$query = sprintf(
+			'SELECT %2$s FROM %1$s WHERE %3$s = %%s OR %4$s = %%s',
+			$this->table,
+			LanguagesTable::COLUMN_ID,
+			LanguagesTable::COLUMN_LOCALE,
+			LanguagesTable::COLUMN_ISO_639_1_CODE
+		);
+
+		$locale = (string) ( $language[ LanguagesTable::COLUMN_LOCALE ] ?? '' );
+
+		if ( '' === $locale ) {
+			return (bool) $this->db->insert( $this->table, $language );
+		}
+
+		$language_id = $this->db->get_var( $this->db->prepare( $query, $locale, $locale ) );
+		if ( ! $language_id ) {
+			return false;
+		}
+
+		return false !== $this->db->update(
+			$this->table,
+			[
+				LanguagesTable::COLUMN_PRIORITY => 10,
+			],
+			[
+				LanguagesTable::COLUMN_ID => $language_id,
+			]
+		);
+	}
+
+	/**
 	 * Updates the given languages.
 	 *
 	 * @since 3.0.0

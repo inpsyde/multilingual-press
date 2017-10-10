@@ -77,7 +77,7 @@ final class InstallationServiceProvider implements IntegrationServiceProvider {
 			return new Updater(
 				$container['multilingualpress.wpdb'],
 				$container['multilingualpress.site_settings_repository'],
-				$container['multilingualpress.languages_table']
+				$container['multilingualpress.languages']
 			);
 		};
 	}
