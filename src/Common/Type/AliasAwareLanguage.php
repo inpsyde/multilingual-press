@@ -146,20 +146,17 @@ final class AliasAwareLanguage implements Language {
 	 * @since 3.0.0
 	 *
 	 * @param string $output Optional. Output type. Defaults to 'native'.
-	 *
-	 * TODO: Check/Adapt formatting to provide best possible readability for both inline and rendered documentation.
-	 * Possible values:
-	 *
-	 * * native:         Native name of the language (default, e.g., "Deutsch" for German).
-	 * * english:        English name of the language.
-	 * * custom:         Language name as defined in the site settings.
-	 * * text:           Alias for "custom".
-	 * * http:           HTTP code of the language (e.g., "de-DE").
-	 * * language_long:  Alias for "http".
-	 * * language_short: First part of "http" (e.g., "de" for "de-DE").
-	 * * lang:           Alias for "language_short".
-	 * * locale:         WordPress locale representing the language.
-	 * * none:           No text output.
+	 *                       Possible values:
+	 *                       - native:         Native name of the language (default, e.g., "Deutsch" for German).
+	 *                       - english:        English name of the language.
+	 *                       - custom:         Language name as defined in the site settings.
+	 *                       - text:           Alias for "custom".
+	 *                       - http:           HTTP code of the language (e.g., "de-DE").
+	 *                       - language_long:  Alias for "http".
+	 *                       - language_short: First part of "http" (e.g., "de" for "de-DE").
+	 *                       - lang:           Alias for "language_short".
+	 *                       - locale:         WordPress locale representing the language.
+	 *                       - none:           No text output.
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
