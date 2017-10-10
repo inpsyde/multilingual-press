@@ -18,7 +18,12 @@
 
 	<!-- Check for cross-version support for PHP 7.0 and higher. -->
 	<config name="testVersion" value="7.0-"/>
-	<rule ref="PHPCompatibility"/>
+	<rule ref="PHPCompatibility">
+
+		<!-- With PHP 7 or higher, these keywords actually are valid function names. https://github.com/wimg/PHPCompatibility/issues/515 -->
+		<exclude name="PHPCompatibility.PHP.ForbiddenNamesAsInvokedFunctions"/>
+
+	</rule>
 
 	<rule ref="WordPress">
 
