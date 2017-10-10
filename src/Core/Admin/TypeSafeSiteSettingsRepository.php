@@ -42,7 +42,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_alternative_language_title( int $site_id ): string {
 
-		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
+		$settings = $this->get_settings();
 
 		return empty( $settings[ $site_id ]['text'] ) ? '' : stripslashes( $settings[ $site_id ]['text'] );
 	}
@@ -70,7 +70,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_site_ids( array $exclude = [] ): array {
 
-		$settings = (array) get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
+		$settings = $this->get_settings();
 		if ( ! $settings ) {
 			return [];
 		}
@@ -94,7 +94,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 		$site_id = $site_id ?: get_current_blog_id();
 
-		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
+		$settings = $this->get_settings();
 
 		return (string) ( $settings[ $site_id ]['lang'] ?? '' );
 	}
