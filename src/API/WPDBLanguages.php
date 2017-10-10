@@ -256,6 +256,12 @@ final class WPDBLanguages implements Languages {
 	 */
 	public function import_language( array $language ): bool {
 
+		$locale = (string) ( $language[ LanguagesTable::COLUMN_LOCALE ] ?? '' );
+
+		if ( '' === $locale ) {
+			return (bool) $this->db->insert( $this->table, $language );
+		}
+
 		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
 		$query = sprintf(
 			'SELECT %2$s FROM %1$s WHERE %3$s = %%s OR %4$s = %%s',
@@ -264,12 +270,6 @@ final class WPDBLanguages implements Languages {
 			LanguagesTable::COLUMN_LOCALE,
 			LanguagesTable::COLUMN_ISO_639_1_CODE
 		);
-
-		$locale = (string) ( $language[ LanguagesTable::COLUMN_LOCALE ] ?? '' );
-
-		if ( '' === $locale ) {
-			return (bool) $this->db->insert( $this->table, $language );
-		}
 
 		$language_id = $this->db->get_var( $this->db->prepare( $query, $locale, $locale ) );
 		if ( ! $language_id ) {

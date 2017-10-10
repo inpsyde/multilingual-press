@@ -83,6 +83,11 @@ final class WPDBContentRelations implements ContentRelations {
 	 */
 	public function delete_all_relations_for_invalid_content( string $type ): bool {
 
+		$relationship_ids = $this->get_relationship_ids_for_type( $type );
+		if ( ! $relationship_ids ) {
+			return true;
+		}
+
 		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
 		$query_template = sprintf(
 			'
@@ -96,11 +101,6 @@ WHERE %3$s = %%d
 			Table\ContentRelationsTable::COLUMN_SITE_ID,
 			Table\ContentRelationsTable::COLUMN_RELATIONSHIP_ID
 		);
-
-		$relationship_ids = $this->get_relationship_ids_for_type( $type );
-		if ( ! $relationship_ids ) {
-			return true;
-		}
 
 		$relationship_ids = join( ',', $relationship_ids );
 
