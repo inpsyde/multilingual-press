@@ -67,7 +67,7 @@ $uninstaller->delete_network_options( [
 ] );
 
 $uninstaller->delete_site_options( [
-	Module\Redirect\SettingsRepository::OPTION_SITE
+	Module\Redirect\SettingsRepository::OPTION_SITE,
 ] );
 
 unset( $uninstaller );
