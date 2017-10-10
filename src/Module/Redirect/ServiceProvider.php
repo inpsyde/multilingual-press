@@ -60,15 +60,9 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 		$container['multilingualpress.noredirect_storage'] = function () {
 
-			// @codingStandardsIgnoreStart
-			/*
-			 * TODO for logged in user, when using external object cache, we used to return
-			 * `NoredirectObjectCacheStorage` here.
-			 * Think about adding cached storage again, when cache handling will be refactored.
-			 */
-			// @codingStandardsIgnoreEnd
-
-			return new NoredirectSessionStorage();
+			return is_user_logged_in() && wp_using_ext_object_cache()
+				? new NoredirectObjectCacheStorage()
+				: new NoredirectSessionStorage();
 		};
 
 		$container['multilingualpress.redirect_request_validator'] = function ( Container $container ) {

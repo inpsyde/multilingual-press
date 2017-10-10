@@ -70,13 +70,6 @@ final class TermTranslator implements Translator {
 
 		$term_taxonomy_id = (int) $args['content_id'];
 
-		// @codingStandardsIgnoreStart
-		/*
-		 * TODO There was cache here, now removed. Think about adding it again.
-		 * Cache key was 'mlp_term_translations' and cache group 'mlp'.
-		 */
-		// @codingStandardsIgnoreEnd
-
 		switch_to_blog( $site_id );
 
 		$data = $this->get_translation_data( $term_taxonomy_id );
@@ -129,13 +122,6 @@ final class TermTranslator implements Translator {
 	 * @return array Term data.
 	 */
 	private function get_term_by_term_taxonomy_id( int $term_taxonomy_id ): array {
-
-		// @codingStandardsIgnoreStart
-		/*
-		 * TODO There was cache here, now removed. Think about adding it again.
-		 * cache key was "term_with_ttid_{$term_taxonomy_id}" and cache group 'mlp'
-		 */
-		// @codingStandardsIgnoreEnd
 
 		$query = "
 SELECT t.term_id, t.name, tt.taxonomy

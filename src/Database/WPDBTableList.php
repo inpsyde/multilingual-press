@@ -43,13 +43,6 @@ final class WPDBTableList implements TableList {
 	 */
 	public function all_tables(): array {
 
-		// @codingStandardsIgnoreStart
-		/*
-		 * TODO There was cache here, now removed. Think about adding it again.
-		 * Cache key was 'all_tables' and cache group 'multilingualpress'.
-		 */
-		// @codingStandardsIgnoreEnd
-
 		$query = $this->db->prepare( "SHOW TABLES LIKE '%s'", $this->db->esc_like( "{$this->db->base_prefix}%" ) );
 
 		$all_tables = (array) $this->db->get_col( $query );

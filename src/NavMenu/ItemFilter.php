@@ -172,7 +172,6 @@ class ItemFilter {
 
 		$item_id = (int) $item->ID;
 
-		// TODO: Refactor to use a real cache.
 		if ( isset( $this->site_ids[ $item_id ] ) ) {
 			return $this->site_ids[ $item_id ];
 		}
