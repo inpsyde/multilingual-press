@@ -131,10 +131,8 @@ final class PluginSettingsPageView implements SettingsPageView {
 			</td>
 			<td>
 				<label for="<?php echo esc_attr( $id ); ?>" class="mlp-block-label">
-					<strong><?php echo esc_html( $module->name() ); ?></strong>
-					<p>
-						<?php echo esc_html( $module->description() ); ?>
-					</p>
+					<strong class="mlp-module-name"><?php echo esc_html( $module->name() ); ?></strong>
+					<?php echo esc_html( $module->description() ); ?>
 				</label>
 			</td>
 		</tr>
