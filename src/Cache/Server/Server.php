@@ -7,6 +7,8 @@ use Inpsyde\MultilingualPress\Cache\Driver\CacheDriver;
 use Inpsyde\MultilingualPress\Cache\Exception;
 use Inpsyde\MultilingualPress\Cache\Pool\CachePool;
 
+use function Inpsyde\MultilingualPress\call_exit;
+
 /**
  * @package Inpsyde\MultilingualPress\Cache\Server
  * @since   3.0.0
@@ -236,7 +238,7 @@ class Server {
 
 		if ( $this->is_updating( $updating_key, $is_network ) ) {
 
-			$this->exit_on_update_end();
+			call_exit();
 
 			return;
 		}
@@ -275,7 +277,7 @@ class Server {
 
 		$this->mark_not_updating( $updating_key, $is_network );
 
-		$this->exit_on_update_end();
+		call_exit();
 	}
 
 	/**
@@ -560,18 +562,4 @@ class Server {
 			throw Exception\NotRegisteredCacheItem::for_namespace_and_key( $namespace, $key );
 		}
 	}
-
-	/**
-	 * Cancelable (via `remove_action`) plus test-friendly way to end the request.
-	 */
-	private function exit_on_update_end() {
-
-		add_action( 'multilingualpress.after_server_update_value', function () {
-
-			exit();
-		}, 100 );
-
-		do_action( 'multilingualpress.after_server_update_value' );
-	}
-
 }
