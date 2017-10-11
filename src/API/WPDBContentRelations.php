@@ -106,7 +106,11 @@ WHERE %3$s = %%d
 
 		$network_state = NetworkState::create();
 
-		foreach ( $this->get_existing_site_ids() as $site_id ) {
+		$site_ids = get_sites( [
+			'fields' => 'ids',
+		] );
+
+		foreach ( $site_ids as $site_id ) {
 			switch_to_blog( $site_id );
 
 			$query = $this->db->prepare( $query_template, [
@@ -624,23 +628,6 @@ WHERE %4$s = %%d',
 		}
 
 		return array_map( 'intval', $content_ids );
-	}
-
-	/**
-	 * Returns the IDs of all existing sites in the current network.
-	 *
-	 * @return int[] Site IDs.
-	 */
-	private function get_existing_site_ids() {
-
-		static $site_ids;
-		if ( ! isset( $site_ids ) ) {
-			$site_ids = get_sites( [
-				'fields' => 'ids',
-			] );
-		}
-
-		return $site_ids;
 	}
 
 	/**
