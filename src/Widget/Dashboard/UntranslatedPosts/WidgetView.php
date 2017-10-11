@@ -104,21 +104,18 @@ final class WidgetView implements View {
 	 */
 	private function get_site_ids(): array {
 
-		$site_ids = [
-			get_current_blog_id(),
-		];
-
-		if ( $this->configurator->is_displaying_remote_sites() ) {
-			$related_site_ids = $this->site_relations->get_related_site_ids();
-			$related_site_ids = array_filter( $related_site_ids, function ( int $site_id ) {
-
-				return is_user_member_of_blog( 0, $site_id );
-			} );
-
-			$site_ids = array_merge( $site_ids, $related_site_ids );
+		if ( ! $this->configurator->is_displaying_remote_sites() ) {
+			return [
+				get_current_blog_id(),
+			];
 		}
 
-		return $site_ids;
+		$related_site_ids = $this->site_relations->get_related_site_ids( 0, true );
+
+		return array_filter( $related_site_ids, function ( int $site_id ) {
+
+			return is_user_member_of_blog( 0, $site_id );
+		} );
 	}
 
 	/**
