@@ -40,13 +40,6 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
-		$container['multilingualpress.rest_schema_field_processor'] = function ( Container $container ) {
-
-			return new Core\Endpoint\FieldProcessor(
-				$container['multilingualpress.rest_field_access']
-			);
-		};
-
 		$container['multilingualpress.rest_response_data_access'] = function () {
 
 			return new Core\Response\LinkAwareDataAccess();
@@ -65,6 +58,13 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.rest_route_registry'] = function () {
 
 			return new Core\Route\Registry( REST_API_NAMESPACE );
+		};
+
+		$container['multilingualpress.rest_schema_field_processor'] = function ( Container $container ) {
+
+			return new Core\Endpoint\FieldProcessor(
+				$container['multilingualpress.rest_field_access']
+			);
 		};
 	}
 
