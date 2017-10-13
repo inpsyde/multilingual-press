@@ -166,7 +166,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 		$query  = $this->wpdb->prepare(
 			"SELECT `{$field}`
 			FROM `{$this->table_name}`
-			WHERE `http_name` = " . "%s LIMIT 1",
+			WHERE `http_name` = " . "%s ORDER BY `priority` DESC LIMIT 1",
 						   $iso
 		);
 		$result = $this->wpdb->get_var( $query );
