@@ -184,9 +184,10 @@ final class WPDBLanguages implements Languages {
 
 		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
 		$query = sprintf(
-			'SELECT * FROM %1$s WHERE %2$s = %%s LIMIT 1',
+			'SELECT * FROM %1$s WHERE %2$s = %%s ORDER BY %3$s DESC LIMIT 1',
 			$this->table,
-			LanguagesTable::COLUMN_HTTP_CODE
+			LanguagesTable::COLUMN_HTTP_CODE,
+			LanguagesTable::COLUMN_PRIORITY
 		);
 		$query = $this->db->prepare( $query, $http_code );
 
