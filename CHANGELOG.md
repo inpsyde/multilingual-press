@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.9.2
+- Languages API: Fetch the language with the highest priority as site language.
+
 ## 2.9.1
 - Translations: Restrict post type archive translations to active post types only.
 
