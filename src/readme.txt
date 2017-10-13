@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.2
 Tested up to: 4.8
-Stable tag: 2.9.1
+Stable tag: 2.9.2
 
 Create a fast translation network on WordPress multisite.
 
@@ -113,6 +113,9 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.9.2 =
+- Languages API: Fetch the language with the highest priority as site language.
 
 = 2.9.1 =
 - Translations: Restrict post type archive translations to active post types only.
