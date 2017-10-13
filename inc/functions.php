@@ -15,6 +15,24 @@ use Inpsyde\MultilingualPress\Module\Redirect\SettingsRepository as RedirectSett
 use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
 
 /**
+ * Namespace for all REST API URLs.
+ *
+ * @since 3.0.0
+ *
+ * @var string
+ */
+const REST_API_NAMESPACE = 'multilingualpress/v' . REST_API_VERSION;
+
+/**
+ * REST API version.
+ *
+ * @since 3.0.0
+ *
+ * @var string
+ */
+const REST_API_VERSION = '1';
+
+/**
  * Resolves the value with the given name from the container.
  *
  * @since 3.0.0
@@ -783,6 +801,24 @@ function replace_language_in_language_attributes( $language_attributes ): string
 	);
 
 	return $language_attributes;
+}
+
+/**
+ * Returns the REST URL for the given route in the MultilingualPress namespace.
+ *
+ * @since 3.0.0
+ *
+ * @param string $route  Optional. REST route. Defaults to empty string.
+ * @param string $scheme Optional. Sanitization scheme. Defaults 'json'.
+ *
+ * @return string
+ */
+function rest_url( string $route = '', string $scheme = 'json' ) {
+
+	$route = trim( "{$route}/", '/' );
+	$route = REST_API_NAMESPACE . ( $route ? "/{$route}" : '' ) . '/';
+
+	return \rest_url( $route, $scheme );
 }
 
 /**
