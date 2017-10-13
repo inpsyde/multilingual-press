@@ -27,6 +27,7 @@ use Inpsyde\MultilingualPress\Installation\InstallationServiceProvider;
 use Inpsyde\MultilingualPress\Integration\IntegrationProvider;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\NavMenu\NavMenuServiceProvider;
+use Inpsyde\MultilingualPress\REST\RESTServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\DistinctServiceProviderCollection;
 use Inpsyde\MultilingualPress\Service\ServiceProviderCollection;
@@ -92,6 +93,7 @@ function bootstrap(): bool {
 		->add_service_provider( new Module\Redirect\ServiceProvider() )
 		->add_service_provider( new Module\Trasher\ServiceProvider() )
 		->add_service_provider( new NavMenuServiceProvider() )
+		->add_service_provider( new RESTServiceProvider() )
 		->add_service_provider( new SiteDuplicationServiceProvider() )
 		->add_service_provider( new TranslationServiceProvider() )
 		->add_service_provider( new WidgetServiceProvider() );
