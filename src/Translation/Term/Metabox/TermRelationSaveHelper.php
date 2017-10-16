@@ -98,17 +98,9 @@ class TermRelationSaveHelper {
 
 		$relationship_id = $this->content_relations->get_relationship_id(
 			$content_ids,
-			ContentRelations::CONTENT_TYPE_TERM
+			ContentRelations::CONTENT_TYPE_TERM,
+			true
 		);
-		if ( ! $relationship_id ) {
-			$relationship_id = $this->content_relations->get_relationship_id(
-				[
-					$remote_site_id => $remote_term_taxonomy_id,
-				],
-				ContentRelations::CONTENT_TYPE_TERM,
-				true
-			);
-		}
 		if ( ! $relationship_id ) {
 			return false;
 		}
