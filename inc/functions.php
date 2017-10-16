@@ -15,15 +15,6 @@ use Inpsyde\MultilingualPress\Module\Redirect\SettingsRepository as RedirectSett
 use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
 
 /**
- * Namespace for all REST API URLs.
- *
- * @since 3.0.0
- *
- * @var string
- */
-const REST_API_NAMESPACE = 'multilingualpress/v' . REST_API_VERSION;
-
-/**
  * REST API version.
  *
  * @since 3.0.0
@@ -31,6 +22,15 @@ const REST_API_NAMESPACE = 'multilingualpress/v' . REST_API_VERSION;
  * @var string
  */
 const REST_API_VERSION = '1';
+
+/**
+ * Namespace for all REST API URLs.
+ *
+ * @since 3.0.0
+ *
+ * @var string
+ */
+const REST_API_NAMESPACE = 'multilingualpress/v' . REST_API_VERSION;
 
 /**
  * Resolves the value with the given name from the container.
