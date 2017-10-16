@@ -2,17 +2,17 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\REST\Factory;
+namespace Inpsyde\MultilingualPress\Factory;
 
 use Inpsyde\MultilingualPress\Common\Factory\ClassResolver;
 
 /**
  * Factory for WordPress REST response objects.
  *
- * @package Inpsyde\MultilingualPress\REST\Factory
+ * @package Inpsyde\MultilingualPress\Factory
  * @since   3.0.0
  */
-class ResponseFactory {
+class RESTResponseFactory {
 
 	/**
 	 * @var ClassResolver

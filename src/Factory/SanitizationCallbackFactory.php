@@ -1,14 +1,14 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\REST\Factory;
+namespace Inpsyde\MultilingualPress\Factory;
 
 /**
  * Static factory for diverse sanitization callbacks.
  *
- * @package Inpsyde\MultilingualPress\REST\Factory
+ * @package Inpsyde\MultilingualPress\Factory
  * @since   3.0.0
  */
-class SanitizeCallbackFactory {
+class SanitizationCallbackFactory {
 
 	/**
 	 * Returns a callback that sanitizes and returns the given value.
@@ -19,7 +19,7 @@ class SanitizeCallbackFactory {
 	 *
 	 * @return \Closure Sanitization callback.
 	 */
-	public static function sanitize_array( array $default = [] ) : \Closure {
+	public static function sanitize_array( array $default = [] ): \Closure {
 
 		/**
 		 * Sanitizes and returns the given value.
@@ -30,7 +30,7 @@ class SanitizeCallbackFactory {
 		 *
 		 * @return array Sanitized value.
 		 */
-		return function ( $value ) use ( $default ) : array {
+		return function ( $value ) use ( $default ): array {
 
 			return is_array( $value ) ? $value : $default;
 		};
@@ -45,7 +45,7 @@ class SanitizeCallbackFactory {
 	 *
 	 * @return \Closure Sanitization callback.
 	 */
-	public static function sanitize_array_elements( callable $callback ) : \Closure {
+	public static function sanitize_array_elements( callable $callback ): \Closure {
 
 		/**
 		 * Sanitizes and returns the given value.
@@ -69,7 +69,7 @@ class SanitizeCallbackFactory {
 	 *
 	 * @return \Closure Sanitization callback.
 	 */
-	public static function sanitize_bool() : \Closure {
+	public static function sanitize_bool(): \Closure {
 
 		/**
 		 * Sanitizes and returns the given value.
@@ -80,7 +80,7 @@ class SanitizeCallbackFactory {
 		 *
 		 * @return bool Sanitized value.
 		 */
-		return function ( $value ) : bool {
+		return function ( $value ): bool {
 
 			return (bool) $value;
 		};
@@ -93,7 +93,7 @@ class SanitizeCallbackFactory {
 	 *
 	 * @return \Closure Sanitization callback.
 	 */
-	public static function sanitize_numeric_id() : \Closure {
+	public static function sanitize_numeric_id(): \Closure {
 
 		/**
 		 * Sanitizes and returns the given value.
@@ -104,7 +104,7 @@ class SanitizeCallbackFactory {
 		 *
 		 * @return int Sanitized value.
 		 */
-		return function ( $value ) : int {
+		return function ( $value ): int {
 
 			return absint( $value );
 		};
@@ -119,7 +119,7 @@ class SanitizeCallbackFactory {
 	 *
 	 * @return \Closure Sanitization callback.
 	 */
-	public static function sanitize_string( string $default = '' ) : \Closure {
+	public static function sanitize_string( string $default = '' ): \Closure {
 
 		/**
 		 * Sanitizes and returns the given value.
