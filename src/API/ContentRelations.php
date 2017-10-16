@@ -55,7 +55,6 @@ interface ContentRelations {
 	 */
 	const FILTER_TAXONOMY = 'multilingualpress.content_relations_taxonomy';
 
-
 	/**
 	 * Deletes all relations for posts that don't exist (anymore).
 	 *
@@ -145,6 +144,17 @@ interface ContentRelations {
 		string $type,
 		int $target_site_id
 	): int;
+
+	/**
+	 * Returns the content IDs for the given relationship ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $relationship_id Relationship ID.
+	 *
+	 * @return int[] Array with site IDs as keys and content IDs as values.
+	 */
+	public function get_content_ids( int $relationship_id ): array;
 
 	/**
 	 * Returns all relations for the given content element.

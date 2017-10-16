@@ -200,7 +200,7 @@ WHERE %2$s NOT IN (
 			return true;
 		}
 
-		$site_ids = array_keys( $content_ids );
+		$site_ids = array_map( 'intval', array_keys( $content_ids ) );
 
 		return array_reduce( $site_ids, function ( bool $success, int $site_id ) use ( $relationship_id ) {
 
@@ -284,6 +284,42 @@ WHERE %4$s = %%d',
 		$relations = $this->get_relations( $site_id, $content_id, $type );
 
 		return $relations[ $target_site_id ] ?? 0;
+	}
+
+	/**
+	 * Returns the content IDs for the given relationship ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $relationship_id Relationship ID.
+	 *
+	 * @return int[] Array with site IDs as keys and content IDs as values.
+	 */
+	public function get_content_ids( int $relationship_id ): array {
+
+		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
+		$query = sprintf(
+			'
+SELECT %2$s, %3$s
+FROM %1$s
+WHERE %4$s = %%d',
+			$this->table,
+			Table\ContentRelationsTable::COLUMN_SITE_ID,
+			Table\ContentRelationsTable::COLUMN_CONTENT_ID,
+			Table\ContentRelationsTable::COLUMN_RELATIONSHIP_ID
+		);
+		$query = $this->db->prepare( $query, $relationship_id );
+
+		$rows = $this->db->get_results( $query, ARRAY_A );
+
+		return array_reduce( $rows, function ( array $content_ids, array $row ) {
+
+			$content_id = (int) $row[ Table\ContentRelationsTable::COLUMN_CONTENT_ID ];
+
+			$content_ids[ (int) $row[ Table\ContentRelationsTable::COLUMN_SITE_ID ] ] = $content_id;
+
+			return $content_ids;
+		}, [] );
 	}
 
 	/**
@@ -566,40 +602,6 @@ WHERE t.%6$s = %%d
 	}
 
 	/**
-	 * Returns the content IDs for the given relationship ID.
-	 *
-	 * @param int $relationship_id Relationship ID.
-	 *
-	 * @return int[] Array with site IDs as keys and content IDs as values.
-	 */
-	private function get_content_ids( int $relationship_id ): array {
-
-		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
-		$query = sprintf(
-			'
-SELECT %2$s, %3$s
-FROM %1$s
-WHERE %4$s = %%d',
-			$this->table,
-			Table\ContentRelationsTable::COLUMN_SITE_ID,
-			Table\ContentRelationsTable::COLUMN_CONTENT_ID,
-			Table\ContentRelationsTable::COLUMN_RELATIONSHIP_ID
-		);
-		$query = $this->db->prepare( $query, $relationship_id );
-
-		$rows = $this->db->get_results( $query, ARRAY_A );
-
-		return array_reduce( $rows, function ( array $content_ids, array $row ) {
-
-			$content_id = (int) $row[ Table\ContentRelationsTable::COLUMN_CONTENT_ID ];
-
-			$content_ids[ (int) $row[ Table\ContentRelationsTable::COLUMN_SITE_ID ] ] = $content_id;
-
-			return $content_ids;
-		}, [] );
-	}
-
-	/**
 	 * Returns the IDs of all existing content elements of the given type in the current site.
 	 *
 	 * @param string $type Content type.
@@ -701,7 +703,7 @@ WHERE 1 = 1',
 		$relationship_id = 0;
 
 		foreach ( $content_ids as $site_id => $content_id ) {
-			$new_relationship_id = $this->get_relationship_id_single( $site_id, $content_id, $type );
+			$new_relationship_id = $this->get_relationship_id_single( (int) $site_id, (int) $content_id, $type );
 			if ( ! $new_relationship_id ) {
 				continue;
 			}
