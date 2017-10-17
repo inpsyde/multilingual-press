@@ -41,12 +41,10 @@ class API {
 	 */
 	public function create_relationship( array $content_ids, string $type ): int {
 
-		$content_ids = array_map( 'intval', $content_ids );
-
-		$relationship_id = $this->api->get_relationship_id( $content_ids, $type, true );
+		$relationship_id = $this->api->create_relationship_for_type( $type );
 		if ( $relationship_id ) {
 			foreach ( $content_ids as $site_id => $content_id ) {
-				$this->api->set_relation( $relationship_id, $site_id, $content_id );
+				$this->api->set_relation( $relationship_id, (int) $site_id, (int) $content_id );
 			}
 		}
 
