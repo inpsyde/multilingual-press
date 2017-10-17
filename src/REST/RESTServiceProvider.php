@@ -333,12 +333,18 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 	 */
 	private function add_content_relations_fields( Core\Field\Collection $field_collection, Container $container ) {
 
-		$object_types = array_merge(
+		$object_types = array_unique( array_merge(
 			$container['multilingualpress.active_post_types']->names(),
 			$container['multilingualpress.active_taxonomies']->names()
-		);
+		) );
 		if ( ! $object_types ) {
 			return;
+		}
+
+		// For whatever reason, the object type for the post_tag taxonomy endpoint is "tag", not "post_tag".
+		$post_tag_index = array_search( 'post_tag', $object_types, true );
+		if ( false !== $post_tag_index ) {
+			$object_types[ $post_tag_index ] = 'tag';
 		}
 
 		$field = $container['multilingualpress.rest.content_relations_field'];

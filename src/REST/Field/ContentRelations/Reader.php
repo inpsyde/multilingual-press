@@ -207,6 +207,13 @@ final class Reader implements Field\Reader {
 			return ContentRelations::CONTENT_TYPE_TERM;
 		}
 
+		// For whatever reason, the object type for the post_tag taxonomy endpoint is "tag", not "post_tag".
+		if ( 'tag' === $object_type ) {
+			if ( taxonomy_exists( 'post_tag' ) && $this->active_taxonomies->includes( 'post_tag' ) ) {
+				return ContentRelations::CONTENT_TYPE_TERM;
+			}
+		}
+
 		return '';
 	}
 }
