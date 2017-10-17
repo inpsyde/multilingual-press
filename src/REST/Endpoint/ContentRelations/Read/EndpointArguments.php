@@ -2,6 +2,7 @@
 
 namespace Inpsyde\MultilingualPress\REST\Endpoint\ContentRelations\Read;
 
+use Inpsyde\MultilingualPress\API\ContentRelations;
 use Inpsyde\MultilingualPress\REST\Common\Arguments;
 use Inpsyde\MultilingualPress\Factory\SanitizationCallbackFactory as Sanitizer;
 
@@ -40,7 +41,7 @@ final class EndpointArguments implements Arguments {
 			'type'       => [
 				'description'       => __( 'A content element type.', 'multilingualpress' ),
 				'type'              => 'string',
-				'default'           => 'post',
+				'default'           => ContentRelations::CONTENT_TYPE_POST,
 				'sanitize_callback' => Sanitizer::sanitize_string(),
 			],
 		];
