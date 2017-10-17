@@ -88,11 +88,10 @@ final class Reader implements Field\Reader {
 		string $object_type = ''
 	) {
 
-
 		$relations = $this->api->get_relations(
 			get_current_blog_id(),
 			$this->get_content_id( $object, $field_name, $request, $object_type ),
-			ContentRelations::CONTENT_TYPE_POST
+			$this->get_content_type( $object, $field_name, $request, $object_type )
 		);
 		if ( ! $relations ) {
 			return [];
