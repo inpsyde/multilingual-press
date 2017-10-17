@@ -72,13 +72,15 @@ class Formatter {
 	 */
 	public function format( array $content_ids, string $type, string $context ) {
 
-		return array_reduce( array_keys( $content_ids ), function ( array $data, int $site_id ) use (
+		$site_ids = array_map( 'intval', array_keys( $content_ids ) );
+
+		return array_reduce( $site_ids, function ( array $data, int $site_id ) use (
 			$content_ids,
 			$type,
 			$context
 		) {
 
-			$data[] = $this->format_item( $site_id, $content_ids[ $site_id ], $type, $context );
+			$data[] = $this->format_item( $site_id, (int) $content_ids[ $site_id ], $type, $context );
 
 			return $data;
 		}, [] );
