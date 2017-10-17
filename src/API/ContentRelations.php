@@ -56,6 +56,17 @@ interface ContentRelations {
 	const FILTER_TAXONOMY = 'multilingualpress.content_relations_taxonomy';
 
 	/**
+	 * Creates a new relationship for the given type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $type Content type.
+	 *
+	 * @return int Relationship ID.
+	 */
+	public function create_relationship_for_type( string $type ): int;
+
+	/**
 	 * Deletes all relations for posts that don't exist (anymore).
 	 *
 	 * @since 3.0.0

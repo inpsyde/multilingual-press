@@ -73,6 +73,26 @@ final class WPDBContentRelations implements ContentRelations {
 	}
 
 	/**
+	 * Creates a new relationship for the given type.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $type Content type.
+	 *
+	 * @return int Relationship ID.
+	 */
+	public function create_relationship_for_type( string $type ): int {
+
+		if ( $this->db->insert( $this->relationships_table, [
+			Table\RelationshipsTable::COLUMN_TYPE => $type,
+		], '%s' ) ) {
+			return (int) $this->db->insert_id;
+		}
+
+		return 0;
+	}
+
+	/**
 	 * Deletes all relations for posts that don't exist (anymore).
 	 *
 	 * @since 3.0.0
@@ -498,24 +518,6 @@ LIMIT 1',
 		}
 
 		return $this->insert_relation( $relationship_id, $site_id, $content_id );
-	}
-
-	/**
-	 * Creates a new relationship for the given type.
-	 *
-	 * @param string $type Content type.
-	 *
-	 * @return int Relationship ID.
-	 */
-	private function create_relationship_for_type( string $type ): int {
-
-		if ( $this->db->insert( $this->relationships_table, [
-			Table\RelationshipsTable::COLUMN_TYPE => $type,
-		], '%s' ) ) {
-			return (int) $this->db->insert_id;
-		}
-
-		return 0;
 	}
 
 	/**
