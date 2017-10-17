@@ -64,6 +64,8 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 		} );
 
 		$this->register_content_relations( $container );
+
+		$this->register_site_relations( $container );
 	}
 
 	/**
@@ -146,6 +148,63 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 	}
 
 	/**
+	 * Registers the site relations services on the given container.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function register_site_relations( Container $container ) {
+
+		$container->share( 'multilingualpress.rest.site_relations_api', function ( Container $container ) {
+
+			return new Endpoint\SiteRelations\API(
+				$container['multilingualpress.site_relations']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.site_relations_data_filter', function ( Container $container ) {
+
+			return new Core\Response\SchemaAwareDataFilter(
+				$container['multilingualpress.rest.site_relations_schema']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.site_relations_formatter', function ( Container $container ) {
+
+			return new Endpoint\SiteRelations\Formatter(
+				$container['multilingualpress.rest.site_relations_data_filter'],
+				$container['multilingualpress.rest.site_relations_schema'],
+				$container['multilingualpress.rest_response_factory'],
+				$container['multilingualpress.rest_response_data_access']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.site_relations_read_arguments', function () {
+
+			return new Endpoint\SiteRelations\Read\EndpointArguments();
+		} );
+
+		$container->share( 'multilingualpress.rest.site_relations_read_handler', function ( Container $container ) {
+
+			return new Endpoint\SiteRelations\Read\RequestHandler(
+				$container['multilingualpress.rest.site_relations_api'],
+				$container['multilingualpress.rest.site_relations_formatter'],
+				$container['multilingualpress.rest.site_relations_schema'],
+				$container['multilingualpress.rest_request_field_processor'],
+				$container['multilingualpress.rest_response_factory']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.site_relations_schema', function ( Container $container ) {
+
+			return new Endpoint\SiteRelations\Schema(
+				$container['multilingualpress.rest_schema_field_processor']
+			);
+		} );
+	}
+
+	/**
 	 * Bootstraps the registered services.
 	 *
 	 * @since 3.0.0
@@ -161,6 +220,7 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			$routes = $container['multilingualpress.rest_route_collection'];
 
 			$this->add_content_relations_routes( $routes, $container );
+			$this->add_site_relations_routes( $routes, $container );
 
 			$container['multilingualpress.rest_route_registry']->register_routes( $routes );
 		} );
@@ -197,6 +257,34 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			Core\Route\Options::from_arguments(
 				$container['multilingualpress.rest.content_relations_read_handler'],
 				$container['multilingualpress.rest.content_relations_read_arguments']
+			)->set_schema( $schema )
+		) );
+
+		$routes->add( new Core\Route\Route(
+			$base . '/schema',
+			Core\Route\Options::with_callback( [ $schema, 'definition' ] )
+		) );
+	}
+
+	/**
+	 * Adds the site relations routes.
+	 *
+	 * @param Core\Route\Collection $routes    Route collection object.
+	 * @param Container             $container Container object.
+	 *
+	 * @return void
+	 */
+	private function add_site_relations_routes( Core\Route\Collection $routes, Container $container ) {
+
+		$schema = $container['multilingualpress.rest.site_relations_schema'];
+
+		$base = $schema->title();
+
+		$routes->add( new Core\Route\Route(
+			$base . '/(?P<site_id>\d+)',
+			Core\Route\Options::from_arguments(
+				$container['multilingualpress.rest.site_relations_read_handler'],
+				$container['multilingualpress.rest.site_relations_read_arguments']
 			)->set_schema( $schema )
 		) );
 
