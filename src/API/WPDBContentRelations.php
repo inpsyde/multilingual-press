@@ -73,23 +73,25 @@ final class WPDBContentRelations implements ContentRelations {
 	}
 
 	/**
-	 * Creates a new relationship for the given type.
+	 * Creates a relationship for the given content elements.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $type Content type.
+	 * @param int[]  $content_ids Array with site IDs as keys and content IDs as values.
+	 * @param string $type        Content type.
 	 *
-	 * @return int Relationship ID.
+	 * @return int The relationship ID.
 	 */
-	public function create_relationship_for_type( string $type ): int {
+	public function create_relationship( array $content_ids, string $type ): int {
 
-		if ( $this->db->insert( $this->relationships_table, [
-			Table\RelationshipsTable::COLUMN_TYPE => $type,
-		], '%s' ) ) {
-			return (int) $this->db->insert_id;
+		$relationship_id = $this->create_relationship_for_type( $type );
+		if ( $relationship_id ) {
+			foreach ( $content_ids as $site_id => $content_id ) {
+				$this->set_relation( $relationship_id, (int) $site_id, (int) $content_id );
+			}
 		}
 
-		return 0;
+		return $relationship_id;
 	}
 
 	/**
@@ -518,6 +520,24 @@ LIMIT 1',
 		}
 
 		return $this->insert_relation( $relationship_id, $site_id, $content_id );
+	}
+
+	/**
+	 * Creates a new relationship for the given type.
+	 *
+	 * @param string $type Content type.
+	 *
+	 * @return int Relationship ID.
+	 */
+	private function create_relationship_for_type( string $type ): int {
+
+		if ( $this->db->insert( $this->relationships_table, [
+			Table\RelationshipsTable::COLUMN_TYPE => $type,
+		], '%s' ) ) {
+			return (int) $this->db->insert_id;
+		}
+
+		return 0;
 	}
 
 	/**
