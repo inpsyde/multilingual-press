@@ -25,7 +25,7 @@ final class Reader implements Field\Reader {
 	 *
 	 * @var string
 	 */
-	const FILTER_CONTENT_ID = 'multilingualpress.rest.content_id';
+	const FILTER_CONTENT_ID = 'multilingualpress.rest.content_relations_field_content_id';
 
 	/**
 	 * Filter name.
@@ -34,7 +34,7 @@ final class Reader implements Field\Reader {
 	 *
 	 * @var string
 	 */
-	const FILTER_CONTENT_TYPE = 'multilingualpress.rest.content_type';
+	const FILTER_CONTENT_TYPE = 'multilingualpress.rest.content_relations_field_content_type';
 
 	/**
 	 * @var ActivePostTypes
