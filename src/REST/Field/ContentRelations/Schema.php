@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\REST\Field\Posts\ContentRelations;
+namespace Inpsyde\MultilingualPress\REST\Field\ContentRelations;
 
 use Inpsyde\MultilingualPress\REST\Common;
 
 /**
- * Content relations post field schema.
+ * Content relations field schema.
  *
- * @package Inpsyde\MultilingualPress\REST\Field\Posts\ContentRelations
+ * @package Inpsyde\MultilingualPress\REST\Field\ContentRelations
  * @since   3.0.0
  */
 final class Schema implements Common\Schema {
@@ -24,7 +24,7 @@ final class Schema implements Common\Schema {
 	public function definition(): array {
 
 		return [
-			'description' => __( 'An array of related post objects with site and content ID.', 'multilingualpress' ),
+			'description' => __( 'An array of related objects with site ID and content ID.', 'multilingualpress' ),
 			'type'        => 'array',
 			'context'     => [
 				'view',
