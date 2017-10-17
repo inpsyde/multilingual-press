@@ -7,11 +7,20 @@ namespace Inpsyde\MultilingualPress\Translation\Term;
 use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
+ * Simple read-only storage for taxonomies active for MultilingualPress.
+ *
  * @package Inpsyde\MultilingualPress\Translation\Term
  * @since   3.0.0
  */
 class ActiveTaxonomies {
 
+	/**
+	 * Filter hook.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
 	const FILTER_ACTIVE_TAXONOMIES = 'multilingualpress.active_taxonomies';
 
 	/**
