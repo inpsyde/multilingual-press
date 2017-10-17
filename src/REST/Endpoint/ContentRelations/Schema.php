@@ -45,7 +45,7 @@ final class Schema implements Endpoint\Schema {
 	public function definition(): array {
 
 		return [
-			'$schema'    => 'http://json-schema.org/draft-04/schema#',
+			'$schema'    => 'http://json-schema.org/schema#',
 			'title'      => $this->title(),
 			'type'       => 'object',
 			'properties' => $this->properties(),
