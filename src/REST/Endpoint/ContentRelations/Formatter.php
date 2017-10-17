@@ -80,7 +80,9 @@ class Formatter {
 			$context
 		) {
 
-			return $data + $this->format_item( $site_id, (int) $content_ids[ $site_id ], $type, $context );
+			$data[] = $this->format_item( $site_id, (int) $content_ids[ $site_id ], $type, $context );
+
+			return $data;
 		}, [] );
 	}
 
