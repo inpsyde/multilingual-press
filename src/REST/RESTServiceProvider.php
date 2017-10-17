@@ -87,13 +87,6 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 	 */
 	private function register_content_relations( Container $container ) {
 
-		$container->share( 'multilingualpress.rest.content_relations_api', function ( Container $container ) {
-
-			return new Endpoint\ContentRelations\API(
-				$container['multilingualpress.content_relations']
-			);
-		} );
-
 		$container->share( 'multilingualpress.rest.content_relations_create_arguments', function (
 			Container $container
 		) {
@@ -108,7 +101,7 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 		) {
 
 			return new Endpoint\ContentRelations\Create\RequestHandler(
-				$container['multilingualpress.rest.content_relations_api'],
+				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.rest.content_relations_formatter'],
 				$container['multilingualpress.rest.content_relations_schema'],
 				$container['multilingualpress.rest_request_field_processor'],
@@ -164,7 +157,7 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 		$container->share( 'multilingualpress.rest.content_relations_read_handler', function ( Container $container ) {
 
 			return new Endpoint\ContentRelations\Read\RequestHandler(
-				$container['multilingualpress.rest.content_relations_api'],
+				$container['multilingualpress.content_relations'],
 				$container['multilingualpress.rest.content_relations_formatter'],
 				$container['multilingualpress.rest.content_relations_schema'],
 				$container['multilingualpress.rest_request_field_processor'],
@@ -188,13 +181,6 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 	 * @return void
 	 */
 	private function register_site_relations( Container $container ) {
-
-		$container->share( 'multilingualpress.rest.site_relations_api', function ( Container $container ) {
-
-			return new Endpoint\SiteRelations\API(
-				$container['multilingualpress.site_relations']
-			);
-		} );
 
 		$container->share( 'multilingualpress.rest.site_relations_data_filter', function ( Container $container ) {
 
@@ -221,7 +207,7 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 		$container->share( 'multilingualpress.rest.site_relations_read_handler', function ( Container $container ) {
 
 			return new Endpoint\SiteRelations\Read\RequestHandler(
-				$container['multilingualpress.rest.site_relations_api'],
+				$container['multilingualpress.site_relations'],
 				$container['multilingualpress.rest.site_relations_formatter'],
 				$container['multilingualpress.rest.site_relations_schema'],
 				$container['multilingualpress.rest_request_field_processor'],

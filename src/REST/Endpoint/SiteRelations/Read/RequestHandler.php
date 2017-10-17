@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\REST\Endpoint\SiteRelations\Read;
 
+use Inpsyde\MultilingualPress\API\SiteRelations as API;
 use Inpsyde\MultilingualPress\Factory\RESTResponseFactory;
 use Inpsyde\MultilingualPress\REST\Common\Endpoint;
 use Inpsyde\MultilingualPress\REST\Common\Request\FieldProcessor;
-use Inpsyde\MultilingualPress\REST\Endpoint\SiteRelations\API;
 use Inpsyde\MultilingualPress\REST\Endpoint\SiteRelations\Formatter;
 use Inpsyde\MultilingualPress\REST\Endpoint\SiteRelations\Schema;
 
