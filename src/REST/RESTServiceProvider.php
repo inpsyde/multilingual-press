@@ -34,6 +34,16 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			return new Core\Field\Access();
 		} );
 
+		$container->share( 'multilingualpress.rest_field_collection', function () {
+
+			return new Core\Field\Collection();
+		} );
+
+		$container->share( 'multilingualpress.rest_field_registry', function () {
+
+			return new Core\Field\Registry();
+		} );
+
 		$container->share( 'multilingualpress.rest_request_field_processor', function ( Container $container ) {
 
 			return new Core\Request\FieldProcessor(
@@ -121,6 +131,29 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.rest_response_factory'],
 				$container['multilingualpress.rest_response_data_access']
 			);
+		} );
+
+		$container->share( 'multilingualpress.rest.content_relations_post_field', function ( Container $container ) {
+
+			$field = new Core\Field\Field( 'mlp:content_relations' );
+			$field->set_get_callback( $container['multilingualpress.rest.content_relations_post_field_reader'] );
+			$field->set_schema( $container['multilingualpress.rest.content_relations_post_field_schema'] );
+
+			return $field;
+		} );
+
+		$container->share( 'multilingualpress.rest.content_relations_post_field_reader', function (
+			Container $container
+		) {
+
+			return new Field\Posts\ContentRelations\Reader(
+				$container['multilingualpress.content_relations']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.content_relations_post_field_schema', function () {
+
+			return new Field\Posts\ContentRelations\Schema();
 		} );
 
 		$container->share( 'multilingualpress.rest.content_relations_read_arguments', function () {
@@ -217,12 +250,20 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 
 		add_action( 'rest_api_init', function () use ( $container ) {
 
+			// Bootstrap new REST routes.
 			$routes = $container['multilingualpress.rest_route_collection'];
 
 			$this->add_content_relations_routes( $routes, $container );
 			$this->add_site_relations_routes( $routes, $container );
 
 			$container['multilingualpress.rest_route_registry']->register_routes( $routes );
+
+			// Bootstrap new REST fields.
+			$fields = $container['multilingualpress.rest_field_collection'];
+
+			$fields->add( 'post', $container['multilingualpress.rest.content_relations_post_field'] );
+
+			$container['multilingualpress.rest_field_registry']->register_fields( $fields );
 		} );
 	}
 
