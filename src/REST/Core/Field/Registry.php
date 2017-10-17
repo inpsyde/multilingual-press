@@ -25,14 +25,6 @@ final class Registry implements Common\Field\Registry {
 	 */
 	public function register_fields( Common\Field\Collection $fields ) {
 
-		if ( ! function_exists( 'register_rest_field' ) ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				trigger_error( 'Function register_rest_field() not available. Cannot register additional fields.' );
-			}
-
-			return;
-		}
-
 		/**
 		 * Fires right before the fields are registered.
 		 *
