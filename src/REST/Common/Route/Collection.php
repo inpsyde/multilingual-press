@@ -6,15 +6,14 @@ namespace Inpsyde\MultilingualPress\REST\Common\Route;
  * Interface for all route collection implementations.
  *
  * @package Inpsyde\MultilingualPress\REST\Common\Route
- * @since   1.0.0
- * @since   1.1.0 Removed `to_array()` method.
+ * @since 3 3.0.0
  */
 interface Collection extends \IteratorAggregate {
 
 	/**
 	 * Adds the given route object to the collection.
 	 *
-	 * @since 1.0.0
+	 * @since 3.0.0
 	 *
 	 * @param Route $route Route object.
 	 *
@@ -25,7 +24,7 @@ interface Collection extends \IteratorAggregate {
 	/**
 	 * Deletes the route object at the given index from the collection.
 	 *
-	 * @since 1.0.0
+	 * @since 3.0.0
 	 *
 	 * @param int $index Index of the route object.
 	 *

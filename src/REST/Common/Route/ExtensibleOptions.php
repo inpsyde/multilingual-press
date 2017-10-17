@@ -8,15 +8,14 @@ use Inpsyde\MultilingualPress\REST\Common\Arguments;
  * Interface for all implementations of extensible route options.
  *
  * @package Inpsyde\MultilingualPress\REST\Common\Route
- * @since   1.1.0
+ * @since   3.0.0
  */
 interface ExtensibleOptions extends Arguments {
 
 	/**
 	 * Adds the given route options as new entry to the internal options.
 	 *
-	 * @since 1.1.0
-	 * @since 2.0.0 Require $options to be an array.
+	 * @since 3.0.0
 	 *
 	 * @param array $options Route options.
 	 *

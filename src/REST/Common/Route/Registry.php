@@ -6,7 +6,7 @@ namespace Inpsyde\MultilingualPress\REST\Common\Route;
  * Interface for all route registry implementations.
  *
  * @package Inpsyde\MultilingualPress\REST\Common\Route
- * @since   1.0.0
+ * @since   3.0.0
  */
 interface Registry {
 
@@ -24,7 +24,7 @@ interface Registry {
 	/**
 	 * Registers the given routes.
 	 *
-	 * @since 1.0.0
+	 * @since 3.0.0
 	 *
 	 * @param Collection $routes Route collection object.
 	 *

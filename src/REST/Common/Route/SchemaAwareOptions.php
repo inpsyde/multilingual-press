@@ -9,14 +9,14 @@ use Inpsyde\MultilingualPress\REST\Common\Endpoint\Schema;
  * Interface for all implementations of schema-aware route options.
  *
  * @package Inpsyde\MultilingualPress\REST\Common\Route
- * @since   1.1.0
+ * @since   3.0.0
  */
 interface SchemaAwareOptions extends Arguments {
 
 	/**
 	 * Sets the schema callback in the options to the according callback on the given schema object.
 	 *
-	 * @since 1.1.0
+	 * @since 3.0.0
 	 *
 	 * @param Schema $schema Schema object.
 	 *

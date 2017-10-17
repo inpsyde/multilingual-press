@@ -6,8 +6,7 @@ namespace Inpsyde\MultilingualPress\REST\Common\Route;
  * Interface for all route implementations.
  *
  * @package Inpsyde\MultilingualPress\REST\Common\Route
- * @since   1.0.0
- * @since   3.0.0 Removed "get_" prefix from getters.
+ * @since   3.0.0
  */
 interface Route {
 
