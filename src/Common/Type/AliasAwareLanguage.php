@@ -69,6 +69,7 @@ final class AliasAwareLanguage implements Language {
 			'native_name',
 			'priority',
 			'text',
+		    'ID',
 		];
 
 		return in_array( (string) $name, $names, true );
@@ -237,6 +238,7 @@ final class AliasAwareLanguage implements Language {
 			'native_name'  => '',
 			'text'         => '',
 			'wp_locale'    => '',
+		    'ID'           => ''
 		];
 
 		$names = array_replace( $names, array_intersect_key( $data, $names ) );
