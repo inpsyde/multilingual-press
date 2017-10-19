@@ -46,25 +46,9 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 
 		add_action( LanguageManagerSettingsPageView::CONTENT_DISPLAY, function() use ( $container ) {
 
-			$active = get_available_languages( false );
-			$active = array_map( function( $val ) {
-				return str_replace( '_', '-', $val );
-			}, $active );
+			$separator = new LanguageUsageList( $container['multilingualpress.languages'] );
 
-			// This is just a stub, needs to be moved to a separate class
-			$languages = array_filter(
-				$container['multilingualpress.languages']->get_all_languages(),
-				function( Language $language ) use ( $active ) {
-
-					if ( ! $language->offsetExists( 'http_code' ) ) {
-						return false;
-					}
-
-					return in_array( $language->offsetGet( 'http_code' ), $active );
-				}
-			);
-
-			$table = new LanguageListTable( $languages );
+			$table = new LanguageListTable( $separator->get_by( LanguageUsageList::ACTIVE ) );
 			$table->prepare_items();
 			$table->display();
 			return;
