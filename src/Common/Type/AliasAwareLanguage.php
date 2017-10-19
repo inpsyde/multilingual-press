@@ -237,7 +237,7 @@ final class AliasAwareLanguage implements Language {
 			'iso_639_2'    => '',
 			'native_name'  => '',
 			'text'         => '',
-			'wp_locale'    => '',
+			'locale'       => '',
 		    'ID'           => ''
 		];
 
