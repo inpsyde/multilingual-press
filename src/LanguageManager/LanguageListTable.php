@@ -41,9 +41,9 @@ class LanguageListTable extends \WP_List_Table
 	/**
 	 * LanguageListTable constructor.
 	 *
-	 * @param Languages $languages
+	 * @param array $languages
 	 */
-	public function __construct( $languages )
+	public function __construct( array $languages )
 	{
 		$this->_args = [
 			'plural' => '',
