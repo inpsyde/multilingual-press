@@ -85,17 +85,33 @@ final class RequestHandler implements Endpoint\RequestHandler {
 	 */
 	public function handle_request( \WP_REST_Request $request ): \WP_REST_Response {
 
-		$site_id = (int) $request['site_id'];
-
 		$data = $this->formatter->format(
-			[
-				$site_id => $this->api->get_related_site_ids( $site_id ),
-			],
+			$this->get_related_sites( $request ),
 			(string) ( $request['context'] ?? 'view' )
 		);
 
 		$data = $this->field_processor->add_fields_to_object( $data, $request, $this->object_type );
 
 		return $this->response_factory->create( [ $data ] );
+	}
+
+	/**
+	 * Returns an array with site IDs as keys and arrays with the IDs of all related sites according to the request.
+	 *
+	 * @param \WP_REST_Request $request Request object.
+	 *
+	 * @return array An array with site IDs as keys and related site IDs as values.
+	 */
+	private function get_related_sites( \WP_REST_Request $request ): array {
+
+		if ( ! isset( $request['site_id'] ) ) {
+			return $this->api->get_all_relations();
+		}
+
+		$site_id = (int) $request['site_id'];
+
+		return [
+			$site_id => $this->api->get_related_site_ids( $site_id ),
+		];
 	}
 }

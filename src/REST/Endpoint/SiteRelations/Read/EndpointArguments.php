@@ -27,7 +27,6 @@ final class EndpointArguments implements Arguments {
 				'description'       => __( 'A site ID.', 'multilingualpress' ),
 				'type'              => 'integer',
 				'minimum'           => 1,
-				'required'          => true,
 				'sanitize_callback' => Sanitizer::sanitize_numeric_id(),
 			],
 		];

@@ -310,7 +310,7 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 		$base = $schema->title();
 
 		$route_collection->add( new Core\Route\Route(
-			$base . '/(?P<site_id>\d+)',
+			$base . '(?:/(?P<site_id>\d+))?',
 			Core\Route\Options::from_arguments(
 				$container['multilingualpress.rest.site_relations_read_handler'],
 				$container['multilingualpress.rest.site_relations_read_arguments']
