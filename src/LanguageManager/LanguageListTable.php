@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\LanguageManager;
 
-use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
@@ -12,10 +11,22 @@ class LanguageListTable extends \WP_List_Table
 {
 	protected $screen = 'mlp_language_manager';
 
-	// used in inherited method display()
+	/**
+	 * Used in inherited method display()
+	 *
+	 * @var array
+	 */
 	public $_args = [];
 
+	/**
+	 * List of languages.
+	 *
+	 * We use "items" here for compatibility with the extended class.
+	 *
+	 * @var array
+	 */
 	public $items = [];
+
 	/**
 	 * @var array column headers
 	 */
@@ -27,16 +38,9 @@ class LanguageListTable extends \WP_List_Table
 	public $columns;
 
 	/**
-	 * @var array colum names
+	 * @var array column names
 	 */
 	public $column_names;
-
-	/**
-	 *
-	 *
-	 * @var Languages
-	 */
-	private $languages;
 
 	/**
 	 * LanguageListTable constructor.
@@ -46,10 +50,10 @@ class LanguageListTable extends \WP_List_Table
 	public function __construct( array $languages )
 	{
 		$this->_args = [
-			'plural' => '',
+			'plural'   => '',
 			'singular' => '',
-			'ajax' => false,
-			'screen' => null,
+			'ajax'     => false,
+			'screen'   => null,
 		];
 		$this->items = $languages;
 
@@ -90,7 +94,6 @@ class LanguageListTable extends \WP_List_Table
 			echo 'nothing found';
 		}
 	}
-
 
 	/**
 	 *
