@@ -116,6 +116,22 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			);
 		} );
 
+		$container->share( 'multilingualpress.rest.content_relations_delete_arguments', function () {
+
+			return new Endpoint\ContentRelations\Delete\EndpointArguments();
+		} );
+
+		$container->share( 'multilingualpress.rest.content_relations_delete_handler', function ( Container $container ) {
+
+			return new Endpoint\ContentRelations\Delete\RequestHandler(
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.rest.content_relations_formatter'],
+				$container['multilingualpress.rest.content_relations_schema'],
+				$container['multilingualpress.rest_request_field_processor'],
+				$container['multilingualpress.rest_response_factory']
+			);
+		} );
+
 		$container->share( 'multilingualpress.rest.content_relations_field', function ( Container $container ) {
 
 			$field = new Core\Field\Field( 'mlp:content_relations' );
@@ -321,6 +337,8 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 
 		$base = $schema->title();
 
+		// TODO: Permission checking is currently targeted at posts. Content elements can be really anything, though.
+
 		$route_collection->add( new Core\Route\Route(
 			$base,
 			Core\Route\Options::from_arguments(
@@ -338,6 +356,18 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			Core\Route\Options::from_arguments(
 				$container['multilingualpress.rest.content_relations_read_handler'],
 				$container['multilingualpress.rest.content_relations_read_arguments']
+			)->set_schema( $schema )
+		) );
+
+		$route_collection->add( new Core\Route\Route(
+			$base . '/(?P<site_id>\d+)/(?P<content_id>\d+)(?:/(?P<type>[^/]+))?',
+			Core\Route\Options::from_arguments(
+				$container['multilingualpress.rest.content_relations_delete_handler'],
+				$container['multilingualpress.rest.content_relations_delete_arguments'],
+				\WP_REST_Server::DELETABLE,
+				[
+					'permission_callback' => PermissionCallbackFactory::current_user_can( 'edit_posts' ),
+				]
 			)->set_schema( $schema )
 		) );
 
