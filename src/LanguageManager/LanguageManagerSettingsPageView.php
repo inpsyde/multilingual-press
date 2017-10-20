@@ -19,6 +19,7 @@ use function Inpsyde\MultilingualPress\nonce_field;
 final class LanguageManagerSettingsPageView implements SettingsPageView {
 
 	const CONTENT_DISPLAY = 'display_language_manager';
+	const SINGLE_LANGUAGE_DISPLAY = 'display_single_language';
 
 	/**
 	 * @var AssetManager
@@ -71,7 +72,14 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 			<form method="post" action="<?php echo admin_url( "admin-post.php?action={$action}" ); ?>">
 				<?php
 				echo nonce_field( $this->nonce );
-				do_action( self::CONTENT_DISPLAY );
+
+				$langID = filter_input( INPUT_GET, 'langID', FILTER_VALIDATE_INT );
+				if ( $langID ) {
+					do_action( self::SINGLE_LANGUAGE_DISPLAY, $langID );
+				}
+				else {
+					do_action( self::CONTENT_DISPLAY );
+				}
 				?>
 
 			</form>
