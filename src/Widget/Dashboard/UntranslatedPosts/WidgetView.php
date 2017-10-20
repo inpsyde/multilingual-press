@@ -110,7 +110,7 @@ final class WidgetView implements View {
 			];
 		}
 
-		$related_site_ids = $this->site_relations->get_related_site_ids( 0, true );
+		$related_site_ids = $this->site_relations->get_related_site_ids( get_current_blog_id(), true );
 
 		return array_filter( $related_site_ids, function ( int $site_id ) {
 
