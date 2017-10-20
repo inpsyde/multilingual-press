@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Module\Redirect;
 
-use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\RequestValidator;
 
 use function Inpsyde\MultilingualPress\get_current_site_language;
@@ -32,11 +31,6 @@ final class NoredirectAwareRedirectRequestValidator implements RequestValidator 
 	private $noredirect_storage;
 
 	/**
-	 * @var ServerRequest
-	 */
-	private $request;
-
-	/**
 	 * @var SettingsRepository
 	 */
 	private $settings_repository;
@@ -48,19 +42,12 @@ final class NoredirectAwareRedirectRequestValidator implements RequestValidator 
 	 *
 	 * @param SettingsRepository $settings_repository Settings repository object.
 	 * @param NoredirectStorage  $noredirect_storage  Noredirect session storage object.
-	 * @param ServerRequest      $request             HTTP server request object.
 	 */
-	public function __construct(
-		SettingsRepository $settings_repository,
-		NoredirectStorage $noredirect_storage,
-		ServerRequest $request
-	) {
+	public function __construct( SettingsRepository $settings_repository, NoredirectStorage $noredirect_storage ) {
 
 		$this->settings_repository = $settings_repository;
 
 		$this->noredirect_storage = $noredirect_storage;
-
-		$this->request = $request;
 	}
 
 	/**
@@ -74,7 +61,9 @@ final class NoredirectAwareRedirectRequestValidator implements RequestValidator 
 	 */
 	public function is_valid( $context = null ): bool {
 
-		if ( ! $this->request->server_value( 'ACCEPT_LANGUAGE' ) ) {
+		global $pagenow;
+
+		if ( 'wp-login.php' === $pagenow ) {
 			return false;
 		}
 

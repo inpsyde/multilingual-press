@@ -296,16 +296,6 @@ final class LanguagesTable implements Table {
 				self::COLUMN_HTTP_CODE      => 'ba',
 				self::COLUMN_PRIORITY       => 1,
 			],
-			'bal'   => [
-				self::COLUMN_ENGLISH_NAME   => 'Catalan (Balear)',
-				self::COLUMN_NATIVE_NAME    => 'Català (Balear)',
-				self::COLUMN_RTL            => 0,
-				self::COLUMN_ISO_639_1_CODE => 'ca',
-				self::COLUMN_ISO_639_2_CODE => 'cat',
-				self::COLUMN_LOCALE         => 'bal',
-				self::COLUMN_HTTP_CODE      => 'ca',
-				self::COLUMN_PRIORITY       => 1,
-			],
 			'bel'   => [
 				self::COLUMN_ENGLISH_NAME   => 'Belarusian',
 				self::COLUMN_NATIVE_NAME    => 'Беларуская мова',
@@ -403,7 +393,7 @@ final class LanguagesTable implements Table {
 				self::COLUMN_ISO_639_1_CODE => 'ca',
 				self::COLUMN_ISO_639_2_CODE => 'cat',
 				self::COLUMN_LOCALE         => 'ca',
-				self::COLUMN_HTTP_CODE      => 'ca-ES',
+				self::COLUMN_HTTP_CODE      => 'ca',
 				self::COLUMN_PRIORITY       => 1,
 			],
 			'ce'    => [
@@ -1910,7 +1900,7 @@ final class LanguagesTable implements Table {
 
 		$rows = array_map( function ( array $row ) {
 
-			return '(\'' . implode( '\',\'', $row ) . '\')';
+			return "('" . implode( "','", $row ) . "')";
 		}, $rows );
 
 		return implode( ',', $rows );

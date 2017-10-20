@@ -6,8 +6,6 @@ namespace Inpsyde\MultilingualPress\Database\Table;
 
 use Inpsyde\MultilingualPress\Database\Table;
 
-// TODO: This (as well as the Content Relations API) will be (functionally) refactored after the structural one.
-
 /**
  * Content relations table.
  *
@@ -17,12 +15,39 @@ use Inpsyde\MultilingualPress\Database\Table;
 final class ContentRelationsTable implements Table {
 
 	/**
+	 * Column name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const COLUMN_CONTENT_ID = 'content_id';
+
+	/**
+	 * Column name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const COLUMN_RELATIONSHIP_ID = 'relationship_id';
+
+	/**
+	 * Column name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const COLUMN_SITE_ID = 'site_id';
+
+	/**
 	 * @var string
 	 */
 	private $prefix;
 
 	/**
-	 * Constructor. Set up the properties.
+	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
@@ -42,9 +67,7 @@ final class ContentRelationsTable implements Table {
 	 */
 	public function columns_without_default_content(): array {
 
-		return [
-			'ml_id',
-		];
+		return [];
 	}
 
 	/**
@@ -69,7 +92,11 @@ final class ContentRelationsTable implements Table {
 	public function keys_sql(): string {
 
 		// Due to dbDelta: KEY (not INDEX), and no spaces inside brackets!
-		return "KEY blog_element (ml_blogid,ml_elementid)";
+		return sprintf(
+			'KEY site_content (%1$s,%2$s)',
+			self::COLUMN_SITE_ID,
+			self::COLUMN_CONTENT_ID
+		);
 	}
 
 	/**
@@ -81,7 +108,7 @@ final class ContentRelationsTable implements Table {
 	 */
 	public function name(): string {
 
-		return "{$this->prefix}multilingual_linked";
+		return "{$this->prefix}mlp_content_relations";
 	}
 
 	/**
@@ -93,7 +120,12 @@ final class ContentRelationsTable implements Table {
 	 */
 	public function primary_key(): string {
 
-		return 'ml_id';
+		return sprintf(
+			'%1$s,%2$s,%3$s',
+			self::COLUMN_RELATIONSHIP_ID,
+			self::COLUMN_SITE_ID,
+			self::COLUMN_CONTENT_ID
+		);
 	}
 
 	/**
@@ -106,12 +138,9 @@ final class ContentRelationsTable implements Table {
 	public function schema(): array {
 
 		return [
-			'ml_id'               => 'int unsigned NOT NULL AUTO_INCREMENT',
-			'ml_source_blogid'    => 'bigint(20) NOT NULL',
-			'ml_source_elementid' => 'bigint(20) NOT NULL',
-			'ml_blogid'           => 'bigint(20) NOT NULL',
-			'ml_elementid'        => 'bigint(20) NOT NULL',
-			'ml_type'             => 'varchar(20) NOT NULL',
+			self::COLUMN_RELATIONSHIP_ID => 'bigint(20) unsigned NOT NULL auto_increment',
+			self::COLUMN_SITE_ID         => 'bigint(20) NOT NULL',
+			self::COLUMN_CONTENT_ID      => 'bigint(20) NOT NULL',
 		];
 	}
 }

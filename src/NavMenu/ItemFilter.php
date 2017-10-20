@@ -90,7 +90,6 @@ class ItemFilter {
 			return false;
 		}
 
-		// TODO: Check the object type (could also be a term), and delete the real thing (in a separate method).
 		wp_delete_post( $item->ID );
 
 		return true;
@@ -173,7 +172,6 @@ class ItemFilter {
 
 		$item_id = (int) $item->ID;
 
-		// TODO: Refactor to use a real cache.
 		if ( isset( $this->site_ids[ $item_id ] ) ) {
 			return $this->site_ids[ $item_id ];
 		}

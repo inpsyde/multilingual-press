@@ -101,11 +101,6 @@ final class CachingTranslations implements Translations {
 
 		$args = $this->normalize_arguments( $args );
 
-		/*
-		 * @TODO There was cache here, now removed. Think about adding it again.
-		 * Cache key was calculated with `$key = md5( serialize( $args ) );` and cache group was 'mlp'
-		 */
-
 		$translations = $this->build_translations( $args );
 
 		/**
@@ -187,11 +182,15 @@ final class CachingTranslations implements Translations {
 						continue;
 					}
 
-					$translation = array_merge( [ 'target_content_id' => $content_id ], $translation );
+					$translation = array_merge( [
+						'target_content_id' => $content_id,
+					], $translation );
 				}
 			}
 
-			$translation = array_merge( $default_translation, [ 'target_site_id' => $site_id ], $translation );
+			$translation = array_merge( $default_translation, [
+				'target_site_id' => $site_id,
+			], $translation );
 
 			$language = $languages[ $site_id ];
 			if ( empty( $language['http_code'] ) ) {

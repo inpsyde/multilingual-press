@@ -32,21 +32,19 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	}
 
 	/**
-	 * Returns the alternative language title of the site with the given ID, or the current site.
+	 * Returns the alternative language title of the site with the given ID.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $site_id Optional. Site ID. Defaults to 0.
+	 * @param int $site_id Site ID.
 	 *
-	 * @return string The alternative language title of the site with the given ID, or the current site.
+	 * @return string The alternative language title of the site with the given ID.
 	 */
-	public function get_alternative_language_title( int $site_id = 0 ): string {
+	public function get_alternative_language_title( int $site_id ): string {
 
-		$site_id = $site_id ?: get_current_blog_id();
+		$settings = $this->get_settings();
 
-		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
-
-		return empty( $settings[ $site_id ]['text'] ) ? '' : stripslashes( $settings[ $site_id ]['text'] );
+		return stripslashes( $settings[ $site_id ][ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ] ?? '' );
 	}
 
 	/**
@@ -72,7 +70,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_site_ids( array $exclude = [] ): array {
 
-		$settings = (array) get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
+		$settings = $this->get_settings();
 		if ( ! $settings ) {
 			return [];
 		}
@@ -96,17 +94,9 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 
 		$site_id = $site_id ?: get_current_blog_id();
 
-		$settings = get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
+		$settings = $this->get_settings();
 
-		if ( ! empty( $settings[ $site_id ]['lang'] ) ) {
-			return (string) $settings[ $site_id ]['lang'];
-		}
-
-		$site_language = (string) get_network_option( null, 'WPLANG', '' );
-
-		return in_array( $site_language, get_available_languages(), true )
-			? $site_language
-			: '';
+		return stripslashes( $settings[ $site_id ][ SiteSettingsRepository::KEY_LANGUAGE ] ?? '' );
 	}
 
 	/**

@@ -115,10 +115,13 @@ final class WPDBLanguages implements Languages {
 		$iso_codes = [];
 
 		foreach ( $languages as $site_id => $language ) {
-			if ( ! empty( $language['lang'] ) ) {
-				$names[ $site_id ] = str_replace( '_', '-', $language['lang'] );
-			} elseif ( ! empty( $language['text'] ) && preg_match( '~[a-zA-Z-]+~', $language['text'] ) ) {
-				$names[ $site_id ] = str_replace( '_', '-', $language['text'] );
+			if ( ! empty( $language[ SiteSettingsRepository::KEY_LANGUAGE ] ) ) {
+				$names[ $site_id ] = str_replace( '_', '-', $language[ SiteSettingsRepository::KEY_LANGUAGE ] );
+			} elseif ( ! empty( $language[ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ] ) ) {
+				$alternative_language_title = $language[ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ];
+				if ( preg_match( '~[a-zA-Z-]+~', $alternative_language_title ) ) {
+					$names[ $site_id ] = str_replace( '_', '-', $alternative_language_title );
+				}
 			}
 
 			if ( isset( $names[ $site_id ] ) && false === strpos( $names[ $site_id ], '-' ) ) {
@@ -127,7 +130,7 @@ final class WPDBLanguages implements Languages {
 				$iso_codes[ $site_id ] = $names[ $site_id ];
 			}
 
-			unset( $languages[ $site_id ]['lang'] );
+			unset( $languages[ $site_id ][ SiteSettingsRepository::KEY_LANGUAGE ] );
 		}
 
 		$names_string = "'" . implode( "','", array_map( 'esc_sql', $names ) ) . "'";
@@ -181,9 +184,10 @@ final class WPDBLanguages implements Languages {
 
 		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
 		$query = sprintf(
-			'SELECT * FROM %1$s WHERE %2$s = %%s LIMIT 1',
+			'SELECT * FROM %1$s WHERE %2$s = %%s ORDER BY %3$s DESC LIMIT 1',
 			$this->table,
-			LanguagesTable::COLUMN_HTTP_CODE
+			LanguagesTable::COLUMN_HTTP_CODE,
+			LanguagesTable::COLUMN_PRIORITY
 		);
 		$query = $this->db->prepare( $query, $http_code );
 
@@ -206,7 +210,6 @@ final class WPDBLanguages implements Languages {
 	 */
 	public function get_languages( array $args = [] ): array {
 
-		// TODO: Think about what to do with this. Pass Language constants, or LanguagesTable constants, or allow both?
 		$args = array_merge( [
 			'conditions' => [],
 			'fields'     => [],
@@ -243,6 +246,48 @@ final class WPDBLanguages implements Languages {
 	}
 
 	/**
+	 * Imports the given language. An existing language with the same code will be overwritten.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $language Language data.
+	 *
+	 * @return bool Whether or not the language has been imported successfully.
+	 */
+	public function import_language( array $language ): bool {
+
+		$locale = (string) ( $language[ LanguagesTable::COLUMN_LOCALE ] ?? '' );
+
+		if ( '' === $locale ) {
+			return (bool) $this->db->insert( $this->table, $language );
+		}
+
+		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
+		$query = sprintf(
+			'SELECT %2$s FROM %1$s WHERE %3$s = %%s OR %4$s = %%s',
+			$this->table,
+			LanguagesTable::COLUMN_ID,
+			LanguagesTable::COLUMN_LOCALE,
+			LanguagesTable::COLUMN_ISO_639_1_CODE
+		);
+
+		$language_id = $this->db->get_var( $this->db->prepare( $query, $locale, $locale ) );
+		if ( ! $language_id ) {
+			return false;
+		}
+
+		return false !== $this->db->update(
+			$this->table,
+			[
+				LanguagesTable::COLUMN_PRIORITY => 10,
+			],
+			[
+				LanguagesTable::COLUMN_ID => $language_id,
+			]
+		);
+	}
+
+	/**
 	 * Updates the given languages.
 	 *
 	 * @since 3.0.0
@@ -255,12 +300,13 @@ final class WPDBLanguages implements Languages {
 
 		$updated = 0;
 
-		// TODO: Think about what to do with this. Allow Language constants, or LanguagesTable constants, or both?
 		foreach ( $languages as $id => $language ) {
 			$updated += (int) $this->db->update(
 				$this->table,
 				(array) $language,
-				[ LanguagesTable::COLUMN_ID => $id ],
+				[
+					LanguagesTable::COLUMN_ID => $id,
+				],
 				$this->get_field_specifications( $language ),
 				'%d'
 			);
@@ -470,7 +516,7 @@ final class WPDBLanguages implements Languages {
 	/**
 	 * Checks if the given element is an array that has a valid field element.
 	 *
-	 * @param mixed $maybe_array Maybe an array
+	 * @param mixed $maybe_array Maybe an array.
 	 *
 	 * @return bool Whether or not the given element is an array that has a valid field element.
 	 */

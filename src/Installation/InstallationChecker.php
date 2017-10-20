@@ -72,8 +72,6 @@ class InstallationChecker {
 
 		$version_check = $this->checker->check_version( $installed_version, $current_version );
 
-		update_network_option( null, MultilingualPress::OPTION_VERSION, (string) $current_version );
-
 		/**
 		 * Fires right after the MultilingualPress version check.
 		 *
@@ -83,6 +81,8 @@ class InstallationChecker {
 		 * @param VersionNumber $installed_version Installed MultilingualPress version.
 		 */
 		do_action( SystemChecker::ACTION_CHECKED_VERSION, $version_check, $installed_version );
+
+		update_network_option( null, MultilingualPress::OPTION_VERSION, (string) $current_version );
 
 		return $installation_check;
 	}

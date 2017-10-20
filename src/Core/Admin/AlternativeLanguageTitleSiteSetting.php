@@ -37,26 +37,29 @@ final class AlternativeLanguageTitleSiteSetting implements SiteSettingViewModel 
 	}
 
 	/**
-	 * Returns the markup for the site setting.
+	 * Renders the markup for the site setting.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return string The markup for the site setting.
+	 * @return void
 	 */
-	public function markup( int $site_id ): string {
+	public function render( int $site_id ) {
 
-		return sprintf(
-			'<input type="text" name="%3$s" value="%1$s" class="regular-text" id="%2$s"><p class="description">%4$s</p>',
-			esc_attr( $this->repository->get_alternative_language_title( $site_id ) ),
-			esc_attr( $this->id ),
-			esc_attr( SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE ),
-			esc_html__(
+		?>
+		<input type="text" name="<?php echo esc_attr( SiteSettingsRepository::NAME_ALTERNATIVE_LANGUAGE_TITLE ); ?>"
+			value="<?php echo esc_attr( $this->repository->get_alternative_language_title( $site_id ) ); ?>"
+			class="regular-text" id="<?php echo esc_attr( $this->id ); ?>">
+		<p class="description">
+			<?php
+			esc_html_e(
 				'Enter a title here that you want to be displayed in the frontend instead of the default one (i.e. "My English Site")',
 				'multilingualpress'
-			)
-		);
+			);
+			?>
+		</p>
+		<?php
 	}
 
 	/**

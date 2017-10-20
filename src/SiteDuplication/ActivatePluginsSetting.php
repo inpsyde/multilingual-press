@@ -20,22 +20,23 @@ final class ActivatePluginsSetting implements SiteSettingViewModel {
 	private $id = 'mlp-activate-plugins';
 
 	/**
-	 * Returns the markup for the site setting.
+	 * Renders the markup for the site setting.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return string The markup for the site setting.
+	 * @return void
 	 */
-	public function markup( int $site_id ): string {
+	public function render( int $site_id ) {
 
-		return sprintf(
-			'<label for="%2$s"><input type="checkbox" value="1" id="%2$s" name="%3$s" checked="checked">%1$s</label>',
-			esc_html__( 'Activate all plugins that are active on the source site', 'multilingualpress' ),
-			esc_attr( $this->id ),
-			esc_attr( SiteDuplicator::NAME_ACTIVATE_PLUGINS )
-		);
+		?>
+		<label for="<?php echo esc_attr( $this->id ); ?>">
+			<input type="checkbox" value="1" id="<?php echo esc_attr( $this->id ); ?>"
+				name="<?php echo esc_attr( SiteDuplicator::NAME_ACTIVATE_PLUGINS ); ?>" checked="checked">
+			<?php esc_html_e( 'Activate all plugins that are active on the source site', 'multilingualpress' ); ?>
+		</label>
+		<?php
 	}
 
 	/**

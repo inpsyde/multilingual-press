@@ -5,12 +5,14 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI;
 
 use Inpsyde\MultilingualPress\API\ContentRelations;
+use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUI;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\SourceTermSaveContext;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\TranslationMetaBoxView;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\TranslationMetadataUpdater;
 use Inpsyde\MultilingualPress\Translation\Term\MetaBox\ViewInjection;
+use Inpsyde\MultilingualPress\Translation\Term\TermOptionsRepository;
 
 /**
  * @package Inpsyde\MultilingualPress\Translation\Term\MetaBox\UI
@@ -30,9 +32,19 @@ final class SimpleTermTranslator implements MetaBoxUI {
 	const ID = 'multilingualpress.simple_term_translator';
 
 	/**
+	 * @var AssetManager
+	 */
+	private $asset_manager;
+
+	/**
 	 * @var ContentRelations
 	 */
 	private $content_relations;
+
+	/**
+	 * @var TermOptionsRepository
+	 */
+	private $repository;
 
 	/**
 	 * @var ServerRequest
@@ -42,14 +54,25 @@ final class SimpleTermTranslator implements MetaBoxUI {
 	/**
 	 * Constructor. Sets properties.
 	 *
-	 * @param ContentRelations $content_relations
-	 * @param ServerRequest    $server_request
+	 * @param ContentRelations      $content_relations
+	 * @param ServerRequest         $server_request
+	 * @param TermOptionsRepository $repository
+	 * @param AssetManager          $asset_manager
 	 */
-	public function __construct( ContentRelations $content_relations, ServerRequest $server_request ) {
+	public function __construct(
+		ContentRelations $content_relations,
+		ServerRequest $server_request,
+		TermOptionsRepository $repository,
+		AssetManager $asset_manager
+	) {
 
 		$this->content_relations = $content_relations;
 
 		$this->server_request = $server_request;
+
+		$this->repository = $repository;
+
+		$this->asset_manager = $asset_manager;
 	}
 
 	/**
@@ -103,7 +126,7 @@ final class SimpleTermTranslator implements MetaBoxUI {
 			int $remote_site_id,
 			ServerRequest $server_request,
 			SourceTermSaveContext $save_context
-		) {
+		): \WP_Term {
 
 			$updater = new SimpleTermTranslatorUpdater(
 				$this->content_relations,
@@ -111,9 +134,8 @@ final class SimpleTermTranslator implements MetaBoxUI {
 				$save_context
 			);
 
-			return $updater->update( $remote_term, $remote_site_id );
-
-		}, 30, 5 );
+			return $updater->update( $remote_site_id, $remote_term );
+		}, 30, 4 );
 	}
 
 	/**
@@ -125,18 +147,20 @@ final class SimpleTermTranslator implements MetaBoxUI {
 	 */
 	public function register_view() {
 
+		$fields = new SimpleTermTranslatorFields( $this->server_request, $this->repository, $this->asset_manager );
+
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Term $term,
 			int $remote_site_id,
 			string $remote_language,
-			array $data,
-			\WP_Term $remote_term = null
-		) {
+			\WP_Term $remote_term = null,
+			array $data = []
+		) use ( $fields ) {
 
-			$fields = new SimpleTermTranslatorFields( ! empty( $data['update'] ) );
+			$fields->set_update( ! empty( $data['update'] ) );
 
-			echo $fields->main_fields( $remote_site_id, $term, $remote_term );
-
+			$fields->render_main_fields( $term, $remote_site_id, $remote_term );
 		}, TranslationMetaBoxView::POSITION_MAIN );
 	}
 }

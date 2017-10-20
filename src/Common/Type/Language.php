@@ -2,6 +2,8 @@
 
 namespace Inpsyde\MultilingualPress\Common\Type;
 
+use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
+
 /**
  * Interface for all language data type implementations.
  *
@@ -10,7 +12,113 @@ namespace Inpsyde\MultilingualPress\Common\Type;
  */
 interface Language extends \ArrayAccess {
 
-	// TODO: Add constants for all properties (referencing the according ~\Database\Table\LanguagesTable constants).
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const CODE_LONG = 'language_long';
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const CODE_SHORT = 'language_short';
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const CUSTOM_NAME = LanguagesTable::COLUMN_CUSTOM_NAME;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ENGLISH_NAME = LanguagesTable::COLUMN_ENGLISH_NAME;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const HTTP_CODE = LanguagesTable::COLUMN_HTTP_CODE;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const IS_RTL = LanguagesTable::COLUMN_RTL;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ISO_639_1_CODE = LanguagesTable::COLUMN_ISO_639_1_CODE;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ISO_639_2_CODE = LanguagesTable::COLUMN_ISO_639_2_CODE;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const LOCALE = LanguagesTable::COLUMN_LOCALE;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const NATIVE_NAME = LanguagesTable::COLUMN_NATIVE_NAME;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const PRIORITY = LanguagesTable::COLUMN_PRIORITY;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const NONE = 'none';
 
 	/**
 	 * Checks if the language is written right-to-left (RTL).
@@ -30,7 +138,7 @@ interface Language extends \ArrayAccess {
 	 *
 	 * @return string Language name (or code) according to the given argument.
 	 */
-	public function name( string $output = 'native' ): string;
+	public function name( string $output = self::NATIVE_NAME ): string;
 
 	/**
 	 * Returns the language priority.

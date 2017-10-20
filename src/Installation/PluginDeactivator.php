@@ -71,10 +71,13 @@ class PluginDeactivator {
 	 */
 	private function render_admin_notice() {
 
+		// translators: %s: plugin name.
+		$message = esc_html__( 'The plugin %s has been deactivated.', 'multilingualpress' );
+
 		$content = sprintf(
 			'<p><strong>%s</strong></p>%s',
 			sprintf(
-				esc_html__( 'The plugin %s has been deactivated.', 'multilingualpress' ),
+				$message,
 				$this->plugin_name
 			),
 			$this->get_errors_as_string()

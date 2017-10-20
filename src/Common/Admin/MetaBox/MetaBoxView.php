@@ -24,11 +24,11 @@ interface MetaBoxView {
 	public function with_data( array $data ): MetaBoxView;
 
 	/**
-	 * Returns the rendered HTML.
+	 * Reenders the HTML.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string Rendered HTML.
+	 * @return void
 	 */
-	public function render(): string;
+	public function render();
 }

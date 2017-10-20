@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Translation\Post;
 
 /**
- * Simple read-only storage for post types activ for MultilingualPress.
+ * Simple read-only storage for post types active for MultilingualPress.
  *
  * @package Inpsyde\MultilingualPress\Translation\Post
  * @since   3.0.0
@@ -82,7 +82,7 @@ class ActivePostTypes {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param \string[] $post_types Post type slugs to check.
+	 * @param string[] ...$post_types Post type slugs to check.
 	 *
 	 * @return bool Whether or not all given post type slugs are active.
 	 */

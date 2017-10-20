@@ -69,7 +69,6 @@ class Uninstaller {
 	 */
 	public function uninstall_tables( array $tables ): int {
 
-		/** @noinspection PhpStrictTypeCheckingInspection */
 		return array_reduce( $tables, function ( int $uninstalled, Table $table ) {
 
 			return $uninstalled + (int) $this->table_installer->uninstall( $table->name() );

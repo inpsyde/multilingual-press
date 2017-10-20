@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher;
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
+use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Widget\Sidebar\View;
 
 use function Inpsyde\MultilingualPress\get_linked_elements;
@@ -48,7 +49,7 @@ final class WidgetView implements View {
 	public function render( array $args, array $instance, string $id_base ) {
 
 		$output = get_linked_elements( [
-			'link_text'         => empty( $instance['widget_link_type'] ) ? 'text' : $instance['widget_link_type'],
+			'link_text'         => (string) ( $instance['widget_link_type'] ?? Language::CUSTOM_NAME ),
 			'show_current_blog' => ! empty( $instance['widget_show_current_blog'] ),
 			'strict'            => ! empty( $instance['widget_toggle_view_on_translated_posts'] ),
 		] );
@@ -58,20 +59,20 @@ final class WidgetView implements View {
 
 		$this->enqueue_style();
 
-		echo $args['before_widget'] ?? '';
+		$html = $args['before_widget'] ?? '';
 
 		if ( ! empty( $instance['widget_title'] ) ) {
 			/** This filter is documented in wp-includes/default-widgets.php */
 			$title = (string) apply_filters( 'widget_title', (string) $instance['widget_title'], $instance, $id_base );
 
-			echo $args['before_title'] ?? '';
-			echo esc_html( $title );
-			echo $args['after_title'] ?? '';
+			$html .= ( $args['before_title'] ?? '' ) . esc_html( $title ) . ( $args['after_title'] ?? '' );
 		}
 
-		echo $output;
+		$html .= $output;
 
-		echo $args['after_widget'] ?? '';
+		$html .= $args['after_widget'] ?? '';
+
+		echo wp_kses_post( $html );
 	}
 
 	/**

@@ -26,22 +26,38 @@ export const returnUndefined = () => undefined;
 //
 // Dependent (!) functions.
 //
-export const getRandomArray = ( min = 0, max = 10, value ) => {
+export const getRandomArray = ( min = 0, max = 10, valueOrCallback = getRandomString ) => {
 	const a = [];
 
+	const valueCallback = 'function' === typeof valueOrCallback
+		? valueOrCallback
+		: () => valueOrCallback;
+
 	for ( let i = 0; i < getRandomInteger( min, max ); i++ ) {
-		a.push( value || getRandomString() );
+		a.push( valueCallback() );
 	}
 
 	return a;
 };
 
-export const getRandomObject = ( min = 0, max = 10, value ) => {
+export const getRandomBoolArray = ( min = 0, max = 10 ) => getRandomArray( min, max, getRandomBool );
+
+export const getRandomIntegerArray = ( min = 0, max = 10 ) => getRandomArray( min, max, getRandomInteger );
+
+export const getRandomObject = ( min = 0, max = 10, valueOrCallback = getRandomString ) => {
 	const o = {};
 
+	const valueCallback = 'function' === typeof valueOrCallback
+		? valueOrCallback
+		: () => valueOrCallback;
+
 	for ( let i = 0; i < getRandomInteger( min, max ); i++ ) {
-		o[ `element-${i}` ] = value || getRandomString();
+		o[ `element-${i}` ] = valueCallback();
 	}
 
 	return o;
 };
+
+export const getRandomBoolObject = ( min = 0, max = 10 ) => getRandomObject( min, max, getRandomBool );
+
+export const getRandomIntegerObject = ( min = 0, max = 10 ) => getRandomObject( min, max, getRandomInteger );

@@ -32,16 +32,16 @@ interface SiteRelations {
 	public function get_all_relations(): array;
 
 	/**
-	 * Returns an array holding the IDs of all sites related to the site with the given (or current) ID.
+	 * Returns an array holding the IDs of all sites related to the site with the given ID.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int  $site_id      Optional. Site ID. Defaults to 0.
+	 * @param int  $site_id      Site ID.
 	 * @param bool $include_site Optional. Whether or not to include the given site ID. Defaults to false.
 	 *
-	 * @return int[] The array holding the IDs of all sites related to the site with the given (or current) ID.
+	 * @return int[] The array holding the IDs of all sites related to the site with the given ID.
 	 */
-	public function get_related_site_ids( int $site_id = 0, bool $include_site = false ): array;
+	public function get_related_site_ids( int $site_id, bool $include_site = false ): array;
 
 	/**
 	 * Creates relations between one site and one or more other sites.

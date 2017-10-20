@@ -51,23 +51,25 @@ final class RedirectUserSetting implements UserSettingViewModel {
 	}
 
 	/**
-	 * Returns the markup for the user setting.
+	 * Renders the user setting.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param \WP_User $user User object.
 	 *
-	 * @return string The markup for the user setting.
+	 * @return void
 	 */
-	public function markup( \WP_User $user ): string {
+	public function render( \WP_User $user ) {
 
-		return sprintf(
-			'<label for="%2$s"><input type="checkbox" name="%2$s" value="1" id="%2$s"%3$s>%1$s</label>%4$s',
-			esc_html__( 'Do not redirect me to the best matching language version.', 'multilingualpress' ),
-			esc_attr( $this->meta_key ),
-			checked( $this->repository->get_user_setting( (int) $user->ID ), true, false ),
-			nonce_field( $this->nonce )
-		);
+		?>
+		<label for="<?php echo esc_attr( $this->meta_key ); ?>">
+			<input type="checkbox" name="<?php echo esc_attr( $this->meta_key ); ?>" value="1"
+				id="<?php echo esc_attr( $this->meta_key ); ?>"
+				<?php checked( $this->repository->get_user_setting( (int) $user->ID ) ); ?>>
+			<?php esc_html_e( 'Do not redirect me to the best matching language version.', 'multilingualpress' ); ?>
+		</label>
+		<?php
+		nonce_field( $this->nonce );
 	}
 
 	/**

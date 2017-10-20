@@ -70,8 +70,8 @@ final class TranslationMetaBox implements PriorityAwareMetaBox {
 		if ( $post ) {
 			switch_to_blog( $site_id );
 
-			/* translators: 1: meta box title, 2: edit post link */
-			$template = _x( '%1$s<small> - %2$s</small>', 'Post translation meta box title', 'multilingualpress' );
+			/* translators: 1: meta box title, 2: edit link */
+			$template = _x( '%1$s<small> - %2$s</small>', 'Translation meta box title', 'multilingualpress' );
 
 			$edit_post_link = sprintf(
 				'<a href="%2$s">%1$s</a>',
@@ -100,7 +100,7 @@ final class TranslationMetaBox implements PriorityAwareMetaBox {
 	 */
 	private function get_translated_post_status( \WP_Post $post ) {
 
-		$post_statuses= get_post_statuses();
+		$post_statuses = get_post_statuses();
 
 		$status = get_post_status( $post );
 

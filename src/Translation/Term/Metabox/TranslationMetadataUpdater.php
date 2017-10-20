@@ -137,14 +137,8 @@ final class TranslationMetadataUpdater implements TermMetaUpdater {
 	 */
 	public function update( ServerRequest $server_request ): bool {
 
-		if ( ! $this->save_context instanceof SourceTermSaveContext ) {
+		if ( ! $this->save_context ) {
 			return false;
-		}
-
-		if ( ! $this->remote_term ) {
-			$this->remote_term = new \WP_Term( (object) [
-				'taxonomy'   => $this->save_context[ SourceTermSaveContext::TAXONOMY ],
-			] );
 		}
 
 		/**
@@ -163,7 +157,7 @@ final class TranslationMetadataUpdater implements TermMetaUpdater {
 		 */
 		$remote_term = apply_filters(
 			self::FILTER_SAVE_TERM,
-			$this->remote_term,
+			$this->remote_term ?? $this->create_term(),
 			$this->remote_site_id,
 			$server_request,
 			$this->save_context
@@ -183,18 +177,37 @@ final class TranslationMetadataUpdater implements TermMetaUpdater {
 		 *
 		 * @param \WP_Term              $remote_term    Remote term object being saved.
 		 * @param int                   $remote_site_id Remote site ID.
-		 * @param string                $source_term    Source term object.
 		 * @param ServerRequest         $server_request Server request object.
 		 * @param SourceTermSaveContext $save_context   Save context object.
 		 */
 		do_action(
 			self::ACTION_SAVED_TERM,
-			$this->remote_term,
+			$remote_term,
 			$this->remote_site_id,
-			$this->save_context,
-			$server_request
+			$server_request,
+			$this->save_context
 		);
 
 		return true;
+	}
+
+	/**
+	 * @return \WP_Term
+	 */
+	private function create_term(): \WP_Term {
+
+		$remote_term = [
+			'taxonomy' => $this->save_context[ SourceTermSaveContext::TAXONOMY ],
+		];
+
+		/** @var \WP_Term $source_term */
+		$source_term = $this->save_context[ SourceTermSaveContext::TERM ];
+		if ( $source_term ) {
+			$remote_term = array_merge( $remote_term, array_intersect_key( $source_term->to_array(), array_flip( [
+				'name',
+			] ) ) );
+		}
+
+		return new \WP_Term( (object) $remote_term );
 	}
 }

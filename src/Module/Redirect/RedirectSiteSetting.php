@@ -51,23 +51,25 @@ class RedirectSiteSetting implements SiteSettingViewModel {
 	}
 
 	/**
-	 * Returns the markup for the site setting.
+	 * Renders the markup for the site setting.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return string The markup for the site setting.
+	 * @return void
 	 */
-	public function markup( int $site_id ): string {
+	public function render( int $site_id ) {
 
-		return sprintf(
-			'<label for="%2$s"><input type="checkbox" name="%2$s" value="1" id="%2$s"%3$s>%1$s</label>%4$s',
-			esc_html__( 'Enable automatic redirect', 'multilingualpress' ),
-			esc_attr( $this->option ),
-			checked( $this->repository->get_site_setting( $site_id ), true, false ),
-			nonce_field( $this->nonce )
-		);
+		?>
+		<label for="<?php echo esc_attr( $this->option ); ?>">
+			<input type="checkbox" name="<?php echo esc_attr( $this->option ); ?>" value="1"
+				id="<?php echo esc_attr( $this->option ); ?>"
+				<?php checked( $this->repository->get_site_setting( $site_id ) ); ?>>
+			<?php esc_html_e( 'Enable automatic redirect', 'multilingualpress' ); ?>
+		</label>
+		<?php
+		nonce_field( $this->nonce );
 	}
 
 	/**

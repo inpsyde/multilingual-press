@@ -62,7 +62,7 @@ final class NoredirectAwareRedirector implements Redirector {
 	 */
 	public function redirect(): bool {
 
-		$value = (string) $this->request->body_value( NoredirectStorage::KEY, INPUT_GET, FILTER_SANITIZE_STRING );
+		$value = (string) $this->request->body_value( NoredirectPermalinkFilter::QUERY_ARGUMENT, INPUT_GET, FILTER_SANITIZE_STRING );
 		if ( '' !== $value ) {
 			$this->storage->add_language( $value );
 
@@ -77,24 +77,17 @@ final class NoredirectAwareRedirector implements Redirector {
 			return false;
 		}
 
-		/**
-		 * Filters the redirect URL.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param string         $url             Redirect URL.
-		 * @param RedirectTarget $target          Redirect target object.
-		 * @param int            $current_site_id Current site ID.
-		 */
-		$url = (string) apply_filters( Redirector::FILTER_URL, $target->url(), $target, $current_site_id );
-		if ( ! $url ) {
+		if ( ! $target->url() ) {
 			return false;
 		}
 
-		$this->storage->add_language( $target->language() );
+		add_action( 'template_redirect', function () use ( $target ) {
 
-		wp_redirect( $url );
-		call_exit();
+			$this->storage->add_language( $target->language() );
+
+			wp_redirect( $target->url() );
+			call_exit();
+		}, 1 );
 
 		return true;
 	}

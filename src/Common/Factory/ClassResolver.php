@@ -37,7 +37,7 @@ class ClassResolver {
 	 * @param string $base          Fully qualified name of the base class or interface.
 	 * @param string $default_class Optional. Fully qualified name of the default class. Defaults to empty string.
 	 *
-	 * @throws \InvalidArgumentException if the given base is not a valid fully qualified class or interface name.
+	 * @throws \InvalidArgumentException If the given base is not a valid fully qualified class or interface name.
 	 */
 	public function __construct( string $base, string $default_class = '' ) {
 
@@ -65,7 +65,7 @@ class ClassResolver {
 	 *
 	 * @return string Resolved fully qualified class name.
 	 *
-	 * @throws \InvalidArgumentException if no class is given and no default class is available.
+	 * @throws \InvalidArgumentException If no class is given and no default class is available.
 	 */
 	public function resolve( string $class = '' ): string {
 
@@ -89,7 +89,7 @@ class ClassResolver {
 	 *
 	 * @return string Fully qualified class name.
 	 *
-	 * @throws InvalidClass if the class with the given name is invalid with respect to the defined base.
+	 * @throws InvalidClass If the class with the given name is invalid with respect to the defined base.
 	 */
 	private function check_class( string $class ): string {
 

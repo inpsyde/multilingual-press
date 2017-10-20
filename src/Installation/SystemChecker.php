@@ -335,7 +335,7 @@ class SystemChecker {
 		$plugin_file_path = wp_normalize_path( realpath( $this->plugin_properties->plugin_file_path() ) );
 
 		foreach ( wp_get_active_network_plugins() as $plugin ) {
-			if ( $plugin_file_path === wp_normalize_path( realpath( $plugin ) ) ) {
+			if ( wp_normalize_path( realpath( $plugin ) ) === $plugin_file_path ) {
 				return;
 			}
 		}

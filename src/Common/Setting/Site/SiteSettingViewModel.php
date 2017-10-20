@@ -11,15 +11,15 @@ namespace Inpsyde\MultilingualPress\Common\Setting\Site;
 interface SiteSettingViewModel {
 
 	/**
-	 * Returns the markup for the site setting.
+	 * Renders the markup for the site setting.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return string The markup for the site setting.
+	 * @return void
 	 */
-	public function markup( int $site_id ): string;
+	public function render( int $site_id );
 
 	/**
 	 * Returns the title of the site setting.

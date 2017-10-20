@@ -30,7 +30,7 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param ServiceProvider $provider The provider to be registered
+	 * @param ServiceProvider $provider The provider to be registered.
 	 *
 	 * @return ServiceProviderCollection The instance that also contains the given provider.
 	 */
@@ -46,7 +46,7 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param ServiceProvider $provider The provider to be registered
+	 * @param ServiceProvider $provider The provider to be registered.
 	 *
 	 * @return ServiceProviderCollection The instance that does not contain the given provider.
 	 */
@@ -142,6 +142,8 @@ final class DistinctServiceProviderCollection implements ServiceProviderCollecti
 	 * @param array    ...$args  Variadic array of arguments that will be passed to provider method.
 	 *
 	 * @return ServiceProviderCollection The transformed instance.
+	 *
+	 * @throws \UnexpectedValueException If a given callback did not return a service provider instance.
 	 */
 	public function map( callable $callback, ...$args ): ServiceProviderCollection {
 

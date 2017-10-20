@@ -69,9 +69,9 @@ final class PluginSettingsPageView implements SettingsPageView {
 		<div class="wrap">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<?php settings_errors(); ?>
-			<form method="post" action="<?php echo admin_url( "admin-post.php?action={$action}" ); ?>"
+			<form method="post" action="<?php echo esc_url( admin_url( "admin-post.php?action={$action}" ) ); ?>"
 				id="multilingualpress-modules">
-				<?php echo nonce_field( $this->nonce ); ?>
+				<?php nonce_field( $this->nonce ); ?>
 				<table class="mlp-module-list">
 					<?php
 					foreach ( $this->module_manager->get_modules() as $id => $module ) {
@@ -131,8 +131,8 @@ final class PluginSettingsPageView implements SettingsPageView {
 			</td>
 			<td>
 				<label for="<?php echo esc_attr( $id ); ?>" class="mlp-block-label">
-					<strong><?php echo esc_html( $module->name() ); ?></strong>
-					<?php echo wpautop( esc_html( $module->description() ) ); ?>
+					<strong class="mlp-module-name"><?php echo esc_html( $module->name() ); ?></strong>
+					<?php echo esc_html( $module->description() ); ?>
 				</label>
 			</td>
 		</tr>

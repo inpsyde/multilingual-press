@@ -58,6 +58,15 @@ class RedirectTarget {
 	const KEY_URL = 'url';
 
 	/**
+	 * Array key.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const KEY_USER_PRIORITY = 'user_priority';
+
+	/**
 	 * @var int
 	 */
 	private $content_id;
@@ -83,6 +92,11 @@ class RedirectTarget {
 	private $url;
 
 	/**
+	 * @var float
+	 */
+	private $user_priority;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -92,11 +106,12 @@ class RedirectTarget {
 	public function __construct( array $data = [] ) {
 
 		$data = array_merge( [
-			static::KEY_CONTENT_ID => 0,
-			static::KEY_LANGUAGE   => '',
-			static::KEY_PRIORITY   => 0,
-			static::KEY_SITE_ID    => 0,
-			static::KEY_URL        => '',
+			static::KEY_CONTENT_ID    => 0,
+			static::KEY_LANGUAGE      => '',
+			static::KEY_PRIORITY      => 0,
+			static::KEY_SITE_ID       => 0,
+			static::KEY_URL           => '',
+			static::KEY_USER_PRIORITY => 0.0,
 		], $data );
 
 		$this->content_id = (int) $data[ static::KEY_CONTENT_ID ];
@@ -108,6 +123,8 @@ class RedirectTarget {
 		$this->site_id = (int) $data[ static::KEY_SITE_ID ];
 
 		$this->url = (string) $data[ static::KEY_URL ];
+
+		$this->user_priority = (float) $data[ static::KEY_USER_PRIORITY ];
 	}
 
 	/**
@@ -168,5 +185,17 @@ class RedirectTarget {
 	public function url(): string {
 
 		return $this->url;
+	}
+
+	/**
+	 * Returns the user priority of the target language.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return float The user priority of the target language.
+	 */
+	public function user_priority(): float {
+
+		return $this->user_priority;
 	}
 }

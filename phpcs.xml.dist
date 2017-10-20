@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<ruleset name="MultilingualPress Coding Standard" namespace="Inpsyde\MultilingualPress\Standard">
+
+	<description>MultilingualPress coding standard.</description>
+
+	<file>./inc</file>
+	<file>./src</file>
+	<file>./multilingualpress.php</file>
+	<file>./uninstall.php</file>
+
+	<!-- TODO: Remove as soon as the "src/inc/" folder was deleted. -->
+	<exclude-pattern>./src/inc/*</exclude-pattern>
+
+	<arg value="sp"/>
+
+	<!-- Set textdomain. -->
+	<config name="text_domain" value="multilingualpress"/>
+
+	<!-- Check for cross-version support for PHP 7.0 and higher. -->
+	<config name="testVersion" value="7.0-"/>
+	<rule ref="PHPCompatibility">
+
+		<!-- With PHP 7 or higher, these keywords actually are valid function names. https://github.com/wimg/PHPCompatibility/issues/515 -->
+		<exclude name="PHPCompatibility.PHP.ForbiddenNamesAsInvokedFunctions"/>
+
+	</rule>
+
+	<rule ref="WordPress">
+
+		<!-- Exclude to not be forced to have something like "@var Container $container Container.". -->
+		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+
+		<!-- Exclude to be able to include an encoding cookie. -->
+		<exclude name="Squiz.Commenting.FileComment.WrongStyle"/>
+		<exclude name="Squiz.Commenting.InlineComment.WrongStyle"/>
+
+		<!-- Exclude to not be forced to document methods always throwing (e.g., for not allowed methods). -->
+		<exclude name="Squiz.Commenting.FunctionComment.EmptyThrows"/>
+
+		<!-- Exclude to be able to use variadic arguments. https://github.com/squizlabs/PHP_CodeSniffer/issues/1652 -->
+		<exclude name="Squiz.Commenting.FunctionComment.IncorrectTypeHint"/>
+
+		<!-- Exclude to be able to use "@noinspection PhpUnusedParameterInspection" annotations. -->
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint"/>
+
+		<!-- Exclude to be able to adhere to PSR-4. -->
+		<exclude name="WordPress.Files.FileName"/>
+
+		<!-- Exclude VIP-specific sniffs, for now. -->
+		<exclude name="WordPress.VIP"/>
+
+		<!-- Exclude to not be forced to use a space before return type colons. https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/547. -->
+		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterCloseParenthesis"/>
+
+	</rule>
+
+	<!-- Adapt to be able to use namespaced hooks in dot notation such as "multilingualpress.active_taxonomies". -->
+	<rule ref="WordPress.NamingConventions.ValidHookName">
+		<properties>
+			<property name="additionalWordDelimiters" value="."/>
+		</properties>
+	</rule>
+
+</ruleset>

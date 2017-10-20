@@ -42,10 +42,10 @@ class TrasherSettingView {
 	 * @param ActivePostTypes          $active_post_types  Active post types storage object.
 	 */
 	public function __construct(
-        TrasherSettingRepository $setting_repository,
-        Nonce $nonce,
-        ActivePostTypes $active_post_types
-    ) {
+		TrasherSettingRepository $setting_repository,
+		Nonce $nonce,
+		ActivePostTypes $active_post_types
+	) {
 
 		$this->setting_repository = $setting_repository;
 
@@ -73,12 +73,12 @@ class TrasherSettingView {
 		$id = 'mlp-trasher';
 		?>
 		<div class="misc-pub-section misc-pub-mlp-trasher">
-			<?php echo nonce_field( $this->nonce ); ?>
+			<?php nonce_field( $this->nonce ); ?>
 			<label for="<?php echo esc_attr( $id ); ?>">
 				<input type="checkbox" name="<?php echo esc_attr( TrasherSettingRepository::META_KEY ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>"
 					<?php checked( $this->setting_repository->get_setting( (int) $post->ID ) ); ?>>
-				<?php _e( 'Send all the translations to trash when this post is trashed.', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Send all the translations to trash when this post is trashed.', 'multilingualpress' ); ?>
 			</label>
 		</div>
 		<?php

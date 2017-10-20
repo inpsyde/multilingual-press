@@ -53,6 +53,17 @@ interface Languages {
 	public function get_languages( array $args = [] ): array;
 
 	/**
+	 * Imports the given language. An existing language with the same code will be overwritten.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $language Language data.
+	 *
+	 * @return bool Whether or not the language has been imported successfully.
+	 */
+	public function import_language( array $language ): bool;
+
+	/**
 	 * Updates the given languages.
 	 *
 	 * @since 3.0.0

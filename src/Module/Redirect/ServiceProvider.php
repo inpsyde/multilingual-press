@@ -60,28 +60,25 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 		$container['multilingualpress.noredirect_storage'] = function () {
 
-			/*
-			 * @TODO for logged in user, when using external object cache, we used to return
-			 * `NoredirectObjectCacheStorage` here.
-			 * Think about adding cached storage again, when cache handling will be refactored.
-			 */
-
-			return new NoredirectSessionStorage();
+			return is_user_logged_in() && wp_using_ext_object_cache()
+				? new NoredirectObjectCacheStorage()
+				: new NoredirectSessionStorage();
 		};
 
 		$container['multilingualpress.redirect_request_validator'] = function ( Container $container ) {
 
 			return new NoredirectAwareRedirectRequestValidator(
 				$container['multilingualpress.redirect_settings_repository'],
-				$container['multilingualpress.noredirect_storage'],
-				$container['multilingualpress.server_request']
+				$container['multilingualpress.noredirect_storage']
 			);
 		};
 
-		$container->share( 'multilingualpress.redirect_settings_repository', function () {
+		$container->share(
+            'multilingualpress.redirect_settings_repository', function () {
 
 			return new TypeSafeSettingsRepository();
-		} );
+            }
+        );
 
 		$container['multilingualpress.redirect_site_setting'] = function ( Container $container ) {
 
@@ -121,11 +118,29 @@ final class ServiceProvider implements ModuleServiceProvider {
 
 		$container['multilingualpress.redirector'] = function ( Container $container ) {
 
-			return new NoredirectAwareRedirector(
-				$container['multilingualpress.language_negotiator'],
-				$container['multilingualpress.noredirect_storage'],
-				$container['multilingualpress.server_request']
-			);
+			/**
+			 * Filters the redirector type.
+			 *
+			 * @since 3.0.0
+			 *
+			 * @param string $type Redirector type.
+			 */
+			$type = apply_filters( Redirector::FILTER_TYPE, Redirector::TYPE_PHP );
+			switch ( strtoupper( $type ) ) {
+				case Redirector::TYPE_JAVASCRIPT:
+					return new NoredirectAwareJavaScriptRedirector(
+						$container['multilingualpress.language_negotiator'],
+						$container['multilingualpress.asset_manager']
+					);
+
+				case Redirector::TYPE_PHP:
+				default:
+					return new NoredirectAwareRedirector(
+						$container['multilingualpress.language_negotiator'],
+						$container['multilingualpress.noredirect_storage'],
+						$container['multilingualpress.server_request']
+					);
+			}
 		};
 
 		$container['multilingualpress.save_redirect_site_setting_nonce'] = function () {
@@ -150,11 +165,15 @@ final class ServiceProvider implements ModuleServiceProvider {
 	 */
 	public function register_module( ModuleManager $module_manager ): bool {
 
-		return $module_manager->register_module( new Module( 'redirect', [
-			'description' => __( 'Redirect visitors according to browser language settings.', 'multilingualpress' ),
-			'name'        => __( 'Redirect', 'multilingualpress' ),
-			'active'      => false,
-		] ) );
+		return $module_manager->register_module(
+            new Module(
+                'redirect', [
+                 'description' => __( 'Redirect visitors according to browser language settings.', 'multilingualpress' ),
+                 'name'        => __( 'Redirect', 'multilingualpress' ),
+                 'active'      => false,
+                ]
+            )
+        );
 	}
 
 	/**
@@ -191,12 +210,6 @@ final class ServiceProvider implements ModuleServiceProvider {
 	 */
 	private function activate_module_for_admin( Container $container ) {
 
-		if ( is_network_admin() ) {
-			$this->activate_module_for_network_admin( $container );
-
-			return;
-		}
-
 		( new SiteSetting(
 			$container['multilingualpress.redirect_site_setting'],
 			$container['multilingualpress.redirect_site_setting_updater']
@@ -204,6 +217,10 @@ final class ServiceProvider implements ModuleServiceProvider {
 			SiteSettingsSectionView::ACTION_AFTER . '_' . SiteSettings::ID,
 			SiteSettingsUpdater::ACTION_UPDATE_SETTINGS
 		);
+
+		if ( is_network_admin() ) {
+			$this->activate_module_for_network_admin( $container );
+		}
 	}
 
 	/**
@@ -254,12 +271,20 @@ final class ServiceProvider implements ModuleServiceProvider {
 	 */
 	private function activate_module_for_front_end( Container $container ) {
 
+		$container['multilingualpress.asset_manager']
+			->register_script(
+				$container['multilingualpress.asset_factory']->create_internal_script(
+					'multilingualpress-redirect',
+					'redirect.js'
+				)
+			);
+
 		$filter = $container['multilingualpress.noredirect_permalink_filter'];
 		$filter->enable();
 		add_action( AlternateLanguages::FILTER_URL, [ $filter, 'remove_noredirect_query_argument' ] );
 
 		if ( $container['multilingualpress.redirect_request_validator']->is_valid() ) {
-			add_action( 'template_redirect', [ $container['multilingualpress.redirector'], 'redirect' ], 1 );
+			add_action( 'wp_loaded', [ $container['multilingualpress.redirector'], 'redirect' ], 0 );
 		}
 	}
 }

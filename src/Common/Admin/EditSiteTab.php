@@ -68,7 +68,11 @@ class EditSiteTab {
 
 			add_action( 'load-' . $this->settings_page->hook_name(), function () {
 
-				$GLOBALS['parent_file'] = $GLOBALS['submenu_file'] = SettingsPage::PARENT_SITES;
+				// @codingStandardsIgnoreLine
+				$GLOBALS['parent_file'] = SettingsPage::PARENT_SITES;
+
+				// @codingStandardsIgnoreLine
+				$GLOBALS['submenu_file'] = SettingsPage::PARENT_SITES;
 			} );
 
 			add_filter( 'network_edit_site_nav_links', function ( array $links = [] ) {

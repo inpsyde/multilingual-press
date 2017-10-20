@@ -32,11 +32,6 @@ class Trasher {
 	private $setting_repository;
 
 	/**
-	 * @var bool
-	 */
-	private static $trashing_related_posts = false;
-
-	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -74,12 +69,12 @@ class Trasher {
 			return 0;
 		}
 
-		if ( self::$trashing_related_posts || ! $this->setting_repository->get_setting( (int) $post_id ) ) {
+		static $trashing_related_posts;
+		if ( $trashing_related_posts || ! $this->setting_repository->get_setting( (int) $post_id ) ) {
 			return 0;
 		}
 
-		// Set static flag to prevent recursion.
-		self::$trashing_related_posts = true;
+		$trashing_related_posts = true;
 
 		$current_site_id = get_current_blog_id();
 
@@ -108,8 +103,7 @@ class Trasher {
 
 		$network_state->restore();
 
-		// Reset static flag.
-		self::$trashing_related_posts = false;
+		$trashing_related_posts = false;
 
 		return $trashed_posts;
 	}

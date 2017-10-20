@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Widget\Sidebar\LanguageSwitcher;
 
+use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Widget\Sidebar\RegistrableWidget;
 use Inpsyde\MultilingualPress\Widget\Sidebar\SelfRegisteringWidget;
 use Inpsyde\MultilingualPress\Widget\Sidebar\View;
@@ -58,7 +59,7 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 			<?php
 			$id = $this->get_field_id( 'mlp_widget_title' );
 			?>
-			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Title', 'multilingualpress' ); ?></label><br>
+			<label for="<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Title', 'multilingualpress' ); ?></label><br>
 			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_title' ) ); ?>"
 				value="<?php echo esc_attr( $instance['widget_title'] ?? '' ); ?>"
 				class="widefat" id="<?php echo esc_attr( $id ); ?>">
@@ -68,17 +69,17 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 			$id = $this->get_field_id( 'mlp_widget_link_type' );
 
 			$options = [
-				'native'         => __( 'Native name', 'multilingualpress' ),
-				'text'           => __( 'Custom name', 'multilingualpress' ),
-				'english'        => __( 'English name', 'multilingualpress' ),
-				'http'           => __( 'Language code', 'multilingualpress' ),
-				'language_short' => __( 'Language code (short)', 'multilingualpress' ),
-				'none'           => __( 'None', 'multilingualpress' ),
+				Language::NATIVE_NAME  => __( 'Native name', 'multilingualpress' ),
+				Language::CUSTOM_NAME  => __( 'Custom name', 'multilingualpress' ),
+				Language::ENGLISH_NAME => __( 'English name', 'multilingualpress' ),
+				Language::HTTP_CODE    => __( 'Language code', 'multilingualpress' ),
+				Language::CODE_SHORT   => __( 'Language code (short)', 'multilingualpress' ),
+				Language::NONE         => __( 'None', 'multilingualpress' ),
 			];
 
 			$link_type = $instance['widget_link_type'] ?? '';
 			?>
-			<label for="<?php echo esc_attr( $id ); ?>"><?php _e( 'Link text', 'multilingualpress' ); ?></label>
+			<label for="<?php echo esc_attr( $id ); ?>"><?php esc_html_e( 'Link text', 'multilingualpress' ); ?></label>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_link_type' ) ); ?>" class="widefat"
 				id="<?php echo esc_attr( $id ); ?>" autocomplete="off">
 				<?php foreach ( $options as $value => $text ) : ?>
@@ -97,7 +98,7 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 					name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_show_current_blog' ) ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>"
 					<?php checked( ! empty( $instance['widget_show_current_blog'] ) ); ?>>
-				<?php _e( 'Show current site', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Show current site', 'multilingualpress' ); ?>
 			</label>
 		</p>
 		<p>
@@ -109,20 +110,30 @@ final class Widget extends \WP_Widget implements RegistrableWidget {
 					name="<?php echo esc_attr( $this->get_field_name( 'mlp_widget_toggle_view_on_translated_posts' ) ); ?>"
 					value="1" id="<?php echo esc_attr( $id ); ?>"
 					<?php checked( ! empty( $instance['widget_toggle_view_on_translated_posts'] ) ); ?>>
-				<?php _e( 'Show links for translated content only.', 'multilingualpress' ); ?>
+				<?php esc_html_e( 'Show links for translated content only.', 'multilingualpress' ); ?>
 			</label>
 		</p>
 		<p>
 			<?php
-			// TODO: Don't hard-code settings page capability.
+			// TODO: Inject language manager settings page, and reference the capability...
 			if ( current_user_can( 'manage_network_options' ) ) {
-				printf(
-					__( 'Languages are sorted by <a href="%s">priority</a>.', 'multilingualpress' ),
-					// TODO: Don't hard-code settings page URL/slug.
-					network_admin_url( 'settings.php?page=language-manager' )
+				// translators: %s: settings page URL.
+				$message = __( 'Languages are sorted by <a href="%s">priority</a>.', 'multilingualpress' );
+				$message = sprintf(
+					$message,
+					// TODO: ... as well as the URL.
+					esc_url( network_admin_url( 'settings.php?page=language-manager' ) )
 				);
+
+				$tags = [
+					'a' => [
+						'href' => true,
+					],
+				];
+
+				echo wp_kses( $message, $tags );
 			} else {
-				_e( 'Languages are sorted by priority.', 'multilingualpress' );
+				esc_html_e( 'Languages are sorted by priority.', 'multilingualpress' );
 			}
 			?>
 		</p>

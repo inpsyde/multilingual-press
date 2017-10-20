@@ -90,7 +90,7 @@ final class PHPServerRequest implements ServerRequest {
 	 * Return a value from request body, optionally filtered.
 	 *
 	 * @param string $name    Key to get value for.
-	 * @param int    $method  HTTP method constants, can be one of INPUT_REQUEST, INPUT_GET or INPUT_POST
+	 * @param int    $method  HTTP method constants, can be one of INPUT_REQUEST, INPUT_GET or INPUT_POST.
 	 * @param int    $filter  Optional. One of the FILTER_* constants. Defaults to FILTER_UNSAFE_RAW (value unchanged).
 	 * @param mixed  $options Optional. Options for filter. Defaults to FILTER_FLAG_NONE.
 	 *
@@ -177,6 +177,7 @@ final class PHPServerRequest implements ServerRequest {
 	private function ensure_body() {
 
 		if ( null === self::$body ) {
+			// @codingStandardsIgnoreLine as it is not possible to do the following via the WordPress file system(s).
 			self::$body = stream_get_contents( fopen( 'php://input', 'r' ) );
 		}
 	}
@@ -196,7 +197,7 @@ final class PHPServerRequest implements ServerRequest {
 			return;
 		}
 
-		// This seems to be the only way to get the Authorization header on Apache
+		// This seems to be the only way to get the Authorization header on Apache.
 		$apache_request_headers = apache_request_headers();
 		if ( ! $apache_request_headers ) {
 			return;
@@ -224,10 +225,10 @@ final class PHPServerRequest implements ServerRequest {
 
 		$headers = [];
 		foreach ( self::$server as $key => $value ) {
-			// Apache prefixes environment variables with REDIRECT_ if they are added by rewrite rules
+			// Apache prefixes environment variables with REDIRECT_ if they are added by rewrite rules.
 			if ( strpos( $key, 'REDIRECT_' ) === 0 ) {
 				$key = substr( $key, 9 );
-				// We will not overwrite existing variables with the prefixed versions, though
+				// We will not overwrite existing variables with the prefixed versions, though.
 				if ( array_key_exists( $key, self::$server ) ) {
 					continue;
 				}
@@ -263,14 +264,14 @@ final class PHPServerRequest implements ServerRequest {
 		$method = strtoupper( $this->server_value( 'REQUEST_METHOD' ) );
 
 		// For GET requests URL query data represent all the request values.
-		if ( $method === 'GET' ) {
+		if ( 'GET' === $method ) {
 			self::$values[ INPUT_REQUEST ] = $url_query_data;
 
 			return;
 		}
 
 		// For POST requests values are represented by URL query data merged with any kind of form data.
-		if ( $method === 'POST' ) {
+		if ( 'POST' === $method ) {
 
 			self::$values[ INPUT_POST ] = (array) filter_input_array( INPUT_POST, FILTER_DEFAULT, false );
 
@@ -282,13 +283,14 @@ final class PHPServerRequest implements ServerRequest {
 		$content_type = $this->server_value( 'CONTENT_TYPE' );
 
 		// When content type is not URL-encoded, give up parsing body. Raw body can still be accessed and decoded.
-		if ( $content_type !== 'application/x-www-form-urlencoded' ) {
+		if ( 'application/x-www-form-urlencoded' !== $content_type ) {
 			self::$values[ INPUT_REQUEST ] = $url_query_data;
 
 			return;
 		}
 
 		// When not GET nor POST method is used, but content is URL-encoded, we can safely decode raw body stream.
+		// @codingStandardsIgnoreLine
 		@parse_str( $this->body(), $values );
 
 		self::$values[ INPUT_REQUEST ] = is_array( $values )

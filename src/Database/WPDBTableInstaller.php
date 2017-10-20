@@ -39,9 +39,9 @@ final class WPDBTableInstaller implements TableInstaller {
 	 */
 	public function __construct( \wpdb $db, Table $table = null ) {
 
-		$this->table = $table;
-
 		$this->db = $db;
+
+		$this->table = $table;
 	}
 
 	/**
@@ -53,7 +53,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return bool Whether or not the table was installed successfully.
 	 *
-	 * @throws InvalidTable if a table was neither passed, nor injected via the constructor.
+	 * @throws InvalidTable If a table was neither passed, nor injected via the constructor.
 	 */
 	public function install( Table $table = null ): bool {
 
@@ -97,7 +97,7 @@ final class WPDBTableInstaller implements TableInstaller {
 	 *
 	 * @return bool Whether or not the table was uninstalled successfully.
 	 *
-	 * @throws InvalidTable if a table was neither passed, nor injected via the constructor.
+	 * @throws InvalidTable If a table was neither passed, nor injected via the constructor.
 	 */
 	public function uninstall( Table $table = null ): bool {
 
@@ -212,8 +212,7 @@ final class WPDBTableInstaller implements TableInstaller {
 		}
 
 		$default_content = $table->default_content_sql();
-
-		if ( empty( $default_content ) ) {
+		if ( ! $default_content ) {
 			return;
 		}
 

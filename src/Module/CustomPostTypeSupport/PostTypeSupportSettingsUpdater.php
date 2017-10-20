@@ -85,7 +85,9 @@ class PostTypeSupportSettingsUpdater {
 				return PostTypeRepository::CPT_INACTIVE;
 			}
 
-			return empty( $settings["{$slug}|links"] )
+			$links_setting = "{$slug}|links";
+
+			return empty( $settings[ $links_setting ] )
 				? PostTypeRepository::CPT_ACTIVE
 				: PostTypeRepository::CPT_QUERY_BASED;
 		}, $custom_post_types ) );

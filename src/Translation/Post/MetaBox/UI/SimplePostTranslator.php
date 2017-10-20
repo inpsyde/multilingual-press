@@ -126,37 +126,40 @@ final class SimplePostTranslator implements MetaBoxUI {
 
 		$fields = new SimplePostTranslatorFields();
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
-			echo $fields->top_fields( $post, $remote_site_id, $remote_post );
+			$fields->render_top_fields( $post, $remote_site_id, $remote_post );
 		}, TranslationMetaBoxView::POSITION_TOP );
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
-			echo $fields->main_fields( $post, $remote_site_id, $remote_post );
+			$fields->render_main_fields( $post, $remote_site_id, $remote_post );
 		}, TranslationMetaBoxView::POSITION_MAIN );
 
-		/** @noinspection PhpUnusedParameterInspection */
 		$this->inject_into_view( function (
+			/** @noinspection PhpUnusedParameterInspection */
 			\WP_Post $post,
 			int $remote_site_id,
 			string $remote_language,
-			\WP_Post $remote_post = null
+			\WP_Post $remote_post = null,
+			array $data = []
 		) use ( $fields ) {
 
-			echo $fields->bottom_fields( $post, $remote_site_id, $remote_post );
+			$fields->render_bottom_fields( $post, $remote_site_id, $remote_post );
 		} );
 	}
 }

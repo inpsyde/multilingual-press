@@ -54,10 +54,10 @@ final class SiteSettingSingleView implements SiteSettingView {
 		?>
 		<tr class="form-field">
 			<th scope="row">
-				<?php echo $this->model->title(); ?>
+				<?php echo wp_kses_post( $this->model->title() ); ?>
 			</th>
 			<td>
-				<?php echo $this->model->markup( (int) $site_id ); ?>
+				<?php $this->model->render( (int) $site_id ); ?>
 			</td>
 		</tr>
 		<?php

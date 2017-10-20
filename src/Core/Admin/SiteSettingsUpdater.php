@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
-use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 /**
  * Site settings updater.
@@ -33,6 +32,15 @@ class SiteSettingsUpdater {
 	 * @var string
 	 */
 	const ACTION_UPDATE_SETTINGS = 'multilingualpress.update_site_settings';
+
+	/**
+	 * Settings value.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const VALUE_LANGUAGE_NONE = '-1';
 
 	/**
 	 * @var Languages
@@ -136,7 +144,7 @@ class SiteSettingsUpdater {
 			INPUT_POST,
 			FILTER_SANITIZE_STRING
 		);
-		if ( ! is_string( $language ) || '-1' === $language ) {
+		if ( ! is_string( $language ) || self::VALUE_LANGUAGE_NONE === $language ) {
 			$language = '';
 		}
 
@@ -204,28 +212,11 @@ class SiteSettingsUpdater {
 	 */
 	private function update_wplang( int $site_id ) {
 
-		$language = $this->get_language();
-		if ( ! $language ) {
-			return;
-		}
-
-		$languages = $this->languages->get_languages( [
-			'fields'     => LanguagesTable::COLUMN_LOCALE,
-			'conditions' => [
-				[
-					'field' => LanguagesTable::COLUMN_HTTP_CODE,
-					'value' => str_replace( '_', '-', $language ),
-				],
-			],
-		] );
-
-		$language = reset( $languages );
-		if ( ! $language ) {
-			return;
-		}
-
-		$wplang = $language[ LanguagesTable::COLUMN_LOCALE ];
-
+		$wplang = (string) $this->request->body_value(
+			'WPLANG',
+			INPUT_POST,
+			FILTER_SANITIZE_STRING
+		);
 		if ( in_array( $wplang, get_available_languages(), true ) ) {
 			update_blog_option( $site_id, 'WPLANG', $wplang );
 		}

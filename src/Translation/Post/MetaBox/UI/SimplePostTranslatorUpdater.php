@@ -63,7 +63,7 @@ class SimplePostTranslatorUpdater {
 	public function update( \WP_Post $remote_post, int $remote_site_id ): \WP_Post {
 
 		if (
-			! in_array( $remote_site_id, $this->save_context[ SourcePostSaveContext::RELATED_BLOGS ] )
+			! in_array( $remote_site_id, $this->save_context[ SourcePostSaveContext::RELATED_BLOGS ], true )
 			|| ! site_exists( $remote_site_id )
 		) {
 			return $this->create_empty_post();

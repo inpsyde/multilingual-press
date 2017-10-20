@@ -37,6 +37,11 @@ final class FactoryProvider implements ServiceProvider {
 			return new NonceFactory( WPNonce::class );
 		} );
 
+		$container->share( 'multilingualpress.rest_response_factory', function () {
+
+			return new RESTResponseFactory();
+		} );
+
 		$container->share( 'multilingualpress.type_factory', function () {
 
 			return new TypeFactory();

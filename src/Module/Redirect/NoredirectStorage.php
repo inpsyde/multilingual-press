@@ -11,13 +11,22 @@ namespace Inpsyde\MultilingualPress\Module\Redirect;
 interface NoredirectStorage {
 
 	/**
-	 * Lifetime for all stored languages (5 minutes).
+	 * Hook name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const FILTER_LIFETIME = 'multilingualpress.noredirect_storage_lifetime';
+
+	/**
+	 * Lifetime for all stored languages.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @var int
 	 */
-	const LIFETIME_IN_SECONDS = 300;
+	const LIFETIME_IN_SECONDS = 5 * MINUTE_IN_SECONDS;
 
 	/**
 	 * Noredirect key.

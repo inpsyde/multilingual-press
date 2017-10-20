@@ -6,7 +6,7 @@ namespace Inpsyde\MultilingualPress\Translation\Term\MetaBox;
 
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\GenericMetaBox;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxDecorator;
-use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBox;
+use Inpsyde\MultilingualPress\Common\Admin\MetaBox\PriorityAwareMetaBox;
 use Inpsyde\MultilingualPress\Translation\Term\ActiveTaxonomies;
 
 use function Inpsyde\MultilingualPress\get_site_language;
@@ -17,7 +17,7 @@ use function Inpsyde\MultilingualPress\get_site_language;
  * @package Inpsyde\MultilingualPress\Translation\Term\MetaBox
  * @since   3.0.0
  */
-final class TranslationMetaBox implements MetaBox {
+final class TranslationMetaBox implements PriorityAwareMetaBox {
 
 	use MetaBoxDecorator;
 
@@ -85,12 +85,12 @@ final class TranslationMetaBox implements MetaBox {
 		if ( $term ) {
 			switch_to_blog( $site_id );
 
-			/* translators: 1: meta box title, 2: term edit link */
-			$template = _x( '%1$s <small>%2$s</small>', 'Term translation meta box title', 'multilingualpress' );
+			/* translators: 1: meta box title, 2: edit link */
+			$template = _x( '%1$s<small> - %2$s</small>', 'Translation meta box title', 'multilingualpress' );
 
 			$edit_term_link = sprintf(
 				'<a href="%2$s">%1$s</a>',
-				esc_html_x( 'edit', 'Term translation meta box', 'multilingualpress' ),
+				esc_html_x( 'Edit', 'Term translation meta box edit link text', 'multilingualpress' ),
 				esc_url( get_edit_term_link( $term->term_id, $term->taxonomy ) )
 			);
 

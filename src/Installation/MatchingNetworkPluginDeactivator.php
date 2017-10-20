@@ -32,7 +32,7 @@ final class MatchingNetworkPluginDeactivator implements NetworkPluginDeactivator
 
 		$active_plugins = array_diff_key( $active_plugins, array_flip( $plugins_to_deactivate ) );
 
-		update_site_option( NetworkPluginDeactivator::OPTION, $active_plugins );
+		update_network_option( null, NetworkPluginDeactivator::OPTION, $active_plugins );
 
 		return $plugins_to_deactivate;
 	}

@@ -47,7 +47,7 @@ class UserSettingView {
 	 *
 	 * @return bool Whether or not the user setting markup was rendered successfully.
 	 */
-	public function render( \WP_User $user ) {
+	public function render( \WP_User $user ): bool {
 
 		if ( $this->check_user && ! current_user_can( 'edit_user', $user->ID ) ) {
 			return false;
@@ -55,10 +55,10 @@ class UserSettingView {
 		?>
 		<tr>
 			<th scope="row">
-				<?php echo $this->model->title(); ?>
+				<?php echo wp_kses_post( $this->model->title() ); ?>
 			</th>
 			<td>
-				<?php echo $this->model->markup( $user ); ?>
+				<?php $this->model->render( $user ); ?>
 			</td>
 		</tr>
 		<?php

@@ -22,6 +22,8 @@ final class SourcePostSaveContext implements \ArrayAccess {
 
 	const POST = 'post';
 
+	const POST_PARENT = 'post_parent';
+
 	const POST_STATUS = 'original_post_status';
 
 	const FEATURED_IMG_PATH = 'featured_image_path';
@@ -95,6 +97,8 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			self::POST_TYPE         => '',
 			self::POST_ID           => 0,
 			self::POST_STATUS       => '',
+			self::POST              => new \WP_Post( new \stdClass() ),
+			self::POST_PARENT       => 0,
 			self::FEATURED_IMG_PATH => '',
 			self::RELATED_BLOGS     => [],
 		];
@@ -105,16 +109,21 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			FILTER_SANITIZE_STRING
 		);
 
-		$context = array_merge( $empty_context, [ self::POST_STATUS => $original_post_status ] );
+		$context = array_merge( $empty_context, [
+			self::POST_STATUS => $original_post_status,
+		] );
 
-		// TODO: Make sure this is right! Think about remote posts being updated just now by MLP. Attach empty context?!
-		if ( ms_is_switched() && ! $this->is_valid_save_request( [ self::POST_STATUS => $original_post_status ] ) ) {
-			self::$contexts->attach( $this->post, $context );
+		if ( ms_is_switched() ) {
+			if ( ! $this->is_valid_save_request( [
+				self::POST_STATUS => $original_post_status,
+			] ) ) {
+				self::$contexts->attach( $this->post, $context );
 
-			return $empty_context;
+				return $empty_context;
+			}
 		}
 
-		$source_site_id = (int) get_current_blog_id();
+		$source_site_id = get_current_blog_id();
 
 		$related_blogs = $this->site_relations->get_related_site_ids( $source_site_id );
 		if ( empty( $related_blogs ) ) {
@@ -123,7 +132,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			return $empty_context;
 		}
 
-		// Get type of post in case of revision
+		// Get type of post in case of revision.
 		$real_post_type = $this->real_post_type( $this->post );
 
 		if ( ! $this->post_types->includes( $real_post_type ) ) {
@@ -140,6 +149,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			self::POST_ID           => $request_post_id ?: (int) $this->post->ID,
 			self::POST_STATUS       => $original_post_status,
 			self::POST              => $this->post,
+			self::POST_PARENT       => (int) $this->post->post_parent,
 			self::FEATURED_IMG_PATH => $this->featured_image_path( $this->post ),
 			self::RELATED_BLOGS     => $related_blogs,
 		];
@@ -158,11 +168,11 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 */
 	private function is_valid_save_request( array $context ) {
 
-		static $called = 0;
-
 		if ( ms_is_switched() ) {
 			return false;
 		}
+
+		static $called;
 
 		// For auto-drafts, 'save_post' is called twice, resulting in doubled drafts for translations.
 		$called ++;
@@ -177,7 +187,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 			return false;
 		}
 
-		// If context is filled, we only want to check that is not called twice for auto-draft
+		// If context is filled, we only want to check that is not called twice for auto-draft.
 		if ( array_key_exists( self::SITE_ID, $context ) ) {
 			return true;
 		}
@@ -202,9 +212,13 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 */
 	private function real_post_type( \WP_Post $post ) {
 
+		static $post_type;
+		if ( ! $post_type ) {
+			$post_type = [];
+		}
+
 		$post_id = (int) $post->ID;
 
-		static $post_type = [];
 		if ( isset( $post_type[ $post_id ] ) ) {
 			return $post_type[ $post_id ];
 		}
@@ -233,13 +247,15 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	private function is_connectable_status( \WP_Post $post, string $original_post_status ) {
 
 		static $connectable_statuses;
-		// TODO: Discuss post status "future"...
-		$connectable_statuses or $connectable_statuses = [
-			'publish',
-			'draft',
-			'private',
-			'auto-draft',
-		];
+		if ( ! $connectable_statuses ) {
+			$connectable_statuses = [
+				'auto-draft',
+				'draft',
+				'future',
+				'private',
+				'publish',
+			];
+		}
 
 		return
 			in_array( $post->post_status, $connectable_statuses, true )
@@ -253,7 +269,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 * We inspect value from request to distinguish them from real revisions and attachments which have the same status.
 	 *
 	 * @param  \WP_Post $post                 Post object.
-	 * @param string    $original_post_status Post status sent with request.
+	 * @param string   $original_post_status Post status sent with request.
 	 *
 	 * @return bool
 	 */
@@ -279,7 +295,7 @@ final class SourcePostSaveContext implements \ArrayAccess {
 		}
 
 		$thumb_post = get_post( $thumb_id );
-		if ( ! $thumb_post || $thumb_post->post_type !== 'attachment' ) {
+		if ( ! $thumb_post || 'attachment' !== $thumb_post->post_type ) {
 			return '';
 		}
 
@@ -328,6 +344,8 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 *
 	 * @param mixed $offset
 	 * @param mixed $value
+	 *
+	 * @throws \BadMethodCallException
 	 */
 	public function offsetSet( $offset, $value ) {
 
@@ -338,6 +356,8 @@ final class SourcePostSaveContext implements \ArrayAccess {
 	 * Disabled.
 	 *
 	 * @param mixed $offset
+	 *
+	 * @throws \BadMethodCallException
 	 */
 	public function offsetUnset( $offset ) {
 

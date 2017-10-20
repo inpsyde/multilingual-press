@@ -4,7 +4,10 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\SiteDuplication;
 
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingViewModel;
+
+use function Inpsyde\MultilingualPress\nonce_field;
 
 /**
  * Site duplication "Based on site" setting.
@@ -25,34 +28,43 @@ final class BasedOnSiteSetting implements SiteSettingViewModel {
 	private $id = 'mlp-base-site-id';
 
 	/**
+	 * @var Nonce
+	 */
+	private $nonce;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param \wpdb $db WordPress database object.
+	 * @param \wpdb $db    WordPress database object.
+	 * @param Nonce $nonce Nonce object.
 	 */
-	public function __construct( \wpdb $db ) {
+	public function __construct( \wpdb $db, Nonce $nonce ) {
 
 		$this->db = $db;
+
+		$this->nonce = $nonce;
 	}
 
 	/**
-	 * Returns the markup for the site setting.
+	 * Renders the markup for the site setting.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param int $site_id Site ID.
 	 *
-	 * @return string The markup for the site setting.
+	 * @return void
 	 */
-	public function markup( int $site_id ): string {
+	public function render( int $site_id ) {
 
-		return sprintf(
-			'<select id="%2$s" name="%3$s" autocomplete="off">%1$s</select>',
-			$this->get_options(),
-			esc_attr( $this->id ),
-			esc_attr( SiteDuplicator::NAME_BASED_ON_SITE )
-		);
+		?>
+		<select id="<?php echo esc_attr( $this->id ); ?>"
+			name="<?php echo esc_attr( SiteDuplicator::NAME_BASED_ON_SITE ); ?>" autocomplete="off">
+			<?php $this->render_options(); ?>
+		</select>
+		<?php
+		nonce_field( $this->nonce );
 	}
 
 	/**
@@ -72,25 +84,22 @@ final class BasedOnSiteSetting implements SiteSettingViewModel {
 	}
 
 	/**
-	 * Returns the markup for all option tags.
+	 * Renders the option tags.
 	 *
-	 * @return string The markup for all option tags.
+	 * @return void
 	 */
-	private function get_options(): string {
+	private function render_options() {
 
-		$options = '<option value="0">' . esc_html__( 'Choose site', 'multilingualpress' ) . '</option>';
-
-		$sites = (array) $this->get_all_sites();
-		if ( $sites ) {
-			$options = array_reduce( $sites, function ( $options, array $site ) {
-
-				$url = $site['domain'] . ( '/' === $site['path'] ? '' : $site['path'] );
-
-				return $options . '<option value="' . esc_attr( $site['id'] ) . '">' . esc_url( $url ) . '</option>';
-			}, $options );
+		?>
+		<option value="0"><?php esc_html_e( 'Choose site', 'multilingualpress' ); ?></option>
+		<?php
+		foreach ( $this->get_all_sites() as $site ) {
+			?>
+			<option value="<?php echo esc_attr( $site['id'] ); ?>">
+				<?php echo esc_url( $site['domain'] . ( '/' === $site['path'] ? '' : $site['path'] ) ); ?>
+			</option>
+			<?php
 		}
-
-		return $options;
 	}
 
 	/**

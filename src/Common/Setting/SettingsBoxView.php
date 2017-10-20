@@ -43,7 +43,7 @@ class SettingsBoxView {
 			<?php
 			$this->render_title();
 			$this->render_description();
-			echo $this->model->markup();
+			$this->model->render();
 			?>
 		</div>
 		<?php
@@ -72,7 +72,7 @@ class SettingsBoxView {
 	 */
 	private function render_description() {
 
-		$description = esc_html( $this->model->description() );
+		$description = $this->model->description();
 		if ( ! $description ) {
 			return;
 		}
@@ -86,6 +86,13 @@ class SettingsBoxView {
 			);
 		}
 
-		echo wpautop( $description );
+		$tags = [
+			'label' => [
+				'class' => true,
+				'for'   => true,
+			],
+		];
+
+		echo wp_kses( wpautop( $description ), $tags );
 	}
 }

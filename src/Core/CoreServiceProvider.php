@@ -120,12 +120,10 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new MetaBoxUIRegistry();
 		} );
 
-		// TODO: Make a regular not shared service as soon as everything else has been adapted.
-		$container->share( 'multilingualpress.module_manager', function () {
+		$container['multilingualpress.module_manager'] = function () {
 
-			// TODO: Maybe store the option name somewhere? But then again, who else really needs to know it?
-			return new Module\NetworkOptionModuleManager( 'multilingualpress_modules' );
-		} );
+			return new Module\NetworkOptionModuleManager( Module\ModuleManager::OPTION );
+		};
 
 		$container['multilingualpress.new_site_settings'] = function ( Container $container ) {
 
