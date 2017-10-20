@@ -85,9 +85,15 @@ final class RequestHandler implements Endpoint\RequestHandler {
 	 */
 	public function handle_request( \WP_REST_Request $request ): \WP_REST_Response {
 
+		$content_ids = array_filter( $request['content_ids'], 'is_numeric' );
+		$content_ids = array_unique( array_map( 'intval', $content_ids ) );
+		if ( 2 > count( $content_ids ) ) {
+			return $this->create_error_response( $request );
+		}
+
 		$type = (string) $request['type'];
 
-		$relationship_id = $this->api->create_relationship( $request['content_ids'], $type );
+		$relationship_id = $this->api->create_relationship( $content_ids, $type );
 		if ( ! $relationship_id ) {
 			return $this->create_error_response( $request );
 		}
