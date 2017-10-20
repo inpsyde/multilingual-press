@@ -153,6 +153,8 @@ namespace PHPSTORM_META {
 		'multilingualpress.rest.site_relations_read_arguments'                     => \Inpsyde\MultilingualPress\REST\Common\Arguments::class,
 		'multilingualpress.rest.site_relations_read_handler'                       => \Inpsyde\MultilingualPress\REST\Common\Endpoint\RequestHandler::class,
 		'multilingualpress.rest.site_relations_schema'                             => \Inpsyde\MultilingualPress\REST\Endpoint\ContentRelations\Schema::class,
+		'multilingualpress.rest.site_relations_update_arguments'                   => \Inpsyde\MultilingualPress\REST\Common\Arguments::class,
+		'multilingualpress.rest.site_relations_update_handler'                     => \Inpsyde\MultilingualPress\REST\Common\Endpoint\RequestHandler::class,
 		'multilingualpress.rest_field_access'                                      => \Inpsyde\MultilingualPress\REST\Common\Field\Access::class,
 		'multilingualpress.rest_field_collection'                                  => \Inpsyde\MultilingualPress\REST\Common\Field\Collection::class,
 		'multilingualpress.rest_field_registry'                                    => \Inpsyde\MultilingualPress\REST\Common\Field\Registry::class,
