@@ -137,6 +137,8 @@ namespace PHPSTORM_META {
 		'multilingualpress.rest.content_relations_create_arguments'                => \Inpsyde\MultilingualPress\REST\Common\Arguments::class,
 		'multilingualpress.rest.content_relations_create_handler'                  => \Inpsyde\MultilingualPress\REST\Common\Endpoint\RequestHandler::class,
 		'multilingualpress.rest.content_relations_data_filter'                     => \Inpsyde\MultilingualPress\REST\Common\Response\DataFilter::class,
+		'multilingualpress.rest.content_relations_delete_arguments'                => \Inpsyde\MultilingualPress\REST\Common\Arguments::class,
+		'multilingualpress.rest.content_relations_delete_handler'                  => \Inpsyde\MultilingualPress\REST\Common\Endpoint\RequestHandler::class,
 		'multilingualpress.rest.content_relations_formatter'                       => \Inpsyde\MultilingualPress\REST\Endpoint\ContentRelations\Formatter::class,
 		'multilingualpress.rest.content_relations_post_field'                      => \Inpsyde\MultilingualPress\REST\Core\Field\Field::class,
 		'multilingualpress.rest.content_relations_post_field_reader'               => \Inpsyde\MultilingualPress\REST\Common\Field\Reader::class,

@@ -191,6 +191,22 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			);
 		} );
 
+		$container->share( 'multilingualpress.rest.site_relations_delete_arguments', function () {
+
+			return new Endpoint\SiteRelations\Delete\EndpointArguments();
+		} );
+
+		$container->share( 'multilingualpress.rest.site_relations_delete_handler', function ( Container $container ) {
+
+			return new Endpoint\SiteRelations\Delete\RequestHandler(
+				$container['multilingualpress.site_relations'],
+				$container['multilingualpress.rest.site_relations_formatter'],
+				$container['multilingualpress.rest.site_relations_schema'],
+				$container['multilingualpress.rest_request_field_processor'],
+				$container['multilingualpress.rest_response_factory']
+			);
+		} );
+
 		$container->share( 'multilingualpress.rest.site_relations_formatter', function ( Container $container ) {
 
 			return new Endpoint\SiteRelations\Formatter(
@@ -314,6 +330,18 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			Core\Route\Options::from_arguments(
 				$container['multilingualpress.rest.site_relations_read_handler'],
 				$container['multilingualpress.rest.site_relations_read_arguments']
+			)->set_schema( $schema )
+		) );
+
+		$route_collection->add( new Core\Route\Route(
+			$base . '/(?P<site_id>\d+)',
+			Core\Route\Options::from_arguments(
+				$container['multilingualpress.rest.site_relations_delete_handler'],
+				$container['multilingualpress.rest.site_relations_delete_arguments'],
+				\WP_REST_Server::DELETABLE,
+				[
+					'permission_callback' => PermissionCallbackFactory::current_user_can( 'manage_sites' ),
+				]
 			)->set_schema( $schema )
 		) );
 
