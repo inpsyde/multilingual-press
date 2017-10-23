@@ -41,26 +41,9 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 			);
 		};
 
-		add_action( LanguageManagerSettingsPageView::CONTENT_DISPLAY, function() use ( $container ) {
-
-			$separator = new LanguageUsageList( $container['multilingualpress.languages'] );
-
-			$table = new LanguageListTable( $separator->get_by( LanguageUsageList::ACTIVE ) );
-			$table->prepare_items();
-			$table->display();
-			return;
-		});
-
 		$container['multilingualpress.language_edit_view'] = function( Container $container ) {
 			return new LanguageEditView( $container['multilingualpress.languages'] );
 		};
-
-		add_action( LanguageManagerSettingsPageView::SINGLE_LANGUAGE_DISPLAY,
-		            [
-			            $container['multilingualpress.language_edit_view'],
-		                'render'
-		            ]
-		);
 
 		$container['multilingualpress.languagelisttable'] = function ( Container $container ) {
 
@@ -99,5 +82,21 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 	public function bootstrap( Container $container ) {
 
 		$container['multilingualpress.language_manager_settings_page']->register();
+
+		add_action( LanguageManagerSettingsPageView::SINGLE_LANGUAGE_DISPLAY,
+            [
+	            $container['multilingualpress.language_edit_view'],
+	            'render'
+            ]
+		);
+
+		add_action( LanguageManagerSettingsPageView::CONTENT_DISPLAY, function() use ( $container ) {
+
+			$separator = new LanguageUsageList( $container['multilingualpress.languages'] );
+			$table = new LanguageListTable( $separator->get_by( LanguageUsageList::ACTIVE ) );
+			$table->prepare_items();
+			$table->display();
+			return;
+		});
 	}
 }
