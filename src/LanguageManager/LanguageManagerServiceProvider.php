@@ -8,7 +8,6 @@ use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
-use Inpsyde\MultilingualPress\Common\Type\Language;
 
 use function Inpsyde\MultilingualPress\get_available_languages;
 
