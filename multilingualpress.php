@@ -100,7 +100,6 @@ function bootstrap(): bool {
 		->add_service_provider( new TranslationServiceProvider() )
 		->add_service_provider( new WidgetServiceProvider()	);
 
-
 	$multilingualpress = new MultilingualPress( $container, $providers );
 
 	/**
