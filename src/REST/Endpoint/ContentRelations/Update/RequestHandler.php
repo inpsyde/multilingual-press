@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\REST\Endpoint\ContentRelations\Create;
+namespace Inpsyde\MultilingualPress\REST\Endpoint\ContentRelations\Update;
 
 use Inpsyde\MultilingualPress\API\ContentRelations as API;
 use Inpsyde\MultilingualPress\Factory\RESTResponseFactory;
@@ -12,9 +12,9 @@ use Inpsyde\MultilingualPress\REST\Endpoint\ContentRelations\Formatter;
 use Inpsyde\MultilingualPress\REST\Endpoint\ContentRelations\Schema;
 
 /**
- * Request handler for creating content relations.
+ * Request handler for updating content relations.
  *
- * @package Inpsyde\MultilingualPress\REST\Endpoint\ContentRelations\Create
+ * @package Inpsyde\MultilingualPress\REST\Endpoint\ContentRelations\Update
  * @since   3.0.0
  */
 final class RequestHandler implements Endpoint\RequestHandler {
@@ -87,6 +87,9 @@ final class RequestHandler implements Endpoint\RequestHandler {
 
 		$content_ids = array_filter( $request['content_ids'], 'is_numeric' );
 		$content_ids = array_unique( array_map( 'intval', $content_ids ) );
+
+		$content_ids[ (int) $request['site_id'] ] = (int) $request['content_id'];
+
 		if ( 2 > count( $content_ids ) ) {
 			return $this->create_error_response( $request );
 		}
@@ -94,9 +97,6 @@ final class RequestHandler implements Endpoint\RequestHandler {
 		$type = (string) $request['type'];
 
 		$relationship_id = $this->api->create_relationship( $content_ids, $type );
-		if ( ! $relationship_id ) {
-			return $this->create_error_response( $request );
-		}
 
 		$data = $this->formatter->format(
 			$this->api->get_content_ids( $relationship_id ),
@@ -122,8 +122,8 @@ final class RequestHandler implements Endpoint\RequestHandler {
 
 		return $this->response_factory->create( [
 			[
-				'code'    => 'could_not_create',
-				'message' => __( 'The relationship could not be created.', 'multilingualpress' ),
+				'code'    => 'could_not_update',
+				'message' => __( 'The relationship could not be updated.', 'multilingualpress' ),
 				'data'    => $request->get_params(),
 			],
 			400,

@@ -121,7 +121,9 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			return new Endpoint\ContentRelations\Delete\EndpointArguments();
 		} );
 
-		$container->share( 'multilingualpress.rest.content_relations_delete_handler', function ( Container $container ) {
+		$container->share( 'multilingualpress.rest.content_relations_delete_handler', function (
+			Container $container
+		) {
 
 			return new Endpoint\ContentRelations\Delete\RequestHandler(
 				$container['multilingualpress.content_relations'],
@@ -189,6 +191,29 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.rest_schema_field_processor']
 			);
 		} );
+
+		$container->share( 'multilingualpress.rest.content_relations_update_arguments', function (
+			Container $container
+		) {
+
+			return new Endpoint\ContentRelations\Update\EndpointArguments(
+				$container['multilingualpress.error_factory']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.content_relations_update_handler', function (
+			Container $container
+		) {
+
+			return new Endpoint\ContentRelations\Update\RequestHandler(
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.rest.content_relations_formatter'],
+				$container['multilingualpress.rest.content_relations_schema'],
+				$container['multilingualpress.rest_request_field_processor'],
+				$container['multilingualpress.rest_response_factory']
+			);
+		} );
+
 	}
 
 	/**
@@ -356,6 +381,18 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			Core\Route\Options::from_arguments(
 				$container['multilingualpress.rest.content_relations_read_handler'],
 				$container['multilingualpress.rest.content_relations_read_arguments']
+			)->set_schema( $schema )
+		) );
+
+		$route_collection->add( new Core\Route\Route(
+			$base . '/(?P<site_id>\d+)/(?P<content_id>\d+)(?:/(?P<type>[^/]+))?',
+			Core\Route\Options::from_arguments(
+				$container['multilingualpress.rest.content_relations_update_handler'],
+				$container['multilingualpress.rest.content_relations_update_arguments'],
+				\WP_REST_Server::EDITABLE,
+				[
+					'permission_callback' => PermissionCallbackFactory::current_user_can( 'edit_posts' ),
+				]
 			)->set_schema( $schema )
 		) );
 

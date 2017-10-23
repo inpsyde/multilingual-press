@@ -172,24 +172,27 @@ final class WPDBLanguages implements Languages {
 	}
 
 	/**
-	 * Returns language with the given HTTP code.
+	 * Returns the language for the given arguments.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $http_code Language HTTP code.
+	 * @param string     $column Column name to be used for querying.
+	 * @param string|int $value  Value to be used for querying.
 	 *
 	 * @return Language Language object.
 	 */
-	public function get_language_by_http_code( string $http_code ): Language {
+	public function get_language_by( string $column, $value ): Language {
 
 		// Note: Placeholders intended for \wpdb::prepare() have to be double-encoded for sprintf().
+		$placeholder = '%' . ( $this->fields[ $column ] ?? '%s' );
+
 		$query = sprintf(
-			'SELECT * FROM %1$s WHERE %2$s = %%s ORDER BY %3$s DESC LIMIT 1',
+			'SELECT * FROM %1$s WHERE %2$s = ' . $placeholder . ' ORDER BY %3$s DESC LIMIT 1',
 			$this->table,
-			LanguagesTable::COLUMN_HTTP_CODE,
+			$column,
 			LanguagesTable::COLUMN_PRIORITY
 		);
-		$query = $this->db->prepare( $query, $http_code );
+		$query = $this->db->prepare( $query, $value );
 
 		$language = $this->db->get_row( $query, ARRAY_A );
 		if ( ! $language || ! is_array( $language ) ) {
@@ -352,7 +355,7 @@ final class WPDBLanguages implements Languages {
 
 		return array_combine( array_keys( $schema ), array_map( function ( $definition ) use ( $numeric_types ) {
 
-			return preg_match( '/^\s*[A-Z]*(' . $numeric_types . ')/', $definition ) ? '%d' : '%s';
+			return preg_match( '/^\s*[A-Z]*(' . $numeric_types . ')/i', $definition ) ? '%d' : '%s';
 		}, $schema ) );
 	}
 
