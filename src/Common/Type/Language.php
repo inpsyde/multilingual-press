@@ -121,6 +121,15 @@ interface Language extends \ArrayAccess {
 	const NONE = 'none';
 
 	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const ID = LanguagesTable::COLUMN_ID;
+
+	/**
 	 * Checks if the language is written right-to-left (RTL).
 	 *
 	 * @since 3.0.0

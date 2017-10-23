@@ -124,6 +124,7 @@ final class NullLanguage implements Language {
 			Language::LOCALE         => '',
 			Language::NATIVE_NAME    => '',
 			Language::PRIORITY       => 1,
+			Language::ID             => 1,
 		];
 	}
 }

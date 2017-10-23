@@ -70,6 +70,7 @@ final class AliasAwareLanguage implements Language {
 				Language::LOCALE,
 				Language::NATIVE_NAME,
 				Language::PRIORITY,
+				Language::ID,
 			];
 		}
 
@@ -233,6 +234,7 @@ final class AliasAwareLanguage implements Language {
 			Language::ISO_639_2_CODE => '',
 			Language::LOCALE         => '',
 			Language::NATIVE_NAME    => '',
+			Language::ID             => '',
 		];
 
 		$names = array_replace( $names, array_intersect_key( $data, $names ) );
