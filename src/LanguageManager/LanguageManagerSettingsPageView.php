@@ -69,8 +69,7 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 
 		$this->asset_manager->enqueue_style( 'multilingualpress-admin' );
 
-		// TODO: Put the action somewhere, preferably on the language updater (or repository).
-		$action = 'update_multilingualpress_languages';
+		$action = LanguageManagerUpdater::ACTION;
 
 		// TODO: Completely adapt to your needs.
 		?>
