@@ -74,11 +74,11 @@ class LanguageListTable extends \WP_List_Table
 
 	public function prepare_items()
 	{
-		$this->_column_headers = array(
+		$this->_column_headers = [
 			$this->get_columns(),
 			$this->get_hidden_columns(),
 			$this->get_sortable_columns(),
-		);
+		];
 	}
 
 	public function get_hidden_columns()
