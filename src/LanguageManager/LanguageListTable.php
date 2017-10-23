@@ -16,7 +16,7 @@ class LanguageListTable extends \WP_List_Table
 	 *
 	 * @var array
 	 */
-	public $_args = [];
+	protected $_args = [];
 
 	/**
 	 * List of languages.
