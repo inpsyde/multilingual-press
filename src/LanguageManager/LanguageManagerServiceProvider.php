@@ -65,7 +65,8 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 			// registration runs before the necessary admin files are included.
 			return new LanguageManagerSettingsPageView(
 				$container['multilingualpress.update_languages_nonce'],
-				$container['multilingualpress.asset_manager']
+				$container['multilingualpress.asset_manager'],
+				$container['multilingualpress.server_request']
 			);
 		};
 

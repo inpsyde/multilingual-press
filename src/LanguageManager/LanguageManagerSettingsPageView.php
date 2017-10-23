@@ -6,6 +6,7 @@ namespace Inpsyde\MultilingualPress\LanguageManager;
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageView;
+use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 
 use function Inpsyde\MultilingualPress\nonce_field;
@@ -37,17 +38,24 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 	private $listTable;
 
 	/**
+	 * @var ServerRequest
+	 */
+	private $request;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Nonce             $nonce         Nonce object.
-	 * @param AssetManager      $asset_manager Asset manager object.
+	 * @param Nonce         $nonce         Nonce object.
+	 * @param AssetManager  $asset_manager Asset manager object.
+	 * @param ServerRequest $request
 	 */
-	public function __construct( Nonce $nonce, AssetManager $asset_manager )
+	public function __construct( Nonce $nonce, AssetManager $asset_manager, ServerRequest $request )
 	{
 		$this->nonce         = $nonce;
 		$this->asset_manager = $asset_manager;
+		$this->request       = $request;
 	}
 
 	/**
@@ -73,7 +81,7 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 				<?php
 				nonce_field( $this->nonce );
 
-				$langID = filter_input( INPUT_GET, 'langID', FILTER_VALIDATE_INT );
+				$langID = $this->request->body_value( 'langID', INPUT_GET, FILTER_VALIDATE_INT );
 				if ( $langID ) {
 					do_action( self::SINGLE_LANGUAGE_DISPLAY, $langID );
 				}
