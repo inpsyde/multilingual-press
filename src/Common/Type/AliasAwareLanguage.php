@@ -64,13 +64,13 @@ final class AliasAwareLanguage implements Language {
 				Language::CUSTOM_NAME,
 				Language::ENGLISH_NAME,
 				Language::HTTP_CODE,
+				Language::ID,
 				Language::ISO_639_1_CODE,
 				Language::ISO_639_2_CODE,
 				Language::IS_RTL,
 				Language::LOCALE,
 				Language::NATIVE_NAME,
 				Language::PRIORITY,
-				Language::ID,
 			];
 		}
 
@@ -230,11 +230,11 @@ final class AliasAwareLanguage implements Language {
 			Language::CUSTOM_NAME    => $data[ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ] ?? '',
 			Language::ENGLISH_NAME   => '',
 			Language::HTTP_CODE      => '',
+			Language::ID             => '',
 			Language::ISO_639_1_CODE => '',
 			Language::ISO_639_2_CODE => '',
 			Language::LOCALE         => '',
 			Language::NATIVE_NAME    => '',
-			Language::ID             => '',
 		];
 
 		$names = array_replace( $names, array_intersect_key( $data, $names ) );
