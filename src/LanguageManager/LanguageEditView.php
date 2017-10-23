@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\LanguageManager;
 
 use Inpsyde\MultilingualPress\API\Languages;
+use Inpsyde\MultilingualPress\Common\Type\NullLanguage;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 final class LanguageEditView {
@@ -31,7 +32,8 @@ final class LanguageEditView {
 	{
 		$language = $this->languages->get_language_by( LanguagesTable::COLUMN_ID, $langID );
 
-		if ( ! $language ) {
+		if ( is_a( $language, NullLanguage::class ) ) {
+			// now what?
 			return;
 		}
 
