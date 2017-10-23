@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\LanguageManager;
 
 use Inpsyde\MultilingualPress\API\Languages;
+use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 final class LanguageEditView {
 	/**
@@ -28,10 +29,13 @@ final class LanguageEditView {
 	 */
 	public function render( string $langID )
 	{
-		$language = $this->languages->get_language_by_http_code( $langID );
+		$language = $this->languages->get_language_by( LanguagesTable::COLUMN_ID, $langID );
 
 		if ( ! $language ) {
 			return;
 		}
+
+		// temporary
+		print '<pre>' . print_r( $language, true ) . '</pre>';
 	}
 }

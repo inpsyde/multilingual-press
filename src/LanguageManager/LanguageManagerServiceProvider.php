@@ -54,6 +54,17 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 			return;
 		});
 
+		$container['multilingualpress.language_edit_view'] = function( Container $container ) {
+			return new LanguageEditView( $container['multilingualpress.languages'] );
+		};
+
+		add_action( LanguageManagerSettingsPageView::SINGLE_LANGUAGE_DISPLAY,
+		            [
+			            $container['multilingualpress.language_edit_view'],
+		                'render'
+		            ]
+		);
+
 		$container['multilingualpress.languagelisttable'] = function ( Container $container ) {
 
 			return new LanguageListTable( $container['multilingualpress.languages'] );
