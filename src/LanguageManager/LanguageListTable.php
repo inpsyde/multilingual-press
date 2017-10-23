@@ -81,7 +81,7 @@ class LanguageListTable extends \WP_List_Table
 		];
 	}
 
-	public function get_hidden_columns()
+	public function get_hidden_columns() : array
 	{
 		return [ 'id' ];
 	}
@@ -103,11 +103,6 @@ class LanguageListTable extends \WP_List_Table
 	 */
 	protected function column_default( $item, $column_name ) : string
 	{
-		/** @var $item AliasAwareLanguage  */
-		if ( ! $item->offsetExists( $column_name ) ) {
-			return '';
-		}
-
 		if ( LanguagesTable::COLUMN_NATIVE_NAME === $column_name
 		     || LanguagesTable::COLUMN_ENGLISH_NAME === $column_name ) {
 
