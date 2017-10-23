@@ -120,6 +120,7 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 - Relations: Introduce a new filter, `multilingualpress.remote_post_search_arguments`, to manipulate the query arguments for the remote post search.
 - Quicklinks: Introduce a new filter, `multilingualpress.quicklinks_nofollow`, to render nofollow quicklinks, see [#251](https://github.com/inpsyde/MultilingualPress/issues/251).
 - Post Translation: Fix meta box not rendered for CPTs with custom capabilities, see [#286](https://github.com/inpsyde/MultilingualPress/issues/286).
+- Redirection: Introduce JavaScript-based redirection.
 
 = 2.9.2 =
 - Languages API: Fetch the language with the highest priority as site language.
