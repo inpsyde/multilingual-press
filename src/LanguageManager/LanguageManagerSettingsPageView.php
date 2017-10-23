@@ -71,7 +71,7 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 			<?php settings_errors(); ?>
 			<form method="post" action="<?php echo admin_url( "admin-post.php?action={$action}" ); ?>">
 				<?php
-				echo nonce_field( $this->nonce );
+				nonce_field( $this->nonce );
 
 				$langID = filter_input( INPUT_GET, 'langID', FILTER_VALIDATE_INT );
 				if ( $langID ) {
