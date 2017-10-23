@@ -9,8 +9,6 @@ use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use Inpsyde\MultilingualPress\Service\Container;
 
-use function Inpsyde\MultilingualPress\get_available_languages;
-
 /**
  * Service provider for all language manager objects.
  *
