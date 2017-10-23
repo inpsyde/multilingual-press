@@ -23,9 +23,6 @@
 		<!-- Exclude as MultilingualPress adheres to the PSR-0 standard. -->
 		<exclude name="WordPress.Files.FileName"/>
 
-		<!-- Exclude to be able to use namespaced hooks such as "multilingualpress.active_taxonomies". -->
-		<exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
-
 		<!-- Exclude VIP-specific sniffs, for now. -->
 		<exclude name="WordPress.VIP"/>
 
@@ -35,13 +32,16 @@
 	</rule>
 
 	<rule ref="WordPress.CSRF.NonceVerification">
-
 		<properties>
-
 			<property name="customNonceVerificationFunctions" value="is_valid"/>
-
 		</properties>
+	</rule>
 
+	<!-- Adapt to be able to use namespaced hooks in dot notation such as "multilingualpress.active_taxonomies". -->
+	<rule ref="WordPress.NamingConventions.ValidHookName">
+		<properties>
+			<property name="additionalWordDelimiters" value="."/>
+		</properties>
 	</rule>
 
 </ruleset>

@@ -1,13 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+var _functions = require("./common/functions");
+
+var F = _interopRequireWildcard(_functions);
+
 var _utils = require("./common/utils");
 
 var Util = _interopRequireWildcard(_utils);
-
-var _functions = require("./admin/core/functions");
-
-var F = _interopRequireWildcard(_functions);
 
 var _common = require("./admin/core/common");
 
@@ -199,7 +199,7 @@ jQuery(function () {
 // Externalize the MultilingualPress admin namespace.
 window.MultilingualPressAdmin = MLP;
 
-},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/core/functions":8,"./admin/nav-menus/NavMenus":9,"./admin/network/AddNewSite":10,"./admin/post-translation/CopyPost":11,"./admin/post-translation/RelationshipControl":12,"./admin/post-translation/RemotePostSearch":13,"./admin/term-translation/TermTranslator":14,"./admin/user-settings/UserBackEndLanguage":15,"./common/utils":16}],2:[function(require,module,exports){
+},{"./admin/core/Controller":2,"./admin/core/EventManager":3,"./admin/core/Model":4,"./admin/core/Registry":5,"./admin/core/Router":6,"./admin/core/common":7,"./admin/nav-menus/NavMenus":8,"./admin/network/AddNewSite":9,"./admin/post-translation/CopyPost":10,"./admin/post-translation/RelationshipControl":11,"./admin/post-translation/RemotePostSearch":12,"./admin/term-translation/TermTranslator":13,"./admin/user-settings/UserBackEndLanguage":14,"./common/functions":15,"./common/utils":16}],2:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -624,52 +624,6 @@ var Toggler = exports.Toggler = function (_Backbone$View) {
 
 exports.__esModule = true;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/**
- * Returns the name of the given module.
- * @param {Function|String|Object} module - The instance or constructor or name of a MulitilingualPress module.
- * @returns {String} The name of the module.
- */
-var getModuleName = function getModuleName(module) {
-	switch (typeof module === 'undefined' ? 'undefined' : _typeof(module)) {
-		case 'function':
-			return module.name;
-
-		case 'string':
-			return module;
-
-		case 'object':
-			return module.constructor.name;
-	}
-
-	return '';
-};
-
-/**
- * Returns the settings for the given module or settings name.
- * @param {Function|String|Object} module - The instance or constructor or name of a MulitilingualPress module.
- * @returns {Object} The settings.
- */
-var getSettings = exports.getSettings = function getSettings(module) {
-	module = getModuleName(module);
-
-	if ('undefined' !== typeof window['mlp' + module + 'Settings']) {
-		return window['mlp' + module + 'Settings'];
-	}
-
-	if ('undefined' !== typeof window[module]) {
-		return window[module];
-	}
-
-	return {};
-};
-
-},{}],9:[function(require,module,exports){
-'use strict';
-
-exports.__esModule = true;
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -822,7 +776,7 @@ var NavMenus = function (_Backbone$View) {
 
 exports.default = NavMenus;
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -931,7 +885,7 @@ var AddNewSite = function (_Backbone$View) {
 
 exports.default = AddNewSite;
 
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1236,7 +1190,7 @@ var CopyPost = function (_Backbone$View) {
 
 exports.default = CopyPost;
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1499,7 +1453,7 @@ var RelationshipControl = function (_Backbone$View) {
 
 exports.default = RelationshipControl;
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1686,7 +1640,7 @@ var RemotePostSearch = function (_Backbone$View) {
 
 exports.default = RemotePostSearch;
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1818,7 +1772,7 @@ var TermTranslator = function (_Backbone$View) {
 
 exports.default = TermTranslator;
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1885,6 +1839,52 @@ var UserBackEndLanguage = function (_Backbone$View) {
 }(Backbone.View);
 
 exports.default = UserBackEndLanguage;
+
+},{}],15:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/**
+ * Returns the name of the given module.
+ * @param {Function|String|Object} module - The instance or constructor or name of a MulitilingualPress module.
+ * @returns {String} The name of the module.
+ */
+var getModuleName = function getModuleName(module) {
+	switch (typeof module === 'undefined' ? 'undefined' : _typeof(module)) {
+		case 'function':
+			return module.name;
+
+		case 'string':
+			return module;
+
+		case 'object':
+			return module.constructor.name;
+	}
+
+	return '';
+};
+
+/**
+ * Returns the settings for the given module or settings name.
+ * @param {Function|String|Object} module - The instance or constructor or name of a MulitilingualPress module.
+ * @returns {Object} The settings.
+ */
+var getSettings = exports.getSettings = function getSettings(module) {
+	module = getModuleName(module);
+
+	if ('undefined' !== typeof window['mlp' + module + 'Settings']) {
+		return window['mlp' + module + 'Settings'];
+	}
+
+	if ('undefined' !== typeof window[module]) {
+		return window[module];
+	}
+
+	return {};
+};
 
 },{}],16:[function(require,module,exports){
 'use strict';

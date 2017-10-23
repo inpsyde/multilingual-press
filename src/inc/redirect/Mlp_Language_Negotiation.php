@@ -59,6 +59,79 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 */
 	public function get_redirect_match( array $args = array() ) {
 
+		$targets = $this->get_redirect_targets( $args );
+		if ( ! $targets ) {
+			return $this->get_fallback_match();
+		}
+
+		foreach ( $targets as $key => $target ) {
+			if ( empty( $target['user_priority'] ) || 0.0 === (float) $target['user_priority'] ) {
+				unset( $targets[ $key ] );
+			}
+		}
+
+		if ( ! $targets ) {
+			return $this->get_fallback_match();
+		}
+
+		uasort( $targets, array( $this, 'sort_combined_priorities' ) );
+
+		return reset( $targets );
+	}
+
+	/**
+	 * Returns the redirect target data for all available language versions.
+	 *
+	 * @since 2.10.0
+	 *
+	 * @param array $args Optional. Arguments required to determine the redirect targets. Defaults to empty array.
+	 *
+	 * @return array[] array of redirect targets.
+	 */
+	public function get_redirect_targets( array $args = array() ) {
+
+		$current_site_id = get_current_blog_id();
+
+		$user_languages = empty( $_SERVER['HTTP_ACCEPT_LANGUAGE'] )
+			? array()
+			: $this->parse_accept_header( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
+
+		$translations = $this->get_translations( $args );
+
+		$targets = array();
+
+		/** @var Mlp_Translation $translation */
+		foreach ( $translations as $site_id => $translation ) {
+			$this->collect_matches( $targets, $site_id, $translation, $user_languages, $current_site_id );
+		}
+
+		/**
+		 * Filters the possible redirect target objects.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param array[]           $targets      Possible redirect targets.
+		 * @param Mlp_Translation[] $translations Translation objects.
+		 */
+		$targets = (array) apply_filters( 'multilingualpress.redirect_targets', $targets, $translations );
+		if ( ! $targets ) {
+			return array();
+		}
+
+		uasort( $targets, array( $this, 'sort_priorities' ) );
+
+		return $targets;
+	}
+
+	/**
+	 * Returns all translations according to the given arguments.
+	 *
+	 * @param array $args Arguments required to fetch the translations.
+	 *
+	 * @return Mlp_Translation[] An array with site IDs as keys and Mlp_Translation objects as values.
+	 */
+	private function get_translations( array $args = array() ) {
+
 		/**
 		 * Filters the allowed status for posts to be included as possible redirect targets.
 		 *
@@ -74,49 +147,20 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 			'include_base' => true,
 			'post_status'  => $post_status,
 		), $args ) );
-
-		if ( empty( $translations ) ) {
-			return $this->get_fallback_match();
-		}
-
-		$possible = $this->get_possible_matches( $translations );
-
-		if ( empty( $possible ) ) {
-			return $this->get_fallback_match();
-		}
-
-		uasort( $possible, array( $this, 'sort_priorities' ) );
-
-		return array_pop( $possible );
-	}
-
-	/**
-	 * @param array $translations
-	 * @return array
-	 */
-	private function get_possible_matches( array $translations ) {
-
-		$user = $this->parse_accept_header( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
-		if ( empty( $user ) ) {
+		if ( ! $translations ) {
 			return array();
 		}
 
-		$matches = array();
-
-		/** @var Mlp_Translation $translation */
-		foreach ( $translations as $site_id => $translation ) {
-			$this->collect_matches( $matches, $site_id, $translation, $user );
+		/**
+		 * @var Mlp_Translation $translation
+		 */
+		foreach ( $translations as $key => $translation ) {
+			if ( ! $translation->get_remote_url() ) {
+				unset( $translations[ $key ] );
+			}
 		}
 
-		/**
-		 * Filters the possible redirect target objects.
-		 *
-		 * @since 2.7.0
-		 *
-		 * @param array[]           $matches      Possible redirect targets.
-		 * @param Mlp_Translation[] $translations Translation objects.
-		 */
-		return (array) apply_filters( 'multilingualpress.redirect_targets', $matches, $translations );
+		return $translations;
 	}
 
 	/**
@@ -125,11 +169,12 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	private function get_fallback_match() {
 
 		return array(
-			'priority'   => 0,
-			'url'        => '',
-			'language'   => '',
-			'site_id'    => 0,
-			'content_id' => 0,
+			'priority'      => 0,
+			'user_priority' => 0.0,
+			'url'           => '',
+			'language'      => '',
+			'site_id'       => 0,
+			'content_id'    => 0,
 		);
 	}
 
@@ -138,36 +183,70 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 	 * @param  int             $site_id
 	 * @param  Mlp_Translation $translation
 	 * @param  array           $user
+	 * @param  int             $current_site_id
 	 * @return void
 	 */
 	private function collect_matches(
 		array &$possible,
-						$site_id,
+		$site_id,
 		Mlp_Translation $translation,
-		array $user
+		array $user,
+		$current_site_id
 	) {
 
-		$language      = $translation->get_language();
-		$user_priority = $this->get_user_priority( $language, $user );
+		$language = $translation->get_language();
 
-		if ( 0 === $user_priority ) {
-			return;
-		}
+		$user_priority = $this->get_user_priority( $language, $user );
 
 		$url = $translation->get_remote_url();
 
-		if ( empty( $url ) ) {
-			return;
+		$target = array(
+			'priority'      => $language->get_priority(),
+			'user_priority' => $user_priority,
+			'url'           => $url,
+			'language'      => $language->get_name( 'http' ),
+			'site_id'       => $site_id,
+			'content_id'    => $translation->get_target_content_id(),
+		);
+
+		/**
+		 * Filters the redirect URL.
+		 *
+		 * @param string $url             Redirect URL.
+		 * @param array  $target          Redirect target. {
+		 *                                    'priority' => int
+		 *                                    'url'      => string
+		 *                                    'language' => string
+		 *                                    'site_id'  => int
+		 *                                }
+		 * @param int    $current_site_id Current site ID.
+		 */
+		$url = (string) apply_filters( 'mlp_redirect_url', $target['url'], $target, $current_site_id );
+		if ( ! empty( $url ) ) {
+			$target['url'] = $url;
+
+			$possible[] = $target;
+		}
+	}
+
+	/**
+	 * Helper to sort URLs by combined priority.
+	 *
+	 * @param  array $a
+	 * @param  array $b
+	 * @return int
+	 */
+	private function sort_combined_priorities( $a, $b ) {
+
+		$a = $a['priority'] * $a['user_priority'];
+
+		$b = $b['priority'] * $b['user_priority'];
+
+		if ( $a === $b ) {
+			return 0;
 		}
 
-		$combined_value   = $language->get_priority() * $user_priority;
-		$possible[]       = array(
-			'priority'   => $combined_value,
-			'url'        => $url,
-			'language'   => $language->get_name( 'http' ),
-			'site_id'    => $site_id,
-			'content_id' => $translation->get_target_content_id(),
-		);
+		return ( $a < $b ) ? -1 : 1;
 	}
 
 	/**
@@ -207,7 +286,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 			return $this->language_only_priority_factor * $user[ $lang_short ];
 		}
 
-		return 0;
+		return 0.0;
 	}
 
 	/**

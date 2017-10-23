@@ -11,6 +11,11 @@ class Mlp_Redirect {
 	private $language_api;
 
 	/**
+	 * @var Mlp_Locations_Interface
+	 */
+	private $locations;
+
+	/**
 	 * @var Mlp_Module_Manager_Interface
 	 */
 	private $modules;
@@ -26,16 +31,20 @@ class Mlp_Redirect {
 	 * @param Mlp_Module_Manager_Interface $modules
 	 * @param Mlp_Language_Api_Interface   $language_api
 	 * @param                              $deprecated
+	 * @param Mlp_Locations_Interface      $locations
 	 */
 	public function __construct(
 		Mlp_Module_Manager_Interface $modules,
 		Mlp_Language_Api_Interface $language_api,
-		$deprecated
+		$deprecated,
+		Mlp_Locations_Interface $locations
 	) {
 
 		$this->modules = $modules;
 
 		$this->language_api = $language_api;
+
+		$this->locations = $locations;
 	}
 
 	/**
@@ -76,9 +85,35 @@ class Mlp_Redirect {
 		$validator   = new Mlp_Language_Header_Validator();
 		$parser      = new Mlp_Accept_Header_Parser( $validator );
 		$negotiation = new Mlp_Language_Negotiation( $this->language_api, $parser );
-		$response    = new Mlp_Redirect_Response( $negotiation );
-		$controller  = new Mlp_Redirect_Frontend( $response, $this->option );
+		$controller  = new Mlp_Redirect_Frontend( $this->create_response( $negotiation ), $this->option );
 		$controller->setup();
+	}
+
+	/**
+	 * Returns the redirect response object according to the desired type.
+	 *
+	 * @param Mlp_Language_Negotiation_Interface $negotiation
+	 *
+	 * @return Mlp_Redirect_Response_Interface
+	 */
+	private function create_response( Mlp_Language_Negotiation_Interface $negotiation ) {
+
+		/**
+		 * Filters the redirector type.
+		 *
+		 * @since 2.10.0
+		 *
+		 * @param string $type Redirector type.
+		 */
+		$type = apply_filters( 'multilingualpress.redirector_type', 'PHP' );
+		switch ( strtoupper( $type ) ) {
+			case 'JAVASCRIPT':
+				return new Mlp_Javascript_Redirect_Response( $negotiation, $this->locations );
+
+			case 'PHP':
+			default:
+				return new Mlp_Redirect_Response( $negotiation );
+		}
 	}
 
 	/**
