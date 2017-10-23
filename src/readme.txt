@@ -121,6 +121,9 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 - Quicklinks: Introduce a new filter, `multilingualpress.quicklinks_nofollow`, to render nofollow quicklinks, see [#251](https://github.com/inpsyde/MultilingualPress/issues/251).
 - Post Translation: Fix meta box not rendered for CPTs with custom capabilities, see [#286](https://github.com/inpsyde/MultilingualPress/issues/286).
 
+= 2.9.2 =
+- Languages API: Fetch the language with the highest priority as site language.
+
 = 2.9.1 =
 - Translations: Restrict post type archive translations to active post types only.
 
