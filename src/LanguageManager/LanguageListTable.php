@@ -122,16 +122,8 @@ class LanguageListTable extends \WP_List_Table
 	 *
 	 * @return array
 	 */
-	public function get_columns() {
-
+	public function get_columns() : array
+	{
 		return $this->columns;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function get_sortable_columns() {
-
-		return [];
 	}
 }
