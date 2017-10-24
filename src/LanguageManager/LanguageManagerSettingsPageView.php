@@ -8,6 +8,7 @@ use Inpsyde\MultilingualPress\Asset\AssetManager;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageView;
 use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 use function Inpsyde\MultilingualPress\nonce_field;
 
@@ -79,18 +80,42 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 			<form method="post" action="<?php echo admin_url( "admin-post.php?action={$action}" ); ?>">
 				<?php
 				nonce_field( $this->nonce );
-
-				$langID = $this->request->body_value( 'langID', INPUT_GET, FILTER_VALIDATE_INT );
-				if ( $langID ) {
-					do_action( self::SINGLE_LANGUAGE_DISPLAY, $langID );
-				}
-				else {
-					do_action( self::CONTENT_DISPLAY );
-				}
+				$this->fire_actions();
 				?>
 
 			</form>
 		</div>
 		<?php
+	}
+
+	private function fire_actions()
+	{
+		$language_id = (string) $this->request->body_value(
+			LanguagesTable::COLUMN_ID,
+			INPUT_GET,
+			FILTER_VALIDATE_INT
+		);
+
+		if ( $language_id ) {
+			/**
+			 * Show edit screen for a single language.
+			 *
+			 * This action is called either for a single page view, an edit form
+			 * loaded per AJAX, or when a new language is added.
+			 *
+			 * @since 3.0.0
+			 * @param string $language_id A positive integer as a string.
+			 *                            It is 0 when a new language is added.
+			 */
+			do_action( self::SINGLE_LANGUAGE_DISPLAY, $language_id );
+			return;
+		}
+		/**
+		 * Show language manager main screen.
+		 *
+		 * Normally used to show the list table with active languages.
+		 * @since 3.0.0
+		 */
+		do_action( self::CONTENT_DISPLAY );
 	}
 }
