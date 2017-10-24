@@ -45,11 +45,6 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 			return new LanguageEditView( $container['multilingualpress.languages'] );
 		};
 
-		$container['multilingualpress.languagelisttable'] = function ( Container $container ) {
-
-			return new LanguageListTable( $container['multilingualpress.languages'] );
-		};
-
 		$container['multilingualpress.language_manager_settings_page_view'] = function ( Container $container ) {
 
 			// We cannot pass a WP_List_Table instance here, because the
@@ -65,8 +60,18 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 
 		// TODO: Pass this on to the language updater or repository.
 		$container['multilingualpress.update_languages_nonce'] = function () {
-
 			return new WPNonce( 'update_languages' );
+		};
+
+		// the following two entries aren't really used, because the Container
+		// object doesn't work late enough at the moment.
+		$container['multilingualpress.language_usage_list'] = function ( Container $container ) {
+			return new LanguageUsageList( $container['multilingualpress.languages'] );
+		};
+
+		$container['multilingualpress.language_list_table'] = function ( Container $container ) {
+			$active_languages = $container['multilingualpress.language_usage_list']->get_by( LanguageUsageList::ACTIVE );
+			return new LanguageListTable( $active_languages );
 		};
 	}
 
@@ -83,20 +88,26 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 
 		$container['multilingualpress.language_manager_settings_page']->register();
 
-		add_action( LanguageManagerSettingsPageView::SINGLE_LANGUAGE_DISPLAY,
+
+		add_action( LanguageManagerSettingsPageView::ACTION_CONTENT_DISPLAY, function() use (
+			$container
+		) {
+			$usage = new LanguageUsageList( $container['multilingualpress.languages'] );
+			// the following throws "Cannot read not shared"
+			//$active_languages = $container['multilingualpress.language_usage_list']->get_by( LanguageUsageList::ACTIVE );
+			$active_languages = $usage->get_by( LanguageUsageList::ACTIVE );
+			// I cannot create an instance earlier, because many classes and
+			// functions aren't loaded yet when bootstrap() is called.
+			$table = new LanguageListTable( $active_languages );
+			$table->setup();
+
+		});
+
+		add_action( LanguageManagerSettingsPageView::ACTION_SINGLE_LANGUAGE_DISPLAY,
             [
 	            $container['multilingualpress.language_edit_view'],
 	            'render'
             ]
 		);
-
-		add_action( LanguageManagerSettingsPageView::CONTENT_DISPLAY, function() use ( $container ) {
-
-			$separator = new LanguageUsageList( $container['multilingualpress.languages'] );
-			$table = new LanguageListTable( $separator->get_by( LanguageUsageList::ACTIVE ) );
-			$table->prepare_items();
-			$table->display();
-			return;
-		});
 	}
 }
