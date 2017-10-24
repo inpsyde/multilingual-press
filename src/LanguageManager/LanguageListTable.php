@@ -96,9 +96,9 @@ class LanguageListTable extends \WP_List_Table
 	{
 		if ( $this->has_items() ) {
 			$this->display_rows();
-		} else {
-			echo 'nothing found';
+			return;
 		}
+		$this->no_items();
 	}
 
 	/**
