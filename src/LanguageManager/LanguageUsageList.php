@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\LanguageManager;
 
 use Inpsyde\MultilingualPress\API\Languages;
+
 use function Inpsyde\MultilingualPress\get_available_languages;
 
 class LanguageUsageList {
