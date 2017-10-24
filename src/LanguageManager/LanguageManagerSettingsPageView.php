@@ -34,11 +34,6 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 	private $nonce;
 
 	/**
-	 * @var LanguageListTable
-	 */
-	private $listTable;
-
-	/**
 	 * @var ServerRequest
 	 */
 	private $request;
