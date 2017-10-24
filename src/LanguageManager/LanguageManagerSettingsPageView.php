@@ -20,8 +20,8 @@ use function Inpsyde\MultilingualPress\nonce_field;
  */
 final class LanguageManagerSettingsPageView implements SettingsPageView {
 
-	const CONTENT_DISPLAY = 'display_language_manager';
-	const SINGLE_LANGUAGE_DISPLAY = 'display_single_language';
+	const ACTION_CONTENT_DISPLAY         = 'multilingualpress_language_manager_default';
+	const ACTION_SINGLE_LANGUAGE_DISPLAY = 'multilingualpress_display_single_language';
 
 	/**
 	 * @var AssetManager
@@ -107,7 +107,7 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 			 * @param string $language_id A positive integer as a string.
 			 *                            It is 0 when a new language is added.
 			 */
-			do_action( self::SINGLE_LANGUAGE_DISPLAY, $language_id );
+			do_action( self::ACTION_SINGLE_LANGUAGE_DISPLAY, $language_id );
 			return;
 		}
 		/**
@@ -116,6 +116,6 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 		 * Normally used to show the list table with active languages.
 		 * @since 3.0.0
 		 */
-		do_action( self::CONTENT_DISPLAY );
+		do_action( self::ACTION_CONTENT_DISPLAY );
 	}
 }
