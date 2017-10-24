@@ -6,6 +6,7 @@ namespace Inpsyde\MultilingualPress\LanguageManager;
 
 use Inpsyde\MultilingualPress\API\Languages;
 use Inpsyde\MultilingualPress\Common\Type\Language;
+
 use function Inpsyde\MultilingualPress\get_available_languages;
 
 class LanguageUsageList {
