@@ -21,6 +21,7 @@ npm-debug.log*
 # PHP_CodeSniffer
 phpcs.xml
 report-*.txt
+ruleset.xml
 
 # PhpStorm
 .idea
