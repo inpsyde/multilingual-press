@@ -20,9 +20,9 @@ use function Inpsyde\MultilingualPress\nonce_field;
  */
 final class LanguageManagerSettingsPageView implements SettingsPageView {
 
-	const ACTION_CONTENT_DISPLAY         = 'multilingualpress_language_manager_default';
-	const ACTION_SINGLE_LANGUAGE_DISPLAY = 'multilingualpress_display_single_language';
-	const CURRENT_SCREEN                 = 'multilingualpress_language_manager';
+	const ACTION_CONTENT_DISPLAY         = 'multilingualpress.language_manager_default';
+	const ACTION_SINGLE_LANGUAGE_DISPLAY = 'multilingualpress.display_single_language';
+	const CURRENT_SCREEN                 = 'multilingualpress.language_manager';
 
 	/**
 	 * @var AssetManager
