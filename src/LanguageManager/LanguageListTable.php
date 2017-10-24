@@ -18,7 +18,12 @@ class LanguageListTable extends \WP_List_Table
 	 *
 	 * @var array
 	 */
-	protected $_args = [];
+	protected $_args = [
+		'plural'   => '',
+		'singular' => '',
+		'ajax'     => false,
+		'screen'   => null,
+	];
 
 	/**
 	 * List of languages.
@@ -51,12 +56,6 @@ class LanguageListTable extends \WP_List_Table
 	 */
 	public function __construct( array $languages )
 	{
-		$this->_args = [
-			'plural'   => '',
-			'singular' => '',
-			'ajax'     => false,
-			'screen'   => null,
-		];
 		$this->items = $languages;
 		$this->screen = LanguageManagerSettingsPageView::CURRENT_SCREEN;
 
