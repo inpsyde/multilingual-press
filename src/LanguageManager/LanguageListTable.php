@@ -112,7 +112,7 @@ class LanguageListTable extends \WP_List_Table
 		if ( LanguagesTable::COLUMN_NATIVE_NAME === $column_name
 		     || LanguagesTable::COLUMN_ENGLISH_NAME === $column_name ) {
 
-			$url = add_query_arg( LanguagesTable::COLUMN_ID, $item[ LanguagesTable::COLUMN_ID ] );
+			$url = add_query_arg( LanguageManagerSettingsPageView::QUERY_ARG_ID, $item[ LanguagesTable::COLUMN_ID ] );
 			$url = esc_url( $url );
 
 			return sprintf( '<a href="%1$s">%2$s</a>', $url, $item[ $column_name ] );

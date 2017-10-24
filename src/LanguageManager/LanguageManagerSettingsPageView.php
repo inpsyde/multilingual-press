@@ -23,7 +23,7 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 	const ACTION_CONTENT_DISPLAY         = 'multilingualpress.language_manager_default';
 	const ACTION_SINGLE_LANGUAGE_DISPLAY = 'multilingualpress.display_single_language';
 	const CURRENT_SCREEN                 = 'mlp_language_manager';
-	const QUERY_ARG_ID                   = 'id';
+	const QUERY_ARG_ID                   = 'ID';
 
 	/**
 	 * @var AssetManager
@@ -88,7 +88,7 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 	private function fire_actions()
 	{
 		$language_id = (string) $this->request->body_value(
-			LanguagesTable::COLUMN_ID,
+			self::QUERY_ARG_ID,
 			INPUT_GET,
 			FILTER_VALIDATE_INT
 		);
