@@ -48,11 +48,7 @@ class LanguageUsageList {
 			$this->separate();
 		}
 
-		if ( ! empty ( $this->separated[ $type ] ) ) {
-			return $this->separated[ $type ];
-		}
-
-		return [];
+		return $this->separated[ $type ] ?? [];
 	}
 
 	/**
