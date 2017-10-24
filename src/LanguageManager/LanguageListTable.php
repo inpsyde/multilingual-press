@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\LanguageManager;
 
-use Inpsyde\MultilingualPress\Common\Type\AliasAwareLanguage;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 class LanguageListTable extends \WP_List_Table
