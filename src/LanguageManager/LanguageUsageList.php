@@ -42,7 +42,7 @@ class LanguageUsageList {
 	 *
 	 * @return array
 	 */
-	public function get_by( int $type )
+	public function get_by( int $type ) : array
 	{
 		if ( empty ( $this->separated ) ) {
 			$this->separate();
