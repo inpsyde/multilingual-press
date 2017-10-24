@@ -72,6 +72,17 @@ class LanguageListTable extends \WP_List_Table
 		parent::__construct();
 	}
 
+	/**
+	 * Used as a callback to show this table.
+	 *
+	 * @return void
+	 */
+	public function setup()
+	{
+		$this->prepare_items();
+		$this->display();
+	}
+
 	public function prepare_items()
 	{
 		$this->_column_headers = [
