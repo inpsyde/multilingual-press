@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\LanguageManager;
 
 use Inpsyde\MultilingualPress\API\Languages;
-
+use Inpsyde\MultilingualPress\Common\Type\Language;
 use function Inpsyde\MultilingualPress\get_available_languages;
 
 class LanguageUsageList {
@@ -63,22 +63,22 @@ class LanguageUsageList {
 		// no languages available at all.
 		$this->separated = [ self::ACTIVE => [], self::INACTIVE => [] ];
 
-		$active = get_available_languages( false );
-		$active = array_map( function( $val ) {
-			return str_replace( '_', '-', $val );
-		}, $active );
-
 		$languages = $this->languages->get_all_languages();
 
-		foreach ( $languages as $language ) {
-			if ( $language->offsetExists( 'http_code' )
-				and ( in_array( $language->offsetGet( 'http_code' ), $active ) )
-			) {
-				$this->separated[ self::ACTIVE ][] = $language;
-			}
-			else {
-				$this->separated[ self::INACTIVE ][] = $language;
-			}
-		}
+		$available_languages = array_map( function ( $language ) {
+			return str_replace( '_', '-', $language );
+		}, get_available_languages( false ) );
+
+		$this->separated = array_reduce( $languages, function ( array $languages, Language $language ) use (
+			$available_languages
+		) {
+			$type = in_array( $language[ Language::HTTP_CODE ], $available_languages, true )
+				? self::ACTIVE
+				: self::INACTIVE;
+
+			$languages[ $type ][] = $language;
+
+			return $languages;
+		}, [] );
 	}
 }
