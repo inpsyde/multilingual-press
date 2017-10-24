@@ -22,7 +22,8 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 
 	const ACTION_CONTENT_DISPLAY         = 'multilingualpress.language_manager_default';
 	const ACTION_SINGLE_LANGUAGE_DISPLAY = 'multilingualpress.display_single_language';
-	const CURRENT_SCREEN                 = 'multilingualpress.language_manager';
+	const CURRENT_SCREEN                 = 'mlp_language_manager';
+	const QUERY_ARG_ID                   = 'id';
 
 	/**
 	 * @var AssetManager

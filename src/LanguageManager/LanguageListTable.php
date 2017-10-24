@@ -52,7 +52,7 @@ class LanguageListTable extends \WP_List_Table
 	public function __construct( array $languages )
 	{
 		$this->items = $languages;
-		$this->screen = LanguageManagerSettingsPageView::CURRENT_SCREEN;
+		$this->_args['screen'] = LanguageManagerSettingsPageView::CURRENT_SCREEN;
 
 		$this->columns = [
 			LanguagesTable::COLUMN_NATIVE_NAME    => __( 'Native name', 'multilingualpress' ),
@@ -64,7 +64,7 @@ class LanguageListTable extends \WP_List_Table
 			LanguagesTable::COLUMN_PRIORITY       => __( 'Priority', 'multilingualpress' ),
 		];
 
-		parent::__construct();
+		parent::__construct([ 'screen' => LanguageManagerSettingsPageView::CURRENT_SCREEN ]);
 	}
 
 	/**
