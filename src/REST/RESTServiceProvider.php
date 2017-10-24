@@ -362,7 +362,7 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 
 		$base = $schema->title();
 
-		// TODO: Permission checking is currently targeted at posts. Content elements can be really anything, though.
+		/* TODO: Permission checking is currently targeted at posts. Content elements can be really anything, though. */
 
 		$route_collection->add( new Core\Route\Route(
 			$base,

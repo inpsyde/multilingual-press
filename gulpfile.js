@@ -24,6 +24,7 @@ const sass = require( 'gulp-sass' );
 const tap = require( 'gulp-tap' );
 const uglify = require( 'gulp-uglify' );
 const util = require( 'gulp-util' );
+const xmlValidator = require( 'gulp-xml-validator' );
 const zip = require( 'gulp-zip' );
 
 const config = {
@@ -36,6 +37,8 @@ const config = {
 		src: 'resources/images/',
 		dest: 'assets/images/'
 	},
+
+	inc: 'inc/',
 
 	name: 'MultilingualPress',
 
@@ -59,6 +62,16 @@ const config = {
 	}
 };
 
+const createExecCallback = ( cb ) => ( err, stdout, stderr ) => {
+	if ( stdout ) {
+		util.log( stdout );
+	}
+	if ( stderr ) {
+		util.log( stderr );
+	}
+	cb( err );
+};
+
 gulp.task( 'assets', () => {
 	const dest = config.assets.dest;
 
@@ -80,22 +93,8 @@ gulp.task( 'clean', () => {
 	] );
 } );
 
-gulp.task( 'lint-configs', () => {
-	return gulp
-		.src( [
-			'*.json',
-			'.*rc',
-		] )
-		.pipe( newer( {
-			dest: '*.json',
-			extra: '.*rc'
-		} ) )
-		.pipe( jsonlint() )
-		.pipe( jsonlint.reporter() );
-} );
-
 gulp.task( 'lint-javascript-tests', [
-	'lint-configs',
+	'lint-json',
 ], () => {
 	const src = `${config.tests.js}**/*.js`;
 
@@ -113,9 +112,24 @@ gulp.task( 'lint-javascript-tests', [
 		.pipe( eslint.format() );
 } );
 
+gulp.task( 'lint-json', () => {
+	return gulp
+		.src( [
+			'*.json',
+			'.*rc',
+		] )
+		.pipe( newer( {
+			dest: '*.json',
+			extra: '.*rc'
+		} ) )
+		.pipe( jsonlint() )
+		.pipe( jsonlint.reporter() );
+} );
+
 gulp.task( 'lint-php', ( cb ) => {
 	const src = [
 		'*.php',
+		`${config.inc}*.php`,
 		`${config.src}**/*.php`,
 		`${config.tests.php}**/*.php`,
 	];
@@ -129,7 +143,7 @@ gulp.task( 'lint-php', ( cb ) => {
 } );
 
 gulp.task( 'lint-scripts', [
-	'lint-configs',
+	'lint-json',
 ], () => {
 	const src = `${config.scripts.src}*.js`;
 
@@ -141,6 +155,15 @@ gulp.task( 'lint-scripts', [
 		} ) )
 		.pipe( eslint() )
 		.pipe( eslint.format() );
+} );
+
+gulp.task( 'lint-xml', () => {
+	return gulp
+		.src( [
+			'*.xml',
+			'*.xml.dist',
+		] )
+		.pipe( xmlValidator() );
 } );
 
 gulp.task( 'images', () => {
@@ -155,22 +178,21 @@ gulp.task( 'images', () => {
 		.pipe( gulp.dest( dest ) );
 } );
 
+gulp.task( 'phpcs', [
+	'lint-xml',
+	'lint-php',
+], ( cb ) => {
+	childProcess.exec( '"./vendor/bin/phpcs" src/API/CachingTranslations.php', createExecCallback( cb ) );
+} );
+
 gulp.task( 'phpunit', [
 	'lint-php',
 ], ( cb ) => {
-	childProcess.exec( '"./vendor/bin/phpunit"', ( err, stdout, sterr ) => {
-		if ( stdout ) {
-			util.log( stdout );
-		}
-		if ( sterr ) {
-			util.log( sterr );
-		}
-		cb( err );
-	} );
+	childProcess.exec( '"./vendor/bin/phpunit"', createExecCallback( cb ) );
 } );
 
 gulp.task( 'scripts', [
-	'lint-configs',
+	'lint-json',
 	'lint-scripts',
 ], () => {
 	const dest = config.scripts.dest;
@@ -227,23 +249,23 @@ gulp.task( 'styles', () => {
 		.pipe( postcss( [
 			cssnano( {
 				zindex: false
-			}),
+			} ),
 		] ) )
 		.pipe( gulp.dest( dest ) );
 } );
 
 gulp.task( 'tape', [
-	'lint-configs',
+	'lint-json',
 	'lint-javascript-tests',
 	'lint-scripts',
 ], () => {
+	const command = '"./node_modules/.bin/babel-node" --plugins rewire <%= file.path %> | "./node_modules/.bin/faucet"';
+
 	return gulp
 		.src( argv.src || `${config.tests.js}**/*Test.js`, {
 			read: false
 		} )
-		.pipe( exec(
-			'"./node_modules/.bin/babel-node" --plugins rewire <%= file.path %> | "./node_modules/.bin/faucet"'
-		) )
+		.pipe( exec( command ) )
 		.pipe( exec.reporter() );
 } );
 
@@ -253,6 +275,7 @@ gulp.task( 'zip', () => {
 			`${config.images.dest}**/*.{gif,jpeg,jpg,png}`,
 			`${config.scripts.dest}*.js`,
 			`${config.styles.dest}*.css`,
+			`${config.inc}*.php`,
 			`${config.src}**/*.php`,
 			'*.{php,txt}',
 			'LICENSE',
@@ -268,7 +291,7 @@ gulp.task( 'zip', () => {
 } );
 
 gulp.task( 'common', [
-	'lint-configs',
+	'lint-json',
 	'lint-javascript-tests',
 	'lint-php',
 	'lint-scripts',
@@ -276,6 +299,7 @@ gulp.task( 'common', [
 
 gulp.task( 'test', [
 	'common',
+	'phpcs',
 	'phpunit',
 	'tape',
 ] );

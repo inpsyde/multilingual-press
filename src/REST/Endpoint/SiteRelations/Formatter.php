@@ -11,6 +11,12 @@ use Inpsyde\MultilingualPress\REST\Common\Response\DataFilter;
 
 use function Inpsyde\MultilingualPress\rest_url;
 
+/**
+ * Site relations formatter implementation.
+ *
+ * @package Inpsyde\MultilingualPress\REST\Endpoint\SiteRelations
+ * @since   3.0.0
+ */
 class Formatter {
 
 	/**

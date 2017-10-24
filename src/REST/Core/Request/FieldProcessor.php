@@ -59,6 +59,7 @@ final class FieldProcessor implements Common\Request\FieldProcessor {
 
 			if ( ! is_callable( $definition['get_callback'] ) ) {
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					// @codingStandardsIgnoreLine as this is specifically intended to be used when debugging.
 					trigger_error( "Invalid callback. Cannot read {$name} field for {$object_type}." );
 				}
 
@@ -118,6 +119,7 @@ final class FieldProcessor implements Common\Request\FieldProcessor {
 
 			if ( ! is_callable( $definition['update_callback'] ) ) {
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					// @codingStandardsIgnoreLine as this is specifically intended to be used when debugging.
 					trigger_error( "Invalid callback. Cannot update {$name} field for {$object_type}." );
 				}
 
