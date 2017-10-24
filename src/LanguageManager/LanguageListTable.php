@@ -8,7 +8,10 @@ use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
 class LanguageListTable extends \WP_List_Table
 {
-	protected $screen = 'mlp_language_manager';
+	/**
+	 * @var string
+	 */
+	protected $screen;
 
 	/**
 	 * Used in inherited method display()
@@ -55,6 +58,7 @@ class LanguageListTable extends \WP_List_Table
 			'screen'   => null,
 		];
 		$this->items = $languages;
+		$this->screen = LanguageManagerSettingsPageView::CURRENT_SCREEN;
 
 		$this->columns = [
 			LanguagesTable::COLUMN_NATIVE_NAME    => __( 'Native name', 'multilingualpress' ),
