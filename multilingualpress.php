@@ -98,7 +98,7 @@ function bootstrap(): bool {
 		->add_service_provider( new RESTServiceProvider() )
 		->add_service_provider( new SiteDuplicationServiceProvider() )
 		->add_service_provider( new TranslationServiceProvider() )
-		->add_service_provider( new WidgetServiceProvider()	);
+		->add_service_provider( new WidgetServiceProvider() );
 
 	$multilingualpress = new MultilingualPress( $container, $providers );
 
