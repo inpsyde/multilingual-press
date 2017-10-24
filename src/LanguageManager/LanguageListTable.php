@@ -45,11 +45,6 @@ class LanguageListTable extends \WP_List_Table
 	public $columns;
 
 	/**
-	 * @var array column names
-	 */
-	public $column_names;
-
-	/**
 	 * LanguageListTable constructor.
 	 *
 	 * @param array $languages
@@ -68,8 +63,6 @@ class LanguageListTable extends \WP_List_Table
 			LanguagesTable::COLUMN_LOCALE         => __( 'Locale', 'multilingualpress' ),
 			LanguagesTable::COLUMN_PRIORITY       => __( 'Priority', 'multilingualpress' ),
 		];
-
-		$this->column_names = array_keys( $this->columns );
 
 		parent::__construct();
 	}
