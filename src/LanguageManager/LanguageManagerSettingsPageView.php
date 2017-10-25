@@ -87,11 +87,13 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 
 	private function fire_actions()
 	{
-		$language_id = (string) $this->request->body_value(
+		$language_id = (int) $this->request->body_value(
 			self::QUERY_ARG_ID,
 			INPUT_GET,
 			FILTER_VALIDATE_INT
 		);
+
+		$language_id = $language_id ?? 0;
 
 		if ( $language_id ) {
 			/**
@@ -101,7 +103,7 @@ final class LanguageManagerSettingsPageView implements SettingsPageView {
 			 * loaded per AJAX, or when a new language is added.
 			 *
 			 * @since 3.0.0
-			 * @param string $language_id A positive integer as a string.
+			 * @param int $language_id A positive integer as a string.
 			 *                            It is 0 when a new language is added.
 			 */
 			do_action( self::ACTION_SINGLE_LANGUAGE_DISPLAY, $language_id );

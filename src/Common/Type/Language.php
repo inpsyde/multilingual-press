@@ -62,7 +62,7 @@ interface Language extends \ArrayAccess {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var string
+	 * @var int
 	 */
 	const ID = LanguagesTable::COLUMN_ID;
 

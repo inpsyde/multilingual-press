@@ -24,13 +24,13 @@ final class LanguageEditView {
 	}
 
 	/**
-	 * @param string $langID
+	 * @param string $language_id
 	 *
 	 * @return void
 	 */
-	public function render( string $langID )
+	public function render( int $language_id )
 	{
-		$language = $this->languages->get_language_by( LanguagesTable::COLUMN_ID, $langID );
+		$language = $this->languages->get_language_by( LanguagesTable::COLUMN_ID, $language_id );
 
 		if ( is_a( $language, NullLanguage::class ) ) {
 			// now what?

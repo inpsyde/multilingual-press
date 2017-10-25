@@ -98,6 +98,10 @@ final class AliasAwareLanguage implements Language {
 			return $this->priority;
 		}
 
+		if ( Language::ID === $name ) {
+			return (int) $this->names[ Language::ID ] ?? 0;
+		}
+
 		return (string) ( $this->names[ $name ] ?? '' );
 	}
 
@@ -230,7 +234,7 @@ final class AliasAwareLanguage implements Language {
 			Language::CUSTOM_NAME    => $data[ SiteSettingsRepository::KEY_ALTERNATIVE_LANGUAGE_TITLE ] ?? '',
 			Language::ENGLISH_NAME   => '',
 			Language::HTTP_CODE      => '',
-			Language::ID             => '',
+			Language::ID             => 0,
 			Language::ISO_639_1_CODE => '',
 			Language::ISO_639_2_CODE => '',
 			Language::LOCALE         => '',
