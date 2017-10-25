@@ -41,8 +41,15 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 			);
 		};
 
+		$container['multilingualpress.language_meta_labels'] = function () {
+			return new LanguageMetaLabels();
+		};
+
 		$container['multilingualpress.language_edit_view'] = function( Container $container ) {
-			return new LanguageEditView( $container['multilingualpress.languages'] );
+			return new LanguageEditView(
+				$container['multilingualpress.languages'],
+				$container['multilingualpress.language_meta_labels']
+			);
 		};
 
 		$container['multilingualpress.language_manager_settings_page_view'] = function ( Container $container ) {
@@ -87,10 +94,11 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 	public function bootstrap( Container $container ) {
 
 		$container['multilingualpress.language_manager_settings_page']->register();
+		$labels = $container['multilingualpress.language_meta_labels'];
 
 
 		add_action( LanguageManagerSettingsPageView::ACTION_CONTENT_DISPLAY, function() use (
-			$container
+			$container, $labels
 		) {
 			$usage = new LanguageUsageList( $container['multilingualpress.languages'] );
 			// the following throws "Cannot read not shared"
@@ -98,7 +106,7 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 			$active_languages = $usage->get_by( LanguageUsageList::ACTIVE );
 			// I cannot create an instance earlier, because many classes and
 			// functions aren't loaded yet when bootstrap() is called.
-			$table = new LanguageListTable( $active_languages );
+			$table = new LanguageListTable( $active_languages, $labels );
 			$table->setup();
 
 		});

@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\LanguageManager;
 
 use Inpsyde\MultilingualPress\API\Languages;
+use Inpsyde\MultilingualPress\Common\Labels;
 use Inpsyde\MultilingualPress\Common\Type\NullLanguage;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 
@@ -14,13 +15,20 @@ final class LanguageEditView {
 	private $languages;
 
 	/**
+	 * @var \Inpsyde\MultilingualPress\Common\Labels
+	 */
+	private $labels;
+
+	/**
 	 * LanguageEditView constructor.
 	 *
 	 * @param Languages $languages
+	 * @param Labels    $labels
 	 */
-	public function __construct( Languages $languages )
+	public function __construct( Languages $languages, Labels $labels )
 	{
 		$this->languages = $languages;
+		$this->labels    = $labels;
 	}
 
 	/**
@@ -39,5 +47,6 @@ final class LanguageEditView {
 
 		// temporary
 		print '<pre>' . print_r( $language, true ) . '</pre>';
+		print '<pre>' . print_r( $this->labels->all(), true ) . '</pre>';
 	}
 }
