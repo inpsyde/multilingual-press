@@ -95,20 +95,16 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 
 		$container['multilingualpress.language_manager_settings_page']->register();
 		$labels = $container['multilingualpress.language_meta_labels'];
+		$usage  = $container['multilingualpress.language_usage_list'];
 
-
-		add_action( LanguageManagerSettingsPageView::ACTION_CONTENT_DISPLAY, function() use (
-			$container, $labels
-		) {
-			$usage = new LanguageUsageList( $container['multilingualpress.languages'] );
-			// the following throws "Cannot read not shared"
-			//$active_languages = $container['multilingualpress.language_usage_list']->get_by( LanguageUsageList::ACTIVE );
-			$active_languages = $usage->get_by( LanguageUsageList::ACTIVE );
-			// I cannot create an instance earlier, because many classes and
-			// functions aren't loaded yet when bootstrap() is called.
-			$table = new LanguageListTable( $active_languages, $labels );
-			$table->setup();
-
+		add_action(
+			LanguageManagerSettingsPageView::ACTION_CONTENT_DISPLAY,
+			function() use ( $container, $labels, $usage ) {
+				$active_languages = $usage->get_by( LanguageUsageList::ACTIVE );
+				// I cannot create an instance earlier, because many classes and
+				// functions aren't loaded yet when bootstrap() is called.
+				$table = new LanguageListTable( $active_languages, $labels );
+				$table->setup();
 		});
 
 		add_action( LanguageManagerSettingsPageView::ACTION_SINGLE_LANGUAGE_DISPLAY,
