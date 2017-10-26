@@ -70,12 +70,12 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 			return new WPNonce( 'update_languages' );
 		};
 
-		// the following two entries aren't really used, because the Container
-		// object doesn't work late enough at the moment.
 		$container['multilingualpress.language_usage_list'] = function ( Container $container ) {
 			return new LanguageUsageList( $container['multilingualpress.languages'] );
 		};
 
+		// the following entry isn't really used, because the Container
+		// object doesn't work late enough at the moment.
 		$container['multilingualpress.language_list_table'] = function ( Container $container ) {
 			$active_languages = $container['multilingualpress.language_usage_list']->get_by( LanguageUsageList::ACTIVE );
 			return new LanguageListTable( $active_languages );
