@@ -47,7 +47,7 @@ final class LanguageEditView {
 		$this->print_text_fields( $language );
 		$this->print_priority( $language );
 		$this->print_rtl( $language );
-		$this->print_site_selector();
+		$this->print_site_selector( $language );
 		print '</table>';
 
 		if ( ! wp_doing_ajax() ) {
@@ -152,7 +152,7 @@ final class LanguageEditView {
 		<?php
 	}
 
-	private function print_site_selector()
+	private function print_site_selector( Language $language )
 	{
 		$sites = get_sites();
 		$active_languages = get_available_languages( false );
@@ -167,7 +167,7 @@ final class LanguageEditView {
 				<?php
 				/** @var \WP_Site $site */
 				foreach ( $sites as $site ) {
-					$active = isset ( $active_languages[ $site->blog_id ] );
+					$active = $this->is_active_language_for_site( $language, $site, $active_languages );
 					?>
 					<label>
 						<input
@@ -186,5 +186,23 @@ final class LanguageEditView {
 			</td>
 		</tr>
 		<?php
+	}
+
+	/**
+	 * @param \Inpsyde\MultilingualPress\Common\Type\Language $language
+	 * @param \WP_Site                                        $site
+	 * @param array                                           $active_languages
+	 *
+	 * @return bool
+	 */
+	private function is_active_language_for_site( Language $language, \WP_Site $site, array $active_languages )
+	{
+		if ( ! isset ( $active_languages[ $site->blog_id ] ) ) {
+			return false;
+		}
+
+		$replaced = str_replace( '_', '-', $active_languages[ $site->blog_id ] );
+
+		return $language->name( LanguagesTable::COLUMN_HTTP_CODE ) === $replaced;
 	}
 }
