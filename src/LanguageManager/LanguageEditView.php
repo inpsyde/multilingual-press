@@ -1,4 +1,5 @@
 <?php # -*- coding: utf-8 -*-
+
 declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\LanguageManager;
@@ -55,6 +56,13 @@ final class LanguageEditView {
 		}
 	}
 
+	/**
+	 * Language ID in a hidden input
+	 *
+	 * @param \Inpsyde\MultilingualPress\Common\Type\Language $language
+	 *
+	 * @return void
+	 */
 	private function print_language_id( Language $language )
 	{
 		?>
@@ -63,6 +71,8 @@ final class LanguageEditView {
 	}
 
 	/**
+	 * General text input fields
+	 *
 	 * @param Language $language
 	 *
 	 * @return void
@@ -101,6 +111,8 @@ final class LanguageEditView {
 	}
 
 	/**
+	 * HTTP priority numeric input
+	 *
 	 * @param Language $language
 	 *
 	 * @return void
@@ -127,6 +139,8 @@ final class LanguageEditView {
 	}
 
 	/**
+	 * Checkbox for RTL property of a language
+	 *
 	 * @param Language $language
 	 *
 	 * @return void
@@ -152,6 +166,13 @@ final class LanguageEditView {
 		<?php
 	}
 
+	/**
+	 * List of sites to assign a language
+	 *
+	 * @param \Inpsyde\MultilingualPress\Common\Type\Language $language
+	 *
+	 * @return void
+	 */
 	private function print_site_selector( Language $language )
 	{
 		$sites = get_sites();
