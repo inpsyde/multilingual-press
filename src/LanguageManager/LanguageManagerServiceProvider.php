@@ -99,7 +99,7 @@ final class LanguageManagerServiceProvider implements BootstrappableServiceProvi
 
 		add_action(
 			LanguageManagerSettingsPageView::ACTION_CONTENT_DISPLAY,
-			function() use ( $container, $labels, $usage ) {
+			function() use ( $labels, $usage ) {
 				$active_languages = $usage->get_by( LanguageUsageList::ACTIVE );
 				// I cannot create an instance earlier, because many classes and
 				// functions aren't loaded yet when bootstrap() is called.
