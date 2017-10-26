@@ -24,7 +24,7 @@ class LanguageUsageList {
 	 *
 	 * @var array
 	 */
-	private $separated = [];
+	private $separated;
 
 	/**
 	 * LanguageUsageList constructor.
@@ -45,7 +45,7 @@ class LanguageUsageList {
 	 */
 	public function get_by( int $type ) : array
 	{
-		if ( empty ( $this->separated ) ) {
+		if ( ! isset ( $this->separated ) ) {
 			$this->separate();
 		}
 
@@ -59,11 +59,6 @@ class LanguageUsageList {
 	 */
 	private function separate()
 	{
-		// Prepare array. Once this has been done, $this->separated cannot be
-		// empty anymore, so get_by() won't run this twice, even if there are
-		// no languages available at all.
-		$this->separated = [ self::ACTIVE => [], self::INACTIVE => [] ];
-
 		$languages = $this->languages->get_all_languages();
 
 		$available_languages = array_map( function ( $language ) {
