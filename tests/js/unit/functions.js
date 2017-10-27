@@ -1,6 +1,6 @@
-//
-// Independent functions.
-//
+/*
+ * Independent functions.
+ */
 export const getRandomBool = () => .5 > Math.random();
 
 export const getRandomInteger = ( min = 0, max = 10e14 - 1 ) => Math.floor( Math.random() * ( max - min + 1 ) ) + min;
@@ -23,9 +23,9 @@ export const returnTrue = () => true;
 
 export const returnUndefined = () => undefined;
 
-//
-// Dependent (!) functions.
-//
+/*
+ * Dependent (!) functions.
+ */
 export const getRandomArray = ( min = 0, max = 10, valueOrCallback = getRandomString ) => {
 	const a = [];
 
