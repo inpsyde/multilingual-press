@@ -13,12 +13,12 @@ use function Inpsyde\MultilingualPress\get_available_languages;
 
 final class LanguageEditView {
 	/**
-	 * @var \Inpsyde\MultilingualPress\API\Languages
+	 * @var Languages
 	 */
 	private $languages;
 
 	/**
-	 * @var \Inpsyde\MultilingualPress\Common\Labels
+	 * @var Labels
 	 */
 	private $labels;
 
@@ -59,7 +59,7 @@ final class LanguageEditView {
 	/**
 	 * Language ID in a hidden input
 	 *
-	 * @param \Inpsyde\MultilingualPress\Common\Type\Language $language
+	 * @param Language $language
 	 *
 	 * @return void
 	 */
@@ -169,7 +169,7 @@ final class LanguageEditView {
 	/**
 	 * List of sites to assign a language
 	 *
-	 * @param \Inpsyde\MultilingualPress\Common\Type\Language $language
+	 * @param Language $language
 	 *
 	 * @return void
 	 */
@@ -210,9 +210,9 @@ final class LanguageEditView {
 	}
 
 	/**
-	 * @param \Inpsyde\MultilingualPress\Common\Type\Language $language
-	 * @param \WP_Site                                        $site
-	 * @param array                                           $active_languages
+	 * @param Language $language
+	 * @param \WP_Site $site
+	 * @param array    $active_languages
 	 *
 	 * @return bool
 	 */
