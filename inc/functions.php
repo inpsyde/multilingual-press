@@ -11,6 +11,7 @@ use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Common\Type\Language;
 use Inpsyde\MultilingualPress\Common\Type\Translation;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
+use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 use Inpsyde\MultilingualPress\Module\Redirect\SettingsRepository as RedirectSettingsRepository;
 use Inpsyde\MultilingualPress\Service\AddOnlyContainer;
 
@@ -339,14 +340,15 @@ function get_default_content_id( $content_id ): int {
  *
  * @since 3.0.0
  *
- * @param string $http_code Language HTTP code.
+ * @param string     $column Column name to be used for querying.
+ * @param string|int $value  Value to be used for querying.
  *
  * @return Language Language object.
  */
-function get_language_by_http_code( $http_code ) {
+function get_language_by( string $column, $value ) {
 
 	return resolve( 'multilingualpress.languages', Languages::class )
-		->get_language_by( LanguagesTable::COLUMN_HTTP_CODE, (string) $http_code );
+		->get_language_by( $column, $value );
 }
 
 /**
@@ -361,15 +363,15 @@ function get_language_by_http_code( $http_code ) {
  * @return string The desired field value, or an empty string on failure.
  */
 function get_language_field_by_http_code(
-	$http_code,
-	$field = 'native_name',
+	string $http_code,
+	string $field = 'native_name',
 	array $fallbacks = [
 		'native_name',
 		'english_name',
 	]
 ): string {
 
-	$language = get_language_by_http_code( $http_code );
+	$language = get_language_by( LanguagesTable::COLUMN_HTTP_CODE, $http_code );
 	if ( $language ) {
 		foreach ( array_unique( array_merge( (array) $field, $fallbacks ) ) as $key ) {
 			if ( ! empty( $language[ $key ] ) ) {
