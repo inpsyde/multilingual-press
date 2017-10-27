@@ -346,7 +346,7 @@ function get_default_content_id( $content_id ): int {
 function get_language_by_http_code( $http_code ) {
 
 	return resolve( 'multilingualpress.languages', Languages::class )
-		->get_language_by_http_code( (string) $http_code );
+		->get_language_by( LanguagesTable::COLUMN_HTTP_CODE, (string) $http_code );
 }
 
 /**
