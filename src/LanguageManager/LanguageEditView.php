@@ -23,6 +23,11 @@ final class LanguageEditView {
 	private $labels;
 
 	/**
+	 * @var Language
+	 */
+	private $language;
+
+	/**
 	 * LanguageEditView constructor.
 	 *
 	 * @param Languages $languages
@@ -41,14 +46,14 @@ final class LanguageEditView {
 	 */
 	public function render( int $language_id )
 	{
-		$language = $this->languages->get_language_by( LanguagesTable::COLUMN_ID, $language_id );
+		$this->language = $this->languages->get_language_by( LanguagesTable::COLUMN_ID, $language_id );
 
-		print $this->print_language_id( $language );
+		print $this->print_language_id( $this->language );
 		print '<table>';
-		$this->print_text_fields( $language );
-		$this->print_priority( $language );
-		$this->print_rtl( $language );
-		$this->print_site_selector( $language );
+		$this->print_text_fields( $this->language );
+		$this->print_priority( $this->language );
+		$this->print_rtl( $this->language );
+		$this->print_site_selector( $this->language );
 		print '</table>';
 
 		if ( ! wp_doing_ajax() ) {
@@ -59,25 +64,21 @@ final class LanguageEditView {
 	/**
 	 * Language ID in a hidden input
 	 *
-	 * @param Language $language
-	 *
 	 * @return void
 	 */
-	private function print_language_id( Language $language )
+	private function print_language_id()
 	{
 		?>
-		<input type="hidden" name="language_id" value="<?=esc_attr($language->name( LanguagesTable::COLUMN_ID ) )?>">
+		<input type="hidden" name="language_id" value="<?=esc_attr( $this->language->name( LanguagesTable::COLUMN_ID ) )?>">
 		<?php
 	}
 
 	/**
 	 * General text input fields
 	 *
-	 * @param Language $language
-	 *
 	 * @return void
 	 */
-	private function print_text_fields( Language $language )
+	private function print_text_fields()
 	{
 		$text_fields = [
 			LanguagesTable::COLUMN_NATIVE_NAME,
@@ -89,7 +90,7 @@ final class LanguageEditView {
 
 		foreach ( $text_fields as $field ) {
 			$label = $this->labels->label( $field );
-			$value = $language->name( $field );
+			$value = $this->language->name( $field );
 			?>
 			<tr>
 				<td class="alignright">
@@ -113,11 +114,9 @@ final class LanguageEditView {
 	/**
 	 * HTTP priority numeric input
 	 *
-	 * @param Language $language
-	 *
 	 * @return void
 	 */
-	private function print_priority( Language $language )
+	private function print_priority()
 	{
 		?>
 		<tr>
@@ -131,7 +130,7 @@ final class LanguageEditView {
 					type="number" min="1" max="10"
 					name="<?=esc_attr( LanguagesTable::COLUMN_PRIORITY )?>"
 					id="<?=esc_attr( LanguagesTable::COLUMN_PRIORITY )?>_id"
-					value="<?=esc_html( $language->name( LanguagesTable::COLUMN_PRIORITY ) )?>"
+					value="<?=esc_html( $this->language->name( LanguagesTable::COLUMN_PRIORITY ) )?>"
 				/>
 			</td>
 		</tr>
@@ -141,11 +140,9 @@ final class LanguageEditView {
 	/**
 	 * Checkbox for RTL property of a language
 	 *
-	 * @param Language $language
-	 *
 	 * @return void
 	 */
-	private function print_rtl( Language $language )
+	private function print_rtl()
 	{
 		?>
 		<tr>
@@ -156,7 +153,7 @@ final class LanguageEditView {
 					name="<?=esc_attr( LanguagesTable::COLUMN_RTL )?>"
 					id="<?=esc_attr( LanguagesTable::COLUMN_RTL )?>_id"
 					value="1"
-					<?=checked( true, $language->is_rtl(), false )?>
+					<?=checked( true, $this->language->is_rtl(), false )?>
 				/>
 				<label for="<?=esc_attr( LanguagesTable::COLUMN_RTL )?>_id">
 					<?=esc_html( $this->labels->label( LanguagesTable::COLUMN_RTL ) )?>
@@ -173,7 +170,7 @@ final class LanguageEditView {
 	 *
 	 * @return void
 	 */
-	private function print_site_selector( Language $language )
+	private function print_site_selector()
 	{
 		$sites = get_sites();
 		$active_languages = get_available_languages( false );
@@ -188,7 +185,7 @@ final class LanguageEditView {
 				<?php
 				/** @var \WP_Site $site */
 				foreach ( $sites as $site ) {
-					$active = $this->is_active_language_for_site( $language, $site, $active_languages );
+					$active = $this->is_active_language_for_site( $site, $active_languages );
 					?>
 					<label>
 						<input
@@ -210,13 +207,12 @@ final class LanguageEditView {
 	}
 
 	/**
-	 * @param Language $language
 	 * @param \WP_Site $site
 	 * @param array    $active_languages
 	 *
 	 * @return bool
 	 */
-	private function is_active_language_for_site( Language $language, \WP_Site $site, array $active_languages )
+	private function is_active_language_for_site( \WP_Site $site, array $active_languages )
 	{
 		if ( ! isset ( $active_languages[ $site->blog_id ] ) ) {
 			return false;
@@ -224,6 +220,6 @@ final class LanguageEditView {
 
 		$replaced = str_replace( '_', '-', $active_languages[ $site->blog_id ] );
 
-		return $language->name( LanguagesTable::COLUMN_HTTP_CODE ) === $replaced;
+		return $this->language->name( LanguagesTable::COLUMN_HTTP_CODE ) === $replaced;
 	}
 }
