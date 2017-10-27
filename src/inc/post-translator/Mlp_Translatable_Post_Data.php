@@ -181,7 +181,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 			$new_post = apply_filters( 'mlp_pre_insert_post', $new_post, $this->save_context );
 
 			// Insert remote blog post
-			$remote_post_id = wp_insert_post( $new_post );
+			$remote_post_id = wp_insert_post( wp_slash( $new_post ) );
 
 			if ( ! empty( $post_meta ) ) {
 				$this->update_remote_post_meta( $remote_post_id, $post_meta );

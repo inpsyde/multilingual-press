@@ -169,7 +169,7 @@ class Mlp_Advanced_Translator_Data implements Mlp_Advanced_Translator_Data_Inter
 			if ( array() !== $new_post ) {
 				$sync_thumb = ! empty( $post_data['thumbnail'] );
 				$update     = ! empty( $post_data['remote_post_id'] ) && 0 < $post_data['remote_post_id'];
-				$new_id     = $this->sync_post( $new_post, $post_id, $remote_blog_id, $update );
+				$new_id     = $this->sync_post( wp_slash( $new_post ), $post_id, $remote_blog_id, $update );
 
 				$this->basic_data->set_save_context( $this->save_context );
 
