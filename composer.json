@@ -40,7 +40,7 @@
     "php": "^7.0"
   },
   "require-dev": {
-    "brain/monkey": "^1.4",
+    "brain/monkey": "^1.5",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.4.2",
     "gmazzap/andrew": "~2.1",
     "mockery/mockery": "~0.9",
