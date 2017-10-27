@@ -122,7 +122,7 @@ final class LanguageEditView {
 		<tr>
 			<td class="alignright">
 				<label for="<?=esc_attr( LanguagesTable::COLUMN_PRIORITY )?>_id">
-					<?=esc_attr( $this->labels->label( LanguagesTable::COLUMN_PRIORITY ) )?>
+					<?=esc_html( $this->labels->label( LanguagesTable::COLUMN_PRIORITY ) )?>
 				</label>
 			</td>
 			<td>
@@ -130,7 +130,7 @@ final class LanguageEditView {
 					type="number" min="1" max="10"
 					name="<?=esc_attr( LanguagesTable::COLUMN_PRIORITY )?>"
 					id="<?=esc_attr( LanguagesTable::COLUMN_PRIORITY )?>_id"
-					value="<?=esc_html( $this->language->name( LanguagesTable::COLUMN_PRIORITY ) )?>"
+					value="<?=esc_attr( $this->language->name( LanguagesTable::COLUMN_PRIORITY ) )?>"
 				/>
 			</td>
 		</tr>
@@ -165,8 +165,6 @@ final class LanguageEditView {
 
 	/**
 	 * List of sites to assign a language
-	 *
-	 * @param Language $language
 	 *
 	 * @return void
 	 */
