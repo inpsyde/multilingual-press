@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.10.1
+- Site Settings: Fix updating incorrect site.
+
 ## 2.10.0
 - Add PHP_CodeSniffer configs, and adapt code accordingly, see [#283](https://github.com/inpsyde/MultilingualPress/pull/283).
 - Relations: Include scheduled posts in the remote post search, see [#284](https://github.com/inpsyde/MultilingualPress/issues/284).
