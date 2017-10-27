@@ -199,9 +199,16 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 	 */
 	private function get_blog_id() {
 
-		$blog_id = absint( filter_input( INPUT_GET, 'id' ) );
+		$blog_id = null;
 
-		return $blog_id ? $blog_id : get_current_blog_id();
+		if ( 'POST' === strtoupper( $_SERVER['REQUEST_METHOD'] ) ) {
+			$blog_id = filter_input( INPUT_POST, 'id' );
+		}
+		if ( null === $blog_id ) {
+			$blog_id = filter_input( INPUT_GET, 'id' );
+		}
+
+		return $blog_id ? absint( $blog_id ) : get_current_blog_id();
 	}
 
 	/**
