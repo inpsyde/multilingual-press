@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.10.2
+- Redirect: Fix redirection not working correctly (esp. for front page).
+
 ## 2.10.1
 - Site Settings: Fix updating incorrect site.
 
