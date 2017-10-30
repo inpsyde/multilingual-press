@@ -2,11 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\REST\Endpoint\Languages\Read;
+namespace Inpsyde\MultilingualPress\REST\Endpoint\Languages\Delete;
 
 use Inpsyde\MultilingualPress\API\Languages as API;
-use Inpsyde\MultilingualPress\Common\Type\Language;
-use Inpsyde\MultilingualPress\Common\Type\NullLanguage;
 use Inpsyde\MultilingualPress\Database\Table\LanguagesTable;
 use Inpsyde\MultilingualPress\Factory\RESTResponseFactory;
 use Inpsyde\MultilingualPress\REST\Common\Endpoint;
@@ -15,9 +13,9 @@ use Inpsyde\MultilingualPress\REST\Endpoint\Languages\Formatter;
 use Inpsyde\MultilingualPress\REST\Endpoint\Languages\Schema;
 
 /**
- * Request handler for reading languages.
+ * Request handler for deleting languages.
  *
- * @package Inpsyde\MultilingualPress\REST\Endpoint\Languages\Read
+ * @package Inpsyde\MultilingualPress\REST\Endpoint\Languages\Delete
  * @since   3.0.0
  */
 final class RequestHandler implements Endpoint\RequestHandler {
@@ -88,43 +86,24 @@ final class RequestHandler implements Endpoint\RequestHandler {
 	 */
 	public function handle_request( \WP_REST_Request $request ): \WP_REST_Response {
 
+		$this->api->delete_language( (int) $request['id'] );
+
+		$languages = $this->api->get_languages( [
+			'order_by' => [
+				[
+					'field' => LanguagesTable::COLUMN_ID,
+					'order' => 'ASC',
+				],
+			],
+		] );
+
 		$data = $this->formatter->format(
-			$this->get_languages( $request ),
+			$languages,
 			(string) ( $request['context'] ?? 'view' )
 		);
 
 		$data = $this->field_processor->add_fields_to_object( $data, $request, $this->object_type );
 
 		return $this->response_factory->create( [ $data ] );
-	}
-
-	/**
-	 * Returns an array of all language objects, or the one with the ID included in the request.
-	 *
-	 * @param \WP_REST_Request $request Request object.
-	 *
-	 * @return Language[] An array of language objects..
-	 */
-	private function get_languages( \WP_REST_Request $request ): array {
-
-		if ( ! isset( $request['id'] ) ) {
-			return $this->api->get_languages( [
-				'order_by'   => [
-					[
-						'field' => LanguagesTable::COLUMN_ID,
-						'order' => 'ASC',
-					],
-				],
-			] );
-		}
-
-		$language = $this->api->get_language_by( LanguagesTable::COLUMN_ID, (int) $request['id'] );
-		if ( $language instanceof NullLanguage ) {
-			return [];
-		}
-
-		return [
-			$language,
-		];
 	}
 }
