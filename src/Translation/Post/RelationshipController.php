@@ -208,11 +208,11 @@ class RelationshipController {
 
 		switch_to_blog( $remote_site_id );
 
-		$new_post_id = wp_insert_post( [
+		$new_post_id = wp_insert_post( wp_slash( [
 			'post_type'   => $source_post->post_type,
 			'post_status' => 'draft',
 			'post_title'  => $this->context->new_post_title(),
-		], true );
+		] ), true );
 
 		restore_current_blog();
 

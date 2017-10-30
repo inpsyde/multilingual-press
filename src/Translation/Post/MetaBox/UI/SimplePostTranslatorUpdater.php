@@ -87,7 +87,7 @@ class SimplePostTranslatorUpdater {
 		$remote_post->post_parent = $relation_helper->get_related_post_parent( $remote_site_id );
 
 		if ( $to_translate || $remote_post_parent !== $remote_post->post_parent ) {
-			$remote_post_id = (int) wp_insert_post( $remote_post->to_array(), false );
+			$remote_post_id = (int) wp_insert_post( wp_slash( $remote_post->to_array() ), false );
 			$remote_post = $remote_post_id ? get_post( $remote_post_id ) : $this->create_empty_post();
 		}
 
