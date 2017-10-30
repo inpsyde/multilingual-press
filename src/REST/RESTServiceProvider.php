@@ -75,6 +75,8 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 
 		$this->register_content_relations( $container );
 
+		$this->register_languages( $container );
+
 		$this->register_site_relations( $container );
 	}
 
@@ -213,7 +215,56 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.rest_response_factory']
 			);
 		} );
+	}
 
+	/**
+	 * Registers the languages services on the given container.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function register_languages( Container $container ) {
+
+		$container->share( 'multilingualpress.rest.languages_data_filter', function ( Container $container ) {
+
+			return new Core\Response\SchemaAwareDataFilter(
+				$container['multilingualpress.rest.languages_schema']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.languages_formatter', function ( Container $container ) {
+
+			return new Endpoint\Languages\Formatter(
+				$container['multilingualpress.rest.languages_data_filter'],
+				$container['multilingualpress.rest.languages_schema'],
+				$container['multilingualpress.rest_response_factory'],
+				$container['multilingualpress.rest_response_data_access']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.languages_read_arguments', function () {
+
+			return new Endpoint\Languages\Read\EndpointArguments();
+		} );
+
+		$container->share( 'multilingualpress.rest.languages_read_handler', function ( Container $container ) {
+
+			return new Endpoint\Languages\Read\RequestHandler(
+				$container['multilingualpress.languages'],
+				$container['multilingualpress.rest.languages_formatter'],
+				$container['multilingualpress.rest.languages_schema'],
+				$container['multilingualpress.rest_request_field_processor'],
+				$container['multilingualpress.rest_response_factory']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.languages_schema', function ( Container $container ) {
+
+			return new Endpoint\Languages\Schema(
+				$container['multilingualpress.rest_schema_field_processor']
+			);
+		} );
 	}
 
 	/**
@@ -335,6 +386,7 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			$route_collection = $container['multilingualpress.rest_route_collection'];
 
 			$this->add_content_relations_routes( $route_collection, $container );
+			$this->add_languages_routes( $route_collection, $container );
 			$this->add_site_relations_routes( $route_collection, $container );
 
 			$container['multilingualpress.rest_route_registry']->register_routes( $route_collection );
@@ -414,6 +466,33 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 		) );
 	}
 
+	/**
+	 * Adds the languages routes.
+	 *
+	 * @param Core\Route\Collection $route_collection Route collection object.
+	 * @param Container             $container        Container object.
+	 *
+	 * @return void
+	 */
+	private function add_languages_routes( Core\Route\Collection $route_collection, Container $container ) {
+
+		$schema = $container['multilingualpress.rest.languages_schema'];
+
+		$base = $schema->title();
+
+		$route_collection->add( new Core\Route\Route(
+			$base . '(?:/(?P<id>\d+))?',
+			Core\Route\Options::from_arguments(
+				$container['multilingualpress.rest.languages_read_handler'],
+				$container['multilingualpress.rest.languages_read_arguments']
+			)->set_schema( $schema )
+		) );
+
+		$route_collection->add( new Core\Route\Route(
+			$base . '/schema',
+			Core\Route\Options::with_callback( [ $schema, 'definition' ] )
+		) );
+	}
 	/**
 	 * Adds the site relations routes.
 	 *
