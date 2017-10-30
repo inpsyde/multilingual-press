@@ -335,6 +335,8 @@ final class WPDBLanguages implements Languages {
 	 */
 	public function update_language( int $id, array $data ): bool {
 
+		$data = array_intersect_key( $data, $this->fields );
+
 		return false !== $this->db->update(
 			$this->table,
 			$data,
