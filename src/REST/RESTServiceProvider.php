@@ -226,20 +226,26 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 	 */
 	private function register_languages( Container $container ) {
 
+		$container->share( 'multilingualpress.rest.languages_create_arguments', function () {
+
+			return new Endpoint\Languages\Create\EndpointArguments();
+		} );
+
+		$container->share( 'multilingualpress.rest.languages_create_handler', function ( Container $container ) {
+
+			return new Endpoint\Languages\Create\RequestHandler(
+				$container['multilingualpress.languages'],
+				$container['multilingualpress.rest.languages_formatter'],
+				$container['multilingualpress.rest.languages_schema'],
+				$container['multilingualpress.rest_request_field_processor'],
+				$container['multilingualpress.rest_response_factory']
+			);
+		} );
+
 		$container->share( 'multilingualpress.rest.languages_data_filter', function ( Container $container ) {
 
 			return new Core\Response\SchemaAwareDataFilter(
 				$container['multilingualpress.rest.languages_schema']
-			);
-		} );
-
-		$container->share( 'multilingualpress.rest.languages_formatter', function ( Container $container ) {
-
-			return new Endpoint\Languages\Formatter(
-				$container['multilingualpress.rest.languages_data_filter'],
-				$container['multilingualpress.rest.languages_schema'],
-				$container['multilingualpress.rest_response_factory'],
-				$container['multilingualpress.rest_response_data_access']
 			);
 		} );
 
@@ -256,6 +262,16 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.rest.languages_schema'],
 				$container['multilingualpress.rest_request_field_processor'],
 				$container['multilingualpress.rest_response_factory']
+			);
+		} );
+
+		$container->share( 'multilingualpress.rest.languages_formatter', function ( Container $container ) {
+
+			return new Endpoint\Languages\Formatter(
+				$container['multilingualpress.rest.languages_data_filter'],
+				$container['multilingualpress.rest.languages_schema'],
+				$container['multilingualpress.rest_response_factory'],
+				$container['multilingualpress.rest_response_data_access']
 			);
 		} );
 
@@ -495,6 +511,18 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 		$schema = $container['multilingualpress.rest.languages_schema'];
 
 		$base = $schema->title();
+
+		$route_collection->add( new Core\Route\Route(
+			$base,
+			Core\Route\Options::from_arguments(
+				$container['multilingualpress.rest.languages_create_handler'],
+				$container['multilingualpress.rest.languages_create_arguments'],
+				\WP_REST_Server::CREATABLE,
+				[
+					'permission_callback' => PermissionCallbackFactory::current_user_can( 'manage_sites' ),
+				]
+			)->set_schema( $schema )
+		) );
 
 		$route_collection->add( new Core\Route\Route(
 			$base . '(?:/(?P<id>\d+))?',
