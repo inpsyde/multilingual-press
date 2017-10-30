@@ -38,7 +38,7 @@ class Mlp_Redirect_Frontend {
 		add_filter( 'mlp_linked_element_link', array( $this, 'add_noredirect_parameter' ), 10, 2 );
 
 		if ( $this->is_redirectable() ) {
-			add_action( 'wp_loaded', array( $this->response, 'redirect' ), 0 );
+			add_action( 'wp_loaded', array( $this->response, 'register' ), 0 );
 		}
 	}
 

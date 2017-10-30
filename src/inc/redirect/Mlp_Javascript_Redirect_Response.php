@@ -89,6 +89,16 @@ class Mlp_Javascript_Redirect_Response implements Mlp_Redirect_Response_Interfac
 	}
 
 	/**
+	 * Registers the redirection using the appropriate hook.
+	 *
+	 * @return void
+	 */
+	public function register() {
+
+		$this->redirect();
+	}
+
+	/**
 	 * Returns the URLs of all available language versions.
 	 *
 	 * @return string[] An array with language codes as keys and URLs as values.

@@ -16,4 +16,11 @@ interface Mlp_Redirect_Response_Interface {
 	 * @return void
 	 */
 	public function redirect();
+
+	/**
+	 * Registers the redirection using the appropriate hook.
+	 *
+	 * @return void
+	 */
+	public function register();
 }

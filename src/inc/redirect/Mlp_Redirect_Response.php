@@ -11,11 +11,6 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 	private $negotiation;
 
 	/**
-	 * @var array
-	 */
-	private $redirect_match;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param Mlp_Language_Negotiation_Interface $negotiation Language negotiation object.
@@ -51,28 +46,26 @@ class Mlp_Redirect_Response implements Mlp_Redirect_Response_Interface {
 			return false;
 		}
 
-		$this->redirect_match = $redirect_match;
+		if ( ! isset( $redirect_match['language'] ) ) {
+			return false;
+		}
 
-		add_action( 'template_redirect', array( $this, 'do_redirect' ), 1 );
+		$this->save_session( $redirect_match['language'] );
+
+		wp_redirect( $redirect_match['url'] );
+		mlp_exit();
 
 		return true;
 	}
 
 	/**
-	 * Performs the redirection.
+	 * Registers the redirection using the appropriate hook.
 	 *
 	 * @return void
 	 */
-	private function do_redirect() {
+	public function register() {
 
-		if ( ! isset( $this->redirect_match['language'], $this->redirect_match['url'] ) ) {
-			return;
-		}
-
-		$this->save_session( $this->redirect_match['language'] );
-
-		wp_redirect( $this->redirect_match['url'] );
-		mlp_exit();
+		add_action( 'template_redirect', array( $this, 'redirect' ), 1 );
 	}
 
 	/**

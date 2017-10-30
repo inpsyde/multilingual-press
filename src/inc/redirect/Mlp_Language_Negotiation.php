@@ -246,7 +246,7 @@ class Mlp_Language_Negotiation implements Mlp_Language_Negotiation_Interface {
 			return 0;
 		}
 
-		return ( $a < $b ) ? -1 : 1;
+		return ( $a < $b ) ? 1 : -1;
 	}
 
 	/**
