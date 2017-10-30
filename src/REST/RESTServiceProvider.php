@@ -297,6 +297,22 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.rest_schema_field_processor']
 			);
 		} );
+
+		$container->share( 'multilingualpress.rest.languages_update_arguments', function () {
+
+			return new Endpoint\Languages\Update\EndpointArguments();
+		} );
+
+		$container->share( 'multilingualpress.rest.languages_update_handler', function ( Container $container ) {
+
+			return new Endpoint\Languages\Update\RequestHandler(
+				$container['multilingualpress.languages'],
+				$container['multilingualpress.rest.languages_formatter'],
+				$container['multilingualpress.rest.languages_schema'],
+				$container['multilingualpress.rest_request_field_processor'],
+				$container['multilingualpress.rest_response_factory']
+			);
+		} );
 	}
 
 	/**
@@ -529,6 +545,18 @@ final class RESTServiceProvider implements BootstrappableServiceProvider {
 			Core\Route\Options::from_arguments(
 				$container['multilingualpress.rest.languages_read_handler'],
 				$container['multilingualpress.rest.languages_read_arguments']
+			)->set_schema( $schema )
+		) );
+
+		$route_collection->add( new Core\Route\Route(
+			$base . '/(?P<id>\d+)',
+			Core\Route\Options::from_arguments(
+				$container['multilingualpress.rest.languages_update_handler'],
+				$container['multilingualpress.rest.languages_update_arguments'],
+				\WP_REST_Server::EDITABLE,
+				[
+					'permission_callback' => PermissionCallbackFactory::current_user_can( 'manage_sites' ),
+				]
 			)->set_schema( $schema )
 		) );
 
