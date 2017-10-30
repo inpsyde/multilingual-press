@@ -132,11 +132,13 @@ final class CachingTranslations implements Translations {
 
 		$type = (string) $args['type'];
 
-		$content_relations = 0 < $args['content_id']
+		$has_related_content = 0 < $args['content_id'];
+
+		$content_relations = $has_related_content
 			? $this->content_relations->get_relations( $source_site_id, (int) $args['content_id'], $type )
 			: [];
 
-		if ( ! $content_relations && $args['strict'] ) {
+		if ( $has_related_content && ! $content_relations && $args['strict'] ) {
 			return [];
 		}
 
