@@ -116,6 +116,7 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 
 = 2.10.2 =
 - Redirect: Fix redirection not working correctly (esp. for front page).
+- Post Translation: Fix slashes being stripped off post data.
 
 = 2.10.1 =
 - Site Settings: Fix updating incorrect site.
