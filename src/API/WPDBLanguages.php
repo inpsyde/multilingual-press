@@ -316,7 +316,7 @@ final class WPDBLanguages implements Languages {
 	 */
 	public function insert_language( array $data ): int {
 
-		return $this->db->insert( $this->table, $data )
+		return $this->db->insert( $this->table, $data, $this->get_field_specifications( $data ) )
 			? (int) $this->db->insert_id
 			: 0;
 	}
