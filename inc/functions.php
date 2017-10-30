@@ -284,14 +284,14 @@ function get_available_languages( $related_sites_only = true ): array {
 	}
 
 	if ( $related_sites_only ) {
-		$related_site_ids = resolve( 'multilingualpress.site_relations', SiteRelations::class )
-			->get_related_site_ids();
-		if ( ! $related_site_ids ) {
+		$relations = resolve( 'multilingualpress.site_relations', SiteRelations::class )
+			->get_all_relations();
+		if ( ! $relations ) {
 			return [];
 		}
 
 		// Restrict ro related sites.
-		$languages = array_intersect_key( $languages, array_flip( $related_site_ids ) );
+		$languages = array_intersect_key( $languages, $relations );
 	}
 
 	$available_languages = [];
