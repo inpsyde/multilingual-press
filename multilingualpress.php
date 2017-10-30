@@ -25,6 +25,7 @@ use Inpsyde\MultilingualPress\Database\Table;
 use Inpsyde\MultilingualPress\Factory\FactoryProvider;
 use Inpsyde\MultilingualPress\Installation\InstallationServiceProvider;
 use Inpsyde\MultilingualPress\Integration\IntegrationProvider;
+use Inpsyde\MultilingualPress\LanguageManager\LanguageManagerServiceProvider;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\NavMenu\NavMenuServiceProvider;
 use Inpsyde\MultilingualPress\REST\RESTServiceProvider;
@@ -87,6 +88,7 @@ function bootstrap(): bool {
 		->add_service_provider( new FactoryProvider() )
 		->add_service_provider( new InstallationServiceProvider() )
 		->add_service_provider( new IntegrationProvider() )
+		->add_service_provider( new LanguageManagerServiceProvider() )
 		->add_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() )
 		->add_service_provider( new Module\CustomPostTypeSupport\ServiceProvider() )
 		->add_service_provider( new Module\Quicklinks\ServiceProvider() )
@@ -147,15 +149,3 @@ function activate() {
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\bootstrap', 0 );
 
 register_activation_hook( __FILE__, __NAMESPACE__ . '\\activate' );
-
-// TODO: Eventually remove/refactor according to new architecture as soon as the old controller got replaced.
-add_action( MultilingualPress::ACTION_BOOTSTRAPPED, function () {
-
-	add_action( 'wp_loaded', function () {
-
-		new \Mlp_Language_Manager_Controller(
-			new \Mlp_Language_Db_Access( resolve( 'multilingualpress.languages_table', Table::class )->name() ),
-			resolve( 'multilingualpress.wpdb', \wpdb::class )
-		);
-	} );
-} );

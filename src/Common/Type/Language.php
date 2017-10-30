@@ -62,6 +62,15 @@ interface Language extends \ArrayAccess {
 	 *
 	 * @since 3.0.0
 	 *
+	 * @var int
+	 */
+	const ID = LanguagesTable::COLUMN_ID;
+
+	/**
+	 * Property name.
+	 *
+	 * @since 3.0.0
+	 *
 	 * @var string
 	 */
 	const IS_RTL = LanguagesTable::COLUMN_RTL;

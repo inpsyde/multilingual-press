@@ -118,6 +118,7 @@ final class NullLanguage implements Language {
 			Language::CUSTOM_NAME    => '',
 			Language::ENGLISH_NAME   => '',
 			Language::HTTP_CODE      => '',
+			Language::ID             => 0,
 			Language::IS_RTL         => false,
 			Language::ISO_639_1_CODE => '',
 			Language::ISO_639_2_CODE => '',
