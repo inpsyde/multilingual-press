@@ -37,16 +37,16 @@ final class SettingsPageTabData implements SettingsPageTabDataAccess {
 	 *
 	 * @sine 3.0.0
 	 *
-	 * @param string $capability Capability required to view the tab.
 	 * @param string $id         Tab ID.
 	 * @param string $title      Title on used in the tab.
 	 * @param string $slug       Slug used in the URL.
+	 * @param string $capability Optional. Capability required to view the tab. Defaults to empty string.
 	 */
 	public function __construct(
-		string $capability,
 		string $id,
 		string $title,
-		string $slug
+		string $slug,
+		string $capability = ''
 	) {
 
 		$this->capability = $capability;

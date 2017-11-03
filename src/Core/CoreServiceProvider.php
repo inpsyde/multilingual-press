@@ -10,6 +10,8 @@ use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageTab;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageTabData;
+use Inpsyde\MultilingualPress\Common\Admin\SettingsPageTabDataAccess;
+use Inpsyde\MultilingualPress\Common\Admin\SettingsPageView;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
 use Inpsyde\MultilingualPress\Common\AlternateLanguages;
 use Inpsyde\MultilingualPress\Common\HTTP\FullRequestGlobalManipulator;
@@ -21,14 +23,17 @@ use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingMultiView;
 use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
 use Inpsyde\MultilingualPress\Core\Admin\AlternativeLanguageTitleSiteSetting;
 use Inpsyde\MultilingualPress\Core\Admin\LanguageSiteSetting;
+use Inpsyde\MultilingualPress\Core\Admin\ModuleSettingsTabView;
 use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsUpdater;
+use Inpsyde\MultilingualPress\Core\Admin\PostTypeSettingsTabView;
 use Inpsyde\MultilingualPress\Core\Admin\RelationshipsSiteSetting;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsTabView;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdateRequestHandler;
+use Inpsyde\MultilingualPress\Core\Admin\TaxonomySettingsTabView;
 use Inpsyde\MultilingualPress\Core\Admin\TypeSafeSiteSettingsRepository;
 use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageController;
 use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTMLLinkTagRenderer;
@@ -132,6 +137,22 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new Module\NetworkOptionModuleManager( Module\ModuleManager::OPTION );
 		};
 
+		$container['multilingualpress.module_settings_tab_data'] = function () {
+
+			return new SettingsPageTabData(
+				'modules',
+				__( 'Modules', 'multilingualpress' ),
+				'modules'
+			);
+		};
+
+		$container['multilingualpress.module_settings_tab_view'] = function ( Container $container ) {
+
+			return new ModuleSettingsTabView(
+				$container['multilingualpress.module_manager']
+			);
+		};
+
 		$container['multilingualpress.new_site_settings'] = function ( Container $container ) {
 
 			return new NewSiteSettings(
@@ -153,12 +174,48 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			);
 		};
 
+		$container['multilingualpress.plugin_settings_page_tabs'] = function ( Container $container ) {
+
+			$tabs = [
+				[
+					'multilingualpress.module_settings_tab_data',
+					'multilingualpress.module_settings_tab_view',
+				],
+				[
+					'multilingualpress.post_type_settings_tab_data',
+					'multilingualpress.post_type_settings_tab_view',
+				],
+				[
+					'multilingualpress.taxonomy_settings_tab_data',
+					'multilingualpress.taxonomy_settings_tab_view',
+				],
+			];
+
+			return array_reduce( $tabs, function ( array $tabs, array $tab ) use ( $container ) {
+
+				$data = $container[ $tab[0] ] ?? null;
+				if ( ! $data instanceof SettingsPageTabDataAccess ) {
+					return $tabs;
+				}
+
+				$view = $container[ $tab[1] ] ?? null;
+				if ( ! $view instanceof SettingsPageView ) {
+					return $tabs;
+				}
+
+				$tabs[ $data->id() ] = new SettingsPageTab( $data, $view );
+
+				return $tabs;
+			}, [] );
+		};
+
 		$container['multilingualpress.plugin_settings_page_view'] = function ( Container $container ) {
 
 			return new PluginSettingsPageView(
-				$container['multilingualpress.module_manager'],
 				$container['multilingualpress.save_plugin_settings_nonce'],
-				$container['multilingualpress.asset_manager']
+				$container['multilingualpress.asset_manager'],
+				$container['multilingualpress.server_request'],
+				$container['multilingualpress.plugin_settings_page_tabs']
 			);
 		};
 
@@ -170,6 +227,20 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.plugin_settings_page'],
 				$container['multilingualpress.server_request']
 			);
+		};
+
+		$container['multilingualpress.post_type_settings_tab_data'] = function () {
+
+			return new SettingsPageTabData(
+				'post-types',
+				__( 'Post Types', 'multilingualpress' ),
+				'post-types'
+			);
+		};
+
+		$container['multilingualpress.post_type_settings_tab_view'] = function ( Container $container ) {
+
+			return new PostTypeSettingsTabView();
 		};
 
 		$container['multilingualpress.relationships_site_setting'] = function ( Container $container ) {
@@ -217,10 +288,10 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.site_settings_tab_data'] = function () {
 
 			return new SettingsPageTabData(
-				'manage_sites',
 				'multilingualpress',
 				__( 'MultilingualPress', 'multilingualpress' ),
-				'multilingualpress'
+				'multilingualpress',
+				'manage_sites'
 			);
 		};
 
@@ -259,6 +330,20 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.alternative_language_title_site_setting'],
 				$container['multilingualpress.relationships_site_setting'],
 			] );
+		};
+
+		$container['multilingualpress.taxonomy_settings_tab_data'] = function () {
+
+			return new SettingsPageTabData(
+				'taxonomies',
+				__( 'Taxonomies', 'multilingualpress' ),
+				'taxonomies'
+			);
+		};
+
+		$container['multilingualpress.taxonomy_settings_tab_view'] = function ( Container $container ) {
+
+			return new TaxonomySettingsTabView();
 		};
 	}
 

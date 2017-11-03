@@ -5,10 +5,10 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Asset\AssetManager;
+use Inpsyde\MultilingualPress\Common\Admin\SettingsPageTab;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageView;
+use Inpsyde\MultilingualPress\Common\HTTP\ServerRequest;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
-use Inpsyde\MultilingualPress\Module\Module;
-use Inpsyde\MultilingualPress\Module\ModuleManager;
 
 use function Inpsyde\MultilingualPress\nonce_field;
 
@@ -21,14 +21,18 @@ use function Inpsyde\MultilingualPress\nonce_field;
 final class PluginSettingsPageView implements SettingsPageView {
 
 	/**
+	 * Query argument name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const QUERY_ARG_TAB = 'tab';
+
+	/**
 	 * @var AssetManager
 	 */
 	private $asset_manager;
-
-	/**
-	 * @var ModuleManager
-	 */
-	private $module_manager;
 
 	/**
 	 * @var Nonce
@@ -36,21 +40,42 @@ final class PluginSettingsPageView implements SettingsPageView {
 	private $nonce;
 
 	/**
+	 * @var ServerRequest
+	 */
+	private $request;
+
+	/**
+	 * @var SettingsPageTab[]
+	 */
+	private $tabs;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param ModuleManager $module_manager Module manager object.
-	 * @param Nonce         $nonce          Nonce object.
-	 * @param AssetManager  $asset_manager  Asset manager object.
+	 * @param Nonce             $nonce         Nonce object.
+	 * @param AssetManager      $asset_manager Asset manager object.
+	 * @param ServerRequest     $request       Server request object.
+	 * @param SettingsPageTab[] $tabs          Array of settings page tab objects.
 	 */
-	public function __construct( ModuleManager $module_manager, Nonce $nonce, AssetManager $asset_manager ) {
-
-		$this->module_manager = $module_manager;
+	public function __construct(
+		Nonce $nonce,
+		AssetManager $asset_manager,
+		ServerRequest $request,
+		array $tabs
+	) {
 
 		$this->nonce = $nonce;
 
 		$this->asset_manager = $asset_manager;
+
+		$this->request = $request;
+
+		$this->tabs = array_filter( $tabs, function ( $tab ) {
+
+			return $tab instanceof SettingsPageTab;
+		} );
 	}
 
 	/**
@@ -63,84 +88,107 @@ final class PluginSettingsPageView implements SettingsPageView {
 	public function render() {
 
 		$this->asset_manager->enqueue_style( 'multilingualpress-admin' );
-
-		$action = PluginSettingsUpdater::ACTION;
 		?>
 		<div class="wrap">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<?php settings_errors(); ?>
-			<form method="post" action="<?php echo esc_url( admin_url( "admin-post.php?action={$action}" ) ); ?>"
-				id="multilingualpress-modules">
-				<?php nonce_field( $this->nonce ); ?>
-
-				<?php
-				// TODO: Render tab navigation and below tha view of the currently selected tab (or fall back to first).
-				?>
-
-				<table class="mlp-module-list">
-					<?php
-					foreach ( $this->module_manager->get_modules() as $id => $module ) {
-						/**
-						 * Filters if the module should be listed on the settings page.
-						 *
-						 * @since 3.0.0
-						 *
-						 * @param bool $show_module Whether or not the module should be listed on the settings page.
-						 */
-						if ( apply_filters( "multilingualpress.show_module_{$id}", true ) ) {
-							$this->render_module( $module );
-						}
-					}
-
-					/**
-					 * Fires at the end of but still inside the module list on the settings page.
-					 *
-					 * @since 3.0.0
-					 */
-					do_action( 'multilingualpress.in_module_list' );
-					?>
-				</table>
-				<?php
-				/**
-				 * Fires right after after the module list on the settings page.
-				 *
-				 * @since 3.0.0
-				 */
-				do_action( 'multilingualpress.after_module_list' );
-
-				submit_button( __( 'Save Changes', 'multilingualpress' ) );
-				?>
-			</form>
+			<?php $this->render_form(); ?>
 		</div>
 		<?php
 	}
 
 	/**
-	 * Renders the markup for the given module.
+	 * Returns the slug of the active tab.
 	 *
-	 * @param Module $module Module object.
+	 * @return string
+	 */
+	private function get_active_tab() {
+
+		static $active_tab;
+		if ( ! isset( $active_tab ) ) {
+			$tab = (string) $this->request->body_value( self::QUERY_ARG_TAB, INPUT_GET );
+
+			$active_tab = $tab && array_key_exists( $tab, $this->tabs )
+				? $tab
+				: key( $this->tabs );
+		}
+
+		return $active_tab;
+	}
+
+	/**
+	 * Renders the active tab content.
 	 *
 	 * @return void
 	 */
-	private function render_module( Module $module ) {
+	private function render_content() {
 
-		$is_active = $module->is_active();
+		$this->tabs[ $this->get_active_tab() ]->view()->render();
+	}
 
-		$id = 'multilingualpress-module-' . $module->id();
+	/**
+	 * Renders the form.
+	 *
+	 * @return void
+	 */
+	private function render_form() {
+
+		if ( ! $this->tabs ) {
+			return;
+		}
+
+		$this->render_tabs();
+
+		$url = admin_url( 'admin-post.php?action=' . PluginSettingsUpdater::ACTION )
 		?>
-		<tr class="<?php echo esc_attr( $is_active ? 'active' : 'inactive' ); ?>">
-			<td class="check-column">
-				<input type="checkbox"
-					name="<?php echo esc_attr( 'multilingualpress_modules[' . $module->id() . ']' ); ?>" value="1"
-					id="<?php echo esc_attr( $id ); ?>"<?php checked( $is_active ); ?>>
-			</td>
-			<td>
-				<label for="<?php echo esc_attr( $id ); ?>" class="mlp-block-label">
-					<strong class="mlp-module-name"><?php echo esc_html( $module->name() ); ?></strong>
-					<?php echo esc_html( $module->description() ); ?>
-				</label>
-			</td>
-		</tr>
+		<form method="post" action="<?php echo esc_url( $url ); ?>" id="multilingualpress-modules">
+			<?php
+			nonce_field( $this->nonce );
+
+			$this->render_content();
+
+			submit_button( __( 'Save Changes', 'multilingualpress' ) );
+			?>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Renders the tabbed navigation.
+	 *
+	 * @return void
+	 */
+	private function render_tabs() {
+
+		?>
+		<h2 class="nav-tab-wrapper wp-clearfix">
+			<?php array_walk( $this->tabs, [ $this, 'render_tab' ], $this->get_active_tab() ); ?>
+		</h2>
+		<?php
+	}
+
+	/**
+	 * Renders the given tab.
+	 *
+	 * @param SettingsPageTab $tab    Tab object.
+	 * @param string          $slug   Tab slug.
+	 * @param string          $active Active tab slug.
+	 *
+	 * @return void
+	 */
+	private function render_tab( SettingsPageTab $tab, string $slug, string $active ) {
+
+		$url = add_query_arg( self::QUERY_ARG_TAB, $slug );
+
+		$class = 'nav-tab';
+		if ( $active === $slug ) {
+			$class .= ' nav-tab-active';
+		}
+		?>
+		<a href="<?php echo esc_url( $url ); ?>" id="<?php echo esc_attr( $tab->id() ); ?>"
+			class="<?php echo esc_attr( $class ); ?>">
+			<?php echo esc_html( $tab->title() ); ?>
+		</a>
 		<?php
 	}
 }
