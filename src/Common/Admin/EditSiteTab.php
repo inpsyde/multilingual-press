@@ -27,21 +27,20 @@ class EditSiteTab {
 	 *
 	 * @sine 3.0.0
 	 *
-	 * @param SettingsPageTabData $data Tab data object.
-	 * @param SettingsPageView    $view Settings page view object.
+	 * @param SettingsPageTab $tab Tab object.
 	 */
-	public function __construct( SettingsPageTabData $data, SettingsPageView $view ) {
+	public function __construct( SettingsPageTab $tab ) {
 
-		$this->data = $data;
+		$this->data = $tab->data();
 
 		$this->settings_page = SettingsPage::with_parent(
 			SettingsPage::ADMIN_NETWORK,
 			SettingsPage::PARENT_SITES,
-			$data->title(),
+			$tab->title(),
 			'',
-			$data->capability(),
-			$data->slug(),
-			$view
+			$tab->capability(),
+			$tab->slug(),
+			$tab->view()
 		);
 	}
 

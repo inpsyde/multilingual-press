@@ -10,7 +10,7 @@ namespace Inpsyde\MultilingualPress\Common\Admin;
  * @package Inpsyde\MultilingualPress\Common\Admin
  * @since   3.0.0
  */
-class SettingsPageTabData {
+final class SettingsPageTabData implements SettingsPageTabDataAccess {
 
 	/**
 	 * @var string

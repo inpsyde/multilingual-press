@@ -72,6 +72,11 @@ final class PluginSettingsPageView implements SettingsPageView {
 			<form method="post" action="<?php echo esc_url( admin_url( "admin-post.php?action={$action}" ) ); ?>"
 				id="multilingualpress-modules">
 				<?php nonce_field( $this->nonce ); ?>
+
+				<?php
+				// TODO: Render tab navigation and below tha view of the currently selected tab (or fall back to first).
+				?>
+
 				<table class="mlp-module-list">
 					<?php
 					foreach ( $this->module_manager->get_modules() as $id => $module ) {
