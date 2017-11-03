@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
-use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
@@ -35,6 +34,11 @@ class PluginSettingsUpdater {
 	private $module_manager;
 
 	/**
+	 * @var array
+	 */
+	private $modules = [];
+
+	/**
 	 * @var Nonce
 	 */
 	private $nonce;
@@ -45,32 +49,19 @@ class PluginSettingsUpdater {
 	private $request;
 
 	/**
-	 * @var SettingsPage
-	 */
-	private $settings_page;
-
-	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param ModuleManager $module_manager Module manager object.
 	 * @param Nonce         $nonce          Nonce object.
-	 * @param SettingsPage  $settings_page  Settings page object.
 	 * @param Request       $request        HTTP request object.
 	 */
-	public function __construct(
-		ModuleManager $module_manager,
-		Nonce $nonce,
-		SettingsPage $settings_page,
-		Request $request
-	) {
+	public function __construct( ModuleManager $module_manager, Nonce $nonce, Request $request ) {
 
 		$this->module_manager = $module_manager;
 
 		$this->nonce = $nonce;
-
-		$this->settings_page = $settings_page;
 
 		$this->request = $request;
 	}
@@ -86,6 +77,28 @@ class PluginSettingsUpdater {
 
 		check_admin_referer( $this->nonce );
 
+		$this->update_modules();
+
+		redirect_after_settings_update();
+	}
+
+	/**
+	 * Updates all modules according to the data in the request.
+	 *
+	 * @return void
+	 */
+	private function update_modules() {
+
+		$this->modules = $this->request->body_value(
+				'multilingualpress_modules',
+				INPUT_POST,
+				FILTER_UNSAFE_RAW,
+				FILTER_REQUIRE_ARRAY
+			) ?? [];
+		if ( ! $this->modules ) {
+			return;
+		}
+
 		array_walk( array_keys( $this->module_manager->get_modules() ), [ $this, 'update_module' ] );
 
 		$this->module_manager->save_modules();
@@ -98,8 +111,6 @@ class PluginSettingsUpdater {
 		 * @param Request $request HTTP request object.
 		 */
 		do_action( 'multilingualpress.save_modules', $this->request );
-
-		redirect_after_settings_update( $this->settings_page->url() );
 	}
 
 	/**
@@ -111,9 +122,7 @@ class PluginSettingsUpdater {
 	 */
 	private function update_module( string $id ) {
 
-		$modules = $this->request->body_value( 'multilingualpress_modules' );
-
-		if ( empty( $modules[ $id ] ) ) {
+		if ( empty( $this->modules[ $id ] ) ) {
 			$this->module_manager->deactivate_module( $id );
 		} else {
 			$this->module_manager->activate_module( $id );

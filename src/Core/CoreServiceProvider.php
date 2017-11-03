@@ -224,7 +224,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new PluginSettingsUpdater(
 				$container['multilingualpress.module_manager'],
 				$container['multilingualpress.save_plugin_settings_nonce'],
-				$container['multilingualpress.plugin_settings_page'],
 				$container['multilingualpress.server_request']
 			);
 		};
