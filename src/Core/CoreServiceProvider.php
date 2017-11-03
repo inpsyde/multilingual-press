@@ -24,10 +24,12 @@ use Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionView;
 use Inpsyde\MultilingualPress\Core\Admin\AlternativeLanguageTitleSiteSetting;
 use Inpsyde\MultilingualPress\Core\Admin\LanguageSiteSetting;
 use Inpsyde\MultilingualPress\Core\Admin\ModuleSettingsTabView;
+use Inpsyde\MultilingualPress\Core\Admin\ModuleSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\NewSiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsPageView;
 use Inpsyde\MultilingualPress\Core\Admin\PluginSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\PostTypeSettingsTabView;
+use Inpsyde\MultilingualPress\Core\Admin\PostTypeSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\RelationshipsSiteSetting;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettings;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsTabView;
@@ -38,6 +40,7 @@ use Inpsyde\MultilingualPress\Core\Admin\TypeSafeSiteSettingsRepository;
 use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageController;
 use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTMLLinkTagRenderer;
 use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTTPHeaderRenderer;
+use Inpsyde\MultilingualPress\Core\FrontEnd\PostTypeLinkURLFilter;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
@@ -45,6 +48,7 @@ use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
 use function Inpsyde\MultilingualPress\get_available_language_names;
 use function Inpsyde\MultilingualPress\get_language_field_by_http_code;
 use function Inpsyde\MultilingualPress\get_site_language;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 /**
  * Service provider for all Core objects.
@@ -78,6 +82,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		$container->share( 'multilingualpress.internal_locations', function () {
 
 			return new InternalLocations();
+		} );
+
+		$container->share( 'multilingualpress.post_type_repository', function () {
+
+			return new TypeSafePostTypeRepository();
 		} );
 
 		$container->share( 'multilingualpress.server_request', function () {
@@ -149,7 +158,16 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.module_settings_tab_view'] = function ( Container $container ) {
 
 			return new ModuleSettingsTabView(
-				$container['multilingualpress.module_manager']
+				$container['multilingualpress.module_manager'],
+				$container['multilingualpress.save_module_settings_nonce']
+			);
+		};
+
+		$container['multilingualpress.module_settings_updater'] = function ( Container $container ) {
+
+			return new ModuleSettingsUpdater(
+				$container['multilingualpress.module_manager'],
+				$container['multilingualpress.save_module_settings_nonce']
 			);
 		};
 
@@ -222,7 +240,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.plugin_settings_updater'] = function ( Container $container ) {
 
 			return new PluginSettingsUpdater(
-				$container['multilingualpress.module_manager'],
 				$container['multilingualpress.save_plugin_settings_nonce'],
 				$container['multilingualpress.server_request']
 			);
@@ -239,7 +256,18 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.post_type_settings_tab_view'] = function ( Container $container ) {
 
-			return new PostTypeSettingsTabView();
+			return new PostTypeSettingsTabView(
+				$container['multilingualpress.post_type_repository'],
+				$container['multilingualpress.update_post_type_settings_nonce']
+			);
+		};
+
+		$container['multilingualpress.post_type_settings_updater'] = function ( Container $container ) {
+
+			return new PostTypeSettingsUpdater(
+				$container['multilingualpress.post_type_repository'],
+				$container['multilingualpress.update_post_type_settings_nonce']
+			);
 		};
 
 		$container['multilingualpress.relationships_site_setting'] = function ( Container $container ) {
@@ -248,6 +276,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.site_settings_repository'],
 				$container['multilingualpress.site_relations']
 			);
+		};
+
+		$container['multilingualpress.save_module_settings_nonce'] = function () {
+
+			return new WPNonce( 'save_module_settings' );
 		};
 
 		$container['multilingualpress.save_plugin_settings_nonce'] = function () {
@@ -344,6 +377,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new TaxonomySettingsTabView();
 		};
+
+		$container['multilingualpress.update_post_type_settings_nonce'] = function () {
+
+			return new WPNonce( 'update_post_type_settings' );
+		};
 	}
 
 	/**
@@ -380,6 +418,13 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.translations']
 			);
 		} );
+
+		$container['multilingualpress.post_type_link_url_filter'] = function ( Container $container ) {
+
+			return new PostTypeLinkURLFilter(
+				$container['multilingualpress.post_type_repository']
+			);
+		};
 	}
 
 	/**
@@ -425,6 +470,12 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		add_action( 'delete_blog', [ $container['multilingualpress.site_data_deletor'], 'delete_site_data' ] );
 
+		$repository = $container['multilingualpress.post_type_repository'];
+		add_filter( ActivePostTypes::FILTER_ACTIVE_POST_TYPES, function ( array $post_types ) use ( $repository ) {
+
+			return array_merge( $post_types, array_keys( $repository->get_supported_post_types() ) );
+		} );
+
 		if ( is_admin() ) {
 			$this->bootstrap_admin( $container );
 
@@ -462,6 +513,16 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		add_action(
 			'admin_post_' . SiteSettingsUpdateRequestHandler::ACTION,
 			[ $container['multilingualpress.site_settings_update_request_handler'], 'handle_post_request' ]
+		);
+
+		add_action(
+			PluginSettingsUpdater::ACTION_UPDATE_PLUGIN_SETTINGS,
+			[ $container['multilingualpress.module_settings_updater'], 'update_settings' ]
+		);
+
+		add_action(
+			PluginSettingsUpdater::ACTION_UPDATE_PLUGIN_SETTINGS,
+			[ $container['multilingualpress.post_type_settings_updater'], 'update_settings' ]
 		);
 
 		if ( is_network_admin() ) {
@@ -555,5 +616,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		);
 
 		add_filter( 'language_attributes', 'Inpsyde\\MultilingualPress\\replace_language_in_language_attributes' );
+
+		$url_filter = $container['multilingualpress.post_type_link_url_filter'];
+		add_action( 'multilingualpress.generate_permalink', [ $url_filter, 'enable' ] );
+		add_action( 'multilingualpress.generated_permalink', [ $url_filter, 'disable' ] );
 	}
 }

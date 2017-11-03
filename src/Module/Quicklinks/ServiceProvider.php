@@ -6,6 +6,7 @@ namespace Inpsyde\MultilingualPress\Module\Quicklinks;
 
 use Inpsyde\MultilingualPress\Common\Nonce\WPNonce;
 use Inpsyde\MultilingualPress\Common\Setting\SettingsBoxView;
+use Inpsyde\MultilingualPress\Core\Admin\ModuleSettingsUpdater;
 use Inpsyde\MultilingualPress\Module\ModuleServiceProvider;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
@@ -135,7 +136,7 @@ final class ServiceProvider implements ModuleServiceProvider {
 		} );
 
 		add_action(
-			'multilingualpress.save_modules',
+			ModuleSettingsUpdater::ACTION_SAVE_MODULES,
 			[ $container['multilingualpress.quicklinks_settings_updater'], 'update_settings' ]
 		);
 	}

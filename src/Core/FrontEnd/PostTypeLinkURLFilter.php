@@ -2,18 +2,19 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
+namespace Inpsyde\MultilingualPress\Core\FrontEnd;
 
 use Inpsyde\MultilingualPress\Common\ContextAwareFilter;
 use Inpsyde\MultilingualPress\Common\Filter;
+use Inpsyde\MultilingualPress\Core\PostTypeRepository;
 
 /**
  * Post type link URL filter.
  *
- * @package Inpsyde\MultilingualPress\Module\CustomPostTypeSupport
+ * @package Inpsyde\MultilingualPress\Core\FrontEnd
  * @since   3.0.0
  */
-final class URLFilter implements Filter {
+final class PostTypeLinkURLFilter implements Filter {
 
 	use ContextAwareFilter;
 

@@ -53,7 +53,6 @@ class SettingsUpdater {
 	 * Updates the quicklinks settings.
 	 *
 	 * @since   3.0.0
-	 * @wp-hook multilingualpress.save_modules
 	 *
 	 * @param Request $request HTTP request object.
 	 *

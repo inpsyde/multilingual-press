@@ -1,11 +1,11 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
+namespace Inpsyde\MultilingualPress\Core;
 
 /**
  * Interface for all post type repository implementations.
  *
- * @package Inpsyde\MultilingualPress\Module\CustomPostTypeSupport
+ * @package Inpsyde\MultilingualPress\Core
  * @since   3.0.0
  */
 interface PostTypeRepository {
@@ -62,7 +62,7 @@ interface PostTypeRepository {
 	 *
 	 * @return \WP_Post_Type[] All custom post types that MultilingualPress is able to support.
 	 */
-	public function get_custom_post_types(): array;
+	public function get_available_post_types(): array;
 
 	/**
 	 * Returns the slugs of all currently supported post types.

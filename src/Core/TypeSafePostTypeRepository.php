@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
+namespace Inpsyde\MultilingualPress\Core;
 
 /**
  * Type-safe post type repository implementation.
  *
- * @package Inpsyde\MultilingualPress\Module\CustomPostTypeSupport
+ * @package Inpsyde\MultilingualPress\Core
  * @since   3.0.0
  */
 final class TypeSafePostTypeRepository implements PostTypeRepository {
@@ -15,33 +15,32 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	/**
 	 * @var \WP_Post_Type[]
 	 */
-	private $custom_post_types;
+	private $available_post_types;
 
 	/**
-	 * Returns all custom post types that MultilingualPress is able to support.
+	 * Returns all post types that MultilingualPress is able to support.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return \WP_Post_Type[] All custom post types that MultilingualPress is able to support.
+	 * @return \WP_Post_Type[] All post types that MultilingualPress is able to support.
 	 */
-	public function get_custom_post_types(): array {
+	public function get_available_post_types(): array {
 
-		if ( isset( $this->custom_post_types ) ) {
-			return $this->custom_post_types;
+		if ( isset( $this->available_post_types ) ) {
+			return $this->available_post_types;
 		}
 
-		$this->custom_post_types = get_post_types( [
-			'_builtin' => false,
+		$this->available_post_types = get_post_types( [
 			'show_ui'  => true,
 		], 'objects' );
-		if ( $this->custom_post_types ) {
-			uasort( $this->custom_post_types, function ( \WP_Post_Type $a, \WP_Post_Type $b ) {
+		if ( $this->available_post_types ) {
+			uasort( $this->available_post_types, function ( \WP_Post_Type $a, \WP_Post_Type $b ) {
 
 				return strcasecmp( $a->labels->name, $b->labels->name );
 			} );
 		}
 
-		return $this->custom_post_types;
+		return $this->available_post_types;
 	}
 
 	/**

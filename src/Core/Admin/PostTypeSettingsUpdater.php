@@ -2,18 +2,19 @@
 
 declare( strict_types = 1 );
 
-namespace Inpsyde\MultilingualPress\Module\CustomPostTypeSupport;
+namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
+use Inpsyde\MultilingualPress\Core\PostTypeRepository;
 
 /**
- * Post type support settings updater.
+ * Post type settings updater.
  *
- * @package Inpsyde\MultilingualPress\Module\CustomPostTypeSupport
+ * @package Inpsyde\MultilingualPress\Core\Admin
  * @since   3.0.0
  */
-class PostTypeSupportSettingsUpdater {
+class PostTypeSettingsUpdater {
 
 	/**
 	 * Settings name for all post type support input fields.
@@ -22,7 +23,7 @@ class PostTypeSupportSettingsUpdater {
 	 *
 	 * @var string
 	 */
-	const SETTINGS_NAME = 'mlp_cpt_support';
+	const SETTINGS_NAME = 'post_type_settings';
 
 	/**
 	 * @var Nonce
@@ -50,10 +51,9 @@ class PostTypeSupportSettingsUpdater {
 	}
 
 	/**
-	 * Updates the post type support settings.
+	 * Updates the post type settings.
 	 *
-	 * @since   3.0.0
-	 * @wp-hook multilingualpress.save_modules
+	 * @since 3.0.0
 	 *
 	 * @param Request $request HTTP request object.
 	 *
@@ -65,7 +65,7 @@ class PostTypeSupportSettingsUpdater {
 			return false;
 		}
 
-		$custom_post_types = $this->repository->get_custom_post_types();
+		$available_post_types = $this->repository->get_available_post_types();
 
 		$settings = (array) $request->body_value(
 			static::SETTINGS_NAME,
@@ -74,12 +74,12 @@ class PostTypeSupportSettingsUpdater {
 			FILTER_FORCE_ARRAY
 		);
 
-		if ( ! $custom_post_types || ! $settings ) {
+		if ( ! $available_post_types || ! $settings ) {
 			return $this->repository->unset_supported_post_types();
 		}
 
-		$custom_post_types = array_keys( $custom_post_types );
-		$custom_post_types = array_combine( $custom_post_types, array_map( function ( $slug ) use ( $settings ) {
+		$available_post_types = array_keys( $available_post_types );
+		$available_post_types = array_combine( $available_post_types, array_map( function ( $slug ) use ( $settings ) {
 
 			if ( empty( $settings[ $slug ] ) ) {
 				return PostTypeRepository::CPT_INACTIVE;
@@ -90,8 +90,8 @@ class PostTypeSupportSettingsUpdater {
 			return empty( $settings[ $links_setting ] )
 				? PostTypeRepository::CPT_ACTIVE
 				: PostTypeRepository::CPT_QUERY_BASED;
-		}, $custom_post_types ) );
+		}, $available_post_types ) );
 
-		return $this->repository->set_supported_post_types( $custom_post_types );
+		return $this->repository->set_supported_post_types( $available_post_types );
 	}
 }

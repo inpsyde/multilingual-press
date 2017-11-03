@@ -5,8 +5,11 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageView;
+use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
 use Inpsyde\MultilingualPress\Module\Module;
 use Inpsyde\MultilingualPress\Module\ModuleManager;
+
+use function Inpsyde\MultilingualPress\nonce_field;
 
 /**
  * Module settings tab view.
@@ -22,15 +25,23 @@ final class ModuleSettingsTabView implements SettingsPageView {
 	private $module_manager;
 
 	/**
+	 * @var Nonce
+	 */
+	private $nonce;
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param ModuleManager $module_manager Module manager object.
+	 * @param Nonce         $nonce          Nonce object.
 	 */
-	public function __construct( ModuleManager $module_manager ) {
+	public function __construct( ModuleManager $module_manager, Nonce $nonce ) {
 
 		$this->module_manager = $module_manager;
+
+		$this->nonce = $nonce;
 	}
 
 	/**
@@ -73,6 +84,8 @@ final class ModuleSettingsTabView implements SettingsPageView {
 		 * @since 3.0.0
 		 */
 		do_action( 'multilingualpress.after_module_list' );
+
+		nonce_field( $this->nonce );
 	}
 
 	/**
@@ -86,12 +99,13 @@ final class ModuleSettingsTabView implements SettingsPageView {
 
 		$is_active = $module->is_active();
 
+		$name = ModuleSettingsUpdater::NAME_MODULE_SETTINGS . '[' . $module->id() . ']';
+
 		$id = 'multilingualpress-module-' . $module->id();
 		?>
 		<tr class="<?php echo esc_attr( $is_active ? 'active' : 'inactive' ); ?>">
 			<td class="check-column">
-				<input type="checkbox"
-					name="<?php echo esc_attr( 'multilingualpress_modules[' . $module->id() . ']' ); ?>" value="1"
+				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>"<?php checked( $is_active ); ?>>
 			</td>
 			<td>

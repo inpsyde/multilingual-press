@@ -88,7 +88,6 @@ function bootstrap(): bool {
 		->add_service_provider( new InstallationServiceProvider() )
 		->add_service_provider( new IntegrationProvider() )
 		->add_service_provider( new Module\AlternativeLanguageTitleInAdminBar\ServiceProvider() )
-		->add_service_provider( new Module\CustomPostTypeSupport\ServiceProvider() )
 		->add_service_provider( new Module\Quicklinks\ServiceProvider() )
 		->add_service_provider( new Module\Redirect\ServiceProvider() )
 		->add_service_provider( new Module\Trasher\ServiceProvider() )

@@ -6,7 +6,6 @@ namespace Inpsyde\MultilingualPress\Core\Admin;
 
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
-use Inpsyde\MultilingualPress\Module\ModuleManager;
 
 use function Inpsyde\MultilingualPress\check_admin_referer;
 use function Inpsyde\MultilingualPress\redirect_after_settings_update;
@@ -29,14 +28,13 @@ class PluginSettingsUpdater {
 	const ACTION = 'update_multilingualpress_settings';
 
 	/**
-	 * @var ModuleManager
+	 * Hook name.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
 	 */
-	private $module_manager;
-
-	/**
-	 * @var array
-	 */
-	private $modules = [];
+	const ACTION_UPDATE_PLUGIN_SETTINGS = 'multilingualpress.update_plugin_settings';
 
 	/**
 	 * @var Nonce
@@ -53,13 +51,10 @@ class PluginSettingsUpdater {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param ModuleManager $module_manager Module manager object.
-	 * @param Nonce         $nonce          Nonce object.
-	 * @param Request       $request        HTTP request object.
+	 * @param Nonce   $nonce   Nonce object.
+	 * @param Request $request HTTP request object.
 	 */
-	public function __construct( ModuleManager $module_manager, Nonce $nonce, Request $request ) {
-
-		$this->module_manager = $module_manager;
+	public function __construct( Nonce $nonce, Request $request ) {
 
 		$this->nonce = $nonce;
 
@@ -77,55 +72,15 @@ class PluginSettingsUpdater {
 
 		check_admin_referer( $this->nonce );
 
-		$this->update_modules();
-
-		redirect_after_settings_update();
-	}
-
-	/**
-	 * Updates all modules according to the data in the request.
-	 *
-	 * @return void
-	 */
-	private function update_modules() {
-
-		$this->modules = $this->request->body_value(
-				'multilingualpress_modules',
-				INPUT_POST,
-				FILTER_UNSAFE_RAW,
-				FILTER_REQUIRE_ARRAY
-			) ?? [];
-		if ( ! $this->modules ) {
-			return;
-		}
-
-		array_walk( array_keys( $this->module_manager->get_modules() ), [ $this, 'update_module' ] );
-
-		$this->module_manager->save_modules();
-
 		/**
-		 * Fires right after the module settings have been updated, and right before the redirect.
+		 * Fires when the plugin settings are about to get updated.
 		 *
 		 * @since 3.0.0
 		 *
 		 * @param Request $request HTTP request object.
 		 */
-		do_action( 'multilingualpress.save_modules', $this->request );
-	}
+		do_action( self::ACTION_UPDATE_PLUGIN_SETTINGS, $this->request );
 
-	/**
-	 * Updates a single module according to the data in the request.
-	 *
-	 * @param string $id Module ID.
-	 *
-	 * @return void
-	 */
-	private function update_module( string $id ) {
-
-		if ( empty( $this->modules[ $id ] ) ) {
-			$this->module_manager->deactivate_module( $id );
-		} else {
-			$this->module_manager->activate_module( $id );
-		}
+		redirect_after_settings_update();
 	}
 }
