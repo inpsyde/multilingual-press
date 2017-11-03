@@ -60,39 +60,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 	 */
 	public function register( Container $container ) {
 
-		$container['multilingualpress.alternate_language_controller'] = function () {
-
-			return new AlternateLanguageController();
-		};
-
-		$container['multilingualpress.alternate_language_html_link_tag_renderer'] = function ( Container $container ) {
-
-			return new AlternateLanguageHTMLLinkTagRenderer(
-				$container['multilingualpress.alternate_languages']
-			);
-		};
-
-		$container['multilingualpress.alternate_language_http_header_renderer'] = function ( Container $container ) {
-
-			return new AlternateLanguageHTTPHeaderRenderer(
-				$container['multilingualpress.alternate_languages']
-			);
-		};
-
-		$container->share( 'multilingualpress.alternate_languages', function ( Container $container ) {
-
-			return new AlternateLanguages(
-				$container['multilingualpress.translations']
-			);
-		} );
-
-		$container['multilingualpress.alternative_language_title_site_setting'] = function ( Container $container ) {
-
-			return new AlternativeLanguageTitleSiteSetting(
-				$container['multilingualpress.site_settings_repository']
-			);
-		};
-
 		$container['multilingualpress.base_path_adapter'] = function () {
 
 			return new CachingBasePathAdapter();
@@ -107,6 +74,45 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new InternalLocations();
 		} );
+
+		$container->share( 'multilingualpress.server_request', function () {
+
+			return new PHPServerRequest();
+		} );
+
+		$container['multilingualpress.site_data_deletor'] = function ( Container $container ) {
+
+			return new SiteDataDeletor(
+				$container['multilingualpress.content_relations'],
+				$container['multilingualpress.site_relations'],
+				$container['multilingualpress.site_settings_repository']
+			);
+		};
+
+		$container->share( 'multilingualpress.wordpress_request_context', function () {
+
+			return new ConditionalAwareWordPressRequestContext();
+		} );
+
+		$this->register_admin( $container );
+		$this->register_front_end( $container );
+	}
+
+	/**
+	 * Registers the provided admin services on the given container.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function register_admin( Container $container ) {
+
+		$container['multilingualpress.alternative_language_title_site_setting'] = function ( Container $container ) {
+
+			return new AlternativeLanguageTitleSiteSetting(
+				$container['multilingualpress.site_settings_repository']
+			);
+		};
 
 		$container['multilingualpress.language_site_setting'] = function ( Container $container ) {
 
@@ -184,20 +190,6 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 			return new WPNonce( 'save_site_settings' );
 		};
 
-		$container->share( 'multilingualpress.server_request', function () {
-
-			return new PHPServerRequest();
-		} );
-
-		$container['multilingualpress.site_data_deletor'] = function ( Container $container ) {
-
-			return new SiteDataDeletor(
-				$container['multilingualpress.content_relations'],
-				$container['multilingualpress.site_relations'],
-				$container['multilingualpress.site_settings_repository']
-			);
-		};
-
 		$container['multilingualpress.site_settings'] = function ( Container $container ) {
 
 			return new SiteSettings(
@@ -268,10 +260,41 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.relationships_site_setting'],
 			] );
 		};
+	}
 
-		$container->share( 'multilingualpress.wordpress_request_context', function () {
+	/**
+	 * Registers the provided front-end services on the given container.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function register_front_end( Container $container ) {
 
-			return new ConditionalAwareWordPressRequestContext();
+		$container['multilingualpress.alternate_language_controller'] = function () {
+
+			return new AlternateLanguageController();
+		};
+
+		$container['multilingualpress.alternate_language_html_link_tag_renderer'] = function ( Container $container ) {
+
+			return new AlternateLanguageHTMLLinkTagRenderer(
+				$container['multilingualpress.alternate_languages']
+			);
+		};
+
+		$container['multilingualpress.alternate_language_http_header_renderer'] = function ( Container $container ) {
+
+			return new AlternateLanguageHTTPHeaderRenderer(
+				$container['multilingualpress.alternate_languages']
+			);
+		};
+
+		$container->share( 'multilingualpress.alternate_languages', function ( Container $container ) {
+
+			return new AlternateLanguages(
+				$container['multilingualpress.translations']
+			);
 		} );
 	}
 
@@ -316,9 +339,31 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		load_plugin_textdomain( 'multilingualpress' );
 
-		$setting_page = $container['multilingualpress.plugin_settings_page'];
+		add_action( 'delete_blog', [ $container['multilingualpress.site_data_deletor'], 'delete_site_data' ] );
 
-		add_action( 'plugins_loaded', [ $setting_page, 'register' ], 8 );
+		if ( is_admin() ) {
+			$this->bootstrap_admin( $container );
+
+			return;
+		}
+
+		$this->bootstrap_front_end( $container );
+	}
+
+	/**
+	 * Bootstraps the registered admin services.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_admin( Container $container ) {
+
+		$properties = $container['multilingualpress.properties'];
+
+		$settings_page = $container['multilingualpress.plugin_settings_page'];
+
+		add_action( 'plugins_loaded', [ $settings_page, 'register' ], 8 );
 
 		add_action(
 			'admin_post_' . PluginSettingsUpdater::ACTION,
@@ -327,86 +372,104 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		( new ActionLink(
 			'settings',
-			'<a href="' . esc_url( $setting_page->url() ) . '">' . __( 'Settings', 'multilingualpress' ) . '</a>'
+			'<a href="' . esc_url( $settings_page->url() ) . '">' . __( 'Settings', 'multilingualpress' ) . '</a>'
 		) )->register( 'network_admin_plugin_action_links_' . $properties->plugin_base_name() );
 
-		add_action( 'delete_blog', [ $container['multilingualpress.site_data_deletor'], 'delete_site_data' ] );
+		add_action(
+			'admin_post_' . SiteSettingsUpdateRequestHandler::ACTION,
+			[ $container['multilingualpress.site_settings_update_request_handler'], 'handle_post_request' ]
+		);
 
-		if ( is_admin() ) {
-			global $pagenow;
-
-			add_action(
-				'admin_post_' . SiteSettingsUpdateRequestHandler::ACTION,
-				[ $container['multilingualpress.site_settings_update_request_handler'], 'handle_post_request' ]
-			);
-
-			if ( 'sites.php' === $pagenow ) {
-				( new SitesListTableColumn(
-					'multilingualpress.relationships',
-					__( 'Relationships', 'multilingualpress' ),
-					function ( $id, $site_id ) {
-
-						switch_to_blog( $site_id );
-						$sites = get_available_language_names();
-						restore_current_blog();
-						unset( $sites[ $site_id ] );
-
-						return $sites
-							? sprintf(
-								'<div class="mlp-site-relations">%s</div>',
-								implode( '<br>', array_map( 'esc_html', $sites ) )
-							)
-							: __( 'none', 'multilingualpress' );
-					}
-				) )->register();
-
-				( new SitesListTableColumn(
-					'multilingualpress.site_language',
-					__( 'Site Language', 'multilingualpress' ),
-					function ( $id, $site_id ) {
-
-						$language = get_site_language( $site_id );
-
-						return '' === $language
-							? __( 'none', 'multilingualpress' )
-							: sprintf(
-								'<div class="mlp-site-language">%s</div>',
-								esc_html( get_language_field_by_http_code(
-									str_replace( '_', '-', $language )
-								) )
-							);
-					}
-				) )->register();
-			}
-
-			if ( is_network_admin() ) {
-				$container['multilingualpress.site_settings_tab']->register();
-
-				$new_site_settings = $container['multilingualpress.new_site_settings'];
-
-				add_action( 'network_site_new_form', function ( $site_id ) use ( $new_site_settings ) {
-
-					( new SiteSettingsSectionView( $new_site_settings ) )->render( (int) $site_id );
-				} );
-
-				add_action(
-					'wpmu_new_blog',
-					[ $container['multilingualpress.site_settings_updater'], 'define_initial_settings' ]
-				);
-			}
-		} else {
-			$alternate_language_controller = $container['multilingualpress.alternate_language_controller'];
-			$alternate_language_controller->register_renderer(
-				$container['multilingualpress.alternate_language_html_link_tag_renderer'],
-				'wp_head'
-			);
-			$alternate_language_controller->register_renderer(
-				$container['multilingualpress.alternate_language_http_header_renderer'],
-				'template_redirect',
-				11
-			);
-
-			add_filter( 'language_attributes', 'Inpsyde\\MultilingualPress\\replace_language_in_language_attributes' );
+		if ( is_network_admin() ) {
+			$this->bootstrap_network_admin( $container );
 		}
+	}
+
+	/**
+	 * Bootstraps the registered network-admin services.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_network_admin( Container $container ) {
+
+		global $pagenow;
+
+		$container['multilingualpress.site_settings_tab']->register();
+
+		$new_site_settings = $container['multilingualpress.new_site_settings'];
+
+		add_action( 'network_site_new_form', function ( $site_id ) use ( $new_site_settings ) {
+
+			( new SiteSettingsSectionView( $new_site_settings ) )->render( (int) $site_id );
+		} );
+
+		add_action(
+			'wpmu_new_blog',
+			[ $container['multilingualpress.site_settings_updater'], 'define_initial_settings' ]
+		);
+
+		if ( 'sites.php' === $pagenow ) {
+			( new SitesListTableColumn(
+				'multilingualpress.relationships',
+				__( 'Relationships', 'multilingualpress' ),
+				function ( $id, $site_id ) {
+
+					switch_to_blog( $site_id );
+					$sites = get_available_language_names();
+					restore_current_blog();
+					unset( $sites[ $site_id ] );
+
+					return $sites
+						? sprintf(
+							'<div class="mlp-site-relations">%s</div>',
+							implode( '<br>', array_map( 'esc_html', $sites ) )
+						)
+						: __( 'none', 'multilingualpress' );
+				}
+			) )->register();
+
+			( new SitesListTableColumn(
+				'multilingualpress.site_language',
+				__( 'Site Language', 'multilingualpress' ),
+				function ( $id, $site_id ) {
+
+					$language = get_site_language( $site_id );
+
+					return '' === $language
+						? __( 'none', 'multilingualpress' )
+						: sprintf(
+							'<div class="mlp-site-language">%s</div>',
+							esc_html( get_language_field_by_http_code(
+								str_replace( '_', '-', $language )
+							) )
+						);
+				}
+			) )->register();
+		}
+	}
+
+	/**
+	 * Bootstraps the registered front-end services.
+	 *
+	 * @param Container $container Container object.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_front_end( Container $container ) {
+
+		$alternate_language_controller = $container['multilingualpress.alternate_language_controller'];
+		$alternate_language_controller->register_renderer(
+			$container['multilingualpress.alternate_language_html_link_tag_renderer'],
+			'wp_head'
+		);
+		$alternate_language_controller->register_renderer(
+			$container['multilingualpress.alternate_language_http_header_renderer'],
+			'template_redirect',
+			11
+		);
+
+		add_filter( 'language_attributes', 'Inpsyde\\MultilingualPress\\replace_language_in_language_attributes' );
 	}
 }
