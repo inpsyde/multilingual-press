@@ -69,19 +69,17 @@ final class NoredirectAwareRedirector implements Redirector {
 			return false;
 		}
 
-		$target = $this->negotiator->get_redirect_target();
+		add_action( 'template_redirect', function () {
 
-		$current_site_id = get_current_blog_id();
+			$target = $this->negotiator->get_redirect_target();
 
-		if ( $target->site_id() === $current_site_id ) {
-			return false;
-		}
+			if ( $target->site_id() === get_current_blog_id() ) {
+				return;
+			}
 
-		if ( ! $target->url() ) {
-			return false;
-		}
-
-		add_action( 'template_redirect', function () use ( $target ) {
+			if ( ! $target->url() ) {
+				return;
+			}
 
 			$this->storage->add_language( $target->language() );
 

@@ -252,7 +252,7 @@ final class PriorityAwareLanguageNegotiator implements LanguageNegotiator {
 	 */
 	private function get_user_languages(): array {
 
-		$fields = $this->request->parsed_header( 'HTTP_ACCEPT_LANGUAGE', $this->parser );
+		$fields = $this->request->parsed_header( 'Accept-Language', $this->parser );
 		if ( ! $fields ) {
 			return [];
 		}

@@ -142,7 +142,7 @@ final class PHPServerRequest implements ServerRequest {
 
 		$this->ensure_headers();
 
-		$header = $this->header( $name );
+		$header = $this->header( strtolower( $name ) );
 
 		if ( $parser ) {
 			return $parser->parse( $header );
