@@ -503,7 +503,7 @@ class Mlp_Translatable_Post_Data implements Mlp_Translatable_Post_Data_Interface
 	 */
 	private function is_connectable_status( WP_Post $post ) {
 
-		if ( in_array( $post->post_status, array( 'publish', 'draft', 'private', 'auto-draft' ), true ) ) {
+		if ( in_array( $post->post_status, array( 'publish', 'draft', 'private', 'auto-draft', 'future' ), true ) ) {
 			return true;
 		}
 
