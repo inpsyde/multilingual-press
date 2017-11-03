@@ -131,7 +131,5 @@ final class SiteSettingsTabView implements SettingsPageView {
 			'blog_id'  => $site_id,
 			'selected' => $this->data->id(),
 		] );
-		?>
-		<?php
 	}
 }
