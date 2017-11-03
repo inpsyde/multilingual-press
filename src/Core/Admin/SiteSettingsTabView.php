@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Core\Admin;
 
-use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
+use Inpsyde\MultilingualPress\Common\Admin\SettingsPageTabData;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPageView;
 use Inpsyde\MultilingualPress\Common\HTTP\Request;
 use Inpsyde\MultilingualPress\Common\Nonce\Nonce;
@@ -21,7 +21,7 @@ use function Inpsyde\MultilingualPress\nonce_field;
 final class SiteSettingsTabView implements SettingsPageView {
 
 	/**
-	 * @var EditSiteTabData
+	 * @var SettingsPageTabData
 	 */
 	private $data;
 
@@ -45,13 +45,13 @@ final class SiteSettingsTabView implements SettingsPageView {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param EditSiteTabData $data    Tab data object.
-	 * @param SiteSettingView $view    Site settings view object.
-	 * @param Request         $request HTTP request object.
-	 * @param Nonce           $nonce   Nonce object.
+	 * @param SettingsPageTabData $data    Tab data object.
+	 * @param SiteSettingView     $view    Site settings view object.
+	 * @param Request             $request HTTP request object.
+	 * @param Nonce               $nonce   Nonce object.
 	 */
 	public function __construct(
-		EditSiteTabData $data,
+		SettingsPageTabData $data,
 		SiteSettingView $view,
 		Request $request,
 		Nonce $nonce

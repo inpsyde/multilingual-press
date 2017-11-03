@@ -197,7 +197,7 @@ namespace PHPSTORM_META {
 		'multilingualpress.site_relations_table'                                   => \Inpsyde\MultilingualPress\Database\Table::class,
 		'multilingualpress.site_settings'                                          => \Inpsyde\MultilingualPress\Common\Setting\Site\SiteSettingsSectionViewModel::class,
 		'multilingualpress.site_settings_tab'                                      => \Inpsyde\MultilingualPress\Common\Admin\EditSiteTab::class,
-		'multilingualpress.site_settings_tab_data'                                 => \Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData::class,
+		'multilingualpress.site_settings_tab_data'                                 => \Inpsyde\MultilingualPress\Common\Admin\SettingsPageTabData::class,
 		'multilingualpress.site_settings_tab_view'                                 => \Inpsyde\MultilingualPress\Common\Admin\SettingsPageView::class,
 		'multilingualpress.site_settings_repository'                               => \Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository::class,
 		'multilingualpress.site_settings_update_request_handler'                   => \Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdateRequestHandler::class,

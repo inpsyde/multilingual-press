@@ -5,12 +5,12 @@ declare( strict_types = 1 );
 namespace Inpsyde\MultilingualPress\Common\Admin;
 
 /**
- * Tab data structure.
+ * Settings page tab data structure.
  *
  * @package Inpsyde\MultilingualPress\Common\Admin
  * @since   3.0.0
  */
-class EditSiteTabData {
+class SettingsPageTabData {
 
 	/**
 	 * @var string
@@ -37,25 +37,25 @@ class EditSiteTabData {
 	 *
 	 * @sine 3.0.0
 	 *
+	 * @param string $capability Capability required to view the tab.
 	 * @param string $id         Tab ID.
 	 * @param string $title      Title on used in the tab.
-	 * @param string $slug       Page slug used in the URL.
-	 * @param string $capability Optional. Capability required to view the tab. Defaults to "manage_sites".
+	 * @param string $slug       Slug used in the URL.
 	 */
 	public function __construct(
+		string $capability,
 		string $id,
 		string $title,
-		string $slug,
-		string $capability = 'manage_sites'
+		string $slug
 	) {
+
+		$this->capability = $capability;
 
 		$this->id = $id;
 
 		$this->title = $title;
 
 		$this->slug = $slug;
-
-		$this->capability = $capability;
 	}
 
 	/**

@@ -13,7 +13,7 @@ namespace Inpsyde\MultilingualPress\Common\Admin;
 class EditSiteTab {
 
 	/**
-	 * @var EditSiteTabData
+	 * @var SettingsPageTabData
 	 */
 	private $data;
 
@@ -27,10 +27,10 @@ class EditSiteTab {
 	 *
 	 * @sine 3.0.0
 	 *
-	 * @param EditSiteTabData  $data Tab data object.
-	 * @param SettingsPageView $view Settings page view object.
+	 * @param SettingsPageTabData $data Tab data object.
+	 * @param SettingsPageView    $view Settings page view object.
 	 */
-	public function __construct( EditSiteTabData $data, SettingsPageView $view ) {
+	public function __construct( SettingsPageTabData $data, SettingsPageView $view ) {
 
 		$this->data = $data;
 

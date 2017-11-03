@@ -6,9 +6,9 @@ namespace Inpsyde\MultilingualPress\Core;
 
 use Inpsyde\MultilingualPress\Common\Admin\ActionLink;
 use Inpsyde\MultilingualPress\Common\Admin\EditSiteTab;
-use Inpsyde\MultilingualPress\Common\Admin\EditSiteTabData;
 use Inpsyde\MultilingualPress\Common\Admin\MetaBox\MetaBoxUIRegistry;
 use Inpsyde\MultilingualPress\Common\Admin\SettingsPage;
+use Inpsyde\MultilingualPress\Common\Admin\SettingsPageTabData;
 use Inpsyde\MultilingualPress\Common\Admin\SitesListTableColumn;
 use Inpsyde\MultilingualPress\Common\AlternateLanguages;
 use Inpsyde\MultilingualPress\Common\HTTP\FullRequestGlobalManipulator;
@@ -221,7 +221,8 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.site_settings_tab_data'] = function () {
 
-			return new EditSiteTabData(
+			return new SettingsPageTabData(
+				'manage_sites',
 				'multilingualpress',
 				__( 'MultilingualPress', 'multilingualpress' ),
 				'multilingualpress'
