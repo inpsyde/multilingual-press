@@ -15,6 +15,11 @@ use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsRepository;
 final class AliasAwareLanguage implements Language {
 
 	/**
+	 * @var int
+	 */
+	private $id = 0;
+
+	/**
 	 * @var bool
 	 */
 	private $is_rtl;
@@ -37,6 +42,10 @@ final class AliasAwareLanguage implements Language {
 	 * @param array $data Language data.
 	 */
 	public function __construct( array $data ) {
+
+		if ( isset( $data[ Language::ID ] ) && is_numeric( $data[ Language::ID ] ) ) {
+			$this->id = (int) $data[ Language::ID ];
+		}
 
 		$this->is_rtl = (bool) ( $data[ Language::IS_RTL ] ?? false );
 
@@ -90,6 +99,10 @@ final class AliasAwareLanguage implements Language {
 
 		$name = (string) $name;
 
+		if ( Language::ID === $name ) {
+			return $this->id;
+		}
+
 		if ( Language::IS_RTL === $name ) {
 			return $this->is_rtl;
 		}
@@ -130,6 +143,18 @@ final class AliasAwareLanguage implements Language {
 	 */
 	public function offsetUnset( $name ) {
 
+	}
+
+	/**
+	 * Returns the ID of the language.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return int Language ID.
+	 */
+	public function id(): int {
+
+		return $this->id;
 	}
 
 	/**
@@ -216,6 +241,7 @@ final class AliasAwareLanguage implements Language {
 	public function to_array(): array {
 
 		return array_merge( $this->names, [
+			Language::ID       => $this->id,
 			Language::IS_RTL   => $this->is_rtl,
 			Language::PRIORITY => $this->priority,
 		] );

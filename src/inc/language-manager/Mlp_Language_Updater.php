@@ -132,10 +132,9 @@ class Mlp_Language_Updater {
 		if ( 0 === $amount )
 			return 0;
 
-		$this->languages->update_languages_by_id(
-			$diff,
-			[ '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d' ]
-		);
+		foreach ( $diff as $id => $language ) {
+			$this->languages->update_language( (int) $id, $language );
+		}
 
 		return $amount;
 	}

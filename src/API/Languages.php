@@ -13,6 +13,17 @@ use Inpsyde\MultilingualPress\Common\Type\Language;
 interface Languages {
 
 	/**
+	 * Deletes the language with the given ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $id Language ID.
+	 *
+	 * @return bool Whether or not the language has been deleted successfully.
+	 */
+	public function delete_language( int $id ): bool;
+
+	/**
 	 * Returns an array with objects of all available languages.
 	 *
 	 * @since 3.0.0
@@ -58,20 +69,32 @@ interface Languages {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param array $language Language data.
+	 * @param array $data Language data.
 	 *
 	 * @return bool Whether or not the language has been imported successfully.
 	 */
-	public function import_language( array $language ): bool;
+	public function import_language( array $data ): bool;
 
 	/**
-	 * Updates the given languages.
+	 * Creates a new language entry according to the given data.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param array $languages An array with language IDs as keys and one or more fields as values.
+	 * @param array $data Language data.
 	 *
-	 * @return int The number of updated languages.
+	 * @return int Language ID.
 	 */
-	public function update_languages_by_id( array $languages ): int;
+	public function insert_language( array $data ): int;
+
+	/**
+	 * Updates the language with the given ID according to the given data.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int   $id   Language ID.
+	 * @param array $data Language data.
+	 *
+	 * @return bool Whether or not the language has been updated successfully.
+	 */
+	public function update_language( int $id, array $data ): bool;
 }

@@ -88,8 +88,7 @@ class AdvancedPostTranslatorUpdater {
 
 		$post_array = $this->build_remote_post_array( $remote_post, $remote_site_id, $request_data, $relation_helper );
 
-		$new_remote_post_id = $post_array ? (int) wp_insert_post( $post_array, false ) : 0;
-
+		$new_remote_post_id = $post_array ? (int) wp_insert_post( wp_slash( $post_array ), false ) : 0;
 		if ( 0 >= $new_remote_post_id ) {
 			return $this->create_empty_post();
 		}

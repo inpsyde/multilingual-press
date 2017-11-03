@@ -176,6 +176,7 @@ class ServerTest extends TestCase {
 		Functions::expect( 'get_transient' )->andReturn( false );
 		Functions::expect( 'set_transient' )->andReturn( true );
 		Functions::expect( 'get_current_blog_id' )->andReturn( 1 );
+		Functions::when( 'esc_html' )->returnArg();
 
 		Actions::expectAdded( 'shutdown' )->once();
 

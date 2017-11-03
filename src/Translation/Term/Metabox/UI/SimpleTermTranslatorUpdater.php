@@ -163,7 +163,7 @@ class SimpleTermTranslatorUpdater {
 		// We are going to create a new term, let's see if we need to set a parent.
 		$parent = $relations->related_term_parent( $remote_site_id );
 
-		$insert = wp_insert_term( $to_relate_name, $taxonomy, compact( 'parent' ) );
+		$insert = wp_insert_term( wp_slash( $to_relate_name ), $taxonomy, compact( 'parent' ) );
 
 		$inserted_id = is_array( $insert ) ? (int) ( $insert['term_id'] ?? 0 ) : 0;
 
