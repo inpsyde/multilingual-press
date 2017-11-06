@@ -123,11 +123,11 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	}
 
 	/**
-	 * Sets post type support to the given post types.
+	 * Sets post type support according to the given settings.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param array $post_types Post type slugs.
+	 * @param array $post_types Post type settings.
 	 *
 	 * @return bool Whether the support for all given post types was set successfully.
 	 */

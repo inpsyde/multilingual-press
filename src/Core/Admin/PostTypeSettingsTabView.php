@@ -215,7 +215,6 @@ final class PostTypeSettingsTabView implements SettingsPageView {
 		<select name="<?php echo esc_attr( $name ); ?>"
 			title="<?php esc_attr_e( 'User interface', 'multilingualpress' ); ?>" id="<?php echo esc_attr( $id ); ?>"
 		>
-			<option value=""><?php echo esc_html_x( '--None--', 'Meta box UI select', 'multilingualpress' ); ?></option>
 			<?php
 			$ui_objects = $this->get_ui_objects();
 			array_walk( $ui_objects, [ $this, 'render_option' ], $this->repository->get_post_type_ui( $slug ) );
