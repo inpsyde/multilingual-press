@@ -56,7 +56,7 @@ interface PostTypeRepository {
 	 *
 	 * @var string
 	 */
-	const OPTION = 'inpsyde_multilingual_cpt';
+	const OPTION = 'mlp_post_type_settings';
 
 	/**
 	 * Returns all post types that MultilingualPress is able to support.
