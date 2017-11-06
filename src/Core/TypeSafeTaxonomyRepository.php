@@ -70,7 +70,11 @@ final class TypeSafeTaxonomyRepository implements TaxonomyRepository {
 	 */
 	public function get_supported_taxonomies() {
 
-		$settings = $this->get_settings();
+		$settings = get_network_option( null, TaxonomyRepository::OPTION );
+		if ( ! is_array( $settings ) ) {
+			// In case there are no settings at all, return the taxonomies supported by default.
+			return TaxonomyRepository::DEFAULT_SUPPORTED_TAXONOMIES;
+		}
 
 		return array_filter( array_keys( $settings ), function ( string $slug ) {
 
@@ -89,7 +93,11 @@ final class TypeSafeTaxonomyRepository implements TaxonomyRepository {
 	 */
 	public function is_taxonomy_active( string $slug ): bool {
 
-		$settings = $this->get_settings();
+		$settings = get_network_option( null, TaxonomyRepository::OPTION );
+		if ( ! is_array( $settings ) ) {
+			// In case there are no settings at all, respect the taxonomies supported by default.
+			return in_array( $slug, TaxonomyRepository::DEFAULT_SUPPORTED_TAXONOMIES, true );
+		}
 
 		return (bool) (
 			$settings[ $slug ][ TaxonomyRepository::FIELD_ACTIVE ] ?? false

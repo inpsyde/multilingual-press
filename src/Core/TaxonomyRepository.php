@@ -11,6 +11,18 @@ namespace Inpsyde\MultilingualPress\Core;
 interface TaxonomyRepository {
 
 	/**
+	 * Taxonomy slugs.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[]
+	 */
+	const DEFAULT_SUPPORTED_TAXONOMIES = [
+		'category',
+		'post_tag',
+	];
+
+	/**
 	 * Settings field name.
 	 *
 	 * @since 3.0.0
