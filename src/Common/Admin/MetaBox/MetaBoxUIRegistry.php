@@ -7,7 +7,7 @@ namespace Inpsyde\MultilingualPress\Common\Admin\MetaBox;
 /**
  * Meta box UI registry.
  *
- * @package Inpsyde\MultilingualPress\Translation\Post
+ * @package Inpsyde\MultilingualPress\Common\Admin\MetaBox
  * @since   3.0.0
  */
 class MetaBoxUIRegistry {
