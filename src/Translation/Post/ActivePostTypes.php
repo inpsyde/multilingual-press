@@ -13,18 +13,6 @@ namespace Inpsyde\MultilingualPress\Translation\Post;
 class ActivePostTypes {
 
 	/**
-	 * Post type slugs active by default.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string[]
-	 */
-	const DEFAULT_ACTIVE_POST_TYPES = [
-		'page',
-		'post',
-	];
-
-	/**
 	 * Filter hook.
 	 *
 	 * @since 3.0.0
@@ -58,7 +46,7 @@ class ActivePostTypes {
 		 *
 		 * @param string[] $active_post_types Active post type slugs.
 		 */
-		$active_post_types = (array) apply_filters( self::FILTER_ACTIVE_POST_TYPES, self::DEFAULT_ACTIVE_POST_TYPES );
+		$active_post_types = (array) apply_filters( self::FILTER_ACTIVE_POST_TYPES, [] );
 
 		$this->active_post_types_slugs = array_filter( array_unique( $active_post_types ), 'post_type_exists' );
 

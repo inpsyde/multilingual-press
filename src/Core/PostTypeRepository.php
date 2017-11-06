@@ -11,6 +11,18 @@ namespace Inpsyde\MultilingualPress\Core;
 interface PostTypeRepository {
 
 	/**
+	 * Post type slugs.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string[]
+	 */
+	const DEFAULT_SUPPORTED_POST_TYPES = [
+		'page',
+		'post',
+	];
+
+	/**
 	 * Settings field name.
 	 *
 	 * @since 3.0.0

@@ -62,6 +62,27 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	}
 
 	/**
+	 * Returns all post types supported by MultilingualPress.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return string[] Post type slugs.
+	 */
+	public function get_supported_post_types() {
+
+		$settings = get_network_option( null, PostTypeRepository::OPTION );
+		if ( ! is_array( $settings ) ) {
+			// In case there are no settings at all, return the post types supported by default.
+			return PostTypeRepository::DEFAULT_SUPPORTED_POST_TYPES;
+		}
+
+		return array_filter( array_keys( $settings ), function ( string $slug ) {
+
+			return $this->is_post_type_active( $slug );
+		} );
+	}
+
+	/**
 	 * Checks if the post type with the given slug is active.
 	 *
 	 * @since 3.0.0
@@ -72,7 +93,11 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	 */
 	public function is_post_type_active( string $slug ): bool {
 
-		$settings = $this->get_settings();
+		$settings = get_network_option( null, PostTypeRepository::OPTION );
+		if ( ! is_array( $settings ) ) {
+			// In case there are no settings at all, respect the post types supported by default.
+			return in_array( $slug, PostTypeRepository::DEFAULT_SUPPORTED_POST_TYPES, true );
+		}
 
 		return (bool) (
 			$settings[ $slug ][ PostTypeRepository::FIELD_ACTIVE ] ?? false
