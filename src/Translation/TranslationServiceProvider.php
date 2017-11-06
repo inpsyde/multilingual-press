@@ -297,16 +297,9 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$meta_box_registrar->register_meta_boxes();
 		}, 0 );
 
-		// To toggle the UI, just put either one or two asterisks in the following comment. Magic. ;)
-		// @codingStandardsIgnoreStart
-		/**/
 		$post_translation_ui = $container['multilingualpress.post_translation_advanced_ui'];
-		/*/
-		$post_translation_ui = $container['multilingualpress.post_translation_simple_ui'];
-		/**/
-		// @codingStandardsIgnoreEnd
 
-		// For the moment, let's set select here the UI for posts.
+		// TODO: Use the UI according to the post type settings.
 		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use (
 			$meta_box_registrar,
 			$post_translation_ui
@@ -315,11 +308,12 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			return $registrar === $meta_box_registrar ? $post_translation_ui : $ui;
 		}, 10, 2 );
 
-		add_action( Post\PostMetaBoxRegistrar::ACTION_INIT_META_BOXES, function () use (
+		add_action( Post\PostMetaBoxRegistrar::ACTION_INIT_META_BOXES, function ( \WP_Post $post ) use (
 			$meta_box_registrar,
 			$ui_registry
 		) {
 
+			// TODO: Make the UI specific to each post type, using $post->post_type, with a possible fallback.
 			$meta_box_registrar->set_ui( $ui_registry->selected_ui( $meta_box_registrar ) );
 		}, 0 );
 
@@ -386,7 +380,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$term_translation_ui = $container['multilingualpress.term_translation_simple_ui'];
 
-		// For the moment, let's set select here the UI for terms.
+		// TODO: Use the UI according to the taxonomy settings.
 		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use (
 			$meta_box_registrar,
 			$term_translation_ui
@@ -395,11 +389,12 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			return $registrar === $meta_box_registrar ? $term_translation_ui : $ui;
 		}, 10, 2 );
 
-		add_action( Term\TermMetaBoxRegistrar::ACTION_INIT_META_BOXES, function () use (
+		add_action( Term\TermMetaBoxRegistrar::ACTION_INIT_META_BOXES, function ( \WP_Term $term ) use (
 			$meta_box_registrar,
 			$ui_registry
 		) {
 
+			// TODO: Make the UI specific to each taxonomy, using $term->taxonomy, with a possible fallback.
 			$meta_box_registrar->set_ui( $ui_registry->selected_ui( $meta_box_registrar ) );
 		}, 0 );
 
