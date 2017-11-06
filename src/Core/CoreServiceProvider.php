@@ -258,7 +258,9 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 			return new PostTypeSettingsTabView(
 				$container['multilingualpress.post_type_repository'],
-				$container['multilingualpress.update_post_type_settings_nonce']
+				$container['multilingualpress.update_post_type_settings_nonce'],
+				$container['multilingualpress.meta_box_ui_registry'],
+				$container['multilingualpress.post_meta_box_registrar']
 			);
 		};
 

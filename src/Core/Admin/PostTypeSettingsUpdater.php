@@ -26,6 +26,33 @@ class PostTypeSettingsUpdater {
 	const SETTINGS_NAME = 'post_type_settings';
 
 	/**
+	 * Settings field name for all post type support input fields.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const SETTINGS_FIELD_ACTIVE = 'active';
+
+	/**
+	 * Settings field name for all post type support input fields.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const SETTINGS_FIELD_PERMALINKS = 'permalinks';
+
+	/**
+	 * Settings field name for all post type support input fields.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const SETTINGS_FIELD_UI = 'ui';
+
+	/**
 	 * @var Nonce
 	 */
 	private $nonce;
@@ -81,15 +108,21 @@ class PostTypeSettingsUpdater {
 		$available_post_types = array_keys( $available_post_types );
 		$available_post_types = array_combine( $available_post_types, array_map( function ( $slug ) use ( $settings ) {
 
-			if ( empty( $settings[ $slug ] ) ) {
-				return PostTypeRepository::CPT_INACTIVE;
+			if ( empty( $settings[ $slug ][ self::SETTINGS_FIELD_ACTIVE ] ) ) {
+				return [
+					PostTypeRepository::FIELD_ACTIVE    => false,
+					PostTypeRepository::FIELD_PERMALINK => false,
+					PostTypeRepository::FIELD_UI        => '',
+				];
 			}
 
-			$links_setting = "{$slug}|links";
+			$settings = $settings[ $slug ];
 
-			return empty( $settings[ $links_setting ] )
-				? PostTypeRepository::CPT_ACTIVE
-				: PostTypeRepository::CPT_QUERY_BASED;
+			return [
+				PostTypeRepository::FIELD_ACTIVE    => true,
+				PostTypeRepository::FIELD_PERMALINK => (bool) ( $settings[ self::SETTINGS_FIELD_PERMALINKS ] ?? false ),
+				PostTypeRepository::FIELD_UI        => (string) ( $settings[ self::SETTINGS_FIELD_UI ] ?? '' ),
+			];
 		}, $available_post_types ) );
 
 		return $this->repository->set_supported_post_types( $available_post_types );

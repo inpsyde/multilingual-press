@@ -44,45 +44,57 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	}
 
 	/**
-	 * Returns all currently supported post types.
+	 * Returns the UI ID of the post type with the given slug.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return int[] An array with post type slugs as keys and their individual settings as values.
+	 * @param string $slug Post type slug.
+	 *
+	 * @return string Post type UI ID.
 	 */
-	public function get_supported_post_types(): array {
+	public function get_post_type_ui( string $slug ): string {
 
 		$settings = $this->get_settings();
-		if ( empty( $settings[ PostTypeRepository::SETTINGS_KEY ] ) ) {
-			return [];
-		}
 
-		$post_types = $settings[ PostTypeRepository::SETTINGS_KEY ];
-		$post_types = array_filter( $post_types, function ( $setting ) {
-
-			return PostTypeRepository::CPT_INACTIVE !== $setting;
-		} );
-
-		return $post_types;
+		return (string) (
+			$settings[ $slug ][ PostTypeRepository::FIELD_UI ] ?? ''
+		);
 	}
 
 	/**
-	 * Checks if the given post type is active and set to be query-based.
+	 * Checks if the post type with the given slug is active.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $post_type Post type.
+	 * @param string $slug Post type slug.
 	 *
-	 * @return bool Whether or not the given post type is active and set to be query-based.
+	 * @return bool Whether or not the given post type is active.
 	 */
-	public function is_post_type_active_and_query_based( string $post_type ): bool {
+	public function is_post_type_active( string $slug ): bool {
 
 		$settings = $this->get_settings();
-		if ( empty( $settings[ PostTypeRepository::SETTINGS_KEY ][ $post_type ] ) ) {
-			return false;
-		}
 
-		return PostTypeRepository::CPT_QUERY_BASED === $settings[ PostTypeRepository::SETTINGS_KEY ][ $post_type ];
+		return (bool) (
+			$settings[ $slug ][ PostTypeRepository::FIELD_ACTIVE ] ?? false
+		);
+	}
+
+	/**
+	 * Checks if the post type with the given slug is set to be query-based.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $slug Post type slug.
+	 *
+	 * @return bool Whether or not the given post type is set to be query-based.
+	 */
+	public function is_post_type_query_based( string $slug ): bool {
+
+		$settings = $this->get_settings();
+
+		return (bool) (
+			$settings[ $slug ][ PostTypeRepository::FIELD_PERMALINK ] ?? false
+		);
 	}
 
 	/**
@@ -96,11 +108,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 	 */
 	public function set_supported_post_types( array $post_types ): bool {
 
-		$settings = $this->get_settings();
-
-		$settings[ PostTypeRepository::SETTINGS_KEY ] = $post_types;
-
-		return (bool) update_network_option( null, PostTypeRepository::OPTION, $settings );
+		return (bool) update_network_option( null, PostTypeRepository::OPTION, $post_types );
 	}
 
 	/**

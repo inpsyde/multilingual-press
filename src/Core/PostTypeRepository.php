@@ -11,31 +11,31 @@ namespace Inpsyde\MultilingualPress\Core;
 interface PostTypeRepository {
 
 	/**
-	 * Setting value.
+	 * Settings field name.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var int
+	 * @var string
 	 */
-	const CPT_ACTIVE = 1;
+	const FIELD_ACTIVE = 'active';
 
 	/**
-	 * Setting value.
+	 * Settings field name.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var int
+	 * @var string
 	 */
-	const CPT_INACTIVE = 0;
+	const FIELD_PERMALINK = 'permalink';
 
 	/**
-	 * Setting value.
+	 * Settings field name.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var int
+	 * @var string
 	 */
-	const CPT_QUERY_BASED = 2;
+	const FIELD_UI = 'ui';
 
 	/**
 	 * Option for storing the post type setting.
@@ -47,42 +47,46 @@ interface PostTypeRepository {
 	const OPTION = 'inpsyde_multilingual_cpt';
 
 	/**
-	 * Settings key for storing the post type support settings.
+	 * Returns all post types that MultilingualPress is able to support.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @var string
-	 */
-	const SETTINGS_KEY = 'post_types';
-
-	/**
-	 * Returns all custom post types that MultilingualPress is able to support.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return \WP_Post_Type[] All custom post types that MultilingualPress is able to support.
+	 * @return \WP_Post_Type[] All post types that MultilingualPress is able to support.
 	 */
 	public function get_available_post_types(): array;
 
 	/**
-	 * Returns the slugs of all currently supported post types.
+	 * Returns the UI ID of the post type with the given slug.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @return string[] The slugs of all currently supported post types.
+	 * @param string $slug Post type slug.
+	 *
+	 * @return string Post type UI ID.
 	 */
-	public function get_supported_post_types(): array;
+	public function get_post_type_ui( string $slug ): string;
 
 	/**
-	 * Checks if the given post type is active and set to be query-based.
+	 * Checks if the post type with the given slug is active.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $post_type Post type.
+	 * @param string $slug Post type slug.
 	 *
-	 * @return bool Whether or not the given post type is active and set to be query-based.
+	 * @return bool Whether or not the given post type is active.
 	 */
-	public function is_post_type_active_and_query_based( string $post_type ): bool;
+	public function is_post_type_active( string $slug ): bool;
+
+	/**
+	 * Checks if the post type with the given slug is set to be query-based.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $slug Post type slug.
+	 *
+	 * @return bool Whether or not the given post type is set to be query-based.
+	 */
+	public function is_post_type_query_based( string $slug ): bool;
 
 	/**
 	 * Sets post type support to the given post types.
