@@ -22,6 +22,15 @@ class MetaBoxUIRegistry {
 	const ACTION_UI_SELECTED = 'multilingualpress.meta_box_ui';
 
 	/**
+	 * Default UI context
+	 *
+	 * @since 3.0.0
+	 *
+	 * @var string
+	 */
+	const DEFAULT_CONTEXT = '__DEFAULT__';
+
+	/**
 	 * Filter name.
 	 *
 	 * @since 3.0.0
@@ -142,15 +151,19 @@ class MetaBoxUIRegistry {
 	 * @since 3.0.0
 	 *
 	 * @param UIAwareMetaBoxRegistrar $registrar Meta box registrar object.
+	 * @param string                  $context   Optional. UI context (e.g., post type). Defaults to default context.
 	 *
 	 * @return MetaBoxUI Selected UI object.
 	 */
-	public function selected_ui( UIAwareMetaBoxRegistrar $registrar ): MetaBoxUI {
+	public function selected_ui(
+		UIAwareMetaBoxRegistrar $registrar,
+		string $context = self::DEFAULT_CONTEXT
+	): MetaBoxUI {
 
 		$registrar_id = $registrar->id();
 
-		if ( array_key_exists( $registrar_id, $this->selected_ui ) ) {
-			return $this->selected_ui[ $registrar_id ];
+		if ( isset( $this->selected_ui[ $registrar_id ][ $context ] ) ) {
+			return $this->selected_ui[ $registrar_id ][ $context ];
 		}
 
 		$ui_objects = $this->get_objects( $registrar );
@@ -162,21 +175,22 @@ class MetaBoxUIRegistry {
 		 *
 		 * @param MetaBoxUI|null          $selected_ui Currently selected UI object.
 		 * @param UIAwareMetaBoxRegistrar $registrar   Meta box registrar object.
+		 * @param string                  $context     UI context (e.g., post type).
 		 * @param MetaBoxUI[]             $ui_objects  An array with all meta box IDs as keys and the objects as values.
 		 */
-		$user_ui = apply_filters( self::FILTER_SELECT_UI, null, $registrar, $ui_objects );
+		$user_ui = apply_filters( self::FILTER_SELECT_UI, null, $registrar, $context, $ui_objects );
 
 		// If the filter does not return valid MetaBoxUI we default to null object and return.
 		if ( ! $user_ui instanceof MetaBoxUI ) {
-			$this->selected_ui[ $registrar_id ] = new NullMetaBoxUI();
+			$this->selected_ui[ $registrar_id ][ $context ] = new NullMetaBoxUI();
 
-			return $this->selected_ui[ $registrar_id ];
+			return $this->selected_ui[ $registrar_id ][ $context ];
 		}
 
 		// Let's ensure that the selected UI is one of the available UI objects: filter can only pick one, not override.
 		$ui_selected = ( $ui_objects[ $user_ui->id() ] ?? null ) === $user_ui;
 
-		$this->selected_ui[ $registrar_id ] = $ui_selected ? $user_ui : new NullMetaBoxUI();
+		$this->selected_ui[ $registrar_id ][ $context ] = $ui_selected ? $user_ui : new NullMetaBoxUI();
 
 		if ( $ui_selected ) {
 
@@ -187,8 +201,9 @@ class MetaBoxUIRegistry {
 			 *
 			 * @param MetaBoxUI               $selected_ui Selected UI object.
 			 * @param UIAwareMetaBoxRegistrar $registrar   Meta box registrar object.
+			 * @param string                  $context     UI context (e.g., post type).
 			 */
-			do_action( self::ACTION_UI_SELECTED, $user_ui, $registrar );
+			do_action( self::ACTION_UI_SELECTED, $user_ui, $registrar, $context );
 
 			/**
 			 * Fires right after the UI for the meta box has been selected.
@@ -196,10 +211,11 @@ class MetaBoxUIRegistry {
 			 * @since 3.0.0
 			 *
 			 * @param MetaBoxUI $selected_ui Selected UI object.
+			 * @param string    $context     UI context (e.g., post type).
 			 */
-			do_action( self::ACTION_UI_SELECTED . "_{$registrar_id}", $user_ui );
+			do_action( self::ACTION_UI_SELECTED . "_{$registrar_id}", $user_ui, $context );
 		}
 
-		return $this->selected_ui[ $registrar_id ];
+		return $this->selected_ui[ $registrar_id ][ $context ];
 	}
 }

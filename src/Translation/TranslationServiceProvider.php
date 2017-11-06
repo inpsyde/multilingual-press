@@ -297,24 +297,30 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$meta_box_registrar->register_meta_boxes();
 		}, 0 );
 
-		$post_translation_ui = $container['multilingualpress.post_translation_advanced_ui'];
+		$post_type_repository = $container['multilingualpress.post_type_repository'];
 
-		// TODO: Use the UI according to the post type settings.
-		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use (
+		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar, $context ) use (
 			$meta_box_registrar,
-			$post_translation_ui
+			$post_type_repository,
+			$ui_registry
 		) {
+			if ( $registrar !== $meta_box_registrar ) {
+				return $ui;
+			}
 
-			return $registrar === $meta_box_registrar ? $post_translation_ui : $ui;
-		}, 10, 2 );
+			$ui_objects = $ui_registry->get_objects( $meta_box_registrar );
+
+			$id = $post_type_repository->get_post_type_ui( $context );
+
+			return $ui_objects[ $id ] ?? null;
+		}, 10, 3 );
 
 		add_action( Post\PostMetaBoxRegistrar::ACTION_INIT_META_BOXES, function ( \WP_Post $post ) use (
 			$meta_box_registrar,
 			$ui_registry
 		) {
 
-			// TODO: Make the UI specific to each post type, using $post->post_type, with a possible fallback.
-			$meta_box_registrar->set_ui( $ui_registry->selected_ui( $meta_box_registrar ) );
+			$meta_box_registrar->set_ui( $ui_registry->selected_ui( $meta_box_registrar, $post->post_type ) );
 		}, 0 );
 
 		add_action( Post\PostMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function () use ( $container ) {
@@ -378,24 +384,31 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 			$meta_box_registrar->register_meta_boxes();
 		}, 0 );
 
-		$term_translation_ui = $container['multilingualpress.term_translation_simple_ui'];
+		$taxonomy_repository = $container['multilingualpress.taxonomy_repository'];
 
-		// TODO: Use the UI according to the taxonomy settings.
-		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar ) use (
+		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar, $context ) use (
 			$meta_box_registrar,
-			$term_translation_ui
+			$taxonomy_repository,
+			$ui_registry
 		) {
 
-			return $registrar === $meta_box_registrar ? $term_translation_ui : $ui;
-		}, 10, 2 );
+			if ( $registrar !== $meta_box_registrar ) {
+				return $ui;
+			}
+
+			$ui_objects = $ui_registry->get_objects( $meta_box_registrar );
+
+			$id = $taxonomy_repository->get_taxonomy_ui( $context );
+
+			return $ui_objects[ $id ] ?? null;
+		}, 10, 3 );
 
 		add_action( Term\TermMetaBoxRegistrar::ACTION_INIT_META_BOXES, function ( \WP_Term $term ) use (
 			$meta_box_registrar,
 			$ui_registry
 		) {
 
-			// TODO: Make the UI specific to each taxonomy, using $term->taxonomy, with a possible fallback.
-			$meta_box_registrar->set_ui( $ui_registry->selected_ui( $meta_box_registrar ) );
+			$meta_box_registrar->set_ui( $ui_registry->selected_ui( $meta_box_registrar, $term->taxonomy ) );
 		}, 0 );
 
 		add_action( Term\TermMetaBoxRegistrar::ACTION_SAVE_META_BOXES, function () use ( $container ) {
