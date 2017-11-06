@@ -158,11 +158,9 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 	 */
 	private function register_term_translation( Container $container ) {
 
-		$container->share( 'multilingualpress.active_taxonomies', function ( Container $container ) {
+		$container->share( 'multilingualpress.active_taxonomies', function () {
 
-			return new Term\ActiveTaxonomies(
-				$container['multilingualpress.active_post_types']
-			);
+			return new Term\ActiveTaxonomies();
 		} );
 
 		$container['multilingualpress.term_meta_box_factory'] = function ( Container $container ) {

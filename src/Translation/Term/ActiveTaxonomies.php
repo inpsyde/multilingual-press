@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace Inpsyde\MultilingualPress\Translation\Term;
 
-use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
-
 /**
  * Simple read-only storage for taxonomies active for MultilingualPress.
  *
@@ -29,21 +27,6 @@ class ActiveTaxonomies {
 	private $active_taxonomy_names;
 
 	/**
-	 * @var ActivePostTypes
-	 */
-	private $active_post_types;
-
-	/**
-	 * Constructor. Sets properties.
-	 *
-	 * @param ActivePostTypes $active_post_types
-	 */
-	public function __construct( ActivePostTypes $active_post_types ) {
-
-		$this->active_post_types = $active_post_types;
-	}
-
-	/**
 	 * Returns the allowed taxonomy names.
 	 *
 	 * @return string[] Allowed taxonomy names.
@@ -54,7 +37,6 @@ class ActiveTaxonomies {
 			return $this->active_taxonomy_names;
 		}
 
-		$active_taxonomies = get_object_taxonomies( $this->active_post_types->names() );
 		/**
 		 * Filters the allowed taxonomies.
 		 *
@@ -62,12 +44,9 @@ class ActiveTaxonomies {
 		 *
 		 * @param string[] $active_taxonomies Allowed taxonomy names.
 		 */
-		$active_taxonomies = (array) apply_filters( self::FILTER_ACTIVE_TAXONOMIES, $active_taxonomies );
+		$active_taxonomies = (array) apply_filters( self::FILTER_ACTIVE_TAXONOMIES, [] );
 
-		$this->active_taxonomy_names = array_filter( $active_taxonomies, function ( $taxonomy ) {
-
-			return is_string( $taxonomy ) && taxonomy_exists( $taxonomy );
-		} );
+		$this->active_taxonomy_names = array_filter( array_unique( $active_taxonomies ), 'taxonomy_exists' );
 
 		return $this->active_taxonomy_names;
 	}
