@@ -32,11 +32,6 @@ final class PostTypeSettingsTabView implements SettingsPageView {
 	private $nonce;
 
 	/**
-	 * @var \WP_Post_Type[]
-	 */
-	private $post_types;
-
-	/**
 	 * @var PostTypeRepository
 	 */
 	private $repository;
@@ -86,18 +81,15 @@ final class PostTypeSettingsTabView implements SettingsPageView {
 	 */
 	public function render() {
 
-		if ( ! isset( $this->post_types ) ) {
-			$this->post_types = $this->repository->get_available_post_types();
-		}
-
-		if ( ! $this->post_types ) {
+		$post_types = $this->repository->get_available_post_types();
+		if ( ! $post_types ) {
 			return;
 		}
 
 		nonce_field( $this->nonce );
 		?>
 		<table class="mlp-module-list">
-			<?php array_walk( $this->post_types, [ $this, 'render_table_row' ] ); ?>
+			<?php array_walk( $post_types, [ $this, 'render_table_row' ] ); ?>
 		</table>
 		<?php
 	}
@@ -163,8 +155,8 @@ final class PostTypeSettingsTabView implements SettingsPageView {
 	/**
 	 * Renders a table row element according to the given data.
 	 *
-	 * @param \WP_Post_Type $post_type            Post type object.
-	 * @param string        $slug                 Post type slug.
+	 * @param \WP_Post_Type $post_type Post type object.
+	 * @param string        $slug      Post type slug.
 	 *
 	 * @return void
 	 */
