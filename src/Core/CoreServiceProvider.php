@@ -36,6 +36,7 @@ use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsTabView;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\SiteSettingsUpdateRequestHandler;
 use Inpsyde\MultilingualPress\Core\Admin\TaxonomySettingsTabView;
+use Inpsyde\MultilingualPress\Core\Admin\TaxonomySettingsUpdater;
 use Inpsyde\MultilingualPress\Core\Admin\TypeSafeSiteSettingsRepository;
 use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageController;
 use Inpsyde\MultilingualPress\Core\FrontEnd\AlternateLanguageHTMLLinkTagRenderer;
@@ -44,11 +45,12 @@ use Inpsyde\MultilingualPress\Core\FrontEnd\PostTypeLinkURLFilter;
 use Inpsyde\MultilingualPress\Module;
 use Inpsyde\MultilingualPress\Service\Container;
 use Inpsyde\MultilingualPress\Service\BootstrappableServiceProvider;
+use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
 
 use function Inpsyde\MultilingualPress\get_available_language_names;
 use function Inpsyde\MultilingualPress\get_language_field_by_http_code;
 use function Inpsyde\MultilingualPress\get_site_language;
-use Inpsyde\MultilingualPress\Translation\Post\ActivePostTypes;
+use Inpsyde\MultilingualPress\Translation\Term\ActiveTaxonomies;
 
 /**
  * Service provider for all Core objects.
@@ -102,6 +104,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 				$container['multilingualpress.site_settings_repository']
 			);
 		};
+
+		$container->share( 'multilingualpress.taxonomy_repository', function () {
+
+			return new TypeSafeTaxonomyRepository();
+		} );
 
 		$container->share( 'multilingualpress.wordpress_request_context', function () {
 
@@ -377,12 +384,30 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		$container['multilingualpress.taxonomy_settings_tab_view'] = function ( Container $container ) {
 
-			return new TaxonomySettingsTabView();
+			return new TaxonomySettingsTabView(
+				$container['multilingualpress.taxonomy_repository'],
+				$container['multilingualpress.update_taxonomy_settings_nonce'],
+				$container['multilingualpress.meta_box_ui_registry'],
+				$container['multilingualpress.term_meta_box_registrar']
+			);
+		};
+
+		$container['multilingualpress.taxonomy_settings_updater'] = function ( Container $container ) {
+
+			return new TaxonomySettingsUpdater(
+				$container['multilingualpress.taxonomy_repository'],
+				$container['multilingualpress.update_taxonomy_settings_nonce']
+			);
 		};
 
 		$container['multilingualpress.update_post_type_settings_nonce'] = function () {
 
 			return new WPNonce( 'update_post_type_settings' );
+		};
+
+		$container['multilingualpress.update_taxonomy_settings_nonce'] = function () {
+
+			return new WPNonce( 'update_taxonomy_settings' );
 		};
 	}
 
@@ -472,10 +497,20 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 
 		add_action( 'delete_blog', [ $container['multilingualpress.site_data_deletor'], 'delete_site_data' ] );
 
-		$repository = $container['multilingualpress.post_type_repository'];
-		add_filter( ActivePostTypes::FILTER_ACTIVE_POST_TYPES, function ( array $post_types ) use ( $repository ) {
+		$post_type_repository = $container['multilingualpress.post_type_repository'];
+		add_filter( ActivePostTypes::FILTER_ACTIVE_POST_TYPES, function ( array $post_types ) use (
+			$post_type_repository
+		) {
 
-			return array_merge( $post_types, $repository->get_supported_post_types() );
+			return array_merge( $post_types, $post_type_repository->get_supported_post_types() );
+		} );
+
+		$taxonomy_repository = $container['multilingualpress.taxonomy_repository'];
+		add_filter( ActiveTaxonomies::FILTER_ACTIVE_TAXONOMIES, function ( array $taxonomies ) use (
+			$taxonomy_repository
+		) {
+
+			return array_merge( $taxonomies, $taxonomy_repository->get_supported_taxonomies() );
 		} );
 
 		if ( is_admin() ) {
@@ -525,6 +560,11 @@ final class CoreServiceProvider implements BootstrappableServiceProvider {
 		add_action(
 			PluginSettingsUpdater::ACTION_UPDATE_PLUGIN_SETTINGS,
 			[ $container['multilingualpress.post_type_settings_updater'], 'update_settings' ]
+		);
+
+		add_action(
+			PluginSettingsUpdater::ACTION_UPDATE_PLUGIN_SETTINGS,
+			[ $container['multilingualpress.taxonomy_settings_updater'], 'update_settings' ]
 		);
 
 		if ( is_network_admin() ) {
