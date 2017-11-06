@@ -33,6 +33,10 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 		$this->available_post_types = get_post_types( [
 			'show_ui'  => true,
 		], 'objects' );
+
+		// We don't support media, yet.
+		unset( $this->available_post_types['attachment'] );
+
 		if ( $this->available_post_types ) {
 			uasort( $this->available_post_types, function ( \WP_Post_Type $a, \WP_Post_Type $b ) {
 
