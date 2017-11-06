@@ -114,13 +114,11 @@ class MetaBoxUIRegistry {
 		$id = $ui->id();
 
 		if ( array_key_exists( $id, $registrar_ui_ids ) ) {
-			throw new \InvalidArgumentException(
-				sprintf(
-					"Unable to register meta box UI. A user interface with the '%s' already exists for registrar '%s'.",
-					$id,
-					$registrar_id
-				)
-			);
+			throw new \InvalidArgumentException( sprintf(
+				"Unable to register meta box UI. A user interface with ID '%s' already exists for registrar '%s'.",
+				$id,
+				$registrar_id
+			) );
 		}
 
 		$this->objects[ $registrar_id ] = $registrar_ui_ids;
