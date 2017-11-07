@@ -88,8 +88,16 @@ final class PostTypeSettingsTabView implements SettingsPageView {
 
 		nonce_field( $this->nonce );
 		?>
-		<table class="mlp-module-list">
+		<table class="widefat mlp-settings-table mlp-post-type-settings">
+			<tbody>
 			<?php array_walk( $post_types, [ $this, 'render_table_row' ] ); ?>
+			</tbody>
+			<thead>
+			<?php $this->render_table_headings(); ?>
+			</thead>
+			<tfoot>
+			<?php $this->render_table_headings(); ?>
+			</tfoot>
 		</table>
 		<?php
 	}
@@ -153,6 +161,23 @@ final class PostTypeSettingsTabView implements SettingsPageView {
 	}
 
 	/**
+	 * Renders the table headings.
+	 *
+	 * @return void
+	 */
+	private function render_table_headings() {
+
+		?>
+		<tr>
+			<th scope="col"></th>
+			<th scope="col"><?php esc_html_e( 'Post Type', 'multilingualpress' ); ?></th>
+			<th scope="col"><?php esc_html_e( 'User Interface', 'multilingualpress' ); ?></th>
+			<th scope="col"><?php esc_html_e( 'Permalinks', 'multilingualpress' ); ?></th>
+		</tr>
+		<?php
+	}
+
+	/**
 	 * Renders a table row element according to the given data.
 	 *
 	 * @param \WP_Post_Type $post_type Post type object.
@@ -167,11 +192,11 @@ final class PostTypeSettingsTabView implements SettingsPageView {
 		<tr class="<?php echo esc_attr( $is_active ? 'active' : 'inactive' ); ?>">
 			<?php $field = PostTypeSettingsUpdater::SETTINGS_FIELD_ACTIVE; ?>
 			<?php $id = $this->get_id( $slug ); ?>
-			<td class="check-column">
+			<th class="check-column" scope="row">
 				<input type="checkbox" name="<?php echo esc_attr( $this->get_name( $slug, $field ) ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>" title="<?php echo esc_html( $slug ); ?>"
 					<?php checked( $is_active ); ?>>
-			</td>
+			</th>
 			<td>
 				<label for="<?php echo esc_attr( $id ); ?>" class="mlp-block-label">
 					<strong class="mlp-module-name" title="<?php echo esc_html( $slug ); ?>">

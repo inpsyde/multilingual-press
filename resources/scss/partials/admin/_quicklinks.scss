@@ -3,7 +3,6 @@
 
 	label {
 		display: inline-block;
-		margin-left: 10px;
 		border: 1px solid #eee;
 		padding: 10px;
 		width: 120px;
@@ -35,5 +34,9 @@
 		&.quicklink-position-br:before {
 			background-position: bottom right;
 		}
+	}
+
+	* + label {
+		margin-left: 10px;
 	}
 }

@@ -92,7 +92,7 @@ final class SiteSettingsTabView implements SettingsPageView {
 					value="<?php echo esc_attr( SiteSettingsUpdateRequestHandler::ACTION ); ?>">
 				<input type="hidden" name="id" value="<?php echo esc_attr( $site_id ); ?>">
 				<?php nonce_field( $this->nonce ); ?>
-				<table class="form-table mlp-admin-settings-table">
+				<table class="form-table mlp-settings-table">
 					<?php $this->view->render( $site_id ); ?>
 				</table>
 				<?php submit_button(); ?>

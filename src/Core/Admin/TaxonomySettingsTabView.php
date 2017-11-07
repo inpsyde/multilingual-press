@@ -88,8 +88,16 @@ final class TaxonomySettingsTabView implements SettingsPageView {
 
 		nonce_field( $this->nonce );
 		?>
-		<table class="mlp-module-list">
+		<table class="widefat mlp-settings-table mlp-taxonomy-settings">
+			<tbody>
 			<?php array_walk( $taxonomies, [ $this, 'render_table_row' ] ); ?>
+			</tbody>
+			<thead>
+			<?php $this->render_table_headings(); ?>
+			</thead>
+			<tfoot>
+			<?php $this->render_table_headings(); ?>
+			</tfoot>
 		</table>
 		<?php
 	}
@@ -153,6 +161,22 @@ final class TaxonomySettingsTabView implements SettingsPageView {
 	}
 
 	/**
+	 * Renders the table headings.
+	 *
+	 * @return void
+	 */
+	private function render_table_headings() {
+
+		?>
+		<tr>
+			<th scope="col"></th>
+			<th scope="col"><?php esc_html_e( 'Taxonomy', 'multilingualpress' ); ?></th>
+			<th scope="col"><?php esc_html_e( 'User Interface', 'multilingualpress' ); ?></th>
+		</tr>
+		<?php
+	}
+
+	/**
 	 * Renders a table row element according to the given data.
 	 *
 	 * @param \WP_Taxonomy $taxonomy Taxonomy object.
@@ -167,11 +191,11 @@ final class TaxonomySettingsTabView implements SettingsPageView {
 		<tr class="<?php echo esc_attr( $is_active ? 'active' : 'inactive' ); ?>">
 			<?php $field = TaxonomySettingsUpdater::SETTINGS_FIELD_ACTIVE; ?>
 			<?php $id = $this->get_id( $slug ); ?>
-			<td class="check-column">
+			<th class="check-column" scope="row">
 				<input type="checkbox" name="<?php echo esc_attr( $this->get_name( $slug, $field ) ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>" title="<?php echo esc_html( $slug ); ?>"
 					<?php checked( $is_active ); ?>>
-			</td>
+			</th>
 			<td>
 				<label for="<?php echo esc_attr( $id ); ?>" class="mlp-block-label">
 					<strong class="mlp-module-name" title="<?php echo esc_html( $slug ); ?>">

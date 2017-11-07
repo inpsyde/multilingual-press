@@ -54,7 +54,7 @@ final class ModuleSettingsTabView implements SettingsPageView {
 	public function render() {
 
 		?>
-		<table class="mlp-module-list">
+		<table class="widefat mlp-settings-table mlp-module-settings">
 			<?php
 			foreach ( $this->module_manager->get_modules() as $id => $module ) {
 				/**
@@ -104,10 +104,10 @@ final class ModuleSettingsTabView implements SettingsPageView {
 		$id = 'multilingualpress-module-' . $module->id();
 		?>
 		<tr class="<?php echo esc_attr( $is_active ? 'active' : 'inactive' ); ?>">
-			<td class="check-column">
+			<th class="check-column" scope="row">
 				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"
 					id="<?php echo esc_attr( $id ); ?>"<?php checked( $is_active ); ?>>
-			</td>
+			</th>
 			<td>
 				<label for="<?php echo esc_attr( $id ); ?>" class="mlp-block-label">
 					<strong class="mlp-module-name"><?php echo esc_html( $module->name() ); ?></strong>

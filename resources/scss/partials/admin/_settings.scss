@@ -1,42 +1,17 @@
-.mlp-module-list,
-.mlp-extra-settings-box {
-	box-sizing: border-box;
-	margin: 2em 0 0;
-	border: 1px solid #ddd;
-	border-collapse: collapse;
-	max-width: 50em;
-	background: #fff;
-	color: #000;
-}
-
-.mlp-module-list,
-.mlp-admin-settings-table {
+.mlp-settings-table {
+	margin: 2em 0;
 
 	td,
 	th {
 		vertical-align: top;
 	}
+
+	tr.inactive {
+		background: #e9e9e9;
+	}
 }
 
-.mlp-module-list .check-column,
-.mlp-callback-indent,
-.mlp-extra-settings-box {
-	padding: 10px;
-}
-
-.mlp-module-list label {
-	padding: 10px 20px 10px 0;
-}
-
-.mlp-block-label {
-	display: block;
-}
-
-.mlp-module-list .inactive {
-	background: #e9e9e9;
-}
-
-.mlp-module-list tr,
+.mlp-settings-table tr,
 .mlp-extra-settings-box label {
 
 	&:hover {
@@ -44,11 +19,31 @@
 	}
 }
 
-.mlp-callback-indent,
-.mlp-extra-settings-box h4 {
-	margin: 0;
+.mlp-extra-settings-box {
+	box-sizing: border-box;
+	margin: 2em 0 0;
+	border: 1px solid #ddd;
+	border-collapse: collapse;
+	background: #fff;
+	color: #000;
 }
 
-#mlp-cpt-support-settings table label {
-	padding: 5px 20px 5px 10px;
+.mlp-block-label {
+	display: block;
+}
+
+.mlp-module-settings {
+
+	.mlp-module-name {
+		display: block;
+		margin-bottom: .5em;
+	}
+}
+
+.mlp-extra-settings-box {
+	padding: 10px;
+
+	h4 {
+		margin: 0;
+	}
 }
