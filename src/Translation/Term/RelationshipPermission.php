@@ -60,20 +60,36 @@ class RelationshipPermission {
 			return false;
 		}
 
-		if ( ! $term->term_id ) {
-			return current_user_can_for_blog( $related_site_id, $taxonomy->cap->edit_terms );
+		$is_term_editable = current_user_can_for_blog( $related_site_id, $taxonomy->cap->edit_terms );
+
+		if ( $term->term_id ) {
+			$related_term_id = $this->get_related_term_id( $term, $related_site_id );
+			if ( 0 > $related_term_id ) {
+				return false;
+			}
+
+			if ( 0 < $related_term_id ) {
+				$is_term_editable = current_user_can_for_blog( $related_site_id, 'edit_term', $related_term_id );
+			}
 		}
 
-		$related_term_id = $this->get_related_term_id( $term, $related_site_id );
-		if ( 0 > $related_term_id ) {
-			return false;
-		}
-
-		if ( 0 < $related_term_id ) {
-			return current_user_can_for_blog( $related_site_id, 'edit_term', $related_term_id );
-		}
-
-		return current_user_can_for_blog( $related_site_id, $taxonomy->cap->edit_terms );
+		/**
+		 * Filters if the related term of the given term in the given site is editable.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param bool     $is_term_editable Whether the related term of the given term in the given site is editable.
+		 * @param \WP_Post $term             Post object in the current site.
+		 * @param int      $related_site_id  Related site ID.
+		 * @param int      $related_term_id  Related term ID, or 0.
+		 */
+		return (bool) apply_filters(
+			'multilingualpress.is_related_term_editable',
+			$is_term_editable,
+			$term,
+			$related_site_id,
+			$related_term_id ?? 0
+		);
 	}
 
 	/**

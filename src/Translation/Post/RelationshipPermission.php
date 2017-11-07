@@ -61,11 +61,28 @@ class RelationshipPermission {
 		}
 
 		$related_post_id = $this->get_related_post_id( $post, $related_site_id );
-		if ( $related_post_id ) {
-			return current_user_can_for_blog( $related_site_id, $post_type->cap->edit_post, $related_post_id );
-		}
 
-		return current_user_can_for_blog( $related_site_id, $post_type->cap->edit_others_posts );
+		$is_post_editable = $related_post_id
+			? current_user_can_for_blog( $related_site_id, $post_type->cap->edit_post, $related_post_id )
+			: current_user_can_for_blog( $related_site_id, $post_type->cap->edit_others_posts );
+
+		/**
+		 * Filters if the related post of the given post in the given site is editable.
+		 *
+		 * @since 2.11.0
+		 *
+		 * @param bool     $is_post_editable Whether the related post of the given post in the given site is editable.
+		 * @param \WP_Post $post             Post object in the current site.
+		 * @param int      $related_site_id  Related site ID.
+		 * @param int      $related_post_id  Related post ID, or 0.
+		 */
+		return (bool) apply_filters(
+			'multilingualpress.is_related_post_editable',
+			$is_post_editable,
+			$post,
+			$related_site_id,
+			$related_post_id
+		);
 	}
 
 	/**
