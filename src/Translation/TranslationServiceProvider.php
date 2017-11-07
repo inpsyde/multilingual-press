@@ -282,8 +282,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$ui_registry = $container['multilingualpress.meta_box_ui_registry'];
 
+		$advanced_ui = $container['multilingualpress.post_translation_advanced_ui'];
+
 		$ui_registry->register_ui(
-			$container['multilingualpress.post_translation_advanced_ui'],
+			$advanced_ui,
 			$meta_box_registrar
 		);
 
@@ -302,7 +304,8 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar, $context ) use (
 			$meta_box_registrar,
 			$post_type_repository,
-			$ui_registry
+			$ui_registry,
+			$advanced_ui
 		) {
 			if ( $registrar !== $meta_box_registrar ) {
 				return $ui;
@@ -312,7 +315,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 			$id = $post_type_repository->get_post_type_ui( $context );
 
-			return $ui_objects[ $id ] ?? null;
+			return $ui_objects[ $id ] ?? $advanced_ui;
 		}, 10, 3 );
 
 		add_action( Post\PostMetaBoxRegistrar::ACTION_INIT_META_BOXES, function ( \WP_Post $post ) use (
@@ -374,8 +377,10 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 		$ui_registry = $container['multilingualpress.meta_box_ui_registry'];
 
+		$simple_ui = $container['multilingualpress.term_translation_simple_ui'];
+
 		$ui_registry->register_ui(
-			$container['multilingualpress.term_translation_simple_ui'],
+			$simple_ui,
 			$meta_box_registrar
 		);
 
@@ -389,7 +394,8 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 		add_filter( MetaBoxUIRegistry::FILTER_SELECT_UI, function ( $ui, $registrar, $context ) use (
 			$meta_box_registrar,
 			$taxonomy_repository,
-			$ui_registry
+			$ui_registry,
+			$simple_ui
 		) {
 
 			if ( $registrar !== $meta_box_registrar ) {
@@ -400,7 +406,7 @@ final class TranslationServiceProvider implements BootstrappableServiceProvider 
 
 			$id = $taxonomy_repository->get_taxonomy_ui( $context );
 
-			return $ui_objects[ $id ] ?? null;
+			return $ui_objects[ $id ] ?? $simple_ui;
 		}, 10, 3 );
 
 		add_action( Term\TermMetaBoxRegistrar::ACTION_INIT_META_BOXES, function ( \WP_Term $term ) use (
