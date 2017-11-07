@@ -166,7 +166,7 @@ final class ServiceProvider implements ModuleServiceProvider {
 		return $module_manager->register_module( new Module( 'redirect', [
 			'description' => __( 'Redirect visitors according to browser language settings.', 'multilingualpress' ),
 			'name'        => __( 'Redirect', 'multilingualpress' ),
-			'active'      => false,
+			'active'      => true,
 		] ) );
 	}
 
