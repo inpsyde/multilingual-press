@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.2
 Tested up to: 4.8
-Stable tag: 2.10.2
+Stable tag: 2.11.0
 
 Create a fast translation network on WordPress multisite.
 
@@ -113,6 +113,10 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
 
 == Changelog ==
+
+= 2.11.0 =
+- Post Translation: Allow for translation of scheduled posts, see [#296](https://github.com/inpsyde/MultilingualPress/pull/296).
+- Introduce filter for the remote post editing capability check.
 
 = 2.10.2 =
 - Redirect: Fix redirection not working correctly (esp. for front page).

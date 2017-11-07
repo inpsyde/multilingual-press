@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.11.0
+- Post Translation: Allow for translation of scheduled posts, see [#296](https://github.com/inpsyde/MultilingualPress/pull/296).
+- Introduce filter for the remote post editing capability check.
+
 ## 2.10.2
 - Redirect: Fix redirection not working correctly (esp. for front page).
 - Post Translation: Fix slashes being stripped off post data.
