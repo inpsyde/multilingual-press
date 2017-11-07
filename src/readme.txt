@@ -116,7 +116,7 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 
 = 2.11.0 =
 - Post Translation: Allow for translation of scheduled posts, see [#296](https://github.com/inpsyde/MultilingualPress/pull/296).
-- Introduce filter for the remote post editing capability check.
+- Post Translation: Introduce new filter, `multilingualpress.is_related_post_editable`, for the remote post editing capability check.
 
 = 2.10.2 =
 - Redirect: Fix redirection not working correctly (esp. for front page).
