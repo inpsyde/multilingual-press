@@ -52,7 +52,8 @@ final class NavMenuServiceProvider implements BootstrappableServiceProvider {
 		$container['multilingualpress.nav_menu_item_filter'] = function ( Container $container ) {
 
 			return new ItemFilter(
-				$container['multilingualpress.translations']
+				$container['multilingualpress.translations'],
+				$container['multilingualpress.nav_menu_item_repository']
 			);
 		};
 
@@ -122,6 +123,18 @@ final class NavMenuServiceProvider implements BootstrappableServiceProvider {
 				'wp_ajax_' . AJAXHandler::ACTION,
 				[ $container['multilingualpress.nav_menu_ajax_handler'], 'send_items' ]
 			);
+
+			$item_repository = $container['multilingualpress.nav_menu_item_repository'];
+
+			add_action( 'wp_setup_nav_menu_item', function ( $item ) use ( $item_repository ) {
+
+				if ( $item_repository->get_site_id( (int) $item->ID ?? 0 ) ) {
+					$item->type_label = esc_html__( 'Language', 'multilingualpress' );
+				}
+
+				return $item;
+			} );
+
 		} else {
 			add_filter(
 				'wp_nav_menu_objects',

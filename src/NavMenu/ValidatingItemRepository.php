@@ -23,6 +23,11 @@ final class ValidatingItemRepository implements ItemRepository {
 	private $request;
 
 	/**
+	 * @var int[]
+	 */
+	private $site_ids = [];
+
+	/**
 	 * Constructor. Sets up the properties.
 	 *
 	 * @since 3.0.0
@@ -76,6 +81,28 @@ final class ValidatingItemRepository implements ItemRepository {
 	}
 
 	/**
+	 * Returns the site ID for the nav menu item with the given ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $item_id Nav menu item ID.
+	 *
+	 * @return int Site ID.
+	 */
+	public function get_site_id( int $item_id ): int {
+
+		if ( isset( $this->site_ids[ $item_id ] ) ) {
+			return $this->site_ids[ $item_id ];
+		}
+
+		$site_id = (int) get_post_meta( $item_id, ItemRepository::META_KEY_SITE_ID, true );
+
+		$this->site_ids[ $item_id ] = $site_id;
+
+		return $site_id;
+	}
+
+	/**
 	 * Ensures that an item according to the given arguments exists in the database.
 	 *
 	 * @param int    $menu_id       Menu ID.
@@ -87,11 +114,8 @@ final class ValidatingItemRepository implements ItemRepository {
 	private function ensure_item( int $menu_id, int $site_id, string $language_name ) {
 
 		return get_post( wp_update_nav_menu_item( $menu_id, 0, [
-			'menu-item-title'      => esc_attr( $language_name ),
-			'menu-item-type'       => 'language',
-			'menu-item-object'     => 'custom',
-			'menu-item-url'        => get_home_url( $site_id, '/' ),
-			'menu_item-type-label' => esc_html__( 'Language', 'multilingualpress' ),
+			'menu-item-title' => esc_attr( $language_name ),
+			'menu-item-url'   => get_home_url( $site_id, '/' ),
 		] ) );
 	}
 
@@ -107,26 +131,21 @@ final class ValidatingItemRepository implements ItemRepository {
 
 		$item->object = 'mlp_language';
 
-		$item->post_type = 'nav_menu_item';
+		$item->url = get_home_url( $site_id, '/' );
+
+		if ( empty( $item->classes ) || ! is_array( $item->classes ) ) {
+			$item->classes = [];
+		}
+		$item->classes = array_filter( $item->classes );
+
+		$item->classes[] = "site-id-{$site_id}";
+		$item->classes[] = 'mlp-language-nav-item';
 
 		$item->xfn = 'alternate';
 
-		$item = wp_setup_nav_menu_item( $item );
-
-		$item->label = $item->title;
-
-		$item->type_label = esc_html__( 'Language', 'multilingualpress' );
-
-		$item->classes[] = "blog-id-{$site_id}";
-		$item->classes[] = 'mlp-language-nav-item';
-
-		$home_url = get_home_url( $site_id, '/' );
-
-		$item->url = $home_url;
-
 		update_post_meta( $item->ID, ItemRepository::META_KEY_SITE_ID, $site_id );
 
-		update_post_meta( $item->ID, '_menu_item_url', esc_url_raw( $home_url ) );
+		$item = wp_setup_nav_menu_item( $item );
 
 		return $item;
 	}

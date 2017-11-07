@@ -19,9 +19,9 @@ use function Inpsyde\MultilingualPress\site_exists;
 class ItemFilter {
 
 	/**
-	 * @var int[]
+	 * @var ItemRepository
 	 */
-	private $site_ids = [];
+	private $repository;
 
 	/**
 	 * @var Translations
@@ -33,11 +33,14 @@ class ItemFilter {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param Translations $translations Translations API object.
+	 * @param Translations   $translations Translations API object.
+	 * @param ItemRepository $repository   Item repository object.
 	 */
-	public function __construct( Translations $translations ) {
+	public function __construct( Translations $translations, ItemRepository $repository ) {
 
 		$this->translations = $translations;
+
+		$this->repository = $repository;
 	}
 
 	/**
@@ -81,7 +84,7 @@ class ItemFilter {
 	 */
 	private function maybe_delete_obsolete_item( \WP_Post $item ): bool {
 
-		$site_id = $this->get_site_id( $item );
+		$site_id = $this->repository->get_site_id( (int) $item->ID );
 		if ( ! $site_id ) {
 			return false;
 		}
@@ -105,7 +108,7 @@ class ItemFilter {
 	 */
 	private function prepare_item( \WP_Post $item, array $translations ): bool {
 
-		$site_id = $this->get_site_id( $item );
+		$site_id = $this->repository->get_site_id( (int) $item->ID );
 		if ( ! $site_id ) {
 			return false;
 		}
@@ -159,29 +162,5 @@ class ItemFilter {
 			$translation->remote_url() ?: get_home_url( $site_id, '/' ),
 			$translation,
 		];
-	}
-
-	/**
-	 * Returns the site ID for the given nav menu item object.
-	 *
-	 * @param \WP_Post $item Nav menu item object.
-	 *
-	 * @return int Site ID.
-	 */
-	private function get_site_id( \WP_Post $item ): int {
-
-		$item_id = (int) $item->ID;
-
-		if ( isset( $this->site_ids[ $item_id ] ) ) {
-			return $this->site_ids[ $item_id ];
-		}
-
-		$site_id = in_array( $item->type, [ 'language', 'custom' ], true )
-			? (int) get_post_meta( $item->ID, ItemRepository::META_KEY_SITE_ID, true )
-			: 0;
-
-		$this->site_ids[ $item_id ] = $site_id;
-
-		return $site_id;
 	}
 }

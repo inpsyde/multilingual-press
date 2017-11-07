@@ -29,4 +29,15 @@ interface ItemRepository {
 	 * @return object[] The items for the sites with the given IDs.
 	 */
 	public function get_items_for_sites( array $site_ids ): array;
+
+	/**
+	 * Returns the site ID for the nav menu item with the given ID.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int $item_id Nav menu item ID.
+	 *
+	 * @return int Site ID.
+	 */
+	public function get_site_id( int $item_id ): int;
 }
