@@ -198,7 +198,7 @@ final class TaxonomySettingsTabView implements SettingsPageView {
 			</th>
 			<td>
 				<label for="<?php echo esc_attr( $id ); ?>" class="mlp-block-label">
-					<strong class="mlp-module-name" title="<?php echo esc_html( $slug ); ?>">
+					<strong class="mlp-setting-name" title="<?php echo esc_html( $slug ); ?>">
 						<?php echo esc_html( $taxonomy->labels->name ); ?>
 					</strong>
 				</label>

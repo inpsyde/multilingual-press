@@ -110,7 +110,7 @@ final class ModuleSettingsTabView implements SettingsPageView {
 			</th>
 			<td>
 				<label for="<?php echo esc_attr( $id ); ?>" class="mlp-block-label">
-					<strong class="mlp-module-name"><?php echo esc_html( $module->name() ); ?></strong>
+					<strong class="mlp-setting-name"><?php echo esc_html( $module->name() ); ?></strong>
 					<?php echo esc_html( $module->description() ); ?>
 				</label>
 			</td>
