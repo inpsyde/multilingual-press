@@ -56,7 +56,7 @@ interface PostTypeRepository {
 	 *
 	 * @var string
 	 */
-	const OPTION = 'multilingualpress.post_types';
+	const OPTION = 'multilingualpress_post_types';
 
 	/**
 	 * Returns all post types that MultilingualPress is able to support.

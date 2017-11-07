@@ -19,7 +19,7 @@ final class NetworkOptionActivator implements Activator {
 	 *
 	 * @var string
 	 */
-	const OPTION = 'multilingualpress.activation';
+	const OPTION = 'multilingualpress_activation';
 
 	/**
 	 * @var callable[]

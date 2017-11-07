@@ -44,7 +44,7 @@ interface ModuleManager {
 	 *
 	 * @var string
 	 */
-	const OPTION = 'multilingualpress.modules';
+	const OPTION = 'multilingualpress_modules';
 
 	/**
 	 * Activates the module with the given ID.

@@ -17,7 +17,7 @@ interface SettingsRepository {
 	 *
 	 * @var string
 	 */
-	const OPTION = 'multilingualpress.quicklinks';
+	const OPTION = 'multilingualpress_quicklinks';
 
 	/**
 	 * Position value.

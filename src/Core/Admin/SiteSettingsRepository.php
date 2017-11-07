@@ -62,7 +62,7 @@ interface SiteSettingsRepository {
 	 *
 	 * @var string
 	 */
-	const OPTION = 'multilingualpress.site_settings';
+	const OPTION = 'multilingualpress_site_settings';
 
 	/**
 	 * Returns the alternative language title of the site with the given ID.

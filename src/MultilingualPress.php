@@ -45,7 +45,7 @@ final class MultilingualPress {
 	 *
 	 * @var string
 	 */
-	const OPTION_VERSION = 'multilingualpress.version';
+	const OPTION_VERSION = 'multilingualpress_version';
 
 	/**
 	 * @var Container
