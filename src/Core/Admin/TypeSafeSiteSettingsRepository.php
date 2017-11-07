@@ -56,7 +56,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function get_settings(): array {
 
-		return (array) get_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, [] );
+		return (array) get_network_option( null, SiteSettingsRepository::OPTION, [] );
 	}
 
 	/**
@@ -157,7 +157,7 @@ final class TypeSafeSiteSettingsRepository implements SiteSettingsRepository {
 	 */
 	public function set_settings( array $settings ): bool {
 
-		return (bool) update_network_option( null, SiteSettingsRepository::OPTION_SETTINGS, $settings );
+		return (bool) update_network_option( null, SiteSettingsRepository::OPTION, $settings );
 	}
 
 	/**

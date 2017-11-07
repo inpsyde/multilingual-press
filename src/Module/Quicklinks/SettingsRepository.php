@@ -17,7 +17,7 @@ interface SettingsRepository {
 	 *
 	 * @var string
 	 */
-	const OPTION = 'inpsyde_multilingual_quicklink_options';
+	const OPTION = 'multilingualpress.quicklinks';
 
 	/**
 	 * Position value.

@@ -47,7 +47,7 @@ interface TaxonomyRepository {
 	 *
 	 * @var string
 	 */
-	const OPTION = 'mlp_taxonomy_settings';
+	const OPTION = 'multilingualpress.taxonomies';
 
 	/**
 	 * Returns all taxonomies that MultilingualPress is able to support.

@@ -17,7 +17,7 @@ interface SettingsRepository {
 	 *
 	 * @var string
 	 */
-	const META_KEY_USER = 'mlp_redirect';
+	const META_KEY_USER = 'multilingualpress.redirect';
 
 	/**
 	 * Option name.
@@ -26,7 +26,7 @@ interface SettingsRepository {
 	 *
 	 * @var string
 	 */
-	const OPTION_SITE = 'inpsyde_multilingual_redirect';
+	const OPTION_SITE = 'multilingualpress.redirect';
 
 	/**
 	 * Returns the redirect setting for the site with the given ID.
