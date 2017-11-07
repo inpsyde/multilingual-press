@@ -93,6 +93,23 @@ class Uninstaller {
 	}
 
 	/**
+	 * Deletes all MultilingualPress post meta.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string[] $keys Meta keys.
+	 *
+	 * @return void
+	 */
+	public function delete_post_meta( array $keys ) {
+
+		array_walk( $keys, function ( string $key ) {
+
+			delete_post_meta_by_key( $key );
+		} );
+	}
+
+	/**
 	 * Deletes all MultilingualPress options for the given (or all) sites.
 	 *
 	 * @since 3.0.0
@@ -123,6 +140,23 @@ class Uninstaller {
 		$network_state->restore();
 
 		return $deleted;
+	}
+
+	/**
+	 * Deletes all MultilingualPress user meta.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string[] $keys Meta keys.
+	 *
+	 * @return void
+	 */
+	public function delete_user_meta( array $keys ) {
+
+		array_walk( $keys, function ( string $key ) {
+
+			delete_metadata( 'user', null, $key, '', true );
+		} );
 	}
 
 	/**

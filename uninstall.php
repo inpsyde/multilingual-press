@@ -58,9 +58,9 @@ $uninstaller->uninstall_tables( [
 
 $uninstaller->delete_network_options( [
 	Activation\NetworkOptionActivator::OPTION,
-	Core\Admin\SiteSettingsRepository::OPTION_SETTINGS,
-	Installation\NetworkPluginDeactivator::OPTION,
-	Module\CustomPostTypeSupport\PostTypeRepository::OPTION,
+	Core\Admin\SiteSettingsRepository::OPTION,
+	Core\PostTypeRepository::OPTION,
+	Core\TaxonomyRepository::OPTION,
 	Module\Quicklinks\SettingsRepository::OPTION,
 	Module\ModuleManager::OPTION,
 	MultilingualPress::OPTION_VERSION,
@@ -68,6 +68,16 @@ $uninstaller->delete_network_options( [
 
 $uninstaller->delete_site_options( [
 	Module\Redirect\SettingsRepository::OPTION_SITE,
+] );
+
+$uninstaller->delete_post_meta( [
+	Module\Trasher\TrasherSettingRepository::META_KEY,
+	NavMenu\ItemRepository::META_KEY_SITE_ID,
+	Widget\Dashboard\UntranslatedPosts\PostsRepository::META_KEY,
+] );
+
+$uninstaller->delete_user_meta( [
+	Module\Redirect\SettingsRepository::META_KEY_USER,
 ] );
 
 unset( $uninstaller );
