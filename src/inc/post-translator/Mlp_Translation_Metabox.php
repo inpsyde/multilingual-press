@@ -187,11 +187,30 @@ class Mlp_Translation_Metabox {
 		$blog_id = absint( $blog_id );
 
 		$remote_post = $this->data->get_remote_post( $post, $blog_id );
-		if ( isset( $remote_post->dummy ) && true === $remote_post->dummy ) {
-			return current_user_can_for_blog( $blog_id, $post_type->cap->edit_others_posts );
-		}
 
-		return current_user_can_for_blog( $blog_id, $post_type->cap->edit_post, $remote_post->ID );
+		$is_dummy_post = isset( $remote_post->dummy ) && true === $remote_post->dummy;
+
+		$is_related_post_editable = $is_dummy_post
+			? current_user_can_for_blog( $blog_id, $post_type->cap->edit_others_posts )
+			: current_user_can_for_blog( $blog_id, $post_type->cap->edit_post, $remote_post->ID );
+
+		/**
+		 * Filters if the related post of the given post in the given site is editable.
+		 *
+		 * @since 2.11.0
+		 *
+		 * @param bool    $is_editable     Whether the related post of the given post in the given site is editable.
+		 * @param WP_Post $post            Post object in the current site.
+		 * @param int     $related_site_id Related site ID.
+		 * @param int     $related_post_id Related post ID, or 0.
+		 */
+		return (bool) apply_filters(
+			'multilingualpress.is_related_post_editable',
+			$is_related_post_editable,
+			$post,
+			$blog_id,
+			$is_dummy_post ? 0 : (int) $remote_post->ID
+		);
 	}
 
 	/**
