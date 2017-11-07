@@ -11,15 +11,6 @@ namespace Inpsyde\MultilingualPress\Installation;
 interface NetworkPluginDeactivator {
 
 	/**
-	 * Name of the option that WordPress uses to store all plugins activated network-wide.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @var string
-	 */
-	const OPTION = 'active_sitewide_plugins';
-
-	/**
 	 * Deactivates the given plugins network-wide.
 	 *
 	 * @since 3.0.0

@@ -23,7 +23,7 @@ final class MatchingNetworkPluginDeactivator implements NetworkPluginDeactivator
 	 */
 	public function deactivate_plugins( array $plugins ): array {
 
-		$active_plugins = (array) get_network_option( null, NetworkPluginDeactivator::OPTION, [] );
+		$active_plugins = (array) get_network_option( null, 'active_sitewide_plugins', [] );
 
 		$plugins_to_deactivate = $this->get_plugins_to_deactivate( array_keys( $active_plugins ), $plugins );
 		if ( ! $plugins_to_deactivate ) {
@@ -32,7 +32,7 @@ final class MatchingNetworkPluginDeactivator implements NetworkPluginDeactivator
 
 		$active_plugins = array_diff_key( $active_plugins, array_flip( $plugins_to_deactivate ) );
 
-		update_network_option( null, NetworkPluginDeactivator::OPTION, $active_plugins );
+		update_network_option( null, 'active_sitewide_plugins', $active_plugins );
 
 		return $plugins_to_deactivate;
 	}
