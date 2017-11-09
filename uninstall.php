@@ -53,6 +53,7 @@ $uninstaller = resolve( 'multilingualpress.uninstaller', Uninstaller::class );
 $uninstaller->uninstall_tables( [
 	resolve( 'multilingualpress.content_relations_table', Table::class ),
 	resolve( 'multilingualpress.languages_table', Table::class ),
+	resolve( 'multilingualpress.relationships_table', Table::class ),
 	resolve( 'multilingualpress.site_relations_table', Table::class ),
 ] );
 
