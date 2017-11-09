@@ -71,7 +71,7 @@ class Uninstaller {
 
 		return array_reduce( $tables, function ( int $uninstalled, Table $table ) {
 
-			return $uninstalled + (int) $this->table_installer->uninstall( $table->name() );
+			return $uninstalled + (int) $this->table_installer->uninstall( $table );
 		}, 0 );
 	}
 
