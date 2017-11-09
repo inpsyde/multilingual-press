@@ -182,7 +182,7 @@ gulp.task( 'phpcs', [
 	'lint-xml',
 	'lint-php',
 ], ( cb ) => {
-	childProcess.exec( '"./vendor/bin/phpcs" src/API/CachingTranslations.php', createExecCallback( cb ) );
+	childProcess.exec( '"./vendor/bin/phpcs"', createExecCallback( cb ) );
 } );
 
 gulp.task( 'phpunit', [

@@ -18,17 +18,14 @@
 
 	<!-- Check for cross-version support for PHP 7.0 and higher. -->
 	<config name="testVersion" value="7.0-"/>
-	<rule ref="PHPCompatibility">
-
-		<!-- With PHP 7 or higher, these keywords actually are valid function names. https://github.com/wimg/PHPCompatibility/issues/515 -->
-		<exclude name="PHPCompatibility.PHP.ForbiddenNamesAsInvokedFunctions"/>
-
-	</rule>
 
 	<rule ref="WordPress">
 
 		<!-- Exclude to not be forced to have something like "@var Container $container Container.". -->
 		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+
+		<!-- Exclude to not be forced to align completely unrelated assignments. -->
+		<exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning"/>
 
 		<!-- Exclude to be able to include an encoding cookie. -->
 		<exclude name="Squiz.Commenting.FileComment.WrongStyle"/>
@@ -52,10 +49,20 @@
 		<!-- Exclude to not be forced to use a space before return type colons. https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/547. -->
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterCloseParenthesis"/>
 
+		<!-- Now that's an interesting bug. https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1227. -->
+		<exclude name="WordPress.CodeAnalysis.AssignmentInCondition.Found"/>
+
 		<!-- TODO: Remove the following TEMPORARY exceptions used for current development only. -->
 		<exclude name="PEAR.Functions.FunctionCallSignature.Indent"/>
 		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
 
+	</rule>
+
+	<!-- Adapt to maximum line length of 120. -->
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="maxColumn" value="120"/>
+		</properties>
 	</rule>
 
 	<!-- Adapt to be able to use namespaced hooks in dot notation such as "multilingualpress.active_taxonomies". -->

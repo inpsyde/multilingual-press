@@ -31,7 +31,7 @@ final class TypeSafePostTypeRepository implements PostTypeRepository {
 		}
 
 		$this->available_post_types = get_post_types( [
-			'show_ui'  => true,
+			'show_ui' => true,
 		], 'objects' );
 
 		// We don't support media, yet.

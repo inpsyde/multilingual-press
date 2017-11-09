@@ -109,7 +109,7 @@ final class RequestHandler implements Endpoint\RequestHandler {
 
 		if ( ! isset( $request['id'] ) ) {
 			return $this->api->get_languages( [
-				'order_by'   => [
+				'order_by' => [
 					[
 						'field' => LanguagesTable::COLUMN_ID,
 						'order' => 'ASC',

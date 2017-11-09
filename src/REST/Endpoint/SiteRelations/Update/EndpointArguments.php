@@ -42,7 +42,7 @@ final class EndpointArguments implements Arguments {
 	public function to_array(): array {
 
 		return [
-			'site_id' => [
+			'site_id'       => [
 				'description'       => __( 'A site ID.', 'multilingualpress' ),
 				'type'              => 'integer',
 				'minimum'           => 1,

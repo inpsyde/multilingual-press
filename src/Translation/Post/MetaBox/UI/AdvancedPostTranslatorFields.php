@@ -225,7 +225,7 @@ class AdvancedPostTranslatorFields {
 	private function render_excerpt_input( \WP_Post $source_post, int $remote_site_id, \WP_Post $remote_post = null ) {
 
 		if ( ! post_type_supports( $source_post->post_type, 'excerpt' ) ) {
-			return ;
+			return;
 		}
 
 		$id = $this->field_id( $remote_site_id, self::POST_EXCERPT );
@@ -270,7 +270,9 @@ class AdvancedPostTranslatorFields {
 					id="<?php echo esc_attr( $id ); ?>">
 				<?php esc_html_e( 'Copy the featured image of the source post.', 'multilingualpress' ); ?>
 				<span class="description">
-					<?php esc_html_e( 'Overwrites an existing featured image in the target post.', 'multilingualpress' ); ?>
+					<?php
+					esc_html_e( 'Overwrites an existing featured image in the target post.', 'multilingualpress' );
+					?>
 				</span>
 			</label>
 		</p>
