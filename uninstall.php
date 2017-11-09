@@ -44,7 +44,7 @@ require_once $main_plugin_file;
 
 unset( $main_plugin_file );
 
-if ( bootstrap() ) {
+if ( ! bootstrap() ) {
 	return;
 }
 
