@@ -39,26 +39,6 @@ class Uninstaller {
 	}
 
 	/**
-	 * Checks if the uninstall request is valid.
-	 *
-	 * @since 3.0.0
-	 *
-	 * @return bool Whether or not the uninstall request is valid.
-	 */
-	public function is_request_valid(): bool {
-
-		if ( ! current_user_can( 'activate_plugins' ) ) {
-			return false;
-		}
-
-		if ( ! is_multisite() ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Uninstalls the given tables.
 	 *
 	 * @since 3.0.0
@@ -97,16 +77,33 @@ class Uninstaller {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string[] $keys Meta keys.
+	 * @param string[] $keys     Meta keys.
+	 * @param int[]    $site_ids Optional. Site IDs. Defaults to empty string.
 	 *
-	 * @return void
+	 * @return bool Whether or not all post meta have been deleted successfully.
 	 */
-	public function delete_post_meta( array $keys ) {
+	public function delete_post_meta( array $keys, array $site_ids = [] ): bool {
 
-		array_walk( $keys, function ( string $key ) {
+		$site_ids = $site_ids ?: $this->site_ids();
+		if ( ! $site_ids ) {
+			return false;
+		}
 
-			delete_post_meta_by_key( $key );
+		$network_state = NetworkState::create();
+
+		array_walk( $site_ids, function ( int $site_id ) use ( $keys ) {
+
+			switch_to_blog( $site_id );
+
+			array_walk( $keys, function ( string $key ) {
+
+				delete_post_meta_by_key( $key );
+			} );
 		} );
+
+		$network_state->restore();
+
+		return true;
 	}
 
 	/**
@@ -122,6 +119,9 @@ class Uninstaller {
 	public function delete_site_options( array $options, array $site_ids = [] ): int {
 
 		$site_ids = $site_ids ?: $this->site_ids();
+		if ( ! $site_ids ) {
+			return 0;
+		}
 
 		$network_state = NetworkState::create();
 
