@@ -130,6 +130,15 @@ interface Language extends \ArrayAccess {
 	const NONE = 'none';
 
 	/**
+	 * Returns the ID of the language.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return int Language ID.
+	 */
+	public function id(): int;
+
+	/**
 	 * Checks if the language is written right-to-left (RTL).
 	 *
 	 * @since 3.0.0

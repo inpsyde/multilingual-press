@@ -68,6 +68,18 @@ final class NullLanguage implements Language {
 	}
 
 	/**
+	 * Returns the ID of the language.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return int Language ID.
+	 */
+	public function id(): int {
+
+		return 0;
+	}
+
+	/**
 	 * Checks if the language is written right-to-left (RTL).
 	 *
 	 * @since 3.0.0
@@ -102,7 +114,7 @@ final class NullLanguage implements Language {
 	 */
 	public function priority(): int {
 
-		return 0;
+		return 1;
 	}
 
 	/**
@@ -118,6 +130,7 @@ final class NullLanguage implements Language {
 			Language::CUSTOM_NAME    => '',
 			Language::ENGLISH_NAME   => '',
 			Language::HTTP_CODE      => '',
+			Language::ID             => 0,
 			Language::IS_RTL         => false,
 			Language::ISO_639_1_CODE => '',
 			Language::ISO_639_2_CODE => '',
