@@ -111,6 +111,7 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 10. New user settings for the sitewide _Backend Language_ and the _Language Redirect_.
 11. New _Language Switcher_ widget.
 12. Frontend view of a post showing both the _Quicklinks_ and the _Language Switcher_ widget.
+13. MultilingualPress is recommended by WP Engine as a solution for multilingual websites.
 
 == Changelog ==
 
