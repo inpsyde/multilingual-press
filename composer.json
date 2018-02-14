@@ -38,7 +38,6 @@
     "php": ">=5.2.4"
   },
   "require-dev": {
-    "php": ">=5.3.3",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.4.2",
     "phpunit/phpunit": "~4.8|~5.1",
     "squizlabs/php_codesniffer": "^2.0|^3.0",
