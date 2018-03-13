@@ -1,5 +1,8 @@
 # Changelog
 
+## Next release
+- Bump minimum WP version to 4.7 in order to prevent issues, see [#301](https://github.com/inpsyde/MultilingualPress/pull/301), props @lkraav.
+
 ## 2.11.0
 - Post Translation: Allow for translation of scheduled posts, see [#296](https://github.com/inpsyde/MultilingualPress/pull/296).
 - Post Translation: Introduce new filter, `multilingualpress.is_related_post_editable`, for the remote post editing capability check.
