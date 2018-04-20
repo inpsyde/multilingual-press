@@ -2,6 +2,7 @@
 
 ## Next release
 - Bump minimum WP version to 4.7 in order to prevent issues, see [#301](https://github.com/inpsyde/MultilingualPress/pull/301), props @lkraav.
+- Avoid error from `STRICT_TRANS_TABLES` in `@@sqlmode`, see [#302](https://github.com/inpsyde/MultilingualPress/issues/302) and [#303](https://github.com/inpsyde/MultilingualPress/pull/303), props @rebeccahum, @nickdaugherty.
 
 ## 2.11.0
 - Post Translation: Allow for translation of scheduled posts, see [#296](https://github.com/inpsyde/MultilingualPress/pull/296).
