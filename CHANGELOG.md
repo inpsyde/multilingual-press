@@ -1,6 +1,6 @@
 # Changelog
 
-## Next release
+## 2.11.1
 - Bump minimum WP version to 4.7 in order to prevent issues, see [#301](https://github.com/inpsyde/MultilingualPress/pull/301), props @lkraav.
 - Avoid error from `STRICT_TRANS_TABLES` in `@@sqlmode`, see [#302](https://github.com/inpsyde/MultilingualPress/issues/302) and [#303](https://github.com/inpsyde/MultilingualPress/pull/303), props @rebeccahum, @nickdaugherty.
 - Use Union Jack as English flag.
