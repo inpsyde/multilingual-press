@@ -49,7 +49,7 @@ class Mlp_Db_Languages_Schema implements Mlp_Db_Schema_Interface {
 			'ID'           => 'bigint unsigned NOT NULL auto_increment',
 			'english_name' => 'tinytext',
 			'native_name'  => 'tinytext',
-			'custom_name'  => 'tinytext NOT NULL',
+			'custom_name'  => 'tinytext NOT NULL DEFAULT \'\'',
 			// BOOL was added in MyQL 5.0.3, but WordPress requires just 5.0.0
 			'is_rtl'       => 'tinyint(1) unsigned DEFAULT 0',
 			// Could be de-DE-1901 or something more sophisticated
