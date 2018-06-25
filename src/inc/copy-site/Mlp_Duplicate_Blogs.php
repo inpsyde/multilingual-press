@@ -154,7 +154,10 @@ class Mlp_Duplicate_Blogs {
 			)
 		);
 
-		if( isset( $_POST['related_blogs'] ) ) {
+		$related_blogs = (array) filter_input( INPUT_POST, 'related_blogs', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		$related_blogs = array_map( 'intval', array_filter( $related_blogs ) );
+
+		if ( $related_blogs && in_array( $source_blog_id, $related_blogs, true ) ) {
 			$this->insert_post_relations( $source_blog_id, $blog_id );
 		}
 
