@@ -154,7 +154,10 @@ class Mlp_Duplicate_Blogs {
 			)
 		);
 
-		$this->insert_post_relations( $source_blog_id, $blog_id );
+		if( isset( $_POST['related_blogs'] ) ) {
+			$this->insert_post_relations( $source_blog_id, $blog_id );
+		}
+
 		$this->copy_attachments( $source_blog_id, $blog_id, $blog_id );
 
 		// Set the search engine visibility
