@@ -9,7 +9,7 @@ cache:
     - $HOME/.npm
 
 env:
-  - TRAVIS_NODE_VERSION=5
+  - TRAVIS_NODE_VERSION=7
 
 php:
   - 5.6
