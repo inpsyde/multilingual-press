@@ -6,6 +6,14 @@
 class Mlp_Trasher {
 
 	/**
+	 * @var string[]
+	 */
+	private $allowed_post_types = array(
+		'post',
+		'page',
+	);
+
+	/**
 	 * @var Mlp_Module_Manager_Interface
 	 */
 	private $module_manager;
@@ -65,9 +73,14 @@ class Mlp_Trasher {
 	 */
 	public function post_submitbox_misc_actions() {
 
-		$post_id = absint( filter_input( INPUT_GET, 'post' ) );
+		$post_id = $this->get_post_id();
+
+		if ( ! $this->isAllowedPost( $post_id ) ) {
+			return;
+		}
+
 		if ( $post_id ) {
-			// old key
+			// old key.
 			$trash_the_other_posts = (int) get_post_meta( $post_id, 'trash_the_other_posts', true );
 
 			if ( 1 !== $trash_the_other_posts ) {
@@ -194,5 +207,38 @@ class Mlp_Trasher {
 			'slug'         => 'class-' . __CLASS__,
 			'description'  => $description,
 		) );
+	}
+
+	/**
+	 * Returns the current post ID, or 0 on failure.
+	 *
+	 * @return int
+	 */
+	private function get_post_id() {
+
+		return absint( filter_input( INPUT_GET, 'post' ) );
+	}
+
+	/**
+	 * Check if post type is allowed to be translated.
+	 *
+	 * @param $post_id
+	 *
+	 * @return bool
+	 */
+	private function isAllowedPost( $post_id ) {
+
+		$allowed = apply_filters(
+			'mlp_allowed_post_types',
+			$this->allowed_post_types,
+			$this
+		);
+
+		$post = get_post( (int) $post_id );
+		if ( ! $post ) {
+			return false;
+		}
+
+		return in_array( $post->post_type, $allowed, true );
 	}
 }

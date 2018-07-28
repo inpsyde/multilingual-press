@@ -6,6 +6,14 @@
 class Mlp_Dashboard_Widget {
 
 	/**
+	 * @var string[]
+	 */
+	private $allowed_post_types = array(
+		'post',
+		'page',
+	);
+
+	/**
 	 * @var Inpsyde_Nonce_Validator
 	 */
 	private $nonce_validator;
@@ -65,6 +73,10 @@ class Mlp_Dashboard_Widget {
 		$post_id = $this->get_post_id();
 
 		$is_translated = $this->is_translated( $post_id );
+
+		if ( ! $this->isAllowedPost( $post_id ) ) {
+			return;
+		}
 
 		/**
 		 * Filters the visibility of the 'Translation completed' checkbox.
@@ -260,5 +272,28 @@ class Mlp_Dashboard_Widget {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if post type is allowed to be translated.
+	 *
+	 * @param $post_id
+	 *
+	 * @return bool
+	 */
+	private function isAllowedPost( $post_id ) {
+
+		$allowed = apply_filters(
+			'mlp_allowed_post_types',
+			$this->allowed_post_types,
+			$this
+		);
+
+		$post = get_post( (int) $post_id );
+		if ( ! $post ) {
+			return false;
+		}
+
+		return in_array( $post->post_type, $allowed, true );
 	}
 }
