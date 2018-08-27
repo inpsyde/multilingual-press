@@ -88,7 +88,7 @@ class Mlp_Dashboard_Widget {
 			<input type="hidden" name="post_is_translated_blogid"
 				value="<?php echo get_current_blog_id(); ?>">
 			<label for="post_is_translated">
-				<input type="checkbox" name="_post_is_translated" value="1" id="post_is_translated"
+				<input type="checkbox" name="post_is_translated" value="1" id="post_is_translated"
 					<?php checked( $is_translated ); ?>>
 				<?php esc_html_e( 'Translation completed', 'multilingual-press' ); ?>
 			</label>
@@ -198,7 +198,7 @@ class Mlp_Dashboard_Widget {
 	public function save_post( $post_id ) {
 
 		// If checkbox is not checked, return.
-		if ( ! isset( $_POST['translate_this_post'] ) ) {
+		if ( ! isset( $_POST['post_is_translated'] ) ) {
 			return;
 		}
 
@@ -223,7 +223,7 @@ class Mlp_Dashboard_Widget {
 		delete_post_meta( $post_id, 'post_is_translated' );
 
 		// Well, is this post translated? We just need the single way.
-		$post_is_translated = ! empty( $_POST['_post_is_translated'] ) && '1' === $_POST['_post_is_translated'];
+		$post_is_translated = ! empty( $_POST['post_is_translated'] ) && '1' === $_POST['post_is_translated'];
 		update_post_meta( $post_id, '_post_is_translated', $post_is_translated );
 	}
 

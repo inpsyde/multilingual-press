@@ -174,7 +174,7 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 			"SELECT `{$field}`
 			FROM `{$this->table_name}`
 			WHERE `http_name` = %s
-			ORDER BY `priority` DESC 
+			ORDER BY `priority` DESC
 			LIMIT 1",
 			$iso
 		);
@@ -654,12 +654,12 @@ WHERE `http_name` IN( $values )";
 
 		$sites = $this->site_relations->get_related_sites( $site_id );
 
-		if ( empty( $sites ) ) {
-			return array();
-		}
-
 		if ( $include_base ) {
 			$sites[] = (int) $site_id;
+		}
+
+		if ( empty( $sites ) ) {
+			return array();
 		}
 
 		return $sites;
