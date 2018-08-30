@@ -9,6 +9,8 @@ Create a fast translation network on WordPress multisite.
 
 == Description ==
 
+**Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and much more. [Get it here!](https://multilingualpress.org/#buy)**
+
 Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
 to link to all sites.
 
