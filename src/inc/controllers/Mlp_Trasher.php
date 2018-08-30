@@ -75,7 +75,7 @@ class Mlp_Trasher {
 
 		$post_id = $this->get_post_id();
 
-		if ( ! $this->isAllowedPost( $post_id ) ) {
+		if ( ! $this->is_allowed_post( $post_id ) ) {
 			return;
 		}
 
@@ -226,8 +226,14 @@ class Mlp_Trasher {
 	 *
 	 * @return bool
 	 */
-	private function isAllowedPost( $post_id ) {
+	private function is_allowed_post( $post_id ) {
 
+		/**
+		 * Filter the allowed post types.
+		 *
+		 * @param string[]                $allowed_post_types Allowed post type names.
+		 * @param Mlp_Translation_Metabox $meta_box           Translation meta box object.
+		 */
 		$allowed = apply_filters(
 			'mlp_allowed_post_types',
 			$this->allowed_post_types,
