@@ -231,8 +231,8 @@ class Mlp_Trasher {
 		/**
 		 * Filter the allowed post types.
 		 *
-		 * @param string[]                $allowed_post_types Allowed post type names.
-		 * @param Mlp_Translation_Metabox $meta_box           Translation meta box object.
+		 * @param string[]    $allowed_post_types Allowed post type names.
+		 * @param Mlp_Trasher $meta_box           Trasher meta box object.
 		 */
 		$allowed = apply_filters(
 			'mlp_allowed_post_types',
