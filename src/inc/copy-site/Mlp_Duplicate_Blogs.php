@@ -1,4 +1,5 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Class Mlp_Duplicate_Blogs
  *
@@ -44,7 +45,7 @@ class Mlp_Duplicate_Blogs {
 	 * @param Mlp_Db_Table_List_Interface    $table_names
 	 */
 	public function __construct(
-									   $link_table,
+		$link_table,
 		wpdb $wpdb,
 		Mlp_Table_Duplicator_Interface $duplicator,
 		Mlp_Db_Table_List_Interface $table_names
@@ -72,8 +73,10 @@ class Mlp_Duplicate_Blogs {
 	/**
 	 * Duplicates the old blog to the new blog
 	 *
-	 * @global    wpdb $wpdb WordPress Database Wrapper
-	 * @param   int $blog_id the new blog id
+	 * @global    wpdb $wpdb    WordPress Database Wrapper
+	 *
+	 * @param   int    $blog_id the new blog id
+	 *
 	 * @return  void
 	 */
 	public function wpmu_new_blog( $blog_id ) {
@@ -186,6 +189,7 @@ class Mlp_Duplicate_Blogs {
 	 * confirmation email to the new address.
 	 *
 	 * @param  string $admin_email
+	 *
 	 * @return void
 	 */
 	private function update_admin_email( $admin_email ) {
@@ -227,6 +231,7 @@ class Mlp_Duplicate_Blogs {
 	 * Tables to copy.
 	 *
 	 * @param array $context
+	 *
 	 * @return array
 	 */
 	private function get_table_names( array $context ) {
@@ -254,17 +259,13 @@ class Mlp_Duplicate_Blogs {
 	 *
 	 * @param int $source_blog_id
 	 * @param int $target_blog_id
+	 *
 	 * @return int|false Number of rows affected/selected or false on error
 	 */
 	private function insert_post_relations( $source_blog_id, $target_blog_id ) {
 
-		if ( $this->has_related_blogs( $source_blog_id ) ) {
-			return $this->copy_post_relationships( $source_blog_id, $target_blog_id );
-		}
-
 		return $this->create_post_relationships( $source_blog_id, $target_blog_id );
 	}
-
 
 	/**
 	 * Copies post relationships from source site to target site.
@@ -348,6 +349,7 @@ LIMIT 2";
 	 * @param int $from_id
 	 * @param int $to_id
 	 * @param int $final_id
+	 *
 	 * @return void
 	 */
 	private function copy_attachments( $from_id, $to_id, $final_id ) {
@@ -393,6 +395,7 @@ LIMIT 2";
 	 * Replace file URLs in new blog.
 	 *
 	 * @param Mlp_Copy_Attachments $copy_files
+	 *
 	 * @return int|false Number of rows affected/selected or false on error
 	 */
 	private function update_file_urls( $copy_files ) {
@@ -416,7 +419,7 @@ LIMIT 2";
 		$replaced_rows = 0;
 
 		foreach ( $tables as $table => $columns ) {
-			$table_name = new Mlp_Db_Table_Name( $table, $this->table_names );
+			$table_name    = new Mlp_Db_Table_Name( $table, $this->table_names );
 			$replaced_rows += (int) $db_replace->replace_string(
 				$table_name,
 				$columns,

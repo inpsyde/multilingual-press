@@ -42,9 +42,9 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 		$link_table
 	) {
 
-		$this->wpdb = $wpdb;
+		$this->wpdb           = $wpdb;
 		$this->site_relations = $site_relations;
-		$this->link_table = $link_table->get_name();
+		$this->link_table     = $link_table->get_name();
 	}
 
 	/**
@@ -126,7 +126,6 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 			$translation_ids['ml_source_elementid'],
 			$type
 		);
-		wp_cache_delete( $cache_key, $this->cache_group );
 
 		do_action(
 			'mlp_debug',
@@ -163,13 +162,6 @@ class Mlp_Content_Relations implements Mlp_Content_Relations_Interface {
 	 */
 	public function get_relations( $source_site_id, $source_content_id, $type = 'post' ) {
 
-		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
-
-		$cache = wp_cache_get( $cache_key, $this->cache_group );
-		if ( is_array( $cache ) ) {
-			return $cache;
-		}
-
 		$sql = "
 SELECT DISTINCT t.ml_blogid as site_id, t.ml_elementid as content_id
 FROM {$this->link_table} s
@@ -194,8 +186,6 @@ WHERE s.ml_blogid = %d
 			$output[ (int) $set['site_id'] ] = (int) $set['content_id'];
 		}
 
-		wp_cache_set( $cache_key, $output, $this->cache_group );
-
 		return $output;
 	}
 
@@ -218,7 +208,7 @@ WHERE s.ml_blogid = %d
 		$type = 'post'
 	) {
 
-		$where = array(
+		$where        = array(
 			'ml_source_blogid'    => $source_site_id,
 			'ml_source_elementid' => $source_content_id,
 			'ml_type'             => $type,
@@ -231,18 +221,15 @@ WHERE s.ml_blogid = %d
 
 		if ( 0 < $target_site_id ) {
 			$where['ml_blogid'] = $target_site_id;
-			$where_format[] = '%d';
+			$where_format[]     = '%d';
 		}
 
 		if ( 0 < $target_content_id ) {
 			$where['ml_elementid'] = $target_content_id;
-			$where_format[] = '%d';
+			$where_format[]        = '%d';
 		}
 
 		$result = (int) $this->wpdb->delete( $this->link_table, $where, $where_format );
-
-		$cache_key = $this->get_cache_key( $source_site_id, $source_content_id, $type );
-		wp_cache_delete( $cache_key, $this->cache_group );
 
 		do_action(
 			'mlp_debug',
