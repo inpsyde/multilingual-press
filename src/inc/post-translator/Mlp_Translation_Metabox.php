@@ -234,6 +234,7 @@ class Mlp_Translation_Metabox {
 			'remote_blog_id' => $blog_id,
 			'remote_post'    => $remote_post,
 			'language'       => $lang,
+			'__block_editor_compatible_meta_box' => false,
 		);
 
 		$nonce_validator = Mlp_Nonce_Validator_Factory::create(
