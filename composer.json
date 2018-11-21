@@ -48,5 +48,9 @@
     "branch-alias": {
       "dev-2.10": "2.10.x-dev"
     }
+  },
+  "conflict": {
+    "johnpbloch/wordpress": "^5.0.x-dev",
+    "johnpbloch/wordpress-core": "^5.0.x-dev"
   }
 }
