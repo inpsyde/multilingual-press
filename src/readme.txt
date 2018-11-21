@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
 Requires at least: 4.7
 Tested up to: 4.9
-Stable tag: 2.11.1
+Stable tag: 2.11.2
 
 Create a fast translation network on WordPress multisite.
 
@@ -119,6 +119,10 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 13. MultilingualPress is recommended by WP Engine as a solution for multilingual websites.
 
 == Changelog ==
+
+= 2.11.2 =
+- Add `__block_editor_compatible_meta_box` with `false` value to translation metabox, see [#320](https://github.com/inpsyde/MultilingualPress/pull/320).
+- Add Network admin notice about WordPress 5 upgrade with a link to the documentation, see [#320](https://github.com/inpsyde/MultilingualPress/pull/320).
 
 = 2.11.1 =
 - Bump minimum WP version to 4.7 in order to prevent issues, see [#301](https://github.com/inpsyde/MultilingualPress/pull/301), props @lkraav.

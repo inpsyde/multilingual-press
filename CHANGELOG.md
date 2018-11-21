@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.11.2
+- Add `__block_editor_compatible_meta_box` with `false` value to translation metabox, see [#320](https://github.com/inpsyde/MultilingualPress/pull/320).
+- Add Network admin notice about WordPress 5 upgrade with a link to the documentation, see [#320](https://github.com/inpsyde/MultilingualPress/pull/320).
+
 ## 2.11.1
 - Bump minimum WP version to 4.7 in order to prevent issues, see [#301](https://github.com/inpsyde/MultilingualPress/pull/301), props @lkraav.
 - Avoid error from `STRICT_TRANS_TABLES` in `@@sqlmode`, see [#302](https://github.com/inpsyde/MultilingualPress/issues/302) and [#303](https://github.com/inpsyde/MultilingualPress/pull/303), props @rebeccahum, @nickdaugherty.
