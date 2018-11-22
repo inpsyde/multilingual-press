@@ -3,7 +3,9 @@
 ![MultilingualPress](assets/banner-1544x500.png)
 
 ## Description
-WARNING: MultilingualPress 2 is not compatible with Gutenberg. BEFORE you update your WordPress to version 5.0 please read our [MultilingualPress and WordPress 5.0 guide](https://multilingualpress.org/docs/multilingualpress-wordpress-5-0-gutenberg/).
+**WARNING: MultilingualPress 2 is not compatible with Gutenberg. BEFORE you update your WordPress to version 5.0 please read our [MultilingualPress and WordPress 5.0 guide](https://multilingualpress.org/docs/multilingualpress-wordpress-5-0-gutenberg/).**
+
+**Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and much more. [Get 30% off from 23 to 26 Nov!](https://multilingualpress.org)**
 
 Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
 to link to all sites.
@@ -43,14 +45,14 @@ without affecting the output of the front-end.
 
 We cannot guarantee free ad hoc support. Please be patient, we are a small team.
 You can follow our progress and development notices on our
-[developer blog](http://make.multilingualpress.pro).
+[developer blog](http://multilingualpress.org/blog/).
 
 ## Premium Support
-We also offer [premium support](http://marketpress.com/shop/plugins/multilingual-press-pro/) to save your time.
-You get direct help from the developers of the plugin-and support the development.
+We also offer [premium support](https://multilingualpress.org) to save your time.
+You get direct help from the developers of the plugin-and support the development. Support for Version 2 is included in every version 3 licence.
 
 ## WPML to MultilingualPress
-If you would like to switch from the WPML plugin to MultilingualPress, you can use the helping hands of
+If you would like to switch from the WPML plugin to MultilingualPress 2, you can use the helping hands of
 [WPML to MultilingualPress](https://wordpress.org/plugins/wpml-to-multilingualpress/). This plugin converts posts from
 an existing WPML multilingual site via XLIFF export/import for MultilingualPress.
 
@@ -60,7 +62,7 @@ an existing WPML multilingual site via XLIFF export/import for MultilingualPress
 * PHP 5.2.4, newer PHP versions will work faster.
 
 If you're new to WordPress multisite, you might find our [WordPress multisite installation
-tutorial](https://marketpress.com/2015/wordpress-multisite-installation/) helpful.
+tutorial](https://multilingualpress.org/docs/how-to-install-wordpress-multisite/) helpful.
 
 ### Installation
 Use the installer via back-end of your install or ...
@@ -80,8 +82,7 @@ That would require changes to the way WordPress stores post content. Other plugi
 because it creates a lock-in: you would lose access to your content after the plugin deactivation.
 
 ### I'm new to WordPress multisite. Are there any tutorials to get me started?
-Yes, just have a look at our [WordPress multisite installation
-tutorial](https://marketpress.com/2015/wordpress-multisite-installation/).
+Yes, just have a look at our [WordPress Multisite 1x1](https://multilingualpress.org/docs-category/wordpress-multisite-1x1/).
 
 ## Screenshots
 ![Screenshot 1](assets/screenshot-1.png)  
