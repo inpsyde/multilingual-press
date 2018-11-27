@@ -1,6 +1,6 @@
 === MultilingualPress ===
-Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont, ChriCo, dnaber-de, paddelboot
-Tags: bilingual, i18n, international, internationalization, l10n, lang, language, localization, multi, multilanguage, multilingual, multisite, network, translation
+Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont, ChriCo, dnaber-de, dinamiko
+Tags: multilingual, multisite, translate, language switcher, international, network
 Requires at least: 4.7
 Tested up to: 4.9
 Stable tag: 2.11.2
@@ -10,12 +10,11 @@ Create a fast translation network on WordPress multisite.
 == Description ==
 WARNING: MultilingualPress 2 is not compatible with Gutenberg. BEFORE you update your WordPress to version 5.0 please read our [MultilingualPress and WordPress 5.0 guide](https://multilingualpress.org/docs/multilingualpress-wordpress-5-0-gutenberg/).
 
-**Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and much more. [Get it here!](https://multilingualpress.org/#buy)**
+**Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and much more. [Get it here - 30% BLACKCYBER Sale until Nov. 26!](https://multilingualpress.org/#buy)**
 
 *Please note, you can't update MLP2 to MLP3 yet, this is a complete refactor, therefore an update is not possible yet.*
 
-Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
-to link to all sites.
+Run each language in a separate site of your WordPress multisite and connect the content in a lightweight user interface. To allow your users switch between languages, create a language switcher in your custom menu or use a customizable widget.
 
 This plugin lets you connect an unlimited amount of sites with each other.
 Set a main language for each site, create relationships (connections), and start writing. You get a new field now to
@@ -32,9 +31,9 @@ Our **Language Manager** offers 174 languages, and you can edit them.
 - Set up unlimited site relationships in the site manager.
 - Language Manager with 174 editable languages.
 - Edit all translations for a post or page from the original post editor without the need to switch sites.
-- Show a list of links for all translations on each page in a flexible widget.
+- Show a list of links for all translations on each page in a flexible language switcher widget.
 - Translate posts, pages and taxonomy terms like categories or tags.
-- Add translation links to any nav menu.
+- Menu language switcher: Add translation links to any nav menu.
 - No lock-in: After deactivation, all sites will still work.
 - SEO-friendly URLs and permalinks.
 - Support for top-level domains per language (via multisite domain mapping).
