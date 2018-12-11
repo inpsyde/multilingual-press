@@ -10,7 +10,7 @@ Create a fast translation network on WordPress multisite.
 == Description ==
 WARNING: MultilingualPress 2 is not compatible with Gutenberg. BEFORE you update your WordPress to version 5.0 please read our [MultilingualPress and WordPress 5.0 guide](https://multilingualpress.org/docs/multilingualpress-wordpress-5-0-gutenberg/).
 
-**Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and much more. [Get it here - 30% BLACKCYBER Sale until Nov. 26!](https://multilingualpress.org/#buy)**
+**Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and much more. [Get it here!](https://multilingualpress.org/#buy)**
 
 *Please note, you can't update MLP2 to MLP3 yet, this is a complete refactor, therefore an update is not possible yet.*
 
