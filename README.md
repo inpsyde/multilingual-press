@@ -5,7 +5,7 @@
 ## Description
 **WARNING: MultilingualPress 2 is not compatible with Gutenberg. BEFORE you update your WordPress to version 5.0 please read our [MultilingualPress and WordPress 5.0 guide](https://multilingualpress.org/docs/multilingualpress-wordpress-5-0-gutenberg/).**
 
-**Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and much more. [Get it here!](https://multilingualpress.org)**
+**Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and much more. [Get 30% off on Dec 19th - as surprise in our Inpsyde Advent Calendar!](https://multilingualpress.org)**
 
 Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
 to link to all sites.
