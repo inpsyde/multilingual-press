@@ -43,9 +43,9 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	private $content_relations;
 
 	/**
-	 * @var array
+	 * @var string
 	 */
-	private $language_data_from_db = array();
+	private $cache_group = 'mlp';
 
 	/**
 	 * Constructor.
@@ -485,11 +485,14 @@ class Mlp_Language_Api implements Mlp_Language_Api_Interface {
 	 */
 	private function get_all_language_data() {
 
-		if ( ! empty( $this->language_data_from_db ) ) {
-			return $this->language_data_from_db;
-		}
-
 		$languages = (array) get_site_option( 'inpsyde_multilingual', array() );
+
+		$cache_key = 'mlp_all_language_data_' . md5( serialize( $languages ) );
+		$cache = wp_cache_get( $cache_key, $this->cache_group );
+
+		if ( is_array( $cache ) ) {
+			return $cache;
+		}
 
 		if ( empty( $languages ) ) {
 			return array();
@@ -541,7 +544,7 @@ WHERE `http_name` IN( $values )";
 			}
 		}
 
-		$this->language_data_from_db = $languages;
+		wp_cache_set( $cache_key, $languages, $this->cache_group );
 
 		return $languages;
 	}
