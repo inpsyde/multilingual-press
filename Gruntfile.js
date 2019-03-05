@@ -225,23 +225,6 @@ module.exports = function( grunt ) {
 		},
 
 		/**
-		 * @see {@link https://github.com/jgable/grunt-phplint grunt-phplint}
-		 */
-		phplint: {
-			root: {
-				src: [ '*.php' ]
-			},
-
-			src: {
-				src: [ '<%= config.src %>**/*.php' ]
-			},
-
-			tests: {
-				src: [ '<%= config.tests.php %>**/*.php' ]
-			}
-		},
-
-		/**
 		 * @see {@link https://github.com/nDmitry/grunt-postcss grunt-postcss}
 		 * @see {@link https://github.com/postcss/postcss PostCSS}
 		 */
@@ -356,17 +339,6 @@ module.exports = function( grunt ) {
 				]
 			},
 
-			php: {
-				files: [
-					'*.php',
-					'<%= config.src %>**/*.php',
-					'<%= config.tests.php %>**/*.php'
-				],
-				tasks: [
-					'newer:phplint'
-				]
-			},
-
 			scripts: {
 				files: [
 					'.eslintrc',
@@ -434,7 +406,6 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'common', [
 		'jsonlint',
-		'phplint',
 		'shell:phpunit',
 		'eslint',
 		'tape'
@@ -450,7 +421,6 @@ module.exports = function( grunt ) {
 		'newer:jsvalidate:gruntfile',
 		'newer:delegate:imagemin-images',
 		'newer:jsonlint',
-		'newer:phplint:src',
 		'newer:lineending',
 		'scripts',
 		'styles'
