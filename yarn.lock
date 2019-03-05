@@ -969,7 +969,7 @@ boom@2.x.x:
   version "2.10.1"
   resolved "https://registry.yarnpkg.com/boom/-/boom-2.10.1.tgz#39c8918ceff5799f83f9492a848f625add0c766f"
   dependencies:
-    hoek "2.x.x"
+    hoek "4.2.1"
 
 brace-expansion@^1.1.7:
   version "1.1.8"
@@ -1083,7 +1083,7 @@ browserify@^13.0.0:
     browser-resolve "^1.11.0"
     browserify-zlib "~0.1.2"
     buffer "^4.1.0"
-    cached-path-relative "^1.0.0"
+    cached-path-relative "^1.0.2"
     concat-stream "~1.5.1"
     console-browserify "^1.1.0"
     constants-browserify "~1.0.0"
@@ -1135,7 +1135,7 @@ browserify@^14.0.0:
     browser-resolve "^1.11.0"
     browserify-zlib "~0.1.2"
     buffer "^5.0.2"
-    cached-path-relative "^1.0.0"
+    cached-path-relative "^1.0.2"
     concat-stream "~1.5.1"
     console-browserify "^1.1.0"
     constants-browserify "~1.0.0"
@@ -1273,8 +1273,8 @@ cacheable-request@^2.1.1:
     normalize-url "2.0.1"
     responselike "1.0.2"
 
-cached-path-relative@^1.0.0:
-  version "1.0.1"
+cached-path-relative@^1.0.2:
+  version "1.0.2"
   resolved "https://registry.yarnpkg.com/cached-path-relative/-/cached-path-relative-1.0.1.tgz#d09c4b52800aa4c078e2dd81a869aac90d2e54e7"
 
 call-me-maybe@^1.0.1:
@@ -1644,8 +1644,8 @@ cross-spawn@^6.0.0:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-cryptiles@2.x.x:
-  version "2.0.5"
+cryptiles@4.1.2:
+  version "4.1.2"
   resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-2.0.5.tgz#3bdfecdc608147c1c67202fa291e7dca59eaa3b8"
   dependencies:
     boom "2.x.x"
@@ -1846,8 +1846,8 @@ deep-equal@~1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
 
-deep-extend@~0.4.0:
-  version "0.4.2"
+deep-extend@~0.5.1:
+  version "0.5.1"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.2.tgz#48b699c27e334bf89f10892be432f6e4c7d34a7f"
 
 deep-is@~0.1.3:
@@ -2364,7 +2364,7 @@ expand-brackets@^2.1.4:
   dependencies:
     debug "^2.3.3"
     define-property "^0.2.5"
-    extend-shallow "^2.0.1"
+    extend-shallow "^3.0.2"
     posix-character-classes "^0.1.0"
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
@@ -2405,8 +2405,8 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
     assign-symbols "^1.0.0"
     is-extendable "^1.0.1"
 
-extend@~3.0.0:
-  version "3.0.1"
+extend@~3.0.2:
+  version "3.0.2"
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.1.tgz#a755ea7bc1adfcc5a31ce7e762dbaadc5e636444"
 
 extglob@^0.3.1:
@@ -2543,7 +2543,7 @@ fill-range@^2.1.0:
   dependencies:
     is-number "^2.1.0"
     isobject "^2.0.0"
-    randomatic "^1.1.3"
+    randomatic "^3.0.0"
     repeat-element "^1.1.2"
     repeat-string "^1.5.2"
 
@@ -3280,8 +3280,8 @@ hawk@~3.1.3:
   resolved "https://registry.yarnpkg.com/hawk/-/hawk-3.1.3.tgz#078444bd7c1640b0fe540d2c9b73d59678e8e1c4"
   dependencies:
     boom "2.x.x"
-    cryptiles "2.x.x"
-    hoek "2.x.x"
+    cryptiles "4.1.2"
+    hoek "4.2.1"
     sntp "1.x.x"
 
 hmac-drbg@^1.0.0:
@@ -3292,8 +3292,8 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hoek@2.x.x:
-  version "2.16.3"
+hoek@4.2.1:
+  version "4.2.1"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
 
 home-or-tmp@^2.0.0:
@@ -3336,7 +3336,7 @@ http-signature@~1.1.0:
   dependencies:
     assert-plus "^0.2.0"
     jsprim "^1.2.2"
-    sshpk "^1.7.0"
+    sshpk "^1.13.2"
 
 https-browserify@^1.0.0:
   version "1.0.0"
@@ -4282,7 +4282,7 @@ module-deps@^4.0.8:
   dependencies:
     JSONStream "^1.0.3"
     browser-resolve "^1.7.0"
-    cached-path-relative "^1.0.0"
+    cached-path-relative "^1.0.2"
     concat-stream "~1.5.0"
     defined "^1.0.0"
     detective "^4.0.0"
@@ -4960,8 +4960,8 @@ querystring@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
 
-randomatic@^1.1.3:
-  version "1.1.7"
+randomatic@^3.0.0:
+  version "3.0.0"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-1.1.7.tgz#c7abe9cc8b87c0baa876b19fde83fd464797e38c"
   dependencies:
     is-number "^3.0.0"
@@ -4985,7 +4985,7 @@ rc@^1.1.7:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/rc/-/rc-1.2.1.tgz#2e03e8e42ee450b8cb3dce65be1bf8974e1dfd95"
   dependencies:
-    deep-extend "~0.4.0"
+    deep-extend "~0.5.1"
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
@@ -5180,7 +5180,7 @@ request@^2.81.0:
     qs "~6.4.0"
     safe-buffer "^5.0.1"
     stringstream "~0.0.4"
-    tough-cookie "~2.3.0"
+    tough-cookie "~2.3.3"
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
@@ -5468,7 +5468,7 @@ sntp@1.x.x:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/sntp/-/sntp-1.0.9.tgz#6541184cc90aeea6c6e7b35e2659082443c66198"
   dependencies:
-    hoek "2.x.x"
+    hoek "4.2.1"
 
 sort-keys-length@^1.0.0:
   version "1.0.1"
@@ -5576,8 +5576,8 @@ squeak@^1.0.0:
     console-stream "^0.1.1"
     lpad-align "^1.0.1"
 
-sshpk@^1.7.0:
-  version "1.13.1"
+sshpk@^1.13.2:
+  version "1.13.2"
   resolved "https://registry.yarnpkg.com/sshpk/-/sshpk-1.13.1.tgz#512df6da6287144316dc4c18fe1cf1d940739be3"
   dependencies:
     asn1 "~0.2.3"
@@ -5978,8 +5978,8 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
 
-tough-cookie@~2.3.0:
-  version "2.3.2"
+tough-cookie@~2.3.3:
+  version "2.3.3"
   resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-2.3.2.tgz#f081f76e4c85720e6c37a5faced737150d84072a"
   dependencies:
     punycode "^1.4.1"
