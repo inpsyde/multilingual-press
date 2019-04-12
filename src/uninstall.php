@@ -49,9 +49,13 @@ if ( WP_UNINSTALL_PLUGIN === 'multilingual-press/multilingual-press.php' ) {
  */
 global $wpdb;
 
-foreach ( array( 'mlp_languages', 'multilingual_linked', 'mlp_site_relations' ) as $table ) {
-	// @codingStandardsIgnoreLine
-	$wpdb->query( sprintf( 'DROP TABLE IF EXISTS %s', "{$wpdb->base_prefix}{$table}" ) );
+$tablesToDelete = apply_filters(
+    'multilingualpress.deleted_tables',
+    ['mlp_languages', 'multilingual_linked', 'mlp_site_relations']
+);
+foreach ($tablesToDelete as $table) {
+    // @codingStandardsIgnoreLine
+    $wpdb->query(sprintf('DROP TABLE IF EXISTS %s', "{$wpdb->base_prefix}{$table}"));
 }
 
 
