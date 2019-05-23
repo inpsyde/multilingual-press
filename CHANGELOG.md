@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.11.3
+- Add `multilingualpress.deleted_tables` filter to skip table deletion, see [#323](https://github.com/inpsyde/MultilingualPress/pull/323).
+
 ## 2.11.2
 - Add `__block_editor_compatible_meta_box` with `false` value to translation metabox, see [#320](https://github.com/inpsyde/MultilingualPress/pull/320).
 - Add Network admin notice about WordPress 5 upgrade with a link to the documentation, see [#320](https://github.com/inpsyde/MultilingualPress/pull/320).

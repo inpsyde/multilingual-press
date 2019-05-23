@@ -3,7 +3,7 @@ Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont
 Tags: multilingual, multisite, translate, woocommerce, language switcher
 Requires at least: 4.7
 Tested up to: 4.9
-Stable tag: 2.11.2
+Stable tag: 2.11.3
 
 Create a fast translation network on WordPress multisite.
 
@@ -118,6 +118,9 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 13. MultilingualPress is recommended by WP Engine as a solution for multilingual websites.
 
 == Changelog ==
+
+= 2.11.3 =
+- Add `multilingualpress.deleted_tables` filter to skip table deletion, see [#323](https://github.com/inpsyde/MultilingualPress/pull/323).
 
 = 2.11.2 =
 - Add `__block_editor_compatible_meta_box` with `false` value to translation metabox, see [#320](https://github.com/inpsyde/MultilingualPress/pull/320).
