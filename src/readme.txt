@@ -120,7 +120,7 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 == Changelog ==
 
 = 2.11.3 =
-- Fix MultilingualPress tab does not appear in WordPress 5.2+, , see [#324](https://github.com/inpsyde/MultilingualPress/pull/324).
+- Fix MultilingualPress tab does not appear in WordPress 5.2+, see [#324](https://github.com/inpsyde/MultilingualPress/pull/324).
 - Add `multilingualpress.deleted_tables` filter to skip table deletion, see [#323](https://github.com/inpsyde/MultilingualPress/pull/323).
 
 = 2.11.2 =
