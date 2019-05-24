@@ -49,7 +49,7 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
                 'manage_sites',
                 'mlp-site-settings',
                 function () use ($that) {
-                    $that->create_tab_header($that);
+                    $that->create_tab_header();
                     $that->create_tab_content();
                 }
             );
@@ -199,30 +199,30 @@ class Mlp_Network_Site_Settings_Controller implements Mlp_Updatable {
 		return $changed;
 	}
 
-	private function create_tab_header($that)
+	private function create_tab_header()
     {
-        switch_to_blog($that->get_blog_id());
+        switch_to_blog($this->get_blog_id());
         $siteName = get_bloginfo();
         restore_current_blog();
 
-        $title = sprintf(__('Edit Site: %s', 'multilingualpress'), $siteName);
+        $title = sprintf(__('Edit Site: %s', 'multilingual-press'), $siteName);
         ?>
         <div class="wrap">
             <h1 id="edit-site"><?= esc_html($title) ?></h1>
         </div>
         <?php settings_errors() ?>
         <p class="edit-site-actions">
-            <a href="<?= esc_url(get_home_url($that->get_blog_id(), '/')) ?>">
-                <?php esc_html_e('Visit', 'multilingualpress') ?>
+            <a href="<?php echo esc_url(get_home_url($this->get_blog_id(), '/')) ?>">
+                <?php esc_html_e('Visit', 'multilingual-press') ?>
             </a>
             |
-            <a href="<?= esc_url(get_admin_url($that->get_blog_id())) ?>">
-                <?php esc_html_e('Dashboard', 'multilingualpress') ?>
+            <a href="<?php echo esc_url(get_admin_url($this->get_blog_id())) ?>">
+                <?php esc_html_e('Dashboard', 'multilingual-press') ?>
             </a>
         </p>
         <?php
         network_edit_site_nav([
-            'blog_id' => $that->get_blog_id(),
+            'blog_id' => $this->get_blog_id(),
             'selected' => 'mlp-site-settings'
         ]);
     }
