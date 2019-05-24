@@ -2,7 +2,7 @@
 Contributors: inpsyde, toscho, tfrommen, Bueltge, hughwillfayle, nullbyte, Biont, ChriCo, dnaber-de, dinamiko
 Tags: multilingual, multisite, translate, woocommerce, language switcher
 Requires at least: 4.7
-Tested up to: 4.9
+Tested up to: 5.2
 Stable tag: 2.11.3
 
 Create a fast translation network on WordPress multisite.
@@ -120,6 +120,7 @@ tutorial](http://make.multilingualpress.org/2014/02/how-to-install-multi-site/).
 == Changelog ==
 
 = 2.11.3 =
+- Fix MultilingualPress tab does not appear in WordPress 5.2+, , see [#324](https://github.com/inpsyde/MultilingualPress/pull/324).
 - Add `multilingualpress.deleted_tables` filter to skip table deletion, see [#323](https://github.com/inpsyde/MultilingualPress/pull/323).
 
 = 2.11.2 =
