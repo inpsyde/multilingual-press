@@ -1940,7 +1940,7 @@ detective@^4.0.0:
     acorn "^4.0.3"
     defined "^1.0.0"
 
-diff@^2.0.2:
+diff@^3.5.0:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/diff/-/diff-2.2.3.tgz#60eafd0d28ee906e4e8ff0a52c1229521033bf99"
 
@@ -3112,7 +3112,7 @@ grunt-postcss@~0.7.1:
   resolved "https://registry.yarnpkg.com/grunt-postcss/-/grunt-postcss-0.7.2.tgz#57b7647b877d42ad32cf9d4cd110080fffb438ab"
   dependencies:
     chalk "^1.0.0"
-    diff "^2.0.2"
+    diff "^3.5.0"
     es6-promise "^3.0.2"
     postcss "^5.0.0"
 
