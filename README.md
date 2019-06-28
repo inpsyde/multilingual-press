@@ -7,6 +7,8 @@
 
 **Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and optimized for WooCommerce. [Get it here!](https://multilingualpress.org)**
 
+*Please note, you can't update MLP2 to MLP3 as usual, this is a complete refactor. We are currently working on a [Migration tool which is available as alpha version on github](https://github.com/inpsyde/multilingualpress-2-to-3-migration). A tutorial for the migration tool can be found [here](https://multilingualpress.org/docs/multilingualpress-2-3-migration-tool/)*
+
 Run each language in a separate site, and connect the content in a lightweight user interface. Use a customizable widget
 to link to all sites.
 
