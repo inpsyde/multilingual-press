@@ -3,6 +3,8 @@
 ![MultilingualPress](assets/banner-1544x500.png)
 
 ## Description
+**SALE - Save your Independence - Get 30% Independence Day discount on MultilingualPress 3 - Only until July 8th! [Save now!](https://multilingualpress.org/)**
+
 **WARNING: MultilingualPress 2 is not compatible with Gutenberg. BEFORE you update your WordPress to version 5.0 please read our [MultilingualPress and WordPress 5.0 guide](https://multilingualpress.org/docs/multilingualpress-wordpress-5-0-gutenberg/).**
 
 **Exciting news! MultilingualPress 3.0 is released and available for Pro users! Fully refactored, based on PHP 7, Gutenberg support, improved UI and optimized for WooCommerce. [Get it here!](https://multilingualpress.org)**
